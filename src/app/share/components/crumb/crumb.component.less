@@ -1,0 +1,46 @@
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  line-height: 50px;
+  float: left;
+}
+
+.breadcrumb {
+  display: flex;
+}
+
+.breadcrumb img{
+  width: 20px;
+  height: 17px;
+  margin: 17px 9px 0 0;
+}
+
+.breadcrumb li {
+  list-style: none;
+}
+
+.breadcrumb > li, .breadcrumb > li > a {
+  color: #23242F;
+}
+
+.breadcrumb > li + li:before {
+  /*color: #999;*/
+  content: ">> ";
+  padding: 0 0 0 5px;
+  color: #23242F;
+}
+
+.breadcrumb a, .breadcrumb > .active {
+  color: #00C1DE;
+}
+
+.breadcrumb a:hover {
+  cursor: pointer;
+  color:#00C1DE;
+  text-decoration: underline;
+}
+
+.breadcrumb li:last-child > a:hover {
+  cursor: default;
+}

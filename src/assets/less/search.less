@@ -1,0 +1,87 @@
+@import "variable";
+
+.search-container {
+  margin: 0 15px 15px;
+  background: @body-fg-color;
+  font-size: 13px;
+}
+
+.search-title span {
+  display: block;
+  padding: 10px 15px 10px 10px;
+  font-weight: bold;
+}
+
+.search-form {
+  line-height: 35px;
+  width: 100%;
+  padding: 10px 15px 15px 25px;
+  //display: flex;
+  //align-items: center;
+  //-webkit-flex-wrap: wrap;
+  //flex-wrap: wrap;
+  background-color: #fff;
+  height: 75px;
+}
+
+.search-form .form-group {
+  display: inline-block;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+.search-form .form-control, .form-control {
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  margin-right: 20px;
+  vertical-align: middle;
+  border-color: #eeeff5;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.search-form .form-control:focus, .form-control:focus {
+  border-color: @theme-color;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.search-form .form-separator {
+  margin-right: 10px;
+}
+
+.search-form input.form-control {
+  width: 240px;
+  border-color: #eeeff5;
+}
+
+.search-form select {
+  width: 147px;
+  margin-right: 10px;
+}
+
+.search-form .ant-btn {
+  margin: auto 0px auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 105px;
+  height: 34px;
+  border-radius: 17px;
+  border: 1px solid rgba(0, 193, 222, 1);
+  background-color: #fff;
+  color: #00c1de;
+}
+
+.search-btn-group {
+  display: flex;
+  margin-top: 10px;
+  float: right;
+}

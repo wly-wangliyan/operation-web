@@ -1,0 +1,27 @@
+.modal-warning-icon{
+  width: 60px;
+  height: 60px;
+  background: url(/assets/images/success.png);
+  margin:0 auto 20px;
+}
+
+
+.modal-dialog{
+  width: 360px!important;
+  height:253px!important;
+}
+
+
+.modal-content{
+  align-items:center;
+  margin-top: 339px;
+}
+
+
+.msg-prompt{
+  font-size:18px;
+  font-family:STHeitiSC-Medium;
+  font-weight:500;
+  color:rgba(55,60,64,1);
+  text-align: center;
+}

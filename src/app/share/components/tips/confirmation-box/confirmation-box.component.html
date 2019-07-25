@@ -1,0 +1,27 @@
+<!-- 提示模态框 -->
+<div class="modal fade" data-keyboard="false" data-backdrop="false" tabindex="-1" #promptDiv>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <span class="modal-title">{{titleTip}}</span>
+          <span class="warn-icon"></span>
+        </div>
+        <button type="button" class="close" aria-label="Close" (click)="close()">
+          &times;
+        </button>
+      </div>
+      <form class="form-horizontal">
+        <div class="modal-body">
+          <div class="modal-warning-icon"></div>
+          <div class="modal-warning-icon"></div>
+          <div>{{message}}</div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="close-btn" nz-button (click)="close()">取消</button>
+        <button class="sure-btn" nz-button nzType="primary" (click)="submit()">{{sureName}}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+@import "variable";
+
+.form-pseudo-bg {
+  background: @body-fg-color;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  right: 15px;
+  bottom: 15px;
+  min-width: 1200px;
+}
+
+.form-container {
+  margin: 15px;
+  background: @body-fg-color;
+  font-size: 13px;
+  position: relative;
+  min-width: 1200px;
+}
+
+.form-horizontal {
+  margin-top: 50px;
+}
+
+.row b {
+  color: red;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.form-radio-group,
+.form-switch-container {
+  padding-top: 5px;
+}
+
+.form-radio-group input {
+  margin-left: 5px !important;
+  cursor: pointer;
+}
+
+.form-radio-group input:nth-child(n+2) {
+  margin-left: 20px !important;
+}
+
+.form-radio-group label {
+  margin-left: 5px !important;
+  cursor: pointer;
+}
+
+.form-btn-submit {
+  width: 130px;
+  height: 40px;
+  margin-top: 25px;
+  font-size: 18px;
+  display: block !important;
+}
+
+
+.row{
+  margin-bottom:15px;
+  display: flex;
+  justify-content: center;
+}
+
+.row label{
+  text-align: right;
+  line-height:30px;
+}
+
+// 弹框
+
+.content-flow{
+  background-color: #f7f8fa!important;
+}
+
+.modal{
+  font-size: 14px;
+  font-family: STHeitiSC-Medium;
+  font-weight: 500;
+  color: rgba(55,60,64,1);
+  background:rgba(55,60,64,0.77);
+}
+
+.modal-content{
+  border:none!important;
+  border-radius: 0!important;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center!important;
+  justify-content: space-between;
+  height: 50px!important;
+  background-color: #00C1DE;
+  border-radius: 0!important;
+  color: #fff;
+  font-size:18px!important;
+}
+
+.modal-header .close{
+  padding:0!important;
+  margin: 0!important;
+  color: #fff;
+  opacity: 1!important;
+}
+
+.modal-footer{
+  border-top:0!important;
+  display: flex;
+  justify-content: space-between!important;
+  padding-top: 15px;
+  padding-bottom: 30px
+}
+
+
+.close-btn{
+  color:rgba(0,193,222,1);
+  width:179px;
+  height:50px;
+  border-radius:25px;
+  border:1px solid rgba(0,193,222,1);
+}
+
+.sure-btn{
+  width:179px;
+  height:50px;
+  border:none;
+  border-radius:25px;
+  color:#fff;
+}
+
+.close , .close:hover {
+  outline: none;
+  color: #fff!important;
+  opacity: 1;
+}
+
+.form-control {
+  border: 1px solid #979797!important;
+}

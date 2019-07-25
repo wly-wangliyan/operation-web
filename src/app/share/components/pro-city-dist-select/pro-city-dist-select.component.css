@@ -1,0 +1,40 @@
+.address-select {
+  display: flex;
+  /*margin-bottom: 15px;*/
+}
+
+.select-position {
+  color: #6c757d;
+  height: 42px;
+  font-size: 14px;
+  background-color: rgb(246, 246, 246);;
+}
+
+.selection-wrap {
+  justify-content: space-between;
+}
+
+.special-selection-wrap {
+  justify-content: normal;
+}
+
+.has-city-selection {
+  margin-right: 10px;
+}
+
+.special-city-selection {
+  margin-right: 5px;
+}
+
+.selected-font-color {
+  color: #555;
+}
+
+.search-form .form-control, .form-control {
+  margin-right: 10px;
+  border-radius: 8px;
+}
+
+.selection-wrap select:last-child {
+  margin-right: 0;
+}

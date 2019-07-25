@@ -1,0 +1,78 @@
+/*提示模态框*/
+
+.modal-dialog {
+  width: 550px;
+  height:283px;
+  margin: 10% auto;
+  border-radius: 0!important;
+}
+
+.modal-footer {
+  padding: 0.5rem 1rem;
+  border-top:0!important;
+}
+
+.modal-content {
+  height: 100%;
+  box-shadow: none;
+}
+
+h4{
+  color:#fff!important;
+}
+
+.modal-body {
+  text-align: left;
+  padding:0;
+  padding-left: 40px;
+  font-size: 14px;
+  font-size:18px;
+  font-family:STHeitiSC-Medium;
+  font-weight:500;
+  color:rgba(55,60,64,1);
+}
+
+.modal-footer button{
+  font-family:PingFangSC-Medium;
+  font-weight:500;
+  font-size: 18px;
+}
+
+.close-btn{
+  margin-left:33px!important;
+}
+
+.sure-btn{
+  margin-right: 26px!important;
+}
+
+.warn-icon{
+  width: 22px;
+  height: 22px;
+  margin-left:8px;
+  background: url(/assets/images/warn.png);
+}
+
+.modal-header div{
+  display: flex;
+  align-items: center;
+}
+
+@-webkit-keyframes fade-in { /*针对webkit内核*/
+  0% {
+    opacity: 0;
+  }
+  7.5% {
+    opacity: 0.5;
+  }
+  10% {
+    opacity: 1;
+  }
+}
+
+.form-horizontal {
+  margin-bottom:64px;
+  width: auto;
+}
+
+

@@ -1,0 +1,159 @@
+/*提示模态框*/
+.z-modal {
+  background:rgba(55,60,64,0.77);
+  z-index: 1200;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding-left: 0px !important;
+}
+
+.z-fade {
+  opacity:0;
+  -webkit-transition:opacity .15s linear;
+  -o-transition:opacity .15s linear;
+  transition:opacity .15s linear;
+}
+
+.z-fade.show{
+  opacity:1;
+  transition-property: opacity;
+}
+
+.z-modal-title {
+  float: left;
+  margin-left: 10px;
+}
+
+.z-modal-dialog {
+  width: 500px;
+  height:283px;
+  margin: 10% auto;
+  border-radius: 0!important;
+  animation-delay: 20ms;
+}
+
+.z-modal-header {
+  border-radius: 0!important;
+  height:50px;
+  line-height: 50px;
+}
+
+.z-modal-footer {
+  padding: 0.5rem 1rem;
+  border-top:0!important;
+}
+
+.z-modal-content {
+  height: 100%;
+  color: #0e0e0e !important;
+  background: #fff;
+  box-shadow: none;
+  border:none;
+  border-radius: 0!important;
+}
+
+.z-modal-body {
+  text-align: left;
+  padding-left: 40px;
+  font-weight:500;
+  color:rgba(55,60,64,1);
+}
+
+.z-modal-footer{
+  display: flex;
+  justify-content: space-around;
+}
+
+.z-modal-footer button{
+  font-family:PingFangSC-Medium;
+  font-weight:500;
+  font-size: 18px;
+}
+
+.z-close-btn{
+  width:179px;
+  height:50px;
+  border-radius:25px;
+  border:1px solid;
+  cursor: pointer;
+  outline: 0px;
+}
+
+.z-sure-btn{
+  width:179px;
+  height:50px;
+  border:none;
+  border-radius:25px;
+  cursor: pointer;
+  outline: 0px;
+}
+
+.z-sure-btn:hover {
+  background: rgba(0,193,222,0.7);
+}
+
+.z-warn-icon{
+  width: 22px;
+  height: 22px;
+  margin:12px 5px;
+  background: url(/assets/images/warn.png);
+  display: block;
+  float: left;
+}
+
+@-webkit-keyframes fade-in { /*针对webkit内核*/
+  0% {
+    opacity: 0;
+  }
+  7.5% {
+    opacity: 0.5;
+  }
+  10% {
+    opacity: 1;
+  }
+}
+
+.z-form-horizontal {
+  margin-top:50px;
+  margin-bottom:64px;
+  width: auto;
+}
+
+.z-close , .close {
+  outline: none;
+  color: #fff;
+  opacity: 1;
+  border: 0;
+  float: right;
+  line-height: inherit;
+  background: none;
+  font-size:24px;
+  font-family:PingFangSC-Medium;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.z-close:hover {
+  font-size:26px;
+}
+
+/*可变样式*/
+.z-font {
+  font-size:18px;
+  font-family:PingFangSC-Medium;
+}
+
+.z-color {
+  background: rgba(0, 193, 222, 1);
+  color: #fff;
+}
+
+.z-close-btn.color {
+  color: rgba(0, 193, 222, 1);
+  background: #fff;
+  border-bottom-color: rgba(0, 193, 222, 1);
+}

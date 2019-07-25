@@ -1,0 +1,36 @@
+<div class="main-layout">
+  <!--header-->
+  <div class="main-header-layout">
+    <div class="logo">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="user">
+      <div class="user_photo"></div>
+      <div class="user_name">{{authService.user?.username}}</div>
+      <div class="logout-btn" (click)="onLoginoutClick()">
+        <i class="main-header-logout"></i>退出
+      </div>
+    </div>
+  </div>
+  <div class="main-left-layout">
+    <app-expanded-menu></app-expanded-menu>
+  </div>
+  <div class="main-right-layout">
+    <div class="content-router-outlet" #routerDiv>
+      <router-outlet></router-outlet>
+      <router-outlet name="popup"></router-outlet>
+    </div>
+    <!--无权限403-->
+    <app-http403-tip (displayStateChanged)="displayStateChanged()"></app-http403-tip>
+
+    <!--服务器500-->
+    <app-http500-tip (displayStateChanged)="displayStateChanged()"></app-http500-tip>
+
+    <!-- 模态框 -->
+    <app-z-prompt-box></app-z-prompt-box>
+    <app-z-confirmation-box></app-z-confirmation-box>
+  </div>
+</div>
+
+

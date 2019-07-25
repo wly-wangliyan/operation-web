@@ -1,0 +1,29 @@
+<!--
+<div class="modal fade" id="mapModal" data-backdrop="false" data-keyboard="true"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content map-content">
+      <div class="modal-body modal-map">
+        <div class="close-wrap" (click)="closeMap()"></div>
+        <div id="container"></div>
+        <div class="btn-wrap" *ngIf="mapObj.type==1">
+          <button type="button" class="btn btn-primary" (click)="saveMarker()">保存</button>
+        </div>
+        <div class="zoom-wrap">
+          <b (click)="setZoom(0)"></b>
+          <b (click)="setZoom(1)"></b>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+-->
+
+
+<div class="map-space">
+  <div id="container"></div>
+  <div class="btn-wrap" *ngIf="mapObj.type==1">
+    <button type="button" class="btn btn-primary" (click)="saveMarker()">保存</button>
+  </div>
+</div>

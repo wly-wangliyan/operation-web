@@ -1,0 +1,31 @@
+<div class="address-select selection-wrap" [ngClass]="{'special-selection-wrap': !hasCity}"
+     [ngStyle]="{width: selectContainerWidth + 'px'}" *ngIf="isEdit">
+  <select class="form-control select-position has-city-selection" [(ngModel)]="regionsObj.province" name="province"
+          (change)="searchRegion($event, regionLevel.province)"
+          [ngClass]="{'selected-font-color': regionsObj.province, 'special-city-selection': !hasCity}"
+          [ngStyle]="{width: selectWidth + 'px'}" #pro></select>
+  <select class="form-control select-position" [(ngModel)]="regionsObj.city" name="city"
+          (change)="searchRegion($event, regionLevel.city)" [ngClass]="{'selected-font-color': regionsObj.city}"
+          [ngStyle]="{width: selectWidth + 'px'}" *ngIf="hasCity" #city></select>
+  <select class="form-control select-position" [(ngModel)]="regionsObj.district" name="district"
+          (change)="searchRegion($event, regionLevel.district)" [ngClass]="{'selected-font-color': regionsObj.district}"
+          [ngStyle]="{width: selectWidth + 'px'}" #dist></select>
+</div>
+
+<!-- 只能显示数据 -->
+<div class="address-select selection-wrap" [ngClass]="{'special-selection-wrap': !hasCity}"
+     [ngStyle]="{width: selectContainerWidth + 'px'}" *ngIf="!isEdit">
+  <select class="form-control select-position has-city-selection"
+          [title]="regionsObj.province ? regionsObj.province : '所在省'" [ngClass]="{'special-city-selection': !hasCity}"
+          [ngStyle]="{width: selectWidth + 'px'}" disabled>
+    <option value="">{{regionsObj.province ? regionsObj.province : '所在省'}}</option>
+  </select>
+  <select class="form-control select-position" [title]="regionsObj.city ? regionsObj.city : '所在市'"
+          [ngStyle]="{width: selectWidth + 'px'}" *ngIf="hasCity" disabled>
+    <option value="">{{regionsObj.city ? regionsObj.city : '所在市'}}</option>
+  </select>
+  <select class="form-control select-position" [title]="regionsObj.district ? regionsObj.district : '所在区'"
+          [ngStyle]="{width: selectWidth + 'px'}" disabled>
+    <option value="">{{regionsObj.district ? regionsObj.district : '所在区'}}</option>
+  </select>
+</div>
