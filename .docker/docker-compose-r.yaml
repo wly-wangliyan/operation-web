@@ -1,0 +1,12 @@
+version: "2"
+services:
+    operation-web:
+        build:
+            context: ..
+            dockerfile: .docker/Dockerfile
+            args:
+                version: R
+        image: operation-web
+        restart: always
+        ports:
+            - 9600:80
