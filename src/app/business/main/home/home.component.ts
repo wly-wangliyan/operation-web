@@ -6,4 +6,8 @@ import {Component} from '@angular/core';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent {
+  public color = '#2889e9';
+  public colorPickerChangeFun() {
+    console.log(this.color);
+  }
 }

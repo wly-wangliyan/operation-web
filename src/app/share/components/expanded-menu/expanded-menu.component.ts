@@ -51,31 +51,32 @@ export class ExpandedMenuComponent implements OnInit {
 
   public generateMenus(): Array<SideMenuItem> {
     const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateSystemMenu());
-    menusItem.push(this.generateProjectMenu());
+    menusItem.push(this.generateParkingMenu());
+    // menusItem.push(this.generateProjectMenu());
     return menusItem;
   }
 
-  // 系统管理
-  private generateSystemMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('系统管理', null);
+  // 美行停车
+  private generateParkingMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('美行停车', null);
     systemMenu.icon = 'team';
-    const subFinanceMenu1 = new SideMenuItem('用户管理', '/main/system-management', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/parking', systemMenu);
+    const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/parking/version-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
 
   // 项目信息管理
-  private generateProjectMenu(): SideMenuItem {
+  /*private generateProjectMenu(): SideMenuItem {
     const projectMenu = new SideMenuItem('项目管理', null);
     projectMenu.icon = 'team';
     const subFinanceMenu1 = new SideMenuItem('项目列表', '/main/project-management', projectMenu);
     projectMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(projectMenu);
     return projectMenu;
-  }
-
+  }*/
 
   private refreshMenu(path: string) {
 

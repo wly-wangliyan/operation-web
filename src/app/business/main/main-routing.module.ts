@@ -10,6 +10,10 @@ const routes: Routes = [{
   children: [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
+    {
+      path: 'parking',
+      loadChildren: () => import('../mx-parking/mx-parking.module').then(m => m.MxParkingModule),
+    },
   ]
 }];
 

@@ -6,6 +6,7 @@ import {MainComponent} from './main.component';
 import {NgZorroAntdModule} from 'ng-zorro-antd';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HomeComponent} from './home/home.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {HomeComponent} from './home/home.component';
     NgZorroAntdModule,
     FormsModule,
     ReactiveFormsModule,
+    ColorPickerModule
   ],
   declarations: [
     MainComponent,

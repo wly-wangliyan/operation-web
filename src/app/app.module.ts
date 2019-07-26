@@ -47,7 +47,7 @@ export class RavenErrorHandler implements ErrorHandler {
 @NgModule({
   declarations: [
     AppComponent,
-    EntryComponent
+    EntryComponent,
   ],
   imports: [
     FormsModule,

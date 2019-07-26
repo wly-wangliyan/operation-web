@@ -13,39 +13,9 @@ import {
 } from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpEventType, HttpResponse} from '@angular/common/http';
-import {Observable, timer as observableTimer} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 import {UploadService} from '../../../core/upload.service';
-
-/**
- * 1、使用该组件在父组件或公共module中的import下定义：
- * const uploadToken: UploadConfig = {
- *  reportProcess: true,
- *  url: `${environment.STORAGE_DOMAIN}/storages/images`,
- *  source: 'park'
- * };
- *
- * 2、providers中注入：
- * {
- *    provide: UPLOAD_TOKEN,
- *   useValue: uploadToken
- * },
- * UploadService
- */
-
-export class ZPhotoImageEntity {
-  public sourceUrl: string;
-  public sourceFile: any;
-  public transformSafeUrl: any;
-
-  constructor(sourceUrl?: string) {
-    this.sourceUrl = sourceUrl;
-  }
-
-  public get showUrl(): string {
-    return this.sourceUrl ? this.sourceUrl : this.transformSafeUrl;
-  }
-}
+import { Observable, timer } from 'rxjs';
 
 @Component({
   selector: 'app-z-photo-select',
@@ -71,9 +41,9 @@ export class ZPhotoSelectComponent implements OnInit {
     });
   }
 
-  @Input() public imageWidth = '114';
+  @Input() public imageWidth = '88';
 
-  @Input() public imageHeight = '114';
+  @Input() public imageHeight = '88';
 
   public get transformLineHeight(): string {
     return (Number(this.imageHeight) - 2).toString();
@@ -115,23 +85,17 @@ export class ZPhotoSelectComponent implements OnInit {
 
   private isValidImg = true;
 
-  @ViewChild('imageModal', {static: false}) public imageModal: ElementRef;
+  @ViewChild('imageModal', {static: true}) public imageModal: ElementRef;
 
-  @ViewChild('cutCoverUrlModal', {static: false}) public cutCoverUrlModal: ElementRef;
+  @ViewChild('cutCoverUrlModal', {static: true}) public cutCoverUrlModal: ElementRef;
 
-  @ViewChild('imgContainer', {static: false}) public imgContainer: ElementRef;
+  @ViewChild('imgContainer', {static: true}) public imgContainer: ElementRef;
 
-  @ViewChild('cutCoverImg', {static: false}) public cutCoverImg: ElementRef;
+  @ViewChild('cutCoverImg', {static: true}) public cutCoverImg: ElementRef;
 
   @ViewChildren('progressBgList') public progressBgList: QueryList<ElementRef>;
 
   @ViewChildren('progressBarList') public progressBarList: QueryList<ElementRef>;
-
-  // 图片是否超出指定大小
-  private _isImgSizeOver = false;
-  public get isImgSizeOver() {
-    return this._isImgSizeOver;
-  }
 
   constructor(@Optional() private uploadService: UploadService, private sanitizer: DomSanitizer, private renderer2: Renderer2) {
   }
@@ -143,11 +107,11 @@ export class ZPhotoSelectComponent implements OnInit {
 
   /**
    * 选择本地图片
-   * fileElement 选择文件的控件，使用后需要手动清空
+   * @param event 参数
+   * @param fileElement 选择文件的控件，使用后需要手动清空
    * JPG、JPEG或者PNG图片格式，图片大小不得高于5M
    */
-  public selectPicture(event: any, fileElement: any) {
-    this._isImgSizeOver = false;
+  public selectPicture(event, fileElement: any) {
     const files = event.target.files;
     if (files.length > 0) {
       const imgUrl = window.URL.createObjectURL(files[0]);
@@ -175,17 +139,14 @@ export class ZPhotoSelectComponent implements OnInit {
     this._dirty = true;
     this.imageList.splice(index, 1);
     // 检查选择照片是否是有效图片
-    // this.validateImg(this.imageList);
-    this.isValidImg = true;
-    this._isImgSizeOver = false;
-    this.selectedImgChange.emit('delete_img');
+    this.validateImg(this.imageList);
   }
 
   // 放大图片
   public zoomPicture(index: any = 0) {
     if ((!this.hasDeletePicture) && (this.imageList.length > 0)) {
       this.currentImgNum = index + 1;
-      observableTimer().subscribe(() => {
+      timer().subscribe(() => {
         $(this.imageModal.nativeElement).children().css({
           width: this.zoomWidth + 'px',
           height: this.zoomHeight + 'px',
@@ -212,12 +173,15 @@ export class ZPhotoSelectComponent implements OnInit {
 
   // 关闭图片查看模态框
   public closeShowZoomPicture() {
-    observableTimer().subscribe(() => {
+    timer().subscribe(() => {
       $(this.imageModal.nativeElement).modal('hide');
     });
   }
 
-  // 上传图片
+  /**
+   * 上传图片
+   * @returns Observable<any>
+   */
   public upload(): Observable<any> {
     if (isNullOrUndefined(this.uploadService)) {
       throw new Error('UploadService is not provided');
@@ -235,7 +199,7 @@ export class ZPhotoSelectComponent implements OnInit {
           return;
         }
         // 添加延迟优化显示效果
-        observableTimer(1000).subscribe(() => {
+        timer(1000).subscribe(() => {
           if (recordErrors) {
             observer.error(recordErrors);
           } else {
@@ -258,15 +222,13 @@ export class ZPhotoSelectComponent implements OnInit {
               if (event.type === HttpEventType.UploadProgress) {
                 // 处理进度状态
                 const percentDone = Math.round(100 * event.loaded / event.total);
-                if (curProcessBg && curProcessBar) {
-                  this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'block');
-                  this.renderer2.setStyle(curProcessBar.nativeElement, 'width', percentDone + '%');
-                  if (percentDone === 100) {
-                    // 添加延迟优化显示效果
-                    observableTimer(1000).subscribe(() => {
-                      this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'none');
-                    });
-                  }
+                this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'block');
+                this.renderer2.setStyle(curProcessBar.nativeElement, 'width', percentDone + '%');
+                if (percentDone === 100) {
+                  // 添加延迟优化显示效果
+                  timer(1000).subscribe(() => {
+                    this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'none');
+                  });
                 }
               } else if (event instanceof HttpResponse) {
                 // 结果返回，处理结果
@@ -306,6 +268,7 @@ export class ZPhotoSelectComponent implements OnInit {
     this.cutCoverImgUrl = '';
     $(this.cutCoverImg.nativeElement).cropper('destroy');
     $(this.fileElement).val('');
+    $(this.cutCoverUrlModal.nativeElement).modal('hide');
   }
 
   // 检查选择照片是否是有效图片
@@ -326,8 +289,7 @@ export class ZPhotoSelectComponent implements OnInit {
               return;
             }
             if (file.size > (this.limitImgSize * 1024 * 1024)) {
-              // this.isValidImg = false;
-              this._isImgSizeOver = true;
+              this.isValidImg = false;
               this.selectedImgChange.emit('size_over');
               return;
             }
@@ -358,7 +320,7 @@ export class ZPhotoSelectComponent implements OnInit {
       $(this.cutCoverUrlModal.nativeElement).modal('show');
       this.cutCoverImgUrl = this.imageItem.showUrl ? this.imageItem.showUrl : '';
 
-      observableTimer().subscribe(() => {
+      timer().subscribe(() => {
         $(this.cutCoverImg.nativeElement).cropper({
           aspectRatio: 4 / 3,
           viewMode: 1,
@@ -405,5 +367,19 @@ export class ZPhotoSelectComponent implements OnInit {
       u8arr[bytesLen] = bytes.charCodeAt(bytesLen);
     }
     return new File([u8arr], fileName, {type: imgType});
+  }
+}
+
+export class ZPhotoImageEntity {
+  public sourceUrl: string;
+  public sourceFile: any;
+  public transformSafeUrl: any;
+
+  constructor(sourceUrl?: string) {
+    this.sourceUrl = sourceUrl;
+  }
+
+  public get showUrl(): string {
+    return this.sourceUrl ? this.sourceUrl : this.transformSafeUrl;
   }
 }

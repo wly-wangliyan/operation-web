@@ -2,7 +2,6 @@
   content: '';
   display: table;
   clear: both;
-  display: inline-block;
 }
 
 .photo-select-wrap div {
@@ -12,8 +11,7 @@
   margin-left: 0;
   text-align: center;
   font-size: 0;
-  border: 1px dashed #B4B4B4;
-  border-radius: 4px;
+  border: 1px solid #ddd;
   cursor: zoom-in;
 }
 
@@ -37,7 +35,7 @@
   top: -5px;
   right: -11px;
   cursor: pointer;
-  background: url(/assets/img/delete_picture.png) no-repeat center;
+  background: url('../../../../assets/images/delete_picture.png') no-repeat center;
   background-size: contain;
 }
 
@@ -53,10 +51,8 @@ input[type=file] {
 input[type=file] + label {
   width: 100%;
   height: 100%;
-  background: url(/assets/img/add2.png) no-repeat center;
-  border: 1px dashed #B4B4B4;
-  border-radius: 4px;
-  background-size: 34px;
+  background: url('../../../../assets/images/add_picture.png') no-repeat center;
+  background-size: contain;
 }
 
 .select-wrap {
@@ -120,7 +116,7 @@ input[type=file] + label {
   height: 100%;
   border-radius: 0;
   border: none;
-  padding: 15px 12px 18px 14px;
+  /*padding: 15px 12px 18px 14px;*/
 }
 
 .image-modal .form-horizontal {
@@ -147,13 +143,13 @@ input[type=file] + label {
 
 .lside-img-arrow {
   left: 0;
-  background: url(/assets/img/lside_img_arrow.png) no-repeat center;
+  /*background: url('../../../../assets/images/lside_img_arrow.png') no-repeat center;*/
   background-size: contain;
 }
 
 .rside-img-arrow {
   right: 0;
-  background: url(/assets/img/rside_img_arrow.png) no-repeat center;
+  /*background: url('../../../../assets/images/rside_img_arrow.png') no-repeat center;*/
   background-size: contain;
 }
 
@@ -205,7 +201,7 @@ input[type=file] + label {
   width: 54px;
   height: 54px;
   margin: 28px auto;
-  background: url(/assets/img/close_img.png) no-repeat center;
+  /*background: url('../../../../assets/images/close_img.png') no-repeat center;*/
   background-size: contain;
   cursor: pointer;
 }

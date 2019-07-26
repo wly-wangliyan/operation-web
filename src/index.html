@@ -2,10 +2,11 @@
 <html lang="zh">
 <head>
   <meta charset="utf-8">
-  <title>路内视频实施管理系统</title>
+  <title>运营后台管理系统</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="/assets/libs/css/cropper.min.css">
   <!-- 加载效果 -->
   <style type="text/css">
     .spinner-text {
@@ -141,7 +142,7 @@
         transform: scale(0.0);
         -webkit-transform: scale(0.0);
       }
-      40% {
+      40% {cropper.min.js
         transform: scale(1.0);
         -webkit-transform: scale(1.0);
       }
@@ -149,8 +150,9 @@
   </style>
 </head>
 <body>
+<script src="/assets/libs/js/jquery-2.2.3.min.js"></script>
+<script src="/assets/libs/js/cropper.min.js"></script>
 <script type="text/javascript" src="//webapi.amap.com/maps?v=1.4.4&key=1334a019606a2d6954251efecde7048c&&plugin=AMap.CitySearch"></script>
-
 <app-entry>
   <div style="width:100%;height:100%;">
     <div class="spinner">

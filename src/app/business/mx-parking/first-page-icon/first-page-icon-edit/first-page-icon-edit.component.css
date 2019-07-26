@@ -1,0 +1,140 @@
+
+.form-group > div {
+    min-width: 550px;
+}
+
+.modal-dialog{
+    width:600px!important;
+    min-height: 600px!important;
+    height: 661px!important;
+    max-width: 600px!important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top:120px!important;
+}
+
+
+.row{
+    margin-left:0!important;
+    margin-right: 0!important;
+    height: 44px;
+    align-items: center!important;
+    margin-bottom:0!important;
+}
+
+.row b{
+    margin-right: 15px!important;
+}
+
+.row-message{
+    height:44px!important;
+}
+
+.control-label{
+    padding-left: 40px!important;
+    margin-bottom:0!important;
+    width:140px!important;
+    padding-right: 10px;
+    padding-left:0!important;
+}
+
+.control-label b{
+    float: left;
+}
+
+
+.control-label span{
+    float: right;
+}
+
+
+.control-input{
+    display: flex!important;
+    align-items: center!important;
+    width:384px!important;
+}
+
+.control-input label{
+    margin-bottom:0!important;
+}
+
+
+.form-control{
+    font-size: 14px!important;
+    margin-right: 0!important;
+    height: 44px!important;
+    width:372px!important;
+    background:rgba(246,246,246,1);
+    border-radius:8px;
+    border:1px solid rgba(151,151,151,1);
+}
+
+.err-message{
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(241,85,51,1);
+}
+
+.sex{
+    margin-bottom:21px;
+}
+
+.form-radio-group{
+    padding-top:0!important;
+}
+
+.form-horizontal{
+    margin-top:36px!important;
+}
+
+.modal-footer button{
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    font-size: 18px;
+}
+
+.close-btn{
+    margin-left:83px!important;
+}
+
+.sure-btn{
+    margin-right: 58px!important;
+}
+
+.change-status{
+    margin-bottom:25px!important;
+}
+
+.form-horizontal .area-supplement{
+    margin-top: 25px;
+}
+
+.brand-model{
+    margin-right:15px;
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(136,136,136,1);
+}
+
+.cover-hint{
+    margin-left: 28px;
+    color: #ff0000;
+}
+
+.detail-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    display: none;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+    background: rgba(0, 0, 0, .5);
+    overflow-y: auto;
+}
