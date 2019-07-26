@@ -1,67 +1,68 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {EntryComponent} from './entry/entry.component';
-import {ShareModule} from './share/share.module';
+import { EntryComponent } from './entry/entry.component';
+import { ShareModule } from './share/share.module';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { registerLocaleData } from '@angular/common';
+import { initializer } from './initializer';
+import { environment } from '../environments/environment';
 import zh from '@angular/common/locales/zh';
-import {initializer} from './initializer';
-import {environment} from '../environments/environment';
-import * as Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 registerLocaleData(zh);
 
-export class RavenErrorHandler implements ErrorHandler {
+export class SentryErrorHandler implements ErrorHandler {
 
-  constructor() {
-    switch (environment.version) {
-      case 'd':
-        Raven
-          .config('https://b0573e182a884e06bdb21396dfbdef28@guard.uucin.com/86')
-          .install();
-        break;
-      case 'r':
-        Raven
-          .config('https://8cf97182b30444b486aca8c26c6c67a4@guard.uucin.com/87')
-          .install();
-        break;
+    constructor() {
+        switch (environment.version) {
+            case 'd':
+                Sentry.init({
+                    dsn: 'https://661d4fc72ca74c8585fd927347d14712@guard.uucin.com/206'
+                });
+                break;
+            case 'r':
+                Sentry.init({
+                    dsn: 'https://bb623fd8fa4048048761dd4b68f3b57f@guard.uucin.com/207'
+                });
+                break;
+        }
     }
-  }
 
-  handleError(err: any): void {
-    if (environment.version === 'd' ||
-      environment.version === 'r') {
-      // 部署到服务器上的版本才生成日志
-      Raven.captureException(err);
+    handleError(error: any): void {
+        if (environment.version === 'd' || environment.version === 'r') {
+            // 部署到服务器上的版本才生成日志
+            Sentry.captureException(error.originalError || error);
+        }
+        throw error;
     }
-    throw err;
-  }
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    EntryComponent,
-  ],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    ShareModule,
-    NgZorroAntdModule,
-    HttpClientModule,
-    BrowserAnimationsModule
-  ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN },
-    {provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true},
-    {provide: ErrorHandler, useClass: RavenErrorHandler}],
-  bootstrap: [EntryComponent]
+    declarations: [
+        AppComponent,
+        EntryComponent,
+    ],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        ShareModule,
+        NgZorroAntdModule,
+        HttpClientModule,
+        BrowserAnimationsModule
+    ],
+    providers: [
+        {provide: NZ_I18N, useValue: zh_CN},
+        {provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true},
+        {provide: ErrorHandler, useClass: SentryErrorHandler}
+    ],
+    bootstrap: [EntryComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
