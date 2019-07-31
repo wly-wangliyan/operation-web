@@ -4,8 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  version: 'd',
-  CAMERA_MONITOR_DEPLOYMENT_SERVE: '////operation-server-d.parkone.cn',
-  STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
+    production: false,
+    version: 'd',
+    OPERATION_SERVE: '//operation-server-d.parkone.cn',
+    STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
 };
