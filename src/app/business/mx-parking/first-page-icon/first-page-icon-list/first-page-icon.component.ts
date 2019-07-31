@@ -127,10 +127,15 @@ export class FirstPageIconComponent implements OnInit {
 
   // 列表排序
   public drop(event: CdkDragDrop<string[]>): void {
-    const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
-    let param = {move_num: this.iconList[index].sort_num};
-    if (event.currentIndex === 0 && this.iconList[index].sort_num === 1) {
-      param = {move_num: 0};
+    let param = {};
+    if (event.previousIndex > event.currentIndex) {
+      const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
+      param = {move_num: this.iconList[index].sort_num};
+      if (event.currentIndex === 0 && this.iconList[index].sort_num === 1) {
+        param = {move_num: 0};
+      }
+    } else {
+      param = {move_num: this.iconList[event.currentIndex].sort_num};
     }
     this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {
       moveItemInArray(this.iconList, event.previousIndex, event.currentIndex);
