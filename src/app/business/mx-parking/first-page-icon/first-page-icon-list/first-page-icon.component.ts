@@ -45,7 +45,7 @@ export class FirstPageIconComponent implements OnInit {
     this.searchAppText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestAppList()))
         .subscribe(res => {
           this.appList = res;
-          this.application_id = this.appList[0].application_id;
+          this.application_id = this.appList.length > 0 ? this.appList[0].application_id : null;
           this.requestFirstPageIconList();
         }, err => {
           this.globalService.httpErrorProcess(err);
