@@ -1,0 +1,39 @@
+<!--新建版本-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">新建版本</span>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form *ngIf="currentVersion" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>应用版本号：</span>
+                    </label>
+                    <div class=" control-input">
+                        <input class="form-control" placeholder="数字加'.'组成，最多不能超过3个" [(ngModel)]="currentVersion.version"
+                               name="version" autocomplete="off" (change)="errPositionItem.version.isError=false" required>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.version?.isError">{{errPositionItem?.version?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

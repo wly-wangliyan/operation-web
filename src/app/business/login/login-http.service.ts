@@ -12,9 +12,6 @@ export class LoginParams extends EntityBase {
 
 export class UserInfoEntity extends EntityBase {
   public username: string = undefined;
-  public access_token: string = undefined;
-  public refresh_token: string = undefined;
-  public expires_in: number = undefined;
 }
 
 @Injectable({
@@ -22,16 +19,15 @@ export class UserInfoEntity extends EntityBase {
 })
 export class LoginHttpService {
 
-  private domain = environment.CAMERA_MONITOR_DEPLOYMENT_SERVE;
+  private domain = environment.OPERATION_SERVE;
 
   constructor(private httpService: HttpService) {
   }
 
   // 登录
   public requestLogin(loginParams: LoginParams): Observable<UserInfoEntity> {
-    const url = this.domain + '/login_by_passport';
-    const body = loginParams.json();
-    return this.httpService.post(url, body).pipe(map(data => UserInfoEntity.Create(data.body)));
+    const url = this.domain + '/login';
+    return this.httpService.postFormData(url, loginParams).pipe(map(data => UserInfoEntity.Create(data.body)));
   }
 }
 

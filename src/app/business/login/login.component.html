@@ -3,16 +3,15 @@
     <div class="left">
       <div class="logo">
         <div></div>
-        <div></div>
       </div>
       <form (ngSubmit)="onLogin()">
         <div class="name-input">
           <span class="name-icon"></span>
-          <input type="text" class="form-control" placeholder="请输入用户名" [(ngModel)]="loginParams.username" name="username" id="username" maxlength="20" autocomplete="off" #username>
+          <input type="text" class="" placeholder="请输入用户名" [(ngModel)]="loginParams.username" name="username" id="username" maxlength="20" autocomplete="off" #username>
         </div>
         <div class="password-input">
           <span class="password-icon"></span>
-          <input class="form-control" type="password" placeholder="请输入密码" [(ngModel)]="loginParams.password" name="password" id="password" maxlength="20" #password>
+          <input class="" type="password" placeholder="请输入密码" [(ngModel)]="loginParams.password" name="password" id="password" maxlength="20" #password>
           <span class="eye-icon-hidden" (click)="onEyeIconClick()" id="eye-icon" #eyeIcon></span>
         </div>
         <div class="danger" *ngIf="loginError">

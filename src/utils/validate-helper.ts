@@ -51,6 +51,25 @@ export class ValidateHelper {
   }
 
   /**
+   * 校验是否为有效url(只要http、https)
+   * @param str_url 目标url
+   * @returns boolean
+   */
+  public static checkUrl(str_url: string): boolean {
+    const strRegex = `^((https|http)?://)`
+        + `(([0-9]{1,3}\.){3}[0-9]{1,3}` // IP形式的URL- 199.194.52.184
+        + `|` // 允许IP和DOMAIN（域名）
+        + `([0-9a-z_!~*'()-]+\.)*` // 域名- www.
+        + `([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.` // 二级域名
+        + `[a-z]{2,6})` // first level domain- .com or .museum
+        + `(:[0-9]{1,4})?` // 端口- :80
+        + `((/?)|` // a slash isn't required if there is no file name
+        + `(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$`;
+    const regex = new RegExp(strRegex);
+    return regex.test(str_url);
+  }
+
+  /**
    * 校验是否为有效mac地址
    * @param mac 目标mac地址
    * @returns boolean
@@ -239,6 +258,43 @@ export class ValidateHelper {
     const regex = /^[0-9a-zA-Z_\-~!@#$%^&*()_+<>?:,./;’，。、‘：“《》？~！@#￥%……（）{}`=【】；'\[\]|]+$/;
     // const regex = /^[0-9a-zA-Z_\-~!@#$%^&*()_+<>?:,./;’，。、‘：“《》？~！@#￥%……（）{}`=【】；'\[\]\\|]+$/;
     const value = regex.test(pwd);
+    return value;
+  }
+
+  /**
+   * 校验是否(只支持16禁止颜色值)
+   * @param bgVal 颜色值
+   * @returns boolean
+   */
+  public static CheckIsColor(bgVal) {
+    const type = '^#[0-9a-fA-F]{6}$';
+    const re = new RegExp(type);
+    if (bgVal.match(re) == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * 校验有效的版本号(只支持数字和'.'，'.'不能出现超过2次，如1.1.1)
+   * @param version 版本号
+   * @returns boolean
+   */
+  public static CheckIsVersion(version) {
+    const regex = /^\d+(\.\d+){0,2}$/;
+    const value = regex.test(version);
+    return value;
+  }
+
+  /**
+   * 校验有效的Bundle ID(只支持字母加'.'组成，开始和结尾不能为'.')
+   * @param bundle_id 参数
+   * @returns boolean
+   */
+  public static CheckIsBundleID(bundle_id) {
+    const regex = /^[A-Za-z].[A-Za-z]+(\.[A-Za-z]+)+$/;
+    const value = regex.test(bundle_id);
     return value;
   }
 }

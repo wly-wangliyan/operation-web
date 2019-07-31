@@ -6,7 +6,7 @@ import {environment} from '../environments/environment';
 import { LocalStorageProvider } from '../app/share/localstorage-provider';
 
 export let file_import = (file, path, success, error) => {
-  const domain = environment.CAMERA_MONITOR_DEPLOYMENT_SERVE;
+  const domain = environment.OPERATION_SERVE;
   const form = new FormData();
   for (const param in file) {
     if (file.hasOwnProperty(param)) {

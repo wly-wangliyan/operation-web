@@ -3,6 +3,8 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import { FirstPageIconEditComponent } from '../first-page-icon-edit/first-page-icon-edit.component';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { AppEntity, FirstPageIconEntity, FirstPageIconService, SearchFirstPageIconParams } from '../first-page-icon.service';
 
 const PageSize = 15;
 
@@ -12,102 +14,129 @@ const PageSize = 15;
   styleUrls: ['./first-page-icon.component.css']
 })
 export class FirstPageIconComponent implements OnInit {
-  public projectList: Array<any> = [];
+  public iconList: Array<FirstPageIconEntity> = [];
+  // public iconList: Array<any> = [];
+  public appList: Array<AppEntity> = [];
   public pageIndex = 1;
-  public searchParams: any;
+  public searchParams: SearchFirstPageIconParams = new SearchFirstPageIconParams();
   public noResultText = '数据加载中...';
+  public application_id: string;
 
   private searchText$ = new Subject<any>();
+  private searchAppText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
   @ViewChild(FirstPageIconEditComponent, { static: true }) public firstPageIconEditComponent: FirstPageIconEditComponent;
 
   private get pageCount(): number {
-    if (this.projectList.length % PageSize === 0) {
-      return this.projectList.length / PageSize;
+    if (this.iconList.length % PageSize === 0) {
+      return this.iconList.length / PageSize;
     }
-    return this.projectList.length / PageSize + 1;
+    return this.iconList.length / PageSize + 1;
   }
 
-  constructor(private globalService: GlobalService) {
-    // this.searchParams.page_size = PageSize * 3;
+  constructor(private globalService: GlobalService,
+              private firstPageIconService: FirstPageIconService) {
+    this.searchParams.page_size = PageSize * 3;
   }
 
   ngOnInit() {
-    this.searchParams = {status: 1};
-    /*this.searchText$.pipe(
-        debounceTime(500),
-        switchMap(() =>
-            this.projectService.requestUsersList(this.searchParams))
+    this.searchAppText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestAppList()))
+        .subscribe(res => {
+          this.appList = res;
+          this.application_id = this.appList[0].application_id;
+          this.requestFirstPageIconList();
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+    this.searchAppText$.next();
+  }
+
+  //  请求App首页图标配置信息
+  private requestFirstPageIconList() {
+    this.searchText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestFirstPageIconList(this.application_id))
     ).subscribe(res => {
-      this.projectList = res.results;
+      this.iconList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    this.searchText$.next();*/
+    this.searchText$.next();
   }
 
   // 显示添加编辑项目modal
-  public onShowModal(isCreateProject, data) {
-    const showMes = isCreateProject ? '确定添加' : '确定修改';
-    this.firstPageIconEditComponent.open(data, () => {
+  public onShowModal(data) {
+    const app = this.appList.filter(v => v.application_id === this.application_id);
+    this.firstPageIconEditComponent.open(data, app[0], () => {
        this.firstPageIconEditComponent.clear();
        this.pageIndex = 1;
        timer(0).subscribe(() => {
-         // this.searchText$.next();
+         this.searchText$.next();
        });
-     }, showMes, () => {
+     }, '保存', () => {
        this.firstPageIconEditComponent.clear();
      });
   }
 
-  // 查询按钮
-  public onSearchBtnClick() {
-    // this.searchParams.project_name = this.searchParams.project_name.trim();
-    this.searchText$.next();
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-  }
-
-  // 清空按钮
-  public onResetBtnClick() {
-    // this.searchParams = new SearchProjectParams();
-    this.searchText$.next();
-  }
-
+  // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
-    /*this.pageIndex = pageIndex;
+    this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.projectService.continueUsersList(this.linkUrl).subscribe(res => {
-        this.projectList = this.projectList.concat(res.results);
+      this.continueRequestSubscription = this.firstPageIconService.continueFirstPageIconList(this.linkUrl).subscribe(res => {
+        this.iconList = this.iconList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
-    }*/
+    }
   }
 
-  public onHideBtnClick(data) {
-
+  // 隐藏、开启按钮触发事件
+  public onHideBtnClick(data: any, dispaly: boolean) {
+    const param = {is_display: dispaly};
+    this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
+      const msg = dispaly ? '隐藏成功！' : '开启成功！';
+      this.globalService.promptBox.open(msg);
+      this.searchText$.next();
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
-  // 删除某一项目
+  // 删除某一App首页图标配置
   public onDeleteBtnClick(data: any) {
-    /*this.globalService.confirmationBox.open('警告', '您确认删除，删除后信息将无法恢复。', () => {
+    this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
-      this.projectService.requestDeleteUser(data.project_id).subscribe((e) => {
-        this.projectList = this.projectList.filter(project => project.project_id !== data.project_id);
+      this.firstPageIconService.requestDeleteFirstPageIcon(data.menu_id, this.application_id).subscribe((e) => {
+        this.iconList = this.iconList.filter(icon => icon.menu_id !== data.menu_id);
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
-    });*/
+    });
   }
 
-  public onCheckStatusClicked(index) {
-    this.searchParams.status = index;
+  //  切换应用
+  public onCheckStatusClicked(application_id) {
+    this.application_id = application_id;
+    this.searchText$.next();
+  }
+
+  // 列表排序
+  public drop(event: CdkDragDrop<string[]>): void {
+    const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
+    let param = {move_num: this.iconList[index].sort_num};
+    if (event.currentIndex === 0 && this.iconList[index].sort_num === 1) {
+      param = {move_num: 0};
+    }
+    this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {
+      moveItemInArray(this.iconList, event.previousIndex, event.currentIndex);
+      this.searchText$.next();
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 }

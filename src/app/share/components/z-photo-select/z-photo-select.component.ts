@@ -322,7 +322,7 @@ export class ZPhotoSelectComponent implements OnInit {
 
             timer().subscribe(() => {
                 $(this.cutCoverImg.nativeElement).cropper({
-                    aspectRatio: 4 / 3,
+                    aspectRatio: 1 / 1,
                     viewMode: 1,
                     dragMode: 'crop',
                     preview: '.small-img',
@@ -332,13 +332,16 @@ export class ZPhotoSelectComponent implements OnInit {
                     minContainerHeight: Number(this.imageHeight),
                     minCanvasWidth: 0,
                     minCanvasHeight: 0,
-                    minCropBoxWidth: 0,
-                    minCropBoxHeight: 0,
+                    minCropBoxWidth: 150,
+                    minCropBoxHeight: 150,
                     movable: true,
                     onlyColorChanged: false,
                     checkCrossOrigin: true,
                     toggleDragModeOnDblclick: false,
-                    checkImageOrigin: true
+                    checkImageOrigin: true,
+                    dragCrop: false,
+                    resizable: false,
+                    autoCropArea: 0.5
                 });
             });
         }

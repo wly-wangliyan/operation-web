@@ -1,0 +1,55 @@
+.row{
+    margin-left:0!important;
+    margin-right: 0!important;
+    height: 34px;
+    align-items: center!important;
+    margin-bottom:10px;
+}
+
+.row b{
+    margin-right: 10px!important;
+}
+
+.row-message{
+    height:28px!important;
+}
+
+.control-label {
+    padding-left: 0px !important;
+    margin-bottom: 0 !important;
+    width: 120px !important;
+    padding-right: 10px;
+    position: absolute;
+    left: 22px;
+    display: inherit;
+}
+
+.form-control {
+    height: 34px;
+    width: 448px;
+    border-radius: 1px;
+    margin-left: 123px;
+}
+
+.control-input input, label {
+    font-size:14px;
+    font-family:STHeitiSC-Light;
+    color:rgba(136,136,136,1);
+    font-weight:300;
+}
+
+.close:hover {
+    font-size: 28px;
+}
+
+.modal-content {
+    width: 600px;
+}
+
+.err-message{
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(232,32,56,1);
+    margin-left: -90px;
+}

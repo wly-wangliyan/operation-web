@@ -48,7 +48,7 @@ export class AuthService {
    * 登录方式授权获取用户信息
    */
   public authorizeByLogin() {
-    this.httpService.get(environment.CAMERA_MONITOR_DEPLOYMENT_SERVE + '/user').subscribe(res => {
+    this.httpService.get(environment.OPERATION_SERVE + '/user').subscribe(res => {
       this._user = UserEntity.Create(res.body);
       LocalStorageProvider.Instance.set(LocalStorageProvider.CompanyId, this._user.company_id);
       /*const tempRes = res['body'];
@@ -94,7 +94,7 @@ export class AuthService {
    * 登出
    */
   public logout() {
-    this.httpService.post(environment.CAMERA_MONITOR_DEPLOYMENT_SERVE + '/logout').subscribe(() => {
+    this.httpService.post(environment.OPERATION_SERVE + '/logout').subscribe(() => {
       this._isLoggedIn = false;
       this._user = null;
       this.router.navigate(['login']);

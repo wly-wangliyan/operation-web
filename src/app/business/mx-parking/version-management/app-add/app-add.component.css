@@ -1,0 +1,87 @@
+.row{
+    margin-left:0!important;
+    margin-right: 0!important;
+    height: 34px;
+    align-items: center!important;
+    margin-bottom:10px;
+}
+
+.row b{
+    margin-right: 10px!important;
+}
+
+.row-message{
+    height:28px!important;
+}
+
+.control-label {
+    padding-left: 0px !important;
+    margin-bottom: 0 !important;
+    width: 105px !important;
+    padding-right: 10px;
+    position: absolute;
+    left: 22px;
+    display: inherit;
+}
+
+.form-control {
+    height: 34px;
+    width: 448px;
+    border-radius: 1px;
+    margin-left: 123px;
+}
+
+.control-input input, label {
+    font-size:14px;
+    font-family:STHeitiSC-Light;
+    color:rgba(136,136,136,1);
+    font-weight:300;
+}
+
+.control-label {
+    font-size:14px;
+    font-family:STHeitiSC-Light;
+    color:rgba(35,36,47,1);
+}
+
+.close:hover {
+    font-size: 28px;
+}
+
+/*更改radio样式*/
+input[type="radio"] + label::before {
+    content: "\a0"; /*不换行空格*/
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    width: 1em;
+    height: 1em;
+    margin-right: .4em;
+    border-radius: 50%;
+    border: 1px solid #3E71F7;
+    text-indent: .15em;
+    line-height: 1;
+}
+
+input[type="radio"]:checked + label::before {
+    background-color: #3E71F7;
+    background-clip: content-box;
+    padding: .2em;
+}
+
+input[type="radio"] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+.modal-content {
+    width: 600px;
+}
+
+.err-message{
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(232,32,56,1);
+    margin-left: -130px;
+}

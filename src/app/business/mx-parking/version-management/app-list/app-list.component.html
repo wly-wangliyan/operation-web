@@ -1,0 +1,48 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'美行停车'" [level2Name]="'版本管理'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg">
+            <a (click)="onShowModal()">新建</a>
+        </li>
+    </ul>
+</div>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table [nzData]="appList"
+                      [nzShowPagination]="false"
+                      [nzNoResult]="noResultText"
+                      [(nzPageIndex)]="pageIndex"
+                      #basicTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>应用名称</th>
+                    <th>操作系统</th>
+                    <th>最新版本号</th>
+                    <th>Bundle ID</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of basicTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="data.application_name">{{data.application_name|zMaxLength:40}}</td>
+                    <td>{{data.system===1?'IOS':data.system===2?'Android':'--'}}</td>
+                    <td>
+                        <span *ngIf="data.version != ''">{{data.version}}</span>
+                        <span *ngIf="data.version === ''">--</span>
+                    </td>
+                    <td>{{data.bundle_id}}</td>
+                    <td class="operation">
+                        <a [title]="'版本管理'" (click)="onVersionBtnClick(data)">版本管理</a>
+                        <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<app-app-add></app-app-add>
+

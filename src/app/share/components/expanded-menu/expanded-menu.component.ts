@@ -60,7 +60,7 @@ export class ExpandedMenuComponent implements OnInit {
   private generateParkingMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('美行停车', null);
     systemMenu.icon = 'team';
-    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/parking', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/parking/first-page-icon', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/parking/version-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     systemMenu.children.push(subFinanceMenu2);

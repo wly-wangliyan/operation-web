@@ -1,141 +1,129 @@
 <!--编辑首页图标配置-->
-<div class="detail-modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #pagePromptDiv>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title">{{isCreateProject ? '新增项目': '修改项目'}}</span>
+                <span class="modal-title">{{isCreatePage ? '新建': '编辑'}}</span>
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true" (click)="onClose()">&times;
                 </button>
             </div>
-            <form *ngIf="currentProject" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-                <div class="row" style="height: 135px">
+            <form *ngIf="currentPage" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div class="row" style="height: 160px">
                     <label class=" control-label">
                         <b>*</b>
-                        <span>ICON图片：</span>
+                        <span>ICON图片</span>
                     </label>
-                    <div class="control-input photo-select">
-                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [maxLength]="3"
+                    <div class="control-input">
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="1"
                                             [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                            [imageHeight]="120" [imageUrls]="cover_url" #coverImg [imageWidth]="162">
+                                            [imageHeight]="152" [imageUrls]="cover_url" #coverImg [imageWidth]="152">
                         </app-z-photo-select>
-                    </div>
-                    <!--<div class="modal-body modal-body-upload">
-                        <div class="select-file-upload-container">
-                            <div class="select-file-upload-contain">
-                                <div class="select-file-upload">
-                                    <a class=" choose-file-upload">
-                                        <input #productFileImportInput1 type="file" name="files1" id="file-upload"
-                                               (change)="importViewModel.selectedFile($event,productFileImportInput1)" accept="image/*" />
-                                    </a>
+                        <div>
+                            <div class="row row-message" style="width: 230px;margin-left:20px!important;padding-top: 105px">
+                                <label class="control-label"></label>
+                                <div class="control-input err-message">
+                                    <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
                                 </div>
-                                <div class="upload-hint" *ngIf='this.importViewModel.hasErrorTip'>{{this.importViewModel.errorTip}}</div>
                             </div>
-                            <img id="transform"  src=""/>
+                            <p class="cover-hint">注：尺寸150*150，格式PNG或JPG，大小1M以内</p>
                         </div>
-                    </div>-->
-                    <p class="cover-hint">注：尺寸XXX，格式PNG或JPG，大小1M以内</p>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.project_name?.isError">{{errPositionItem?.project_name?.errMes}}</span>
                     </div>
                 </div>
+                <div class="row row-message"></div>
                 <div class="row">
                     <label class="control-label">
                         <b>*</b>
-                        <span>标题：</span>
+                        <span>标题</span>
                     </label>
-                    <div class=" control-input">
-                        <input class="form-control" placeholder="请输入项目负责人" [(ngModel)]="currentProject.leader" name="leader"
-                               maxlength="10" autocomplete="off">
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入1-5字标题" [(ngModel)]="currentPage.title" name="title"
+                               maxlength="5" autocomplete="off" style="width: 448px!important;" required (change)="errPositionItem.title.isError=false">
                     </div>
                 </div>
                 <div class="row row-message">
                     <label class="control-label"></label>
                     <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.leader?.isError">{{errPositionItem?.leader?.errMes}}</span>
+                        <span *ngIf="errPositionItem?.title?.isError">{{errPositionItem?.title?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
                     <label class=" control-label">
                         <b>*</b>
-                        <span>显示版本：</span>
+                        <span>显示版本</span>
                     </label>
                     <div class=" control-input">
-                        <input class="form-control" placeholder="请输入负责人手机号" [(ngModel)]="currentProject.mobile" name="mobile"
-                               maxlength="11" autocomplete="off">
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.mobile?.isError">{{errPositionItem?.mobile?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>落地页：</span>
-                    </label>
-                    <div class=" control-input">
-                        <input class="form-control" placeholder="请输入负责人手机号" [(ngModel)]="currentProject.mobile" name="mobile"
-                               maxlength="11" autocomplete="off">
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.mobile?.isError">{{errPositionItem?.mobile?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <span>角标：</span>
-                    </label>
-                    <div class=" control-input">
-                        <input class="form-control" placeholder="请输入负责人手机号" [(ngModel)]="currentProject.mobile" name="mobile"
-                               maxlength="11" autocomplete="off">
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.mobile?.isError">{{errPositionItem?.mobile?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <span>描述：</span>
-                    </label>
-                    <div class=" control-input">
-                        <input class="form-control" placeholder="请输入负责人手机号" [(ngModel)]="currentProject.mobile" name="mobile"
-                               maxlength="11" autocomplete="off">
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.mobile?.isError">{{errPositionItem?.mobile?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row change-status" *ngIf="!isCreateProject">
-                    <label class=" control-label">
-                        <span>状态：</span>
-                    </label>
-                    <div class="control-input control-pwd">
-                        <select class="form-control" [(ngModel)]="currentProject.status" name="status">
-                            <option value=1>未完成</option>
-                            <option value=2>已完成</option>
+                        <select class="form-control" [(ngModel)]="currentPage.system" name="system" disabled>
+                            <option value=1>IOS</option>
+                            <option value=2>Android</option>
+                        </select>
+                        <select class="form-control" [(ngModel)]="currentPage.version" name="version" required>
+                            <option value="">请选择</option>
+                            <option *ngFor="let item of versionList" [value]="item.version">{{item.version}}</option>
                         </select>
                     </div>
                 </div>
-
+                <div class="row row-message"></div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>落地页</span>
+                    </label>
+                    <div class=" control-input">
+                        <select class="form-control" [(ngModel)]="currentPage.belong_to" name="belong_to" required>
+                            <option value=''>请选择</option>
+                            <option value=2>H5</option>
+                        </select>
+                        <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="currentPage.jump_link" name="jump_link"
+                               maxlength="100" autocomplete="off" required (change)="errPositionItem.jump_link.isError=false">
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.jump_link?.isError">{{errPositionItem?.jump_link?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>&nbsp;</b>
+                        <span>角标</span>
+                    </label>
+                    <div class="control-input">
+                        <select class="form-control" [(ngModel)]="currentPage.is_display" name="is_display">
+                            <option value=false>显示</option>
+                            <option value=true>不显示</option>
+                        </select>
+                        <input class="form-control" placeholder="请输入显示内容，限5字以内" [(ngModel)]="currentPage.corner" name="menu_content"
+                               maxlength="5" autocomplete="off" (change)="errPositionItem.corner.isError=false">
+                        <input type="text" [(ngModel)]="currentPage.background_color" name="color" class="form-control" placeholder="输入背景色号,如#ffffff"
+                               style="width: 107px!important;margin-left: 10px" (change)="errPositionItem.corner.isError=false"/>
+                        <input  [(colorPicker)]="currentPage.background_color"
+                                [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
+                                readonly class="choose-color" (change)="errPositionItem.corner.isError=false"/>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.corner?.isError">{{errPositionItem?.corner?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>&nbsp;</b>
+                        <span>描述</span>
+                    </label>
+                    <div class=" control-input">
+                        <input class="form-control" placeholder="请输入描述，100字以内" [(ngModel)]="currentPage.menu_describe" name="menu_describe"
+                               maxlength="100" style="width: 448px!important;">
+                    </div>
+                </div>
+                <div class="row row-message"></div>
                 <div class="modal-footer">
                     <button class="close-btn" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || coverImg.imageList.length===0"
                             (appZDebounceClick)="onEditFormSubmit()">
                         {{sureName}}
                     </button>
@@ -144,34 +132,3 @@
         </div>
     </div>
 </div>
-
-<!--上传-->
-<!--<div class="modal fade" data-backdrop="true" id="uploadModal"
-     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  data-keyboard='false'>
-    <div class="modal-dialog prompt-dialog">
-        <div class="modal-content prompt-content prompt-content-upload">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="closeUpload()">&times;</button>
-                <h4 class="modal-title">图像上传</h4>
-            </div>
-            <div class="modal-body modal-body-upload">
-                <div class="select-file-upload-container">
-                    <div class="select-file-upload-contain">
-                        <div class="select-file-upload">
-                            <a class=" choose-file-upload">
-                                <input #productFileImportInput1 type="file" name="files1" id="file-upload"
-                                       (change)="importViewModel.selectedFile($event,productFileImportInput1)" accept="image/*" />
-                            </a>
-                        </div>
-                        <div class="upload-hint" *ngIf='this.importViewModel.hasErrorTip'>{{this.importViewModel.errorTip}}</div>
-                    </div>
-                    <img id="transform"  src=""/>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-inverse" data-dismiss="modal" (click)="cancleUpload()">取消</button>
-                <button class="btn btn-primary" [ngClass]="{'btn-disabled':this.importViewModel.hasErrorTip || !this.importViewModel.file}" (click)="confirmUpload()" [disabled]="this.importViewModel.hasErrorTip || !this.importViewModel.file">确定</button>
-            </div>
-        </div>
-    </div>
-</div>-->

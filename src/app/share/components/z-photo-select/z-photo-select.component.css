@@ -112,11 +112,17 @@ input[type=file] + label {
 }
 
 .image-modal .modal-content {
-  width: 100%;
+  width: 200%;
   height: 100%;
   border-radius: 0;
   border: none;
+  top: 0;
   /*padding: 15px 12px 18px 14px;*/
+}
+
+.modal-title {
+  color: #fff;
+  font-size: 18px;
 }
 
 .image-modal .form-horizontal {
@@ -233,4 +239,24 @@ input[type=file] + label {
   display: block;
   border-radius: 6px;
   animation: reverse progress-bar-stripes 0.40s linear infinite, animate-positive 2s
+}
+
+.btn-primary {
+  width: 179px;
+  height: 50px;
+  background: #3E71F7;
+  margin-right: 100px;
+}
+
+.btn-primary:hover {
+  background: #315AC5;
+}
+
+.btn-inverse {
+  width: 179px;
+  height: 50px;
+  outline: none;
+  border: 1px solid #3E71F7;
+  color: #3E71F7;
+  margin-left: 100px;
 }

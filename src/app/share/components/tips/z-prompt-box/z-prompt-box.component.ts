@@ -8,6 +8,7 @@ import {Subscription, timer} from 'rxjs';
 })
 export class ZPromptBoxComponent implements AfterViewInit {
 
+  public src = '/assets/images/success.png';
   private callback: any;
   private delaySubscription: Subscription;
 
@@ -47,9 +48,10 @@ export class ZPromptBoxComponent implements AfterViewInit {
    * @param delay 延时关闭时间 (-1为不自动关闭,默认两秒)
    */
 
-  public open(message: string, closeFunc: any = null, delay: number = 2000) {
+  public open(message: string, closeFunc: any = null, delay: number = 2000, src?: string) {
     timer(0).subscribe(() => {
       this.message = message;
+      this.src = src ? src : this.src;
       $(this.promptDiv.nativeElement).modal('show');
     });
     this.callback = closeFunc;

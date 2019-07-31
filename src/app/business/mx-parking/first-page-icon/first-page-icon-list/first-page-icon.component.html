@@ -2,26 +2,24 @@
     <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'"></app-crumb>
     <ul class="header-right">
         <li class="big-bg">
-            <a (click)="onShowModal(true , null)">新增项目</a>
+            <a (click)="onShowModal(null)">新建</a>
         </li>
     </ul>
 </div>
 <div class="content-flow">
     <div class="tab-bar">
-        <ul>
-            <li style="border:1px solid rgba(53,57,92,1);border-right: 0px" [class.active]="searchParams.status==1" (click)="onCheckStatusClicked(1)">美行停车IOS</li>
-            <li style="border:1px solid rgba(53,57,92,1);" [class.active]="searchParams.status==2" (click)="onCheckStatusClicked(2)">美行停车Android</li>
+        <ul *ngFor="let item of appList">
+            <li [class.active]="application_id===item.application_id" (click)="onCheckStatusClicked(item.application_id)">{{item.application_name}}</li>
         </ul>
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="projectList"
+            <nz-table [nzData]="iconList"
                       [nzShowPagination]="true"
                       [nzNoResult]="noResultText"
                       [nzPageSize]="'15'"
                       (nzPageIndexChange)="onNZPageIndexChange($event)"
-                      [(nzPageIndex)]="pageIndex"
-                      #basicTable>
+                      [(nzPageIndex)]="pageIndex">
                 <thead>
                 <tr>
                     <th>显示顺序</th>
@@ -34,24 +32,22 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr *ngFor="let data of basicTable.data">
-                    <td [title]="data.project_name">{{data.project_name|zMaxLength:40}}</td>
-                    <td>{{data.province}}{{data.city}}{{data.district}}</td>
-                    <td *ngIf="data.leader|| data.mobile">
-                        <span *ngIf="data.leader != ''">{{data.leader}}</span>
-                        <span *ngIf="data.mobile != ''">({{data.mobile}})</span>
+                <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                <tr *ngFor="let data of iconList; let i=index" cdkDrag>
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td>
+                        <img [src]="data.icon" style="height: 20px;width: 20px">
                     </td>
-                    <td *ngIf="(data.leader === '' && data.mobile === '')">--</td>
-                    <td>{{data.status}}</td>
-                    <td>{{data.status}}</td>
-                    <td>{{data.status}}</td>
-                    <td >{{data.created_time*1000 | date:"y-MM-dd HH:mm:ss"}}</td>
+                    <td [title]="data.title">{{data.title|zMaxLength:40}}</td>
+                    <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
+                    <td>{{data.version}}</td>
+                    <td>{{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.corner}}</td>
+                    <td>{{data.menu_describe}}</td>
                     <td class="operation">
-                        <a class="export-list" [title]="'隐藏'" (click)="onHideBtnClick(data)"></a>
-                        <a class="export-project-files" [title]="'开启'" (click)="onHideBtnClick(data)"></a>
-                        <a class="edit"  [title]="'修改'" (click)="onShowModal(false , data.project_id)"></a>
-                        <a class="delete" [title]="'删除'" (click)="onDeleteBtnClick(data)"></a>
+                        <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
+                        <a *ngIf="data.is_display" [title]="'开启'" (click)="onHideBtnClick(data, false)">开启</a>
+                        <a [title]="'编辑'" (click)="onShowModal(data.menu_id)">编辑</a>
+                        <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
                     </td>
                 </tr>
                 </tbody>

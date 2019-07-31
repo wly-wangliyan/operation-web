@@ -15,6 +15,7 @@
           [(nzOpen)]="menuItem.isSelect"
           [class.selected]="menuItem.isSelect">
       <span title>
+        <div *ngIf="menuItem.isSelect"></div>
         <i class="icon-menu"></i>
         <span>{{menuItem.title}}</span>
         <i class="icon-arrow" [ngClass]="{'menu-open':!menuItem.isSelect,'menu-close':menuItem.isSelect}"></i>

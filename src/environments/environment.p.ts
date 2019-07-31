@@ -4,5 +4,6 @@
 export const environment = {
   production: true,
   version: 'p',
-  CAMERA_MONITOR_DEPLOYMENT_SERVE: '//camera-monitor-deployment-server-pre.parkone.cn',
+  OPERATION_SERVE: '////operation-server-pre.parkone.cn',
+  STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
 };

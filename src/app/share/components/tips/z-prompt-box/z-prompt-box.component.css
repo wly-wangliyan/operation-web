@@ -24,14 +24,14 @@
 
 .z-modal-dialog {
   width: 360px;
-  height:221px;
+  height:253px;
   margin: 10% auto;
   border-radius: 0!important;
   animation-delay: 20ms;
 }
 
 .z-modal-footer {
-  padding: 0.5rem 1rem;
+  /*padding: 0.5rem 1rem;*/
   border-top:0!important;
 }
 
@@ -50,7 +50,7 @@
   text-align: left;
   font-weight:500;
   color:rgba(55,60,64,1);
-  padding: 16px;
+  padding: 30px;
 }
 
 .z-modal-footer{
@@ -67,7 +67,7 @@
   width:179px;
   height:50px;
   border:none;
-  border-radius:25px;
+  border-radius:4px;
   cursor: pointer;
   outline: 0px;
   font-size: 14px;
@@ -75,7 +75,7 @@
 }
 
 .z-sure-btn:hover {
-  background: rgba(0,193,222,0.7);
+  background: #4A7FFE;
 }
 
 @-webkit-keyframes fade-in { /*针对webkit内核*/
@@ -116,7 +116,7 @@
 .z-modal-warning-icon{
   width: 60px;
   height: 60px;
-  background: url(/assets/images/success.png);
+  /*background: url(/assets/images/success.png);*/
   margin:0 auto 20px;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .z-color {
-  background: rgba(0, 193, 222, 1);
+  background: #3E71F7;
   color: #fff;
 }
 

@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
 
     this.errorMsg = '';
     this.loginHttpService.requestLogin(this.loginParams).subscribe(data => {
-      LocalStorageProvider.Instance.set(LocalStorageProvider.AccessToken, data.access_token);
       this.authService.authorizeByLogin();
     }, err => {
       this.loginError = true;

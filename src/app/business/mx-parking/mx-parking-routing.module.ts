@@ -4,7 +4,8 @@ import {AuthGuardService} from '../../core/auth-guard.service';
 import {RouteMonitorService} from '../../core/route-monitor.service';
 import { MxParkingComponent } from './mx-parking.component';
 import { FirstPageIconComponent } from './first-page-icon/first-page-icon-list/first-page-icon.component';
-import { VersionManagementComponent } from './version-management/version-management-list/version-management.component';
+import { AppListComponent } from './version-management/app-list/app-list.component';
+import { VersionListComponent } from './version-management/version-list/version-list.component';
 
 const routes: Routes = [{
   path: '', component: MxParkingComponent,
@@ -12,7 +13,8 @@ const routes: Routes = [{
   children: [
     {path: '', redirectTo: 'first-page-icon', pathMatch: 'full'},
     {path: 'first-page-icon', component: FirstPageIconComponent},
-    {path: 'version-management', component: VersionManagementComponent},
+    {path: 'version-management', component: AppListComponent},
+    {path: 'version-management/version-list', component: VersionListComponent},
     {path: '**', redirectTo: 'first-page-icon', pathMatch: 'full'}
   ]
 }];
