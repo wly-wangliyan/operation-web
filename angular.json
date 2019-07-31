@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "operation-web-test": {
+    "operation-web": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/operation-web-test",
+            "outputPath": "dist/operation-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "operation-web-test:build"
+            "browserTarget": "operation-web:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "operation-web-test:build:production"
+              "browserTarget": "operation-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "operation-web-test:build"
+            "browserTarget": "operation-web:build"
           }
         },
         "test": {
@@ -114,16 +114,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "operation-web-test:serve"
+            "devServerTarget": "operation-web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "operation-web-test:serve:production"
+              "devServerTarget": "operation-web:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "operation-web-test"
+  "defaultProject": "operation-web"
 }
