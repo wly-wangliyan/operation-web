@@ -9,7 +9,7 @@ services:
         image: operation-web
         restart: always
         ports:
-            - 9600:80
+            - 9006:80
 networks:
     default:
         ipam:
