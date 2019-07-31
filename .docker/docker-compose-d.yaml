@@ -1,0 +1,17 @@
+version: "2"
+services:
+    operation-web:
+        build:
+            context: ..
+            dockerfile: .docker/Dockerfile
+            args:
+                version: D
+        image: operation-web
+        restart: always
+        ports:
+            - 9600:80
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.139.0/24
