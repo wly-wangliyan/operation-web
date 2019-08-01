@@ -9,7 +9,8 @@
 <div class="content-flow">
     <div class="tab-bar">
         <ul *ngFor="let item of appList">
-            <li [class.active]="application_id===item.application_id" (click)="onCheckStatusClicked(item.application_id)">{{item.application_name}}</li>
+            <li [class.active]="application_id===item.application_id" [class.width]="appList.length < 6"
+                (click)="onCheckStatusClicked(item.application_id)">{{item.application_name|zMaxLength:14}}</li>
         </ul>
     </div>
     <div class="table-container">

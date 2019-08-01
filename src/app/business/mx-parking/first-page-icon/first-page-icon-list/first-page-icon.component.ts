@@ -106,6 +106,11 @@ export class FirstPageIconComponent implements OnInit {
       this.globalService.promptBox.open('自助缴费不可隐藏!', null, 2000, '/assets/images/warning.png');
       return;
     }
+    const icon_display = this.iconList.filter(v => !v.is_display);
+    if (!dispaly && icon_display.length >= 10) {
+      this.globalService.promptBox.open('每个系统最大可同时显示10个icon!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     const param = {is_display: dispaly};
     this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
       const msg = dispaly ? '隐藏成功！' : '开启成功！';

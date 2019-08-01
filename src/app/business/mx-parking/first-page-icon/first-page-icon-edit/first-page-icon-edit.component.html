@@ -91,14 +91,14 @@
                         <span>角标</span>
                     </label>
                     <div class="control-input">
-                        <select class="form-control" [(ngModel)]="currentPage.is_display" name="is_display">
+                        <select class="form-control" [(ngModel)]="currentPage.is_display" name="is_display" required>
                             <option value=false>显示</option>
                             <option value=true>不显示</option>
                         </select>
-                        <input class="form-control" placeholder="请输入显示内容，限5字以内" [(ngModel)]="currentPage.corner" name="menu_content"
-                               maxlength="5" autocomplete="off" (change)="errPositionItem.corner.isError=false">
+                        <input class="form-control" placeholder="请输入显示内容，限4字以内" [(ngModel)]="currentPage.corner" name="menu_content"
+                               maxlength="4" autocomplete="off" (change)="errPositionItem.corner.isError=false" required>
                         <input type="text" [(ngModel)]="currentPage.background_color" name="color" class="form-control" placeholder="输入背景色号,如#ffffff"
-                               style="width: 107px!important;margin-left: 10px" (change)="errPositionItem.corner.isError=false"/>
+                               style="width: 107px!important;margin-left: 10px" (change)="errPositionItem.corner.isError=false" required/>
                         <input  [(colorPicker)]="currentPage.background_color"
                                 [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
                                 readonly class="choose-color" (change)="errPositionItem.corner.isError=false"/>

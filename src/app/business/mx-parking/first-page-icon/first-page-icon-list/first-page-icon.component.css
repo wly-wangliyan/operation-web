@@ -14,7 +14,8 @@
 
 .tab-bar > ul > li {
     float: left;
-    width:300px;
+    font-size: 14px;
+    min-width: 190px;
     height:60px;
     margin: 2px 2px 0 0;
     text-align: center;
@@ -23,6 +24,10 @@
     outline: none;
     box-shadow:2px 0px 2px 0px rgba(137,146,170,0.33);
     border-radius:4px 4px 0px 0px;
+}
+
+.width {
+    width: 300px;
 }
 
 .tab-bar > ul > li:last-child {

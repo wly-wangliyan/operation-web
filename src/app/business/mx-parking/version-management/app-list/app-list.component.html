@@ -11,6 +11,7 @@
         <div class="zmy-table">
             <nz-table [nzData]="appList"
                       [nzShowPagination]="false"
+                      [nzPageSize]="appList.length"
                       [nzNoResult]="noResultText"
                       [(nzPageIndex)]="pageIndex"
                       #basicTable>

@@ -46,6 +46,10 @@ export class AppListComponent implements OnInit {
 
   // 显示添加编辑项目modal
   public onShowModal() {
+    if (this.appList.length > 7) {
+      this.globalService.promptBox.open('最多可添加8个应用！', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.appComponent.open(() => {
       this.appComponent.clear();
       this.pageIndex = 1;

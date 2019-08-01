@@ -93,7 +93,7 @@ export class VersionAddComponent implements OnInit {
     let cisCheck = true;
     if (!ValidateHelper.CheckIsVersion(this.currentVersion.version)) {
       this.errPositionItem.version.isError = true;
-      this.errPositionItem.version.errMes = '应用版本号输入格式错误，请重新输入！';
+      this.errPositionItem.version.errMes = '输入格式错误，请重新输入！';
       cisCheck = false;
     }
     return cisCheck;
