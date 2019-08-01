@@ -103,7 +103,10 @@ export class FirstPageIconService {
    * @returns Observable<Array<VersionEntity>>
    */
   public requestVersionList(application_id: string): Observable<Array<VersionEntity>> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications/${application_id}/versions`)
+    const param = {
+      status: 1
+    };
+    return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications/${application_id}/versions`, param)
         .pipe(map(res => {
           const tempList: Array<VersionEntity> = [];
           res.body.forEach(data => {
