@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
@@ -28,6 +28,7 @@ export class FirstPageIconComponent implements OnInit {
   private linkUrl: string;
 
   @ViewChild(FirstPageIconEditComponent, { static: true }) public firstPageIconEditComponent: FirstPageIconEditComponent;
+  @ViewChild('basicTable', { static: true }) public basicTable: ElementRef;
 
   private get pageCount(): number {
     if (this.iconList.length % PageSize === 0) {
@@ -144,7 +145,7 @@ export class FirstPageIconComponent implements OnInit {
   }
 
   // 列表排序
-  public drop(event: CdkDragDrop<string[]>): void {
+  public drop(event: CdkDragDrop<string[]>, data): void {
     if (event.previousIndex === event.currentIndex) {
       return;
     }
@@ -158,12 +159,13 @@ export class FirstPageIconComponent implements OnInit {
     } else {
       param = {move_num: this.iconList[event.currentIndex].sort_num};
     }
+    moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {
       this.searchText$.next();
-      moveItemInArray(this.iconList, event.previousIndex, event.currentIndex);
       this.globalService.promptBox.open('排序成功');
     }, err => {
       this.globalService.httpErrorProcess(err);
+      this.searchText$.next();
     });
   }
 }

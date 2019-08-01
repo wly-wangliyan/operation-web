@@ -17,10 +17,12 @@
         <div class="zmy-table">
             <nz-table [nzData]="iconList"
                       [nzShowPagination]="true"
+                      [nzFrontPagination]="true"
                       [nzNoResult]="noResultText"
                       [nzPageSize]="'15'"
                       (nzPageIndexChange)="onNZPageIndexChange($event)"
-                      [(nzPageIndex)]="pageIndex">
+                      [(nzPageIndex)]="pageIndex"
+                      #basicTable>
                 <thead>
                 <tr>
                     <th>显示顺序</th>
@@ -33,8 +35,8 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody cdkDropList (cdkDropListDropped)="drop($event)">
-                <tr *ngFor="let data of iconList; let i=index" cdkDrag>
+                <tbody cdkDropList (cdkDropListDropped)="drop($event, basicTable.data)">
+                <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
                     <td>{{i+(pageIndex-1)*15+1}}</td>
                     <td>
                         <img [src]="data.icon" style="height: 20px;width: 20px">
