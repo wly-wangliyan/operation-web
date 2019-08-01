@@ -29,7 +29,7 @@
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
                     <td [title]="data.version">{{data.version|zMaxLength:40}}</td>
-                    <td>{{data.status}}</td>
+                    <td>{{data.is_display?'已下线':'已上线'}}</td>
                     <td>{{data.created_time*1000| date:"y-MM-dd HH:mm"}}</td>
                     <td class="operation">
                         <a *ngIf="data.is_display" [title]="'上线'" (click)="onVersionDisplayBtnClick(data, false)">上线</a>
