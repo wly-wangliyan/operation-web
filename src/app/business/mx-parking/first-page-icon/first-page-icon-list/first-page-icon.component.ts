@@ -73,7 +73,8 @@ export class FirstPageIconComponent implements OnInit {
       return;
     }
     const app = this.appList.filter(v => v.application_id === this.application_id);
-    this.firstPageIconEditComponent.open(data.menu_id, app[0], () => {
+    const menu_id = data ? data.menu_id : null;
+    this.firstPageIconEditComponent.open(menu_id, app[0], () => {
        this.firstPageIconEditComponent.clear();
        this.pageIndex = 1;
        timer(0).subscribe(() => {
