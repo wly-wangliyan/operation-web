@@ -94,7 +94,7 @@ export class AuthService {
    * 登出
    */
   public logout() {
-    this.httpService.post(environment.OPERATION_SERVE + '/logout').subscribe(() => {
+    this.httpService.get(environment.OPERATION_SERVE + '/logout').subscribe(() => {
       this._isLoggedIn = false;
       this._user = null;
       this.router.navigate(['login']);

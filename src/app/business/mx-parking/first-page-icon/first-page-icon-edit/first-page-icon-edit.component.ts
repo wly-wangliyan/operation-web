@@ -240,7 +240,7 @@ export class FirstPageIconEditComponent implements OnInit {
   public onSelectedPicture(event) {
     if (event === 'type_error') {
       this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '不接受此文件类型！';
+      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
     } else if (event === 'size_over') {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '图片大小不得高于1M！';

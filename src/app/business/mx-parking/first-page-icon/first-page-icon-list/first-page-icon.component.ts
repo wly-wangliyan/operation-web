@@ -68,8 +68,12 @@ export class FirstPageIconComponent implements OnInit {
 
   // 显示添加编辑项目modal
   public onShowModal(data) {
+    if (data && (data.title === '自助缴费' || data.title === '油卡充值' || data.title === '检车服务' || data.title === '月卡服务')) {
+      this.globalService.promptBox.open('自助缴费、油卡充值、检车服务、月卡服务不可编辑!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     const app = this.appList.filter(v => v.application_id === this.application_id);
-    this.firstPageIconEditComponent.open(data, app[0], () => {
+    this.firstPageIconEditComponent.open(data.menu_id, app[0], () => {
        this.firstPageIconEditComponent.clear();
        this.pageIndex = 1;
        timer(0).subscribe(() => {
@@ -97,6 +101,10 @@ export class FirstPageIconComponent implements OnInit {
 
   // 隐藏、开启按钮触发事件
   public onHideBtnClick(data: any, dispaly: boolean) {
+    if (data && dispaly && data.title === '自助缴费') {
+      this.globalService.promptBox.open('自助缴费不可隐藏!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     const param = {is_display: dispaly};
     this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
       const msg = dispaly ? '隐藏成功！' : '开启成功！';
@@ -109,6 +117,10 @@ export class FirstPageIconComponent implements OnInit {
 
   // 删除某一App首页图标配置
   public onDeleteBtnClick(data: any) {
+    if (data && (data.title === '自助缴费' || data.title === '油卡充值' || data.title === '检车服务' || data.title === '月卡服务')) {
+      this.globalService.promptBox.open('自助缴费、油卡充值、检车服务、月卡服务不可删除!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       this.firstPageIconService.requestDeleteFirstPageIcon(data.menu_id, this.application_id).subscribe((e) => {
@@ -127,6 +139,9 @@ export class FirstPageIconComponent implements OnInit {
 
   // 列表排序
   public drop(event: CdkDragDrop<string[]>): void {
+    if (!event || !event.previousIndex || !event.currentIndex || event.previousIndex === event.currentIndex) {
+      return;
+    }
     let param = {};
     if (event.previousIndex > event.currentIndex) {
       const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
@@ -138,8 +153,9 @@ export class FirstPageIconComponent implements OnInit {
       param = {move_num: this.iconList[event.currentIndex].sort_num};
     }
     this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {
-      moveItemInArray(this.iconList, event.previousIndex, event.currentIndex);
       this.searchText$.next();
+      moveItemInArray(this.iconList, event.previousIndex, event.currentIndex);
+      this.globalService.promptBox.open('排序成功');
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

@@ -45,8 +45,8 @@
                     <td>{{data.menu_describe}}</td>
                     <td class="operation">
                         <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
-                        <a *ngIf="data.is_display" [title]="'开启'" (click)="onHideBtnClick(data, false)">开启</a>
-                        <a [title]="'编辑'" (click)="onShowModal(data.menu_id)">编辑</a>
+                        <a *ngIf="data.is_display" [title]="'显示'" (click)="onHideBtnClick(data, false)">显示</a>
+                        <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
                         <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
                     </td>
                 </tr>
