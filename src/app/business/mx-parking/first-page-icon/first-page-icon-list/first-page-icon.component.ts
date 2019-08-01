@@ -139,7 +139,7 @@ export class FirstPageIconComponent implements OnInit {
 
   // 列表排序
   public drop(event: CdkDragDrop<string[]>): void {
-    if (!event || !event.previousIndex || !event.currentIndex || event.previousIndex === event.currentIndex) {
+    if (event.previousIndex === event.currentIndex) {
       return;
     }
     let param = {};
