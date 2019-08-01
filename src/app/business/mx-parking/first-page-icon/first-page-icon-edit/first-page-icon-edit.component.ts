@@ -238,6 +238,7 @@ export class FirstPageIconEditComponent implements OnInit {
 
   // 选择图片时校验图片格式
   public onSelectedPicture(event) {
+    this.errPositionItem.icon.isError = false;
     if (event === 'type_error') {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
