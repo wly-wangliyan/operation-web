@@ -93,11 +93,11 @@
                     </label>
                     <div class="control-input">
                         <select class="form-control"
-                                [(ngModel)]="currentPage.corner_display" name="is_display" required>
+                                [(ngModel)]="currentPage.corner_display" name="is_display">
                             <option value=false>显示</option>
                             <option value=true>不显示</option>
                         </select>
-                        <div class="control-input" style="width:355px!important" *ngIf="currentPage.corner_display==='false'">
+                        <div class="control-input" style="width:355px!important" *ngIf="currentPage.corner_display==='false' || !currentPage.corner_display">
                             <input class="form-control" style="border-left: none!important;"
                                    [(ngModel)]="currentPage.corner" name="content" placeholder="请输入显示内容，限4字以内"
                                    maxlength="4" autocomplete="off" (change)="errPositionItem.corner.isError=false">
