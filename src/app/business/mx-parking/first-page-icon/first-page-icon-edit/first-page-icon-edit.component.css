@@ -120,9 +120,9 @@
 }
 
 .control-input select:first-child {
-    width: 90px !important;
+    width: 96px !important;
     background: #fff!important;
-    border-right: none!important;
+    /*border-right: none!important;*/
 }
 
 .close:hover {

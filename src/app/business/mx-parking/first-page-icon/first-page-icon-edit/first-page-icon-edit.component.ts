@@ -53,6 +53,7 @@ export class FirstPageIconEditComponent implements OnInit {
   public cover_url = [];
   public versionList: Array<VersionEntity>;
   public color = '';
+  public is_display: string;
 
   private continueRequestSubscription: Subscription;
   private sureCallback: any;
@@ -65,7 +66,6 @@ export class FirstPageIconEditComponent implements OnInit {
 
   @ViewChild('pagePromptDiv', { static: true }) public pagePromptDiv: ElementRef;
   @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
-  private Rx: any;
 
   constructor(private firstPageIconService: FirstPageIconService,
               private globalService: GlobalService) {
@@ -194,7 +194,7 @@ export class FirstPageIconEditComponent implements OnInit {
       this.errPositionItem.corner.errMes = '颜色值格式输入错误，请重新输入！';
       cisCheck = false;
     }
-    if (!this.currentPage.is_display && (!this.currentPage.background_color || !this.currentPage.corner)) {
+    if (!this.currentPage.corner_display && (!this.currentPage.background_color || !this.currentPage.corner)) {
       this.errPositionItem.corner.isError = true;
       this.errPositionItem.corner.errMes = '显示角标必须填写显示内容和背景颜色值！';
       cisCheck = false;

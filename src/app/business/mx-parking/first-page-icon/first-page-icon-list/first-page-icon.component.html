@@ -43,7 +43,7 @@
                     <td [title]="data.title">{{data.title|zMaxLength:20}}</td>
                     <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
                     <td>{{data.version}}</td>
-                    <td>{{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.jump_link|zMaxLength:20}}</td>
+                    <td>{{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.jump_link|zMaxLength:25}}</td>
                     <td>{{data.menu_describe|zMaxLength:15}}</td>
                     <td class="operation">
                         <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
