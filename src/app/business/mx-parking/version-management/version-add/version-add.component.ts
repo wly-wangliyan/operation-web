@@ -118,11 +118,15 @@ export class VersionAddComponent implements OnInit {
   private errorProcess(err) {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
-        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-        for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'version') {
-            this.errPositionItem.application_name.isError = true;
-            this.errPositionItem.application_name.errMes = '应用版本号错误或无效！';
+        for (const content of err.error.errors) {
+          if (content[0].code === 'invalid' && content[0].filed === 'version') {
+            this.errPositionItem.version.isError = true;
+            this.errPositionItem.version.errMes = '应用版本号错误或无效！';
+            return;
+          }
+          if (content[0].code === 'version exists' && content[0].filed === 'version') {
+            this.errPositionItem.version.isError = true;
+            this.errPositionItem.version.errMes = '应用版本号已存在！';
             return;
           }
         }

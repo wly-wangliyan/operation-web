@@ -4,6 +4,7 @@
     height: 34px;
     align-items: center!important;
     margin-bottom:10px;
+    display: inherit;
 }
 
 .row b{
@@ -22,6 +23,7 @@
     position: absolute;
     left: 22px;
     display: inherit;
+    margin-left: -22px;
 }
 
 .form-control {
@@ -51,5 +53,5 @@
     font-family:STHeitiSC-Medium;
     font-weight:500;
     color:rgba(232,32,56,1);
-    margin-left: -162px;
+    margin-left: 122px;
 }
