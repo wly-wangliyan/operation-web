@@ -22,7 +22,7 @@ export class FirstPageIconEntity extends EntityBase {
   public created_time: number = undefined; 	// float 	创建时间
   public updated_time: number = undefined; 	// float 	修改时间
   public is_display = undefined;  // 	bool	是否隐藏 false为不隐藏
-  public corner_display = true;  // 	bool	角标是否隐藏 false为不隐藏
+  public corner_display = 'true';  // 	bool	角标是否隐藏 false为不隐藏
   public is_delete = undefined;  // 	bool	是否删除 false为不删除
 }
 
