@@ -46,7 +46,7 @@ export class VersionAddComponent implements OnInit {
 
   // 弹框close
   public onClose() {
-    // this.clear();
+    this.clear();
     $(this.projectPromptDiv.nativeElement).modal('hide');
   }
 
