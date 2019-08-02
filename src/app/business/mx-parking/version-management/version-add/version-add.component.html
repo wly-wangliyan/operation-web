@@ -16,7 +16,7 @@
                         <span>应用版本号：</span>
                     </label>
                     <div class=" control-input">
-                        <input class="form-control" placeholder="数字加'.'组成，最多不能超过3个" [(ngModel)]="currentVersion.version"
+                        <input class="form-control" placeholder="数字加'.'组成，最多不能超过3个，例：1.1.0" [(ngModel)]="currentVersion.version"
                                name="version" autocomplete="off" (change)="errPositionItem.version.isError=false" required>
                     </div>
                 </div>

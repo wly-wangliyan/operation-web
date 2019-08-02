@@ -114,7 +114,7 @@ export class FirstPageIconComponent implements OnInit {
     }
     const param = {is_display: dispaly};
     this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
-      const msg = dispaly ? '隐藏成功！' : '开启成功！';
+      const msg = dispaly ? '隐藏成功！' : '显示成功！';
       this.globalService.promptBox.open(msg);
       this.searchText$.next();
     }, err => {
