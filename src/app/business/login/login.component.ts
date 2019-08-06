@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    if (!ValidateHelper.Account(this.loginParams.username) || !ValidateHelper.NoSpace(this.loginParams.password)) {
+    if (!ValidateHelper.NoSpace(this.loginParams.password)) {
       this.loginError = true;
       this.errorMsg = '账号或者密码错误！';
       return;
