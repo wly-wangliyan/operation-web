@@ -4,7 +4,6 @@ import {AuthService} from '../../core/auth.service';
 import {ValidateHelper} from '../../../utils/validate-helper';
 import {ZPromptBoxComponent} from '../../share/components/tips/z-prompt-box/z-prompt-box.component';
 import {ZConfirmationBoxComponent} from '../../share/components/tips/z-confirmation-box/z-confirmation-box.component';
-import { LocalStorageProvider } from '../../share/localstorage-provider';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +51,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    if (!ValidateHelper.NoSpace(this.loginParams.password)) {
+    if (!ValidateHelper.NoSpace(this.loginParams.password, 1, 20)) {
       this.loginError = true;
       this.errorMsg = '账号或者密码错误！';
       return;

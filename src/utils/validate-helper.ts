@@ -204,8 +204,8 @@ export class ValidateHelper {
    * @param string words
    * @returns boolean
    */
-  public static NoSpace(words: string ): boolean {
-    const regex = /^[^ ]{6,20}$/g;
+  public static NoSpace(words: string, min: number = 6, max: number = 20): boolean {
+    const regex = new RegExp(`^[^ ]{${min},${max}}$`);
     return regex.test(words);
   }
 
