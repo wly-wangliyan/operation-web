@@ -22,12 +22,12 @@ export class SentryErrorHandler implements ErrorHandler {
         switch (environment.version) {
             case 'd':
                 Sentry.init({
-                    dsn: 'https://661d4fc72ca74c8585fd927347d14712@guard.uucin.com/206'
+                    dsn: 'https://7fbfde3dd06e42a381f9f0e1fd630347@guard.uucin.com/217'
                 });
                 break;
             case 'r':
                 Sentry.init({
-                    dsn: 'https://bb623fd8fa4048048761dd4b68f3b57f@guard.uucin.com/207'
+                    dsn: 'https://9289f44a2da1424dbf63b6e014de9e41@guard.uucin.com/219'
                 });
                 break;
         }
