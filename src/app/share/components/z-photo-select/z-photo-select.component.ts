@@ -45,6 +45,10 @@ export class ZPhotoSelectComponent implements OnInit {
 
     @Input() public imageHeight = '88';
 
+    @Input() public minCropBoxWidth = 150;
+
+    @Input() public minCropBoxHeight = 150;
+
     public get transformLineHeight(): string {
         return (Number(this.imageHeight) - 2).toString();
     }
@@ -103,6 +107,7 @@ export class ZPhotoSelectComponent implements OnInit {
     public ngOnInit() {
         this.hasDeletePicture = this.hasDeletePicture;
         this.hasAddPicture = this.hasAddPicture;
+        console.log(this.hasDeletePicture);
     }
 
     /**
@@ -332,8 +337,8 @@ export class ZPhotoSelectComponent implements OnInit {
                     minContainerHeight: Number(this.imageHeight),
                     minCanvasWidth: 0,
                     minCanvasHeight: 0,
-                    minCropBoxWidth: 150,
-                    minCropBoxHeight: 150,
+                    minCropBoxWidth: this.minCropBoxWidth,
+                    minCropBoxHeight: this.minCropBoxHeight,
                     movable: true,
                     onlyColorChanged: false,
                     checkCrossOrigin: true,
@@ -341,7 +346,7 @@ export class ZPhotoSelectComponent implements OnInit {
                     checkImageOrigin: true,
                     dragCrop: false,
                     resizable: false,
-                    autoCropArea: 0.5
+                    autoCropArea: 0.2
                 });
             });
         }

@@ -1,11 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
 import { isUndefined } from 'util';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { FirstPageIconEntity, FirstPageIconService, VersionEntity } from '../first-page-icon.service';
-import { ActivatedRoute } from '@angular/router';
 import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../core/http.service';
 
@@ -53,7 +51,6 @@ export class FirstPageIconEditComponent implements OnInit {
   public cover_url = [];
   public versionList: Array<VersionEntity>;
   public color = '';
-  public is_display: string;
 
   private continueRequestSubscription: Subscription;
   private sureCallback: any;

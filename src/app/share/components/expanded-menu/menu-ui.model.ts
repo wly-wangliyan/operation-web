@@ -35,7 +35,9 @@ export class SideMenuItem {
 export class MenuHelper {
   public static Select(menu: Array<SideMenuItem>, menuItem: SideMenuItem) {
     menu.forEach(item => {
-      item.reset();
+      if (item.children.length === 0) {
+        item.reset();
+      }
     });
     menuItem.isSelect = true;
   }

@@ -5,7 +5,7 @@ import {map} from 'rxjs/internal/operators';
 import {isNullOrUndefined} from 'util';
 import {GlobalConst} from '../share/global-const';
 import {EntityBase} from '../../utils/z-entity';
-import { LocalStorageProvider } from '../share/localstorage-provider';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -42,8 +42,8 @@ export class HttpService {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/JSON');
     headers = headers.set('Content-Type', 'application/JSON;charset=UTF-8');
-    headers = headers.set('Authorization', 'token ' + LocalStorageProvider.Instance.get(LocalStorageProvider.AccessToken));
-    console.log(headers);
+    headers = headers.set('X-CLIENT-ID', environment.X_CLIENT_ID);
+    headers = headers.set('X-CLIENT-MD5', environment.X_CLIENT_MD5);
     requestOptions.headers = headers;
     requestOptions.withCredentials = true;
     requestOptions.observe = 'response';
@@ -55,7 +55,8 @@ export class HttpService {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/JSON');
     headers = headers.set('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    headers = headers.set('Authorization', 'token ' + LocalStorageProvider.Instance.get(LocalStorageProvider.AccessToken));
+    headers = headers.set('X-CLIENT-ID', environment.X_CLIENT_ID);
+    headers = headers.set('X-CLIENT-MD5', environment.X_CLIENT_MD5);
     requestOptions.headers = headers;
     requestOptions.withCredentials = true;
     requestOptions.observe = 'response';

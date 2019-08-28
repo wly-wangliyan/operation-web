@@ -20,7 +20,7 @@
 .row{
     margin-left:0!important;
     margin-right: 0!important;
-    height: 44px;
+    /*height: 44px;*/
     align-items: center!important;
     margin-bottom:0!important;
 }
@@ -29,14 +29,10 @@
     margin-right:10px!important;
 }
 
-.row-message{
-    height:28px!important;
-}
-
 .control-label{
     padding-left: 40px!important;
-    margin-bottom:0!important;
-    width:100px!important;
+    margin-bottom:20px!important;
+    width:106px!important;
     padding-right: 10px;
     padding-left:0!important;
 }
@@ -45,22 +41,20 @@
     float: left;
 }
 
-
 .control-label span{
     float: left;
 }
 
-
 .control-input{
     display: flex!important;
     align-items: center!important;
-    width:448px!important;
+    width:428px!important;
+    margin-bottom: 20px;
 }
 
 .control-input label{
     margin-bottom:0!important;
 }
-
 
 .form-control{
     font-size: 14px!important;
@@ -69,17 +63,6 @@
     width:342px!important;
     background:rgba(246,246,246,1);
     border-radius:1px;
-}
-
-.err-message{
-    font-size:14px;
-    font-family:STHeitiSC-Medium;
-    font-weight:500;
-    color:rgba(232,32,56,1);
-}
-
-.sex{
-    margin-bottom:21px;
 }
 
 .form-radio-group{
@@ -113,27 +96,43 @@
 }
 
 .cover-hint{
-    margin-left: 20px;
-    width: 279px;
-    margin-top: 20px;
-    color: #888888;
-}
-
-.control-input select:first-child {
-    width: 106px !important;
-    background: #fff!important;
-    /*border-right: none!important;*/
+    margin-left: 150px;
+    font-size: 14px;
 }
 
 .close:hover {
     font-size: 28px;
 }
 
-.choose-color {
-    width: 34px;
-    height: 34px;
-    border: 0.5px solid rgba(136, 136, 136, 0.3);
-    border-left: none;
-    cursor: pointer;
-    background: url("/assets/images/choose_color.png") center no-repeat;
+.modal {
+    font-size: 13px;
+}
+
+.checkbox {
+    margin-right: 10px;
+}
+
+.control-label span{
+    font-size: 14px;
+}
+
+.control-input ul {
+    margin-bottom: 0;
+}
+
+.control-input li {
+    float: left;
+    width: 200px;
+    color: #888888;
+}
+
+.row-message{
+    height:28px!important;
+}
+
+.err-message{
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(232,32,56,1);
 }

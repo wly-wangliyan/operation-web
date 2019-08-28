@@ -1,0 +1,43 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'经纪公司管理'" [level2Name]=""></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table [nzData]="brokerageList"
+                      [nzShowPagination]="true"
+                      [nzNoResult]="noResultText"
+                      [nzPageSize]="'15'"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)"
+                      [(nzPageIndex)]="pageIndex"
+                      #basicTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>企业名称</th>
+                    <th>用户名</th>
+                    <th>手机号</th>
+                    <th>地址</th>
+                    <th>授权保险公司</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of basicTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
+                    <td>{{data.account}}</td>
+                    <td>{{data.telephone}}</td>
+                    <td>{{data.address|zMaxLength:20}}</td>
+                    <td>{{data.ic_company_name|zMaxLength:20}}</td>
+                    <td class="operation">
+                        <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<!--编辑经纪公司信息-->
+<app-brokerage-company-edit></app-brokerage-company-edit>

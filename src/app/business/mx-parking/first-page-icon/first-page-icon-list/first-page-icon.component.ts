@@ -69,10 +69,6 @@ export class FirstPageIconComponent implements OnInit {
 
   // 显示添加编辑项目modal
   public onShowModal(data) {
-    if (data && (data.title === '自助缴费' || data.title === '油卡充值' || data.title === '检车服务' || data.title === '月卡服务')) {
-      this.globalService.promptBox.open('自助缴费、油卡充值、检车服务、月卡服务不可编辑!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
     const app = this.appList.filter(v => v.application_id === this.application_id);
     const menu_id = data ? data.menu_id : null;
     this.firstPageIconEditComponent.open(menu_id, app[0], () => {
@@ -103,10 +99,6 @@ export class FirstPageIconComponent implements OnInit {
 
   // 隐藏、开启按钮触发事件
   public onHideBtnClick(data: any, dispaly: boolean) {
-    if (data && dispaly && data.title === '自助缴费') {
-      this.globalService.promptBox.open('自助缴费不可隐藏!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
     const icon_display = this.iconList.filter(v => !v.is_display);
     if (!dispaly && icon_display.length >= 10) {
       this.globalService.promptBox.open('每个系统最大可同时显示10个icon!', null, 2000, '/assets/images/warning.png');
@@ -124,10 +116,6 @@ export class FirstPageIconComponent implements OnInit {
 
   // 删除某一App首页图标配置
   public onDeleteBtnClick(data: any) {
-    if (data && (data.title === '自助缴费' || data.title === '油卡充值' || data.title === '检车服务' || data.title === '月卡服务')) {
-      this.globalService.promptBox.open('自助缴费、油卡充值、检车服务、月卡服务不可删除!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
     this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       this.firstPageIconService.requestDeleteFirstPageIcon(data.menu_id, this.application_id).subscribe((e) => {

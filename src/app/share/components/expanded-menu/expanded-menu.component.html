@@ -5,7 +5,7 @@
           (click)="onMenuItemClick(menuItem,menuItem.title)"
           [class.selected]="menuItem.isSelect">
       <span title>
-        <i class="icon-menu"></i>
+        <i [class.icon-menu]="menu_icon"></i>
         <span>{{menuItem.title}}</span>
       </span>
       </li>

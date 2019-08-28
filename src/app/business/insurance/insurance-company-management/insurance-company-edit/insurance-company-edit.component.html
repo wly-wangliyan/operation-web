@@ -1,0 +1,101 @@
+<!--编辑首页图标配置-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #pagePromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{isCreateInsurance ? '新建' : '编辑'}}</span>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form *ngIf="currentInsurance" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>保险公司名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入1-20字以内名称" [(ngModel)]="currentInsurance.ic_name"
+                               name="title"
+                               maxlength="20" autocomplete="off" style="width: 448px!important;" required
+                               (change)="errPositionItem.ic_name.isError=false">
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.ic_name?.isError">{{errPositionItem?.ic_name?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="row" style="height: auto">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>LOGO</span>
+                    </label>
+                    <div class="control-input">
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="1"
+                                            [maxLength]="1"
+                                            [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)"
+                                            file_id="coverImg"
+                                            [imageHeight]="64" [imageUrls]="cover_url" #coverImg [imageWidth]="64"
+                                            [minCropBoxWidth]="64" [minCropBoxHeight]="64">
+                        </app-z-photo-select>
+                    </div>
+                </div>
+                <div class="row row-message" style="height: 20px!important;margin-top: -6px">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                    </div>
+                </div>
+                <p class="cover-hint">注：尺寸64*64px，格式PNG或JPG，大小1M以内</p>
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>标签</span>
+                    </label>
+                    <div class="control-input" style="display: contents!important;">
+                        <ul>
+                            <li *ngFor="let tag of tagList; let i=index">
+                                <div>{{tag}}</div>
+                                <span class="tag-span" (click)="tagList.splice(i, 1)">
+                                    <img src="/assets/images/tag_delete.png">
+                                </span>
+                            </li>
+                            <li *ngIf="tagList.length < 5">
+                                <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag"
+                                       name="tag" maxlength="10">
+                                <span class="tag-span" (click)="tagList.push(tag);tag=''">
+                                    <img src="/assets/images/tag_add.png">
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row row-message"></div>
+                <div class="row" style="height: 70px">
+                    <label class=" control-label">
+                        <b>&nbsp;</b>
+                        <span>备注</span>
+                    </label>
+                    <div class=" control-input">
+                        <textarea class="form-control" placeholder="请输入描述，200字以内" [(ngModel)]="currentInsurance.describe"
+                               name="menu_describe"
+                               maxlength="200" style="width: 428px!important;height: 80px!important">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="row row-message"></div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!editForm.form.valid || coverImg.imageList.length===0"
+                            (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+<!--编辑首页图标配置-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #pagePromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{isCreateBrokerage ? '新建' : '编辑'}}</span>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form *ngIf="currentBrokerage" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <span>企业名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentBrokerage.broker_company_name"
+                               name="broker_company_name" style="width: 448px!important;" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>用户名</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentBrokerage.account"
+                               name="account" style="width: 448px!important;" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>手机号</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentBrokerage.telephone"
+                               name="telephone" style="width: 448px!important;" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>地址</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentBrokerage.address"
+                               name="address" style="width: 448px!important;" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>授权保险公司</span>
+                    </label>
+                    <div class="control-input">
+                        <ul>
+                            <li *ngFor="let item of insuranceList; let i=index">
+                                <input type="checkbox" class="checkbox" [(ngModel)]="item.checked"
+                                       name="{{i}}" (change)="insuranceErrMes=''">{{item.source.ic_name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row row-message" style="margin-top: -20px">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span>{{insuranceErrMes}}</span>
+                    </div>
+                </div>
+                <div class="row" style="height: 70px;margin-bottom: 20px!important;">
+                    <label class=" control-label">
+                        <span>备注</span>
+                    </label>
+                    <div class=" control-input">
+                        <textarea class="form-control" placeholder="请输入描述，200字以内" [(ngModel)]="currentBrokerage.describe"
+                               name="describe"
+                               maxlength="200" style="width: 448px!important;height: 80px!important">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

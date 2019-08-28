@@ -4,6 +4,12 @@
     <div class="logo">
       <div [routerLink]="'/main'"></div>
     </div>
+    <ul class="main-herder-title">
+      <li [class.herder-active]="menu===1" (click)="onMainMenuClick(1)">运营</li>
+<!--      <li [class.herder-active]="menu===2" (click)="onMainMenuClick(2)">油卡</li>-->
+      <li [class.herder-active]="menu===3" (click)="onMainMenuClick(3)">保险</li>
+<!--      <li [class.herder-active]="menu===4" (click)="onMainMenuClick(4)">保养</li>-->
+    </ul>
     <div class="user">
       <!--<div class="user_photo"></div>
       <div class="user_name">{{authService.user?.username}}</div>-->

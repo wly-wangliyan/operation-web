@@ -97,7 +97,7 @@
                             <option value=false>显示</option>
                             <option value=true>不显示</option>
                         </select>
-                        <div class="control-input" style="width:355px!important" *ngIf="currentPage.corner_display==='false' || !currentPage.corner_display">
+                        <div class="control-input" style="width:342px!important" *ngIf="currentPage.corner_display==='false' || !currentPage.corner_display">
                             <input class="form-control" style="border-left: none!important;"
                                    [(ngModel)]="currentPage.corner" name="content" placeholder="请输入显示内容，限4字以内"
                                    maxlength="4" autocomplete="off" (change)="errPositionItem.corner.isError=false">
@@ -107,7 +107,9 @@
                             <input [(colorPicker)]="currentPage.background_color"
                                    [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
                                    readonly class="choose-color" (change)="errPositionItem.corner.isError=false"/>
-                        </div>{{is_display}}
+                        </div>
+                        <div class="control-input" style="width:342px!important" *ngIf="currentPage.corner_display==='true' && currentPage.corner_display">
+                        </div>
                     </div>
                 </div>
                 <div class="row row-message">
