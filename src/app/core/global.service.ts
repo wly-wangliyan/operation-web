@@ -22,6 +22,7 @@ export class GlobalService {
   public confirmationBox: ZConfirmationBoxComponent = undefined;
   public http500Tip: Http500TipComponent = undefined;
   public http403Tip: Http403TipComponent = undefined;
+  public menu_index = undefined;
   private permissionErrorMessage = '授权失败，请重新登录';
 
   /**

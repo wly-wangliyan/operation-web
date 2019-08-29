@@ -70,21 +70,27 @@ export class BrokerageCompanyEditComponent {
     this.closeCallback = closeFunc;
     this.insuranceErrMes = '';
     this.insuranceList = [];
-    this.rquestBrokerageDetail();
+    this.rquestInsuranceList();
     openPageModal();
   }
 
-  // 获取经纪公司详情\保险公司列表
-  private rquestBrokerageDetail() {
+  // 获取保险公司列表
+  private rquestInsuranceList() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription = this.insuranceService.requestInsuranceUseList()
         .subscribe(res => {
           res.results.forEach(value => {
             this.insuranceList.push(new InsuranceEntityItem(value));
           });
+          this.rquestBrokerageDetail();
         }, err => {
           this.globalService.httpErrorProcess(err);
         });
+  }
+
+  // 获取经纪公司详情
+  private rquestBrokerageDetail() {
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription =
          this.insuranceService.requestBrokerDetail(this.brokerage_id).subscribe(res => {
            this.currentBrokerage = res;

@@ -4,6 +4,7 @@ import {RouteMonitorService} from '../../../core/route-monitor.service';
 import {Router} from '@angular/router';
 import {Subscription, timer} from 'rxjs';
 import {MenuHelper, SideMenuItem} from './menu-ui.model';
+import { GlobalService } from '../../../core/global.service';
 
 /* 左侧菜单栏 */
 
@@ -23,8 +24,13 @@ export class ExpandedMenuComponent implements OnInit {
 
   constructor(public router: Router,
               public routeMonitorService: RouteMonitorService,
+              private globalService: GlobalService,
               public authService: AuthService) {
-    this.menuItems = this.generateMenus();
+    if (this.globalService.menu_index === 1) {
+      this.menuItems = this.generateMenus();
+    } else if (this.globalService.menu_index === 3) {
+      this.menuItems = this.generateMenus_insurance();
+    }
   }
 
   ngOnInit() {

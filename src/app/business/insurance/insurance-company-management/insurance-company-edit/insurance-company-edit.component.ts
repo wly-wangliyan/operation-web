@@ -199,4 +199,13 @@ export class InsuranceCompanyEditComponent implements OnInit {
       this.errPositionItem.icon.errMes = '图片大小不得高于1M！';
     }
   }
+
+  // 添加标签
+  public onAddTagClick() {
+    if (!this.tag) {
+      return;
+    }
+    this.tagList.push(this.tag);
+    this.tag = '';
+  }
 }

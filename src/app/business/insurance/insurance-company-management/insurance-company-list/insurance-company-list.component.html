@@ -32,13 +32,15 @@
                         <img *ngIf="data.ic_image" [src]="data.ic_image" style="height: 64px;width: 64px">
                         <img *ngIf="!data.ic_image" [src]="'/assets/images/image_space.png'" style="height: 64px;width: 64px">
                     </td>
-                    <td [title]="data.ic_name">{{data.ic_name|zMaxLength:40}}</td>
+                    <td [title]="data.ic_name">{{data.ic_name|zMaxLength:10}}</td>
                     <td class="list-tag">
-                        <li *ngFor="let item of data.tag">
-                            <span class="col-tag">{{item}}</span>
-                        </li>
+                        <div>
+                            <li *ngFor="let item of data.tag">
+                                <span class="col-tag">{{item}}</span>
+                            </li>
+                        </div>
                     </td>
-                    <td>{{data.describe}}</td>
+                    <td style="width: 15%" [title]="data.describe">{{data.describe|zMaxLength:15}}</td>
                     <td class="operation">
                         <a *ngIf="!data.discontinue_use" [title]="'停用'" (click)="onCloseBtnClick(data, true)">停用</a>
                         <a *ngIf="data.discontinue_use" [title]="'启用'" (click)="onCloseBtnClick(data, false)">启用</a>

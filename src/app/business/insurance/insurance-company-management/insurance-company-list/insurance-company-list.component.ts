@@ -82,6 +82,9 @@ export class InsuranceCompanyListComponent implements OnInit {
 
     // 列表排序
     public drop(event: CdkDragDrop<string[]>, data): void {
+        if (data[event.previousIndex].discontinue_use) {
+            return;
+        }
         if (event.previousIndex === event.currentIndex) {
             return;
         }

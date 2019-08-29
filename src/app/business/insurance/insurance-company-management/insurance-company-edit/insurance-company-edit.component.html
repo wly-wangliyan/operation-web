@@ -66,7 +66,7 @@
                             <li *ngIf="tagList.length < 5">
                                 <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag"
                                        name="tag" maxlength="10">
-                                <span class="tag-span" (click)="tagList.push(tag);tag=''">
+                                <span class="tag-span" (click)="onAddTagClick()">
                                     <img src="/assets/images/tag_add.png">
                                 </span>
                             </li>

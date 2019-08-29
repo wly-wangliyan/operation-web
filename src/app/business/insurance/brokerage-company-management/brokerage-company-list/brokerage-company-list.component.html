@@ -29,7 +29,7 @@
                     <td>{{data.account}}</td>
                     <td>{{data.telephone}}</td>
                     <td>{{data.address|zMaxLength:20}}</td>
-                    <td>{{data.ic_company_name|zMaxLength:20}}</td>
+                    <td [title]="data.ic_company_name">{{data.ic_company_name|zMaxLength:20}}</td>
                     <td class="operation">
                         <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
                     </td>

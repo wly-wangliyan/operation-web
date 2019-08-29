@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements AfterViewInit, OnDestroy {
 
   public user: string;
-  public menu = 1;
+  public menu: number;
 
   @ViewChild(ZPromptBoxComponent, {static: false} ) private promptBox: ZPromptBoxComponent;
   @ViewChild(ZConfirmationBoxComponent, {static: false}) private confirmationBox: ZConfirmationBoxComponent;
@@ -39,7 +39,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     DateFormatHelper.NowBlock = () => {
       return new Date(globalService.timeStamp * 1000);
     };
-
+    const url = this.router.routerState.snapshot.url;
+    this.menu = url.includes('insurance') ? 3 : 1;
+    this.globalService.menu_index = this.menu;
   }
 
   ngAfterViewInit() {
@@ -53,7 +55,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.global403Tip.http403Flag = false;
       this.global500Tip.http500Flag = false;
     });
-    this.onMainMenuClick(1);
   }
 
   ngOnDestroy() {
@@ -78,6 +79,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   public onMainMenuClick(index) {
     this.menu = index;
+    this.getMenuList(index);
+  }
+
+  private getMenuList(index) {
     const url = this.router.routerState.snapshot.url;
     switch (index) {
       case 1:
