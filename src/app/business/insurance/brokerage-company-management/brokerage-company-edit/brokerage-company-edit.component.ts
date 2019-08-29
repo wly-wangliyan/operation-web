@@ -117,7 +117,7 @@ export class BrokerageCompanyEditComponent {
       params.ic_company = insurance_id.join(',');
       this.insuranceService.requestModifyBrokerage(params, this.brokerage_id).subscribe(() => {
         this.onClose();
-        this.globalService.promptBox.open('修改成功！', () => {
+        this.globalService.promptBox.open('保存成功！', () => {
           this.sureCallbackInfo();
         });
       }, err => {
