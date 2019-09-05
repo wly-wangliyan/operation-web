@@ -139,6 +139,13 @@ export class BrokerageCompanyEditComponent {
       this.insuranceErrMes = '请选择授权保险公司！';
       isCheck = false;
     }
+    /*if (this.insuranceList.length === 0) {
+      this.insuranceErrMes = '请启用保险公司！';
+      isCheck = false;
+    } else if (insurance_id.length === 0) {
+      this.insuranceErrMes = '请选择授权保险公司！';
+      isCheck = false;
+    }*/
     return isCheck;
   }
 

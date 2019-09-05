@@ -86,7 +86,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     const url = this.router.routerState.snapshot.url;
     switch (index) {
       case 1:
-        if (url.includes('insurance')) {
+        if (!url.includes('operation')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus();
           this.router.navigate(['/main/home']);
         } else if (url.includes('home')) {
@@ -99,6 +99,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           this.router.navigate(['/main']);
         } else if (url.includes('home')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
+        }
+        break;
+      case 4:
+        if (!url.includes('maintenance')) {
+          this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
+          this.router.navigate(['/main']);
+        } else if (url.includes('home')) {
+          this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
         }
     }
   }

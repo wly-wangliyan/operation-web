@@ -35,7 +35,7 @@ export class InsuranceEntity extends EntityBase {
     public ic_id: string = undefined; 	// 	string 保险公司id
     public ic_name: string = undefined; 	// 	string 保险公司名称
     public ic_image: string = undefined; 	// 保险公司logo
-    public describe: string = undefined; 	// 	string 保险公司描述
+    public describe = ''; 	// 	string 保险公司描述
     public discontinue_use = undefined; 	// 	bool 是否启用 false为启用，true为不启用
     public sort_num: number = undefined; 	// 	number 排序数字
     public tag: Array<any> = undefined; 	// 	Array 应用id

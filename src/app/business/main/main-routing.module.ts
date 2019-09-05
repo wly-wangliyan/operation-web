@@ -18,18 +18,10 @@ const routes: Routes = [{
       path: 'insurance',
       loadChildren: () => import('../insurance/insurance.module').then(m => m.InsuranceModule),
     },
-    /*{
-      path: 'product',
-      loadChildren: () => import('../product-management/product-management.module').then(m => m.ProductManagementModule),
-    },
     {
-      path: 'order',
-      loadChildren: () => import('../order-management/order-management.module').then(m => m.OrderManagementModule),
+      path: 'maintenance',
+      loadChildren: () => import('../maintenance/maintenance.module').then(m => m.MaintenanceModule),
     },
-    {
-      path: 'business',
-      loadChildren: () => import('../business-management/business-management.module').then(m => m.BusinessManagementModule),
-    },*/
   ]
 }];
 
