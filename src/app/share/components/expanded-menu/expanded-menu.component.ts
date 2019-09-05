@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../../core/auth.service';
-import {RouteMonitorService} from '../../../core/route-monitor.service';
-import {Router} from '@angular/router';
-import {Subscription, timer} from 'rxjs';
-import {MenuHelper, SideMenuItem} from './menu-ui.model';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../core/auth.service';
+import { RouteMonitorService } from '../../../core/route-monitor.service';
+import { Router } from '@angular/router';
+import { Subscription, timer } from 'rxjs';
+import { MenuHelper, SideMenuItem } from './menu-ui.model';
 import { GlobalService } from '../../../core/global.service';
 
 /* 左侧菜单栏 */
@@ -22,10 +22,11 @@ export class ExpandedMenuComponent implements OnInit {
 
   private routePathSubscription: Subscription;
 
-  constructor(public router: Router,
-              public routeMonitorService: RouteMonitorService,
-              private globalService: GlobalService,
-              public authService: AuthService) {
+  constructor(
+    public router: Router,
+    public routeMonitorService: RouteMonitorService,
+    private globalService: GlobalService,
+    public authService: AuthService) {
     if (this.globalService.menu_index === 1) {
       this.menuItems = this.generateMenus();
     } else if (this.globalService.menu_index === 3) {
@@ -120,9 +121,9 @@ export class ExpandedMenuComponent implements OnInit {
     return brokerageMenu;
   }
 
-  // 项目管理
+  // 保养 》保养项目管理
   private generateProjectMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('项目管理', '/main/maintenance/vehicle-type-list');
+    const brokerageMenu = new SideMenuItem('保养项目管理', '/main/maintenance/project-management');
     brokerageMenu.icon = 'team';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
