@@ -40,7 +40,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       return new Date(globalService.timeStamp * 1000);
     };
     const url = this.router.routerState.snapshot.url;
-    this.menu = url.includes('insurance') ? 3 : 1;
+    this.menu = url.includes('insurance') ? 3 : url.includes('maintenance') ? 4 : 1;
     this.globalService.menu_index = this.menu;
   }
 

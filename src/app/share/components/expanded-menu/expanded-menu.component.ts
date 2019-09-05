@@ -30,6 +30,8 @@ export class ExpandedMenuComponent implements OnInit {
       this.menuItems = this.generateMenus();
     } else if (this.globalService.menu_index === 3) {
       this.menuItems = this.generateMenus_insurance();
+    } else if (this.globalService.menu_index === 4) {
+      this.menuItems = this.generateMenus_maintenance();
     }
   }
 
@@ -61,9 +63,6 @@ export class ExpandedMenuComponent implements OnInit {
     this.menu_icon = true;
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
-    // menusItem.push(this.generateProductMenu());
-    // menusItem.push(this.generateOrderMenu());
-    // menusItem.push(this.generateBusinessMenu());
     return menusItem;
   }
 
