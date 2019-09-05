@@ -3,15 +3,15 @@ import {Routes, RouterModule} from '@angular/router';
 import {AuthGuardService} from '../../core/auth-guard.service';
 import {RouteMonitorService} from '../../core/route-monitor.service';
 import { MaintenanceComponent } from './maintenance.component';
-import { VehicleTypeManagementComponent } from './vehicle-type-management/vehicle-type-management.component';
+import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
 
 const routes: Routes = [{
   path: '', component: MaintenanceComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
     {path: '', redirectTo: 'vehicle-type-list', pathMatch: 'full'},
-    {path: 'vehicle-type-list', component: VehicleTypeManagementComponent},
-    {path: 'insurance-company-list', component: VehicleTypeManagementComponent},
+    {path: 'vehicle-type-list', component: VehicleTypeListComponent},
+    {path: 'insurance-company-list', component: VehicleTypeListComponent},
     {path: '**', redirectTo: 'vehicle-type-list', pathMatch: 'full'}
   ]
 }];

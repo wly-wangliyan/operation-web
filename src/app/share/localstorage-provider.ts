@@ -13,6 +13,7 @@ export class LocalStorageProvider {
   public static readonly CorporateEmail = 'corporate_email';
   public static readonly HistoryLoginName = 'history-login-name';
   public static readonly CompanyId = 'company_id';
+  public static readonly Vehicle = 'company_id';
 
   /* 有效键值列表,所有键值都要在其中 */
   private validList: Array<string> = ['access_token', 'corporate_email', 'history-login-name', 'company_id'];

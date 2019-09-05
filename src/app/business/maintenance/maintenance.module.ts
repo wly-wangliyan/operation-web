@@ -6,6 +6,7 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.ser
 import { environment } from '../../../environments/environment';
 import { MaintenanceComponent } from './maintenance.component';
 import { VehicleTypeManagementComponent } from './vehicle-type-management/vehicle-type-management.component';
+import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
 
 const uploadToken: UploadConfig = {
     reportProcess: true,
@@ -21,7 +22,8 @@ const uploadToken: UploadConfig = {
     ],
     declarations: [
         MaintenanceComponent,
-        VehicleTypeManagementComponent
+        VehicleTypeManagementComponent,
+        VehicleTypeListComponent
     ],
     providers: [{
         provide: UPLOAD_TOKEN,
