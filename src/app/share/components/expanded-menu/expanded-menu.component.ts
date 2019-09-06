@@ -80,6 +80,7 @@ export class ExpandedMenuComponent implements OnInit {
   public generateMenus_maintenance(): Array<SideMenuItem> {
     this.menu_icon = false;
     const menusItem: Array<SideMenuItem> = [];
+    menusItem.push(this.generateOrderManagementMenu());
     menusItem.push(this.generateVehicleTypeMenu());
     menusItem.push(this.generateProjectMenu());
     return menusItem;
@@ -108,6 +109,14 @@ export class ExpandedMenuComponent implements OnInit {
   // 经纪公司管理
   private generateBrokerageMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance');
+    brokerageMenu.icon = 'team';
+    this.routeLinkList.push(brokerageMenu);
+    return brokerageMenu;
+  }
+
+  // 订单管理
+  private generateOrderManagementMenu(): SideMenuItem {
+    const brokerageMenu = new SideMenuItem('订单管理', '/main/maintenance/order-management');
     brokerageMenu.icon = 'team';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;

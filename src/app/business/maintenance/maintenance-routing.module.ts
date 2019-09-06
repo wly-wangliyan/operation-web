@@ -16,6 +16,11 @@ const routes: Routes = [{
       loadChildren: () => import('./project-managemant/project-managemant.module').then(m => m.ProjectManagemantModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'order-management',
+      loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'vehicle-type-list', pathMatch: 'full' }
   ]
 }];

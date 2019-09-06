@@ -9,27 +9,27 @@ import { VehicleTypeManagementComponent } from './vehicle-type-management/vehicl
 import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+  reportProcess: true,
+  url: `${environment.STORAGE_DOMAIN}/storages/images`,
+  source: 'park'
 };
 
 @NgModule({
-    imports: [
-        ShareModule,
-        MaintenanceRoutingModule,
-        HttpClientModule,
-    ],
-    declarations: [
-        MaintenanceComponent,
-        VehicleTypeManagementComponent,
-        VehicleTypeListComponent
-    ],
-    providers: [{
-        provide: UPLOAD_TOKEN,
-        useValue: uploadToken
-    },
-        UploadService]
+  imports: [
+    ShareModule,
+    MaintenanceRoutingModule,
+    HttpClientModule,
+  ],
+  declarations: [
+    MaintenanceComponent,
+    VehicleTypeManagementComponent,
+    VehicleTypeListComponent,
+  ],
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService]
 })
 export class MaintenanceModule {
 }
