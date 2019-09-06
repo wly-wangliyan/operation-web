@@ -1,20 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
-import { MaintenanceManualHttpService } from '../maintenance-manual-http.service';
+import { ProductLibraryHttpService } from '../product-library-http.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 
 const PageSize = 15;
-@Component({
-  selector: 'app-manual-list',
-  templateUrl: './manual-list.component.html',
-  styleUrls: ['./manual-list.component.css']
-})
-export class ManualListComponent implements OnInit {
 
-  public manualList: Array<any> = []; // 保养手册列表
+@Component({
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
+})
+export class ProductListComponent implements OnInit {
+
+  public productList: Array<any> = []; // 产品列表
 
   public pageIndex = 1; // 当前页码
 
@@ -32,15 +33,15 @@ export class ManualListComponent implements OnInit {
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
   private get pageCount(): number {
-    if (this.manualList.length % PageSize === 0) {
-      return this.manualList.length / PageSize;
+    if (this.productList.length % PageSize === 0) {
+      return this.productList.length / PageSize;
     }
-    return this.manualList.length / PageSize + 1;
+    return this.productList.length / PageSize + 1;
   }
 
   constructor(
     private globalService: GlobalService,
-    private manualService: MaintenanceManualHttpService
+    private productLibraryService: ProductLibraryHttpService
   ) { }
 
   public ngOnInit() {
@@ -76,8 +77,8 @@ export class ManualListComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       console.log('分页请求保养手册数据');
-      // this.continueRequestSubscription = this.manualService.continueManualList(this.linkUrl).subscribe(res => {
-      //   this.manualList = this.manualList.concat(res.results);
+      // this.continueRequestSubscription = this.productLibraryService.continueProductList(this.linkUrl).subscribe(res => {
+      //   this.productList = this.productList.concat(res.results);
       //   this.linkUrl = res.linkUrl;
       // }, err => {
       //   this.globalService.httpErrorProcess(err);

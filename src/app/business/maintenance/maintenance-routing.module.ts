@@ -30,6 +30,11 @@ const routes: Routes = [{
       loadChildren: () => import('./business-management/business-management.module').then(m => m.BusinessManagementModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'product-library', /** 产品库 */
+      loadChildren: () => import('./product-library/product-library.module').then(m => m.ProductLibraryModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'order-management', pathMatch: 'full' }
   ]
 }];
