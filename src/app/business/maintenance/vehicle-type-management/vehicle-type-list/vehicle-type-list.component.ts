@@ -4,6 +4,7 @@ import { Subscription, timer } from 'rxjs';
 import { VehicleImportViewModel } from './vehicle-import.model';
 import { GlobalService } from '../../../../core/global.service';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
+import { LocalStorageProvider } from '../../../../share/localstorage-provider';
 
 @Component({
   selector: 'app-vehicle-type-list',
@@ -27,6 +28,7 @@ export class VehicleTypeListComponent implements OnInit {
       { title: '宝马', key: '222', btn: '删除' },
       { title: '奔驰', key: '333', btn: '删除', isLeaf: true }
     ];
+    LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.nodes);
   }
 
   nzEvent(event: Required<NzFormatEmitEvent>): void {
@@ -35,6 +37,9 @@ export class VehicleTypeListComponent implements OnInit {
       if (node && node.getChildren().length === 0 && node.isExpanded) {
         this.loadNode().then(data => {
           node.addChildren(data);
+          const tempList = this.nodes;
+          tempList[0].Manufacturer = data;
+          LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, tempList);
         });
       }
     }
@@ -54,6 +59,7 @@ export class VehicleTypeListComponent implements OnInit {
   }
 
   public onImportClick() {
+    console.log(LocalStorageProvider.Instance.getObject(LocalStorageProvider.VehicleList));
     $('#importBerthPromptDiv').modal('show');
     this.importViewModel.initImportData();
   }
