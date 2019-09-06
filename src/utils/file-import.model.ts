@@ -1,4 +1,4 @@
-export class VehicleImportViewModel {
+export class FileImportViewModel {
   public address = ''; // 暂时没发现哪用 by zwl
   public file: any;
   public type: any = '';

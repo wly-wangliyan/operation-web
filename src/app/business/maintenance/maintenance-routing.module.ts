@@ -9,8 +9,12 @@ const routes: Routes = [{
   path: '', component: MaintenanceComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
-    { path: '', redirectTo: 'vehicle-type-list', pathMatch: 'full' },
-    { path: 'vehicle-type-list', component: VehicleTypeListComponent },
+    { path: '', redirectTo: 'order-management', pathMatch: 'full' },
+    {
+      path: 'vehicle-type-management',
+      loadChildren: () => import('./vehicle-type-management/vehicle-type-management.module').then(m => m.VehicleTypeManagementModule),
+      canLoad: [AuthGuardService]
+    },
     {
       path: 'project-management',
       loadChildren: () => import('./project-managemant/project-managemant.module').then(m => m.ProjectManagemantModule),
@@ -21,7 +25,12 @@ const routes: Routes = [{
       loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
       canLoad: [AuthGuardService]
     },
-    { path: '**', redirectTo: 'vehicle-type-list', pathMatch: 'full' }
+    {
+      path: 'business-management',
+      loadChildren: () => import('./business-management/business-management.module').then(m => m.BusinessManagementModule),
+      canLoad: [AuthGuardService]
+    },
+    { path: '**', redirectTo: 'order-management', pathMatch: 'full' }
   ]
 }];
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
 import { Subscription, timer } from 'rxjs';
-import { VehicleImportViewModel } from './vehicle-import.model';
 import { GlobalService } from '../../../../core/global.service';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 import { LocalStorageProvider } from '../../../../share/localstorage-provider';
+import { FileImportViewModel } from '../../../../../utils/file-import.model';
 
 @Component({
   selector: 'app-vehicle-type-list',
@@ -14,8 +14,14 @@ import { LocalStorageProvider } from '../../../../share/localstorage-provider';
 export class VehicleTypeListComponent implements OnInit {
 
   public nodes: any;
+  public nodes_1: any;
+  public nodes_2: any;
+  public nodes_3: any;
+  public key = '111';
+  public index = 0;
+  private vehicleList = [];
   private importSpotSubscription: Subscription;
-  public importViewModel: VehicleImportViewModel = new VehicleImportViewModel();
+  public importViewModel: FileImportViewModel = new FileImportViewModel();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
@@ -26,7 +32,7 @@ export class VehicleTypeListComponent implements OnInit {
     this.nodes = [
       { title: '奥迪', key: '111', btn: '删除'},
       { title: '宝马', key: '222', btn: '删除' },
-      { title: '奔驰', key: '333', btn: '删除', isLeaf: true }
+      { title: '奔驰', key: '333', btn: '删除', isLeaf: false }
     ];
     LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.nodes);
   }
@@ -37,9 +43,22 @@ export class VehicleTypeListComponent implements OnInit {
       if (node && node.getChildren().length === 0 && node.isExpanded) {
         this.loadNode().then(data => {
           node.addChildren(data);
-          const tempList = this.nodes;
-          tempList[0].Manufacturer = data;
-          LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, tempList);
+          const temp = this.vehicleList.length > 0 ? JSON.stringify(this.vehicleList) : JSON.stringify(this.nodes);
+          this.vehicleList = JSON.parse(temp);
+          data.forEach(value => {
+            this.vehicleList.push(value);
+          });
+          LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.vehicleList);
+          let sizeStore = 0;
+          if (window.localStorage) {
+          // 遍历所有存储
+            for (const item in window.localStorage) {
+              if (window.localStorage.hasOwnProperty(item)) {
+                sizeStore += window.localStorage.getItem(item).length;
+              }
+            }
+          }
+          console.log((sizeStore / 1024 / 1024).toFixed(2) + 'M');
         });
       }
     }
@@ -51,7 +70,7 @@ export class VehicleTypeListComponent implements OnInit {
           () =>
               resolve([
                 { title: 'Audi Sport', key: `${new Date().getTime()}-0` },
-                { title: '一汽-大众奥迪', key: `${new Date().getTime()}-1` }
+                { title: '一汽-大众奥迪', key: `${new Date().getTime()}-1`, isLeaf: true }
               ]),
           500
       );
@@ -66,6 +85,7 @@ export class VehicleTypeListComponent implements OnInit {
 
   /* 导入数据 */
   public onSubmitImportBerth() {
+    LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, []);
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
@@ -125,5 +145,20 @@ export class VehicleTypeListComponent implements OnInit {
         this.globalService.httpErrorProcess(err);
       });*/
     });
+  }
+
+  public onBrandClick(data) {
+    this.key = data.key;
+  }
+
+  public onManufacturerClick(data, index) {
+    this.index = index;
+    this.nodes_2 = [{ title: 'Audi Sport', key: `${new Date().getTime()}-0`, key_1: '111' },
+      { title: '一汽-大众奥迪', key: `${new Date().getTime()}-1`, key_1: '222' }];
+  }
+
+  public onTypeClick(data) {
+    this.nodes_3 = [{ title: '2017', key: `${new Date().getTime()}-0` },
+      { title: '2018', key: `${new Date().getTime()}-1` }];
   }
 }
