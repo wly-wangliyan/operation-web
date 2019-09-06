@@ -1,3 +1,40 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养项目管理'" [level2Name]=""></app-crumb>
 </div>
+<div class="content-flow">
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="projectList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #projectTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>类别</th>
+            <th>项目名称</th>
+            <th>项目ID</th>
+            <th>项目类型</th>
+            <th>配套项目</th>
+            <th>描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of projectTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td [title]="data.project_type | projectType">{{data.project_type | projectType}}</td>
+            <td [title]="data.project_name">{{data.project_name ? data.project_name : '--'}}</td>
+            <td>{{data.project_id ? data.project_id : '--'}}</td>
+            <td [title]="data.project_type | projectType">{{data.project_type | projectType}}</td>
+            <td *ngIf="data.project">{{data.project.project_name}}</td>
+            <td *ngIf="!data.project">--</td>
+            <td [title]="data.remark">{{data.remark|zMaxLength:20}}</td>
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
+              <a [title]="'删除'" (click)="onEditBtnClick(data)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
