@@ -81,6 +81,8 @@ export class ExpandedMenuComponent implements OnInit {
     this.menu_icon = false;
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateOrderManagementMenu());
+    menusItem.push(this.generateVehicleTypeMenu());
+    menusItem.push(this.generateMaintenanceManualMenu());
     menusItem.push(this.generateProjectMenu());
     menusItem.push(this.generateBusinessMenu());
     menusItem.push(this.generateVehicleTypeMenu());
@@ -126,6 +128,14 @@ export class ExpandedMenuComponent implements OnInit {
   // 车型管理
   private generateVehicleTypeMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('车型管理', '/main/maintenance/vehicle-type-management');
+    brokerageMenu.icon = 'team';
+    this.routeLinkList.push(brokerageMenu);
+    return brokerageMenu;
+  }
+
+  // 保养 》保养手册
+  private generateMaintenanceManualMenu(): SideMenuItem {
+    const brokerageMenu = new SideMenuItem('保养手册', '/main/maintenance/maintenance-manual');
     brokerageMenu.icon = 'team';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;

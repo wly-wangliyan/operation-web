@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { RouteMonitorService } from '../../core/route-monitor.service';
 import { MaintenanceComponent } from './maintenance.component';
-import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
 
 const routes: Routes = [{
   path: '', component: MaintenanceComponent,

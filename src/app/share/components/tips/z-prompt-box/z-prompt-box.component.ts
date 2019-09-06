@@ -1,5 +1,5 @@
-import {Component, Input, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
-import {Subscription, timer} from 'rxjs';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-z-prompt-box',
@@ -9,12 +9,13 @@ import {Subscription, timer} from 'rxjs';
 export class ZPromptBoxComponent implements AfterViewInit {
 
   public src = '/assets/images/success.png';
+  private errSrc = '/assets/images/warning.png';
   private callback: any;
   private delaySubscription: Subscription;
 
   @Input() public message: string;
 
-  @ViewChild('promptDiv', {static: false}) public promptDiv: ElementRef;
+  @ViewChild('promptDiv', { static: false }) public promptDiv: ElementRef;
 
   /**
    * 模态框消失，如果有关闭回调则执行，释放订阅。
@@ -48,10 +49,11 @@ export class ZPromptBoxComponent implements AfterViewInit {
    * @param delay 延时关闭时间 (-1为不自动关闭,默认两秒)
    */
 
-  public open(message: string, closeFunc: any = null, delay: number = 2000, src?: string) {
+  public open(message: string, closeFunc: any = null, delay: number = 2000, src?: string, isSuccess: boolean = true) {
     timer(0).subscribe(() => {
       this.message = message;
       this.src = src ? src : this.src;
+      this.src = isSuccess ? this.src : this.errSrc;
       $(this.promptDiv.nativeElement).modal('show');
     });
     this.callback = closeFunc;
