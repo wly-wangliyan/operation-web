@@ -18,9 +18,7 @@
 @primary-2: color(~`colorPalette('@{primary-color}', 2) `); // replace tint(@primary-color, 80%)
 @primary-3: color(~`colorPalette('@{primary-color}', 3) `); // unused
 @primary-4: color(~`colorPalette('@{primary-color}', 4) `); // unused
-@primary-5: color(
-  ~`colorPalette('@{primary-color}', 5) `
-); // color used to control the text color in many active and hover states, replace tint(@primary-color, 20%)
+@primary-5: color(~`colorPalette('@{primary-color}', 5) `); // color used to control the text color in many active and hover states, replace tint(@primary-color, 20%)
 @primary-6: @primary-color; // color used to control the text color of active buttons, don't use, use @primary-color
 @primary-7: color(~`colorPalette('@{primary-color}', 7) `); // replace shade(@primary-color, 5%)
 @primary-8: color(~`colorPalette('@{primary-color}', 8) `); // unused
@@ -35,7 +33,7 @@
 // Base background color for most components
 @component-background: #fff;
 @font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif,
-"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 @code-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 @heading-color: fade(#000, 85%);
 @text-color: fade(#000, 65%);
@@ -550,7 +548,8 @@
   margin: 0;
 }
 
-body, html {
+body,
+html {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -574,12 +573,60 @@ ul {
   border-radius: 0;
 }
 
-.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+.col-lg-1,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-md-1,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-sm-1,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-xs-1,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9 {
   padding-left: 0;
   padding-right: 5px;
 }
 
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
@@ -713,7 +760,8 @@ button {
 }
 
 /* 重置按钮默认 */
-.btn-reset, .btn-search {
+.btn-reset,
+.btn-search {
   width: 104px;
   height: 38px;
   border-radius: 4px;
@@ -839,13 +887,14 @@ button {
   margin-right: 30px;
 }
 
-.pagination > .active > a {
+.pagination>.active>a {
   background: #1d5fa9;
   border-color: #1d5fa9;
 }
 
 /* 模态框 */
-#modal, #cashModal {
+#modal,
+#cashModal {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -881,7 +930,7 @@ button {
   cursor: pointer;
 }
 
-.modal-contain > h5 {
+.modal-contain>h5 {
   color: #333333;
   font-size: 22px;
   font-family: SimSun;
@@ -975,11 +1024,15 @@ button {
   background: transparent !important;
 }
 
-.ant-menu-item-disabled, .ant-menu-item-disabled > .ant-menu-submenu-title, .ant-menu-submenu-disabled, .ant-menu-submenu-disabled > .ant-menu-submenu-title {
+.ant-menu-item-disabled,
+.ant-menu-item-disabled>.ant-menu-submenu-title,
+.ant-menu-submenu-disabled,
+.ant-menu-submenu-disabled>.ant-menu-submenu-title {
   color: #fff !important;
 }
 
-.ant-menu-item:active, .ant-menu-submenu-title:active {
+.ant-menu-item:active,
+.ant-menu-submenu-title:active {
   color: @theme-color;
 }
 
@@ -991,11 +1044,14 @@ button {
 }*/
 
 .ant-menu:not(.ant-menu-horizontal) .submenu .menu-item.ant-menu-item-selected .subMenuItem {
-  background: rgba(74,127,254,1) !important;
+  background: rgba(74, 127, 254, 1) !important;
   color: #fff !important;
 }
 
-.ant-menu-inline .ant-menu-item:after, .ant-menu-vertical .ant-menu-item:after, .ant-menu-vertical-left .ant-menu-item:after, .ant-menu-vertical-right .ant-menu-item:after {
+.ant-menu-inline .ant-menu-item:after,
+.ant-menu-vertical .ant-menu-item:after,
+.ant-menu-vertical-left .ant-menu-item:after,
+.ant-menu-vertical-right .ant-menu-item:after {
   border-right: 0;
 }
 
@@ -1004,43 +1060,53 @@ button {
 }
 
 /* 时间插件 */
-.ant-input, .ant-input:hover {
-  border: 1px solid #EDEDED !important;
+
+.ant-calendar-picker {
+  width: 240px !important;
+  background: #f8f9fb;
 }
 
 .ant-calendar-picker-icon {
   color: rgba(0, 0, 0, 0);
-  background: url(/assets/img/calendar.png) no-repeat center;
-  background-size: 100% 100%;
+  margin-top: -9px !important;
 }
 
-.ant-calendar-today-btn, .ant-calendar-today-btn:hover, .ant-calendar-time-picker-btn, .ant-calendar-time-picker-btn:hover {
+.ant-calendar-today-btn,
+.ant-calendar-today-btn:hover,
+.ant-calendar-time-picker-btn,
+.ant-calendar-time-picker-btn:hover {
   color: #FE9D66;
 }
 
 .ant-calendar .ant-calendar-ok-btn {
-  border: 1px solid #009AB1;
-  background: #009AB1;
+  border: 1px solid #3E71F7;
+  background: #3E71F7;
+  color: #fff !important;
 }
 
-.ant-calendar .ant-calendar-ok-btn:focus, .ant-calendar .ant-calendar-ok-btn:hover {
-  border: 1px solid #00C1DE;
-  background: #00C1DE;
-}
-
-.ant-calendar-today .ant-calendar-date {
-  color: #FE9D66;
-  border: 1px solid #FE9D66;
+.ant-calendar .ant-calendar-ok-btn:focus,
+.ant-calendar .ant-calendar-ok-btn:hover {
+  border: 1px solid rgb(80, 123, 230);
+  background: rgb(80, 123, 230);
 }
 
 .ant-calendar-selected-day .ant-calendar-date {
-  color: #FFFFFF;
-  background: #FE9D66;
-  border: 1px solid #FE9D66;
+  border: 1px solid #3E71F7;
+  background: #3E71F7 !important;
+  color: #fff !important;
 }
 
 .ant-calendar-input:focus {
   border: none;
+}
+
+.ant-select-selection {
+  border: 1px solid #e8e8e8 !important;
+  border-radius: 0 !important;
+}
+
+.ant-select-selection {
+  background: #f8f9fb !important;
 }
 
 /*radio样式*/
@@ -1061,16 +1127,17 @@ input[type=radio]:checked {
   margin-right: 20px;
 }
 
-.header-right > li, .header-right > li > i {
+.header-right>li,
+.header-right>li>i {
   float: left;
 }
 
-.header-right > li:focus {
+.header-right>li:focus {
   border: none;
   outline: none;
 }
 
-.header-right > li.big-bg {
+.header-right>li.big-bg {
   margin-top: 8px;
   cursor: pointer;
   width: 105px;
@@ -1084,11 +1151,13 @@ input[type=radio]:checked {
   color: rgba(255, 255, 255, 1);
 }
 
-.header-right > li.big-bg:hover, .header-right > li.big-bg:focus, .header-right > li.big-bg:active {
+.header-right>li.big-bg:hover,
+.header-right>li.big-bg:focus,
+.header-right>li.big-bg:active {
   background: #315AC5;
 }
 
-.header-right > li > a:hover {
+.header-right>li>a:hover {
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -1097,7 +1166,8 @@ input[type=radio]:checked {
   text-align: center
 }
 
-.header-right > li > a, .header-right > li > a:hover {
+.header-right>li>a,
+.header-right>li>a:hover {
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -1106,11 +1176,11 @@ input[type=radio]:checked {
   text-align: center
 }
 
-.header-right > li:hover a {
+.header-right>li:hover a {
   color: #3247a0;
 }
 
-.header-right > li:hover .header-right-plus {
+.header-right>li:hover .header-right-plus {
   background: url(/assets/images/header_right.png) no-repeat -40px -37px;
 }
 
@@ -1144,10 +1214,11 @@ input[type=radio]:checked {
   background-color: #fff;
   border-color: @theme-color;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(62,113,247,.25) !important;
+  box-shadow: 0 0 0 0.2rem rgba(62, 113, 247, .25) !important;
 }
 
-.ant-table table, .ant-table-thead > tr > th {
+.ant-table table,
+.ant-table-thead>tr>th {
   text-align: center !important;
 }
 
@@ -1164,7 +1235,9 @@ input[type=radio]:checked {
   background-size: 100% 100%;
 }
 
-.edit:hover, .edit:focus, .edit:active {
+.edit:hover,
+.edit:focus,
+.edit:active {
   background-image: url(/assets/images/edit_hover.png);
 }
 
@@ -1176,7 +1249,9 @@ input[type=radio]:checked {
   background-image: url(/assets/images/delete.png);
 }
 
-.delete:hover, .delete:focus, .delete:active {
+.delete:hover,
+.delete:focus,
+.delete:active {
   background-image: url(/assets/images/delete_hover.png);
 }
 
@@ -1188,7 +1263,9 @@ input[type=radio]:checked {
   background: url(/assets/images/icon_details_normal.png) no-repeat;
 }
 
-.detail:hover, .detail:focus, .detail:active {
+.detail:hover,
+.detail:focus,
+.detail:active {
   background: url(/assets/images/icon_details_hover.png) no-repeat;
 }
 
@@ -1200,11 +1277,27 @@ input[type=radio]:checked {
   background-size: 100% 100%;
 }
 
-.allocation-authority:hover, .allocation-authority:focus, .allocation-authority:active {
+.allocation-authority:hover,
+.allocation-authority:focus,
+.allocation-authority:active {
   background-image: url(/assets/images/authority_hover.png);
 }
 
 .search-btn {
   float: right;
   margin-left: 50px;
+}
+
+.ant-input {
+  border-color: #e8e8e8 !important;
+  border-radius: 0 !important;
+  background: #f8f9fb !important;
+}
+
+.ant-input::-webkit-input-placeholder {
+  /* placeholder颜色  */
+  font-size: 14px !important;
+  font-family: STHeitiSC-Light !important;
+  font-weight: 300 !important;
+  color: rgb(110, 110, 110) !important;
 }
