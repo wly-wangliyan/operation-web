@@ -1,5 +1,16 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养项目管理'" [level2Name]=""></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg big-white-btn">
+      <a (click)="onImportProject()">导入</a>
+    </li>
+    <li class="big-bg">
+      <a (click)="onDownloadMould()">下载模板</a>
+    </li>
+    <li class="big-bg">
+      <a (click)="onShowModal()" data-toggle="modal" data-target="#editProjectModal">新建</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="table-container">
@@ -21,7 +32,7 @@
         <tbody>
           <tr *ngFor="let data of projectTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]="data.project_type | projectType">{{data.project_type | projectType}}</td>
+            <td [title]="data.project_category | projectCategory">{{data.project_category | projectCategory}}</td>
             <td [title]="data.project_name">{{data.project_name ? data.project_name : '--'}}</td>
             <td>{{data.project_id ? data.project_id : '--'}}</td>
             <td [title]="data.project_type | projectType">{{data.project_type | projectType}}</td>
@@ -35,6 +46,95 @@
           </tr>
         </tbody>
       </nz-table>
+    </div>
+  </div>
+</div>
+
+<!--新增/编辑保养项目-->
+<div class="modal fade" id="editProjectModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #pagePromptDiv>
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">{{isCreateProject ? '新建' : '编辑'}}</span>
+        <button type="button" class="close" data-dismiss="modal">&times;
+        </button>
+      </div>
+      <form *ngIf="projectParams" autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal"
+        #editForm="ngForm">
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>项目类别</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="project_category" name="project_category" required>
+              <option value="">请选择</option>
+              <option *ngFor="let projectCategory of projectCategories" [value]="projectCategory">
+                {{projectCategory | projectCategory}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>项目类型</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="project_type" name="project_type" required>
+              <option value="">请选择</option>
+              <option *ngFor="let projectType of projectTypes" [value]="projectType">{{projectType | projectType}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>名称</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请输入名称，50字以内" [(ngModel)]="projectParams.project_name"
+              maxlength="50" name="project_name" required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>配套项目</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="project_id" name="project_id">
+              <option value="">请选择</option>
+              <option *ngFor="let item of versionList" [value]="item.version">{{item.version}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>描述</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="4" placeholder="请输入描述，100字以内" [(ngModel)]="projectParams.remark"
+              name="remark" maxlength="100">
+            </textarea>
+          </div>
+        </div>
+        <div class="row row-message" style="margin-top: -20px">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span>{{projectErrMsg}}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+            保存
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

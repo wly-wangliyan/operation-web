@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuardService } from 'src/app/core/auth-guard.service';
-import { RouteMonitorService } from 'src/app/core/route-monitor.service';
+import { AuthGuardService } from '../../../core/auth-guard.service';
+import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { ProjectManagemantComponent } from './project-managemant.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 

@@ -22,7 +22,7 @@ import { ZPromptBoxComponent } from './components/tips/z-prompt-box/z-prompt-box
 import { PromptBoxComponent } from './components/tips/prompt-box/prompt-box.component';
 import { ConfirmationBoxComponent } from './components/tips/confirmation-box/confirmation-box.component';
 import { ZMapSelectPointComponent } from './components/z-map-select-point/z-map-select-point.component';
-import { ProjectTypePipe } from './pipes/project-type.pipe';
+import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe';
 
 
 @NgModule({
@@ -56,6 +56,7 @@ import { ProjectTypePipe } from './pipes/project-type.pipe';
     DurationFormatHMSPipe,
     ZEmptyPipe,
     ProjectTypePipe,
+    ProjectCategoryPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -89,6 +90,7 @@ import { ProjectTypePipe } from './pipes/project-type.pipe';
     DurationFormatHMSPipe,
     ZEmptyPipe,
     ProjectTypePipe,
+    ProjectCategoryPipe,
 
     // 指令
     IgnoreSpaceDirective,

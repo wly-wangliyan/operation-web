@@ -542,6 +542,7 @@
 @import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
 @import "assets/less/variable";
 @import "assets/less/content";
+@import "assets/less/modal";
 
 * {
   padding: 0;
@@ -682,7 +683,7 @@ select {
   border-radius: 2px;
   outline: none;
   color: #333333;
-  padding-left: 10px;
+  padding-left: 10px !important;
 }
 
 button {
@@ -1149,12 +1150,24 @@ input[type=radio]:checked {
   font-family: STHeitiSC-Light;
   font-weight: 300;
   color: rgba(255, 255, 255, 1);
+  margin-left: 10px;
 }
 
 .header-right>li.big-bg:hover,
 .header-right>li.big-bg:focus,
 .header-right>li.big-bg:active {
   background: #315AC5;
+}
+
+.header-right>li.big-white-btn {
+  background: #fff;
+  border: 1px solid #3E71F7;
+  color: #3E71F7
+}
+
+.header-right>li.big-white-btn:hover {
+  background: #315AC5;
+  color: #fff;
 }
 
 .header-right>li>a:hover {
@@ -1300,4 +1313,8 @@ input[type=radio]:checked {
   font-family: STHeitiSC-Light !important;
   font-weight: 300 !important;
   color: rgb(110, 110, 110) !important;
+}
+
+textarea {
+  resize: none !important;
 }
