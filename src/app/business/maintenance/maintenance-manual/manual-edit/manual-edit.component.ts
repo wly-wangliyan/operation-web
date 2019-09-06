@@ -16,4 +16,9 @@ export class ManualEditComponent implements OnInit {
   public ngOnInit() {
   }
 
+  public onEditClick() {
+    this.isEdit = true;
+    this.title = '编辑手册';
+  }
+
 }

@@ -1,5 +1,10 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养手册'" [level2Name]="title"></app-crumb>
+  <ul class="header-right" *ngIf="isEdit">
+    <li class="big-bg">
+      <a (click)="onEditClick()">编辑</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="content-top">
@@ -83,4 +88,3 @@
   </div>
 
 </div>
-<!-- <div class="content-footer"></div> -->
