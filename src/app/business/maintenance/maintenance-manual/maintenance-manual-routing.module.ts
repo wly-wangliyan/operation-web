@@ -4,6 +4,7 @@ import { AuthGuardService } from '../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { MaintenanceManualComponent } from './maintenance-manual.component';
 import { ManualListComponent } from './manual-list/manual-list.component';
+import { ManualEditComponent } from './manual-edit/manual-edit.component';
 
 
 const routes: Routes = [{
@@ -12,6 +13,7 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: ManualListComponent },
+    { path: 'edit', component: ManualEditComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];

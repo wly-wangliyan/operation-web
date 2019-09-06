@@ -1,0 +1,86 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'保养手册'" [level2Name]="title"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-top">
+    <i></i>
+    <div class="manual-info">
+      <label>宝马</label>
+      <label>Audi Sport</label>
+      <label>奥迪A3</label>
+      <label>2019款</label>
+      <label>2019款 Sportback 35 TFSI 时尚型 国V；2019款 Sportback 35 TFSI 时尚型 国V</label>
+    </div>
+  </div>
+
+  <div class="content-middle">
+    <div class="category-item">
+      <i class="category-icon1"></i>
+      <nz-table [nzShowPagination]="false" #category1Table>
+        <thead>
+          <th>项目</th>
+          <th>操作</th>
+          <th>描述</th>
+        </thead>
+        <tbody>
+          <td>汽油</td>
+          <td></td>
+          <td>
+            <ng-container *ngIf="isEdit">
+              <input type="text" />
+            </ng-container>
+            <ng-container>
+
+            </ng-container>
+          </td>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="category-item">
+      <i class="category-icon2"></i>
+      <nz-table [nzShowPagination]="false" #category2Table>
+        <thead>
+          <th>项目</th>
+          <th>操作</th>
+          <th>描述</th>
+        </thead>
+        <tbody>
+          <td>汽油</td>
+          <td></td>
+          <td>
+            <ng-container *ngIf="isEdit">
+              <input type="text" />
+            </ng-container>
+            <ng-container>
+
+            </ng-container>
+          </td>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="category-item">
+      <i class="category-icon3"></i>
+      <nz-table [nzShowPagination]="false" #category3Table>
+        <thead>
+          <th>项目</th>
+          <th>操作</th>
+          <th>描述</th>
+        </thead>
+        <tbody>
+          <td>汽油</td>
+          <td></td>
+          <td>
+            <ng-container *ngIf="isEdit">
+              <input type="text" />
+            </ng-container>
+            <ng-container>
+
+            </ng-container>
+          </td>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+</div>
+<!-- <div class="content-footer"></div> -->
