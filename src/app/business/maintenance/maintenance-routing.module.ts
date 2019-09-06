@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { RouteMonitorService } from '../../core/route-monitor.service';
 import { MaintenanceComponent } from './maintenance.component';
+import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
 
 const routes: Routes = [{
   path: '', component: MaintenanceComponent,
@@ -10,18 +11,18 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'order-management', pathMatch: 'full' },
     {
-      path: 'vehicle-type-management',
-      loadChildren: () => import('./vehicle-type-management/vehicle-type-management.module').then(m => m.VehicleTypeManagementModule),
-      canLoad: [AuthGuardService]
-    },
-    {
-      path: 'project-management',
+      path: 'project-management', /** 保养项目管理 */
       loadChildren: () => import('./project-managemant/project-managemant.module').then(m => m.ProjectManagemantModule),
       canLoad: [AuthGuardService]
     },
     {
-      path: 'order-management',
+      path: 'order-management', /** 订单管理 */
       loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
+      canLoad: [AuthGuardService]
+    },
+    {
+      path: 'maintenance-manual', /** 保养手册 */
+      loadChildren: () => import('./maintenance-manual/maintenance-manual.module').then(m => m.MaintenanceManualModule),
       canLoad: [AuthGuardService]
     },
     {
@@ -39,3 +40,4 @@ const routes: Routes = [{
 })
 export class MaintenanceRoutingModule {
 }
+
