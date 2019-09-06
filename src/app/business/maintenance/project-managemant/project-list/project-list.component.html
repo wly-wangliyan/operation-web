@@ -15,8 +15,7 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="projectList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #projectTable>
+      <nz-table [nzData]="projectList" [nzShowPagination]="false" [nzNoResult]="noResultText" #projectTable>
         <thead>
           <tr>
             <th>序号</th>
