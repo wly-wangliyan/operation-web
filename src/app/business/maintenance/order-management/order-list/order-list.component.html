@@ -1,0 +1,184 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'订单管理'" [level2Name]=""></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button nz-button nzType="primary">导出Excel</button>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+
+  <div class="table-container">
+    <div class="search-container">
+      <form nz-form class="search-form">
+        <div nz-row class="search_row">
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>订单状态</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
+                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
+                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
+                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
+                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>汽车品牌</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
+                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
+                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
+                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
+                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>项目类别</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
+                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
+                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
+                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
+                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>手机号</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入手机号" autocomplete="off" [ngModel]="''"
+                  name="customer_name" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>购买人</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入购买人" autocomplete="off" [ngModel]="''" name="car_num" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>所属商家</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入所属商家" autocomplete="off" [ngModel]="''" name="car_num" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>订单编号</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入订单编号" autocomplete="off" [ngModel]="''" name="car_num" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class='search_time'>
+            <nz-form-item nzFlex>
+              <nz-form-label>下单时间</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
+                  (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_Time" [nzShowToday]=false [nzDisabledDate]="disabledEndDate"
+                  (ngModelChange)="onEndChange($event)" name='endTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class='search_time'>
+            <nz-form-item nzFlex>
+              <nz-form-label>支付时间</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
+                  (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_Time" [nzShowToday]=false [nzDisabledDate]="disabledEndDate"
+                  (ngModelChange)="onEndChange($event)" name='endTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class='search_time'>
+            <nz-form-item nzFlex>
+              <nz-form-label>预定时间</nz-form-label>
+              <nz-form-control class="form_control">
+                <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
+                  (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_Time" [nzShowToday]=false [nzDisabledDate]="disabledEndDate"
+                  (ngModelChange)="onEndChange($event)" name='endTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class='search_btn'>
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">
+              查询</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="zmy-table">
+      <nz-table [nzData]="brokerageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>购买人</th>
+            <th>手机号</th>
+            <th>汽车品牌</th>
+            <th>车型</th>
+            <th>所属商家</th>
+            <th>项目类别</th>
+            <th>数量</th>
+            <th>应付</th>
+            <th>优惠</th>
+            <th>实付</th>
+            <th>支付时间</th>
+            <th>预订时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
+            <td>{{data.account}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td>{{data.telephone}}</td>
+            <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
+            <td [title]="data.ic_company_name">{{data.ic_company_name|zMaxLength:20}}</td>
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
