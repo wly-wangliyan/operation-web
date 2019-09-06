@@ -41,7 +41,7 @@
             <td [title]="data.remark">{{data.remark|zMaxLength:20}}</td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
-              <a [title]="'删除'" (click)="onEditBtnClick(data)">删除</a>
+              <a [title]="'删除'" (click)="onDeleteProgect(data)">删除</a>
             </td>
           </tr>
         </tbody>

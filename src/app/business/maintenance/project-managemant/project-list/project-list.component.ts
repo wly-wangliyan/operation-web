@@ -87,6 +87,14 @@ export class ProjectListComponent implements OnInit {
 
   }
 
+  /** 删除 */
+  public onDeleteProgect() {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+      this.globalService.confirmationBox.close();
+      console.log('调用删除接口');
+    });
+  }
+
   // 键盘按下事件
   public onKeydownEvent(event: any) {
     if (event.keyCode === 13) {

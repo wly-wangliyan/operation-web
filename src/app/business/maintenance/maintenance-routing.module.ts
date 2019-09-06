@@ -12,13 +12,18 @@ const routes: Routes = [{
     { path: '', redirectTo: 'vehicle-type-list', pathMatch: 'full' },
     { path: 'vehicle-type-list', component: VehicleTypeListComponent },
     {
-      path: 'project-management',
+      path: 'project-management', /** 保养项目管理 */
       loadChildren: () => import('./project-managemant/project-managemant.module').then(m => m.ProjectManagemantModule),
       canLoad: [AuthGuardService]
     },
     {
-      path: 'order-management',
+      path: 'order-management', /** 订单管理 */
       loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
+      canLoad: [AuthGuardService]
+    },
+    {
+      path: 'maintenance-manual', /** 保养手册 */
+      loadChildren: () => import('./maintenance-manual/maintenance-manual.module').then(m => m.MaintenanceManualModule),
       canLoad: [AuthGuardService]
     },
     { path: '**', redirectTo: 'vehicle-type-list', pathMatch: 'full' }
