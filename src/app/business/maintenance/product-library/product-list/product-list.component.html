@@ -1,12 +1,6 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品库'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg big-white-btn">
-      <a (click)="onImportProject()">导入</a>
-    </li>
-    <li class="big-bg">
-      <a (click)="onDownloadMould()">下载模板</a>
-    </li>
     <li class="big-bg">
       <a (click)="onShowModal()" data-toggle="modal" data-target="#editProjectModal">新建</a>
     </li>
@@ -57,43 +51,4 @@
       </nz-table>
     </div>
   </div>
-</div>
-
-<!--上传-->
-<div class="modal fade" id="importProductPromptDiv" data-backdrop="false" data-keyboard="false" tabindex="-1"
-  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-common" role="document">
-    <div class="modal-content modal-content-common">
-      <div class="modal-header">
-        <span class="modal-title">导入数据</span>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCancelData()">&times;
-        </button>
-      </div>
-      <form class="form-horizontal import-form">
-        <div class="form-group">
-          <span>使用Excel编辑批量操作文件模板时，请确认输入的内容为文本格式，保存的内容和输入的内容保持一致</span>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
-            placeholder="请选择文件" disabled>
-          <div class="select-file">
-            <a class="choose-file">
-              <span class="download">选择文件</span>
-              <input #productFileImportInput type="file"
-                (change)="importViewModel.selectedFile($event,productFileImportInput)" title="" />
-            </a>
-          </div>
-        </div>
-        <div class="form-group import-tip">
-          <span>每次只能上传1000条数据</span>
-        </div>
-        <div class="modal-footer">
-          <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()">上传</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <!--进度条-->
-  <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
 </div>
