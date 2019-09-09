@@ -5,6 +5,7 @@ import { ProductLibraryComponent } from './product-library.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { AuthGuardService } from '../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: ProductListComponent },
+      { path: 'detail', component: ProductDetailComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }

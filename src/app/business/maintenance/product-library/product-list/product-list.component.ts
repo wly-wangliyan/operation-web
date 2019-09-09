@@ -48,7 +48,7 @@ export class ProductListComponent implements OnInit {
     this.generateProjectList();
   }
 
-  // 初始化获取手册列表
+  // 初始化获取产品列表
   private generateProjectList() {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
@@ -57,9 +57,9 @@ export class ProductListComponent implements OnInit {
     this.searchText$.next();
   }
 
-  // 请求手册列表
+  // 请求产品列表
   private requestProjectList() {
-    console.log('请求获取保养手册接口');
+    console.log('请求获取产品列表接口');
     this.noResultText = '暂无数据';
   }
 
@@ -76,7 +76,7 @@ export class ProductListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      console.log('分页请求保养手册数据');
+      console.log('分页请求产品数据');
       // this.continueRequestSubscription = this.productLibraryService.continueProductList(this.linkUrl).subscribe(res => {
       //   this.productList = this.productList.concat(res.results);
       //   this.linkUrl = res.linkUrl;
@@ -93,10 +93,10 @@ export class ProductListComponent implements OnInit {
 
   /**
    * 导入
-   * 导入成功后需要刷新类表
+   * 导入成功后需要刷新列表
    */
   public onImportProject() {
-    $('#importManualPromptDiv').modal('show');
+    $('#importProductPromptDiv').modal('show');
     this.importViewModel.initImportData();
     console.log('导入');
     if (true) {
@@ -108,7 +108,7 @@ export class ProductListComponent implements OnInit {
   public onCancelData() {
     this.onCloseUnsubscribe();
     this.importViewModel.initImportData();
-    $('#importManualPromptDiv').modal('hide');
+    $('#importProductPromptDiv').modal('hide');
   }
 
   /* 导入数据 */

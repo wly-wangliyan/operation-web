@@ -4,10 +4,11 @@ import { ShareModule } from '../../../share/share.module';
 import { ProductLibraryRoutingModule } from './product-library-routing.module';
 import { ProductLibraryComponent } from './product-library.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 
 @NgModule({
-  declarations: [ProductLibraryComponent, ProductListComponent],
+  declarations: [ProductLibraryComponent, ProductListComponent, ProductDetailComponent],
   imports: [
     ShareModule,
     CommonModule,

@@ -60,7 +60,7 @@
 </div>
 
 <!--上传-->
-<div class="modal fade" id="importManualPromptDiv" data-backdrop="false" data-keyboard="false" tabindex="-1"
+<div class="modal fade" id="importProductPromptDiv" data-backdrop="false" data-keyboard="false" tabindex="-1"
   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-common" role="document">
     <div class="modal-content modal-content-common">
@@ -79,8 +79,8 @@
           <div class="select-file">
             <a class="choose-file">
               <span class="download">选择文件</span>
-              <input #berthFileImportInput type="file"
-                (change)="importViewModel.selectedFile($event,berthFileImportInput)" title="" />
+              <input #productFileImportInput type="file"
+                (change)="importViewModel.selectedFile($event,productFileImportInput)" title="" />
             </a>
           </div>
         </div>
