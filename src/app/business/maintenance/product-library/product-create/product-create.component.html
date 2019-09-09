@@ -1,0 +1,90 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'产品库'" [level2Name]="'新建产品'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+    <form autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal" #productForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>项目类别</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" placeholder="请选择项目类别" name="project_name" required disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>项目类型</span>
+        </label>
+        <div class="control-input">
+          <label>{{productParams?'配件': '服务'}}</label>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>产品名称</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" placeholder="输入1-20个字标题" maxlength="20" name="project_name" required>
+          <label>选择</label>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;</b>
+          <span>是否原厂</span>
+        </label>
+        <div class="control-input">
+          <select class="form-control" name="project_id">
+            <option value="1">是</option>
+            <option value="2">否</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>所属厂商</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" placeholder="请选择所属厂商" name="project_name" required disabled>
+          <label>选择</label>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;</b>
+          <span>零件编号</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" placeholder="请输入零件编号" name="order" maxlength="100" />
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;</b>
+          <span>规格</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" placeholder="请输入规格" name="remark" maxlength="100" />
+        </div>
+      </div>
+      <div class="row row-message" style="margin-top: -20px">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{productErrMsg}}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+.content-flow {
+  margin-right: 10px;
+}
+
+.content-container {
+  padding-top: 20px;
+  margin-right: 10px;
+  
+  background: #fff;
+}
+
+.content-container form {
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+}

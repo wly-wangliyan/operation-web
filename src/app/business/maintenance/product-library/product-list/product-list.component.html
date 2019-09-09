@@ -1,8 +1,8 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品库'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg">
-      <a (click)="onShowModal()" data-toggle="modal" data-target="#editProjectModal">新建</a>
+    <li class="big-bg" [routerLink]="['../create']">
+      <a>新建</a>
     </li>
   </ul>
 </div>

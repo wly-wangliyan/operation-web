@@ -5,10 +5,15 @@ import { ProductLibraryRoutingModule } from './product-library-routing.module';
 import { ProductLibraryComponent } from './product-library.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductCreateComponent } from './product-create/product-create.component';
 
 
 @NgModule({
-  declarations: [ProductLibraryComponent, ProductListComponent, ProductDetailComponent],
+  declarations: [
+    ProductLibraryComponent,
+    ProductListComponent,
+    ProductDetailComponent,
+    ProductCreateComponent],
   imports: [
     ShareModule,
     CommonModule,
