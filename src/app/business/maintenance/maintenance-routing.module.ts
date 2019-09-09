@@ -11,6 +11,11 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'order-management', pathMatch: 'full' },
     {
+      path: 'vehicle-type-management',
+      loadChildren: () => import('./vehicle-type-management/vehicle-type-management.module').then(m => m.VehicleTypeManagementModule),
+      canLoad: [AuthGuardService]
+    },
+    {
       path: 'project-management', /** 保养项目管理 */
       loadChildren: () => import('./project-managemant/project-managemant.module').then(m => m.ProjectManagemantModule),
       canLoad: [AuthGuardService]

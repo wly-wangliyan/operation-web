@@ -1,0 +1,34 @@
+.tab-bar {
+    padding: 14px 32px 14px 15px;
+    height: 62px;
+    overflow: hidden;
+    display: flex;
+}
+
+.tab-bar > li {
+    float: left;
+    font-size: 14px;
+    min-width: 190px;
+    height:60px;
+    margin: 2px 2px 0 0;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    outline: none;
+    box-shadow:2px 0px 2px 0px rgba(137,146,170,0.33);
+    border-radius:4px 4px 0px 0px;
+    list-style: none;
+}
+
+.tab-active {
+    background: #3E71F7;
+}
+
+.search-container {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+}
+
+.operation a:hover {
+    color:rgba(62,113,247,1);
+}

@@ -1,24 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { GlobalService } from '../../../../core/global.service';
 import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { Router } from '@angular/router';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 const PageSize = 15;
 
 @Component({
-  selector: 'app-business-list',
-  templateUrl: './business-list.component.html',
-  styleUrls: ['./business-list.component.css']
+  selector: 'app-operation-configuration',
+  templateUrl: './operation-configuration.component.html',
+  styleUrls: ['./operation-configuration.component.css']
 })
-export class BusinessListComponent implements OnInit {
+export class OperationConfigurationComponent implements OnInit {
 
   public searchParams = {};
   public businessList: any;
   public pageIndex = 1;
   public noResultText = '数据加载中...';
+  public tabIndex = 1;
+  public bookingTimes = [];
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -84,8 +86,20 @@ export class BusinessListComponent implements OnInit {
 
   }
 
-  public onOperationBtnClick(data) {
-    this.router.navigate(['/main/maintenance/business-management/operation-configuration'],
-        { queryParams: {} });
+  // 切换Tab
+  public onTabClicked(index) {
+    this.tabIndex = index;
+  }
+
+  onChange(result: Date): void {
+    console.log('Selected Time: ', result);
+  }
+
+  onOk(result: Date): void {
+    console.log('onOk', result);
+  }
+
+  public onAddClick() {
+
   }
 }

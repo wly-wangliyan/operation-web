@@ -1,67 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 declare var AMap: any;
-
-export enum MapType {
-  view,
-  edit
-}
-
-export class MapItem {
-  public point?: Array<number>; // 传进来的坐标
-  public type: MapType = MapType.view; // 操作地图类型 查看编辑
-  public address ?: Array<string>;
-  public hasDetailedAddress ? = false; // 是否填写了详细地址
-  public cityCode ? = ''; // 默认沈阳
-
-  constructor(type?: MapType, point?: Array<number>, address?: Array<string>, hasDetailedAddress?: boolean, cityCode?: string) {
-    if (type) {
-      this.type = type;
-    }
-    if (point) {
-      this.point = point;
-    }
-    if (address) {
-      this.address = address;
-    }
-    if (hasDetailedAddress) {
-      this.hasDetailedAddress = true;
-    }
-    if (cityCode) {
-      this.cityCode = cityCode;
-    }
-  }
-}
-
-/**
- * 点标记所有信息
- */
-export class MarkerItem {
-  public marker: any; // 点标记
-  public geocoder: any; // 地理编码
-  public point: any; // 坐标
-  public regeocode: any; // 逆向编码信息
-
-  public initMarker(point: Array<number>, status?: number) {
-    let icon = '';
-    switch (status) {
-      case 1:
-        icon = '/assets/images/map/marker_1.png';
-        break;
-      case 2:
-        icon = '/assets/images/map/marker_2.png';
-        break;
-      case 3:
-        icon = '/assets/images/map/marker_3.png';
-        break;
-    }
-    this.marker = new AMap.Marker({
-      icon,
-      position: point,
-      offset: new AMap.Pixel(-18, -34)
-    });
-  }
-}
 
 /**
  * 调用方法：openMap打开地图
@@ -73,7 +12,7 @@ export class MarkerItem {
   templateUrl: './z-map-select-point.component.html',
   styleUrls: ['./z-map-select-point.component.css']
 })
-export class ZMapSelectPointComponent implements OnInit {
+export class ZMapSelectPointComponent {
 
   public map: any;
 
@@ -84,12 +23,8 @@ export class ZMapSelectPointComponent implements OnInit {
   @Input()
   public mapObj: MapItem = new MapItem();
 
-  @Output()
+  @Output('selectedMarkerInfo')
   public selectedMarkerInfo = new EventEmitter();
-
-  ngOnInit(): void {
-    this.InitMap();
-  }
 
   /**
    * 打开地图
@@ -110,8 +45,9 @@ export class ZMapSelectPointComponent implements OnInit {
 
   /**
    * 初始化地图
+   * @constructor
    */
-  public InitMap() {
+  private InitMap() {
     try {
       if (AMap) {
         this.map = new AMap.Map('container', {
@@ -119,28 +55,29 @@ export class ZMapSelectPointComponent implements OnInit {
           dragEnable: true,
           keyboardEnable: true,
           doubleClickZoom: false,
-          zoom: 13, //  中心位置，地图比例尺为1km。
+          zoom: 13, //中心位置，地图比例尺为1km。
           isHotspot: true,
         });
         // 加载插件
         this.map.plugin(['AMap.Scale', 'AMap.Autocomplete', 'AMap.Geocoder'],
-          () => {
-            this.map.addControl(new AMap.Scale()); // 比例尺
-            $('.amap-scale-line').children().css('border', 'none');
-            // 设置地图中心点 ，确认默认点坐标
-            if (this.mapObj.point && this.mapObj.point.length > 0) {
-              this.showMarkerAndInfoWindow(this.mapObj.point);
-            } else {
-              this.getGeocodesPosition(result => {
-                if (this.mapObj.hasDetailedAddress) {
-                  const point = [result.location.lng, result.location.lat];
-                } else {
-                  this.map.setZoomAndCenter(13, new AMap.LngLat(result.location.lng, result.location.lat));
-                }
-                this.showMarkerAndInfoWindow(result.location);
-              });
-            }
-          });
+            () => {
+              this.map.addControl(new AMap.Scale()); // 比例尺
+              $('.amap-scale-line').children().css('border', 'none');
+              // 设置地图中心点 ，确认默认点坐标
+              if (this.mapObj.point && this.mapObj.point.length > 0) {
+                this.map.setCenter(new AMap.LngLat(this.mapObj.point[0], this.mapObj.point[1]));
+                this.showMarkerAndInfoWindow(this.mapObj.point);
+              } else {
+                this.getGeocodesPosition(result => {
+                  if (this.mapObj.hasDetailedAddress) {
+                    const point = [result.location.lng, result.location.lat];
+                  } else {
+                    this.map.setZoomAndCenter(13, new AMap.LngLat(result.location.lng, result.location.lat));
+                  }
+                  this.showMarkerAndInfoWindow(result.location);
+                });
+              }
+            });
 
         this.map.on('complete', () => {
           $('.amap-logo').attr('href', 'javascript:void(0);');
@@ -160,41 +97,36 @@ export class ZMapSelectPointComponent implements OnInit {
 
   /**
    * 显示点标记和信息窗口
-   * @param location 位置参数
+   * @param location
    */
   private showMarkerAndInfoWindow(location: any) {
     this.selectedMarker.point = location;
     this.addMarker(this.selectedMarker.point);
+    this.getPosition(() => {
+      this.setInfoWindow();
+    });
   }
 
   /**
    * 添加点标记
    */
-  public addMarker(point: Array<number>) {
+  private addMarker(point: Array<number>) {
     this.map.clearMap();
-    for (let i = 0; i < point.length; i++) {
-      const point_temp = [point[i], point[i + 1]];
-      this.selectedMarker.initMarker(point_temp, point[i + 2]);
-      this.selectedMarker.marker.setMap(this.map);
-      // this.getPosition(point_temp, () => {
-      //   this.setInfoWindow();
-      // });
-      i += 2;
-    }
-    this.map.setFitView(null, false, [20, 20, 450, 10]);
+    this.selectedMarker.initMarker(point);
+    this.selectedMarker.marker.setMap(this.map);
   }
 
   /**
    * 逆向获取地理编码
-   * @param callback 参数
+   * @param callback
    */
-  private getPosition(point, callback) {
+  private getPosition(callback) {
     const geocoder = new AMap.Geocoder({
       radius: 1000,
       extensions: 'all'
     });
     this.selectedMarker.geocoder = geocoder;
-    geocoder.getAddress(point, (status, result) => {
+    geocoder.getAddress(this.selectedMarker.point, (status, result) => {
       if (status === 'complete' && result.info === 'OK') {
         this.selectedMarker.regeocode = result.regeocode;
         callback();
@@ -211,7 +143,7 @@ export class ZMapSelectPointComponent implements OnInit {
       radius: 1000,
     });
     // 地理编码,返回地理编码结果
-    geocoder.getLocation(this.mapObj.address, function(status, result) {
+    geocoder.getLocation(this.mapObj.address, function (status, result) {
       if (status === 'complete' && result.info === 'OK') {
         callback(result.geocodes[0]);
       }
@@ -228,7 +160,7 @@ export class ZMapSelectPointComponent implements OnInit {
     });
     //  html结构
     const infoWindowStr =
-      `<div style="position: relative;padding-left:26px;">
+        `<div style="position: relative;padding-left:26px;">
       <div style="
           width: 200px;
           padding: 5px;
@@ -246,8 +178,7 @@ export class ZMapSelectPointComponent implements OnInit {
       </div></div>`;
     infoWindow.setContent(infoWindowStr);
     infoWindow.open(this.map, this.selectedMarker.marker.getPosition());
-    console.log(this.selectedMarker.marker.getPosition(), this.selectedMarker.regeocode.formattedAddress);
-    this.map.setFitView(null, false, [20, 20, 450, 10]);
+    this.map.setFitView();
     if (this.mapObj.type === MapType.view) {
       this.map.setZoom(17); // 100m比例尺
     }
@@ -255,7 +186,7 @@ export class ZMapSelectPointComponent implements OnInit {
 
   /**
    * 放大0、缩小1
-   * @param num 参数
+   * @param num
    */
   public setZoom(num) {
     num === 0 ? this.map.zoomIn() : this.map.zoomOut();
@@ -264,8 +195,58 @@ export class ZMapSelectPointComponent implements OnInit {
   /**
    * 保存相关坐标信息
    */
-  public saveMarker() {
-    /*this.selectedMarkerInfo.emit({selectedMarker: this.selectedMarker});
-    this.closeMap();*/
+  private saveMarker() {
+    this.selectedMarkerInfo.emit({selectedMarker: this.selectedMarker});
+    this.closeMap();
+  }
+}
+
+export class MapItem {
+  public point?: Array<number>; // 传进来的坐标
+  public type: MapType = MapType.view; // 操作地图类型 查看编辑
+  public address? = '';
+  public hasDetailedAddress? = false; // 是否填写了详细地址
+  public cityCode? = ''; // 默认沈阳
+
+  constructor(type?: MapType, point?: Array<number>, address?: string, hasDetailedAddress?: boolean, cityCode?: string) {
+    if (type) {
+      this.type = type;
+    }
+    if (point) {
+      this.point = point;
+    }
+    if (address) {
+      this.address = address;
+    }
+    if (hasDetailedAddress) {
+      this.hasDetailedAddress = true;
+    }
+    if (cityCode) {
+      this.cityCode = cityCode;
+    }
+  }
+
+}
+
+export enum MapType {
+  view,
+  edit
+}
+
+/**
+ * 点标记所有信息
+ */
+export class MarkerItem {
+  public marker: any; // 点标记
+  public geocoder: any; // 地理编码
+  public point: any; // 坐标
+  public regeocode: any; // 逆向编码信息
+
+  public initMarker(point: Array<number>) {
+    this.marker = new AMap.Marker({
+      icon: '/assets/images/map/marker.png',
+      position: point,
+      offset: new AMap.Pixel(-18, -34)
+    });
   }
 }

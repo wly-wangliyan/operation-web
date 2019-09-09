@@ -1,5 +1,5 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]=""></app-crumb>
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家列表'" [level2RelativePath]="'../'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="search-container">
@@ -64,7 +64,7 @@
                     <td>{{data.telephone}}</td>
                     <td>{{data.telephone}}</td>
                     <td class="operation">
-                        <a [title]="'运营配置'" (click)="onEditBtnClick(data)">运营配置</a>
+                        <a [title]="'运营配置'" (click)="onOperationBtnClick(data)">运营配置</a>
                         <a [title]="'编辑材料'" (click)="onEditBtnClick(data)">编辑材料</a>
                         <a [title]="'删除'" (click)="onEditBtnClick(data)">删除</a>
                     </td>
@@ -74,3 +74,4 @@
         </div>
     </div>
 </div>
+<app-business-edit></app-business-edit>

@@ -1,0 +1,152 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家列表'" [level3Name]="'编辑'" [level2RelativePath]="'../list'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="content-main">
+        <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>所属企业</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentPage.title" name="title" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>店铺名称</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentPage.title" name="title" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>类型</span>
+                </label>
+                <div class="control-input">
+                    <select class="form-control" [(ngModel)]="currentPage.type" name="network_status" disabled>
+                        <option value="">全部</option>
+                        <option value="1">营业中</option>
+                        <option value="2">停业休息</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="height: 120px; margin-top: -5px;">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>商家图片</span>
+                </label>
+                <div class="control-input">
+                    <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="1"
+                                        [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                        [imageHeight]="100" [imageUrls]="cover_url" #coverImg [imageWidth]="100">
+                    </app-z-photo-select>
+                    <!--<div>
+                        <div class="row row-message" style="width: 230px;margin-left:20px!important;padding-top: 105px">
+                            <label class="control-label"></label>
+                            <div class="control-input err-message">
+                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                            </div>
+                        </div>
+                        <p class="cover-hint">注：尺寸800*800，格式PNG或JPG，大小2M以内，最多上传6张</p>
+                    </div>-->
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系人</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" name="tel" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系电话</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" name="tel" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>门店地址</span>
+                </label>
+                <div class="control-input">
+                    <app-pro-city-dist-select [selectContainerWidth]="372" #projectInfoPro></app-pro-city-dist-select>
+                </div>
+            </div>
+            <div class="row">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>地图坐标</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" style="border-right: none!important;" name="tel" readonly>
+                    <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>汽车品牌</span>
+                </label>
+                <div class="control-input">
+                    <button class="common-btn" nz-button (click)="openMapModal()">选择</button>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>可提前预定</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" style="border-right: none!important;"
+                           type="number" name="tel" (keypress)="inputNumberLimit($event)">
+                    <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>客服电话</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" name="tel" style="border-right: none!important;"
+                    placeholder="请输入座机或手机号">
+                    <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
+                    <button class="common-btn" nz-button (click)="openMapModal()" *ngIf="!is_add_tel">移除</button>
+                </div>
+                <span class="msg-span">注：最多可添加2个</span>
+            </div>
+            <div class="row" *ngIf="!is_add_tel">
+                <label class="control-label">
+                    <b>&nbsp;</b>
+                    <span></span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" name="tel" style="border-right: none!important;"
+                           placeholder="请输入座机或手机号">
+                    <button class="common-btn" nz-button (click)="openMapModal()">移除</button>
+                </div>
+            </div>
+            <div class="row row-message"></div>
+            <div>
+                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || coverImg.imageList.length===0"
+                        (appZDebounceClick)="onEditFormSubmit()">保存
+                </button>
+                <button class="close-btn" nz-button (click)="onClose()">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 地图组件 -->
+<app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>

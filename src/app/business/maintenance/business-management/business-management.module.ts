@@ -4,11 +4,15 @@ import { ShareModule } from '../../../share/share.module';
 import { BusinessManagementRoutingModule } from './business-management-routing.module';
 import { BusinessManagementComponent } from './business-management.component';
 import { BusinessListComponent } from './business-list/business-list.component';
+import { BusinessEditComponent } from './business-edit/business-edit.component';
+import { OperationConfigurationComponent } from './operation-configuration/operation-configuration.component';
 
 @NgModule({
   declarations: [
     BusinessManagementComponent,
-    BusinessListComponent],
+    BusinessListComponent,
+    BusinessEditComponent,
+    OperationConfigurationComponent],
   imports: [
     ShareModule,
     CommonModule,
