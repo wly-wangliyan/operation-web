@@ -1,16 +1,94 @@
 .content-flow {
   margin-right: 10px;
+  margin-left: 25px;
 }
 
 .content-container {
-  padding-top: 20px;
+  padding: 20px;
   margin-right: 10px;
-  
+
   background: #fff;
 }
 
-.content-container form {
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
+.content-container .form-horizontal {
+  margin-top: 0px;
 }
+
+.content-container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.content-container form .row {
+  margin-left: 0;
+  margin-right: 0;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.content-container form .row {
+  margin-left: 0;
+  margin-right: 0;
+  align-items: center;
+  margin-bottom: 0;
+  justify-content: start;
+}
+
+.content-container form .row b {
+  margin-right: 10px;
+}
+
+.content-container form .row .control-label {
+  padding-left: 40px;
+  margin-bottom: 20px;
+  width: 106px;
+  padding-right: 10px;
+  padding-left: 0;
+}
+
+.content-container form .row .control-label b {
+  float: left;
+}
+
+.content-container form .row .control-label span {
+  font-size: 14px;
+  float: left;
+}
+
+.content-container .control-input {
+  display: flex;
+  align-items: center;
+  width: 428px;
+  margin-bottom: 20px;
+}
+
+.content-container .control-input label {
+  margin-bottom: 0;
+}
+
+.content-container .form-control {
+  font-size: 14px;
+  margin-right: 0;
+  width: 448px;
+  background: rgba(246, 246, 246, 1);
+  border-radius: 1px;
+}
+
+.content-container input,
+.content-container select {
+  height: 34px;
+}
+
+.content-container form .row-message {
+  height: 28px;
+}
+
+.content-container form .err-message {
+  font-size: 14px;
+  font-family: STHeitiSC-Medium;
+  font-weight: 500;
+  color: rgba(232, 32, 56, 1);
+}
+

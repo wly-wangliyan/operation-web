@@ -11,6 +11,7 @@
         </label>
         <div class="control-input">
           <input class="form-control" placeholder="请选择项目类别" name="project_name" required disabled>
+          <label>选择</label>
         </div>
       </div>
       <div class="row">
@@ -29,7 +30,6 @@
         </label>
         <div class="control-input">
           <input class="form-control" placeholder="输入1-20个字标题" maxlength="20" name="project_name" required>
-          <label>选择</label>
         </div>
       </div>
       <div class="row">
@@ -71,6 +71,51 @@
         </label>
         <div class="control-input">
           <input class="form-control" placeholder="请输入规格" name="remark" maxlength="100" />
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>图片</span>
+        </label>
+        <div>
+          <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="true"
+            (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg" [imageAddHeight]="100" [dragCrop]="true"
+            [minCropBoxWidth]="400" [minCropBoxHeight]="400" [imageUrls]="cover_url" #coverImg>
+          </app-z-photo-select>
+          <div class="row row-message" style="height: 20px!important;margin-top: -6px">
+            <div class="control-input err-message">
+              <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+            </div>
+          </div>
+          <p class="cover-hint">注：尺寸400*400px，格式PNG或JPG，大小2M以内</p>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>原价</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" name="remark" />
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>销售单价</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" name="remark" />
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>所需数量</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" name="remark" />
         </div>
       </div>
       <div class="row row-message" style="margin-top: -20px">
