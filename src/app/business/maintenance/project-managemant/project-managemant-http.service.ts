@@ -4,21 +4,35 @@ import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
 import { map } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
 
 export class ProjectEntity extends EntityBase {
-  public project_id: string = undefined; // 项目ID
-  public project_category: number = undefined; // 项目类别
-  public project_name: string = undefined; // 项目名称
-  public project_type: number = undefined; // 项目类型
-  public project: ProjectEntity = undefined; // 配套项目
-  public remark: string = undefined; // 描述
+  public upkeep_item_id: string = undefined; // 项目ID
+  public upkeep_item_name: string = undefined; // 保养项目名称
+  public upkeep_item_num: string = undefined; // 保养项目序号
+  public upkeep_item_type: number = undefined; // 保养项目类型 1.配件 2.服务
+  public upkeep_item_category: number = undefined; // 保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目
+  public upkeep_item_relation: ProjectEntity = undefined; // 保养项目配套
+  public upkeep_item_content: string = undefined; // 保养项目描述
+  public created_time: number = undefined;
+  public updated_time: string = undefined;
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'project') {
+    if (propertyName === 'upkeep_item_relation') {
       return ProjectEntity;
     }
     return null;
   }
+}
+
+// 添加、编辑 保养项目
+export class ProjectParams extends EntityBase {
+  public upkeep_item_name: string = undefined; // 保养项目名称
+  public upkeep_item_num: string = undefined; // 保养项目序号
+  public upkeep_item_type: number = undefined; // int 保养项目类型 1.配件 2.服务
+  public upkeep_item_category: number = undefined; // int 保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目
+  public upkeep_item_relation = ''; //  保养项目配套id
+  public upkeep_item_content: string = undefined; // 保养项目描述
 }
 
 @Injectable({
@@ -32,7 +46,7 @@ export class ProjectManagemantHttpService {
 
   /** 获取项目列表 */
   public requestProjectListData(): Observable<Array<ProjectEntity>> {
-    const httpUrl = `${this.domain}/admin/brokers`;
+    const httpUrl = `${this.domain}/upkeep_items`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       const tempList: Array<ProjectEntity> = [];
       res.body.forEach(data => {
@@ -40,5 +54,38 @@ export class ProjectManagemantHttpService {
       });
       return tempList;
     }));
+  }
+
+  /** 获取可用的项目列表
+   * @param upkeep_item_id 项目大类
+   */
+  public requestRelationProjectsData(upkeep_item_id: string): Observable<Array<ProjectEntity>> {
+    const httpUrl = `${this.domain}/upkeep_available_items`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<ProjectEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(ProjectEntity.Create(data));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 添加项目
+   * @param  projectParams 编辑参数
+   */
+  public requestAddProjectData(projectParams: ProjectParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/upkeep_items`;
+    return this.httpService.post(httpUrl, projectParams.json());
+  }
+
+  /**
+   * 编辑项目
+   * @param upkeep_items_id 保养项目id
+   * @param projectParams 编辑参数
+   */
+  public requestUpdateProjectData(upkeep_items_id: string, projectParams: ProjectParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/upkeep_items/${upkeep_items_id}`;
+    return this.httpService.post(httpUrl, projectParams.json());
   }
 }
