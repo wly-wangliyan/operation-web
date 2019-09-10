@@ -81,7 +81,7 @@ export class MaintenanceManualHttpService {
   }
 
   /**
-   * 批量保存保养手册描述信息
+   * 批量保存手册描述信息
    * @param params 参数列表
    * @param upkeep_handbook_id 保养手册id
    * @returns Observable<HttpResponse<any>>
@@ -89,5 +89,19 @@ export class MaintenanceManualHttpService {
   public requestBatcSaveDescriptionData(params: BatcSaveParams, upkeep_handbook_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/uh_items/description`;
     return this.httpService.post(httpUrl, params.json());
+  }
+
+  /**
+   * 获取保存手册详情
+   * @param vehicle_type_id 车型id
+   * @returns Observable<ManualEntity>
+   */
+  public requestManualDetailData(vehicle_type_id: string): Observable<ManualEntity> {
+    const httpUrl = `${this.domain}/uh_items`;
+    const body = {
+      vehicle_type_id
+    };
+    return this.httpService.get(httpUrl, body)
+      .pipe(map(res => ManualEntity.Create(res.body)));
   }
 }
