@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品库'" [level2Name]="'新建产品'"></app-crumb>
+  <app-crumb [level1Name]="'产品库'" [level2Name]="title"></app-crumb>
 </div>
 <div class="content-flow">
   <div class="content-container">
@@ -7,116 +7,131 @@
       <div class="row">
         <label class="control-label">
           <b>*</b>
-          <span>项目类别</span>
+          <span>所属项目</span>
         </label>
         <div class="control-input">
           <input class="form-control" placeholder="请选择项目类别" name="project_name" required disabled>
-          <label>选择</label>
+          <button name="select_project_name" class="two-word-btn" nz-button (click)="openMapModal()">选择</button>
         </div>
       </div>
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>项目类型</span>
-        </label>
-        <div class="control-input">
-          <label>{{productParams?'配件': '服务'}}</label>
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>产品名称</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" placeholder="输入1-20个字标题" maxlength="20" name="project_name" required>
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>&nbsp;</b>
-          <span>是否原厂</span>
-        </label>
-        <div class="control-input">
-          <select class="form-control" name="project_id">
-            <option value="1">是</option>
-            <option value="2">否</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>所属厂商</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" placeholder="请选择所属厂商" name="project_name" required disabled>
-          <label>选择</label>
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>&nbsp;</b>
-          <span>零件编号</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" placeholder="请输入零件编号" name="order" maxlength="100" />
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>&nbsp;</b>
-          <span>规格</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" placeholder="请输入规格" name="remark" maxlength="100" />
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>图片</span>
-        </label>
-        <div>
-          <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="true"
-            (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg" [imageAddHeight]="100" [dragCrop]="true"
-            [minCropBoxWidth]="400" [minCropBoxHeight]="400" [imageUrls]="cover_url" #coverImg>
-          </app-z-photo-select>
-          <div class="row row-message" style="height: 20px!important;margin-top: -6px">
-            <div class="control-input err-message">
-              <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
-            </div>
+      <ng-container *ngIf="productRecord.upkeep_item_id">
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>项目类型</span>
+          </label>
+          <div class="control-input">
+            <label style="font-size: 14px;text-indent: 14px;">{{productParams ?'配件': '服务'}}</label>
           </div>
-          <p class="cover-hint">注：尺寸400*400px，格式PNG或JPG，大小2M以内</p>
         </div>
-      </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品名称</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" [(ngModel)]="productRecord.upkeep_accessory_name" placeholder="输入1-20个字标题"
+              maxlength="20" name="upkeep_accessory_name" required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>是否原厂</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="productRecord.is_original" name="project_id" required>
+              <option value="true">是</option>
+              <option value="false">否</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>所属厂商</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请选择所属厂商" name="project_name" required disabled>
+            <button class="two-word-btn" nz-button (click)="openMapModal()">选择</button>
+          </div>
+          <div>
+            <input type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>零件编号</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" [(ngModel)]="productRecord.serial_number" placeholder="请输入零件编号"
+              name="serial_number" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>规格</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" [(ngModel)]="productRecord.specification" placeholder="请输入规格"
+              name="specification" />
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>图片</span>
+          </label>
+          <div>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+              [imageAddHeight]="100" [dragCrop]="fasle" [minCropBoxWidth]="400" [minCropBoxHeight]="400"
+              [imageUrls]="cover_url" #coverImg>
+            </app-z-photo-select>
+            <div class="row row-message" style="height: 20px!important;margin-top: -6px">
+              <div class="control-input err-message">
+                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+              </div>
+            </div>
+            <p class="cover-hint">注：尺寸400*400px，格式PNG或JPG，大小2M以内</p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>原价</span>
+          </label>
+          <div class="control-input small-group">
+            <input class="form-control small-input" [(ngModel)]="productRecord.original_amount"
+              name="original_amount" />
+            <label class="one-word-lable">元</label>
+          </div>
+
+          <label class="control-label">
+            <b>*</b>
+            <span>销售单价</span>
+          </label>
+          <div class="control-input small-group">
+            <input class="form-control small-input" [(ngModel)]="productRecord.sale_amount" name="sale_amount" />
+            <label class="one-word-lable">元</label>
+          </div>
+
+          <label class="control-label">
+            <b>*</b>
+            <span>所需数量</span>
+          </label>
+          <div class="control-input small-group">
+            <input type="number" min="1" class="form-control small-input" oninput="value=value.replace(/[^\d]/g,'')"
+              [(ngModel)]="productRecord.number" name="need_number" />
+            <label class="one-word-lable">件</label>
+          </div>
+        </div>
+      </ng-container>
       <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>原价</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" name="remark" />
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>销售单价</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" name="remark" />
-        </div>
-      </div>
-      <div class="row">
-        <label class="control-label">
-          <b>*</b>
-          <span>所需数量</span>
-        </label>
-        <div class="control-input">
-          <input class="form-control" name="remark" />
-        </div>
+
       </div>
       <div class="row row-message" style="margin-top: -20px">
         <label class="control-label"></label>
@@ -124,11 +139,11 @@
           <span>{{productErrMsg}}</span>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+      <div class="row">
         <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
+        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
       </div>
     </form>
   </div>

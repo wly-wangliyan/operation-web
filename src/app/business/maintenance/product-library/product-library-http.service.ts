@@ -14,6 +14,9 @@ export class ProductEntity extends EntityBase {
   public UpkeepItem: ProjectEntity = undefined; // 所属项目
   public VehicleBrand: VehicleBrandEntity = undefined; // 所属品牌
   public VehicleFirm: VehicleFirmEntity = undefined; // 所属厂商
+  public upkeep_item_id: string = undefined; // 所属项目id
+  public vehicle_brand_id: string = undefined; // 所属品牌ID
+  public vehicle_firm_id: string = undefined; // 所属厂商ID
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
   public upkeep_accessory_name: string = undefined; // 产品名称
   public is_original: boolean = undefined; // 是否原厂
@@ -58,15 +61,14 @@ export class SearchParams extends EntityBase {
 
 // 产品
 export class AddProductParams extends EntityBase {
-  public upkeep_accessory_id: string = undefined; // 保养配件库-主键ID
-  public UpkeepItem: ProjectEntity = undefined; // 所属项目
-  public VehicleBrand: VehicleBrandEntity = undefined; // 所属品牌
-  public VehicleFirm: VehicleFirmEntity = undefined; // 所属厂商
-  public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
+  public upkeep_item_id: string = undefined; // 所属项目ID
+  public upkeep_accessory_type: ProjectEntity = undefined; // 项目类型 1:配件 2:服务
   public upkeep_accessory_name: string = undefined; // 产品名称
   public is_original: boolean = undefined; // 是否原厂
-  public brand_instruction: string = undefined; // 品牌说明 注:原产为否填写
+  public vehicle_brand_id: VehicleBrandEntity = undefined; // 所属品牌ID
+  public vehicle_firm_id: VehicleFirmEntity = undefined; // 所属厂商ID
   public is_brand_special: boolean = undefined; // 品牌专用
+  public brand_instruction: string = undefined; // 品牌说明 注:原产为否填写
   public serial_number: string = undefined; // 零件编号
   public specification: string = undefined; // 规格
   public image_url: string = undefined; // 图片
