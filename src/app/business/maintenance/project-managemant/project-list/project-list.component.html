@@ -31,16 +31,18 @@
         <tbody>
           <tr *ngFor="let data of projectTable.data; let i=index">
             <td>{{i+1}}</td>
-            <td [title]="data.project_category | projectCategory">{{data.project_category | projectCategory}}</td>
-            <td [title]="data.project_name">{{data.project_name ? data.project_name : '--'}}</td>
-            <td>{{data.project_id ? data.project_id : '--'}}</td>
-            <td [title]="data.project_type | projectType">{{data.project_type | projectType}}</td>
-            <td *ngIf="data.project">{{data.project.project_name}}</td>
-            <td *ngIf="!data.project">--</td>
-            <td [title]="data.remark">{{data.remark|zMaxLength:20}}</td>
+            <td [title]="data.upkeep_item_category | projectCategory">
+              {{data.upkeep_item_category | projectCategory}}
+            </td>
+            <td [title]="data.upkeep_item_name">{{data.upkeep_item_name ? data.upkeep_item_name : '--'}}</td>
+            <td>{{data.upkeep_item_num ? data.upkeep_item_num : '--'}}</td>
+            <td [title]="data.upkeep_item_type | projectType">{{data.upkeep_item_type | projectType}}</td>
+            <td *ngIf="data.upkeep_item_relation">{{data.upkeep_item_relation.upkeep_item_name}}</td>
+            <td *ngIf="!data.upkeep_item_relation">--</td>
+            <td [title]="data.upkeep_item_content">{{data.upkeep_item_content|zMaxLength:20}}</td>
             <td class="operation">
-              <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
-              <a [title]="'删除'" (click)="onDeleteProgect(data)">删除</a>
+              <a [title]="'编辑'" (click)="onShowModal(data)" data-toggle="modal" data-target="#editProjectModal">编辑</a>
+              <!-- <a [title]="'删除'" (click)="onDeleteProgect(data)">删除</a> -->
             </td>
           </tr>
         </tbody>
@@ -67,7 +69,8 @@
             <span>项目类别</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="project_category" name="project_category" required>
+            <select class="form-control" [(ngModel)]="project_category" (change)="onChangeCategory($event)"
+              name="project_category" required>
               <option value="">请选择</option>
               <option *ngFor="let projectCategory of projectCategories" [value]="projectCategory">
                 {{projectCategory | projectCategory}}
@@ -81,7 +84,8 @@
             <span>项目类型</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="project_type" name="project_type" required>
+            <select class="form-control" [(ngModel)]="project_type" (change)="onChangeType($event)" name="project_type"
+              required>
               <option value="">请选择</option>
               <option *ngFor="let projectType of projectTypes" [value]="projectType">{{projectType | projectType}}
               </option>
@@ -94,34 +98,37 @@
             <span>名称</span>
           </label>
           <div class="control-input">
-            <input class="form-control" placeholder="请输入名称，50字以内" [(ngModel)]="projectParams.project_name"
-              maxlength="50" name="project_name" required>
+            <input class="form-control" placeholder="请输入名称，50字以内" [(ngModel)]="projectParams.upkeep_item_name"
+              (focus)="onClearErrMsg()" maxlength="50" name="upkeep_item_name" required>
           </div>
         </div>
         <div class="row">
           <label class="control-label">
-            <b>&nbsp;</b>
+            <b>&nbsp;&nbsp;</b>
             <span>配套项目</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="project_id" name="project_id">
+            <select class="form-control" [(ngModel)]="projectParams.upkeep_item_relation"
+              (change)="onChangeRelation($event)" name="upkeep_item_relation">
               <option value="">请选择</option>
-              <option *ngFor="let item of versionList" [value]="item.version">{{item.version}}</option>
+              <option *ngFor="let item of toRelationList" [value]="item.upkeep_item_id">{{item.upkeep_item_name}}
+              </option>
             </select>
           </div>
         </div>
         <div class="row">
           <label class="control-label">
-            <b>&nbsp;</b>
+            <b>&nbsp;&nbsp;</b>
             <span>描述</span>
           </label>
           <div class="control-input">
-            <textarea class="form-control" rows="4" placeholder="请输入描述，100字以内" [(ngModel)]="projectParams.remark"
-              name="remark" maxlength="100">
+            <textarea class="form-control" rows="4" placeholder="请输入描述，100字以内"
+              [(ngModel)]="projectParams.upkeep_item_content" (focus)="onClearErrMsg()" name="upkeep_item_content"
+              maxlength="100">
             </textarea>
           </div>
         </div>
-        <div class="row row-message" style="margin-top: -20px">
+        <div class="row row-message" style="margin-top:-20px">
           <label class="control-label"></label>
           <div class="control-input err-message">
             <span>{{projectErrMsg}}</span>
@@ -129,11 +136,52 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+            (appZDebounceClick)="onEditFormSubmit()">
             保存
           </button>
         </div>
       </form>
     </div>
   </div>
+</div>
+
+
+<!--上传-->
+<div class="modal fade" id="importProjectPromptDiv" data-backdrop="false" data-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">导入数据</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCancelData()">&times;
+        </button>
+      </div>
+      <form class="form-horizontal import-form">
+        <div class="form-group">
+          <span>使用Excel编辑批量操作文件模板时，请确认输入的内容为文本格式，保存的内容和输入的内容保持一致</span>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
+            placeholder="请选择文件" disabled>
+          <div class="select-file">
+            <a class="choose-file">
+              <span class="download">选择文件</span>
+              <input #projectFileImportInput type="file"
+                (change)="importViewModel.selectedFile($event,projectFileImportInput)" title="" />
+            </a>
+          </div>
+        </div>
+        <div class="form-group import-tip">
+          <span>每次只能上传1000条数据</span>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportProject()">上传</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--进度条-->
+  <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
 </div>

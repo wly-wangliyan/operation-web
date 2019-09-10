@@ -14,6 +14,9 @@ const ProjectType = {
 export class ProjectTypePipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
+    if (value === null || value === undefined) {
+      return '--';
+    }
     if (value && (typeof value === 'string')) {
       // 当直接传递字符串时的处理
       return ProjectType[value];
@@ -45,6 +48,9 @@ const ProjectCategory = {
 export class ProjectCategoryPipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
+    if (value === null || value === undefined) {
+      return '--';
+    }
     if (value && (typeof value === 'string')) {
       // 当直接传递字符串时的处理
       return ProjectCategory[value];

@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ProjectEntity } from '../project-managemant-http.service';
-import { Subject } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ProjectEntity, ProjectParams } from '../project-managemant-http.service';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { ProjectManagemantHttpService } from '../project-managemant-http.service';
+import { HttpErrorEntity } from '../../../../core/http.service';
+import { FileImportViewModel } from '../../../../../utils/file-import.model';
+import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 
 @Component({
   selector: 'app-project-list',
@@ -16,21 +19,37 @@ export class ProjectListComponent implements OnInit {
 
   public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
 
-  public projectList: Array<ProjectEntity> = [];
+  public projectList: Array<ProjectEntity> = []; // 保养项目列表
+
+  public toRelationList: Array<ProjectEntity> = []; // 可关联项目列表
 
   public noResultText = '数据加载中...';
 
   private searchText$ = new Subject<any>();
 
-  public projectParams: ProjectEntity = new ProjectEntity();
+  public projectParams: ProjectParams = new ProjectParams();
 
   public project_category = ''; // 项目类别
 
   public project_type = ''; // 项目类型
 
-  public project_id = ''; // 配套项目id
+  public project_id = ''; // 项目id
 
   public projectErrMsg = ''; // 添加、编辑错误提示
+
+  public isCreateProject = true; // 标记是否为新建
+
+  public rowspan_category_1: number; // 保养项目合并行数量
+
+  public rowspan_category_2: number; // 清洗养护项目合并行数量
+
+  public rowspan_category_3: number; // 维修项目合并行数量
+
+  private importSpotSubscription: Subscription; // 导入描述对象
+
+  public importViewModel: FileImportViewModel = new FileImportViewModel();
+
+  @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -38,6 +57,15 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    // 测试数据
+    const project = new ProjectEntity();
+    project.upkeep_item_id = '1';
+    project.upkeep_item_category = 1;
+    project.upkeep_item_num = '1';
+    project.upkeep_item_type = 1;
+    project.upkeep_item_name = '测试';
+    this.projectList.push(project);
+
     this.generateProjectList();
   }
 
@@ -54,37 +82,111 @@ export class ProjectListComponent implements OnInit {
   private requestProjectList() {
     this.projectService.requestProjectListData().subscribe(res => {
       this.projectList = res;
+      const category_1 = this.projectList.filter(value => value.upkeep_item_category === 1);
+      this.rowspan_category_1 = category_1.length;
+      const category_2 = this.projectList.filter(value => value.upkeep_item_category === 2);
+      this.rowspan_category_2 = category_2.length;
+      const category_3 = this.projectList.filter(value => value.upkeep_item_category === 3);
+      this.rowspan_category_3 = category_3.length;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
   }
 
+  // 解订阅
+  public onCloseUnsubscribe() {
+    this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
+  }
+
   /**
-   * 获取配套项目
-   * 前提是需要选择项目类别及项目类型
+   * 导入
+   * 导入成功后需要刷新列表
    */
-  private requestProjectRecords() {
-    if (this.project_category && this.project_type) {
-      console.log('获取配套项目');
-    } else {
-      console.log('配套项目置空');
+  public onImportProject() {
+    $('#importProjectPromptDiv').modal('show');
+    this.importViewModel.initImportData();
+    console.log('导入');
+  }
+
+  // 取消导入
+  public onCancelData() {
+    this.onCloseUnsubscribe();
+    this.importViewModel.initImportData();
+    $('#importProjectPromptDiv').modal('hide');
+  }
+
+  /* 导入数据 */
+  public onSubmitImportBerth() {
+    if (this.importViewModel.address) {
+      const length = this.importViewModel.address.length;
+      const index = this.importViewModel.address.lastIndexOf('.');
+      const type = this.importViewModel.address.substring(index, length);
+      if (type !== '.xlsx' && type !== '.xls' && type !== '.csv') {
+        this.globalService.promptBox.open('文件格式错误！', null, -1, null, false);
+        return;
+      }
+    }
+    if (this.importViewModel.checkFormDataValid()) {
+      /* this.progressModalComponent.openOrClose(true);
+       this.importSpotSubscription = this.projectService.requestImportSpot(
+           this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
+         $('#dataImportModal').modal('hide');
+         this.globalService.promptBox.open('导入成功！', () => {
+           this.importViewModel.initImportData();
+           $('#importBerthPromptDiv').modal('hide');
+           this.progressModalComponent.openOrClose(false);
+         }, -1);
+       }, err => {
+         this.progressModalComponent.openOrClose(false);
+         timer(300).subscribe(() => {
+           if (!this.globalService.httpErrorProcess(err)) {
+             if (err.status === 422) {
+               const tempErr = JSON.parse(err.responseText);
+               const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+               if (error.resource === 'file' && error.code === 'missing') {
+                 this.globalService.promptBox.open('泊位文件不能为空！', null, -1, null, false);
+               } else {
+                 this.globalService.promptBox.open('泊位文件错误', null, -1, null, false);
+               }
+             }
+           }
+         });
+       });*/
     }
   }
 
-  /** 导入 */
-  public onImportProject() {
-
-  }
-
-  /** 下载模板 */
   public onDownloadMould() {
-
+    console.log('下载模板');
   }
 
   /** 添加、编辑 */
-  public onShowModal() {
+  public onShowModal(data?: ProjectEntity) {
+    this.onClearErrMsg();
+    if (data) {
+      this.isCreateProject = false;
+      this.project_id = data.upkeep_item_id;
+      this.projectParams = new ProjectParams();
+      const relation_id = data.upkeep_item_relation ? data.upkeep_item_relation.upkeep_item_id : '';
+      this.projectParams.upkeep_item_relation = relation_id;
+      this.projectParams.upkeep_item_category = data.upkeep_item_category;
+      this.project_category = String(data.upkeep_item_category);
+      this.requestRelationProjects(data.upkeep_item_category); // 获取可关联列表
+      this.projectParams.upkeep_item_name = data.upkeep_item_name;
+      this.projectParams.upkeep_item_type = data.upkeep_item_type;
+      this.project_type = String(data.upkeep_item_type);
+      this.projectParams.upkeep_item_content = data.upkeep_item_content;
+      this.projectParams.upkeep_item_num = data.upkeep_item_num;
+    } else {
+      this.isCreateProject = true;
+      this.project_category = '';
+      this.project_type = '';
+      this.projectParams = new ProjectParams();
+    }
+  }
 
+  public onClearErrMsg() {
+    this.projectErrMsg = '';
   }
 
   /** 删除 */
@@ -93,6 +195,47 @@ export class ProjectListComponent implements OnInit {
       this.globalService.confirmationBox.close();
       console.log('调用删除接口');
     });
+  }
+
+  // 变更项目类别后，获取同大类下可关联项目列表
+  public onChangeCategory(event: any) {
+    this.toRelationList = [];
+    this.projectParams.upkeep_item_relation = '';
+    this.onClearErrMsg();
+    const category_id = event.target.value;
+    if (category_id) {
+      this.projectParams.upkeep_item_category = Number(category_id);
+      this.requestRelationProjects(category_id);
+    } else {
+      this.projectParams.upkeep_item_category = null;
+    }
+  }
+
+  // 获取可用配套项目
+  private requestRelationProjects(category_id: any) {
+    if (category_id) {
+      this.projectService.requestRelationProjectsData(category_id).subscribe(data => {
+        this.toRelationList = data;
+        if (this.projectParams.upkeep_item_relation) {
+          if (!this.toRelationList.some(value => value.upkeep_item_id === this.projectParams.upkeep_item_relation)) {
+            this.projectParams.upkeep_item_relation = '';
+          }
+        }
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }
+  }
+
+  // 变更项目类型
+  public onChangeType(event: any) {
+    this.onClearErrMsg();
+    const type_id = event.target.value;
+    if (type_id) {
+      this.projectParams.upkeep_item_type = Number(type_id);
+    } else {
+      this.projectParams.upkeep_item_type = null;
+    }
   }
 
   // 键盘按下事件
@@ -105,12 +248,68 @@ export class ProjectListComponent implements OnInit {
 
   // 确定事件
   public onEditFormSubmit() {
+    if (this.generateAndCheckParamsValid()) {
+      if (this.isCreateProject) {
+        this.requestAddProject();
+      } else {
+        this.requestUpdateProject();
+      }
+    }
+  }
 
+  // 添加
+  private requestAddProject() {
+    this.projectService.requestAddProjectData(this.projectParams).subscribe(res => {
+      $('#editProjectModal').modal('hide');
+      this.globalService.promptBox.open('保存成功！');
+      this.searchText$.next();
+    }, err => {
+      this.errorProcess(err);
+    });
+  }
+
+  // 编辑
+  private requestUpdateProject() {
+    this.projectService.requestUpdateProjectData(this.project_id, this.projectParams).subscribe(res => {
+      $('#editProjectModal').modal('hide');
+      this.globalService.promptBox.open('保存成功！');
+      this.searchText$.next();
+    }, err => {
+      this.errorProcess(err);
+    });
   }
 
   /** 校验项目新增参数是否合法 */
-  private generateAndCheckParamsValid() {
+  private generateAndCheckParamsValid(): boolean {
+    if (!this.projectParams.upkeep_item_category) {
+      this.projectErrMsg = '请选择项目类别！';
+      return false;
+    }
 
+    if (!this.projectParams.upkeep_item_type) {
+      this.projectErrMsg = '请选择项目类型！';
+      return false;
+    }
+
+    if (!this.projectParams.upkeep_item_name) {
+      this.projectErrMsg = '请输入名称！';
+      return false;
+    }
+    return true;
   }
 
+  // 接口错误信息处理
+  private errorProcess(err: any) {
+    if (!this.globalService.httpErrorProcess(err)) {
+      if (err.status === 422) {
+        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+        for (const content of error.errors) {
+          if (content.resource === 'upkeep_item_relation' && content.code === 'invalid') {
+            this.projectErrMsg = '所选配套项目不存在！';
+            return;
+          }
+        }
+      }
+    }
+  }
 }
