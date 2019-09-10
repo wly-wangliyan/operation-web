@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
-import { ProductLibraryHttpService } from '../product-library-http.service';
+import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const PageSize = 15;
 
@@ -13,7 +14,9 @@ const PageSize = 15;
 })
 export class ProductListComponent implements OnInit {
 
-  public productList: Array<any> = []; // 产品列表
+  public searchParams: SearchParams = new SearchParams(); // 条件筛选
+
+  public productList: Array<ProductEntity> = []; // 产品列表
 
   public pageIndex = 1; // 当前页码
 
@@ -33,11 +36,14 @@ export class ProductListComponent implements OnInit {
   }
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private globalService: GlobalService,
     private productLibraryService: ProductLibraryHttpService
   ) { }
 
   public ngOnInit() {
+    this.productList.push(new ProductEntity());
     this.generateProjectList();
   }
 
@@ -52,15 +58,34 @@ export class ProductListComponent implements OnInit {
 
   // 请求产品列表
   private requestProjectList() {
-    console.log('请求获取产品列表接口');
-    this.noResultText = '暂无数据';
+    this.productLibraryService.requestProjectListData(this.searchParams).subscribe(res => {
+      this.productList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+
+        }
+      }
+    });
   }
 
-  /** 删除 */
-  public onDeleteProgect() {
+  // 编辑产品
+  public onEditBtnClick(data: ProductEntity) {
+    this.router.navigate(['../edit'], { relativeTo: this.route, queryParams: { product_id: data.upkeep_accessory_id } });
+  }
+
+  /** 删除产品 */
+  public onDeleteProgect(data: ProductEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      console.log('调用删除接口');
+      this.productLibraryService.requestDeleteProductData(data.upkeep_accessory_id).subscribe(res => {
+        this.globalService.promptBox.open('删除成功');
+        this.searchText$.next();
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     });
   }
 
@@ -69,13 +94,13 @@ export class ProductListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      console.log('分页请求产品数据');
-      // this.continueRequestSubscription = this.productLibraryService.continueProductList(this.linkUrl).subscribe(res => {
-      //   this.productList = this.productList.concat(res.results);
-      //   this.linkUrl = res.linkUrl;
-      // }, err => {
-      //   this.globalService.httpErrorProcess(err);
-      // });
+      this.continueRequestSubscription = this.productLibraryService.continueProjectListData(this.linkUrl)
+        .subscribe(res => {
+          this.productList = this.productList.concat(res.results);
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 

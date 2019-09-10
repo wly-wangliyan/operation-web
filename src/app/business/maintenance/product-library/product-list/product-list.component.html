@@ -22,29 +22,37 @@
             <th>零件编号</th>
             <th>是否原厂</th>
             <th>品牌</th>
-            <th>原价</th>
-            <th>销售单价</th>
-            <th>销量</th>
+            <!-- <th>原价</th> -->
+            <!-- <th>销售单价</th> -->
+            <!-- <th>销量</th> -->
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let manual of productTable.data; let i=index">
+          <tr *ngFor="let product of productTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td><a></a></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td [title]="product.upkeep_accessory_name">
+              <a>{{product.upkeep_accessory_name}}</a>
+            </td>
+            <td>{{product.UpkeepItem ? (product.UpkeepItem.upkeep_item_category | projectCategory) : '--'}}</td>
+            <td *ngIf="product.UpkeepItem" [title]="product.UpkeepItem.upkeep_item_name">
+              {{product.UpkeepItem.upkeep_item_name | zMaxLength:20}}</td>
+            <td *ngIf="!product.UpkeepItem">--</td>
+            <td>{{product.upkeep_accessory_type | projectType}}</td>
+            <td>{{product.serial_number ? product.serial_number : '--'}}</td>
+            <td>{{product.is_original ? '是' : '否'}}</td>
+            <td *ngIf="product.is_original && product.VehicleBrand && product.VehicleFirm ">
+              {{(product.VehicleBrand.vehicle_brand_name + '>' + product.VehicleFirm.vehicle_firm_name) | zMaxLength:20}}
+            </td>
+            <td *ngIf="!product.is_original || !product.VehicleBrand || !product.VehicleFirm">--</td>
+            <!-- <td>{{product.original_amount}}</td> -->
+            <!-- <td>{{product.sale_amount}}</td> -->
+            <!-- <td>{{product.upkeep_accessory_name}}</td> -->
             <td class="operation">
-              <a [title]="'查看'">查看</a>
-              <a [title]="'编辑'" (click)="onEditBtnClick(manual)">编辑</a>
-              <a [title]="'删除'" (click)="onDeleteProgect(manual)">删除</a>
+              <a [title]="'查看'" [routerLink]="['../detail',product.upkeep_accessory_id]">查看</a>
+              <a [title]="'编辑'" [routerLink]="['../edit',product.upkeep_accessory_id]">编辑</a>
+              <a [title]="'删除'" *ngIf="!product.upkeep_merchants || product.upkeep_merchants.length===0"
+                (click)="onDeleteProgect(product)">删除</a>
             </td>
           </tr>
         </tbody>

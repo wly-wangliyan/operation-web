@@ -16,7 +16,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: ProductListComponent },
       { path: 'create', component: ProductCreateComponent },
-      { path: 'detail', component: ProductDetailComponent },
+      { path: 'edit/:product_id', component: ProductCreateComponent },
+      { path: 'detail/:product_id', component: ProductDetailComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }
