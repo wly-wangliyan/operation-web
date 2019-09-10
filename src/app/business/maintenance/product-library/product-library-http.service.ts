@@ -56,6 +56,28 @@ export class SearchParams extends EntityBase {
   public page_size = 45; // 每页条数 默认:15
 }
 
+// 产品
+export class AddProductParams extends EntityBase {
+  public upkeep_accessory_id: string = undefined; // 保养配件库-主键ID
+  public UpkeepItem: ProjectEntity = undefined; // 所属项目
+  public VehicleBrand: VehicleBrandEntity = undefined; // 所属品牌
+  public VehicleFirm: VehicleFirmEntity = undefined; // 所属厂商
+  public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
+  public upkeep_accessory_name: string = undefined; // 产品名称
+  public is_original: boolean = undefined; // 是否原厂
+  public brand_instruction: string = undefined; // 品牌说明 注:原产为否填写
+  public is_brand_special: boolean = undefined; // 品牌专用
+  public serial_number: string = undefined; // 零件编号
+  public specification: string = undefined; // 规格
+  public image_url: string = undefined; // 图片
+  public original_amount: number = undefined; // 原价 单位:元
+  public sale_amount: number = undefined; // 销售单价 单位:元
+  public number: number = undefined; // 所需数量 单位:件
+  public upkeep_merchants: Array<any> = undefined; // 在售保养商家ID集合
+  public created_time: number = undefined;
+  public updated_time: string = undefined;
+}
+
 // 保养商家
 export class MerchantEntity extends EntityBase {
   public upkeep_merchant_id: string = undefined; // 保养商家-主键ID
@@ -125,7 +147,7 @@ export class ProductLibraryHttpService {
    * @param upkeep_accessory_id 保养配件库-主键ID
    * @returns Observable<ProductEntity>
    */
-  public requestManualDetailData(upkeep_accessory_id: string): Observable<ProductEntity> {
+  public requestProductDetailData(upkeep_accessory_id: string): Observable<ProductEntity> {
     const httpUrl = `${this.domain}/upkeep_accessories/${upkeep_accessory_id}`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => ProductEntity.Create(res.body)));

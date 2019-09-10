@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
 import { Subject, Subscription } from 'rxjs';
@@ -69,11 +69,6 @@ export class ProductListComponent implements OnInit {
         }
       }
     });
-  }
-
-  // 编辑产品
-  public onEditBtnClick(data: ProductEntity) {
-    this.router.navigate(['../edit'], { relativeTo: this.route, queryParams: { product_id: data.upkeep_accessory_id } });
   }
 
   /** 删除产品 */

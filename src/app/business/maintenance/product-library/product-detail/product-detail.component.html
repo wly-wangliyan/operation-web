@@ -1,149 +1,171 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品库'" [level2Name]="title"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg">
+    <li class="big-bg big-white-btn" [routerLink]="['../../edit',productRecord.upkeep_accessory_id]">
       <a>编辑</a>
     </li>
     <li class="big-bg">
-      <a>删除</a>
+      <a (click)="onDeleteClick()">删除</a>
     </li>
   </ul>
 </div>
 <div class="content-flow">
   <!-- 查看配件 -->
-  <ng-container>
+  <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
     <div class="content-container">
       <div class="img-item">
-        <i></i>
+        <img src="{{productRecord.image_url?productRecord.image_url:no_img_url}}" />
       </div>
       <div class="table-item">
         <table class="detail-table">
           <tr>
             <td>产品名称：</td>
-            <td>XXX配件</td>
+            <td>{{productRecord.upkeep_accessory_name ? productRecord.upkeep_accessory_name : '--'}}</td>
             <td>所属项目：</td>
-            <td>
-              4S店保养项目>空气滤清器
+            <td *ngIf="productRecord.UpkeepItem">
+              {{productRecord.UpkeepItem.upkeep_item_category | projectCategory}} >
+              {{productRecord.UpkeepItem.upkeep_item_name}}
             </td>
+            <td *ngIf="!productRecord.UpkeepItem">--</td>
             <td>项目类型：</td>
             <td>
-              配件
+              {{productRecord.upkeep_accessory_type | projectType}}
             </td>
           </tr>
           <tr>
             <td>原价：</td>
             <td>
-              15元
+              {{productRecord.original_amount ? productRecord.original_amount + '元' : '--' }}
             </td>
             <td>零售单价：</td>
             <td>
-              25元
+              {{productRecord.sale_amount ? productRecord.sale_amount + '元' : '--' }}
             </td>
-            <td>销量：</td>
-            <td>
-              150
-            </td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td>是否原厂：</td>
-            <td>否</td>
-            <td>所属厂商：</td>
-            <td>
-              奥迪 · 一汽大众
-            </td>
-            <td>此品牌厂商专用：</td>
-            <td>
-              是
-            </td>
-            <td>品牌说明：</td>
-            <td>
-              美孚牌
-            </td>
+            <td>{{productRecord.is_original ? '是' : '否' }}</td>
+            <ng-container *ngIf="productRecord.is_original">
+              <td>所属厂商：</td>
+              <td>
+                {{(product.VehicleBrand.vehicle_brand_name + '>' + product.VehicleFirm.vehicle_firm_name) | zMaxLength:20}}
+              </td>
+              <td>此品牌厂商专用：</td>
+              <td>
+                {{productRecord.is_brand_special ? '是' : '否' }}
+              </td>
+            </ng-container>
+            <ng-container *ngIf="!productRecord.is_original">
+              <td>品牌说明：</td>
+              <td>
+                {{productRecord.brand_instruction ? productRecord.brand_instruction : '--' }}
+              </td>
+              <td></td>
+              <td></td>
+            </ng-container>
           </tr>
           <tr>
             <td>规格：</td>
             <td>
-              5L
+              {{productRecord.specification ? productRecord.specification : '--' }}
             </td>
             <td>零件编号：</td>
             <td>
-              154654
+              {{productRecord.serial_number ? productRecord.serial_number : '--' }}
             </td>
             <td>所需数量：</td>
             <td>
-              2
+              {{productRecord.number >=0 ? productRecord.number : '--' }}
             </td>
           </tr>
 
           <tr>
             <td>创建时间：</td>
-            <td>2019.08.15 12:00:00</td>
+            <td>{{productRecord.created_time ? (productRecord.created_time*1000 | date:"y-MM-dd HH:mm") : '--' }}
+            </td>
             <td>ID：</td>
             <td>
-              15455411221
+              {{productRecord.upkeep_accessory_id ? productRecord.upkeep_accessory_id : '--' }}
             </td>
             <td></td>
-            <td>
-            </td>
+            <td></td>
           </tr>
-
           <tr>
             <td>在售商家：</td>
-            <td colspan="5">XXX商家；XXX商家；</td>
+            <td colspan="5">
+              <ng-container *ngIf="productRecord.upkeep_merchants && productRecord.upkeep_merchants.length > 0">
+                <ng-container *ngFor="let merchant of productRecord.upkeep_merchants;let index = index">
+                  <span>{{merchant.upkeep_merchant_name}}</span>
+                  <span *ngIf="productRecord.upkeep_merchants.length-1>index">,</span>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="!productRecord.upkeep_merchants || productRecord.upkeep_merchants.length===0">--
+              </ng-container>
+            </td>
           </tr>
         </table>
       </div>
     </div>
   </ng-container>
   <!-- 查看服务 -->
-  <ng-container>
+  <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[1]">
     <div class="content-container">
       <div class="img-item">
-        <i></i>
+        <img src="{{productRecord.image_url?productRecord.image_url:no_img_url}}" />
       </div>
       <div class="table-item">
         <table class="detail-table">
           <tr>
             <td>产品名称：</td>
-            <td>XXX配件</td>
+            <td>{{productRecord.upkeep_accessory_name ? productRecord.upkeep_accessory_name : '--'}}</td>
             <td>所属项目：</td>
-            <td>
-              4S店保养项目>空气滤清器
+            <td *ngIf="productRecord.UpkeepItem">
+              {{productRecord.UpkeepItem.upkeep_item_category | projectCategory}} >
+              {{productRecord.UpkeepItem.upkeep_item_name}}
             </td>
+            <td *ngIf="!productRecord.UpkeepItem">--</td>
             <td>项目类型：</td>
             <td>
-              配件
+              {{productRecord.upkeep_accessory_type | projectType}}
             </td>
           </tr>
           <tr>
             <td>原价：</td>
             <td>
-              15元
+              {{productRecord.original_amount ? productRecord.original_amount + '元' : '--' }}
             </td>
             <td>零售单价：</td>
             <td>
-              25元
+              {{productRecord.sale_amount ? productRecord.sale_amount + '元' : '--' }}
             </td>
-            <td>销量：</td>
-            <td>
-              150
-            </td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
-            <td>所需数量：</td>
-            <td>
-              2
+            <td>创建时间：</td>
+            <td>{{productRecord.created_time ? (productRecord.created_time*1000 | date:"y-MM-dd HH:mm") : '--' }}
             </td>
             <td>ID：</td>
             <td>
-              15455411221
+              {{productRecord.upkeep_accessory_id ? productRecord.upkeep_accessory_id : '--' }}
             </td>
-            <td>创建时间：</td>
-            <td>2019.08.15 12:00:00</td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td>在售商家：</td>
-            <td colspan="5">XXX商家；XXX商家；</td>
+            <td colspan="5">
+              <ng-container *ngIf="productRecord.upkeep_merchants && productRecord.upkeep_merchants.length > 0">
+                <ng-container *ngFor="let merchant of productRecord.upkeep_merchants;let index = index">
+                  <span>{{merchant.upkeep_merchant_name}}</span>
+                  <span *ngIf="productRecord.upkeep_merchants.length-1>index">,</span>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="!productRecord.upkeep_merchants || productRecord.upkeep_merchants.length===0">--
+              </ng-container>
+            </td>
           </tr>
         </table>
       </div>
