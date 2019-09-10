@@ -138,9 +138,7 @@
     margin-left: 13%;
     margin-top: 10px;
     width: 85%;
-    height: 50%;
-    padding-left: 30px;
-    padding-top: 20px;
+    padding: 20px 0 30px 30px;
     box-shadow:0px 0px 4px 0px rgba(0,0,0,0.2);
     border-radius:4px;
 }
@@ -172,4 +170,9 @@
     height:79px;
     background:rgba(247,248,250,1);
     border-radius:4px;
+    margin-top: -15px;
+}
+
+::ng-deep .ant-tree li span.ant-tree-switcher, .ant-tree li span.ant-tree-iconEle {
+    height: 0 !important;
 }

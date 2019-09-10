@@ -1,10 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 import { LocalStorageProvider } from '../../../../share/localstorage-provider';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import {
+  VehicleBrandEntity,
+  VehicleFirmEntity,
+  VehicleSeriesEntity, VehicleTypeEntity,
+  VehicleTypeManagementService
+} from '../vehicle-type-management.service';
 
 @Component({
   selector: 'app-vehicle-type-list',
@@ -13,68 +20,82 @@ import { FileImportViewModel } from '../../../../../utils/file-import.model';
 })
 export class VehicleTypeListComponent implements OnInit {
 
-  public nodes: any;
-  public nodes_1: any;
-  public nodes_2: any;
-  public nodes_3: any;
-  public key = '111';
+  public vehicleBrandList: Array<VehicleBrandEntity> = [];
+  public vehicleFirmList: Array<VehicleFirmEntity> = [];
+  public vehicleSeriesList: Array<VehicleSeriesEntity> = [];
+  public vehicleTypeList: Array<VehicleTypeEntity> = [];
+  public vehicle_brand_id: string;
   public index = 0;
-  private vehicleList = [];
+
+  private searchText$ = new Subject<any>();
+  private continueRequestSubscription: Subscription;
   private importSpotSubscription: Subscription;
   public importViewModel: FileImportViewModel = new FileImportViewModel();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
-  constructor(private globalService: GlobalService) {
+  constructor(private globalService: GlobalService,
+              private vehicleTypeManagementService: VehicleTypeManagementService) {
   }
 
   ngOnInit() {
-    this.nodes = [
-      { title: '奥迪', key: '111', btn: '删除'},
-      { title: '宝马', key: '222', btn: '删除' },
-      { title: '奔驰', key: '333', btn: '删除', isLeaf: false }
-    ];
-    LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.nodes);
+    // 获取车辆品牌列表
+    this.searchText$.pipe(
+        debounceTime(500),
+        switchMap(() =>
+            this.vehicleTypeManagementService.requestVehicleBrandList())
+    ).subscribe(res => {
+      this.vehicleBrandList = res.results;
+      this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
+      if (this.vehicleBrandList.length > 0) {
+        this.requestVehicleFirmsList(this.vehicleBrandList[0].vehicle_brand_id);
+      }
+      LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.vehicleBrandList);
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchText$.next();
+  }
+
+  // 获取厂商列表
+  private requestVehicleFirmsList(vehicle_brand_id: string) {
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    this.continueRequestSubscription =
+        this.vehicleTypeManagementService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
+          this.vehicleFirmList = res;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   nzEvent(event: Required<NzFormatEmitEvent>): void {
     if (event.eventName === 'expand') {
       const node = event.node;
       if (node && node.getChildren().length === 0 && node.isExpanded) {
-        this.loadNode().then(data => {
-          node.addChildren(data);
-          const temp = this.vehicleList.length > 0 ? JSON.stringify(this.vehicleList) : JSON.stringify(this.nodes);
-          this.vehicleList = JSON.parse(temp);
-          data.forEach(value => {
-            this.vehicleList.push(value);
+        if (node.level === 0) {
+          // 根据厂商获取汽车车系
+          this.vehicleTypeManagementService.requestVehicleSeriesList(node.origin.vehicle_firm_id).subscribe(res => {
+            this.vehicleSeriesList = res;
+            node.addChildren(res);
+          }, err => {
+            this.globalService.httpErrorProcess(err);
           });
-          LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.vehicleList);
-          let sizeStore = 0;
-          if (window.localStorage) {
-          // 遍历所有存储
-            for (const item in window.localStorage) {
-              if (window.localStorage.hasOwnProperty(item)) {
-                sizeStore += window.localStorage.getItem(item).length;
-              }
-            }
-          }
-          console.log((sizeStore / 1024 / 1024).toFixed(2) + 'M');
-        });
+        } else if (node.level === 1) {
+          // 根据车系获取汽车车型
+          this.vehicleTypeManagementService.requestVehicleTypeList(node.origin.vehicle_series_id).subscribe(res => {
+            this.vehicleTypeList = res;
+            let temp = [];
+            temp = res;
+            temp.forEach(value => {
+              value.isLeaf = true;
+            });
+            node.addChildren(res);
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+        }
       }
     }
-  }
-
-  loadNode(): Promise<NzTreeNodeOptions[]> {
-    return new Promise(resolve => {
-      setTimeout(
-          () =>
-              resolve([
-                { title: 'Audi Sport', key: `${new Date().getTime()}-0` },
-                { title: '一汽-大众奥迪', key: `${new Date().getTime()}-1`, isLeaf: true }
-              ]),
-          500
-      );
-    });
   }
 
   public onImportClick() {
@@ -137,6 +158,16 @@ export class VehicleTypeListComponent implements OnInit {
 
   // 删除车型
   public onDeleteVehicleClick() {
+    let sizeStore = 0;
+    if (window.localStorage) {
+      // 遍历所有存储
+      for (const item in window.localStorage) {
+        if (window.localStorage.hasOwnProperty(item)) {
+          sizeStore += window.localStorage.getItem(item).length;
+        }
+      }
+    }
+    console.log((sizeStore / 1024 / 1024).toFixed(2) + 'M');
     this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       /*this.versionManagementService.requestDeleteVersion(data.version_id).subscribe((e) => {
@@ -147,18 +178,7 @@ export class VehicleTypeListComponent implements OnInit {
     });
   }
 
-  public onBrandClick(data) {
-    this.key = data.key;
-  }
-
-  public onManufacturerClick(data, index) {
-    this.index = index;
-    this.nodes_2 = [{ title: 'Audi Sport', key: `${new Date().getTime()}-0`, key_1: '111' },
-      { title: '一汽-大众奥迪', key: `${new Date().getTime()}-1`, key_1: '222' }];
-  }
-
-  public onTypeClick(data) {
-    this.nodes_3 = [{ title: '2017', key: `${new Date().getTime()}-0` },
-      { title: '2018', key: `${new Date().getTime()}-1` }];
+  public onBrandClick(data: VehicleBrandEntity) {
+    this.vehicle_brand_id = data.vehicle_brand_id;
   }
 }

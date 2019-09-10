@@ -89,7 +89,7 @@
                     <span>地图坐标</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" style="border-right: none!important;" name="tel" readonly>
+                    <input class="form-control" name="tel" readonly>
                     <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
                 </div>
             </div>
@@ -99,7 +99,8 @@
                     <span>汽车品牌</span>
                 </label>
                 <div class="control-input">
-                    <button class="common-btn" nz-button (click)="openMapModal()">选择</button>
+                    <button class="common-btn" style="border-left: 1px solid #d9d9d9" nz-button
+                            (click)="openMapModal()">选择</button>
                 </div>
             </div>
             <div class="row">
@@ -108,7 +109,7 @@
                     <span>可提前预定</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" style="border-right: none!important;"
+                    <input class="form-control"
                            type="number" name="tel" (keypress)="inputNumberLimit($event)">
                     <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
                 </div>
@@ -119,10 +120,9 @@
                     <span>客服电话</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel" style="border-right: none!important;"
+                    <input class="form-control" name="tel"
                     placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                    <button class="common-btn" nz-button (click)="openMapModal()" *ngIf="!is_add_tel">移除</button>
                 </div>
                 <span class="msg-span">注：最多可添加2个</span>
             </div>
@@ -132,14 +132,14 @@
                     <span></span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel" style="border-right: none!important;"
+                    <input class="form-control" name="tel"
                            placeholder="请输入座机或手机号">
-                    <button class="common-btn" nz-button (click)="openMapModal()">移除</button>
+                    <button class="common-btn" nz-button (click)="onDelTelClick()">移除</button>
                 </div>
             </div>
             <div class="row row-message"></div>
             <div>
-                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || coverImg.imageList.length===0"
+                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
                         (appZDebounceClick)="onEditFormSubmit()">保存
                 </button>
                 <button class="close-btn" nz-button (click)="onClose()">取消</button>

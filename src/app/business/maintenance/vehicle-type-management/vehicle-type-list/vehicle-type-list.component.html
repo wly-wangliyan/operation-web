@@ -11,14 +11,14 @@
 </div>
 <div class="content-flow">
     <div class="brand-list">
-        <li *ngFor="let item of nodes; let i=index" (click)="onBrandClick(item)" [class.width]="item.key===key">
-            <img [src]="''">
-            <span>{{item.title}}</span>
-            <img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">
+        <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)" [class.width]="item.vehicle_brand_id===vehicle_brand_id">
+            <img [src]="item.vehicle_brand_image">
+            <span>{{item.vehicle_brand_name}}</span>
+            <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
         </li>
     </div>
 
-    <div class="vehicle-list">
+    <div class="vehicle-list" *ngIf="vehicleBrandList.length>0">
         <!--<li *ngFor="let item of nodes_1; let i=index" (click)="onManufacturerClick(item, i)">
             <img [src]="''">
             <span>{{item.title}}</span>
@@ -37,17 +37,26 @@
                 </ul>
             &lt;!&ndash;</div>&ndash;&gt;
         </li>-->
-        <nz-tree [nzData]="nodes" nzAsyncData (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
-                 [nzTreeTemplate]="nzTreeTemplate">
+        <nz-tree [nzData]="vehicleFirmList" nzAsyncData nzShowIcon (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
+                 [nzTreeTemplate]="nzTreeTemplate" >
         </nz-tree>
+        <!--<ng-template #mutiExpandedIconTpl let-node>
+            &lt;!&ndash;<i nz-icon [nzType]="'/assets/images/open_tree.png'"></i>&ndash;&gt;
+            <i
+                    nz-icon
+                    [nzType]="node.isExpanded ? 'folder-open' : 'folder'"
+                    class="ant-tree-switcher-line-icon"
+            ></i>
+        </ng-template>-->
         <ng-template #nzTreeTemplate let-node>
-             <span *ngIf="!node.isLeaf">
-                 <label>{{ node.title }}</label>
-                 <img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">
+            <span *ngIf="!node.isLeaf">
+                 <label *ngIf="node.level===0">{{ node.origin.vehicle_firm_name }}</label>
+                 <label *ngIf="node.level===1">{{ node.origin.vehicle_series_name }}</label>
+                 <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
              </span>
             <div *ngIf="node.isLeaf" class="vehicle-info">
-                <span>{{ node.title }}</span>
-                <span class="btn-del-info" (click)="onDeleteVehicleClick()"></span>
+                <span>{{ node.origin.vehicle_type_name }}</span>
+                <!--<span class="btn-del-info" (click)="onDeleteVehicleClick()"></span>-->
             </div>
         </ng-template>
     </div>

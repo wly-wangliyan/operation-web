@@ -56,6 +56,7 @@ export class BusinessEditComponent implements OnInit {
   public color = '';
   public mapItem: MapItem = new MapItem();
   public is_add_tel = true;
+  public tel = '';
 
   private continueRequestSubscription: Subscription;
   private sureCallback: any;
@@ -242,6 +243,12 @@ export class BusinessEditComponent implements OnInit {
   // 添加客服联系电话
   public onAddTelClick() {
     this.is_add_tel = false;
+  }
+
+  // 移除客服联系电话
+  public onDelTelClick() {
+    this.is_add_tel = true;
+    this.tel = '';
   }
 }
 

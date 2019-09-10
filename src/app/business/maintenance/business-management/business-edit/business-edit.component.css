@@ -79,11 +79,12 @@ nz-range-picker {
     height:34px;
     background:rgba(255,255,255,1);
     border-radius:1px;
-
+    border-left: none;
 }
 
 .common-btn:hover {
     border: 1px solid #d9d9d9;
+    border-left: none;
     color: rgba(0,0,0,0.65);
 }
 
