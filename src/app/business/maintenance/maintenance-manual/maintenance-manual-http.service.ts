@@ -98,11 +98,21 @@ export class MaintenanceManualHttpService {
 
   constructor(private httpService: HttpService) { }
 
-  /** 获取保养手册列表 */
-  public requestManualListData(params: SearchParams): Observable<ManualLinkResponse> {
+  /** 获取保养手册列表
+   * @param searchParams 条件筛选参数
+   */
+  public requestManualListData(searchParams: SearchParams): Observable<ManualLinkResponse> {
     const httpUrl = `${this.domain}/vehicle_types`;
-    return this.httpService.get(httpUrl, params.json())
+    return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new ManualLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkurl 分页获取保养手册
+   * @param url linkURL
+   */
+  public continueManualListData(url: string): Observable<ManualLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new ManualLinkResponse(res)));
   }
 
   /**
@@ -140,7 +150,7 @@ export class MaintenanceManualHttpService {
   /**
    * 获取保存手册详情
    * @param vehicle_type_id 车型id
-   * @returns Observable<ManualEntity>
+   * @returns Observable<ManualSettingEntity>
    */
   public requestManualDetailData(vehicle_type_id: string): Observable<ManualSettingEntity> {
     const httpUrl = `${this.domain}/uh_items`;
@@ -149,5 +159,15 @@ export class MaintenanceManualHttpService {
     };
     return this.httpService.get(httpUrl, body)
       .pipe(map(res => ManualSettingEntity.Create(res.body)));
+  }
+
+  /**
+   * 删除汽车车型的保养手册
+   * @param vehicle_type_id 车型id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeleteManualByVehicle(vehicle_type_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/vehicle/vehicle_types/${vehicle_type_id}/has_upkeepbook`;
+    return this.httpService.patch(httpUrl);
   }
 }

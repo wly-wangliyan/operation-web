@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
-import { MaintenanceManualHttpService } from '../maintenance-manual-http.service';
+import { MaintenanceManualHttpService, SearchParams } from '../maintenance-manual-http.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
@@ -16,6 +16,8 @@ const PageSize = 15;
 export class ManualListComponent implements OnInit {
 
   public manualList: Array<VehicleTypeEntity> = []; // 保养手册列表
+
+  public searchParams: SearchParams = new SearchParams(); // 条件筛选参数
 
   public pageIndex = 1; // 当前页码
 
@@ -59,15 +61,23 @@ export class ManualListComponent implements OnInit {
 
   // 请求手册列表
   private requestProjectList() {
-    console.log('请求获取保养手册接口');
-    this.noResultText = '暂无数据';
+    this.manualService.requestManualListData(this.searchParams).subscribe(res => {
+      this.manualList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+    });
   }
 
   /** 删除 */
-  public onDeleteProgect() {
+  public onDeleteProgect(data: VehicleTypeEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      console.log('调用删除接口');
+      this.manualService.requestDeleteManualByVehicle(data.vehicle_type_id).subscribe(res => {
+        this.globalService.promptBox.open('删除成功');
+        this.searchText$.next();
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     });
   }
 
@@ -76,13 +86,12 @@ export class ManualListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      console.log('分页请求保养手册数据');
-      // this.continueRequestSubscription = this.manualService.continueManualList(this.linkUrl).subscribe(res => {
-      //   this.manualList = this.manualList.concat(res.results);
-      //   this.linkUrl = res.linkUrl;
-      // }, err => {
-      //   this.globalService.httpErrorProcess(err);
-      // });
+      this.continueRequestSubscription = this.manualService.continueManualListData(this.linkUrl).subscribe(res => {
+        this.manualList = this.manualList.concat(res.results);
+        this.linkUrl = res.linkUrl;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     }
   }
 
