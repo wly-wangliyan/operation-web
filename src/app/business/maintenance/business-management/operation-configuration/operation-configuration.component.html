@@ -78,7 +78,7 @@
                         <td>{{data.telephone}}</td>
                         <td>{{data.telephone}}</td>
                         <td class="operation">
-                            <a [title]="'查看'" (click)="onEditBtnClick(data)">查看</a>
+                            <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
                             <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
                             <a [title]="'下架'" (click)="onEditBtnClick(data)">下架</a>
                             <a [title]="'复制'" (click)="onEditBtnClick(data)">复制</a>
@@ -93,15 +93,28 @@
     <div *ngIf="tabIndex===2">
         <div class="content-flow">
             <div class="content-main">
-                <span>每日可预订时段配置</span>
-                <div *ngFor="let item of bookingTimes; let i=index">
-                    <nz-range-picker
-                            [nzShowTime]="{ nzFormat: 'HH:mm' }"
-                            nzFormat="yyyy-MM-dd HH:mm"
-                            [nzPlaceHolder]="['开始时间', '结束时间']"
-                            (ngModelChange)="onChange($event)"
-                            (nzOnOk)="onOk($event)"
-                    ></nz-range-picker>
+                <div class="booking-title">每日可预订时段配置</div>
+                <div *ngFor="let item of bookingTimes;let i=index;" class="booking-times">
+                    <div style="float: left">
+                        <app-date-clock [has24]="false" [(hour)]="item.begin_time.hour" [(minute)]="item.begin_time.minute"
+                                   [readonly]="!item.isEdit"></app-date-clock>
+                        <span class="booking-time-center"> - </span>
+                        <app-date-clock [has24]="true" [(hour)]="item.end_time.hour" [(minute)]="item.end_time.minute"
+                                        [readonly]="!item.isEdit"></app-date-clock>
+                        <!--<nz-time-picker [(ngModel)]="item.begin_time" [nzDefaultOpenValue]="defaultOpenValue"></nz-time-picker>
+                        <span class="booking-time-center"> - </span>
+                        <nz-time-picker [(ngModel)]="item.end_time" [nzDefaultOpenValue]="defaultOpenValue"></nz-time-picker>-->
+                    </div>
+                    <label>加价</label>
+                    <input class="form-control" type="number" name="price" [disabled]="!item.isEdit">
+                    <span style="float:left">元</span>
+                    <div style="float:left;margin-left: 61px">
+                        <button class="close-btn" nz-button (click)="onTimeAddBtn()">添加</button>
+                        <button *ngIf="i > 0" class="close-btn" nz-button (click)="onTimeDelBtn(i)">移除</button>
+                        <button *ngIf="!item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="item.isEdit=true">编辑</button>
+                        <button *ngIf="item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="onTimeSaveBtn(item)">保存</button>
+                    </div>
+                    <div style="clear: both;"></div>
                 </div>
             </div>
         </div>

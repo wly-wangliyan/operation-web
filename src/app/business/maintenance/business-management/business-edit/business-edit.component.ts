@@ -9,6 +9,8 @@ import { GlobalService } from '../../../../core/global.service';
 import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { MapItem, ZMapSelectPointComponent } from '../../../../share/components/z-map-select-point/z-map-select-point.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UpkeepMerchantEntity } from '../business-management.service';
 
 export class ErrMessageItem {
   public isError = false;
@@ -49,14 +51,15 @@ export class ErrPositionItem {
 })
 export class BusinessEditComponent implements OnInit {
 
-  public currentPage = {};
+  public currentBusiness = new UpkeepMerchantEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
   public versionList: Array<any>;
   public color = '';
   public mapItem: MapItem = new MapItem();
   public is_add_tel = true;
-  public tel = '';
+  public service_telephone = '';
+  public brandList = [{b: 1}];
 
   private continueRequestSubscription: Subscription;
   private sureCallback: any;
@@ -73,10 +76,16 @@ export class BusinessEditComponent implements OnInit {
   @ViewChild(ZMapSelectPointComponent, { static: true }) public zMapSelectPointComponent: ZMapSelectPointComponent;
 
   constructor(private firstPageIconService: FirstPageIconService,
-              private globalService: GlobalService) {
+              private globalService: GlobalService,
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
   }
 
   public ngOnInit(): void {
+    this.currentBusiness = new UpkeepMerchantEntity();
+   /* const regionObj = new RegionEntity(this.currentBusiness.region_id);
+    this.proCityDistSelectComponent.regionsObj = regionObj;
+    this.proCityDistSelectComponent.initRegions(regionObj);*/
   }
 
   // 键盘按下事件
@@ -87,41 +96,12 @@ export class BusinessEditComponent implements OnInit {
     }
   }
 
-  // 弹框close
-  public onClose() {
-    this.clear();
-    this.currentPage = {};
-    $(this.pagePromptDiv.nativeElement).modal('hide');
-  }
-
-  /**
-   * 打开确认框
-   * @param sureName 确认按钮文本(默认为确定)
-   * @param sureFunc 确认回调
-   * @param closeFunc 取消回调
-   */
-  public open(menu_id: string, sureFunc: any, sureName: string = '确定', closeFunc: any = null) {
-    const openPageModal = (data?: any) => {
-      timer(0).subscribe(() => {
-        this.proCityDistSelectComponent.regionsObj = new RegionEntity();
-        this.proCityDistSelectComponent.initRegions();
-        $(this.pagePromptDiv.nativeElement).modal('show');
-      });
-    };
-    this.menu_id = menu_id;
-    this.sureName = sureName;
-    this.sureCallback = sureFunc;
-    this.closeCallback = closeFunc;
-    // this.rquestPageIconDetail();
-    openPageModal();
-  }
-
   // 获取详情\版本列表
   private rquestPageIconDetail() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription =
         this.firstPageIconService.requestPageIconDetail(this.menu_id, this.app.application_id).subscribe(res => {
-          this.currentPage = res;
+          // this.currentBusiness = res;
           // this.cover_url = this.currentPage.icon ? this.currentPage.icon.split(',') : [];
         }, err => {
           this.globalService.httpErrorProcess(err);
@@ -171,22 +151,17 @@ export class BusinessEditComponent implements OnInit {
     return cisCheck;
   }
 
+  // 取消按钮
+  public onClose() {
+    this.router.navigate(['/main/maintenance/business-management']);
+  }
+
   // 清空
   public clear() {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.title.isError = false;
     this.errPositionItem.jump_link.isError = false;
     this.errPositionItem.corner.isError = false;
-  }
-
-  // 确定按钮回调
-  private sureCallbackInfo() {
-    if (this.sureCallback) {
-      const temp = this.sureCallback;
-      this.closeCallback = null;
-      this.sureCallback = null;
-      temp();
-    }
   }
 
   // 接口错误状态
@@ -205,31 +180,19 @@ export class BusinessEditComponent implements OnInit {
     }
   }
 
-  // 选择图片时校验图片格式
-  public onSelectedPicture(event) {
-    this.errPositionItem.icon.isError = false;
-    if (event === 'type_error') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
-    } else if (event === 'size_over') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
-    }
-  }
-
   /**
    * 打开地图组件
    */
   public openMapModal() {
     this.mapItem.point = [];
-    /*if (this.parkingCredentialInfo.address) {
+    if (this.currentBusiness.address) {
       this.mapItem.hasDetailedAddress = true;
-    }*/
-   /* if (this.parkingCredentialInfo.lon && this.parkingCredentialInfo.lat) {
-      this.mapItem.point.push(Number(this.parkingCredentialInfo.lon));
-      this.mapItem.point.push(Number(this.parkingCredentialInfo.lat));
     }
-    this.mapItem.address = this.parkingCredentialInfo.address;*/
+    if (this.currentBusiness.lon && this.currentBusiness.lat) {
+      this.mapItem.point.push(Number(this.currentBusiness.lon));
+      this.mapItem.point.push(Number(this.currentBusiness.lat));
+    }
+    this.mapItem.address = this.currentBusiness.address;
     this.zMapSelectPointComponent.openMap();
   }
 
@@ -248,7 +211,12 @@ export class BusinessEditComponent implements OnInit {
   // 移除客服联系电话
   public onDelTelClick() {
     this.is_add_tel = true;
-    this.tel = '';
+    this.service_telephone = '';
+  }
+
+  // 移除汽车品牌、厂商
+  public onDelBrandClick(data) {
+
   }
 }
 

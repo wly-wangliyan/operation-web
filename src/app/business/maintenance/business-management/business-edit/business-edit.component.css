@@ -97,3 +97,12 @@ nz-range-picker {
     line-height: 34px;
     margin-left: 20px;
 }
+
+.brand-list {
+    margin: 0 0 10px 140px;
+    width: 600px;
+}
+
+:host::ng-deep .ant-table {
+    border: 1px solid #D8D8D8;
+}

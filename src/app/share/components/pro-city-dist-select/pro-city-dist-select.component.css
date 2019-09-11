@@ -5,7 +5,7 @@
 
 .select-position {
   color: #6c757d;
-  height: 42px;
+  height: 34px;
   font-size: 14px;
   background-color: rgb(246, 246, 246);;
 }
@@ -32,7 +32,7 @@
 
 .search-form .form-control, .form-control {
   margin-right: 10px;
-  border-radius: 8px;
+  border-radius: 1px;
 }
 
 .selection-wrap select:last-child {

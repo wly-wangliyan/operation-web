@@ -12,50 +12,39 @@
 <div class="content-flow">
     <div class="brand-list">
         <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)" [class.width]="item.vehicle_brand_id===vehicle_brand_id">
-            <img [src]="item.vehicle_brand_image">
+            <img class="brand-img" [src]="item.vehicle_brand_image">
             <span>{{item.vehicle_brand_name}}</span>
             <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
         </li>
     </div>
 
     <div class="vehicle-list" *ngIf="vehicleBrandList.length>0">
-        <!--<li *ngFor="let item of nodes_1; let i=index" (click)="onManufacturerClick(item, i)">
-            <img [src]="''">
-            <span>{{item.title}}</span>
-            &lt;!&ndash;<div *ngIf="item.key===index">&ndash;&gt;
-                <ul *ngFor="let item_1 of nodes_2; let index=index" (click)="onTypeClick(item_1)">
-                    <li *ngIf="item.key===item_1.key_1">
-                        <img [src]="''">
-                        <span>{{item_1.title}}</span>
-                        <ul *ngFor="let item_2 of nodes_3; let index=index" (click)="onTypeClick(item_2)">
-                            <div>
-                                <img [src]="''">
-                                <span>{{item_2.title}}</span>
-                            </div>
-                        </ul>
-                    </li>
-                </ul>
-            &lt;!&ndash;</div>&ndash;&gt;
-        </li>-->
         <nz-tree [nzData]="vehicleFirmList" nzAsyncData nzShowIcon (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
-                 [nzTreeTemplate]="nzTreeTemplate" >
+                 [nzTreeTemplate]="nzTreeTemplate" [nzExpandedIcon]="mutiExpandedIconTpl">
         </nz-tree>
-        <!--<ng-template #mutiExpandedIconTpl let-node>
-            &lt;!&ndash;<i nz-icon [nzType]="'/assets/images/open_tree.png'"></i>&ndash;&gt;
-            <i
-                    nz-icon
-                    [nzType]="node.isExpanded ? 'folder-open' : 'folder'"
-                    class="ant-tree-switcher-line-icon"
-            ></i>
-        </ng-template>-->
+        <ng-template #mutiExpandedIconTpl let-node>
+            <img *ngIf="!node.isExpanded && node.level===0" src="/assets/images/open_tree.png">
+            <img *ngIf="node.isExpanded && node.level===0" src="/assets/images/close_tree.png">
+            <img *ngIf="!node.isExpanded && node.level===1" src="/assets/images/open_tree_one.png">
+            <img *ngIf="node.isExpanded && node.level===1" src="/assets/images/close_tree_one.png">
+        </ng-template>
         <ng-template #nzTreeTemplate let-node>
             <span *ngIf="!node.isLeaf">
-                 <label *ngIf="node.level===0">{{ node.origin.vehicle_firm_name }}</label>
-                 <label *ngIf="node.level===1">{{ node.origin.vehicle_series_name }}</label>
+                 <label *ngIf="node.level===0" style="font-size: 16px;font-weight: 500;">
+                     {{ node.origin.vehicle_firm_name }}
+                 </label>
+                 <label *ngIf="node.level===1" style="font-size: 14px;font-weight: 400;">
+                     {{ node.origin.vehicle_series_name }}
+                 </label>
                  <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
              </span>
             <div *ngIf="node.isLeaf" class="vehicle-info">
+                <div style="width: 400px">&nbsp;</div>
                 <span>{{ node.origin.vehicle_type_name }}</span>
+                <span style="font-weight: 400">
+                    {{node.origin.vehicle_level}} / {{node.origin.vehicle_energy_type}} / {{node.origin.vehicle_sold_time}}
+                    / {{node.origin.vehicle_price}} / {{node.origin.vehicle_engine}} / {{node.origin.vehicle_gearbox}}
+                    / {{node.origin.vehicle_size}} / {{node.origin.vehicle_structure}}</span>
                 <!--<span class="btn-del-info" (click)="onDeleteVehicleClick()"></span>-->
             </div>
         </ng-template>

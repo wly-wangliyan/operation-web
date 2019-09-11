@@ -1,0 +1,7 @@
+<span class="date-clock">
+  <input type="number" min="0" max="{{has24 ? '24':'23'}}" [disabled]="readonly" step="1" class="date-clock-position"
+         [value]="hour" (input)="setHour($event)">
+  <span class="date-clock-content" [class.disabled]="readonly">:</span>
+  <input type="number" min="0" step="1" class="date-clock-position" [disabled]="readonly" [value]="minute"
+         (input)="setMinute($event)">
+</span>

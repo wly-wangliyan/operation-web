@@ -1,0 +1,31 @@
+.date-clock {
+  width: 152px;
+  height: 32px;
+  border: 1px solid #ccc;
+  display: block;
+  overflow: hidden;
+  float: left;
+  background: #fff;
+}
+
+.date-clock-position {
+  text-align: center;
+  outline: none;
+  float: left;
+  height: 32px;
+  width: 43%;
+  border: none;
+}
+
+.date-clock-content {
+  float: left;
+  width: 14%;
+  text-align: center;
+  height: 32px;
+  line-height: 32px;
+  background: #fff;
+}
+
+span.disabled {
+  background-color: rgb(235, 235, 228);
+}
