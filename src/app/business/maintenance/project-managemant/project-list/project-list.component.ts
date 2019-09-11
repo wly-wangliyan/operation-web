@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProjectEntity, ProjectParams, RelationParams } from '../project-managemant-http.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { ProjectManagemantHttpService } from '../project-managemant-http.service';
@@ -35,6 +35,8 @@ export class ProjectListComponent implements OnInit {
 
   public project_id = ''; // 项目id
 
+  public relation_id = ''; // 配套项目id
+
   public projectErrMsg = ''; // 添加、编辑错误提示
 
   public isCreateProject = true; // 标记是否为新建
@@ -59,15 +61,6 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    // 测试数据
-    const project = new ProjectEntity();
-    project.upkeep_item_id = '1';
-    project.upkeep_item_category = 1;
-    project.upkeep_item_num = '1';
-    project.upkeep_item_type = 1;
-    project.upkeep_item_name = '测试';
-    this.projectList.push(project);
-
     this.generateProjectList();
   }
 
@@ -130,31 +123,31 @@ export class ProjectListComponent implements OnInit {
       }
     }
     if (this.importViewModel.checkFormDataValid()) {
-      /* this.progressModalComponent.openOrClose(true);
-       this.importSpotSubscription = this.projectService.requestImportSpot(
-           this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
-         $('#dataImportModal').modal('hide');
-         this.globalService.promptBox.open('导入成功！', () => {
-           this.importViewModel.initImportData();
-           $('#importBerthPromptDiv').modal('hide');
-           this.progressModalComponent.openOrClose(false);
-         }, -1);
-       }, err => {
-         this.progressModalComponent.openOrClose(false);
-         timer(300).subscribe(() => {
-           if (!this.globalService.httpErrorProcess(err)) {
-             if (err.status === 422) {
-               const tempErr = JSON.parse(err.responseText);
-               const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-               if (error.resource === 'file' && error.code === 'missing') {
-                 this.globalService.promptBox.open('泊位文件不能为空！', null, -1, null, false);
-               } else {
-                 this.globalService.promptBox.open('泊位文件错误', null, -1, null, false);
-               }
-             }
-           }
-         });
-       });*/
+      /*this.progressModalComponent.openOrClose(true);
+      this.importSpotSubscription = this.projectService.requestImportProjectData(
+        this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
+          $('#dataImportModal').modal('hide');
+          this.globalService.promptBox.open('导入成功！', () => {
+            this.importViewModel.initImportData();
+            $('#importBerthPromptDiv').modal('hide');
+            this.progressModalComponent.openOrClose(false);
+          }, -1);
+        }, err => {
+          this.progressModalComponent.openOrClose(false);
+          timer(300).subscribe(() => {
+            if (!this.globalService.httpErrorProcess(err)) {
+              if (err.status === 422) {
+                const tempErr = JSON.parse(err.responseText);
+                const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+                if (error.resource === 'file' && error.code === 'missing') {
+                  this.globalService.promptBox.open('泊位文件不能为空！', null, -1, null, false);
+                } else {
+                  this.globalService.promptBox.open('泊位文件错误', null, -1, null, false);
+                }
+              }
+            }
+          });
+        });*/
     }
   }
 
@@ -169,8 +162,8 @@ export class ProjectListComponent implements OnInit {
       this.isCreateProject = false;
       this.project_id = data.upkeep_item_id;
       this.projectParams = new ProjectParams();
-      const relation_id = data.upkeep_item_relation ? data.upkeep_item_relation.upkeep_item_id : '';
-      this.projectParams.upkeep_item_relation = relation_id;
+      this.relation_id = data.upkeep_item_relation ? data.upkeep_item_relation.upkeep_item_id : '';
+      this.projectParams.upkeep_item_relation = this.relation_id ? this.relation_id : null;
       this.projectParams.upkeep_item_category = data.upkeep_item_category;
       this.project_category = String(data.upkeep_item_category);
       this.requestRelationProjects(data.upkeep_item_category); // 获取可关联列表
@@ -202,7 +195,8 @@ export class ProjectListComponent implements OnInit {
   // 变更项目类别后，获取同大类下可关联项目列表
   public onChangeCategory(event: any) {
     this.toRelationList = [];
-    this.projectParams.upkeep_item_relation = '';
+    this.relation_id = '';
+    this.projectParams.upkeep_item_relation = null;
     this.onClearErrMsg();
     const category_id = event.target.value;
     if (category_id) {
@@ -222,7 +216,8 @@ export class ProjectListComponent implements OnInit {
         this.toRelationList = data;
         if (this.projectParams.upkeep_item_relation) {
           if (!this.toRelationList.some(value => value.upkeep_item_id === this.projectParams.upkeep_item_relation)) {
-            this.projectParams.upkeep_item_relation = '';
+            this.relation_id = '';
+            this.projectParams.upkeep_item_relation = null;
           }
         }
       }, err => {
@@ -239,6 +234,15 @@ export class ProjectListComponent implements OnInit {
       this.projectParams.upkeep_item_type = Number(type_id);
     } else {
       this.projectParams.upkeep_item_type = null;
+    }
+  }
+
+  // 变更配套项目处理
+  public onChangeRelation(event: any) {
+    if (event.target.value) {
+      this.projectParams.upkeep_item_relation = event.target.value;
+    } else {
+      this.projectParams.upkeep_item_relation = null;
     }
   }
 
@@ -298,6 +302,17 @@ export class ProjectListComponent implements OnInit {
     if (!this.projectParams.upkeep_item_name) {
       this.projectErrMsg = '请输入名称！';
       return false;
+    }
+
+    if (!this.projectParams.upkeep_item_num) {
+      this.projectErrMsg = '请输入项目ID！';
+      return false;
+    } else {
+      const first_num = this.projectParams.upkeep_item_num.slice(0, 1);
+      if (first_num !== this.project_category) {
+        this.projectErrMsg = '项目ID请以' + this.project_category + '开头';
+        return false;
+      }
     }
     return true;
   }

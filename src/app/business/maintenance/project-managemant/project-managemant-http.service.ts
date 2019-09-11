@@ -93,4 +93,13 @@ export class ProjectManagemantHttpService {
     const httpUrl = `${this.domain}/upkeep_items/${upkeep_items_id}`;
     return this.httpService.put(httpUrl, projectParams.json());
   }
+
+  /**
+   * 上传项目
+   * @param myfile FILE
+   */
+  public requestImportProjectData(myfile: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/upkeep_item/upload_upkeep_items`;
+    return this.httpService.put(httpUrl, myfile);
+  }
 }
