@@ -1,6 +1,7 @@
-:host ::ng-deep .ant-form-item-label {
-  width: 100px;
+:host ::ng-deep .ant-form-item {
+  margin-bottom: 0;
 }
+
 
 :host ::ng-deep .ant-form-item-label>label {
   font-size: 14px;
@@ -23,20 +24,31 @@
 
 .status {
   margin-left: 10px;
-  margin-right: 50px;
+}
+
+.search-form {
+  padding: 0 !important;
 }
 
 .search_row div {
   float: left;
 }
 
+.search_row select {
+  width: 120px;
+  line-height: 34px;
+}
+
 .search_row div .form-control {
-  margin-left: 10px;
-  margin-right: 50px;
+  margin-right: 20px;
+}
+
+.search_row .order-time {
+  margin-right: 10px !important;
 }
 
 .search_row .search_time {
-  margin-right: 37px;
+  margin-right: 20px;
 }
 
 .search_row .search_time .line {
@@ -68,6 +80,10 @@
   background: rgba(255, 255, 255, 1);
 }
 
+.search_btn {
+  margin-top: 3px;
+}
+
 .sign {
   margin-bottom: 28px;
   margin-left: 3px;
@@ -84,9 +100,5 @@
   font-size: 14px;
   font-family: STHeitiSC-Light;
   font-weight: 300;
-  color: rgba(0, 0, 0, .85);
-}
-
-.operation a:hover {
   color: #3E71F7;
 }
