@@ -27,10 +27,15 @@
         <tbody>
           <tr *ngFor="let manual of manualTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a></a></td>
+            <td>{{manual.vehicle_brand? manual.vehicle_brand.vehicle_brand_name : '--'}}</td>
+            <td>{{manual.vehicle_firm? manual.vehicle_firm.vehicle_firm_name : '--'}}</td>
+            <td>{{manual.vehicle_series? manual.vehicle_series.vehicle_series_name : '--'}}</td>
+            <td>
+              <a>
+                {{manual.vehicle_year_model ? manual.vehicle_year_model : ''}}
+                {{manual.vehicle_type_name ? manual.vehicle_type_name : ''}}
+              </a>
+            </td>
             <td class="operation">
               <a [title]="'查看'">查看</a>
               <a [title]="'编辑'" (click)="onEditBtnClick(manual)">编辑</a>

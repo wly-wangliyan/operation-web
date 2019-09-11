@@ -5,6 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
+import { VehicleTypeEntity } from '../../vehicle-type-management/vehicle-type-management.service';
 
 const PageSize = 15;
 @Component({
@@ -14,7 +15,7 @@ const PageSize = 15;
 })
 export class ManualListComponent implements OnInit {
 
-  public manualList: Array<any> = []; // 保养手册列表
+  public manualList: Array<VehicleTypeEntity> = []; // 保养手册列表
 
   public pageIndex = 1; // 当前页码
 
