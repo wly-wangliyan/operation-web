@@ -23,6 +23,7 @@ import { PromptBoxComponent } from './components/tips/prompt-box/prompt-box.comp
 import { ConfirmationBoxComponent } from './components/tips/confirmation-box/confirmation-box.component';
 import { ZMapSelectPointComponent } from './components/z-map-select-point/z-map-select-point.component';
 import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe';
+import { ProjectDialogComponent } from './components/project-dialog/project-dialog.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe'
     PromptBoxComponent,
     ConfirmationBoxComponent,
     ZMapSelectPointComponent,
+    ProjectDialogComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -80,6 +82,7 @@ import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe'
     PromptBoxComponent,
     ConfirmationBoxComponent,
     ZMapSelectPointComponent,
+    ProjectDialogComponent,
 
     // 管道
     ZMaxLengthPipe,
