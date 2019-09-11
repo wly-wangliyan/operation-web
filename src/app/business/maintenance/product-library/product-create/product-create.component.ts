@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity } from '../product-library-http.service';
+import { ProjectDialogComponent } from '../../../../share/components/project-dialog/project-dialog.component';
+import { ProjectCategory } from '../../../../share/pipes/project-type.pipe';
 
 export class ErrMessageItem {
   public isError = false;
@@ -36,13 +38,15 @@ export class ErrPositionItem {
 })
 export class ProductCreateComponent implements OnInit {
 
-  public title = '新建产品';
-
   public isCreateProduct = true;
+
+  public title = '新建产品';
 
   public product_id: string;
 
-  public productRecord: ProductEntity = new ProductEntity();
+  public productRecord: ProductEntity = new ProductEntity(); // 产品 新建/编辑参数
+
+  private projectCategory = ProjectCategory;
 
   public productParams = []; // 产品 新建/编辑参数
 
@@ -50,9 +54,16 @@ export class ProductCreateComponent implements OnInit {
 
   public cover_url = []; // 图片集合
 
+  public selectedCategory: number; // 所属项目》所属项目类别
+
+  public selectedProjectid: number; // 所属项目》所属项目 》项目id
+
+  public selected_info: string; // 所属项目信息
+
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild(ProjectDialogComponent, { static: true }) public projectDialogComponent: ProjectDialogComponent;
 
 
   constructor(
@@ -65,11 +76,13 @@ export class ProductCreateComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.product_id) {
+      this.isCreateProduct = false;
+      this.title = '编辑产品';
       this.getProductDetail();
     } else {
-      this.router.navigate(['../../list'], { relativeTo: this.route });
+      this.isCreateProduct = true;
     }
   }
 
@@ -86,6 +99,20 @@ export class ProductCreateComponent implements OnInit {
   }
 
   private initForm() {
+  }
+
+  // 打开所属项目选择组件
+  public onOpenProjectModal() {
+    this.projectDialogComponent.open();
+  }
+
+  // 选择所属项目回调函数
+  public onSelectedProject(event: any) {
+    if (event) {
+      this.selectedProjectid = event.project.upkeep_item_id;
+      this.selectedCategory = event.category;
+      this.selected_info = this.projectCategory[event.category] + ' > ' + event.project.upkeep_item_name;
+    }
   }
 
   public onSelectedPicture(event: any) {

@@ -10,11 +10,12 @@
           <span>所属项目</span>
         </label>
         <div class="control-input">
-          <input class="form-control" placeholder="请选择项目类别" name="project_name" required disabled>
-          <button name="select_project_name" class="two-word-btn" nz-button (click)="openMapModal()">选择</button>
+          <input class="form-control" [(ngModel)]="selected_info" placeholder="请选择项目类别" name="select_project" required
+            disabled>
+          <button name="select_project_btn" class="two-word-btn" nz-button (click)="onOpenProjectModal()">选择</button>
         </div>
       </div>
-      <ng-container *ngIf="productRecord.upkeep_item_id">
+      <ng-container *ngIf="!this.isCreateProduct || productRecord.upkeep_item_id">
         <div class="row">
           <label class="control-label">
             <b>*</b>
@@ -54,10 +55,11 @@
           </label>
           <div class="control-input">
             <input class="form-control" placeholder="请选择所属厂商" name="project_name" required disabled>
-            <button class="two-word-btn" nz-button (click)="openMapModal()">选择</button>
+            <button name="select_firm_btn" class="two-word-btn" nz-button (click)="openMapModal()">选择</button>
           </div>
-          <div>
-            <input type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
+          <div class="control-input check-group">
+            <input name="is_brand_special" type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
+            <label class="control-label">此品牌厂商专用</label>
           </div>
         </div>
         <div class="row">
@@ -140,11 +142,15 @@
         </div>
       </div>
       <div class="row">
-        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+        <button name="sure_btn" class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
-        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+        <button name="close_btn" class="close-btn" nz-button data-dismiss="modal">取消</button>
       </div>
     </form>
   </div>
 </div>
+
+<app-project-dialog [selectedCategory]='selectedCategory' [selectedProjectid]="selectedProjectid"
+  (selectedProject)="onSelectedProject($event)">
+</app-project-dialog>
