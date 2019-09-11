@@ -1,6 +1,8 @@
 /**
  * Created by zack on 5/5/17.
  */
+import { EntityBase } from './z-entity';
+
 export class DateFormatHelper {
 
   public static NowBlock: any; // 用来同步当前服务器时间的闭包函数
@@ -336,5 +338,48 @@ export class DateFormatHelper {
       rDay = daysInMonth[rMonth];
     }
     return new Date(rYear, rMonth - 1, rDay);
+  }
+
+  /**
+   * 分钟拆分
+   * @param time 时间
+   * @returns TimeItem 返回值
+   */
+  public static getMinuteOrTime(time: any): TimeItem {
+    const time_point = new TimeItem();
+    const hour = Math.floor(parseFloat(time) / (60 * 60));
+    const minute = (parseFloat(time) / 60) % 60;
+    if (hour < 10) {
+      time_point.hour = '0' + hour;
+    } else {
+      time_point.hour = '' + hour;
+    }
+    if (minute < 10) {
+      time_point.minute = '0' + minute;
+    } else {
+      time_point.minute = '' + minute;
+    }
+    return time_point;
+  }
+
+  /**
+   * 求时间值
+   * @param TimeItem timeParam
+   * @returns number
+   */
+  public static getSecondTimeSum(timeParam: TimeItem): number {
+    return parseFloat(timeParam.hour) * 60 * 60 + parseFloat(timeParam.minute) * 60;
+  }
+}
+
+export class TimeItem extends EntityBase {
+  public hour = '00';
+  public minute = '00';
+
+  constructor(hour?: string) {
+    super();
+    if (hour) {
+      this.hour = hour;
+    }
   }
 }

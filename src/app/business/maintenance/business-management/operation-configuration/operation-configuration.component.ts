@@ -5,6 +5,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
 import { Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { DateFormatHelper } from '../../../../../utils/date-format-helper';
 
 const PageSize = 15;
 
@@ -21,6 +22,8 @@ export class OperationConfigurationComponent implements OnInit {
   public noResultText = '数据加载中...';
   public tabIndex = 1;
   public bookingTimes = [];
+  public time: Date | null = null;
+  public defaultOpenValue = new Date(0, 0, 0, 0, 0, 0);
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -41,6 +44,11 @@ export class OperationConfigurationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.bookingTimes.push({
+      begin_time: DateFormatHelper.getMinuteOrTime(28800),
+      end_time: DateFormatHelper.getMinuteOrTime(64800),
+      isEdit: false
+    });
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>
@@ -100,6 +108,32 @@ export class OperationConfigurationComponent implements OnInit {
   }
 
   public onAddClick() {
+
+  }
+
+  // 查看详情
+  public onDetailBtnClick() {
+    this.router.navigate(['/main/maintenance/business-management/operation-configuration/detail'],
+        { queryParams: {} });
+  }
+
+  // 删除预定时间段
+  public onTimeDelBtn(index) {
+    this.bookingTimes.splice(index, 1);
+  }
+
+  // 添加预定时间段
+  public onTimeAddBtn() {
+    const screenOpenObj = {
+      begin_time: DateFormatHelper.getMinuteOrTime(0),
+      end_time: DateFormatHelper.getMinuteOrTime(0),
+      isEdit: false
+    };
+    this.bookingTimes.push(screenOpenObj);
+  }
+
+  // 保存预定时间段
+  public onTimeSaveBtn(data) {
 
   }
 }

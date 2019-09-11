@@ -10,7 +10,7 @@
                     <span>所属企业</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentPage.title" name="title" readonly>
+                    <input class="form-control" name="company_name" readonly>
                 </div>
             </div>
             <div class="row">
@@ -19,7 +19,7 @@
                     <span>店铺名称</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentPage.title" name="title" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" readonly>
                 </div>
             </div>
             <div class="row">
@@ -28,7 +28,7 @@
                     <span>类型</span>
                 </label>
                 <div class="control-input">
-                    <select class="form-control" [(ngModel)]="currentPage.type" name="network_status" disabled>
+                    <select class="form-control" [(ngModel)]="currentBusiness.merchant_status" name="merchant_status" disabled>
                         <option value="">全部</option>
                         <option value="1">营业中</option>
                         <option value="2">停业休息</option>
@@ -41,19 +41,7 @@
                     <span>商家图片</span>
                 </label>
                 <div class="control-input">
-                    <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="1"
-                                        [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                        [imageHeight]="100" [imageUrls]="cover_url" #coverImg [imageWidth]="100">
-                    </app-z-photo-select>
-                    <!--<div>
-                        <div class="row row-message" style="width: 230px;margin-left:20px!important;padding-top: 105px">
-                            <label class="control-label"></label>
-                            <div class="control-input err-message">
-                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
-                            </div>
-                        </div>
-                        <p class="cover-hint">注：尺寸800*800，格式PNG或JPG，大小2M以内，最多上传6张</p>
-                    </div>-->
+                    <img [src]="currentBusiness.image_url">
                 </div>
             </div>
             <div class="row">
@@ -62,7 +50,7 @@
                     <span>联系人</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.contact" name="contact" readonly>
                 </div>
             </div>
             <div class="row">
@@ -71,7 +59,7 @@
                     <span>联系电话</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.telephone" name="telephone" readonly>
                 </div>
             </div>
             <div class="row">
@@ -79,8 +67,9 @@
                     <b>*</b>
                     <span>门店地址</span>
                 </label>
-                <div class="control-input">
-                    <app-pro-city-dist-select [selectContainerWidth]="372" #projectInfoPro></app-pro-city-dist-select>
+                <div class="control-input" style="width: 530px!important;">
+                    <app-pro-city-dist-select [selectContainerWidth]="320" #projectInfoPro></app-pro-city-dist-select>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" readonly>
                 </div>
             </div>
             <div class="row">
@@ -89,7 +78,7 @@
                     <span>地图坐标</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、,' + currentBusiness.lat" name="lon" readonly>
                     <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
                 </div>
             </div>
@@ -100,8 +89,31 @@
                 </label>
                 <div class="control-input">
                     <button class="common-btn" style="border-left: 1px solid #d9d9d9" nz-button
-                            (click)="openMapModal()">选择</button>
+                            (click)="openMapModal()">{{brandList.length===0?'选择':'重新选择'}}</button>
                 </div>
+            </div>
+            <div class="brand-list" *ngIf="brandList.length>0">
+                <nz-table [nzData]="brandList"
+                          [nzShowPagination]="false"
+                          [nzPageSize]="brandList.length"
+                          #basicTable>
+                    <thead>
+                    <tr>
+                        <th>品牌</th>
+                        <th>厂家</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of basicTable.data; let i=index">
+                        <td>{{data.UpkeepCompany?.company_name}}</td>
+                        <td>{{data.service_telephone}}</td>
+                        <td class="operation">
+                            <a [title]="'移除'" (click)="onDelBrandClick(data)">移除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </nz-table>
             </div>
             <div class="row">
                 <label class="control-label">
@@ -110,7 +122,7 @@
                 </label>
                 <div class="control-input">
                     <input class="form-control"
-                           type="number" name="tel" (keypress)="inputNumberLimit($event)">
+                           type="number" [(ngModel)]="currentBusiness.booking" name="booking" (keypress)="inputNumberLimit($event)">
                     <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
                 </div>
             </div>
@@ -119,24 +131,23 @@
                     <b>*</b>
                     <span>客服电话</span>
                 </label>
-                <div class="control-input">
-                    <input class="form-control" name="tel"
-                    placeholder="请输入座机或手机号">
+               <!-- <div class="control-input" *ngFor="let item of currentBusiness.service_telephone.split(',');let i=index">
+                    <input class="form-control" [(ngModel)]="item" name="service_telephone" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                </div>
+                    <button class="common-btn" nz-button (click)="onDelTelClick()" *ngIf="!is_add_tel">移除</button>
+                </div>-->
                 <span class="msg-span">注：最多可添加2个</span>
             </div>
-            <div class="row" *ngIf="!is_add_tel">
+            <!--<div class="row" *ngIf="!is_add_tel">
                 <label class="control-label">
                     <b>&nbsp;</b>
                     <span></span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="tel"
-                           placeholder="请输入座机或手机号">
+                    <input class="form-control" [(ngModel)]="''" name="tel" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onDelTelClick()">移除</button>
                 </div>
-            </div>
+            </div>-->
             <div class="row row-message"></div>
             <div>
                 <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"

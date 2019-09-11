@@ -25,6 +25,7 @@ import { ZMapSelectPointComponent } from './components/z-map-select-point/z-map-
 import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe';
 import { ProjectDialogComponent } from './components/project-dialog/project-dialog.component';
 import { SelectBrandFirmComponent } from './components/select-brand-firm/select-brand-firm.component';
+import { DateClockComponent } from './components/date-clock/date-clock.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { SelectBrandFirmComponent } from './components/select-brand-firm/select-
     ZMapSelectPointComponent,
     ProjectDialogComponent,
     SelectBrandFirmComponent,
+    DateClockComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -86,6 +88,7 @@ import { SelectBrandFirmComponent } from './components/select-brand-firm/select-
     ZMapSelectPointComponent,
     ProjectDialogComponent,
     SelectBrandFirmComponent,
+    DateClockComponent,
 
     // 管道
     ZMaxLengthPipe,

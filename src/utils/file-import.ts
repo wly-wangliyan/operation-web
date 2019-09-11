@@ -52,6 +52,5 @@ export let file_import = (file, path, success, error) => {
     }
   };
   xhr.open('POST', `${domain}${path}`);
-  xhr.setRequestHeader('Authorization', 'token ' + LocalStorageProvider.Instance.get(LocalStorageProvider.AccessToken));
   xhr.send(form);
 };

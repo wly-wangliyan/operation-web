@@ -18,10 +18,11 @@
     box-shadow:2px 0px 2px 0px rgba(137,146,170,0.33);
     border-radius:4px 4px 0px 0px;
     list-style: none;
+    background: #fff;
 }
 
 .tab-active {
-    background: #3E71F7;
+    background: #3E71F7!important;
     color: #fff;
 }
 
@@ -32,4 +33,48 @@
 
 .operation a:hover {
     color:rgba(62,113,247,1);
+}
+
+.content-main {
+    background: #fff !important;
+}
+
+.booking-title {
+    padding: 28px 15px 18px;
+}
+
+.booking-times {
+    margin: 0 0 10px 15px;
+    padding-bottom: 40px;
+}
+
+.booking-times button {
+    width: 80px;
+    height: 34px;
+    margin-right: 10px;
+}
+
+.booking-time-center {
+    color: #888888;
+    float: left;
+    width: 20px;
+    text-align: center;
+}
+
+.booking-times label {
+    width: 90px;
+    text-align: right;
+    float: left;
+    margin: 5px 10px 0;
+}
+
+.booking-times span {
+  line-height: 34px;
+}
+
+.form-control {
+    width: 140px;
+    height: 34px;
+    float: left;
+    background: #F7F8FA;
 }

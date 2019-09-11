@@ -1,8 +1,8 @@
 <div class="content-header">
   <app-crumb [level1Name]="'订单管理'" [level2Name]=""></app-crumb>
   <ul class="header-right">
-    <li>
-      <button nz-button nzType="primary">导出Excel</button>
+    <li class="big-bg">
+      <a>导出Excel</a>
     </li>
   </ul>
 </div>
@@ -16,13 +16,13 @@
             <nz-form-item nzFlex>
               <nz-form-label>订单状态</nz-form-label>
               <nz-form-control class="form_control">
-                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
-                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
-                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
-                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
-                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
-                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
-                </nz-select>
+                <select class="form-control" [ngModel]="''" name="order_status">
+                  <option value="">全部</option>
+                  <option value="1">待支付</option>
+                  <option value="2">已完成</option>
+                  <option value="3">未支付</option>
+                  <option value="4">已取消</option>
+                </select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -30,13 +30,13 @@
             <nz-form-item nzFlex>
               <nz-form-label>汽车品牌</nz-form-label>
               <nz-form-control class="form_control">
-                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
-                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
-                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
-                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
-                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
-                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
-                </nz-select>
+                <select class="form-control" [ngModel]="''" name="car_brands">
+                  <option value="">全部</option>
+                  <option value="1">待支付</option>
+                  <option value="2">已完成</option>
+                  <option value="3">未支付</option>
+                  <option value="4">已取消</option>
+                </select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -44,13 +44,13 @@
             <nz-form-item nzFlex>
               <nz-form-label>项目类别</nz-form-label>
               <nz-form-control class="form_control">
-                <nz-select class="status search_select" name="camera_brands" [ngModel]="''">
-                  <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
-                  <nz-option [nzLabel]="'待支付'" [nzValue]="1"></nz-option>
-                  <nz-option [nzLabel]="'已完成'" [nzValue]="2"></nz-option>
-                  <nz-option [nzLabel]="'已支付'" [nzValue]="3"></nz-option>
-                  <nz-option [nzLabel]="'已取消'" [nzValue]="4"></nz-option>
-                </nz-select>
+                <select class="form-control" [ngModel]="''" name="pro_type">
+                  <option value="">全部</option>
+                  <option value="1">待支付</option>
+                  <option value="2">已完成</option>
+                  <option value="3">未支付</option>
+                  <option value="4">已取消</option>
+                </select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -90,7 +90,7 @@
           <div class='search_time'>
             <nz-form-item nzFlex>
               <nz-form-label>下单时间</nz-form-label>
-              <nz-form-control style="margin-left: 10px;">
+              <nz-form-control>
                 <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
                   (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
                   nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -104,7 +104,7 @@
           <div class='search_time'>
             <nz-form-item nzFlex>
               <nz-form-label>支付时间</nz-form-label>
-              <nz-form-control style="margin-left: 10px;">
+              <nz-form-control>
                 <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
                   (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
                   nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -115,10 +115,10 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div class='search_time'>
+          <div class='search_time order-time'>
             <nz-form-item nzFlex>
               <nz-form-label>预定时间</nz-form-label>
-              <nz-form-control style="margin-left: 10px;">
+              <nz-form-control>
                 <nz-date-picker [(ngModel)]="start_Time" [nzShowToday]=false [nzDisabledDate]="disabledStartDate"
                   (ngModelChange)="onStartChange($event)" name='startTime' [nzShowTime]="{'nzFormat':'HH:mm'}"
                   nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -163,18 +163,19 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
             <td>{{data.account}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td>{{data.telephone}}</td>
-            <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td [title]="data.address">{{data.address|zMaxLength:10}}</td>
             <td [title]="data.ic_company_name">{{data.ic_company_name|zMaxLength:20}}</td>
             <td class="operation">
-              <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
+              <a [routerLink]="['../order-detail']">查看</a>
             </td>
           </tr>
         </tbody>

@@ -98,8 +98,8 @@ export class VehicleTypeListComponent implements OnInit {
     }
   }
 
+  // 导入车型信息
   public onImportClick() {
-    console.log(LocalStorageProvider.Instance.getObject(LocalStorageProvider.VehicleList));
     $('#importBerthPromptDiv').modal('show');
     this.importViewModel.initImportData();
   }
@@ -111,17 +111,17 @@ export class VehicleTypeListComponent implements OnInit {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
-      if (type !== '.xlsx' && type !== '.xls' && type !== '.csv') {
+      if (type !== '.csv') {
         this.globalService.promptBox.open('文件格式错误！');
         return;
       }
     }
     if (this.importViewModel.checkFormDataValid()) {
-     /* this.progressModalComponent.openOrClose(true);
-      this.importSpotSubscription = this.setBerthService.requestImportSpot(
-          this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
+      this.progressModalComponent.openOrClose(true);
+      this.importSpotSubscription = this.vehicleTypeManagementService.requestImportVehicle(
+          this.importViewModel.type, this.importViewModel.file).subscribe(() => {
         $('#dataImportModal').modal('hide');
-        this.globalService.promptBox.open('名单导入成功！', () => {
+        this.globalService.promptBox.open('导入成功！', () => {
           this.importViewModel.initImportData();
           $('#importBerthPromptDiv').modal('hide');
           this.progressModalComponent.openOrClose(false);
@@ -133,15 +133,15 @@ export class VehicleTypeListComponent implements OnInit {
             if (err.status === 422) {
               const tempErr = JSON.parse(err.responseText);
               const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-              if (error.resource === 'file' && error.code === 'missing') {
-                this.globalService.promptBox.open('泊位文件不能为空！');
-              } else {
-                this.globalService.promptBox.open('泊位文件错误');
+              if (error.field === 'FILE' && error.code === 'invalid') {
+                this.globalService.promptBox.open('导入文件不能为空！');
+              } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+                this.globalService.promptBox.open('文件格式错误！');
               }
             }
           }
         });
-      });*/
+      });
     }
   }
 
@@ -180,5 +180,6 @@ export class VehicleTypeListComponent implements OnInit {
 
   public onBrandClick(data: VehicleBrandEntity) {
     this.vehicle_brand_id = data.vehicle_brand_id;
+    this.requestVehicleFirmsList(this.vehicle_brand_id);
   }
 }

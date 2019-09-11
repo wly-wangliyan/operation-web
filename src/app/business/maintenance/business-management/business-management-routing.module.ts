@@ -6,6 +6,7 @@ import { BusinessManagementComponent } from './business-management.component';
 import { BusinessListComponent } from './business-list/business-list.component';
 import { BusinessEditComponent } from './business-edit/business-edit.component';
 import { OperationConfigurationComponent } from './operation-configuration/operation-configuration.component';
+import { OperationConfigurationDetailComponent } from './operation-configuration/operation-configuration-detail/operation-configuration-detail.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'list', component: BusinessListComponent },
       { path: 'edit', component: BusinessEditComponent },
       { path: 'operation-configuration', component: OperationConfigurationComponent },
+      { path: 'operation-configuration/detail', component: OperationConfigurationDetailComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }
