@@ -35,6 +35,11 @@ export class ProjectParams extends EntityBase {
   public upkeep_item_content: string = undefined; // 保养项目描述
 }
 
+export class RelationParams extends EntityBase {
+  public upkeep_item_id: string = undefined; // 保养项目名称
+  public upkeep_item_category: number = undefined; // int 保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,9 +64,9 @@ export class ProjectManagemantHttpService {
   /** 获取可用的项目列表
    * @param upkeep_item_id 项目大类
    */
-  public requestRelationProjectsData(upkeep_item_id: string): Observable<Array<ProjectEntity>> {
+  public requestRelationProjectsData(params: RelationParams): Observable<Array<ProjectEntity>> {
     const httpUrl = `${this.domain}/upkeep_available_items`;
-    return this.httpService.get(httpUrl).pipe(map(res => {
+    return this.httpService.get(httpUrl, params.json()).pipe(map(res => {
       const tempList: Array<ProjectEntity> = [];
       res.body.forEach(data => {
         tempList.push(ProjectEntity.Create(data));
@@ -86,6 +91,6 @@ export class ProjectManagemantHttpService {
    */
   public requestUpdateProjectData(upkeep_items_id: string, projectParams: ProjectParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/upkeep_items/${upkeep_items_id}`;
-    return this.httpService.post(httpUrl, projectParams.json());
+    return this.httpService.put(httpUrl, projectParams.json());
   }
 }

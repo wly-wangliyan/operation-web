@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProjectEntity, ProjectParams } from '../project-managemant-http.service';
+import { ProjectEntity, ProjectParams, RelationParams } from '../project-managemant-http.service';
 import { Subject, Subscription } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
@@ -38,6 +38,8 @@ export class ProjectListComponent implements OnInit {
   public projectErrMsg = ''; // 添加、编辑错误提示
 
   public isCreateProject = true; // 标记是否为新建
+
+  private relationParams: RelationParams = new RelationParams();
 
   public rowspan_category_1: number; // 保养项目合并行数量
 
@@ -214,7 +216,9 @@ export class ProjectListComponent implements OnInit {
   // 获取可用配套项目
   private requestRelationProjects(category_id: any) {
     if (category_id) {
-      this.projectService.requestRelationProjectsData(category_id).subscribe(data => {
+      this.relationParams.upkeep_item_category = category_id;
+      this.relationParams.upkeep_item_id = this.project_id;
+      this.projectService.requestRelationProjectsData(this.relationParams).subscribe(data => {
         this.toRelationList = data;
         if (this.projectParams.upkeep_item_relation) {
           if (!this.toRelationList.some(value => value.upkeep_item_id === this.projectParams.upkeep_item_relation)) {

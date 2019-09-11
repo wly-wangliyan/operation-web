@@ -108,8 +108,7 @@
             <span>配套项目</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="projectParams.upkeep_item_relation"
-              (change)="onChangeRelation($event)" name="upkeep_item_relation">
+            <select class="form-control" [(ngModel)]="projectParams.upkeep_item_relation" name="upkeep_item_relation">
               <option value="">请选择</option>
               <option *ngFor="let item of toRelationList" [value]="item.upkeep_item_id">{{item.upkeep_item_name}}
               </option>
