@@ -36,7 +36,7 @@ export class ProjectTypePipe implements PipeTransform {
 }
 
 /** 项目类别 */
-const ProjectCategory = {
+export const ProjectCategory = {
   1: '保养项目',
   2: '清洗养护项目',
   3: '维修项目'

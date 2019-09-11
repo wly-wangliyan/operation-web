@@ -1,0 +1,71 @@
+.modal-dialog-common {
+  width: 420px !important;
+}
+
+.content-box {
+  display: flex;
+  border-bottom: 1px solid #D8D8D8;
+}
+
+.content-left {
+  width: 150px;
+  border-right: 1px solid #D8D8D8;
+}
+
+.content-right {
+  width: 270px;
+}
+
+.content-list {
+  height: 250px;
+}
+
+.content-list>ul {
+  height: 249px;
+  padding: 18px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.content-list>ul>li {
+  text-indent: 30px;
+  color: #23242F;
+  font-size: 13px;
+  height: 28px;
+  line-height: 28px;
+  padding-right: 20px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.content-list>ul>li:hover,
+.active {
+  background: rgba(62, 113, 247, 0.33);
+}
+
+.content-list .no-data {
+  text-align: center;
+  line-height: 250px;
+}
+
+.content-title {
+  width: 100%;
+  height: 50px;
+  font-family: PingFangSC;
+  font-size: 14px;
+  text-align: center;
+  color: #23242F;
+  font-weight: 500;
+  line-height: 50px;
+  background: rgba(247, 248, 250, 1);
+  border-bottom: 1px solid #D8D8D8;
+}
+
+.tip-msg {
+  font-size: 14px;
+  font-family: STHeitiSC-Medium;
+  font-weight: 500;
+  color: rgba(232, 32, 56, 1);
+  text-indent: 20px;
+  margin: 5px 0 0 0;
+}
