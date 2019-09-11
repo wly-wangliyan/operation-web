@@ -1,1 +1,92 @@
-<p>order-detail works!</p>
+<div class="content-header">
+  <app-crumb [level1Name]="'订单管理'" [level1RelativePath]="'../'" [level2Name]="'订单详情'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class='des_card'>
+    <div class='info_title'>
+      <div class='owner_info'>
+        <img src="/assets/images/owner.png">
+        车主信息
+      </div>
+      <div class='order_info'>
+        <img src="/assets/images/order.png">
+        订单信息
+      </div>
+    </div>
+    <div style='float: left;'>
+      <nz-descriptions nzBordered>
+        <nz-descriptions-item nzTitle="车牌号：">辽A1574</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="订单状态：">已完成</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="购买人：">XXXX先生</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="手机号：">186234213</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="汽车品牌：">奥迪</nz-descriptions-item>
+        <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+        <nz-descriptions-item nzTitle="车型：">
+          厂商+车系+年款+车型名称
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="购车时间：">2019.10</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="行驶公里数：">10000km</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="配件/服务费合计：">100元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="配件/服务费优惠：">0元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工时费合计：">100元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工时费优惠：">0元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="合计应付：">200元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="合计实付：">200元</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="所属门店：">辽宁奥尊4S店</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="订单编号：">1567a465d4as65d</nz-descriptions-item>
+        <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+        <nz-descriptions-item nzTitle="预订时间：">2019.10 08:00</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="下单时间：">2019.10 08:00</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="支付时间：">2019.10 08:00</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="完成时间：">2019.10 08:00</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="操作人：">XXX</nz-descriptions-item>
+        <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </div>
+  <div style='clear: both;'></div>
+  <div class='detail_info'>明细</div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table #rowSelectionTable nzBordered [nzData]="brokerageList" [nzShowPagination]="false"
+        [nzNoResult]="noResultText">
+        <thead>
+          <tr>
+            <th class='pro_width'>项目类别</th>
+            <th>配件/服务名称</th>
+            <th>名称</th>
+            <th>规格</th>
+            <th>零件编号</th>
+            <th>销售单价</th>
+            <th>数量</th>
+            <th>配件/服务优惠</th>
+            <th>工时费</th>
+            <th>工时费优惠</th>
+            <th>应付</th>
+            <th>实付</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of rowSelectionTable.data; let i=index">
+            <td rowspan=2 *ngIf="i === 0" class='pro_type'><img src="/assets/images/upkeep.png">保养项目</td>
+            <td rowspan=3 *ngIf="i === 2" class='pro_type'><img src="/assets/images/wash.png">清洗养护项目</td>
+            <td rowspan=5 *ngIf="i === 5" class='pro_type'><img src="/assets/images/owner.png">维修项目</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td>{{data.telephone|zMaxLength:5}}</td>
+            <td class="operation">
+              <a [title]="'查看'" [routerLink]="['../order-detail']">查看</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
