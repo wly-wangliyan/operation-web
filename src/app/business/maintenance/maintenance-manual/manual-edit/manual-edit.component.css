@@ -67,3 +67,68 @@
   margin-bottom: 20px;
   min-height: 150px;
 }
+
+.table {
+  border-left: 1px solid #dee2e6;
+}
+
+.table thead th {
+  font-size: 12px;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+  background: #F7F8FA;
+  border-right: 1px solid #dee2e6;
+}
+
+.table tbody td {
+  font-size: 12px;
+  text-align: center;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* 开关式样 */
+.btn-switch {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.btn-switch-on {
+  background: url(/assets/images/icon_switch_on.png) no-repeat center !important;
+}
+
+.btn-switch-off {
+  background: url(/assets/images/icon_switch_off.png) no-repeat center !important;
+}
+
+.btn-switch:disabled {
+  background: url(/assets/images/icon_switch_off.png) no-repeat center !important;
+  cursor: not-allowed;
+}
+
+.row-btn {
+  padding: 5px 0;
+  margin: auto;
+  width: 46px;
+  height: 25px;
+  line-height:12px;
+  font-size: 12px;
+  font-weight:600;
+  color: #888;
+  border-radius:13px;
+  background: #fff;
+  border:1px solid rgba(136, 136, 136, 1);
+  cursor: pointer;
+}
+
+.btn-recommend-on {
+  border: none;
+  color: #3E71F7;
+  background:rgba(62, 113, 247, 0.33);
+}
+
+.row-btn:disabled {
+  cursor: default;
+} 

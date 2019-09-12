@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
@@ -6,27 +6,33 @@ import { HttpService, LinkResponse } from '../../../core/http.service';
 import { EntityBase } from '../../../../utils/z-entity';
 import { environment } from '../../../../environments/environment';
 import { VehicleTypeEntity } from '../vehicle-type-management/vehicle-type-management.service';
+import { file_import } from '../../../../utils/file-import';
 
 export class HandbookEntity extends EntityBase {
   public upkeep_handbook_id: string = undefined; // 保养手册id
   public uh_item_id: string = undefined; // 保养手册-项目id
   public month: number = undefined; // 月数
   public kilometer: number = undefined; // 公里数
-  public recommend_value: number = undefined; // 推荐值 1不做,2做,3推荐
+  public recommend_value = 1; // 推荐值 1不做,2做,3推荐
   public created_time: number = undefined;
   public updated_time: string = undefined;
+}
+
+export class ColumnEntity extends EntityBase {
+  public month: number = undefined; // 月数
+  public kilometer: number = undefined; // 公里数
 }
 
 // 保养手册配置详情
 export class ManualSettingEntity extends EntityBase {
   public uh_item_id: string = undefined; // 保养手册-项目id
   public vehicle_type_id: string = undefined; // 车型id
-  public switch: boolean = undefined; // 开关
+  public switch = false; // 开关
   public description: string = undefined; // 描述
   public item_id: string = undefined; // 项目id
   public item_name: string = undefined; // 项目名称
   public item_category: number = undefined; // 项目类别
-  public upkeep_handbook: HandbookEntity = undefined; // 可变公里配置列
+  public upkeep_handbook: Array<HandbookEntity> = undefined; // 可变公里配置列
   public created_time: number = undefined;
   public updated_time: string = undefined;
 
@@ -40,7 +46,11 @@ export class ManualSettingEntity extends EntityBase {
 }
 // 修改推荐值参数
 export class RecommendParams extends EntityBase {
-  public recommend_value: number; // 推荐值 1不做2做3推荐
+  public upkeep_handbook_id: string = undefined; // 保养手册id
+  public recommend_value: number = undefined; // 推荐值 1不做2做
+  public uh_item_id: string = undefined; // 保养手册-项目id
+  public month: number = undefined; // 月数
+  public kilometer: number = undefined; // 公里数
 }
 
 // 获取项目配置参数
@@ -52,9 +62,9 @@ export class ProjectItemParams extends EntityBase {
 
 // 修改项目开关参数
 export class SwitchParams extends EntityBase {
-  public switch: boolean; // 操作开关 False关闭 True开启
-  public item_id: boolean; // 项目id
-  public vehicle_type_id: boolean; // 车型id
+  public switch: boolean = undefined; // 操作开关 False关闭 True开启
+  public item_id: string = undefined; // 项目id
+  public vehicle_type_id: string = undefined; // 车型id
 }
 
 // 批量保存描述参数
@@ -148,17 +158,33 @@ export class MaintenanceManualHttpService {
   }
 
   /**
-   * 获取保存手册详情
+   * 获取保存手册配置详情
    * @param vehicle_type_id 车型id
-   * @returns Observable<ManualSettingEntity>
+   * @returns Observable<Array<ManualSettingEntity>>
    */
-  public requestManualDetailData(vehicle_type_id: string): Observable<ManualSettingEntity> {
+  public requestManualDetailData(vehicle_type_id: string): Observable<Array<ManualSettingEntity>> {
     const httpUrl = `${this.domain}/uh_items`;
     const body = {
       vehicle_type_id
     };
-    return this.httpService.get(httpUrl, body)
-      .pipe(map(res => ManualSettingEntity.Create(res.body)));
+
+    return this.httpService.get(httpUrl, body).pipe(map(res => {
+      const tempList: Array<ManualSettingEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(ManualSettingEntity.Create(data));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 根据车型id获取汽车车型
+   * @param vehicle_type_id 车型id
+   * @returns Observable<VehicleTypeEntity>
+   */
+  public requestVehicleInfoData(vehicle_type_id: string): Observable<VehicleTypeEntity> {
+    const httpUrl = `${this.domain}/vehicle/vehicle_types/${vehicle_type_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => VehicleTypeEntity.Create(res.body)));
   }
 
   /**
@@ -169,5 +195,27 @@ export class MaintenanceManualHttpService {
   public requestDeleteManualByVehicle(vehicle_type_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/vehicle/vehicle_types/${vehicle_type_id}/has_upkeepbook`;
     return this.httpService.patch(httpUrl);
+  }
+
+  /**
+   * 导入保养手册信息
+   * @param any file 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+
+  public requestImportManual(type: any, file: any) {
+    const eventEmitter = new EventEmitter();
+    const params = {
+      myfile: file,
+      type,
+    };
+
+    const url = `/vehicle/upload_car`;
+    file_import(params, url, data => {
+      eventEmitter.next(data);
+    }, err => {
+      eventEmitter.error(err);
+    });
+    return eventEmitter;
   }
 }

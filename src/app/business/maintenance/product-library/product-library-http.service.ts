@@ -112,7 +112,7 @@ export class ProductLibraryHttpService {
    * @param searchParams 条件检索参数
    */
   public requestProductListData(searchParams: SearchParams): Observable<ProductLinkResponse> {
-    const httpUrl = `${this.domain}/upkeep_items`;
+    const httpUrl = `${this.domain}/upkeep_accessories`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new ProductLinkResponse(res)));
   }

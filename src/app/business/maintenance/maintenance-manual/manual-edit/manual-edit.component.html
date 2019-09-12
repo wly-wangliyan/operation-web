@@ -1,6 +1,6 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养手册'" [level2Name]="title"></app-crumb>
-  <ul class="header-right" *ngIf="isEdit">
+  <ul class="header-right" *ngIf="!isEdit">
     <li class="big-bg">
       <a (click)="onEditClick()">编辑</a>
     </li>
@@ -10,81 +10,51 @@
   <div class="content-top">
     <i></i>
     <div class="manual-info">
-      <label>宝马</label>
-      <label>Audi Sport</label>
-      <label>奥迪A3</label>
-      <label>2019款</label>
-      <label>2019款 Sportback 35 TFSI 时尚型 国V；2019款 Sportback 35 TFSI 时尚型 国V</label>
+      <label>{{vehicleTypeInfo.vehicle_brand?vehicleTypeInfo.vehicle_brand.vehicle_brand_name:'--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_firm?vehicleTypeInfo.vehicle_firm.vehicle_firm_name:'--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_series? vehicleTypeInfo.vehicle_series.vehicle_series_name : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_year_model ? vehicleTypeInfo.vehicle_year_model : ''}}</label>
+      <label>{{vehicleTypeInfo.vehicle_type_name ? vehicleTypeInfo.vehicle_type_name : ''}}</label>
     </div>
   </div>
-
   <div class="content-middle">
-    <div class="category-item">
-      <i class="category-icon1"></i>
-      <nz-table [nzShowPagination]="false" #category1Table>
-        <thead>
-          <th>项目</th>
-          <th>操作</th>
-          <th>描述</th>
-        </thead>
-        <tbody>
-          <td>汽油</td>
-          <td></td>
-          <td>
-            <ng-container *ngIf="isEdit">
-              <input type="text" />
-            </ng-container>
-            <ng-container>
-
-            </ng-container>
-          </td>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="category-item">
-      <i class="category-icon2"></i>
-      <nz-table [nzShowPagination]="false" #category2Table>
-        <thead>
-          <th>项目</th>
-          <th>操作</th>
-          <th>描述</th>
-        </thead>
-        <tbody>
-          <td>汽油</td>
-          <td></td>
-          <td>
-            <ng-container *ngIf="isEdit">
-              <input type="text" />
-            </ng-container>
-            <ng-container>
-
-            </ng-container>
-          </td>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="category-item">
-      <i class="category-icon3"></i>
-      <nz-table [nzShowPagination]="false" #category3Table>
-        <thead>
-          <th>项目</th>
-          <th>操作</th>
-          <th>描述</th>
-        </thead>
-        <tbody>
-          <td>汽油</td>
-          <td></td>
-          <td>
-            <ng-container *ngIf="isEdit">
-              <input type="text" />
-            </ng-container>
-            <ng-container>
-
-            </ng-container>
-          </td>
-        </tbody>
-      </nz-table>
+    <div class="category-item" *ngFor="let category of projectCategories">
+      <ng-container *ngIf="mapOfProject && mapOfProject[category] && mapOfProject[category].length>0">
+        <i class="category-icon{{category}}"></i>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th *ngIf="isEdit">操作</th>
+              <th>描述</th>
+              <ng-container *ngIf="mapOfColumns[category]">
+                <th *ngFor="let column of mapOfColumns[category]">
+                  {{column.month>=0?column.month+'个月':''}}&nbsp;
+                  {{column.kilometer?column.kilometer+'km':''}}
+                </th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of mapOfProject[category]">
+              <td>{{project.upkeep_item_name}}</td>
+              <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
+                <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
+                  [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"
+                  (click)=onChangeBtnSwitch(mapOfSetting[project.upkeep_item_id].switch,project.upkeep_item_id)></button>
+              </td>
+              <td *ngIf="mapOfSetting[project.upkeep_item_id]">
+                {{mapOfSetting[project.upkeep_item_id].description}}
+              </td>
+              <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
+                <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"
+                  [disabled]="!isEdit || !handbook.upkeep_handbook_id || !mapOfSetting[project.upkeep_item_id].switch"
+                  (click)=onChangeBtnRecommend(handbook)>{{project.upkeep_item_type===1?'换':'荐'}}</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
     </div>
   </div>
-
 </div>
