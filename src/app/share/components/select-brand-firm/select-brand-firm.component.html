@@ -9,16 +9,28 @@
           <div class="content-list">
             <div class="leter-list">
               <ul>
-                <li *ngFor="let leter of letter_list">{{leter}}</li>
+                <li *ngFor="let leter of letter_list">
+                  <nz-anchor [nzAffix]="false">
+                    <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
+                  </nz-anchor>
+                </li>
               </ul>
             </div>
-            <ul>
-              <li *ngFor="let vehicleBrand of vehicleBrandList" (click)="onBrandClick(vehicleBrand)"
-                [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
-                <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
-                {{vehicleBrand.vehicle_brand_name}}
-              </li>
-            </ul>
+            <div class="brand-list">
+              <ul>
+                <li *ngFor="let leter of letter_list">
+                  <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
+                    <p id="{{leter}}" class="leter-title">{{leter}}</p>
+                    <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
+                      (click)="onBrandClick(vehicleBrand)"
+                      [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
+                      <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
+                      {{vehicleBrand.vehicle_brand_name}}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="content-right">

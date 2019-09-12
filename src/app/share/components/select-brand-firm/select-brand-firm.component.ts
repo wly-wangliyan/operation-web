@@ -37,6 +37,8 @@ export class SelectBrandFirmComponent implements OnInit {
 
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
+  public mapOfBrand: { [key: string]: Array<VehicleBrandEntity> } = {}; // 字母对应品牌
+
   public currentBrand: VehicleBrandEntity = new VehicleBrandEntity(); // 选中品牌
 
   public vehicleFirmList: Array<VehicleFirmEntity> = []; // 车辆品牌厂商
@@ -90,6 +92,9 @@ export class SelectBrandFirmComponent implements OnInit {
   private requestBrandList() {
     this.requestBrandSubscription = this.vehicleService.requestVehicleBrandList().subscribe(res => {
       this.vehicleBrandList = res.results;
+      this.letter_list.forEach(leter => {
+        this.mapOfBrand[leter] = this.vehicleBrandList.filter(brand => brand.vehicle_brand_initial === leter);
+      });
     }, err => {
       $('#selectBrandFirmModal').modal('hide');
       this.globalService.httpErrorProcess(err);
@@ -98,6 +103,7 @@ export class SelectBrandFirmComponent implements OnInit {
 
   // 选中品牌
   public onBrandClick(vehicleBrand: VehicleBrandEntity) {
+    this.currentBrand = vehicleBrand;
     this.requestFirmListByBrand(vehicleBrand.vehicle_brand_id);
   }
 

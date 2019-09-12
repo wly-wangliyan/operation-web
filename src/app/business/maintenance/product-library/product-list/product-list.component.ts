@@ -44,21 +44,21 @@ export class ProductListComponent implements OnInit {
 
   public ngOnInit() {
     this.productList.push(new ProductEntity());
-    this.generateProjectList();
+    this.generateProductList();
   }
 
   // 初始化获取产品列表
-  private generateProjectList() {
+  private generateProductList() {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestProjectList();
+      this.requestProductList();
     });
     this.searchText$.next();
   }
 
   // 请求产品列表
-  private requestProjectList() {
-    this.productLibraryService.requestProjectListData(this.searchParams).subscribe(res => {
+  private requestProductList() {
+    this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
@@ -89,7 +89,7 @@ export class ProductListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.productLibraryService.continueProjectListData(this.linkUrl)
+      this.continueRequestSubscription = this.productLibraryService.continueProductListData(this.linkUrl)
         .subscribe(res => {
           this.productList = this.productList.concat(res.results);
           this.linkUrl = res.linkUrl;
