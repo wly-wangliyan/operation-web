@@ -1,0 +1,90 @@
+.des_card {
+  min-width: 1300px;
+  height: 381px;
+  padding: 30px;
+  background: #fff;
+}
+
+.info_title {
+  float: left;
+  width: 150px;
+  border: 1px solid #E5E6EB;
+  border-right: 0;
+  text-align: center;
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+  background: #fff;
+}
+
+.info_title img {
+  margin-right: 8px;
+}
+
+.info_title .owner_info {
+  height: 119px;
+  line-height: 119px;
+}
+
+.info_title .order_info {
+  height: 200px;
+  line-height: 200px;
+  border-top: 1px solid #E5E6EB;
+}
+
+.pro_width {
+  width: 150px;
+}
+
+.detail_info {
+  font-size: 14px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+  margin: 20px 2px 17px;
+}
+
+.table-container {
+  height: auto;
+  padding: 20px 30px;
+  margin: 0;
+  background: #fff;
+}
+
+.table-container img {
+  margin-right: 8px;
+  margin-top: -3px;
+}
+
+:host ::ng-deep .ant-table {
+  border: none;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+:host ::ng-deep .ant-table>tr {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+:host ::ng-deep.ant-table-tbody>tr:nth-child(even) {
+  background: #fff !important;
+}
+
+.pro_type {
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+  text-align: left;
+  padding-left: 30px !important;
+}
+
+@media screen and (max-width: 1444px) {
+  .info_title {
+    width: 130px;
+  }
+
+  .pro_width {
+    width: 130px;
+  }
+}

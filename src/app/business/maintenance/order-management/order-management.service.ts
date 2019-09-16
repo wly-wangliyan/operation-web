@@ -64,6 +64,23 @@ export class UpdateBrokerageEntity extends EntityBase {
   }
 }
 
+
+export class SearchOrderParams extends EntityBase {
+  public pay_status = ''; // int	F	订单状态 1未支付 2已支付 3已完成
+  public vehicle_brand_name = ''; // string	F	汽车 品牌名称
+  public upkeep_item_category = ''; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目
+  public payer_phone = ''; // string	F	购买人预留电话
+  public payer_name = ''; // string	F	购买人姓名（付款人）
+  public upkeep_merchant_name = ''; // string	F	商家名称
+  public upkeep_order_id = ''; // string	F	保养订单id
+  public created_time = ''; // string	F	下单时间
+  public pay_time = ''; // string	F	支付时间
+  public reserve_time = ''; // string	F	预定时间
+  public page_size = 45; // integer	F	每页条数 默认：15
+  public page_num = 1; // integer	F	页码 默认:1
+}
+
+
 export class UpdateInsueranceEntity extends EntityBase {
   public describe: string = undefined; 	// 	string	T	描述
   public ic_name: string = undefined; 	// 	string	T	保险公司名称
@@ -226,5 +243,7 @@ export class OrderManagementService {
   public requestModifyInsurance(params: UpdateInsueranceEntity, ic_id: string): Observable<HttpResponse<any>> {
     return this.httpService.put(environment.OPERATION_SERVE + `/admin/insurance/${ic_id}`, params.json());
   }
+
+
 }
 
