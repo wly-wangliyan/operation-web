@@ -40,7 +40,8 @@
             <td *ngIf="!product.upkeep_item">--</td>
             <td>{{product.upkeep_accessory_type | projectType}}</td>
             <td>{{product.serial_number ? product.serial_number : '--'}}</td>
-            <td>{{product.is_original ? '是' : '否'}}</td>
+            <td *ngIf="product.upkeep_accessory_type===projectTypes[0]">{{product.is_original ? '是' : '否'}}</td>
+            <td *ngIf="product.upkeep_accessory_type===projectTypes[1]">--</td>
             <td *ngIf="product.is_original && product.vehicle_brand && product.vehicle_firm ">
               {{(product.vehicle_brand.vehicle_brand_name + ' > ' + product.vehicle_firm.vehicle_firm_name) | zMaxLength:20}}
             </td>

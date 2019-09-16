@@ -18,6 +18,8 @@ export class ProductListComponent implements OnInit {
 
   public productList: Array<ProductEntity> = []; // 产品列表
 
+  public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
+
   public pageIndex = 1; // 当前页码
 
   public noResultText = '数据加载中...';

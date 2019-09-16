@@ -60,7 +60,7 @@ export class ProductCreateComponent implements OnInit {
 
   public selectedCategory: number; // 所属项目》所属项目类别
 
-  public selectedProjectid: number; // 所属项目》所属项目 》项目id
+  public selectedProjectid: string; // 所属项目》所属项目 》项目id
 
   public selected_project_info: string; // 所属项目信息
 
@@ -104,14 +104,14 @@ export class ProductCreateComponent implements OnInit {
     });
   }
 
+  // 初始化编辑表单
   private initForm() {
+    this.selectedCategory = this.productRecord.upkeep_item.upkeep_item_category;
+    this.selectedProjectid = this.productRecord.upkeep_item.upkeep_item_id;
     this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
       + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
     this.productRecord.upkeep_item_id = this.productRecord.upkeep_item.upkeep_item_id;
     this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;
-    this.selected_project_info = this.productRecord.upkeep_item ?
-      (this.projectCategory[this.productRecord.upkeep_item.upkeep_item_category] + ' > '
-        + this.productRecord.upkeep_item.upkeep_item_name) : null;
     this.cover_url = this.productRecord.image_url ? this.productRecord.image_url.split(',') : [];
     this.productRecord.upkeep_item = null;
     this.productRecord.vehicle_brand = null;
@@ -124,9 +124,15 @@ export class ProductCreateComponent implements OnInit {
       this.productRecord.vehicle_brand_id = null;
       this.productRecord.vehicle_firm_id = null;
       this.productRecord.is_brand_special = null;
-      this.productRecord.serial_number = null;
-      this.productRecord.specification = null;
-      this.productRecord.number = null;
+      this.productRecord.serial_number = null; // 零件编号
+      this.productRecord.specification = null; // 规格
+      this.productRecord.number = null; // 所需数量
+    } else {
+      this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
+      this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
+      this.selected_project_info = this.productRecord.upkeep_item ?
+        (this.projectCategory[this.productRecord.upkeep_item.upkeep_item_category] + ' > '
+          + this.productRecord.upkeep_item.upkeep_item_name) : null;
     }
   }
 
@@ -190,7 +196,6 @@ export class ProductCreateComponent implements OnInit {
 
   /** 金额 keyup 事件 */
   public onMoneyKeyUp() {
-    debugger;
     if (this.productRecord.original_amount) {
       if (isNaN(parseFloat(String(this.productRecord.original_amount)))) {
         this.productRecord.original_amount = null;
