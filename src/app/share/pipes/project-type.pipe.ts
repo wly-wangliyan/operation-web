@@ -68,3 +68,26 @@ export class ProjectCategoryPipe implements PipeTransform {
   }
 
 }
+
+/** 订单状态 */
+export const payStatus = {
+  1: '未支付',
+  2: '已支付',
+  3: '已完成'
+};
+
+@Pipe({
+  name: 'payStatus'
+})
+export class PayStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (!value) {
+      return '--';
+    } else if (value && (typeof value === 'string')) {
+      return payStatus[value];
+    } else {
+      return payStatus[value];
+    }
+  }
+}

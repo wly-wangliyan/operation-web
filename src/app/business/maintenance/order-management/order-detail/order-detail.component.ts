@@ -1,9 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subject } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { BrokerageEntity, OrderManagementService } from '../order-management.service';
+import {
+  UpkeepOrderEntity,
+  OrderDetailEntity,
+  OrderManagementService,
+} from '../order-management.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -11,30 +15,31 @@ import { BrokerageEntity, OrderManagementService } from '../order-management.ser
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
-  public brokerageList: Array<BrokerageEntity> = [];
-  public pageIndex = 1;
+  public upkeepOrderData = new UpkeepOrderEntity();
+  public orderDetailList: Array<OrderDetailEntity> = [];
   public noResultText = '数据加载中...';
+  public loading = true;
 
+  private upkeep_order_id: string;
   private searchText$ = new Subject<any>();
-  private continueRequestSubscription: Subscription;
   constructor(private globalService: GlobalService,
-              private orderService: OrderManagementService) { }
+              private orderService: OrderManagementService,
+              private routeInfo: ActivatedRoute) { }
 
   ngOnInit() {
+    this.routeInfo.params.subscribe((params: Params) => {
+      this.upkeep_order_id = params.upkeep_order_id;
+    });
+    // 订单详情
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.orderService.requestBrokerageList())
+        this.orderService.requestOrderDetail(this.upkeep_order_id))
     ).subscribe(res => {
-      this.brokerageList = res.results;
-      this.brokerageList.forEach(value => {
-        const ic_company_name = [];
-        value.ic_company.forEach(value1 => {
-          ic_company_name.push(value1.ic_name);
-        });
-        value.ic_company_name = ic_company_name.join(',');
-      });
+      this.upkeepOrderData = res;
+      this.orderDetailList = this.upkeepOrderData.order_detail;
       this.noResultText = '暂无数据';
+      this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

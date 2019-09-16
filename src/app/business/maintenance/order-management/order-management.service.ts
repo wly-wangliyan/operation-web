@@ -1,74 +1,108 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
-import { map } from 'rxjs/internal/operators';
-import { HttpResponse } from '@angular/common/http';
-import { EntityBase } from '../../../../utils/z-entity';
+import { Injectable } from '@angular/core';
 import { HttpService, LinkResponse } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
+import { Observable, timer } from 'rxjs/index';
+import { map } from 'rxjs/internal/operators';
+import { EntityBase } from '../../../../utils/z-entity';
+import { UpkeepMerchantEntity } from '../business-management/business-management.service';
 
-export class BrokerageEntity extends EntityBase {
-  public broker_company_id: string = undefined; 	// 	string 	经济公司id
-  public broker_company_name: string = undefined; 	// string	经济公司名称
-  public region_id: string = undefined; 	// 	string	省市区
-  public address: string = undefined; 	// 	string	地址
-  public person: string = undefined; 	// 	string	企业法人
-  public license_num: string = undefined; 	// 	string	营业执照编号
-  public license_photos: string = undefined; 	// 	string	营业执照
-  public account: string = undefined; 	// 	string 	用户
-  public telephone: number = undefined; 	// 	int	电话
-  public email: string = undefined; 	// 	string	邮箱
-  public describe: string = undefined; 	// string 描述
-  public ic_company: Array<InsuranceEntity> = undefined; 	// 	Array	保险公司
-  public ic_company_name: string = undefined; 	// 	string	保险公司名称
-  public created_time: number = undefined; 	// float 	创建时间
-  public updated_time: number = undefined; 	// float 	修改时间
-
+// 保养商家运营时段对象
+export class UpkeepMerchantOperationEntity extends EntityBase {
+  public upkeep_merchant_operation_id: string = undefined; 	// 	String	保养商家运营时段-主键
+  public upkeep_merchant: UpkeepMerchantEntity = undefined; 	// object	保养商家
+  public start_time: number = undefined; 	// integer	每日可预订时段开始时间 单位:秒
+  public end_time: number = undefined; 	// integer	每日可预订时段结束时间 单位:秒
+  public operation_time_amount: number = undefined; 	// float	运营时段加/减价金额
+  public updated_time: number = undefined; // float	更新时间
+  public created_time: number = undefined; // 	float	创建时间 / 下单时间
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'ic_company') {
-      return InsuranceEntity;
+    if (propertyName === 'upkeep_merchant') {
+      return UpkeepMerchantEntity;
     }
     return null;
   }
 }
 
-export class InsuranceEntity extends EntityBase {
-  public ic_id: string = undefined; 	// 	string 保险公司id
-  public ic_name: string = undefined; 	// 	string 保险公司名称
-  public ic_image: string = undefined; 	// 保险公司logo
-  public describe = ''; 	// 	string 保险公司描述
-  public discontinue_use = undefined; 	// 	bool 是否启用 false为启用，true为不启用
-  public sort_num: number = undefined; 	// 	number 排序数字
-  public tag: Array<any> = undefined; 	// 	Array 应用id
+// 保养项目及配件对象列表
+export class OrderDetailEntity extends EntityBase {
+  public upkeep_merchant_project_id: string = undefined; 	// 	String	保养商家项目id
+  public item_id: string = undefined; 	// 	String	项目id
+  public item_name: string = undefined; 	// 	String	项目名称
+  public item_category: number = undefined; 	// int	项目类别
+  public upkeep_merchant_accessory_id: string = undefined; 	// 	String	保养商家配件 - 主键
+  public upkeep_accessory_type: number = undefined; 	// int	类型 1: 配件 2: 服务
+  public upkeep_accessory_name: string = undefined; 	// 	string	产品名称
+  public is_original: boolean = undefined; 	// boolean 是否原厂 true原厂
+  public is_brand_special: boolean = undefined; 	// boolean	品牌专用
+  public serial_number: string = undefined; 	// 	string	零件编号
+  public specification: string = undefined; 	// 	string	规格
+  public image_url: string = undefined; 	// 	string	图片
+  public number: number = undefined; 	// int	所需数量 单位: 件
+  public original_amount: number = undefined; 	// float	原价 单位: 元
+  public sale_amount: number = undefined; 	// 	float	销售单价 单位: 元
+  public pay_amount: number = undefined; // float	应付 单位: 元
+  public real_pay_amount: number = undefined; // 	float	销售单价 单位: 元
+  public work_original_amount: number = undefined; // float	原价工时费 单位: 元
+  public work_amount_discounted: number = undefined; // float	工时费优惠 单位元
+  public work_sale_amount: number = undefined; // float	售价工时费 单位: 元
+  public updated_time: number = undefined; // float	更新时间
+  public created_time: number = undefined; // 	float	创建时间 / 下单时间
 }
 
-export class VersionEntity extends EntityBase {
-  public version_id: string = undefined; 	// 	string 版本id
-  public version: string = undefined; 	// 	string 版本
-  public is_display: string = undefined; 	// 	bool  是否下线
-  public created_time: number = undefined; 	// 	string 创建时间
-}
-
-export class UpdateBrokerageEntity extends EntityBase {
-  public describe: string = undefined; 	// 	string	T	描述
-  public ic_company: string = undefined; 	// 	string	T	保险公司id
-
-  constructor(describe?: string, ic_company?: string) {
-    super();
-    this.describe = describe;
-    this.ic_company = ic_company;
+// 保养订单
+export class UpkeepOrderEntity extends EntityBase {
+  public upkeep_order_id: string = undefined; 	// 	String	保险报价记录id
+  public car_id: string = undefined; 	// 	String	车牌号
+  public frame_number: string = undefined; 	// 	String	车架号
+  public payer_name: string = undefined; 	// 	payer_name 购买人姓名（付款人）
+  public payer_phone: string = undefined; 	// 	String	购买人预留电话
+  public car_pay_time: number = undefined; 	// 	int	报价状态1: 待报价, 2: 已报价
+  public kilometers: number = undefined; 	// 	int	行驶公里数
+  public vehicle_type_id: string = undefined; 	// string	车型id
+  public vehicle_brand_name: string = undefined; 	// 	string	品牌名称
+  public vehicle_firm_name: string = undefined; 	// 	string	厂商名称
+  public vehicle_series_name: string = undefined; 	// 	string	车系名称
+  public vehicle_type_name: string = undefined; 	// string	车型名称
+  public vehicle_year_model: string = undefined; 	// string	年款
+  public upkeep_merchant_id: string = undefined; 	// 	string	商家id
+  public upkeep_merchant_name: string = undefined; 	// 	string	商家名称
+  public address: string = undefined; // 	string	商家地址
+  public upkeep_item_categorys: string = undefined; // 	string	项目类别 逗号分割 1.保养项目 2.清洗养护项目 3.维修项目
+  public upkeep_item_category_count: number = undefined; 	// 	int	项目类别数量
+  public accessory_amount_total: number = undefined; // 	float	配件 / 服务费合计 单位元
+  public accessory_amount_discounted: number = undefined; // 	float	配件 / 服务费优惠 单位元
+  public work_amount_total: number = undefined; // 	float	工时费合计 单位元
+  public work_amount_discounted: number = undefined; // float	工时费优惠 单位元
+  public total_amount: number = undefined; // 	float	合计应付
+  public total_real_amount: number = undefined; // 	float	合计实付 单位元
+  public fee_amount: number = undefined; // float	优惠前金额(应付)
+  public discounted_fee_amount: number = undefined; // 	float	优惠后金额
+  public real_pay_amount: number = undefined; // 	float	实付金额(实付)
+  public pay_time: number = undefined; // float	支付时间
+  public pay_type: string = undefined; // string 支付方式 UU_APP 悠悠app支付 WX_JSAPI_SL微信支付
+  public reserve_time: number = undefined; // float	预定时间
+  public upkeep_merchant_operation: UpkeepMerchantOperationEntity = undefined; // obj	保养商家运营时段对象
+  public pay_status: number = undefined; // int	订单状态 1未支付 2已支付 3已完成
+  public write_off_code: number = undefined; // int	核销码
+  public order_detail: Array<OrderDetailEntity> = undefined; // Array	保养项目及配件对象列表
+  public order_complete_time: number = undefined; // float	订单完成时间
+  public order_complete_operator: string = undefined; // string	订单完成操作人
+  public updated_time: number = undefined; // float	更新时间
+  public created_time: number = undefined; // 	float	创建时间 / 下单时间
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'order_detail') {
+      return OrderDetailEntity;
+    } else if (propertyName === 'upkeep_merchant_operation') {
+      return UpkeepMerchantOperationEntity;
+    }
+    return null;
   }
-
-  public toEditJson(): any {
-    const json = this.json();
-    return json;
-  }
 }
-
 
 export class SearchOrderParams extends EntityBase {
   public pay_status = ''; // int	F	订单状态 1未支付 2已支付 3已完成
   public vehicle_brand_name = ''; // string	F	汽车 品牌名称
-  public upkeep_item_category = ''; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目
+  public upkeep_item_category = 4; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目 4.全部
   public payer_phone = ''; // string	F	购买人预留电话
   public payer_name = ''; // string	F	购买人姓名（付款人）
   public upkeep_merchant_name = ''; // string	F	商家名称
@@ -80,42 +114,11 @@ export class SearchOrderParams extends EntityBase {
   public page_num = 1; // integer	F	页码 默认:1
 }
 
-
-export class UpdateInsueranceEntity extends EntityBase {
-  public describe: string = undefined; 	// 	string	T	描述
-  public ic_name: string = undefined; 	// 	string	T	保险公司名称
-  public ic_image: string = undefined; 	// 	string	T	保险公司logo
-  public tag: string = undefined; 	// 	string	T	标签
-
-  constructor(describe?: string, ic_name?: string, ic_image?: string, tag?: string) {
-    super();
-    this.describe = describe;
-    this.ic_name = ic_name;
-    this.ic_image = ic_image;
-    this.tag = tag;
-  }
-
-  public toEditJson(): any {
-    const json = this.json();
-    return json;
-  }
-}
-
-export class BrokerageLinkResponse extends LinkResponse {
-  public generateEntityData(results: Array<any>): Array<BrokerageEntity> {
-    const tempList: Array<BrokerageEntity> = [];
+export class OrderLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<UpkeepOrderEntity> {
+    const tempList: Array<UpkeepOrderEntity> = [];
     results.forEach(res => {
-      tempList.push(BrokerageEntity.Create(res));
-    });
-    return tempList;
-  }
-}
-
-export class InsuranceLinkResponse extends LinkResponse {
-  public generateEntityData(results: Array<any>): Array<InsuranceEntity> {
-    const tempList: Array<InsuranceEntity> = [];
-    results.forEach(res => {
-      tempList.push(InsuranceEntity.Create(res));
+      tempList.push(UpkeepOrderEntity.Create(res));
     });
     return tempList;
   }
@@ -125,125 +128,38 @@ export class InsuranceLinkResponse extends LinkResponse {
   providedIn: 'root'
 })
 export class OrderManagementService {
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService) { }
+
+  /**订单管理列表
+   * @param upkeep_company_id string 公司ID
+   * @param upkeep_merchant_id string 商户ID
+   * @param searchParams SearchOrderParams 查询参数
+   * @returns Observable<OrderLinkResponse>
+   */
+  public requestOrderList(searchParams: SearchOrderParams): Observable<OrderLinkResponse> {
+    const params = this.httpService.generateURLSearchParams(searchParams);
+    return this.httpService.get(environment.OPERATION_SERVE + `/upkeep_orders`,
+      params).pipe(map(res => new OrderLinkResponse(res)));
   }
 
   /**
-   * 请求获取经纪公司列表
-   * @returns Observable<BrokerageLinkResponse>
+   * 通过linkUrl继续请求获取订单管理列表
+   * @param url string linkUrl
+   * @returns Observable<OrderLinkResponse>
    */
-  public requestBrokerageList(): Observable<BrokerageLinkResponse> {
-    const params = {
-      page_size: 45,
-      page_num: 1
-    };
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/brokers`,
-      params).pipe(map(res => new BrokerageLinkResponse(res)));
+  public continueOrderList(url: string): Observable<OrderLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new OrderLinkResponse(res)));
   }
 
   /**
-   * 通过linkUrl继续请求获取经纪公司列表
-   * @param string url linkUrl
-   * @returns Observable<BrokerageLinkResponse>
+   * 订单管理详情
+   * @param upkeep_order_id string 保险报价记录id
+   * @returns Observable<UpkeepOrderEntity>
    */
-  public continueBrokerageList(url: string): Observable<BrokerageLinkResponse> {
-    return this.httpService.get(url).pipe(map(res => new BrokerageLinkResponse(res)));
+  public requestOrderDetail(upkeep_order_id: string): Observable<UpkeepOrderEntity> {
+    return this.httpService.get(environment.OPERATION_SERVE + `/upkeep_orders/${upkeep_order_id}`
+    ).pipe(map(res => {
+      return UpkeepOrderEntity.Create(res.body);
+    }));
   }
-
-  /**
-   * 请求获取保险公司列表
-   * @returns Observable<FirstPageIconLinkResponse>
-   */
-  public requestInsuranceList(): Observable<InsuranceLinkResponse> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/insurances`).pipe(map(res => new InsuranceLinkResponse(res)));
-  }
-
-  /**
-   * 请求获取保险公司列表
-   * @returns Observable<FirstPageIconLinkResponse>
-   */
-  public requestInsuranceUseList(): Observable<InsuranceLinkResponse> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/insurances/use`).pipe(map(res => new InsuranceLinkResponse(res)));
-  }
-
-  /**
-   * 通过linkUrl继续请求获取保险公司列表
-   * @param string url linkUrl
-   * @returns Observable<BrokerageLinkResponse>
-   */
-  public continueInsuranceList(url: string): Observable<InsuranceLinkResponse> {
-    return this.httpService.get(url).pipe(map(res => new InsuranceLinkResponse(res)));
-  }
-
-  /**
-   * 停用、启用
-   * @param menu_id 参数
-   * @returns Observable<HttpResponse<any>>
-   */
-  public requestUseInsurance(ic_id: string, params: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(environment.OPERATION_SERVE +
-      `/admin/insurance/${ic_id}`, params);
-  }
-
-  /**
-   * 更新序列
-   * @param menu_id 参数
-   * @returns Observable<HttpResponse<any>>
-   */
-  public requestUpdateSort(ic_id: string, params: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(environment.OPERATION_SERVE + `/admin/insurance/${ic_id}/sort`, params);
-  }
-
-  /**
-   * 获取经纪公司详情
-   * @param string broker_company_id 编号
-   * @returns Observable<BrokerageEntity>
-   */
-  public requestBrokerDetail(broker_company_id: string): Observable<BrokerageEntity> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/broker/${broker_company_id}`
-    ).pipe(map(res => BrokerageEntity.Create(res.body)));
-  }
-
-  /**
-   * 获取保险公司详情
-   * @param string broker_company_id 编号
-   * @returns Observable<BrokerageEntity>
-   */
-  public requestInsuranceDetail(ic_id: string): Observable<InsuranceEntity> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/admin/insurance/${ic_id}`
-    ).pipe(map(res => InsuranceEntity.Create(res.body)));
-  }
-
-  /**
-   * 编辑经纪公司信息
-   * @param params 参数列表
-   * @param broker_company_id 经纪公司id
-   * @returns Observable<HttpResponse<any>>
-   */
-  public requestModifyBrokerage(params: UpdateBrokerageEntity, broker_company_id: string): Observable<HttpResponse<any>> {
-    return this.httpService.put(environment.OPERATION_SERVE + `/admin/broker/${broker_company_id}`, params.json());
-  }
-
-  /**
-   * 新建保险公司信息
-   * @param params 参数列表
-   * @param application_id 应用id
-   * @returns Observable<HttpResponse<any>>
-   */
-  public requestAddInsurance(params: UpdateInsueranceEntity): Observable<HttpResponse<any>> {
-    return this.httpService.post(environment.OPERATION_SERVE + `/admin/insurances`, params.json());
-  }
-
-  /**
-   * 编辑保险公司信息
-   * @param params 参数列表
-   * @param ic_id 保险公司id
-   * @returns Observable<HttpResponse<any>>
-   */
-  public requestModifyInsurance(params: UpdateInsueranceEntity, ic_id: string): Observable<HttpResponse<any>> {
-    return this.httpService.put(environment.OPERATION_SERVE + `/admin/insurance/${ic_id}`, params.json());
-  }
-
-
 }
-

@@ -12,7 +12,7 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'order-list', pathMatch: 'full' },
     { path: 'order-list', component: OrderListComponent },
-    { path: 'order-detail', component: OrderDetailComponent },
+    { path: 'order-detail/:upkeep_order_id', component: OrderDetailComponent },
   ]
 }];
 
