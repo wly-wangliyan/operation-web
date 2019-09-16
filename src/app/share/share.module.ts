@@ -26,6 +26,7 @@ import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe'
 import { ProjectDialogComponent } from './components/project-dialog/project-dialog.component';
 import { SelectBrandFirmComponent } from './components/select-brand-firm/select-brand-firm.component';
 import { DateClockComponent } from './components/date-clock/date-clock.component';
+import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { DateClockComponent } from './components/date-clock/date-clock.component
     ZMapSelectPointComponent,
     ProjectDialogComponent,
     SelectBrandFirmComponent,
+    SelectBrandFirmTypeComponent,
     DateClockComponent,
 
     // 管道
@@ -88,6 +90,7 @@ import { DateClockComponent } from './components/date-clock/date-clock.component
     ZMapSelectPointComponent,
     ProjectDialogComponent,
     SelectBrandFirmComponent,
+    SelectBrandFirmTypeComponent,
     DateClockComponent,
 
     // 管道

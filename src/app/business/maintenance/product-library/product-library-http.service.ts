@@ -88,7 +88,7 @@ export class MerchantEntity extends EntityBase {
   public updated_time: string = undefined;
 }
 
-export class ProjectLinkResponse extends LinkResponse {
+export class ProductLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<ProductEntity> {
     const tempList: Array<ProductEntity> = [];
     results.forEach(res => {
@@ -111,19 +111,19 @@ export class ProductLibraryHttpService {
    * 获取产品/配件列表
    * @param searchParams 条件检索参数
    */
-  public requestProjectListData(searchParams: SearchParams): Observable<ProjectLinkResponse> {
+  public requestProductListData(searchParams: SearchParams): Observable<ProductLinkResponse> {
     const httpUrl = `${this.domain}/upkeep_accessories`;
     return this.httpService.get(httpUrl, searchParams.json())
-      .pipe(map(res => new ProjectLinkResponse(res)));
+      .pipe(map(res => new ProductLinkResponse(res)));
   }
 
   /**
    * 通过linkUrl继续请求产品(服务、配件）配件列表
    * @param string url linkUrl
-   * @returns Observable<ProjectLinkResponse>
+   * @returns Observable<ProductLinkResponse>
    */
-  public continueProjectListData(url: string): Observable<ProjectLinkResponse> {
-    return this.httpService.get(url).pipe(map(res => new ProjectLinkResponse(res)));
+  public continueProductListData(url: string): Observable<ProductLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new ProductLinkResponse(res)));
   }
 
   /**

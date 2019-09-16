@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { MaintenanceManualHttpService, SearchParams } from '../maintenance-manual-http.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
@@ -132,31 +132,31 @@ export class ManualListComponent implements OnInit {
       }
     }
     if (this.importViewModel.checkFormDataValid()) {
-      /* this.progressModalComponent.openOrClose(true);
-       this.importSpotSubscription = this.setBerthService.requestImportSpot(
-           this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
-         $('#dataImportModal').modal('hide');
-         this.globalService.promptBox.open('名单导入成功！', () => {
-           this.importViewModel.initImportData();
-           $('#importBerthPromptDiv').modal('hide');
-           this.progressModalComponent.openOrClose(false);
-         }, -1);
-       }, err => {
-         this.progressModalComponent.openOrClose(false);
-         timer(300).subscribe(() => {
-           if (!this.globalService.httpErrorProcess(err)) {
-             if (err.status === 422) {
-               const tempErr = JSON.parse(err.responseText);
-               const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-               if (error.resource === 'file' && error.code === 'missing') {
-                 this.globalService.promptBox.open('泊位文件不能为空！');
-               } else {
-                 this.globalService.promptBox.open('泊位文件错误');
-               }
-             }
-           }
-         });
-       });*/
+      this.progressModalComponent.openOrClose(true);
+      this.importSpotSubscription = this.manualService.requestImportManual(
+        this.importViewModel.type, this.importViewModel.file).subscribe(() => {
+          $('#dataImportModal').modal('hide');
+          this.globalService.promptBox.open('导入成功！', () => {
+            this.importViewModel.initImportData();
+            $('#importManualPromptDiv').modal('hide');
+            this.progressModalComponent.openOrClose(false);
+          }, -1);
+        }, err => {
+          this.progressModalComponent.openOrClose(false);
+          timer(300).subscribe(() => {
+            if (!this.globalService.httpErrorProcess(err)) {
+              if (err.status === 422) {
+                const tempErr = JSON.parse(err.responseText);
+                const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+                if (error.field === 'FILE' && error.code === 'invalid') {
+                  this.globalService.promptBox.open('导入文件不能为空！');
+                } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+                  this.globalService.promptBox.open('文件格式错误！');
+                }
+              }
+            }
+          });
+        });
     }
   }
 

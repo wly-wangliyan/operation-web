@@ -10,7 +10,7 @@
                     <span>所属企业</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" name="company_name" readonly>
+                    <input class="form-control" [(ngModel)]="company_name" name="company_name" readonly>
                 </div>
             </div>
             <div class="row">
@@ -35,7 +35,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row" style="height: 120px; margin-top: -5px;">
+            <div class="row" style="height: 110px">
                 <label class=" control-label">
                     <b>*</b>
                     <span>商家图片</span>
@@ -67,8 +67,8 @@
                     <b>*</b>
                     <span>门店地址</span>
                 </label>
-                <div class="control-input" style="width: 530px!important;">
-                    <app-pro-city-dist-select [selectContainerWidth]="320" #projectInfoPro></app-pro-city-dist-select>
+                <div class="control-input" style="width: 540px!important;">
+                    <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
                     <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" readonly>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                     <span>地图坐标</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、,' + currentBusiness.lat" name="lon" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon" readonly>
                     <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
                 </div>
             </div>
@@ -89,13 +89,13 @@
                 </label>
                 <div class="control-input">
                     <button class="common-btn" style="border-left: 1px solid #d9d9d9" nz-button
-                            (click)="openMapModal()">{{brandList.length===0?'选择':'重新选择'}}</button>
+                            (click)="openChooseBrandModal()">{{currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length===0?'选择':'重新选择'}}</button>
                 </div>
             </div>
-            <div class="brand-list" *ngIf="brandList.length>0">
-                <nz-table [nzData]="brandList"
+            <div class="brand-list" *ngIf="currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length>0">
+                <nz-table [nzData]="currentBusiness.VehicleFirm"
                           [nzShowPagination]="false"
-                          [nzPageSize]="brandList.length"
+                          [nzPageSize]="currentBusiness.VehicleFirm.length"
                           #basicTable>
                     <thead>
                     <tr>
@@ -106,8 +106,8 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
-                        <td>{{data.UpkeepCompany?.company_name}}</td>
-                        <td>{{data.service_telephone}}</td>
+                        <td>{{data.vehicle_brand.vehicle_brand_name}}</td>
+                        <td>{{data.vehicle_firm_name}}</td>
                         <td class="operation">
                             <a [title]="'移除'" (click)="onDelBrandClick(data)">移除</a>
                         </td>
@@ -161,3 +161,5 @@
 
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
+<!--选择品牌厂商控件-->
+<app-select-brand-firm [selectedBrand]="" [selectedFirm]="" [multi]="true"></app-select-brand-firm>

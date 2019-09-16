@@ -40,27 +40,27 @@ export class BusinessListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.searchText$.pipe(
-    //     debounceTime(500),
-    //     switchMap(() =>
-    //         this.businessManagementService.requestUpkeepMerchantList(this.searchParams))
-    // ).subscribe(res => {
-    //   this.businessList = res.results;
-    //   this.linkUrl = res.linkUrl;
-    //   this.noResultText = '暂无数据';
-    // }, err => {
-    //   this.globalService.httpErrorProcess(err);
-    // });
-    // this.searchText$.next();
-    const temp = [];
-    temp.push({aa: '1', bb: '2'});
-    this.businessList = temp;
+    this.searchText$.pipe(
+        debounceTime(500),
+        switchMap(() =>
+            this.businessManagementService.requestUpkeepMerchantList(this.searchParams))
+    ).subscribe(res => {
+      this.businessList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchText$.next();
+    // const temp = [];
+    // temp.push({aa: '1', bb: '2'});
+    // this.businessList = temp;
   }
 
   // 进入编辑商家页面
   public onEditBtnClick(data: UpkeepMerchantEntity) {
     this.router.navigate(['/main/maintenance/business-management/edit'],
-        { queryParams: {upkeepMerchant: data} });
+        { queryParams: {upkeep_merchant_id: data.upkeep_merchant_id} });
   }
 
   // 翻页方法
@@ -78,18 +78,18 @@ export class BusinessListComponent implements OnInit {
     }
   }
   public onSearchBtnClick() {
-
+    this.searchText$.next();
   }
 
   // 进入运营页面
-  public onOperationBtnClick(data) {
+  public onOperationBtnClick(data: UpkeepMerchantEntity) {
     this.router.navigate(['/main/maintenance/business-management/operation-configuration'],
-        { queryParams: {} });
+        { queryParams: {upkeep_merchant_id: data.upkeep_merchant_id} });
   }
 
   // 开启、关闭营业状态
   public onSwitchChange(upkeep_merchant_id, event) {
-    const swith = event ? 'True' : 'False';
+    const swith = event ? true : false;
     const params = {status: swith};
     this.businessManagementService.requestUpkeepMerchants(upkeep_merchant_id, params).subscribe(res => {
       if (event) {

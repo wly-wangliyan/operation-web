@@ -113,7 +113,7 @@
 
 .brand-list {
     float: left;
-    margin: 10px 0 0 10px;
+    margin: 8px 0 0 10px;
     height: 100%;
     overflow: auto;
 }
@@ -123,7 +123,8 @@
     list-style:none;
     width: 178px;
     height: 60px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    margin-top: 2px;
     vertical-align: middle;
     text-align: center;
     line-height: 60px;

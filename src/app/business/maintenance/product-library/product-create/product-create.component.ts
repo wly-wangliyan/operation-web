@@ -6,6 +6,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity } from '../product-library-http.service';
 import { ProjectDialogComponent } from '../../../../share/components/project-dialog/project-dialog.component';
 import { ProjectCategory } from '../../../../share/pipes/project-type.pipe';
+import { SelectBrandFirmComponent } from '../../../../share/components/select-brand-firm/select-brand-firm.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -58,13 +59,15 @@ export class ProductCreateComponent implements OnInit {
 
   public selectedProjectid: number; // 所属项目》所属项目 》项目id
 
-  public selected_info: string; // 所属项目信息
+  public selected_project_info: string; // 所属项目信息
+
+  public selected_brand_firm_info: string; // 所属厂商信息
 
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild(ProjectDialogComponent, { static: true }) public projectDialogComponent: ProjectDialogComponent;
-
+  @ViewChild(SelectBrandFirmComponent, { static: true }) public selectBrandFirmComponent: SelectBrandFirmComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -110,8 +113,25 @@ export class ProductCreateComponent implements OnInit {
   public onSelectedProject(event: any) {
     if (event) {
       this.selectedProjectid = event.project.upkeep_item_id;
+      this.productRecord.upkeep_item_id = event.project.upkeep_item_id;
       this.selectedCategory = event.category;
-      this.selected_info = this.projectCategory[event.category] + ' > ' + event.project.upkeep_item_name;
+      this.selected_project_info = this.projectCategory[event.category] + ' > ' + event.project.upkeep_item_name;
+    }
+  }
+
+  // 打开所属厂商选择组件
+  public onOpenBrandFirmModal() {
+    this.selectBrandFirmComponent.open();
+  }
+
+  // 选择所属厂商回调函数
+  public onSelectedBrandFirm(event: any) {
+    if (event && event.firm) {
+      const firm = event.firm[0].source;
+      const brand = firm.vehicle_brand;
+      this.productRecord.vehicle_brand_id = brand.vehicle_brand_id;
+      this.productRecord.vehicle_firm_id = firm.vehicle_firm_id;
+      this.selected_brand_firm_info = brand.vehicle_brand_name + ' > ' + firm.vehicle_firm_name;
     }
   }
 

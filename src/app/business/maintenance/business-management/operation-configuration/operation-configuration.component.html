@@ -1,6 +1,6 @@
 <div class="content-header">
     <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家运营配置'" [level2RelativePath]="'../'"></app-crumb>
-    <ul class="header-right">
+    <ul class="header-right" *ngIf="tabIndex===1">
         <li class="big-bg">
             <a (click)="onAddClick()">新建</a>
         </li>
@@ -46,7 +46,7 @@
         </div>
         <div class="table-container">
             <div class="zmy-table">
-                <nz-table [nzData]="businessList"
+                <nz-table [nzData]="productList"
                           [nzShowPagination]="true"
                           [nzNoResult]="noResultText"
                           [nzPageSize]="'15'"
@@ -69,20 +69,19 @@
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
                         <td>{{i+(pageIndex-1)*15+1}}</td>
-                        <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
-                        <td>{{data.account}}</td>
-                        <td>{{data.telephone}}</td>
-                        <td>{{data.telephone}}</td>
+                        <td [title]="data.VehicleBrand.vehicle_brand_name">{{data.VehicleBrand.vehicle_brand_name|zMaxLength:20}}</td>
+                        <td>{{data.VehicleType.VehicleFirm.vehicle_firm_name}}</td>
+                        <td>{{data.VehicleType.VehicleSeries.vehicle_series_name}}</td>
+                        <td>{{data.VehicleType.vehicle_type_name}}</td>
                         <td>{{data.telephone}}</td>
                         <td>{{data.telephone}}</td>
                         <td>{{data.telephone}}</td>
                         <td>{{data.telephone}}</td>
                         <td class="operation">
                             <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
-                            <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
-                            <a [title]="'下架'" (click)="onEditBtnClick(data)">下架</a>
-                            <a [title]="'复制'" (click)="onEditBtnClick(data)">复制</a>
-                            <a [title]="'删除'" (click)="onEditBtnClick(data)">删除</a>
+                            <a [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>
+                            <!--<a [title]="'复制'" (click)="onEditBtnClick(data)">复制</a>-->
+                            <a [title]="'删除'" (click)="onDelBtnClick(data)">删除</a>
                         </td>
                     </tr>
                     </tbody>
@@ -101,18 +100,16 @@
                         <span class="booking-time-center"> - </span>
                         <app-date-clock [has24]="true" [(hour)]="item.end_time.hour" [(minute)]="item.end_time.minute"
                                         [readonly]="!item.isEdit"></app-date-clock>
-                        <!--<nz-time-picker [(ngModel)]="item.begin_time" [nzDefaultOpenValue]="defaultOpenValue"></nz-time-picker>
-                        <span class="booking-time-center"> - </span>
-                        <nz-time-picker [(ngModel)]="item.end_time" [nzDefaultOpenValue]="defaultOpenValue"></nz-time-picker>-->
                     </div>
                     <label>加价</label>
-                    <input class="form-control" type="number" name="price" [disabled]="!item.isEdit">
+                    <input class="form-control" type="number" [(ngModel)]="item.operation_time_amount" name="price" (keypress)="inputNumberLimit($event)" [disabled]="!item.isEdit">
                     <span style="float:left">元</span>
                     <div style="float:left;margin-left: 61px">
                         <button class="close-btn" nz-button (click)="onTimeAddBtn()">添加</button>
                         <button *ngIf="i > 0" class="close-btn" nz-button (click)="onTimeDelBtn(i)">移除</button>
                         <button *ngIf="!item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="item.isEdit=true">编辑</button>
-                        <button *ngIf="item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="onTimeSaveBtn(item)">保存</button>
+                        <button *ngIf="item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="onTimeSaveBtn(item);item.isEdit=false"
+                        [disabled]="!item.operation_time_amount">保存</button>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
@@ -120,3 +117,5 @@
         </div>
     </div>
 </div>
+<!--选择品牌厂商车型控件-->
+<app-select-brand-firm-type [selectedBrand]="" [selectedFirm]="" [multi]="true" (selectBrandFirm)="onEditBtnClick($event, false)"></app-select-brand-firm-type>

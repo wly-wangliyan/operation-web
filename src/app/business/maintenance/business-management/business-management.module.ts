@@ -7,6 +7,8 @@ import { BusinessListComponent } from './business-list/business-list.component';
 import { BusinessEditComponent } from './business-edit/business-edit.component';
 import { OperationConfigurationComponent } from './operation-configuration/operation-configuration.component';
 import { OperationConfigurationDetailComponent } from './operation-configuration/operation-configuration-detail/operation-configuration-detail.component';
+import { OperationConfigurationEditComponent } from './operation-configuration/operation-configuration-edit/operation-configuration-edit.component';
+import { ChooseAccessoryComponent } from './operation-configuration/operation-configuration-edit/choose-accessory/choose-accessory.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { OperationConfigurationDetailComponent } from './operation-configuration
     BusinessListComponent,
     BusinessEditComponent,
     OperationConfigurationComponent,
-    OperationConfigurationDetailComponent],
+    OperationConfigurationDetailComponent,
+    OperationConfigurationEditComponent,
+    ChooseAccessoryComponent],
   imports: [
     ShareModule,
     CommonModule,

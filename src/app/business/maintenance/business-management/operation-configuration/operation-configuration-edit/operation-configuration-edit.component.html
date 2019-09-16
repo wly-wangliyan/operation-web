@@ -1,0 +1,117 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家运营配置管理'" [level3Name]="'查看产品'" [level2RelativePath]="'../'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="content-main">
+        <img src="/assets/images/manual/icon_vehicle.png">
+        <div class="vehicle-space">
+            <label>宝马</label>
+            <label>宝马</label>
+            <label>宝马</label>
+            <label>宝马</label>
+            <label>宝马</label>
+        </div>
+        <div *ngFor="let data of projectList;let i=index">
+            <img *ngIf="i===0" src="/assets/images/manual/icon_category1.png">
+            <img *ngIf="i===1" src="/assets/images/manual/icon_category2.png">
+            <img *ngIf="i===2" src="/assets/images/manual/icon_category3.png">
+            <div class="maintenance-space">
+                <span class="maintenance-title">配件</span>
+                <span style="margin-left: 10px">机油</span>
+                <button nz-button nzType="primary" (click)="onChooseAccessory()">选择配件</button>
+                <div class="maintenance-price">
+                    <label>工时费</label>
+                    <input class="form-control" name="telephone" type="number">元
+                    <img src="/assets/images/icon_up.png">
+                </div>
+            </div>
+            <li class="space-width" *ngFor="let item of accessoryList;let i=index;">
+                <img [src]="'/assets/images/image_space.png'">
+                <div style="margin-top: 20px">
+                    <div class="maintenance-content">
+                        <b>*</b>
+                        <span>配件名称</span>
+                        <input class="form-control" name="telephone" readonly>
+                        <b>*</b>
+                        <span>是否原厂</span>
+                        <input class="form-control" name="telephone" readonly>
+                    </div>
+                    <div class="maintenance-content">
+                        <b>&nbsp;</b>
+                        <span>所属厂商</span>
+                        <input class="form-control" name="telephone" readonly>
+                        <b>&nbsp;</b>
+                        <span>零件编号</span>
+                        <input class="form-control" name="telephone" readonly>
+                    </div>
+                    <div class="maintenance-content">
+                        <b>*</b>
+                        <span>配件原价</span>
+                        <input class="form-control" name="telephone" readonly>
+                        <b>&nbsp;</b>
+                        <span>规格</span>
+                        <input class="form-control" name="telephone" readonly>
+                    </div>
+                    <div class="maintenance-content">
+                        <b>*</b>
+                        <span>所需数量</span>
+                        <input class="form-control" type="number" name="telephone">
+                        <b>*</b>
+                        <span>销售单价</span>
+                        <input class="form-control" type="number" name="telephone">
+                    </div>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="1">编辑
+                    </button>
+                    <button class="close-btn" nz-button (click)="1">移除</button>
+                </div>
+            </li>
+            <div style="clear: both"></div>
+            <div class="maintenance-space">
+                <span class="serve-title">服务</span>
+                <span style="margin-left: 10px">机油滤芯清洗</span>
+                <button nz-button nzType="primary" style="margin-left: 76.5%">选择服务</button>
+                <div class="maintenance-price">
+                    <img src="/assets/images/icon_up.png">
+                </div>
+            </div>
+            <li class="space-width space-height" *ngFor="let item of accessoryList;let i=index;">
+                <img [src]="'/assets/images/image_space.png'">
+                <div style="margin-top: 20px">
+                    <div class="maintenance-content">
+                        <b>*</b>
+                        <span>服务名称</span>
+                        <input class="form-control" style="width: 398px" name="telephone" readonly>
+                    </div>
+                    <div class="maintenance-content">
+                        <b>*</b>
+                        <span>服务原价</span>
+                        <input class="form-control" name="telephone" readonly>
+                        <b>*</b>
+                        <span>销售单价</span>
+                        <input class="form-control" type="number" name="telephone">
+                    </div>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="1">编辑
+                    </button>
+                    <button class="close-btn" nz-button (click)="1">移除</button>
+                </div>
+            </li>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+</div>
+
+<!--选择配件-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #chooseAccessoryPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <app-choose-accessory></app-choose-accessory>
+            <button class="sure-btn" nz-button nzType="primary"
+                    (appZDebounceClick)="1">新建配件
+            </button>
+            <button class="close-btn" nz-button (click)="onClose()">关闭</button>
+        </div>
+    </div>
+</div>

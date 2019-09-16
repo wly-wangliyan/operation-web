@@ -1,0 +1,8 @@
+.search-container {
+    border: none!important;
+    padding: 0!important;
+}
+
+.search-form .form-group {
+    margin-right: 30px;
+}

@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { GlobalService } from '../../../../core/global.service';
-import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../../../business-management.service';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { BusinessEditComponent } from '../../../business-edit/business-edit.component';
+import { GlobalService } from '../../../../../../core/global.service';
+import { Router } from '@angular/router';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { ProductEntity, ProductLibraryHttpService, SearchParams } from '../../../../product-library/product-library-http.service';
 
 const PageSize = 15;
 
 @Component({
-  selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  selector: 'app-choose-accessory',
+  templateUrl: './choose-accessory.component.html',
+  styleUrls: ['./choose-accessory.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ChooseAccessoryComponent implements OnInit {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
@@ -35,14 +37,12 @@ export class ProductListComponent implements OnInit {
     return this.productList.length / PageSize + 1;
   }
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private globalService: GlobalService,
-    private productLibraryService: ProductLibraryHttpService
-  ) { }
+  constructor(private globalService: GlobalService,
+              private productLibraryService: ProductLibraryHttpService,
+              private router: Router) {
+  }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.productList.push(new ProductEntity());
     this.generateProductList();
   }
@@ -71,37 +71,23 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  /** 删除产品 */
-  public onDeleteProgect(data: ProductEntity) {
-    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
-      this.globalService.confirmationBox.close();
-      this.productLibraryService.requestDeleteProductData(data.upkeep_accessory_id).subscribe(res => {
-        this.globalService.promptBox.open('删除成功');
-        this.searchText$.next();
-      }, err => {
-        this.globalService.httpErrorProcess(err);
-      });
-    });
-  }
-
+  // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.productLibraryService.continueProductListData(this.linkUrl)
-        .subscribe(res => {
-          this.productList = this.productList.concat(res.results);
-          this.linkUrl = res.linkUrl;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+          .subscribe(res => {
+            this.productList = this.productList.concat(res.results);
+            this.linkUrl = res.linkUrl;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
     }
   }
 
-  // 重置当前页码
-  private initPageIndex() {
-    this.pageIndex = 1;
+  public onSearchBtnClick() {
+    this.searchText$.next();
   }
-
 }
