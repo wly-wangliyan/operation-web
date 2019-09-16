@@ -32,11 +32,9 @@
     float: left;
 }
 
-
 .control-label span{
     float: left;
 }
-
 
 .control-input{
     display: flex!important;
@@ -49,6 +47,10 @@
     margin-bottom:0!important;
 }
 
+.control-input img {
+    width: 100px;
+    height: 100px;
+}
 
 .form-control{
     font-size: 14px!important;

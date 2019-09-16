@@ -122,8 +122,6 @@ export class VehicleTypeManagementService {
         return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_brands/${vehicle_brand_id}/vehicle_firms`)
             .pipe(map(data => {
                 const tempResults = data.body;
-                // const results = [];
-                // results.push(VehicleFirmEntity.Create(tempResults));
                 return tempResults;
             }));
     }
@@ -136,8 +134,6 @@ export class VehicleTypeManagementService {
         return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_firms/${vehicle_firms_id}/vehicle_series`)
             .pipe(map(data => {
                 const tempResults = data.body;
-                // const results = [];
-                // results.push(VehicleSeriesEntity.Create(tempResults));
                 return tempResults;
             }));
     }
@@ -150,8 +146,6 @@ export class VehicleTypeManagementService {
         return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_series/${vehicle_series_id}/vehicle_types`)
             .pipe(map(data => {
                 const tempResults = data.body;
-                // const results = [];
-                // results.push(VehicleTypeEntity.Create(tempResults));
                 return tempResults;
             }));
     }

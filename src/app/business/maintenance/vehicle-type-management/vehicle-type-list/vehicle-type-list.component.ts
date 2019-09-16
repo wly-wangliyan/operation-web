@@ -3,7 +3,6 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
-import { LocalStorageProvider } from '../../../../share/localstorage-provider';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import {
@@ -26,6 +25,7 @@ export class VehicleTypeListComponent implements OnInit {
   public vehicleTypeList: Array<VehicleTypeEntity> = [];
   public vehicle_brand_id: string;
   public index = 0;
+  public importMsg = '';
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -46,11 +46,10 @@ export class VehicleTypeListComponent implements OnInit {
             this.vehicleTypeManagementService.requestVehicleBrandList())
     ).subscribe(res => {
       this.vehicleBrandList = res.results;
-      this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
       if (this.vehicleBrandList.length > 0) {
+        this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
         this.requestVehicleFirmsList(this.vehicleBrandList[0].vehicle_brand_id);
       }
-      LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, this.vehicleBrandList);
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -106,12 +105,11 @@ export class VehicleTypeListComponent implements OnInit {
 
   /* 导入数据 */
   public onSubmitImportBerth() {
-    LocalStorageProvider.Instance.setObject(LocalStorageProvider.VehicleList, []);
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
-      if (type !== '.csv') {
+      if (type !== '.xlsx' && type !== '.csv') {
         this.globalService.promptBox.open('文件格式错误！');
         return;
       }
@@ -119,12 +117,13 @@ export class VehicleTypeListComponent implements OnInit {
     if (this.importViewModel.checkFormDataValid()) {
       this.progressModalComponent.openOrClose(true);
       this.importSpotSubscription = this.vehicleTypeManagementService.requestImportVehicle(
-          this.importViewModel.type, this.importViewModel.file).subscribe(() => {
+          this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+        this.progressModalComponent.openOrClose(false);
         $('#dataImportModal').modal('hide');
-        this.globalService.promptBox.open('导入成功！', () => {
+        const date = JSON.parse(res.response);
+        this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
           this.importViewModel.initImportData();
           $('#importBerthPromptDiv').modal('hide');
-          this.progressModalComponent.openOrClose(false);
         }, -1);
       }, err => {
         this.progressModalComponent.openOrClose(false);
@@ -137,6 +136,8 @@ export class VehicleTypeListComponent implements OnInit {
                 this.globalService.promptBox.open('导入文件不能为空！');
               } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
                 this.globalService.promptBox.open('文件格式错误！');
+              } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+                this.globalService.promptBox.open('文件超过限长！');
               }
             }
           }
@@ -158,16 +159,6 @@ export class VehicleTypeListComponent implements OnInit {
 
   // 删除车型
   public onDeleteVehicleClick() {
-    let sizeStore = 0;
-    if (window.localStorage) {
-      // 遍历所有存储
-      for (const item in window.localStorage) {
-        if (window.localStorage.hasOwnProperty(item)) {
-          sizeStore += window.localStorage.getItem(item).length;
-        }
-      }
-    }
-    console.log((sizeStore / 1024 / 1024).toFixed(2) + 'M');
     this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       /*this.versionManagementService.requestDeleteVersion(data.version_id).subscribe((e) => {

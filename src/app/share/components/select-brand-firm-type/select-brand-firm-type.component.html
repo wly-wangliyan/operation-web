@@ -1,0 +1,70 @@
+<!--选择所属项目-->
+<div class="modal fade" id="selectBrandFirmModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="content-box">
+        <div class="content-left">
+          <div class="content-title">品牌</div>
+          <div class="content-list">
+            <div class="leter-list">
+              <ul>
+                <li *ngFor="let leter of letter_list">{{leter}}</li>
+              </ul>
+            </div>
+            <ul>
+              <li *ngFor="let vehicleBrand of vehicleBrandList" (click)="onBrandClick(vehicleBrand)"
+                [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
+                <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
+                {{vehicleBrand.vehicle_brand_name}}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="content-left">
+          <div class="content-title">车系</div>
+          <div class="content-list">
+            <ng-container *ngIf="vehicleSeriesItem && vehicleSeriesItem.length > 0">
+              <ul>
+                <li *ngFor="let vehicleSeries of vehicleSeriesItem">
+                  <input id="serie_{{vehicleSeries.source.vehicle_series_id}}" (change)="onChangeFirmCheck(onChangeSeriesCheck)"
+                    [(ngModel)]="vehicleSeries.checked" type="checkbox" />
+                  <label
+                    for="serie_{{vehicleSeries.source.vehicle_series_id}}">{{vehicleSeries.source.vehicle_series_id}}</label>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="!vehicleSeriesItem || vehicleSeriesItem.length === 0">
+              <div class="no-data">暂无数据</div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="content-right">
+          <div class="content-title">车型名称</div>
+          <div class="content-list">
+            <ng-container *ngIf="vehicleTypeItem && vehicleTypeItem.length > 0">
+              <ul>
+                <li *ngFor="let vehicleType of vehicleTypeItem">
+                  <input id="type_{{vehicleType.source.vehicle_type_id}}" (change)="onChangeFirmCheck(vehicleType)"
+                         [(ngModel)]="vehicleType.checked" type="checkbox" />
+                  <label
+                          for="type_{{vehicleType.source.vehicle_type_id}}">{{vehicleType.source.vehicle_type_id}}</label>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="!vehicleTypeItem || vehicleTypeItem.length === 0">
+              <div class="no-data">暂无数据</div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <p class="tip-msg">{{tipMsg}}</p>
+      <div class="modal-footer">
+        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectEmit()">
+          下一步，编辑产品
+        </button>
+        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>

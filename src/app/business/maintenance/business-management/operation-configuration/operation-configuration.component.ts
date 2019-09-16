@@ -3,9 +3,16 @@ import { Subject, Subscription } from 'rxjs';
 import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { GlobalService } from '../../../../core/global.service';
 import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { DateFormatHelper } from '../../../../../utils/date-format-helper';
+import {
+  BusinessManagementService,
+  SearchUpkeepProductParams,
+  UpkeepMerchantOperation,
+  UpkeepMerchantProductEntity
+} from '../business-management.service';
+import { SelectBrandFirmTypeComponent } from '../../../../share/components/select-brand-firm-type/select-brand-firm-type.component';
 
 const PageSize = 15;
 
@@ -16,31 +23,36 @@ const PageSize = 15;
 })
 export class OperationConfigurationComponent implements OnInit {
 
-  public searchParams = {};
-  public businessList: any;
+  public searchParams = new SearchUpkeepProductParams();
+  public productList: Array<UpkeepMerchantProductEntity>;
   public pageIndex = 1;
   public noResultText = '数据加载中...';
   public tabIndex = 1;
   public bookingTimes = [];
-  public time: Date | null = null;
-  public defaultOpenValue = new Date(0, 0, 0, 0, 0, 0);
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
+  private upkeep_merchant_id: string;
 
   @ViewChild(BusinessEditComponent, {static: true}) public businessEditComponent: BusinessEditComponent;
+  @ViewChild(SelectBrandFirmTypeComponent, {static: true}) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
 
   private get pageCount(): number {
-    if (this.businessList.length % PageSize === 0) {
-      return this.businessList.length / PageSize;
+    if (this.productList.length % PageSize === 0) {
+      return this.productList.length / PageSize;
     }
-    return this.businessList.length / PageSize + 1;
+    return this.productList.length / PageSize + 1;
   }
 
   constructor(private globalService: GlobalService,
               private insuranceService: InsuranceService,
-              private router: Router) {
+              private businessManagementService: BusinessManagementService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
+    activatedRoute.queryParams.subscribe(queryParams => {
+      this.upkeep_merchant_id = queryParams.upkeep_merchant_id;
+    });
   }
 
   ngOnInit() {
@@ -52,16 +64,9 @@ export class OperationConfigurationComponent implements OnInit {
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>
-            this.insuranceService.requestBrokerageList())
+            this.businessManagementService.requestUpkeepProductList(this.upkeep_merchant_id, this.searchParams))
     ).subscribe(res => {
-      this.businessList = res.results;
-      this.businessList.forEach(value => {
-        const ic_company_name = [];
-        value.ic_company.forEach(value1 => {
-          ic_company_name.push(value1.ic_name);
-        });
-        value.ic_company_name = ic_company_name.join(',');
-      });
+      this.productList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -71,9 +76,22 @@ export class OperationConfigurationComponent implements OnInit {
   }
 
   // 显示添加编辑项目modal
-  public onEditBtnClick(data: BrokerageEntity) {
-    this.router.navigate(['/main/maintenance/business-management/edit'],
-        { queryParams: {} });
+  public onEditBtnClick(data, isEdit) {
+    this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
+        { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
+    /*if (isEdit) {
+      this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
+          { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
+    } else {
+      this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, '7d9023dfd52b11e995d0309c23a2312b').subscribe(() => {
+        this.globalService.promptBox.open('修改成功！', () => {
+          this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
+              { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
+        });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }*/
   }
 
   // 翻页方法
@@ -82,8 +100,8 @@ export class OperationConfigurationComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.insuranceService.continueBrokerageList(this.linkUrl).subscribe(res => {
-        this.businessList = this.businessList.concat(res.results);
+      this.continueRequestSubscription = this.businessManagementService.continueUpkeepProductList(this.linkUrl).subscribe(res => {
+        this.productList = this.productList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -91,49 +109,123 @@ export class OperationConfigurationComponent implements OnInit {
     }
   }
   public onSearchBtnClick() {
-
+    this.searchText$.next();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 切换Tab
   public onTabClicked(index) {
     this.tabIndex = index;
+    if (index === 2) {
+      this.bookingTimes = [];
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription =
+          this.businessManagementService.requestUpkeepMerchantOperationList(this.upkeep_merchant_id).subscribe(res => {
+            res.forEach(value => {
+              const timeObj = {
+                begin_time: DateFormatHelper.getMinuteOrTime(value.start_time),
+                end_time: DateFormatHelper.getMinuteOrTime(value.end_time),
+                upkeep_merchant_operation_id: value.upkeep_merchant_operation_id,
+                operation_time_amount: value.operation_time_amount,
+                isEdit: false
+              };
+              this.bookingTimes.push(timeObj);
+            });
+            if (res.length === 0) {
+              const timeObj = {
+                begin_time: DateFormatHelper.getMinuteOrTime(28800),
+                end_time: DateFormatHelper.getMinuteOrTime(64800),
+                isEdit: false
+              };
+              this.bookingTimes.push(timeObj);
+            }
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    }
   }
 
-  onChange(result: Date): void {
-    console.log('Selected Time: ', result);
-  }
-
-  onOk(result: Date): void {
-    console.log('onOk', result);
-  }
-
+  // 创建产品
   public onAddClick() {
-
+    this.selectBrandFirmTypeComponent.open();
   }
 
   // 查看详情
-  public onDetailBtnClick() {
+  public onDetailBtnClick(data) {
     this.router.navigate(['/main/maintenance/business-management/operation-configuration/detail'],
         { queryParams: {} });
   }
 
   // 删除预定时间段
   public onTimeDelBtn(index) {
-    this.bookingTimes.splice(index, 1);
+    this.globalService.confirmationBox.open('警告', '此操作不可逆，确认要删除吗？', () => {
+      this.globalService.confirmationBox.close();
+      if (!this.bookingTimes[index].upkeep_merchant_operation_id) {
+        this.bookingTimes.splice(index, 1);
+      } else {
+        this.businessManagementService.requestDeleteUpkeepOperation(this.upkeep_merchant_id, this.bookingTimes[index].upkeep_merchant_operation_id)
+            .subscribe((e) => {
+              this.bookingTimes = this.bookingTimes.
+              filter(version => version.upkeep_merchant_operation_id !== this.bookingTimes[index].upkeep_merchant_operation_id);
+            }, err => {
+              this.globalService.httpErrorProcess(err);
+            });
+      }
+    });
   }
 
   // 添加预定时间段
   public onTimeAddBtn() {
-    const screenOpenObj = {
+    const timeObj = {
       begin_time: DateFormatHelper.getMinuteOrTime(0),
       end_time: DateFormatHelper.getMinuteOrTime(0),
       isEdit: false
     };
-    this.bookingTimes.push(screenOpenObj);
+    this.bookingTimes.push(timeObj);
   }
 
   // 保存预定时间段
   public onTimeSaveBtn(data) {
+    const params = {
+      start_time: DateFormatHelper.getSecondTimeSum(data.begin_time),
+      end_time: DateFormatHelper.getSecondTimeSum(data.end_time),
+      operation_time_amount: data.operation_time_amount
+    };
+    if (data.upkeep_merchant_operation_id) {
+      // 调用编辑接口
+      this.businessManagementService.requestUpdateUpkeepOperation(this.upkeep_merchant_id, data.upkeep_merchant_operation_id, params)
+          .subscribe((e) => {
+            this.globalService.promptBox.open('保存成功！');
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    } else {
+      // 调用创建接口
+      this.businessManagementService.requestAddUpkeepOperation(this.upkeep_merchant_id, params)
+          .subscribe((e) => {
+            this.globalService.promptBox.open('保存成功！');
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    }
+  }
 
+  // 限制input[type='number']输入e
+  public inputNumberLimit(event: any): boolean {
+    const reg = /[\d]/;
+    const keyCode = String.fromCharCode(event.keyCode);
+    return (keyCode && reg.test(keyCode));
+  }
+
+  // 删除商家
+  public onDelBtnClick(data: UpkeepMerchantProductEntity) {
+    this.globalService.confirmationBox.open('警告', '此操作不可逆，是否确认删除？', () => {
+      this.globalService.confirmationBox.close();
+      this.businessManagementService.requestDeleteUpkeepProduct(this.upkeep_merchant_id, data.upkeep_merchant_product_id).subscribe((e) => {
+        this.productList = this.productList.filter(v => v.upkeep_merchant_product_id !== data.upkeep_merchant_product_id);
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    });
   }
 }
