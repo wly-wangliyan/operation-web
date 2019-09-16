@@ -13,6 +13,11 @@
   margin: 0 25px;
 }
 
+.img-item img {
+  height: 200px;
+  width: 200px;
+}
+
 .table-item {
   width: calc(100% - 200px);
   min-width: 800px;

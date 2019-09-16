@@ -99,7 +99,7 @@
           </label>
           <div class="control-input">
             <input class="form-control" placeholder="请输入名称，50字以内" [(ngModel)]="projectParams.upkeep_item_name"
-              (focus)="onClearErrMsg()" maxlength="50" name="upkeep_item_name" required>
+              (focus)="onClearErrMsg()" maxlength="50" name="upkeep_item_name" appIgnoreSpace required>
           </div>
         </div>
         <div class="row">
@@ -109,8 +109,8 @@
           </label>
           <div class="control-input">
             <input class="form-control" placeholder="请输入项目ID" [(ngModel)]="projectParams.upkeep_item_num"
-              (focus)="onClearErrMsg()" maxlength="6" oninput="value=value.replace(/[^\d]/g,'')" name="upkeep_item_num"
-              required>
+              (focus)="onClearErrMsg()" maxlength="6" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace
+              name="upkeep_item_num" required>
           </div>
         </div>
         <div class="row">

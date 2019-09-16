@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
+import { ProjectCategory } from '../../../../share/pipes/project-type.pipe';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,6 +22,12 @@ export class ProductDetailComponent implements OnInit {
   public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
 
   public productRecord: ProductEntity = new ProductEntity(); // 产品详情
+
+  private projectCategory = ProjectCategory;
+
+  public project_info: string; // 所属项目信息
+
+  public brand_firm_info: string; // 所属厂商信息
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +53,7 @@ export class ProductDetailComponent implements OnInit {
     this.productLibraryService.requestProductDetailData(this.product_id).subscribe(data => {
       this.productRecord = data;
       if (this.productRecord) {
+        this.initForm();
         if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
           if (this.productRecord.is_original) {
             this.title = this.titles[2];
@@ -59,6 +67,15 @@ export class ProductDetailComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  private initForm() {
+    this.brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
+      + this.productRecord.vehicle_firm.vehicle_firm_name) : '--';
+    this.productRecord.upkeep_item_id = this.productRecord.upkeep_item.upkeep_item_id;
+    this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;
+    this.project_info = this.productRecord.upkeep_item ? (this.projectCategory[this.productRecord.upkeep_item.upkeep_item_category] + ' > '
+      + this.productRecord.upkeep_item.upkeep_item_name) : '--';
   }
 
   // 删除产品

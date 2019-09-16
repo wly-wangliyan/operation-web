@@ -4,9 +4,9 @@
     <li class="big-bg big-white-btn" [routerLink]="['../../edit',productRecord.upkeep_accessory_id]">
       <a>编辑</a>
     </li>
-    <li class="big-bg">
+    <!-- <li class="big-bg">
       <a (click)="onDeleteClick()">删除</a>
-    </li>
+    </li> -->
   </ul>
 </div>
 <div class="content-flow">
@@ -22,11 +22,7 @@
             <td>产品名称：</td>
             <td>{{productRecord.upkeep_accessory_name ? productRecord.upkeep_accessory_name : '--'}}</td>
             <td>所属项目：</td>
-            <td *ngIf="productRecord.UpkeepItem">
-              {{productRecord.UpkeepItem.upkeep_item_category | projectCategory}} >
-              {{productRecord.UpkeepItem.upkeep_item_name}}
-            </td>
-            <td *ngIf="!productRecord.UpkeepItem">--</td>
+            <td>{{project_info}}</td>
             <td>项目类型：</td>
             <td>
               {{productRecord.upkeep_accessory_type | projectType}}
@@ -50,7 +46,7 @@
             <ng-container *ngIf="productRecord.is_original">
               <td>所属厂商：</td>
               <td>
-                {{(product.VehicleBrand.vehicle_brand_name + '>' + product.VehicleFirm.vehicle_firm_name) | zMaxLength:20}}
+                {{brand_firm_info}}
               </td>
               <td>此品牌厂商专用：</td>
               <td>
@@ -121,11 +117,7 @@
             <td>产品名称：</td>
             <td>{{productRecord.upkeep_accessory_name ? productRecord.upkeep_accessory_name : '--'}}</td>
             <td>所属项目：</td>
-            <td *ngIf="productRecord.UpkeepItem">
-              {{productRecord.UpkeepItem.upkeep_item_category | projectCategory}} >
-              {{productRecord.UpkeepItem.upkeep_item_name}}
-            </td>
-            <td *ngIf="!productRecord.UpkeepItem">--</td>
+            <td>{{project_info}}</td>
             <td>项目类型：</td>
             <td>
               {{productRecord.upkeep_accessory_type | projectType}}

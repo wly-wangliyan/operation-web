@@ -11,35 +11,35 @@ import { VehicleBrandEntity, VehicleFirmEntity } from '../vehicle-type-managemen
 // 产品
 export class ProductEntity extends EntityBase {
   public upkeep_accessory_id: string = undefined; // 保养配件库-主键ID
-  public UpkeepItem: ProjectEntity = undefined; // 所属项目
-  public VehicleBrand: VehicleBrandEntity = undefined; // 所属品牌
-  public VehicleFirm: VehicleFirmEntity = undefined; // 所属厂商
+  public upkeep_item: ProjectEntity = undefined; // 所属项目
+  public vehicle_brand: VehicleBrandEntity = undefined; // 所属品牌
+  public vehicle_firm: VehicleFirmEntity = undefined; // 所属厂商
   public upkeep_item_id: string = undefined; // 所属项目id
   public vehicle_brand_id: string = undefined; // 所属品牌ID
   public vehicle_firm_id: string = undefined; // 所属厂商ID
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
   public upkeep_accessory_name: string = undefined; // 产品名称
-  public is_original: boolean = undefined; // 是否原厂
+  public is_original = true; // 是否原厂
   public brand_instruction: string = undefined; // 品牌说明 注:原产为否填写
-  public is_brand_special: boolean = undefined; // 品牌专用
+  public is_brand_special = false; // 品牌专用
   public serial_number: string = undefined; // 零件编号
   public specification: string = undefined; // 规格
   public image_url: string = undefined; // 图片
   public original_amount: number = undefined; // 原价 单位:元
   public sale_amount: number = undefined; // 销售单价 单位:元
-  public number: number = undefined; // 所需数量 单位:件
+  public number = 1; // 所需数量 单位:件
   public upkeep_merchants: Array<any> = undefined; // 在售保养商家ID集合
   public created_time: number = undefined;
   public updated_time: string = undefined;
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'UpkeepItem') {
+    if (propertyName === 'upkeep_item') {
       return ProjectEntity;
     }
-    if (propertyName === 'VehicleBrand') {
+    if (propertyName === 'vehicle_brand') {
       return VehicleBrandEntity;
     }
-    if (propertyName === 'VehicleFirm') {
+    if (propertyName === 'vehicle_firm') {
       return VehicleFirmEntity;
     }
     return null;
@@ -75,9 +75,6 @@ export class AddProductParams extends EntityBase {
   public original_amount: number = undefined; // 原价 单位:元
   public sale_amount: number = undefined; // 销售单价 单位:元
   public number: number = undefined; // 所需数量 单位:件
-  public upkeep_merchants: Array<any> = undefined; // 在售保养商家ID集合
-  public created_time: number = undefined;
-  public updated_time: string = undefined;
 }
 
 // 保养商家
@@ -141,7 +138,7 @@ export class ProductLibraryHttpService {
    */
   public requestUpdateProductData(params: ProductEntity, upkeep_accessory_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/upkeep_accessories/${upkeep_accessory_id}`;
-    return this.httpService.post(httpUrl, params.json());
+    return this.httpService.put(httpUrl, params.json());
   }
 
   /**
