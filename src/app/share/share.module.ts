@@ -22,11 +22,12 @@ import { ZPromptBoxComponent } from './components/tips/z-prompt-box/z-prompt-box
 import { PromptBoxComponent } from './components/tips/prompt-box/prompt-box.component';
 import { ConfirmationBoxComponent } from './components/tips/confirmation-box/confirmation-box.component';
 import { ZMapSelectPointComponent } from './components/z-map-select-point/z-map-select-point.component';
-import { ProjectTypePipe, ProjectCategoryPipe } from './pipes/project-type.pipe';
+import { ProjectTypePipe, ProjectCategoryPipe, PayStatusPipe } from './pipes/project-type.pipe';
 import { ProjectDialogComponent } from './components/project-dialog/project-dialog.component';
 import { SelectBrandFirmComponent } from './components/select-brand-firm/select-brand-firm.component';
 import { DateClockComponent } from './components/date-clock/date-clock.component';
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
+import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 
 
 @NgModule({
@@ -65,6 +66,8 @@ import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-typ
     ZEmptyPipe,
     ProjectTypePipe,
     ProjectCategoryPipe,
+    ZCompleteNumberPipe,
+    PayStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -103,6 +106,8 @@ import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-typ
     ZEmptyPipe,
     ProjectTypePipe,
     ProjectCategoryPipe,
+    ZCompleteNumberPipe,
+    PayStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,

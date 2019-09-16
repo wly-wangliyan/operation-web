@@ -167,22 +167,35 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
-            <td>{{data.account}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td>{{data.telephone|zMaxLength:5}}</td>
-            <td [title]="data.address">{{data.address|zMaxLength:10}}</td>
-            <td [title]="data.ic_company_name">{{data.ic_company_name|zMaxLength:20}}</td>
+            <td>{{data.upkeep_order_id||'--'}}</td>
+            <td>{{data.payer_name||'--'}}</td>
+            <!-- <td>{{data.payer_phone||'--'}}</td> -->
+            <td>{{data.name}}</td>
+            <td>{{data.vehicle_brand_name||'--'}}</td>
+            <!-- 车型 -->
+            <td
+              [title]='data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name'>
+              {{(data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name)|zMaxLength:10}}
+            </td>
+            <td>{{data.upkeep_merchant_name||'--'}}</td>
+            <!-- 项目列表过滤 -->
+            <td>{{data.upkeep_item_categorys||'--'}}</td>
+            <td>{{data.upkeep_item_category_count||'--'}}</td>
+            <!-- 应付 -->
+            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
+                元</span></td>
+            <!-- 优惠 -->
+            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
+                元</span></td>
+            <!-- 实付 -->
+            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
+                元</span></td>
+            <td>{{data.pay_time* 1000 | date:"y-MM-dd HH:mm"}}</td>
+            <td>{{data.reserve_time* 1000 | date:"y-MM-dd HH:mm"}}</td>
+            <!-- 状态过滤 -->
+            <td>{{data.pay_status|payStatus}}</td>
             <td class="operation">
-              <a [routerLink]="['../order-detail']">查看</a>
+              <a [title]="'查看'" [routerLink]="['../order-detail',data.upkeep_order_id||'121']">查看</a>
             </td>
           </tr>
         </tbody>

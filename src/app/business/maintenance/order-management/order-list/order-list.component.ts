@@ -1,81 +1,7 @@
-// import { Component, OnInit, ViewChild } from '@angular/core';
-// import { Subject, Subscription, timer } from 'rxjs';
-// import { GlobalService } from '../../../../core/global.service';
-// import { ActivatedRoute, Router } from '@angular/router';
-// import { debounceTime, switchMap } from 'rxjs/operators';
-// import { BrokerageEntity, OrderManagementService } from '../order-management.service';
-
-// const PageSize = 15;
-
-// @Component({
-//   selector: 'app-order-list',
-//   templateUrl: './order-list.component.html',
-//   styleUrls: ['./order-list.component.css']
-// })
-// export class OrderListComponent implements OnInit {
-//   public brokerageList: Array<BrokerageEntity> = [];
-//   public pageIndex = 1;
-//   public noResultText = '数据加载中...';
-
-//   private searchText$ = new Subject<any>();
-//   private continueRequestSubscription: Subscription;
-//   private linkUrl: string;
-
-//   private get pageCount(): number {
-//     if (this.brokerageList.length % PageSize === 0) {
-//       return this.brokerageList.length / PageSize;
-//     }
-//     return this.brokerageList.length / PageSize + 1;
-//   }
-
-//   constructor(private globalService: GlobalService,
-//               private orderService: OrderManagementService) {
-//   }
-
-//   ngOnInit() {
-//     this.searchText$.pipe(
-//       debounceTime(500),
-//       switchMap(() =>
-//         this.orderService.requestBrokerageList())
-//     ).subscribe(res => {
-//       this.brokerageList = res.results;
-//       this.brokerageList.forEach(value => {
-//         const ic_company_name = [];
-//         value.ic_company.forEach(value1 => {
-//           ic_company_name.push(value1.ic_name);
-//         });
-//         value.ic_company_name = ic_company_name.join(',');
-//       });
-//       this.linkUrl = res.linkUrl;
-//       this.noResultText = '暂无数据';
-//     }, err => {
-//       this.globalService.httpErrorProcess(err);
-//     });
-//     this.searchText$.next();
-//   }
-
-
-//   // 翻页方法
-//   public onNZPageIndexChange(pageIndex: number) {
-//     this.pageIndex = pageIndex;
-//     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
-//       // 当存在linkUrl并且快到最后一页了请求数据
-//       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-//       this.continueRequestSubscription = this.orderService.continueBrokerageList(this.linkUrl).subscribe(res => {
-//         this.brokerageList = this.brokerageList.concat(res.results);
-//         this.linkUrl = res.linkUrl;
-//       }, err => {
-//         this.globalService.httpErrorProcess(err);
-//       });
-//     }
-//   }
-// }
-
-
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import {
-  BrokerageEntity,
+  UpkeepOrderEntity,
   OrderManagementService,
   SearchOrderParams,
 } from '../order-management.service';
@@ -93,7 +19,7 @@ const PageSize = 15;
 })
 export class OrderListComponent implements OnInit {
 
-  public orderList: Array<BrokerageEntity> = [];
+  public orderList: Array<UpkeepOrderEntity> = [];
   public pageIndex = 1;
   public searchParams = new SearchOrderParams();
   public noResultText = '数据加载中...';
@@ -128,27 +54,23 @@ export class OrderListComponent implements OnInit {
   constructor(private globalService: GlobalService, private orderService: OrderManagementService) { }
 
   ngOnInit() {
+    const obj = { name: '213' };
+    this.orderList.push(obj);
+    // 订单管理列表
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.orderService.requestBrokerageList())
+        this.orderService.requestOrderList(this.searchParams))
     ).subscribe(res => {
       this.orderList = res.results;
-      this.orderList.forEach(value => {
-        const ic_company_name = [];
-        value.ic_company.forEach(value1 => {
-          ic_company_name.push(value1.ic_name);
-        });
-        value.ic_company_name = ic_company_name.join(',');
-      });
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       // tslint:disable-next-line:max-line-length
-      this.searchUrl = `${environment.OPERATION_SERVE}/admin/carline_records/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&created_time=${this.searchParams.created_time}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
+      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&created_time=${this.searchParams.created_time}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    this.searchText$.next();
+    // this.searchText$.next();
   }
 
   // 下单开始时间校验
@@ -321,7 +243,7 @@ export class OrderListComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       // tslint:disable-next-line:no-unused-expression
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.orderService.continueBrokerageList(this.linkUrl).subscribe(res => {
+      this.continueRequestSubscription = this.orderService.continueOrderList(this.linkUrl).subscribe(res => {
         this.orderList = this.orderList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
