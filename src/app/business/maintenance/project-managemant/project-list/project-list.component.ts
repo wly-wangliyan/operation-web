@@ -21,6 +21,8 @@ export class ProjectListComponent implements OnInit {
 
   public projectList: Array<ProjectEntity> = []; // 保养项目列表
 
+  public mapOfCategory: { [key: number]: Array<ProjectEntity> } = {}; // 大类对应项目列表
+
   public toRelationList: Array<ProjectEntity> = []; // 可关联项目列表
 
   public noResultText = '数据加载中...';
@@ -77,6 +79,10 @@ export class ProjectListComponent implements OnInit {
   private requestProjectList() {
     this.projectService.requestProjectListData().subscribe(res => {
       this.projectList = res;
+      this.projectCategories.forEach(category => {
+        this.mapOfCategory[category] = this.projectList.filter(project => project.upkeep_item_category === category);
+      });
+
       const category_1 = this.projectList.filter(value => value.upkeep_item_category === 1);
       this.rowspan_category_1 = category_1.length;
       const category_2 = this.projectList.filter(value => value.upkeep_item_category === 2);
