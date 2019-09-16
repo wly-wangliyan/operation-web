@@ -17,9 +17,9 @@
       <label>{{vehicleTypeInfo.vehicle_type_name ? vehicleTypeInfo.vehicle_type_name : ''}}</label>
     </div>
   </div>
-  <div class="content-middle">
-    <div class="category-item" *ngFor="let category of projectCategories">
-      <ng-container *ngIf="mapOfProject && mapOfProject[category] && mapOfProject[category].length>0">
+  <div class="content-middle" *ngIf="isShowSetting">
+    <ng-container *ngFor="let category of projectCategories">
+      <div class="category-item" *ngIf="mapOfShow[category]">
         <i class="category-icon{{category}}"></i>
         <table class="table">
           <thead>
@@ -36,25 +36,40 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let project of mapOfProject[category]">
-              <td>{{project.upkeep_item_name}}</td>
-              <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
-                <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
-                  [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"
-                  (click)=onChangeBtnSwitch(mapOfSetting[project.upkeep_item_id].switch,project.upkeep_item_id)></button>
-              </td>
-              <td *ngIf="mapOfSetting[project.upkeep_item_id]">
-                {{mapOfSetting[project.upkeep_item_id].description}}
-              </td>
-              <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
-                <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"
-                  [disabled]="!isEdit || !handbook.upkeep_handbook_id || !mapOfSetting[project.upkeep_item_id].switch"
-                  (click)=onChangeBtnRecommend(handbook)>{{project.upkeep_item_type===1?'换':'荐'}}</button>
-              </td>
-            </tr>
+            <ng-container *ngFor="let project of mapOfProject[category]">
+              <tr *ngIf="isEdit ||(!isEdit && mapOfSetting[project.upkeep_item_id] &&
+                  mapOfSetting[project.upkeep_item_id].switch)">
+                <td>{{project.upkeep_item_name}}</td>
+                <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
+                  <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
+                    [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"
+                    (click)=onChangeBtnSwitch(mapOfSetting[project.upkeep_item_id].switch,project.upkeep_item_id)></button>
+                </td>
+                <td
+                  *ngIf="isEdit && mapOfSetting[project.upkeep_item_id] && mapOfSetting[project.upkeep_item_id].switch">
+                  <input name="description_{{project.upkeep_item_id}}"
+                    [(ngModel)]="mapOfSetting[project.upkeep_item_id].description" maxlength="20" />
+                </td>
+                <td
+                  *ngIf="!isEdit && mapOfSetting[project.upkeep_item_id] || isEdit && !mapOfSetting[project.upkeep_item_id].switch">
+                  {{mapOfSetting[project.upkeep_item_id].description}}
+                </td>
+                <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
+                  <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"
+                    [disabled]="!isEdit || !mapOfSetting[project.upkeep_item_id].switch"
+                    (click)=onChangeBtnRecommend(handbook,mapOfSetting[project.upkeep_item_id].uh_item_id)>{{project.upkeep_item_type===1?'换':'荐'}}</button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
-      </ng-container>
+      </div>
+    </ng-container>
+    <div class="content-footer" *ngIf="isEdit">
+      <button name="sure_btn" class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+        保存
+      </button>
+      <button name="close_btn" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
     </div>
   </div>
 </div>

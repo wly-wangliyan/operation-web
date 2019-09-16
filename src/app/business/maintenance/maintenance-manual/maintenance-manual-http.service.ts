@@ -131,9 +131,9 @@ export class MaintenanceManualHttpService {
    * @param upkeep_handbook_id T 保养手册id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestChangeRecommendData(params: RecommendParams, upkeep_handbook_id: string, ): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/upkeep_handbooks/${upkeep_handbook_id}`;
-    return this.httpService.put(httpUrl, params.json());
+  public requestChangeRecommendData(params: RecommendParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/upkeep_handbooks`;
+    return this.httpService.post(httpUrl, params.json());
   }
 
   /**
@@ -152,7 +152,7 @@ export class MaintenanceManualHttpService {
    * @param upkeep_handbook_id 保养手册id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestBatcSaveDescriptionData(params: BatcSaveParams, upkeep_handbook_id: string): Observable<HttpResponse<any>> {
+  public requestBatcSaveDescriptionData(params: BatcSaveParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/uh_items/description`;
     return this.httpService.post(httpUrl, params.json());
   }
