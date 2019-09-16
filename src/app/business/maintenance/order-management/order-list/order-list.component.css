@@ -10,6 +10,10 @@
   color: rgba(51, 51, 51, 1);
 }
 
+:host ::ng-deep .ant-calendar-picker {
+  width: 180px !important;
+}
+
 .span-width {
   width: 40px;
   display: inline-block;
@@ -35,20 +39,17 @@
 }
 
 .search_row select {
-  width: 120px;
+  width: 140px;
   line-height: 34px;
 }
 
 .search_row div .form-control {
-  margin-right: 20px;
-}
-
-.search_row .order-time {
-  margin-right: 10px !important;
+  margin-right: 30px;
+  width: 140px;
 }
 
 .search_row .search_time {
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .search_row .search_time .line {

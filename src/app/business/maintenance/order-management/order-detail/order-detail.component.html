@@ -38,9 +38,9 @@
         <nz-descriptions-item nzTitle="预订时间：">2019.10 08:00</nz-descriptions-item>
         <nz-descriptions-item nzTitle="下单时间：">2019.10 08:00</nz-descriptions-item>
         <nz-descriptions-item nzTitle="支付时间：">2019.10 08:00</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="核销码：">2019.10 08:00</nz-descriptions-item>
         <nz-descriptions-item nzTitle="完成时间：">2019.10 08:00</nz-descriptions-item>
         <nz-descriptions-item nzTitle="操作人：">XXX</nz-descriptions-item>
-        <nz-descriptions-item nzTitle=""></nz-descriptions-item>
       </nz-descriptions>
     </div>
   </div>
@@ -70,7 +70,7 @@
           <tr *ngFor="let data of rowSelectionTable.data; let i=index">
             <td rowspan=2 *ngIf="i === 0" class='pro_type'><img src="/assets/images/upkeep.png">保养项目</td>
             <td rowspan=3 *ngIf="i === 2" class='pro_type'><img src="/assets/images/wash.png">清洗养护项目</td>
-            <td rowspan=5 *ngIf="i === 5" class='pro_type'><img src="/assets/images/owner.png">维修项目</td>
+            <td rowspan=5 *ngIf="i === 5" class='pro_type'><img src="/assets/images/fix.png">维修项目</td>
             <td>{{data.telephone|zMaxLength:5}}</td>
             <td>{{data.telephone|zMaxLength:5}}</td>
             <td>{{data.telephone|zMaxLength:5}}</td>
