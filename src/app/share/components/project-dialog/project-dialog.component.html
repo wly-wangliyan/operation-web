@@ -22,6 +22,8 @@
               <ul>
                 <li *ngFor="let project of currentProjectList" (click)="onProjectClick(project)"
                   [class.active]="project.upkeep_item_id === currentProject.upkeep_item_id">
+                  <span class="blue-info"
+                    [class.orange-info]="project.upkeep_item_type===2">【{{project.upkeep_item_type | projectType}}】</span>
                   {{project.upkeep_item_name | zMaxLength:15}}
                 </li>
               </ul>

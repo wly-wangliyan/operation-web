@@ -108,11 +108,27 @@ export class ProductCreateComponent implements OnInit {
   private initForm() {
     this.selectedCategory = this.productRecord.upkeep_item.upkeep_item_category;
     this.selectedProjectid = this.productRecord.upkeep_item.upkeep_item_id;
-    this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
-      + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
+    this.selected_project_info = this.productRecord.upkeep_item ?
+      (this.projectCategory[this.productRecord.upkeep_item.upkeep_item_category] + ' > '
+        + this.productRecord.upkeep_item.upkeep_item_name) : null;
     this.productRecord.upkeep_item_id = this.productRecord.upkeep_item.upkeep_item_id;
     this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;
     this.cover_url = this.productRecord.image_url ? this.productRecord.image_url.split(',') : [];
+    if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
+      this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
+      this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
+      this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
+        + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
+    }
+  }
+
+  // 清除错误信息
+  public onClearErrMsg() {
+    this.productErrMsg = '';
+  }
+
+  // 清除无关参数
+  private clearParams() {
     this.productRecord.upkeep_item = null;
     this.productRecord.vehicle_brand = null;
     this.productRecord.vehicle_firm = null;
@@ -127,17 +143,7 @@ export class ProductCreateComponent implements OnInit {
       this.productRecord.serial_number = null; // 零件编号
       this.productRecord.specification = null; // 规格
       this.productRecord.number = null; // 所需数量
-    } else {
-      this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
-      this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
-      this.selected_project_info = this.productRecord.upkeep_item ?
-        (this.projectCategory[this.productRecord.upkeep_item.upkeep_item_category] + ' > '
-          + this.productRecord.upkeep_item.upkeep_item_name) : null;
     }
-  }
-
-  public onClearErrMsg() {
-    this.productErrMsg = '';
   }
 
   // 打开所属项目选择组件
@@ -234,6 +240,7 @@ export class ProductCreateComponent implements OnInit {
   // 点击保存按钮
   public onEditFormSubmit() {
     this.onClearErrMsg();
+    this.clearParams();
     this.productImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.productImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.productRecord.image_url = imageUrl.join(',');
@@ -317,8 +324,8 @@ export class ProductCreateComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.resource === 'upkeep_item_relation' && content.code === 'invalid') {
-            this.productErrMsg = '所选配套项目不存在！';
+          if (content.resource === 'object' && content.code === 'already_existed') {
+            this.productErrMsg = '此配置已存在！';
             return;
           }
         }

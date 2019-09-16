@@ -70,6 +70,14 @@
   margin: 5px 0 0 0;
 }
 
+.blue-info {
+  color: #3E71F7;
+}
+
+.orange-info {
+  color: #F5A623 !important;
+}
+
 ul::-webkit-scrollbar {
   width: 1px;
 }
