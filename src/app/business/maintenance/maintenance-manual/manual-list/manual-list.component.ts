@@ -127,7 +127,7 @@ export class ManualListComponent implements OnInit {
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
       if (type !== '.xlsx' && type !== '.xls' && type !== '.csv') {
-        this.globalService.promptBox.open('文件格式错误！', null, -1, null, false);
+        this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
         return;
       }
     }

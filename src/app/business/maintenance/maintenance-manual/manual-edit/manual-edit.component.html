@@ -39,7 +39,7 @@
             <ng-container *ngFor="let project of mapOfProject[category]">
               <tr *ngIf="isEdit ||(!isEdit && mapOfSetting[project.upkeep_item_id] &&
                   mapOfSetting[project.upkeep_item_id].switch)">
-                <td>{{project.upkeep_item_name}}</td>
+                <td [title]="project.upkeep_item_name">{{project.upkeep_item_name | zMaxLength:20}}</td>
                 <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
                     [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"

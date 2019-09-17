@@ -73,7 +73,6 @@ export class ManualEditComponent implements OnInit {
     if (this.vehicle_type_id) {
       this.requestVehicleInfo();
       this.requestProjectList();
-      this.requestManualDetail();
     } else {
       this.router.navigate(['../../list'], { relativeTo: this.route });
     }
@@ -101,6 +100,7 @@ export class ManualEditComponent implements OnInit {
       this.projectCategories.forEach(category => {
         this.mapOfProject[category] = this.projectList.filter(project => project.upkeep_item_category === category);
       });
+      this.requestManualDetail();
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
