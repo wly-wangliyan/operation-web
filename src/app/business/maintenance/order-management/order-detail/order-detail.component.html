@@ -24,7 +24,8 @@
         <nz-descriptions-item nzTitle="车型：">
           {{upkeepOrderData.vehicle_firm_name+upkeepOrderData.vehicle_series_name+upkeepOrderData.vehicle_year_model+upkeepOrderData.vehicle_type_name}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="购车时间：">{{upkeepOrderData.car_pay_time* 1000 | date:"y-MM"}}
+        <nz-descriptions-item nzTitle="购车时间：">
+          {{upkeepOrderData.car_pay_time?(upkeepOrderData.car_pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="行驶公里数：">{{upkeepOrderData.kilometers?(upkeepOrderData.kilometers+'km'):'--'}}
         </nz-descriptions-item>
@@ -62,15 +63,18 @@
           {{ upkeepOrderData.upkeep_merchant_name||'--'}}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="订单编号：">{{upkeepOrderData.upkeep_order_id||'--'}}</nz-descriptions-item>
         <nz-descriptions-item nzTitle=""></nz-descriptions-item>
-        <nz-descriptions-item nzTitle="预订时间：">{{upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"}}
+        <nz-descriptions-item nzTitle="预订时间：">
+          {{upkeepOrderData.reserve_time?(upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
         </nz-descriptions-item>
-        <!-- 下单时间 -->
-        <nz-descriptions-item nzTitle="下单时间：">{{upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"}}
+        <nz-descriptions-item nzTitle="下单时间：">
+          {{upkeepOrderData.reserve_time?(upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="支付时间：">{{upkeepOrderData.pay_time* 1000 | date:"y-MM-dd HH:mm:ss"}}
+        <nz-descriptions-item nzTitle="支付时间：">
+          {{upkeepOrderData.pay_time?(upkeepOrderData.pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="核销码：">{{upkeepOrderData.write_off_code||'--'}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="完成时间：">{{upkeepOrderData.order_complete_time* 1000 | date:"y-MM-dd HH:mm:ss"}}
+        <nz-descriptions-item nzTitle="完成时间：">
+          {{upkeepOrderData.order_complete_time?(upkeepOrderData.order_complete_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="操作人：">{{upkeepOrderData.order_complete_operator||'--'}}
         </nz-descriptions-item>
@@ -81,7 +85,7 @@
   <div class='detail_info'>明细</div>
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table #rowSelectionTable nzBordered [nzData]="brokerageList" [nzShowPagination]="false"
+      <nz-table #rowSelectionTable nzBordered [nzData]="orderDetailList" [nzShowPagination]="false"
         [nzNoResult]="noResultText">
         <thead>
           <tr>
@@ -101,32 +105,37 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of rowSelectionTable.data; let i=index">
-            <td rowspan=2 *ngIf="i === 0" class='pro_type'> {{data.item_category}}</td>
-            <td rowspan=3 *ngIf="i === 2" class='pro_type'> {{data.item_category}}</td>
-            <td rowspan=4 *ngIf="i === 5" class='pro_type'> {{data.item_category}}</td>
-            <td *ngIf="i === 9" class='pro_type'> {{data.item_category}}</td>
+            <td [attr.rowspan]=itemRowSpan1 *ngIf="i === 0" class='pro_type'> {{data.item_category|projectCategory}}
+            </td>
+            <td [attr.rowspan]=itemRowSpan2 *ngIf="i === itemRowSpan1" class='pro_type'>
+              {{data.item_category|projectCategory}}</td>
+            <td [attr.rowspan]=itemRowSpan3 *ngIf="i === (itemRowSpan1+itemRowSpan2)" class='pro_type'>
+              {{data.item_category|projectCategory}}</td>
             <td>
-              <span><img [src]=data.image_url></span>
-              <ul>
-                <li>{{data.is_original}}</li>
-                <li>{{data.is_original?'原厂件':'非原厂件时显示品牌说明'}}</li>
+              <span class='image' *ngIf='data.image_url'><img [src]=data.image_url></span>
+              <ul class='name-ul'>
+                <li class='item-name'>{{data.item_name}}</li>
+                <li>{{data.is_original?'原厂件':data.brand_instruction}}</li>
               </ul>
             </td>
             <td>{{data.upkeep_accessory_name||'--'}}</td>
+            <td>{{data.item_name||'--'}}</td>
             <td>{{data.specification||'--'}}</td>
             <td>{{data.serial_number||'--'}}</td>
             <td>{{(data.sale_amount | zCompleteNumber)||0}}<span *ngIf="data.sale_amount||data.sale_amount===0">
                 元</span></td>
             <td>{{data.number||'--'}}</td>
-            <!-- 配件/服务优惠 -->
-            <td>{{data.customer_worker||'无'}}</td>
-            <!-- 工时费 -->
-            <td>{{data.customer_worker||'无'}}</td>
-            <!-- 工时费优惠 -->
-            <td>{{data.customer_worker||'无'}}</td>
+            <td>{{(data.product_discounted_amount | zCompleteNumber)||0}}<span
+                *ngIf="data.product_discounted_amount||data.product_discounted_amount===0">
+                元</span></td>
+            <td>{{(data.work_original_amount | zCompleteNumber)||0}}<span
+                *ngIf="data.work_original_amount||data.work_original_amount===0">
+                元</span></td>
+            <td>{{(data.work_discounted_amount | zCompleteNumber)||0}}<span
+                *ngIf="data.work_discounted_amount||data.work_discounted_amount===0">
+                元</span></td>
             <td>{{(data.pay_amount | zCompleteNumber)||0}}<span *ngIf="data.pay_amount||data.pay_amount===0">
                 元</span></td>
-            <!-- 实付 -->
             <td>{{(data.real_pay_amount | zCompleteNumber)||0}}<span
                 *ngIf="data.real_pay_amount||data.real_pay_amount===0">
                 元</span></td>

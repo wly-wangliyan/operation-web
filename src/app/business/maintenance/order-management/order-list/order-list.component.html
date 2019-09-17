@@ -2,7 +2,7 @@
   <app-crumb [level1Name]="'订单管理'" [level2Name]=""></app-crumb>
   <ul class="header-right">
     <li class="big-bg">
-      <a>导出Excel</a>
+      <a (click)='onExportOrderList()'>导出Excel</a>
     </li>
   </ul>
 </div>
@@ -19,8 +19,8 @@
                 <select class="form-control" name="pay_status" [(ngModel)]="searchParams.pay_status">
                   <option value="">全部</option>
                   <option value="1">未支付</option>
-                  <option value="2">已完成</option>
-                  <option value="3">已支付</option>
+                  <option value="2">已支付</option>
+                  <option value="3">已完成</option>
                 </select>
               </nz-form-control>
             </nz-form-item>
@@ -31,10 +31,8 @@
               <nz-form-control class="form_control">
                 <select class="form-control" name="vehicle_brand_name" [(ngModel)]="searchParams.vehicle_brand_name">
                   <option value="">全部</option>
-                  <option value="1">待支付</option>
-                  <option value="2">已完成</option>
-                  <option value="3">未支付</option>
-                  <option value="4">已取消</option>
+                  <option *ngFor="let item of vehicleBrandList" [value]="item.vehicle_brand_id">
+                    {{item.vehicle_brand_name}}</option>
                 </select>
               </nz-form-control>
             </nz-form-item>
@@ -44,8 +42,8 @@
               <nz-form-label>项目类别</nz-form-label>
               <nz-form-control class="form_control">
                 <select class="form-control" name="upkeep_item_category"
-                  [(ngModel)]="searchParams.upkeep_item_category">
-                  <option value="">全部</option>
+                  [(ngModel)]="searchParams.upkeep_item_categorys">
+                  <option value="4">全部</option>
                   <option value="1">保养项目</option>
                   <option value="2">清洗养护项目</option>
                   <option value="3">维修项目</option>
@@ -78,22 +76,6 @@
               <nz-form-control>
                 <input class="form-control" placeholder="请输入订单编号" autocomplete="off" maxlength='20'
                   [(ngModel)]="searchParams.upkeep_order_id" name="upkeep_order_id" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div class='search_time'>
-            <nz-form-item nzFlex>
-              <nz-form-label>下单时间</nz-form-label>
-              <nz-form-control>
-                <nz-date-picker [(ngModel)]="start_created_time" [nzShowToday]=false
-                  [nzDisabledDate]="disabledStartCreatedDate" (ngModelChange)="onStartCreatedChange($event)"
-                  name='start_created_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm">
-                </nz-date-picker>
-                <span class='line'>-</span>
-                <nz-date-picker [(ngModel)]="end_created_time" [nzShowToday]=false
-                  [nzDisabledDate]="disabledEndCreatedDate" (ngModelChange)="onEndCreatedChange($event)"
-                  name='end_created_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm">
-                </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -167,33 +149,31 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
-            <td>{{data.upkeep_order_id||'--'}}</td>
-            <td>{{data.payer_name||'--'}}</td>
-            <!-- <td>{{data.payer_phone||'--'}}</td> -->
-            <td>{{data.name}}</td>
+            <td [title]='data.upkeep_order_id'>{{(data.upkeep_order_id|zMaxLength:5)||'--'}}</td>
+            <td [title]='data.payer_name'>{{(data.payer_name|zMaxLength:3)||'--'}}</td>
+            <td>{{data.payer_phone||'--'}}</td>
             <td>{{data.vehicle_brand_name||'--'}}</td>
-            <!-- 车型 -->
             <td
               [title]='data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name'>
-              {{(data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name)|zMaxLength:10}}
+              {{(data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name)|zMaxLength:4}}
             </td>
-            <td>{{data.upkeep_merchant_name||'--'}}</td>
-            <!-- 项目列表过滤 -->
-            <td>{{data.upkeep_item_categorys||'--'}}</td>
+            <td [title]='data.upkeep_merchant_name'>{{(data.upkeep_merchant_name|zMaxLength:4)||'--'}}</td>
+            <td *ngIf='data.item_categorys&&data.item_categorys.length!==0'>
+              <span *ngFor="let obj of data.item_categorys; "> {{obj|projectCategory}}; </span>
+            </td>
+            <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>'--'</td>
             <td>{{data.upkeep_item_category_count||'--'}}</td>
-            <!-- 应付 -->
             <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
                 元</span></td>
-            <!-- 优惠 -->
-            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
+            <td>{{(data.discounted_amount | zCompleteNumber)||0}}<span
+                *ngIf="data.discounted_amount||data.discounted_amount===0">
                 元</span></td>
-            <!-- 实付 -->
-            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
+            <td>{{(data.total_real_amount | zCompleteNumber)||0}}<span
+                *ngIf="data.total_real_amount||data.total_real_amount===0">
                 元</span></td>
-            <td>{{data.pay_time* 1000 | date:"y-MM-dd HH:mm"}}</td>
-            <td>{{data.reserve_time* 1000 | date:"y-MM-dd HH:mm"}}</td>
-            <!-- 状态过滤 -->
-            <td>{{data.pay_status|payStatus}}</td>
+            <td>{{data.pay_time?(data.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{data.reserve_time?(data.reserve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td style='min-width: 70px;'>{{data.pay_status|payStatus}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail',data.upkeep_order_id||'121']">查看</a>
             </td>
