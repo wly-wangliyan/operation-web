@@ -1,0 +1,33 @@
+<div class="form-group">
+  <span>品牌：</span>
+  <select class="form-control" style="width: 140px;" [(ngModel)]="vehicle_brand_id" (change)="onChangeBrand($event)"
+    name="vehicle_brand_id">
+    <option value="">全部</option>
+    <option *ngFor="let vehicleBrand of vehicleBrandList" [value]="vehicleBrand.vehicle_brand_id"
+      [title]="vehicleBrand.vehicle_brand_name">
+      {{vehicleBrand.vehicle_brand_name | zMaxLength:15}}
+    </option>
+  </select>
+</div>
+<div class="form-group" *ngIf="!display_firm">
+  <span>厂商：</span>
+  <select class="form-control" style="width: 220px;" [(ngModel)]="vehicle_firm_id" (change)="onChangeFirm($event)"
+    name="vehicle_firm_id">
+    <option value="">全部</option>
+    <option *ngFor="let vehicleFirm of vehicleFirmList" [value]="vehicleFirm.vehicle_firm_id"
+      [title]="vehicleFirm.vehicle_firm_name">
+      {{vehicleFirm.vehicle_firm_name | zMaxLength:15}}
+    </option>
+  </select>
+</div>
+<div class="form-group" *ngIf="!display_series">
+  <span>车系：</span>
+  <select class="form-control" [(ngModel)]="vehicle_series_id" (change)="onChangeSeries($event)"
+    name="vehicle_series_id">
+    <option value="">全部</option>
+    <option *ngFor="let vehicleSeries of vehicleSeriesList" [value]="vehicleSeries.vehicle_series_id"
+      [title]="vehicleSeries.vehicle_series_name">
+      {{vehicleSeries.vehicle_series_name | zMaxLength:15}}
+    </option>
+  </select>
+</div>

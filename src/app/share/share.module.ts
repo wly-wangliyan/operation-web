@@ -28,6 +28,7 @@ import { SelectBrandFirmComponent } from './components/select-brand-firm/select-
 import { DateClockComponent } from './components/date-clock/date-clock.component';
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
+import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
     SelectBrandFirmComponent,
     SelectBrandFirmTypeComponent,
     DateClockComponent,
+    SearchVehicleTypeGroupComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -95,6 +97,7 @@ import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
     SelectBrandFirmComponent,
     SelectBrandFirmTypeComponent,
     DateClockComponent,
+    SearchVehicleTypeGroupComponent,
 
     // 管道
     ZMaxLengthPipe,
