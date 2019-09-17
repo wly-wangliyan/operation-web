@@ -36,7 +36,7 @@ export class SelectBrandFirmComponent implements OnInit {
 
   @Input() private multi = true; // 标记厂商是否多选
 
-  @Input() private isDisabled = true; // 标记是否对厂商禁用
+  @Input() private isDisabled = false; // 标记是否对厂商禁用
 
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
