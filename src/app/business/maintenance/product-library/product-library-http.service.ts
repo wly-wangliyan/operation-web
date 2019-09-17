@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { EntityBase } from '../../../../utils/z-entity';
 import { Observable } from 'rxjs';
 import { HttpService, LinkResponse } from '../../../core/http.service';
@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { ProjectEntity } from '../project-managemant/project-managemant-http.service';
 import { VehicleBrandEntity, VehicleFirmEntity } from '../vehicle-type-management/vehicle-type-management.service';
+import { file_import } from '../../../../utils/file-import';
 
 // 产品
 export class ProductEntity extends EntityBase {
@@ -43,6 +44,26 @@ export class ProductEntity extends EntityBase {
       return VehicleFirmEntity;
     }
     return null;
+  }
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json['upkeep_item'];
+    delete json['vehicle_brand'];
+    delete json['vehicle_firm'];
+    delete json['created_time'];
+    delete json['updated_time'];
+    delete json['upkeep_merchants'];
+    if (json['upkeep_accessory_type'] === 2) {
+      delete json['is_original'];
+      delete json['vehicle_brand_id'];
+      delete json['vehicle_firm_id'];
+      delete json['is_brand_special'];
+      delete json['serial_number'];
+      delete json['specification'];
+      delete json['number'];
+    }
+    return json;
   }
 }
 
@@ -129,7 +150,7 @@ export class ProductLibraryHttpService {
    */
   public requestAddProductData(params: ProductEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/upkeep_accessories`;
-    return this.httpService.post(httpUrl, params.json());
+    return this.httpService.post(httpUrl, params.toEditJson());
   }
 
   /**
@@ -138,7 +159,7 @@ export class ProductLibraryHttpService {
    */
   public requestUpdateProductData(params: ProductEntity, upkeep_accessory_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/upkeep_accessories/${upkeep_accessory_id}`;
-    return this.httpService.put(httpUrl, params.json());
+    return this.httpService.put(httpUrl, params.toEditJson());
   }
 
   /**
@@ -159,5 +180,26 @@ export class ProductLibraryHttpService {
   public requestDeleteProductData(upkeep_accessory_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/upkeep_accessories/${upkeep_accessory_id}`;
     return this.httpService.delete(httpUrl);
+  }
+
+  /**
+   * 上传产品
+   * @param type 文件类型
+   * @param myfile FILE
+   */
+  public requestImportProductData(type: any, myfile: any) {
+    const eventEmitter = new EventEmitter();
+    const params = {
+      myfile,
+      type
+    };
+
+    const url = `/upkeep_accessories/upload_accessory`;
+    file_import(params, url, data => {
+      eventEmitter.next(data);
+    }, err => {
+      eventEmitter.error(err);
+    });
+    return eventEmitter;
   }
 }

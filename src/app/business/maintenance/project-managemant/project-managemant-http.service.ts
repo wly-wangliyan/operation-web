@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { EntityBase } from '../../../../utils/z-entity';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { file_import } from '../../../../utils/file-import';
 
 export class ProjectEntity extends EntityBase {
   public upkeep_item_id: string = undefined; // 项目ID
@@ -98,8 +99,21 @@ export class ProjectManagemantHttpService {
    * 上传项目
    * @param myfile FILE
    */
-  public requestImportProjectData(myfile: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/upkeep_item/upload_upkeep_items`;
-    return this.httpService.put(httpUrl, myfile);
+  public requestImportProjectData(type: any, myfile: any) {
+    // const httpUrl = `${this.domain}/upkeep_item/upload_upkeep_items`;
+    // return this.httpService.put(httpUrl, myfile);
+    const eventEmitter = new EventEmitter();
+    const params = {
+      myfile,
+      type
+    };
+
+    const url = `/upkeep_item/upload_upkeep_items`;
+    file_import(params, url, data => {
+      eventEmitter.next(data);
+    }, err => {
+      eventEmitter.error(err);
+    });
+    return eventEmitter;
   }
 }

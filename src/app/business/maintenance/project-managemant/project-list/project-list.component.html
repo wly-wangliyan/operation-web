@@ -5,7 +5,7 @@
       <a (click)="onImportProject()">导入</a>
     </li>
     <li class="big-bg">
-      <a (click)="onDownloadMould()">下载模板</a>
+      <a href="/assets/download/spot_info.xlsx" download="spot_info.xlsx" style="color: #fff">下载模板</a>
     </li>
     <li class="big-bg">
       <a (click)="onShowModal()" data-toggle="modal" data-target="#editProjectModal">新建</a>
@@ -37,7 +37,8 @@
               <td [attr.rowspan]="mapOfCategory[category].length" *ngIf="i === 0">
                 {{data.upkeep_item_category | projectCategory}}
               </td>
-              <td [title]="data.upkeep_item_name">{{data.upkeep_item_name ? data.upkeep_item_name : '--'}}</td>
+              <td [title]="data.upkeep_item_name">
+                {{data.upkeep_item_name ? (data.upkeep_item_name | zMaxLength:20) : '--'}}</td>
               <td>{{data.upkeep_item_num ? data.upkeep_item_num : '--'}}</td>
               <td>{{data.upkeep_item_type | projectType}}</td>
               <td *ngIf="data.upkeep_item_relation">{{data.upkeep_item_relation.upkeep_item_name}}</td>
@@ -104,7 +105,7 @@
             <span>名称</span>
           </label>
           <div class="control-input">
-            <input class="form-control" placeholder="请输入名称，50字以内" [(ngModel)]="projectParams.upkeep_item_name"
+            <input class="form-control" placeholder="输入1-50字项目名称" [(ngModel)]="projectParams.upkeep_item_name"
               (focus)="onClearErrMsg()" maxlength="50" name="upkeep_item_name" appIgnoreSpace required>
           </div>
         </div>
@@ -114,9 +115,9 @@
             <span>项目ID</span>
           </label>
           <div class="control-input">
-            <input class="form-control" placeholder="请输入项目ID" [(ngModel)]="projectParams.upkeep_item_num"
-              (focus)="onClearErrMsg()" maxlength="6" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace
-              name="upkeep_item_num" required>
+            <input class="form-control" placeholder="以项目类别的ID开头，不可重复" [(ngModel)]="projectParams.upkeep_item_num"
+              (focus)="onClearErrMsg()" minlength="2" maxlength="6" oninput="value=value.replace(/[^\d]/g,'')"
+              appIgnoreSpace name="upkeep_item_num" required>
           </div>
         </div>
         <div class="row">
@@ -139,7 +140,7 @@
             <span>描述</span>
           </label>
           <div class="control-input">
-            <textarea class="form-control" rows="4" placeholder="请输入描述，100字以内"
+            <textarea class="form-control" rows="4" placeholder="输入0-100字描述"
               [(ngModel)]="projectParams.upkeep_item_content" (focus)="onClearErrMsg()" name="upkeep_item_content"
               maxlength="100">
             </textarea>
@@ -190,7 +191,7 @@
           </div>
         </div>
         <div class="form-group import-tip">
-          <span>每次只能上传1000条数据</span>
+          <span>每次只能上传200条数据</span>
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onCancelData()">取消</button>

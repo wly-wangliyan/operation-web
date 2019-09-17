@@ -62,6 +62,10 @@ export class ProductCreateComponent implements OnInit {
 
   public selectedProjectid: string; // 所属项目》所属项目 》项目id
 
+  public selectedBrandId: string; // 所属厂商 》品牌
+
+  public selectedFirmId: string; // 所属厂商 》厂商
+
   public selected_project_info: string; // 所属项目信息
 
   public selected_brand_firm_info: string; // 所属厂商信息
@@ -115,35 +119,21 @@ export class ProductCreateComponent implements OnInit {
     this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;
     this.cover_url = this.productRecord.image_url ? this.productRecord.image_url.split(',') : [];
     if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
-      this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
-      this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
-      this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
-        + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
+      // 原厂配件
+      if (this.productRecord.is_original) {
+        this.selectedBrandId = this.productRecord.vehicle_brand.vehicle_brand_id;
+        this.selectedFirmId = this.productRecord.vehicle_firm.vehicle_firm_id;
+        this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
+        this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
+        this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
+          + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
+      }
     }
   }
 
   // 清除错误信息
   public onClearErrMsg() {
     this.productErrMsg = '';
-  }
-
-  // 清除无关参数
-  private clearParams() {
-    this.productRecord.upkeep_item = null;
-    this.productRecord.vehicle_brand = null;
-    this.productRecord.vehicle_firm = null;
-    this.productRecord.created_time = null;
-    this.productRecord.updated_time = null;
-    this.productRecord.upkeep_merchants = null;
-    if (this.productRecord.upkeep_accessory_type === this.projectTypes[1]) {
-      this.productRecord.is_original = null;
-      this.productRecord.vehicle_brand_id = null;
-      this.productRecord.vehicle_firm_id = null;
-      this.productRecord.is_brand_special = null;
-      this.productRecord.serial_number = null; // 零件编号
-      this.productRecord.specification = null; // 规格
-      this.productRecord.number = null; // 所需数量
-    }
   }
 
   // 打开所属项目选择组件
@@ -169,6 +159,12 @@ export class ProductCreateComponent implements OnInit {
   // 变更是否原厂
   public onChangeOriginal(event: any) {
     this.productRecord.is_original = event.target.value === 'false' ? false : true;
+    if (!this.productRecord.is_original) {
+      this.selectedBrandId = null;
+      this.selectedFirmId = null;
+      this.selected_brand_firm_info = null;
+      this.productRecord.is_brand_special = false;
+    }
   }
 
   // 打开所属厂商选择组件
@@ -180,10 +176,12 @@ export class ProductCreateComponent implements OnInit {
   // 选择所属厂商回调函数
   public onSelectedBrandFirm(event: any) {
     if (event && event.firm) {
-      const firm = event.firm[0].source;
+      const firm = event.firm[0];
       const brand = firm.vehicle_brand;
       this.productRecord.vehicle_brand_id = brand.vehicle_brand_id;
+      this.selectedBrandId = brand.vehicle_brand_id;
       this.productRecord.vehicle_firm_id = firm.vehicle_firm_id;
+      this.selectedFirmId = firm.vehicle_firm_id;
       this.selected_brand_firm_info = brand.vehicle_brand_name + ' > ' + firm.vehicle_firm_name;
     }
   }
@@ -240,7 +238,6 @@ export class ProductCreateComponent implements OnInit {
   // 点击保存按钮
   public onEditFormSubmit() {
     this.onClearErrMsg();
-    this.clearParams();
     this.productImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.productImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.productRecord.image_url = imageUrl.join(',');
@@ -291,8 +288,8 @@ export class ProductCreateComponent implements OnInit {
       return false;
     }
 
-    if (this.productRecord.original_amount > this.productRecord.sale_amount) {
-      this.productErrMsg = '销售单价应大于原价！';
+    if (this.productRecord.original_amount < this.productRecord.sale_amount) {
+      this.productErrMsg = '原价不能小于销售单价！';
       return false;
     }
 
@@ -311,9 +308,9 @@ export class ProductCreateComponent implements OnInit {
   // 上传图片错误信息处理
   private upLoadErrMsg(err: any) {
     if (err.status === 422) {
-      this.globalService.promptBox.open('参数错误，可能文件格式错误！');
+      this.globalService.promptBox.open('参数错误，可能文件格式错误！', null, 2000, null, false);
     } else if (err.status === 413) {
-      this.globalService.promptBox.open('上传资源文件太大，服务器无法保存！');
+      this.globalService.promptBox.open('上传资源文件太大，服务器无法保存！', null, 2000, null, false);
     } else {
       this.globalService.httpErrorProcess(err);
     }

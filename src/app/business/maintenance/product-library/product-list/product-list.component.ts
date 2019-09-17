@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FileImportViewModel } from '../../../../../utils/file-import.model';
+import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 
 const PageSize = 15;
 
@@ -29,6 +31,13 @@ export class ProductListComponent implements OnInit {
   private continueRequestSubscription: Subscription; // 分页获取数据
 
   private linkUrl: string;
+
+  private importSpotSubscription: Subscription; // 导入描述对象
+
+  public importViewModel: FileImportViewModel = new FileImportViewModel();
+
+  @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
+
 
   private get pageCount(): number {
     if (this.productList.length % PageSize === 0) {
@@ -106,4 +115,69 @@ export class ProductListComponent implements OnInit {
     this.pageIndex = 1;
   }
 
+  // 解订阅
+  public onCloseUnsubscribe() {
+    this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
+  }
+
+  /**
+   * 导入
+   * 导入成功后需要刷新列表
+   */
+  public onImportProduct() {
+    $('#importProductPromptDiv').modal('show');
+    this.importViewModel.initImportData();
+    console.log('导入');
+  }
+
+  // 取消导入
+  public onCancelData() {
+    this.onCloseUnsubscribe();
+    this.importViewModel.initImportData();
+    $('#importProductPromptDiv').modal('hide');
+  }
+
+  /* 导入数据 */
+  public onSubmitImportProduct() {
+    if (this.importViewModel.address) {
+      const length = this.importViewModel.address.length;
+      const index = this.importViewModel.address.lastIndexOf('.');
+      const type = this.importViewModel.address.substring(index, length);
+      if (type !== '.xlsx' && type !== '.csv') {
+        this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
+        return;
+      }
+    }
+    if (this.importViewModel.checkFormDataValid()) {
+      this.progressModalComponent.openOrClose(true);
+      this.importSpotSubscription = this.productLibraryService.requestImportProductData(
+        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+          this.progressModalComponent.openOrClose(false);
+          $('#dataImportModal').modal('hide');
+          const date = JSON.parse(res.response);
+          this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+            this.importViewModel.initImportData();
+            $('#importProductPromptDiv').modal('hide');
+            this.searchText$.next();
+          }, -1);
+        }, err => {
+          this.progressModalComponent.openOrClose(false);
+          timer(300).subscribe(() => {
+            if (!this.globalService.httpErrorProcess(err)) {
+              if (err.status === 422) {
+                const tempErr = JSON.parse(err.responseText);
+                const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+                if (error.field === 'FILE' && error.code === 'invalid') {
+                  this.globalService.promptBox.open('导入文件不能为空！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+                  this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+                  this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
+                }
+              }
+            }
+          });
+        });
+    }
+  }
 }
