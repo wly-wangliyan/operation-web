@@ -5,3 +5,7 @@
 .zmy-table ::ng-deep .ant-table-thead>tr>th {
   border-right: 1px solid #e8e8e8;
 }
+
+.zmy-table ::ng-deep .ant-table-thead>tr>th:last-child {
+  min-width: 75px;
+}

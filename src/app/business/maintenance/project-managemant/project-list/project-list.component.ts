@@ -118,25 +118,27 @@ export class ProjectListComponent implements OnInit {
   }
 
   /* 导入数据 */
-  public onSubmitImportBerth() {
+  public onSubmitImportProject() {
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
-      if (type !== '.xlsx' && type !== '.xls' && type !== '.csv') {
-        this.globalService.promptBox.open('文件格式错误！', null, -1, null, false);
+      if (type !== '.xlsx' && type !== '.csv') {
+        this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
         return;
       }
     }
     if (this.importViewModel.checkFormDataValid()) {
-      /*this.progressModalComponent.openOrClose(true);
+      this.progressModalComponent.openOrClose(true);
       this.importSpotSubscription = this.projectService.requestImportProjectData(
-        this.importViewModel.type, this.importViewModel.file, this.projectId).subscribe(() => {
+        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+          this.progressModalComponent.openOrClose(false);
           $('#dataImportModal').modal('hide');
-          this.globalService.promptBox.open('导入成功！', () => {
+          const date = JSON.parse(res.response);
+          this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
             this.importViewModel.initImportData();
-            $('#importBerthPromptDiv').modal('hide');
-            this.progressModalComponent.openOrClose(false);
+            $('#importProjectPromptDiv').modal('hide');
+            this.searchText$.next();
           }, -1);
         }, err => {
           this.progressModalComponent.openOrClose(false);
@@ -145,15 +147,17 @@ export class ProjectListComponent implements OnInit {
               if (err.status === 422) {
                 const tempErr = JSON.parse(err.responseText);
                 const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-                if (error.resource === 'file' && error.code === 'missing') {
-                  this.globalService.promptBox.open('泊位文件不能为空！', null, -1, null, false);
-                } else {
-                  this.globalService.promptBox.open('泊位文件错误', null, -1, null, false);
+                if (error.field === 'FILE' && error.code === 'invalid') {
+                  this.globalService.promptBox.open('导入文件不能为空！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+                  this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+                  this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
                 }
               }
             }
           });
-        });*/
+        });
     }
   }
 

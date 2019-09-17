@@ -21,10 +21,11 @@
             <ng-container *ngIf="currentProjectList && currentProjectList.length > 0">
               <ul>
                 <li *ngFor="let project of currentProjectList" (click)="onProjectClick(project)"
-                  [class.active]="project.upkeep_item_id === currentProject.upkeep_item_id">
+                  [class.active]="project.upkeep_item_id === currentProject.upkeep_item_id"
+                  [title]="project.upkeep_item_name">
                   <span class="blue-info"
                     [class.orange-info]="project.upkeep_item_type===2">【{{project.upkeep_item_type | projectType}}】</span>
-                  {{project.upkeep_item_name | zMaxLength:15}}
+                  {{project.upkeep_item_name | zMaxLength:11}}
                 </li>
               </ul>
             </ng-container>
