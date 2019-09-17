@@ -15,9 +15,9 @@ import {
 })
 export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
 
-  @Input() public display_firm = true; // 标记是否隐藏厂商
+  @Input() public display_firm = false; // 标记是否隐藏厂商
 
-  @Input() public display_series = true; // 标记是否隐藏车系
+  @Input() public display_series = false; // 标记是否隐藏车系
 
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
@@ -123,12 +123,22 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
 
   // 回调
   private sendEmitter() {
+    const emitter = {
+      brand: this.vehicle_brand_id,
+      firm: this.vehicle_firm_id,
+      series: this.vehicle_series_id
+    };
+    if (!this.vehicle_brand_id) {
+      emitter.brand = null;
+    }
+    if (!this.vehicle_firm_id) {
+      emitter.firm = null;
+    }
+    if (!this.vehicle_series_id) {
+      emitter.series = null;
+    }
     timer(0).subscribe(() => {
-      this.selectBrandFirmSeries.emit({
-        brand: this.vehicle_brand_id,
-        firm: this.vehicle_firm_id,
-        series: this.vehicle_series_id
-      });
+      this.selectBrandFirmSeries.emit(emitter);
     });
   }
 }

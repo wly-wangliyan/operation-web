@@ -14,6 +14,57 @@
 </div>
 
 <div class="content-flow">
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <span>所属类别：</span>
+        <select class="form-control" [(ngModel)]="project_category" (change)="onChangeCategory($event)"
+          name="project_category">
+          <option value="">全部</option>
+          <option *ngFor="let projectCategory of projectCategories" [value]="projectCategory">
+            {{projectCategory | projectCategory}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>项目名称：</span>
+        <select class="form-control" [(ngModel)]="project_id" (change)="onChangeProjectId($event)"
+          name="upkeep_item_id">
+          <option value="">全部</option>
+          <option *ngFor="let project of currentProjectList" [value]="project.upkeep_item_id"
+            [title]="project.upkeep_item_name">
+            {{project.upkeep_item_name | zMaxLength:15}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>项目类型：</span>
+        <select class="form-control" style="width: 100px;" [(ngModel)]="project_type" (change)="onChangeType($event)"
+          name="project_type">
+          <option value="">全部</option>
+          <option *ngFor="let projectType of projectTypes" [value]="projectType">{{projectType | projectType}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>是否原厂：</span>
+        <select class="form-control" style="width: 100px;" [(ngModel)]="is_original" (change)="onChangeOriginal($event)"
+          name="is_original">
+          <option value="">全部</option>
+          <option value="true">是</option>
+          <option value="false">否</option>
+        </select>
+      </div>
+      <app-search-vehicle-type-group [display_series]="true" (selectBrandFirmSeries)="onChangeSearchParams($event)">
+      </app-search-vehicle-type-group>
+      <div class="form-group">
+        <span>配件/服务名称：</span>
+        <input class="form-control" placeholder="请输入配件/服务名称" autocomplete="off" name="upkeep_accessory_name"
+          [(ngModel)]="searchParams.upkeep_accessory_name" maxlength="20" />
+      </div>
+      <div class="form-group"><button nz-button nzType="primary" (click)="onSearchBtnClick()">查询</button></div>
+    </form>
+  </div>
   <div class="table-container">
     <div class="zmy-table">
       <nz-table [nzData]="productList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
@@ -38,18 +89,19 @@
           <tr *ngFor="let product of productTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td [title]="product.upkeep_accessory_name">
-              <a>{{product.upkeep_accessory_name}}</a>
+              <a
+                [routerLink]="['../detail',product.upkeep_accessory_id]">{{product.upkeep_accessory_name | zMaxLength:10}}</a>
             </td>
             <td>{{product.upkeep_item ? (product.upkeep_item.upkeep_item_category | projectCategory) : '--'}}</td>
             <td *ngIf="product.upkeep_item" [title]="product.upkeep_item.upkeep_item_name">
-              {{product.upkeep_item.upkeep_item_name | zMaxLength:20}}</td>
+              {{product.upkeep_item.upkeep_item_name | zMaxLength:10}}</td>
             <td *ngIf="!product.upkeep_item">--</td>
             <td>{{product.upkeep_accessory_type | projectType}}</td>
             <td>{{product.serial_number ? product.serial_number : '--'}}</td>
             <td *ngIf="product.upkeep_accessory_type===projectTypes[0]">{{product.is_original ? '是' : '否'}}</td>
             <td *ngIf="product.upkeep_accessory_type===projectTypes[1]">--</td>
             <td *ngIf="product.is_original && product.vehicle_brand && product.vehicle_firm ">
-              {{(product.vehicle_brand.vehicle_brand_name + ' > ' + product.vehicle_firm.vehicle_firm_name) | zMaxLength:20}}
+              {{(product.vehicle_brand.vehicle_brand_name + ' > ' + product.vehicle_firm.vehicle_firm_name) | zMaxLength:10}}
             </td>
             <td *ngIf="!product.is_original || !product.vehicle_brand || !product.vehicle_firm">--</td>
             <!-- <td>{{product.original_amount}}</td> -->

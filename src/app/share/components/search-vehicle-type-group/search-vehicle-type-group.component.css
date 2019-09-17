@@ -1,0 +1,12 @@
+.form-group span {
+  /* min-width: 102px;
+  text-align: right; */
+}
+
+.form-group {
+  margin-right: 20px !important;
+}
+
+.form-group select{
+  width: 150px;
+}

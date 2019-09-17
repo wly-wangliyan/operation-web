@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -6,6 +6,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
+import { ProjectEntity, ProjectManagemantHttpService } from '../../project-managemant/project-managemant-http.service';
 
 const PageSize = 15;
 
@@ -14,11 +15,27 @@ const PageSize = 15;
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
+  public projectList: Array<ProjectEntity> = []; // 保养项目列表
+
+  public currentProjectList: Array<ProjectEntity> = []; // 选中类别下保养项目列表
+
+  public project_category = ''; // 类别
+
+  public project_id = ''; // 项目id
+
+  public project_type = ''; // 项目类型
+
+  public is_original = ''; // 是否原厂
+
+  private requestSubscription: Subscription; // 获取数据
+
   public productList: Array<ProductEntity> = []; // 产品列表
+
+  public projectCategories = [1, 2, 3]; // 项目类别 1:保养项目 2:清洗养护项目 3:维修项目
 
   public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
 
@@ -50,12 +67,19 @@ export class ProductListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private globalService: GlobalService,
+    private projectService: ProjectManagemantHttpService,
     private productLibraryService: ProductLibraryHttpService
   ) { }
 
   public ngOnInit() {
     this.productList.push(new ProductEntity());
     this.generateProductList();
+    this.requestProjectList();
+  }
+
+  public ngOnDestroy() {
+    this.requestSubscription && this.requestSubscription.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 初始化获取产品列表
@@ -82,6 +106,74 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  // 获取所有配件/服务
+  private requestProjectList() {
+    this.projectList = [];
+    this.requestSubscription = this.projectService.requestProjectListData().subscribe(res => {
+      this.projectList = res;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 变更项目类别
+  public onChangeCategory(event: any) {
+    const category = event.target.value;
+    this.project_id = '';
+    this.searchParams.upkeep_item_id = null;
+    if (category) {
+      if (this.projectList) {
+        this.currentProjectList = this.projectList.filter(value => value.upkeep_item_category === Number(category));
+      }
+      const category_id = event.target.value;
+      this.searchParams.upkeep_item_category = Number(category_id);
+    } else {
+      this.currentProjectList = [];
+      this.searchParams.upkeep_item_category = null;
+    }
+  }
+
+  // 变更项目名称
+  public onChangeProjectId(event: any) {
+    if (!event.target.value) {
+      this.searchParams.upkeep_item_id = null;
+    } else {
+      this.searchParams.upkeep_item_id = event.target.value;
+    }
+  }
+
+  // 变更项目类型
+  public onChangeType(event: any) {
+    const type_id = event.target.value;
+    if (type_id) {
+      this.searchParams.upkeep_accessory_type = Number(type_id);
+    } else {
+      this.searchParams.upkeep_accessory_type = null;
+    }
+  }
+
+  // 变更是否原厂
+  public onChangeOriginal(event: any) {
+    if (event.target.value) {
+      this.searchParams.is_original = event.target.value === 'false' ? false : true;
+    } else {
+      this.searchParams.is_original = null;
+    }
+  }
+
+  // 品牌、厂商、车系回调
+  public onChangeSearchParams(event: any) {
+    if (event) {
+      this.searchParams.vehicle_brand_id = event.brand;
+      this.searchParams.vehicle_firm_id = event.firm;
+    }
+  }
+
+  // 搜索
+  public onSearchBtnClick() {
+    this.searchText$.next();
+  }
+
   /** 删除产品 */
   public onDeleteProgect(data: ProductEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
@@ -95,6 +187,7 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  // 翻页
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {

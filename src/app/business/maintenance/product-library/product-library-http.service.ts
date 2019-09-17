@@ -73,7 +73,7 @@ export class SearchParams extends EntityBase {
   public vehicle_firm_id: string = undefined; // 汽车厂商
   public upkeep_accessory_name: string = undefined; // 配件/服务名称
   public upkeep_item_category: number = undefined; // 所属类别 1:保养项目 2:清洗养护项目 3:维修项目
-  public upkeep_item_name: string = undefined; // 项目名称
+  public upkeep_item_id: string = undefined; // 项目id
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
   public is_original: boolean = undefined; // 是否原厂
   public page_num = 1; // 页码 默认:1
