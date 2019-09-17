@@ -13,6 +13,7 @@ import {
 } from '../maintenance-manual-http.service';
 import { VehicleTypeEntity } from '../../vehicle-type-management/vehicle-type-management.service';
 import { ProjectManagemantHttpService, ProjectEntity } from '../../project-managemant/project-managemant-http.service';
+import { HttpErrorEntity } from 'src/app/core/http.service';
 
 @Component({
   selector: 'app-manual-edit',
@@ -169,7 +170,11 @@ export class ManualEditComponent implements OnInit {
         }
       });
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          this.globalService.promptBox.open('获取保养手册失败！', null, 2000, null, false);
+        }
+      }
     });
   }
 
@@ -188,7 +193,15 @@ export class ManualEditComponent implements OnInit {
       this.requestManualDetail();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
-
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.field === 'parameter' && content.code === 'format_wrong') {
+              this.globalService.promptBox.open('数据缺失,请重试！', null, 2000, null, false);
+              return;
+            }
+          }
+        }
       }
     });
   }
@@ -228,7 +241,11 @@ export class ManualEditComponent implements OnInit {
       this.manualService.requestBatcSaveDescriptionData(batcSaveParams).subscribe(res => {
         this.globalService.promptBox.open('保存成功');
       }, err => {
-        this.globalService.httpErrorProcess(err);
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            this.globalService.promptBox.open('保存描述失败，请重试', null, 2000, null, false);
+          }
+        }
       });
     }
   }
