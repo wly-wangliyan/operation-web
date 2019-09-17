@@ -37,26 +37,7 @@ export class OrderDetailComponent implements OnInit {
     this.routeInfo.params.subscribe((params: Params) => {
       this.upkeep_order_id = params.upkeep_order_id;
     });
-    // const obj = [
-    //   { item_name: '213', item_category: 1 },
-    //   { item_name: '213', item_category: 1 },
-    //   { item_name: '213', item_category: 1 },
-    //   { item_name: '213', item_category: 1 },
-    //   { item_name: '56656', item_category: 2 },
-    //   { item_name: '6566', item_category: 2 },
-    //   { item_name: '65656', item_category: 2 },
-    //   { item_name: '5656', item_category: 2 },
-    //   { item_name: '56', item_category: 2 },
-    //   { item_name: '65', item_category: 3 },
-    //   { item_name: '65', item_category: 3 },
-    //   { item_name: '213', item_category: 3 },
-    //   { item_name: '213', item_category: 3 },
-    //   { item_name: '213', item_category: 3 },
-    // ];
-    // this.orderDetailList = obj;
-    // this.itemRowSpan1 = this.orderDetailList.filter(i => i.item_category === 1).length;
-    // this.itemRowSpan2 = this.orderDetailList.filter(i => i.item_category === 2).length;
-    // this.itemRowSpan3 = this.orderDetailList.filter(i => i.item_category === 3).length;
+
     // 订单详情
     this.searchText$.pipe(
       debounceTime(500),
@@ -77,7 +58,6 @@ export class OrderDetailComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchText$.next();
+    this.searchText$.next();
   }
-
 }
