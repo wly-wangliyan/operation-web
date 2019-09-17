@@ -1,0 +1,18 @@
+.content-flow {
+    margin-left: 25px;
+}
+
+.check-group {
+    margin-left: 5px;
+}
+
+.check-group label{
+    width: 200px;
+    margin-left: 5px;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.content-container {
+    padding: 40px 20px 40px 20px;
+}

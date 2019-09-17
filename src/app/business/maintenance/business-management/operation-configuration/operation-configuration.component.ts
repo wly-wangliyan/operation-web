@@ -3,13 +3,12 @@ import { Subject, Subscription } from 'rxjs';
 import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { GlobalService } from '../../../../core/global.service';
 import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { DateFormatHelper } from '../../../../../utils/date-format-helper';
 import {
   BusinessManagementService,
   SearchUpkeepProductParams,
-  UpkeepMerchantOperation,
   UpkeepMerchantProductEntity
 } from '../business-management.service';
 import { SelectBrandFirmTypeComponent } from '../../../../share/components/select-brand-firm-type/select-brand-firm-type.component';
@@ -50,8 +49,8 @@ export class OperationConfigurationComponent implements OnInit {
               private businessManagementService: BusinessManagementService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
-    activatedRoute.queryParams.subscribe(queryParams => {
-      this.upkeep_merchant_id = queryParams.upkeep_merchant_id;
+    activatedRoute.params.subscribe((params: Params) => {
+      this.upkeep_merchant_id = params.upkeep_merchant_id;
     });
   }
 
@@ -77,21 +76,19 @@ export class OperationConfigurationComponent implements OnInit {
 
   // 显示添加编辑项目modal
   public onEditBtnClick(data, isEdit) {
-    this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
-        { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
-    /*if (isEdit) {
-      this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
+    if (isEdit) {
+      this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
           { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
     } else {
-      this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, '7d9023dfd52b11e995d0309c23a2312b').subscribe(() => {
-        this.globalService.promptBox.open('修改成功！', () => {
-          this.router.navigate(['/main/maintenance/business-management/operation-configuration/edit'],
-              { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
+      this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, data.vehicle_type.vehicle_type_id).subscribe(res => {
+        this.globalService.promptBox.open('创建成功！', () => {
+          this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
+              { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: res.body.upkeep_product_id} });
         });
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
-    }*/
+    }
   }
 
   // 翻页方法
@@ -226,6 +223,31 @@ export class OperationConfigurationComponent implements OnInit {
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
+    });
+  }
+
+  // 产品上架、下架状态
+  public onSwitchChange(upkeep_merchant_product_id, event) {
+    const swith = event ? 1 : 2;
+    const params = {status: swith};
+    this.businessManagementService.requestProductStatus(this.upkeep_merchant_id, upkeep_merchant_product_id, params).subscribe(res => {
+      if (event) {
+        this.globalService.promptBox.open('上架成功');
+      } else {
+        this.globalService.promptBox.open('下架成功');
+      }
+      this.searchText$.next();
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          if (event) {
+            this.globalService.promptBox.open('上架失败，请重试', null, 2000, '/assets/images/warning.png');
+          } else {
+            this.globalService.promptBox.open('下架失败，请重试', null, 2000, '/assets/images/warning.png');
+          }
+        }
+      }
+      this.searchText$.next();
     });
   }
 }

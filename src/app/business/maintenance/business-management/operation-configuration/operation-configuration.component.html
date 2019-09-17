@@ -59,9 +59,9 @@
                         <th>厂商</th>
                         <th>车系</th>
                         <th>车型名称</th>
-                        <th>配件/服务费合计</th>
+                        <!--<th>配件/服务费合计</th>
                         <th>工时费合计</th>
-                        <th>销量</th>
+                        <th>销量</th>-->
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
@@ -69,14 +69,14 @@
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
                         <td>{{i+(pageIndex-1)*15+1}}</td>
-                        <td [title]="data.VehicleBrand.vehicle_brand_name">{{data.VehicleBrand.vehicle_brand_name|zMaxLength:20}}</td>
-                        <td>{{data.VehicleType.VehicleFirm.vehicle_firm_name}}</td>
-                        <td>{{data.VehicleType.VehicleSeries.vehicle_series_name}}</td>
-                        <td>{{data.VehicleType.vehicle_type_name}}</td>
-                        <td>{{data.telephone}}</td>
-                        <td>{{data.telephone}}</td>
-                        <td>{{data.telephone}}</td>
-                        <td>{{data.telephone}}</td>
+                        <td [title]="data.vehicle_brand?.vehicle_brand_name">{{data.vehicle_brand?.vehicle_brand_name|zMaxLength:20}}</td>
+                        <td>{{data.vehicle_firm.vehicle_firm_name}}</td>
+                        <td>{{data.vehicle_series.vehicle_series_name}}</td>
+                        <td>{{data.vehicle_type.vehicle_type_name}}</td>
+                        <td>
+                            <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="上架" nzUnCheckedChildren="下架"
+                                       (ngModelChange)="onSwitchChange(data.upkeep_merchant_product_id,$event)"></nz-switch>
+                        </td>
                         <td class="operation">
                             <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
                             <a [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>

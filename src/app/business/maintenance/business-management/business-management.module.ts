@@ -9,6 +9,7 @@ import { OperationConfigurationComponent } from './operation-configuration/opera
 import { OperationConfigurationDetailComponent } from './operation-configuration/operation-configuration-detail/operation-configuration-detail.component';
 import { OperationConfigurationEditComponent } from './operation-configuration/operation-configuration-edit/operation-configuration-edit.component';
 import { ChooseAccessoryComponent } from './operation-configuration/operation-configuration-edit/choose-accessory/choose-accessory.component';
+import { CreateAccessoryComponent } from './operation-configuration/operation-configuration-edit/create-accessory/create-accessory.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ChooseAccessoryComponent } from './operation-configuration/operation-co
     OperationConfigurationComponent,
     OperationConfigurationDetailComponent,
     OperationConfigurationEditComponent,
-    ChooseAccessoryComponent],
+    ChooseAccessoryComponent,
+    CreateAccessoryComponent],
   imports: [
     ShareModule,
     CommonModule,

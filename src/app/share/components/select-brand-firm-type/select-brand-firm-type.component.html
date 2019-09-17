@@ -9,16 +9,28 @@
           <div class="content-list">
             <div class="leter-list">
               <ul>
-                <li *ngFor="let leter of letter_list">{{leter}}</li>
+                <li *ngFor="let leter of letter_list">
+                  <nz-anchor [nzAffix]="false">
+                    <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
+                  </nz-anchor>
+                </li>
               </ul>
             </div>
-            <ul>
-              <li *ngFor="let vehicleBrand of vehicleBrandList" (click)="onBrandClick(vehicleBrand)"
-                [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
-                <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
-                {{vehicleBrand.vehicle_brand_name}}
-              </li>
-            </ul>
+            <div class="brand-list">
+              <ul>
+                <li *ngFor="let leter of letter_list">
+                  <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
+                    <p id="{{leter}}" class="leter-title">{{leter}}</p>
+                    <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
+                         (click)="onBrandClick(vehicleBrand)"
+                         [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
+                      <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
+                      {{vehicleBrand.vehicle_brand_name}}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="content-left">
@@ -26,11 +38,11 @@
           <div class="content-list">
             <ng-container *ngIf="vehicleSeriesItem && vehicleSeriesItem.length > 0">
               <ul>
-                <li *ngFor="let vehicleSeries of vehicleSeriesItem">
-                  <input id="serie_{{vehicleSeries.source.vehicle_series_id}}" (change)="onChangeFirmCheck(onChangeSeriesCheck)"
-                    [(ngModel)]="vehicleSeries.checked" type="checkbox" />
-                  <label
-                    for="serie_{{vehicleSeries.source.vehicle_series_id}}">{{vehicleSeries.source.vehicle_series_id}}</label>
+                <li *ngFor="let vehicleFirm of vehicleSeriesItem" style="width: 221px">
+                  <label>{{vehicleFirm.source.vehicle_firm.vehicle_firm_name}}</label>
+                  <div (click)="onChangeSeriesCheck(vehicleFirm.source)" [class.active]="vehicleFirm.source.vehicle_series_id === currentSeries.vehicle_series_id">
+                    <span>{{vehicleFirm.source.vehicle_series_name}}</span>
+                  </div>
                 </li>
               </ul>
             </ng-container>
@@ -45,10 +57,9 @@
             <ng-container *ngIf="vehicleTypeItem && vehicleTypeItem.length > 0">
               <ul>
                 <li *ngFor="let vehicleType of vehicleTypeItem">
-                  <input id="type_{{vehicleType.source.vehicle_type_id}}" (change)="onChangeFirmCheck(vehicleType)"
-                         [(ngModel)]="vehicleType.checked" type="checkbox" />
-                  <label
-                          for="type_{{vehicleType.source.vehicle_type_id}}">{{vehicleType.source.vehicle_type_id}}</label>
+                  <div (click)="onChangeTypeCheck(vehicleType.source)" [class.active]="vehicleType.source.vehicle_type_id === currentType.vehicle_type_id">
+                    <span style="padding-left: 0;line-height: 25px">{{vehicleType.source.vehicle_type_name}}</span>
+                  </div>
                 </li>
               </ul>
             </ng-container>

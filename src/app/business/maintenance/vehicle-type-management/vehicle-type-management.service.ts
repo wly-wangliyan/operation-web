@@ -139,11 +139,24 @@ export class VehicleTypeManagementService {
     }
 
     /**
-     * 根据厂商获取汽车车系列表
+     * 根据厂商获取汽车车型列表
      * @returns Observable<Array<VehicleTypeEntity>
      */
     public requestVehicleTypeList(vehicle_series_id: string): Observable<Array<VehicleTypeEntity>> {
         return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_series/${vehicle_series_id}/vehicle_types`)
+            .pipe(map(data => {
+                const tempResults = data.body;
+                return tempResults;
+            }));
+    }
+
+    /**
+     * 根据厂商获取汽车车系列表
+     * @returns Observable<Array<VehicleSeriesEntity>
+     */
+    public requestVehicleSeriesListByBrand(vehicle_brand_id: string): Observable<Array<VehicleSeriesEntity>> {
+        const params = {vehicle_brand: vehicle_brand_id};
+        return this.httpService.get(environment.OPERATION_SERVE + `/vehicle_series`, params)
             .pipe(map(data => {
                 const tempResults = data.body;
                 return tempResults;

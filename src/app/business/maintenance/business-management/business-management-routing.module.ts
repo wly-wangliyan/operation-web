@@ -17,9 +17,9 @@ const routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: BusinessListComponent },
       { path: 'edit', component: BusinessEditComponent },
-      { path: 'operation-configuration', component: OperationConfigurationComponent },
-      { path: 'operation-configuration/detail', component: OperationConfigurationDetailComponent },
-      { path: 'operation-configuration/edit', component: OperationConfigurationEditComponent },
+      { path: 'operation-configuration/:upkeep_merchant_id', component: OperationConfigurationComponent },
+      { path: 'operation-configuration/:upkeep_merchant_id/detail', component: OperationConfigurationDetailComponent },
+      { path: 'operation-configuration/:upkeep_merchant_id/edit', component: OperationConfigurationEditComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }

@@ -57,6 +57,8 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   public currentBrand: VehicleBrandEntity = new VehicleBrandEntity(); // 选中品牌
 
+  public mapOfBrand: { [key: string]: Array<VehicleBrandEntity> } = {}; // 字母对应品牌
+
   public vehicleFirmList: Array<VehicleFirmEntity> = []; // 车辆品牌厂商
 
   public vehicleFirmItem: Array<VehicleFirmItem> = []; // 格式化后厂商元素
@@ -67,7 +69,11 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   public currentSeries: VehicleSeriesEntity = new VehicleSeriesEntity(); // 选中品牌
 
+  public vehicleTypeList: Array<VehicleTypeEntity> = []; // 车辆品牌厂商
+
   public vehicleTypeItem: Array<VehicleTypeItem> = []; // 格式化后厂商元素
+
+  public currentType: VehicleTypeEntity = new VehicleTypeEntity(); // 选中品牌
 
   private requestBrandSubscription: Subscription; // 获取品牌数据
 
@@ -120,6 +126,9 @@ export class SelectBrandFirmTypeComponent implements OnInit {
   private requestBrandList() {
     this.requestBrandSubscription = this.vehicleService.requestVehicleBrandList().subscribe(res => {
       this.vehicleBrandList = res.results;
+      this.letter_list.forEach(leter => {
+        this.mapOfBrand[leter] = this.vehicleBrandList.filter(brand => brand.vehicle_brand_initial === leter);
+      });
     }, err => {
       $('#selectBrandFirmModal').modal('hide');
       this.globalService.httpErrorProcess(err);
@@ -128,60 +137,50 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 选中品牌
   public onBrandClick(vehicleBrand: VehicleBrandEntity) {
-    this.requestFirmListByBrand(vehicleBrand.vehicle_brand_id);
-  }
-
-  // 勾选厂商
-  public onChangeSeriesCheck(vehicleFirm: VehicleSeriesItem) {
-    if (vehicleFirm.checked) {
-      if (!this.multi) {
-        this.vehicleSeriesItem.forEach(item => {
-          if (item.source.vehicle_series_id !== vehicleFirm.source.vehicle_series_id) {
-            item.checked = false;
-          }
-        });
-      }
-    }
+    this.currentBrand = vehicleBrand;
+    this.requestFirmSeriesListByBrand(vehicleBrand.vehicle_brand_id);
   }
 
   // 勾选车系
-  public onChangeFirmCheck(vehicleFirm: VehicleFirmItem) {
-    if (vehicleFirm.checked) {
-      if (!this.multi) {
-        this.vehicleFirmItem.forEach(item => {
-          if (item.source.vehicle_firm_id !== vehicleFirm.source.vehicle_firm_id) {
-            item.checked = false;
-          }
-        });
-      }
-    }
+  public onChangeSeriesCheck(vehicleSeries: VehicleSeriesEntity) {
+    this.currentSeries = vehicleSeries;
+    this.requestTypeList(vehicleSeries.vehicle_series_id);
   }
 
   // 勾选车型
-  public onChangeTypeCheck(vehicleType: VehicleTypeItem) {
-    if (vehicleType.checked) {
-      if (!this.multi) {
-        this.vehicleTypeItem.forEach(item => {
-          if (item.source.vehicle_type_id !== vehicleType.source.vehicle_type_id) {
-            item.checked = false;
-          }
-        });
-      }
-    }
+  public onChangeTypeCheck(vehicleType: VehicleTypeEntity) {
+    this.currentType = vehicleType;
   }
 
-  // 获取对应厂商列表
-  private requestFirmListByBrand(vehicle_brand_id: string) {
-    this.vehicleService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
-      this.vehicleFirmList = res;
-      const vehicleFirmItem = [];
-      this.vehicleFirmList.forEach(item => {
-        const firmItem = new VehicleFirmItem(item);
-        vehicleFirmItem.push(firmItem);
+  // 获取对应厂商车系列表
+  private requestFirmSeriesListByBrand(vehicle_brand_id: string) {
+    this.vehicleService.requestVehicleSeriesListByBrand(vehicle_brand_id).subscribe(res => {
+      this.vehicleSeriesList = res;
+      const vehicleSeriesItem = [];
+      this.vehicleSeriesList.forEach(item => {
+        const seriesItem = new VehicleSeriesItem(item);
+        vehicleSeriesItem.push(seriesItem);
       });
-      this.vehicleFirmItem = vehicleFirmItem;
+      this.vehicleSeriesItem = vehicleSeriesItem;
     }, err => {
-      this.vehicleFirmItem = [];
+      this.vehicleSeriesItem = [];
+      $('#selectBrandFirmModal').modal('hide');
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 获取对应车型列表
+  private requestTypeList(vehicle_series_id: string) {
+    this.vehicleService.requestVehicleTypeList(vehicle_series_id).subscribe(res => {
+      this.vehicleTypeList = res;
+      const vehicleTypeItem = [];
+      this.vehicleTypeList.forEach(item => {
+        const typeItem = new VehicleTypeItem(item);
+        vehicleTypeItem.push(typeItem);
+      });
+      this.vehicleTypeItem = vehicleTypeItem;
+    }, err => {
+      this.vehicleTypeItem = [];
       $('#selectBrandFirmModal').modal('hide');
       this.globalService.httpErrorProcess(err);
     });
@@ -189,14 +188,14 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 回传选中事件
   public onSelectEmit() {
-    const firmItem = this.vehicleFirmItem.filter(item => item.checked);
+    // const firmItem = this.vehicleFirmItem.filter(item => item.checked);
     /*if (firmItem.length > 0) {
       this.selectBrandFirm.emit({ firm: firmItem });
       $('#selectBrandFirmModal').modal('hide');
     } else {
       this.tipMsg = '请选择厂商';
     }*/
-    this.selectBrandFirm.emit({ firm: firmItem });
+    this.selectBrandFirm.emit({ vehicle_type: this.currentType });
     $('#selectBrandFirmModal').modal('hide');
   }
 }

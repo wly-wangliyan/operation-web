@@ -52,7 +52,7 @@ export class SelectBrandFirmComponent implements OnInit {
 
   private requestFirmSubscription: Subscription; // 获取厂商数据
 
-  private isFirstRender = true; // 用于标记第一次渲染已勾选厂商
+  // private isFirstRender = true; // 用于标记第一次渲染已勾选厂商
 
   public tipMsg = ''; // 提示信息
 
@@ -91,7 +91,6 @@ export class SelectBrandFirmComponent implements OnInit {
     this.vehicleBrandList = [];
     this.vehicleFirmItem = [];
     this.mapOfFirm = {};
-    this.isFirstRender = true;
     this.currentBrand = new VehicleBrandEntity();
   }
 
@@ -114,7 +113,6 @@ export class SelectBrandFirmComponent implements OnInit {
           brands.forEach(brandId => {
             const isfindIndex = this.vehicleBrandList.some(brand => brand.vehicle_brand_id === brandId);
             if (isfindIndex) {
-              this.isFirstRender = true;
               this.requestFirmListByBrand(brandId);
             }
           });
@@ -173,7 +171,7 @@ export class SelectBrandFirmComponent implements OnInit {
         vehicleFirmList.forEach(item => {
           const firmItem = new VehicleFirmItem(item);
           // 首次加载渲染已勾选厂商
-          if (this.isFirstRender && fiems.indexOf(item.vehicle_firm_id) !== -1) {
+          if (fiems.indexOf(item.vehicle_firm_id) !== -1) {
             firmItem.checked = true;
             if (this.isDisabled) {
               firmItem.disabled = true;
@@ -184,7 +182,6 @@ export class SelectBrandFirmComponent implements OnInit {
         });
         this.vehicleFirmItem = vehicleFirmItem;
         this.mapOfFirm[vehicle_brand_id] = vehicleFirmItem;
-        this.isFirstRender = false;
       }, err => {
         this.vehicleFirmItem = [];
         $('#selectBrandFirmModal').modal('hide');

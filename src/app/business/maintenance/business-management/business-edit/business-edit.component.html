@@ -106,7 +106,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
-                        <td>{{data.vehicle_brand.vehicle_brand_name}}</td>
+                        <td>{{data.vehicle_brand?.vehicle_brand_name}}</td>
                         <td>{{data.vehicle_firm_name}}</td>
                         <td class="operation">
                             <a [title]="'移除'" (click)="onDelBrandClick(data)">移除</a>
@@ -121,36 +121,30 @@
                     <span>可提前预定</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control"
+                    <input class="form-control" (change)="errPositionItem.booking.isError=false" required
                            type="number" [(ngModel)]="currentBusiness.booking" name="booking" (keypress)="inputNumberLimit($event)">
                     <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
                 </div>
+                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
             </div>
             <div class="row">
                 <label class="control-label">
                     <b>*</b>
                     <span>客服电话</span>
                 </label>
-               <!-- <div class="control-input" *ngFor="let item of currentBusiness.service_telephone.split(',');let i=index">
-                    <input class="form-control" [(ngModel)]="item" name="service_telephone" placeholder="请输入座机或手机号">
+                <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
+                    <input class="form-control" name="service_telephone{{i}}" required
+                           (change)="onInputServiceTelephone($event, i)" [(ngModel)]="item" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                    <button class="common-btn" nz-button (click)="onDelTelClick()" *ngIf="!is_add_tel">移除</button>
-                </div>-->
+                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
+                </div>
                 <span class="msg-span">注：最多可添加2个</span>
             </div>
-            <!--<div class="row" *ngIf="!is_add_tel">
-                <label class="control-label">
-                    <b>&nbsp;</b>
-                    <span></span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="''" name="tel" placeholder="请输入座机或手机号">
-                    <button class="common-btn" nz-button (click)="onDelTelClick()">移除</button>
-                </div>
-            </div>-->
-            <div class="row row-message"></div>
-            <div>
-                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+            <div style="margin-left: 120px;height: 15px;">
+                <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
+            </div>
+            <div style="margin-top: 40px">
+                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
                         (appZDebounceClick)="onEditFormSubmit()">保存
                 </button>
                 <button class="close-btn" nz-button (click)="onClose()">取消</button>
@@ -162,4 +156,4 @@
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
 <!--选择品牌厂商控件-->
-<app-select-brand-firm [selectedBrand]="" [selectedFirm]="" [multi]="true"></app-select-brand-firm>
+<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
