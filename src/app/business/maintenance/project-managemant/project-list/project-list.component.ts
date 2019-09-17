@@ -161,10 +161,6 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  public onDownloadMould() {
-    console.log('下载模板');
-  }
-
   /** 添加、编辑 */
   public onShowModal(data?: ProjectEntity) {
     this.onClearErrMsg();
