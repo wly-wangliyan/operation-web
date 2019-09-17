@@ -8,9 +8,10 @@
     background:rgba(255,255,255,1);
     border-radius:4px;
     margin: 11px 0 30px 0;
+    display: flex;
 }
 
-.vehicle-space label {
+.vehicle-space div {
     width: 100px;
     text-align: center;
     vertical-align: middle;
@@ -18,7 +19,7 @@
     border-right: 1px solid #D8D8D8;
 }
 
-.vehicle-space label:last-child {
+.vehicle-space div:last-child {
     width: 514px;
     border-right: none;
 }
@@ -34,7 +35,8 @@
 }
 
 .maintenance-space button {
-    margin-left: 62%;
+    margin-top: 7px;
+    line-height: 34px;
 }
 
 .maintenance-title {
@@ -57,9 +59,10 @@
 }
 
 .maintenance-price input {
-    width: 160px;
+    width: 100px;
     border-radius: 1px;
     margin-top: 7px;
+    border-right: none!important;
 }
 
 .maintenance-price img {
@@ -67,13 +70,14 @@
     height:34px;
     background:rgba(62,113,247,1);
     border-radius:4px;
-    padding: 10px 3px;
+    padding: 12px 6px;
     margin-top: 7px;
     margin-left: 10px;
 }
 
 .maintenance-price label {
     margin-bottom: 0;
+    margin-right: 10px;
 }
 
 .maintenance-price label:last-child {
@@ -88,7 +92,7 @@
 }
 
 .space-width {
-    height: 240px;
+    /*height: 240px;*/
     width: calc(43% - 5px);
     margin-right: 10px;
     float: left;
@@ -116,7 +120,7 @@
 }
 
 .maintenance-content span {
-    width: 90px;
+    width: 80px;
     line-height: 30px;
 }
 
@@ -147,4 +151,51 @@ b {
 
 .modal-dialog {
     max-width: 1000px;
+}
+
+.price-label {
+    border: 0.5px solid rgba(136, 136, 136, 0.3);
+    height: 34px;
+    width: 34px;
+    border-radius: 1px;
+    margin-top: 7px;
+    border-left: none;
+    text-align: center;
+    line-height: 34px;
+}
+
+.price-label-input {
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    margin-top: 0;
+    margin-right: 20px;
+}
+
+.form-control {
+    height: 34px;
+}
+
+.price-save-btn {
+    margin-top: 7px;
+    width: 34px;
+    height: 34px;
+    border-radius: 1px;
+    border-left: none;
+    background: url("/assets/images/icon_save.png") center no-repeat;
+    background-color: #3E71F7;
+}
+
+.price-save-back {
+    background: url("/assets/images/icon_edit.png") center no-repeat;
+}
+
+.maintenance-space-float {
+    float: right;
+    margin-right: 20px;
+    line-height: 50px;
+}
+
+.img-height {
+    margin-bottom: 40px!important;
 }

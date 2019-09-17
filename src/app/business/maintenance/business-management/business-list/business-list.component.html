@@ -68,7 +68,7 @@
                                    (ngModelChange)="onSwitchChange(data.upkeep_merchant_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'运营配置'" (click)="onOperationBtnClick(data)">运营配置</a>
+                        <a [title]="'运营配置'" routerLink="/main/maintenance/business-management/operation-configuration/{{data.upkeep_merchant_id}}">运营配置</a>
                         <a [title]="'编辑材料'" (click)="onEditBtnClick(data)">编辑材料</a>
                        <!-- <a [title]="'删除'" (click)="onEditBtnClick(data)">删除</a>-->
                     </td>

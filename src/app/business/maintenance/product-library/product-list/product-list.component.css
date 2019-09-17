@@ -1,0 +1,16 @@
+.search-container {
+  margin-left: 15px;
+  width: calc(100% - 30px);
+}
+
+.search-form .form-group {
+  margin-right: 20px !important;
+}
+
+.search-btn-group {
+  margin: 0 0 0 60px;
+}
+
+.form-group select {
+  width: 150px;
+}

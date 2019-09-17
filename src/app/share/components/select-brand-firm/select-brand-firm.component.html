@@ -40,7 +40,7 @@
               <ul>
                 <li *ngFor="let vehicleFirm of vehicleFirmItem">
                   <input id="firm_{{vehicleFirm.source.vehicle_firm_id}}" (change)="onChangeFirmCheck(vehicleFirm)"
-                    [(ngModel)]="vehicleFirm.checked" type="checkbox" />
+                    [(ngModel)]="vehicleFirm.checked" [disabled]="vehicleFirm.disabled" type="checkbox" />
                   <label
                     for="firm_{{vehicleFirm.source.vehicle_firm_id}}">{{vehicleFirm.source.vehicle_firm_name}}</label>
                 </li>

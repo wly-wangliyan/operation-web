@@ -96,58 +96,71 @@ export class UpkeepMerchantOperation extends EntityBase {
 
 export class SearchUpkeepProductParams extends EntityBase {
     public status = ''; // 	integer	F	状态 1:销售中 2:未上架
-    vehicle_brand_id = ''; // 	string(32)	F	汽车品牌ID
-    vehicle_firm_id = ''; // 	string(32)	F	汽车厂商ID
-    vehicle_series_id = ''; // 	string(32)	F	车系ID
-    vehicle_type_name = ''; // 	string	F	车型名称
+    public vehicle_brand_id = ''; // 	string(32)	F	汽车品牌ID
+    public vehicle_firm_id = ''; // 	string(32)	F	汽车厂商ID
+    public vehicle_series_id = ''; // 	string(32)	F	车系ID
+    public vehicle_type_name = ''; // 	string	F	车型名称
     public page_size = 45; // integer	F	每页条数 默认20
     public page_num = 1; // integer	F	页码 默认1
 }
 
 export class UpkeepMerchantProductEntity extends EntityBase {
     public upkeep_merchant_product_id: string = undefined; //	string	保养商家产品-主键
-    public VehicleBrand: VehicleBrandEntity = undefined; //	object	汽车品牌-外键
-    public VehicleFirm: VehicleFirmEntity = undefined; //	object	汽车厂商-外键
-    public VehicleSeries: VehicleSeriesEntity = undefined; //	object	汽车车系-外键
-    public VehicleType: VehicleTypeEntity = undefined; //	object	汽车车型-外键
-    public UpkeepMerchant: UpkeepMerchantEntity = undefined; //	object	保养商家-外键
+    public vehicle_brand: VehicleBrandEntity = undefined; //	object	汽车品牌-外键
+    public vehicle_firm: VehicleFirmEntity = undefined; //	object	汽车厂商-外键
+    public vehicle_series: VehicleSeriesEntity = undefined; //	object	汽车车系-外键
+    public vehicle_type: VehicleTypeEntity = undefined; //	object	汽车车型-外键
+    public upkeep_merchant: UpkeepMerchantEntity = undefined; //	object	保养商家-外键
     public status: number = undefined; //	integer	状态 1:上架 2:下架
     public created_time: number = undefined; 	// float 	创建时间
     public updated_time: number = undefined; 	// float 	修改时间
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-        if (propertyName === 'VehicleBrand') {
+        if (propertyName === 'vehicle_brand') {
             return VehicleBrandEntity;
-        } else if (propertyName === 'VehicleFirm') {
+        } else if (propertyName === 'vehicle_firm') {
             return VehicleFirmEntity;
-        } else if (propertyName === 'VehicleSeries') {
+        } else if (propertyName === 'vehicle_series') {
             return VehicleSeriesEntity;
-        } else if (propertyName === 'VehicleType') {
+        } else if (propertyName === 'vehicle_type') {
             return VehicleTypeEntity;
-        } else if (propertyName === 'UpkeepMerchant') {
+        } else if (propertyName === 'upkeep_merchant') {
             return UpkeepMerchantEntity;
         }
         return null;
     }
 }
 
+export class HandbookItemEntity extends EntityBase {
+    public item_category = undefined; //	float	项目类型
+    public item_id: string = undefined; //	string	保养手册id
+    public item_name: string = undefined; //	string	项目名称
+    public upkeep_item_type = undefined; //	string	项目类型
+    public switch: string = undefined; //	string	开关
+    public uh_item_id: string = undefined; //	string	保养手册-项目id
+    public description: string = undefined; //	string	描述
+    public created_time: number = undefined; 	// float 	创建时间
+    public updated_time: number = undefined; 	// float 	修改时间
+}
+
 export class UpkeepMerchantProjectEntity extends EntityBase {
     public upkeep_merchant_project_id: string = undefined; //	string	保养商家项目-主键
-    public VehicleType: VehicleTypeEntity = undefined; //	object	汽车车型-外键
-    public UpkeepMerchantProduct: UpkeepMerchantProductEntity = undefined; //	object	保养商家产品-外键
-    public UpkeepHandbookItem: HandbookEntity = undefined; //	object	保养手册项目-外键
-    public work_original_amount: number = undefined; //	float	原价工时费 单位:元
-    public work_sale_amount: number = undefined; //	float	售价工时费 单位:元
+    public vehicle_type: VehicleTypeEntity = undefined; //	object	汽车车型-外键
+    public upkeep_merchant_product: UpkeepMerchantProductEntity = undefined; //	object	保养商家产品-外键
+    public upkeep_handbook_item: HandbookItemEntity = undefined; //	object	保养手册项目-外键
+    public work_original_amount = 0; //	float	原价工时费 单位:元
+    public work_sale_amount = 0; //	float	售价工时费 单位:元
     public switch = undefined; //	boolean	商家项目开关 True:开 False:关
+    public accessory_count = undefined; //	float	已选配件数
     public created_time: number = undefined; 	// float 	创建时间
     public updated_time: number = undefined; 	// float 	修改时间
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-        if (propertyName === 'UpkeepMerchantProduct') {
+        if (propertyName === 'upkeep_merchant_product') {
             return UpkeepMerchantProductEntity;
-        } else if (propertyName === 'UpkeepHandbookItem') {
-            return HandbookEntity;
-        } else if (propertyName === 'VehicleType') {
+        } else if (propertyName === 'upkeep_handbook_item') {
+            return HandbookItemEntity;
+        } else if (propertyName === 'vehicle_type') {
             return VehicleTypeEntity;
         }
         return null;
@@ -156,17 +169,17 @@ export class UpkeepMerchantProjectEntity extends EntityBase {
 
 export class UpkeepMerchantAccessoryEntity extends EntityBase {
     public upkeep_merchant_accessory_id: string = undefined; //	string	保养商家配件-主键
-    public UpkeepMerchantProject: UpkeepMerchantProjectEntity = undefined; //	object	保养商家项目-外键
-    public UpkeepAccessory: ProductEntity = undefined; //	object	保养产品/配件库
+    public upkeep_merchant_project: UpkeepMerchantProjectEntity = undefined; //	object	保养商家项目-外键
+    public upkeep_accessory: ProductEntity = undefined; //	object	保养产品/配件库
     public number: number = undefined; //	integer	所需数量 单位:件
     public sale_amount: number = undefined; //	float	销售单价 单位:元
     public created_time: number = undefined; 	// float 	创建时间
     public updated_time: number = undefined; 	// float 	修改时间
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-        if (propertyName === 'UpkeepMerchantProject') {
+        if (propertyName === 'upkeep_merchant_project') {
             return UpkeepMerchantProjectEntity;
-        } else if (propertyName === 'UpkeepAccessory') {
+        } else if (propertyName === 'upkeep_accessory') {
             return ProductEntity;
         }
         return null;
@@ -236,6 +249,29 @@ export class BusinessManagementService {
     public requestUpkeepMerchants(upkeep_merchant_id: string, params: any): Observable<HttpResponse<any>> {
         return this.httpService.patch(environment.OPERATION_SERVE +
             `/upkeep_merchants/${upkeep_merchant_id}/status`, params);
+    }
+
+    /**
+     * 请求编辑商家
+     * @param string upkeep_merchant_id 参数
+     * @param string upkeep_operation_id 参数
+     * @param any params 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestUpdateUpkeepMerchant(upkeep_merchant_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService
+            .put(environment.OPERATION_SERVE + `/upkeep_merchants/${upkeep_merchant_id}`, params);
+    }
+
+    /**
+     * 产品上架、下架状态
+     * @param upkeep_merchant_id 商家id
+     * @param params 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestProductStatus(upkeep_merchant_id: string, upkeep_merchant_product_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService.patch(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_merchant_product_id}/status`, params);
     }
 
     /**
@@ -344,17 +380,6 @@ export class BusinessManagementService {
     }
 
     /**
-     * 上架、下架商家产品
-     * @param upkeep_merchant_id 商家id
-     * @param params 参数
-     * @returns Observable<HttpResponse<any>>
-     */
-    public requestUpkeepProductStatus(upkeep_merchant_id: string, upkeep_product_id: string, productStatus: number): Observable<HttpResponse<any>> {
-        return this.httpService.patch(environment.OPERATION_SERVE +
-            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/status`, {status: productStatus});
-    }
-
-    /**
      * 请求获取保养商家产品下项目列表
      * @returns Observable<Array<UpkeepMerchantProjectEntity>
      */
@@ -377,6 +402,61 @@ export class BusinessManagementService {
                 const tempResults = data.body;
                 return tempResults;
             }));
+    }
+
+    /**
+     * 编辑商家项目状态
+     * @param upkeep_merchant_id 商家id
+     * @param params 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestUpkeepProductStatus(upkeep_merchant_id: string, upkeep_merchant_product_id: string, upkeep_project_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService.patch(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_merchant_product_id}/upkeep_projects/${upkeep_project_id}/status`, params);
+    }
+
+    /**
+     * 请求创建商家配件
+     * @param string upkeep_merchant_id 参数
+     * @param string vehicle_typeId 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestAddUpkeepAccessories(upkeep_merchant_id: string, upkeep_product_id: string, upkeep_project_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService.post(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/upkeep_projects/${upkeep_project_id}/upkeep_accessories`, params);
+    }
+
+    /**
+     * 请求编辑商家配件
+     * @param string upkeep_merchant_id 参数
+     * @param string vehicle_typeId 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestUpdateUpkeepAccessories(upkeep_merchant_id: string, upkeep_product_id: string, upkeep_project_id: string, upkeep_accessory_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService.put(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/upkeep_projects/${upkeep_project_id}/upkeep_accessories/${upkeep_accessory_id}
+`, params);
+    }
+
+    /**
+     * 请求删除商家运营时段
+     * @param string upkeep_merchant_id 参数
+     * @param string upkeep_operation_id 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestDeleteUpkeepAccessory(upkeep_merchant_id: string, upkeep_product_id: string, upkeep_project_id: string, upkeep_accessory_id: string): Observable<HttpResponse<any>> {
+        return this.httpService.delete(environment.OPERATION_SERVE + `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/upkeep_projects/${upkeep_project_id}/upkeep_accessories/${upkeep_accessory_id}`);
+    }
+
+    /**
+     * 请求编辑商家项目
+     * @param string upkeep_merchant_id 参数
+     * @param string vehicle_typeId 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestUpdateUpkeepProject(upkeep_merchant_id: string, upkeep_product_id: string, upkeep_project_id: string, params: any): Observable<HttpResponse<any>> {
+        return this.httpService.put(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/upkeep_projects/${upkeep_project_id}`, params);
     }
 }
 

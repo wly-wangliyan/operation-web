@@ -9,6 +9,7 @@ import {
 
 class VehicleFirmItem {
   public checked = false;
+  public disabled = false;
   public source: VehicleFirmEntity;
 
   constructor(source: VehicleFirmEntity) {
@@ -35,6 +36,8 @@ export class SelectBrandFirmComponent implements OnInit {
 
   @Input() private multi = true; // 标记厂商是否多选
 
+  @Input() private isDisabled = false; // 标记是否对厂商禁用
+
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
   public mapOfBrand: { [key: string]: Array<VehicleBrandEntity> } = {}; // 字母对应品牌
@@ -49,7 +52,7 @@ export class SelectBrandFirmComponent implements OnInit {
 
   private requestFirmSubscription: Subscription; // 获取厂商数据
 
-  private isFirstRender = true; // 用于标记第一次渲染已勾选厂商
+  // private isFirstRender = true; // 用于标记第一次渲染已勾选厂商
 
   public tipMsg = ''; // 提示信息
 
@@ -88,7 +91,6 @@ export class SelectBrandFirmComponent implements OnInit {
     this.vehicleBrandList = [];
     this.vehicleFirmItem = [];
     this.mapOfFirm = {};
-    this.isFirstRender = true;
     this.currentBrand = new VehicleBrandEntity();
   }
 
@@ -111,12 +113,10 @@ export class SelectBrandFirmComponent implements OnInit {
           brands.forEach(brandId => {
             const isfindIndex = this.vehicleBrandList.some(brand => brand.vehicle_brand_id === brandId);
             if (isfindIndex) {
-              this.isFirstRender = true;
               this.requestFirmListByBrand(brandId);
             }
           });
         }
-
       }
     }, err => {
       $('#selectBrandFirmModal').modal('hide');
@@ -168,14 +168,15 @@ export class SelectBrandFirmComponent implements OnInit {
         if (this.selectedFirm) {
           fiems = this.selectedFirm.split(',');
         }
-
         vehicleFirmList.forEach(item => {
           const firmItem = new VehicleFirmItem(item);
           // 首次加载渲染已勾选厂商
-          if (this.isFirstRender && fiems.indexOf(item.vehicle_firm_id) !== -1) {
+          if (fiems.indexOf(item.vehicle_firm_id) !== -1) {
             firmItem.checked = true;
+            if (this.isDisabled) {
+              firmItem.disabled = true;
+            }
             this.currentBrand = item.vehicle_brand;
-            this.isFirstRender = false;
           }
           vehicleFirmItem.push(firmItem);
         });
@@ -195,7 +196,7 @@ export class SelectBrandFirmComponent implements OnInit {
     for (const i in this.mapOfFirm) {
       if (this.mapOfFirm.hasOwnProperty(i)) {
         this.mapOfFirm[i].forEach(firm => {
-          if (firm.checked) {
+          if (firm.checked && !firm.disabled) {
             firmItem_checked.push(firm.source);
           }
         });

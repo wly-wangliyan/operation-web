@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../../../business-management.service';
 import { Subject, Subscription } from 'rxjs';
 import { BusinessEditComponent } from '../../../business-edit/business-edit.component';
@@ -6,6 +6,7 @@ import { GlobalService } from '../../../../../../core/global.service';
 import { Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductEntity, ProductLibraryHttpService, SearchParams } from '../../../../product-library/product-library-http.service';
+import { HttpErrorEntity } from '../../../../../../core/http.service';
 
 const PageSize = 15;
 
@@ -24,11 +25,15 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public noResultText = '数据加载中...';
 
+  public upkeep_item_type: number;
+
   private searchText$ = new Subject<any>();
 
   private continueRequestSubscription: Subscription; // 分页获取数据
 
   private linkUrl: string;
+
+  @Output('selectAccessory') public selectAccessory = new EventEmitter();
 
   private get pageCount(): number {
     if (this.productList.length % PageSize === 0) {
@@ -39,6 +44,7 @@ export class ChooseAccessoryComponent implements OnInit {
 
   constructor(private globalService: GlobalService,
               private productLibraryService: ProductLibraryHttpService,
+              private businessManagementService: BusinessManagementService,
               private router: Router) {
   }
 
@@ -89,5 +95,10 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public onSearchBtnClick() {
     this.searchText$.next();
+  }
+
+  // 选择配件
+  public onChooseClick(data) {
+    this.selectAccessory.emit(data);
   }
 }

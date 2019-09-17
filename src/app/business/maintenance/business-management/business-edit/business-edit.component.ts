@@ -10,6 +10,7 @@ import { MapItem, ZMapSelectPointComponent } from '../../../../share/components/
 import { ActivatedRoute, Router } from '@angular/router';
 import { BusinessManagementService, UpkeepMerchantEntity } from '../business-management.service';
 import { SelectBrandFirmComponent } from '../../../../share/components/select-brand-firm/select-brand-firm.component';
+import { ValidateHelper } from '../../../../../utils/validate-helper';
 
 export class ErrMessageItem {
     public isError = false;
@@ -25,21 +26,16 @@ export class ErrMessageItem {
 }
 
 export class ErrPositionItem {
-    icon: ErrMessageItem = new ErrMessageItem();
-    title: ErrMessageItem = new ErrMessageItem();
-    jump_link: ErrMessageItem = new ErrMessageItem();
-    corner: ErrMessageItem = new ErrMessageItem();
+    service_telephone: ErrMessageItem = new ErrMessageItem();
+    booking: ErrMessageItem = new ErrMessageItem();
 
-    constructor(icon?: ErrMessageItem, title?: ErrMessageItem, jump_link?: ErrMessageItem,
+    constructor(service_telephone?: ErrMessageItem, booking?: ErrMessageItem, jump_link?: ErrMessageItem,
                 corner?: ErrMessageItem) {
-        if (isUndefined(icon) || isUndefined(title) || isUndefined(jump_link)
-            || isUndefined(corner)) {
+        if (isUndefined(service_telephone) || isUndefined(booking)) {
             return;
         }
-        this.icon = icon;
-        this.title = title;
-        this.jump_link = jump_link;
-        this.corner = corner;
+        this.service_telephone = service_telephone;
+        this.booking = booking;
     }
 }
 
@@ -54,8 +50,10 @@ export class BusinessEditComponent implements OnInit {
     public errPositionItem: ErrPositionItem = new ErrPositionItem();
     public mapItem: MapItem = new MapItem();
     public is_add_tel = true;
-    public service_telephone = '';
+    public service_telephones = [];
     public company_name: string;
+    public brand_ids = [];
+    public firm_ids = [];
 
     private continueRequestSubscription: Subscription;
     private upkeep_merchant_id: string;
@@ -81,11 +79,19 @@ export class BusinessEditComponent implements OnInit {
     public ngOnInit(): void {
         this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
             .subscribe(res => {
+                debugger;
                 this.currentBusiness = res;
+                this.service_telephones = res.service_telephone ? res.service_telephone.split(',') : [''];
+                this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
                 this.company_name = res.UpkeepCompany.company_name;
                 const regionObj = new RegionEntity(this.currentBusiness);
                 this.proCityDistSelectComponent.regionsObj = regionObj;
                 this.proCityDistSelectComponent.initRegions(regionObj);
+                this.currentBusiness.VehicleFirm.forEach(value => {
+                    this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
+                    this.firm_ids.push(value.vehicle_firm_id);
+                });
+                console.log(this.brand_ids.join(','), this.firm_ids.join(','));
             }, err => {
                 this.globalService.httpErrorProcess(err);
             });
@@ -103,26 +109,42 @@ export class BusinessEditComponent implements OnInit {
     public onEditFormSubmit() {
         this.clear();
         if (this.verification()) {
-            this.coverImgSelectComponent.upload().subscribe(() => {
-                const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-                // this.currentPage.icon = imageUrl.join(',');
-                // 编辑项目
-                /* this.firstPageIconService.requestModifyPageIcon(this.currentPage, this.app.application_id, this.menu_id).subscribe(() => {
-                   this.onClose();
-                   this.globalService.promptBox.open('修改成功！', () => {
-                     this.sureCallbackInfo();
-                   });
-                 }, err => {
-                   this.errorProcess(err);
-                 });*/
+            // 编辑商家
+            const firms = [];
+            this.currentBusiness.VehicleFirm.forEach(value => {
+                firms.push(value.vehicle_firm_id);
+            });
+            const params = {
+                vehicle_firm_ids: firms.join(','),
+                booking: this.currentBusiness.booking,
+                service_telephone: this.service_telephones.join(',')
+            };
+            this.businessManagementService.requestUpdateUpkeepMerchant(this.upkeep_merchant_id, params).subscribe(() => {
+                this.onClose();
+                this.globalService.promptBox.open('保存成功！', () => {
+                });
+            }, err => {
+                this.errorProcess(err);
             });
         }
     }
 
     // 表单提交校验
     private verification() {
-        let cisCheck = true;
-        return cisCheck;
+        let isCheck = true;
+        if (this.currentBusiness.booking <= 0 || this.currentBusiness.booking > 60) {
+            this.errPositionItem.booking.isError = true;
+            this.errPositionItem.booking.errMes = '可提前预定天数范围为1到60！';
+            isCheck = false;
+        }
+        this.service_telephones.forEach(value => {
+            if (!ValidateHelper.Phone(value)) {
+                this.errPositionItem.service_telephone.isError = true;
+                this.errPositionItem.service_telephone.errMes = '客户电话格式错误！';
+                isCheck = false;
+            }
+        });
+        return isCheck;
     }
 
     // 取消按钮
@@ -132,10 +154,8 @@ export class BusinessEditComponent implements OnInit {
 
     // 清空
     public clear() {
-        this.errPositionItem.icon.isError = false;
-        this.errPositionItem.title.isError = false;
-        this.errPositionItem.jump_link.isError = false;
-        this.errPositionItem.corner.isError = false;
+        this.errPositionItem.service_telephone.isError = false;
+        this.errPositionItem.booking.isError = false;
     }
 
     // 接口错误状态
@@ -145,8 +165,8 @@ export class BusinessEditComponent implements OnInit {
                 const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
                 for (const content of error.errors) {
                     if (content.code === 'invalid' && content.field === 'title') {
-                        this.errPositionItem.title.isError = true;
-                        this.errPositionItem.title.errMes = '标题错误或无效！';
+                        // this.errPositionItem.title.isError = true;
+                        // this.errPositionItem.title.errMes = '标题错误或无效！';
                         return;
                     }
                 }
@@ -185,12 +205,17 @@ export class BusinessEditComponent implements OnInit {
     // 添加客服联系电话
     public onAddTelClick() {
         this.is_add_tel = false;
+        this.service_telephones.push('');
     }
 
     // 移除客服联系电话
-    public onDelTelClick() {
-        this.is_add_tel = true;
-        this.service_telephone = '';
+    public onDelTelClick(index) {
+        if (this.service_telephones.length === 1) {
+            this.service_telephones = [];
+        } else {
+            this.is_add_tel = true;
+            this.service_telephones.splice(index, 1);
+        }
     }
 
     // 移除汽车品牌、厂商
@@ -198,15 +223,26 @@ export class BusinessEditComponent implements OnInit {
       this.continueRequestSubscription = this.businessManagementService.requestFirmsAllowRemove(this.upkeep_merchant_id, data.vehicle_firm_id)
           .subscribe(res => {
             if (res.allow_remove) {
-              this.globalService.promptBox.open('移除成功！', () => {
-                this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
-              });
+                this.currentBusiness.VehicleFirm = this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
             } else {
               this.globalService.promptBox.open('该品牌厂商不可移除！', null, 2000, null, false);
             }
           }, err => {
             this.globalService.httpErrorProcess(err);
           });
+    }
+
+    // 选择完厂商后回调方法
+    public selectBrandFirm(data) {
+        data.firm.forEach(value => {
+            this.currentBusiness.VehicleFirm.push(value);
+        });
+    }
+
+    // 手动赋值客服联系电话
+    public onInputServiceTelephone(event: any, index: number) {
+        this.service_telephones[index] = event.target.value;
+        this.errPositionItem.service_telephone.isError = false;
     }
 }
 

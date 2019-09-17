@@ -39,29 +39,30 @@
                       [(nzPageIndex)]="pageIndex" #basicTable>
                 <thead>
                 <tr>
-                    <th></th>
                     <th>序号</th>
                     <th>配件名称</th>
-                    <th>是否原厂</th>
-                    <th>品牌</th>
-                    <th>零件编号</th>
-                    <th>规格</th>
+                    <th *ngIf="upkeep_item_type===1">是否原厂</th>
+                    <th *ngIf="upkeep_item_type===1">品牌</th>
+                    <th *ngIf="upkeep_item_type===1">零件编号</th>
+                    <th *ngIf="upkeep_item_type===1">规格</th>
                     <th>原件</th>
                     <th>销售单价</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let product of basicTable.data; let i=index">
-                    <td [nzAlign]="'left'" class="check-padding" nzShowCheckbox
-                        ><span class="span-width">{{i+(pageIndex-1)*15+1}}</span></td>
-                    <td>{{product.is_original ? '是' : '否'}}</td>
-                    <td>{{product.is_original ? '是' : '否'}}</td>
-                    <td *ngIf="!product.is_original || !product.VehicleBrand || !product.VehicleFirm">--</td>
-                    <td>{{product.serial_number ? product.serial_number : '--'}}</td>
-                    <td>{{product.sale_amount}}</td>
-                    <td>{{product.original_amount}}</td>
-                    <td>{{product.sale_amount}}</td>
-                    <td>{{product.original_amount}}</td>
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td>{{product.upkeep_accessory_name}}</td>
+                    <td *ngIf="upkeep_item_type===1">{{product.is_original ? '是' : '否'}}</td>
+                    <td *ngIf="upkeep_item_type===1">{{product.vehicle_brand?.vehicle_brand_name || '--'}}</td>
+                    <td *ngIf="upkeep_item_type===1">{{product.serial_number ? product.serial_number : '--'}}</td>
+                    <td *ngIf="upkeep_item_type===1">{{product.specification ? product.specification : '--'}}</td>
+                    <td>{{product.sale_amount?product.sale_amount:'--'}}</td>
+                    <td>{{product.original_amount?product.original_amount:'--'}}</td>
+                    <td class="operation">
+                        <a [title]="'选择'" (click)="onChooseClick(product)">选择</a>
+                    </td>
                 </tr>
                 </tbody>
             </nz-table>

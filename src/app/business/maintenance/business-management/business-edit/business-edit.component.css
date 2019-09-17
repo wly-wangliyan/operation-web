@@ -94,10 +94,14 @@ nz-range-picker {
     margin: 0 31px 0 140px;
 }
 
-.msg-span {
+.msg-span, .msg-tip {
     vertical-align: middle;
     line-height: 34px;
     margin-left: 20px;
+}
+
+.msg-tip {
+    color: #E82038;
 }
 
 .brand-list {
@@ -107,4 +111,10 @@ nz-range-picker {
 
 :host::ng-deep .ant-table {
     border: 1px solid #D8D8D8;
+}
+
+.tel-input {
+    margin-left: 140px;
+    margin-top: 10px;
+    clear: both;
 }

@@ -41,7 +41,8 @@
                 {{data.upkeep_item_name ? (data.upkeep_item_name | zMaxLength:20) : '--'}}</td>
               <td>{{data.upkeep_item_num ? data.upkeep_item_num : '--'}}</td>
               <td>{{data.upkeep_item_type | projectType}}</td>
-              <td *ngIf="data.upkeep_item_relation">{{data.upkeep_item_relation.upkeep_item_name}}</td>
+              <td *ngIf="data.upkeep_item_relation" [title]="data.upkeep_item_relation.upkeep_item_name">
+                {{data.upkeep_item_relation.upkeep_item_name| zMaxLength:20}}</td>
               <td *ngIf="!data.upkeep_item_relation">无</td>
               <td *ngIf="data.upkeep_item_content" [title]="data.upkeep_item_content">
                 {{data.upkeep_item_content|zMaxLength:20}}</td>
