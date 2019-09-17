@@ -199,7 +199,7 @@ export class SelectBrandFirmComponent implements OnInit {
     for (const i in this.mapOfFirm) {
       if (this.mapOfFirm.hasOwnProperty(i)) {
         this.mapOfFirm[i].forEach(firm => {
-          if (firm.checked) {
+          if (firm.checked && !firm.disabled) {
             firmItem_checked.push(firm.source);
           }
         });
