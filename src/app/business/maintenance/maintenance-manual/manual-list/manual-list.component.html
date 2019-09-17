@@ -10,6 +10,18 @@
   </ul> -->
 </div>
 <div class="content-flow">
+  <div class="search-container">
+    <form class="search-form">
+      <app-search-vehicle-type-group (selectBrandFirmSeries)="onChangeSearchParams($event)">
+      </app-search-vehicle-type-group>
+      <div class="form-group">
+        <span>车型名称：</span>
+        <input class="form-control" placeholder="请输入车型名称" name="vehicle_type_name"
+          [(ngModel)]="searchParams.vehicle_type_name" maxlength="20" />
+      </div>
+      <div class="form-group"><button nz-button nzType="primary" (click)="onSearchBtnClick()">查询</button></div>
+    </form>
+  </div>
   <div class="table-container">
     <div class="zmy-table">
       <nz-table [nzData]="manualList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
@@ -31,7 +43,7 @@
             <td>{{manual.vehicle_firm? manual.vehicle_firm.vehicle_firm_name : '--'}}</td>
             <td>{{manual.vehicle_series? manual.vehicle_series.vehicle_series_name : '--'}}</td>
             <td>
-              <a>
+              <a [routerLink]="['../detail',manual.vehicle_type_id]">
                 {{manual.vehicle_year_model ? manual.vehicle_year_model : ''}}
                 {{manual.vehicle_type_name ? manual.vehicle_type_name : ''}}
               </a>

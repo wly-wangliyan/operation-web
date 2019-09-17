@@ -49,6 +49,8 @@ export class ManualEditComponent implements OnInit {
 
   public switchParams: SwitchParams = new SwitchParams(); // 更新开关参数
 
+  public loading = true; // 标记loading
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -135,6 +137,7 @@ export class ManualEditComponent implements OnInit {
       });
       // 编辑模式下，当无可显示项目类别时，隐藏
       this.isShowSetting = this.isEdit || (!this.isEdit && this.mapOfShow.some(show => show === true));
+      this.loading = false;
       this.projectList.forEach(project => {
         if (!this.mapOfSetting[project.upkeep_item_id]) {
           this.mapOfSetting[project.upkeep_item_id] = new ManualSettingEntity();
@@ -232,6 +235,6 @@ export class ManualEditComponent implements OnInit {
 
   // 点击取消
   public onCancelClick() {
-
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 }
