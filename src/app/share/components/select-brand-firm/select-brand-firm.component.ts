@@ -9,6 +9,7 @@ import {
 
 class VehicleFirmItem {
   public checked = false;
+  public disabled = false;
   public source: VehicleFirmEntity;
 
   constructor(source: VehicleFirmEntity) {
@@ -34,6 +35,8 @@ export class SelectBrandFirmComponent implements OnInit {
   @Input() private selectedFirm: string; // 已选中的厂商
 
   @Input() private multi = true; // 标记厂商是否多选
+
+  @Input() private isDisabled = true; // 标记是否对厂商禁用
 
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
@@ -116,7 +119,6 @@ export class SelectBrandFirmComponent implements OnInit {
             }
           });
         }
-
       }
     }, err => {
       $('#selectBrandFirmModal').modal('hide');
@@ -168,19 +170,21 @@ export class SelectBrandFirmComponent implements OnInit {
         if (this.selectedFirm) {
           fiems = this.selectedFirm.split(',');
         }
-
         vehicleFirmList.forEach(item => {
           const firmItem = new VehicleFirmItem(item);
           // 首次加载渲染已勾选厂商
           if (this.isFirstRender && fiems.indexOf(item.vehicle_firm_id) !== -1) {
             firmItem.checked = true;
+            if (this.isDisabled) {
+              firmItem.disabled = true;
+            }
             this.currentBrand = item.vehicle_brand;
-            this.isFirstRender = false;
           }
           vehicleFirmItem.push(firmItem);
         });
         this.vehicleFirmItem = vehicleFirmItem;
         this.mapOfFirm[vehicle_brand_id] = vehicleFirmItem;
+        this.isFirstRender = false;
       }, err => {
         this.vehicleFirmItem = [];
         $('#selectBrandFirmModal').modal('hide');
