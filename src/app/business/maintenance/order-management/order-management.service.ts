@@ -32,6 +32,7 @@ export class OrderDetailEntity extends EntityBase {
   public upkeep_merchant_accessory_id: string = undefined; 	// 	String	保养商家配件 - 主键
   public upkeep_accessory_type: number = undefined; 	// int	类型 1: 配件 2: 服务
   public upkeep_accessory_name: string = undefined; 	// 	string	产品名称
+  public brand_instruction: string = undefined; 	// string	品牌说明 注:原产为否填写
   public is_original: boolean = undefined; 	// boolean 是否原厂 true原厂
   public is_brand_special: boolean = undefined; 	// boolean	品牌专用
   public serial_number: string = undefined; 	// 	string	零件编号
@@ -40,10 +41,11 @@ export class OrderDetailEntity extends EntityBase {
   public number: number = undefined; 	// int	所需数量 单位: 件
   public original_amount: number = undefined; 	// float	原价 单位: 元
   public sale_amount: number = undefined; 	// 	float	销售单价 单位: 元
+  public product_discounted_amount: number = undefined; 	// 	float	产品优惠 单位:元
   public pay_amount: number = undefined; // float	应付 单位: 元
   public real_pay_amount: number = undefined; // 	float	销售单价 单位: 元
   public work_original_amount: number = undefined; // float	原价工时费 单位: 元
-  public work_amount_discounted: number = undefined; // float	工时费优惠 单位元
+  public work_discounted_amount: number = undefined; // float	工时费优惠 单位元
   public work_sale_amount: number = undefined; // float	售价工时费 单位: 元
   public updated_time: number = undefined; // float	更新时间
   public created_time: number = undefined; // 	float	创建时间 / 下单时间
@@ -68,6 +70,7 @@ export class UpkeepOrderEntity extends EntityBase {
   public upkeep_merchant_name: string = undefined; 	// 	string	商家名称
   public address: string = undefined; // 	string	商家地址
   public upkeep_item_categorys: string = undefined; // 	string	项目类别 逗号分割 1.保养项目 2.清洗养护项目 3.维修项目
+  public item_categorys: Array<any> = []; // 	string	项目类别数组 1.保养项目 2.清洗养护项目 3.维修项目
   public upkeep_item_category_count: number = undefined; 	// 	int	项目类别数量
   public accessory_amount_total: number = undefined; // 	float	配件 / 服务费合计 单位元
   public accessory_amount_discounted: number = undefined; // 	float	配件 / 服务费优惠 单位元
@@ -102,12 +105,11 @@ export class UpkeepOrderEntity extends EntityBase {
 export class SearchOrderParams extends EntityBase {
   public pay_status = ''; // int	F	订单状态 1未支付 2已支付 3已完成
   public vehicle_brand_name = ''; // string	F	汽车 品牌名称
-  public upkeep_item_category = 4; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目 4.全部
+  public upkeep_item_categorys = 4; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目 4.全部
   public payer_phone = ''; // string	F	购买人预留电话
   public payer_name = ''; // string	F	购买人姓名（付款人）
   public upkeep_merchant_name = ''; // string	F	商家名称
   public upkeep_order_id = ''; // string	F	保养订单id
-  public created_time = ''; // string	F	下单时间
   public pay_time = ''; // string	F	支付时间
   public reserve_time = ''; // string	F	预定时间
   public page_size = 45; // integer	F	每页条数 默认：15

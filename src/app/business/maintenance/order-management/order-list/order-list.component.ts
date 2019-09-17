@@ -5,6 +5,10 @@ import {
   OrderManagementService,
   SearchOrderParams,
 } from '../order-management.service';
+import {
+  VehicleBrandEntity,
+  VehicleTypeManagementService
+} from '../../vehicle-type-management/vehicle-type-management.service';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
@@ -19,12 +23,11 @@ const PageSize = 15;
 })
 export class OrderListComponent implements OnInit {
 
+  public vehicleBrandList: Array<VehicleBrandEntity> = [];
   public orderList: Array<UpkeepOrderEntity> = [];
   public pageIndex = 1;
   public searchParams = new SearchOrderParams();
   public noResultText = '数据加载中...';
-  public start_created_time = null; // 下单时间
-  public end_created_time = null;
   public start_pay_time = null; // 支付时间
   public end_pay_time = null;
   public start_reserve_time = null; // 预定时间
@@ -32,15 +35,13 @@ export class OrderListComponent implements OnInit {
   public workerList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
+  private searchBrandText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-  private startCreatedValue: Date | null = null;
-  private endCreatedValue: Date | null = null;
-  private startPayValue: Date | null = null;
+  private startPayValue: Date | null = null; // 支付时间
   private endPayValue: Date | null = null;
-  private startReserveValue: Date | null = null;
+  private startReserveValue: Date | null = null; // 预定时间
   private endReserveValue: Date | null = null;
-  private tab = 2;
   private searchUrl: string;
 
 
@@ -51,62 +52,37 @@ export class OrderListComponent implements OnInit {
     return this.orderList.length / PageSize + 1;
   }
 
-  constructor(private globalService: GlobalService, private orderService: OrderManagementService) { }
+  constructor(private globalService: GlobalService, private orderService: OrderManagementService,
+              private vehicleTypeService: VehicleTypeManagementService) { }
 
   ngOnInit() {
-    const obj = { name: '213' };
-    this.orderList.push(obj);
     // 订单管理列表
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
         this.orderService.requestOrderList(this.searchParams))
     ).subscribe(res => {
-      this.orderList = res.results;
+      this.orderList = res.results.map(i => ({ ...i, item_categorys: i.upkeep_item_categorys ? i.upkeep_item_categorys.split(',') : [] }));
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       // tslint:disable-next-line:max-line-length
-      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&created_time=${this.searchParams.created_time}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
+      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_categorys=${this.searchParams.upkeep_item_categorys}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     // this.searchText$.next();
+    // 获取车辆品牌列表
+    this.searchBrandText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.vehicleTypeService.requestVehicleBrandList())
+    ).subscribe(res => {
+      this.vehicleBrandList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchBrandText$.next();
   }
-
-  // 下单开始时间校验
-  public disabledStartCreatedDate = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.endCreatedValue) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endCreatedValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // 下单结束时间校验
-  public disabledEndCreatedDate = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
-      return true;
-    } else if (!endValue || !this.startCreatedValue) {
-      return false;
-    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startCreatedValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public onStartCreatedChange(date: Date): void {
-    this.startCreatedValue = date;
-  }
-
-  public onEndCreatedChange(date: Date): void {
-    this.endCreatedValue = date;
-  }
-
 
   // 支付开始时间校验
   public disabledStartPayDate = (startValue: Date): boolean => {
@@ -144,9 +120,7 @@ export class OrderListComponent implements OnInit {
 
   // 预定开始时间校验
   public disabledStartReserveDate = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.endReserveValue) {
+    if (!startValue || !this.endReserveValue) {
       return false;
     } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endReserveValue).setHours(0, 0, 0, 0)) {
       return true;
@@ -157,9 +131,7 @@ export class OrderListComponent implements OnInit {
 
   // 预定结束时间校验
   public disabledEndReserveDate = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
-      return true;
-    } else if (!endValue || !this.startReserveValue) {
+    if (!endValue || !this.startReserveValue) {
       return false;
     } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startReserveValue).setHours(0, 0, 0, 0)) {
       return true;
@@ -182,9 +154,7 @@ export class OrderListComponent implements OnInit {
     this.searchParams.payer_name = this.searchParams.payer_name.trim();
     this.searchParams.upkeep_merchant_name = this.searchParams.upkeep_merchant_name.trim();
     this.searchParams.upkeep_order_id = this.searchParams.upkeep_order_id.trim();
-    if (this.getTimeValid() === 'created_time') {
-      this.globalService.promptBox.open('查询失败', '下单开始时间不能大于结束时间!');
-    } else if (this.getTimeValid() === 'pay_time') {
+    if (this.getTimeValid() === 'pay_time') {
       this.globalService.promptBox.open('查询失败', '支付开始时间不能大于结束时间!');
     } else if (this.getTimeValid() === 'reserve_time') {
       this.globalService.promptBox.open('查询失败', '预定开始时间不能大于结束时间!');
@@ -195,9 +165,7 @@ export class OrderListComponent implements OnInit {
 
   // 导出订单管理列表
   public onExportOrderList() {
-    if (this.getTimeValid() === 'created_time') {
-      this.globalService.promptBox.open('查询失败', '下单开始时间不能大于结束时间!');
-    } else if (this.getTimeValid() === 'pay_time') {
+    if (this.getTimeValid() === 'pay_time') {
       this.globalService.promptBox.open('查询失败', '支付开始时间不能大于结束时间!');
     } else if (this.getTimeValid() === 'reserve_time') {
       this.globalService.promptBox.open('查询失败', '预定开始时间不能大于结束时间!');
@@ -210,15 +178,11 @@ export class OrderListComponent implements OnInit {
 
   // 查询时间校验
   private getTimeValid(): string {
-    this.searchParams.created_time = this.getSectionTime(this.start_created_time, this.end_created_time);
     this.searchParams.pay_time = this.getSectionTime(this.start_pay_time, this.end_pay_time);
     this.searchParams.reserve_time = this.getSectionTime(this.start_reserve_time, this.end_reserve_time);
-    const created_time = this.searchParams.created_time;
     const pay_time = this.searchParams.pay_time;
     const reserve_time = this.searchParams.reserve_time;
-    if (created_time.split(',')[0] !== '0' && created_time.split(',')[0] > created_time.split(',')[1]) {
-      return 'created_time';
-    } else if (pay_time.split(',')[0] !== '0' && pay_time.split(',')[0] > pay_time.split(',')[1]) {
+    if (pay_time.split(',')[0] !== '0' && pay_time.split(',')[0] > pay_time.split(',')[1]) {
       return 'pay_time';
     } else if (reserve_time.split(',')[0] !== '0' && reserve_time.split(',')[0] > reserve_time.split(',')[1]) {
       return 'reserve_time';
