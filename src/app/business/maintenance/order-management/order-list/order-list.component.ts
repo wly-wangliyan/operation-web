@@ -66,7 +66,7 @@ export class OrderListComponent implements OnInit {
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       // tslint:disable-next-line:max-line-length
-      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
+      this.searchUrl = `${environment.OPERATION_SERVE}/upkeep_orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
