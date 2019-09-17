@@ -7,7 +7,6 @@
   </ul>
 </div>
 <div class="content-flow">
-
   <div class="table-container">
     <div class="search-container">
       <form nz-form class="search-form">
@@ -31,7 +30,7 @@
               <nz-form-control class="form_control">
                 <select class="form-control" name="vehicle_brand_name" [(ngModel)]="searchParams.vehicle_brand_name">
                   <option value="">全部</option>
-                  <option *ngFor="let item of vehicleBrandList" [value]="item.vehicle_brand_id">
+                  <option *ngFor="let item of vehicleBrandList" [value]="item.vehicle_brand_name">
                     {{item.vehicle_brand_name}}</option>
                 </select>
               </nz-form-control>
@@ -42,8 +41,8 @@
               <nz-form-label>项目类别</nz-form-label>
               <nz-form-control class="form_control">
                 <select class="form-control" name="upkeep_item_category"
-                  [(ngModel)]="searchParams.upkeep_item_categorys">
-                  <option value="4">全部</option>
+                  [(ngModel)]="searchParams.upkeep_item_category">
+                  <option value="">全部</option>
                   <option value="1">保养项目</option>
                   <option value="2">清洗养护项目</option>
                   <option value="3">维修项目</option>
@@ -69,12 +68,20 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>所属商家</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入所属商家" autocomplete="off"
+                  [(ngModel)]="searchParams.upkeep_merchant_name" name="upkeep_merchant_name" maxlength='50' />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
           <div>
             <nz-form-item nzFlex>
               <nz-form-label>订单编号</nz-form-label>
               <nz-form-control>
-                <input class="form-control" placeholder="请输入订单编号" autocomplete="off" maxlength='20'
+                <input class="form-control" placeholder="请输入订单编号" autocomplete="off" maxlength='50'
                   [(ngModel)]="searchParams.upkeep_order_id" name="upkeep_order_id" />
               </nz-form-control>
             </nz-form-item>
@@ -90,15 +97,6 @@
                 <nz-date-picker [(ngModel)]="end_pay_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayDate"
                   (ngModelChange)="onEndPayChange($event)" name='end_pay_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                   nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div>
-            <nz-form-item nzFlex>
-              <nz-form-label>所属商家</nz-form-label>
-              <nz-form-control>
-                <input class="form-control" placeholder="请输入所属商家" autocomplete="off"
-                  [(ngModel)]="searchParams.upkeep_merchant_name" name="upkeep_merchant_name" maxlength='20' />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -161,7 +159,7 @@
             <td *ngIf='data.item_categorys&&data.item_categorys.length!==0'>
               <span *ngFor="let obj of data.item_categorys; "> {{obj|projectCategory}}; </span>
             </td>
-            <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>'--'</td>
+            <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>--</td>
             <td>{{data.upkeep_item_category_count||'--'}}</td>
             <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
                 元</span></td>

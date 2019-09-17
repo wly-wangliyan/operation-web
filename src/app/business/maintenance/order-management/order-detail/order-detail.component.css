@@ -83,6 +83,9 @@
   float: left;
   width: 40px;
   height: 40px;
+  display: inline-block;
+  margin: 10px;
+
 }
 
 .image img {
@@ -91,7 +94,7 @@
 
 .name-ul {
   text-align: left;
-  margin-left: 10px;
+  margin: 10px;
 }
 
 .name-ul .item-name {

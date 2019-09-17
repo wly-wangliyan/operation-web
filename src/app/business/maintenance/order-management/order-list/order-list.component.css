@@ -2,6 +2,9 @@
   margin-bottom: 0;
 }
 
+:host ::ng-deep .ant-form-item-label {
+  min-width: 70px;
+}
 
 :host ::ng-deep .ant-form-item-label>label {
   font-size: 14px;
@@ -49,7 +52,7 @@
 }
 
 .search_row .search_time {
-  margin-right: 30px;
+  margin-right: 25px;
 }
 
 .search_row .search_time .line {

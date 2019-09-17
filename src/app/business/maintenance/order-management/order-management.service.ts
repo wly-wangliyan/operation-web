@@ -105,7 +105,7 @@ export class UpkeepOrderEntity extends EntityBase {
 export class SearchOrderParams extends EntityBase {
   public pay_status = ''; // int	F	订单状态 1未支付 2已支付 3已完成
   public vehicle_brand_name = ''; // string	F	汽车 品牌名称
-  public upkeep_item_categorys = 4; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目 4.全部
+  public upkeep_item_category = ''; // string	F	保养项目类别 1.保养项目 2.清洗养护项目 3.维修项目 4.全部
   public payer_phone = ''; // string	F	购买人预留电话
   public payer_name = ''; // string	F	购买人姓名（付款人）
   public upkeep_merchant_name = ''; // string	F	商家名称
@@ -140,7 +140,7 @@ export class OrderManagementService {
    */
   public requestOrderList(searchParams: SearchOrderParams): Observable<OrderLinkResponse> {
     const params = this.httpService.generateURLSearchParams(searchParams);
-    return this.httpService.get(environment.OPERATION_SERVE + `/upkeep_orders`,
+    return this.httpService.get(environment.OPERATION_SERVE + `/upkeep_order/orders`,
       params).pipe(map(res => new OrderLinkResponse(res)));
   }
 

@@ -66,11 +66,11 @@ export class OrderListComponent implements OnInit {
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       // tslint:disable-next-line:max-line-length
-      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_categorys=${this.searchParams.upkeep_item_categorys}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
+      this.searchUrl = `${environment.OPERATION_SERVE}//upkeep_companise/orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchText$.next();
+    this.searchText$.next();
     // 获取车辆品牌列表
     this.searchBrandText$.pipe(
       debounceTime(500),
@@ -178,11 +178,12 @@ export class OrderListComponent implements OnInit {
 
   // 查询时间校验
   private getTimeValid(): string {
-    this.searchParams.pay_time = this.getSectionTime(this.start_pay_time, this.end_pay_time);
+    this.searchParams.pay_time = (this.start_pay_time || this.end_pay_time)
+      ? this.getPaySectionTime(this.start_pay_time, this.end_pay_time) : '';
     this.searchParams.reserve_time = this.getSectionTime(this.start_reserve_time, this.end_reserve_time);
     const pay_time = this.searchParams.pay_time;
     const reserve_time = this.searchParams.reserve_time;
-    if (pay_time.split(',')[0] !== '0' && pay_time.split(',')[0] > pay_time.split(',')[1]) {
+    if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
       return 'pay_time';
     } else if (reserve_time.split(',')[0] !== '0' && reserve_time.split(',')[0] > reserve_time.split(',')[1]) {
       return 'reserve_time';
@@ -191,7 +192,16 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-  // 获取下单时间时间戳
+  // 获取支付时间时间戳
+  public getPaySectionTime(start, end): string {
+    const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
+      new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
+    const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
+      new Date(end).getMinutes(), 59, 0) / 1000).toString() : 0;
+    return `${startTime},${endTime}`;
+  }
+
+  // 获取预定时间时间戳
   public getSectionTime(start, end): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
       new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
@@ -215,5 +225,4 @@ export class OrderListComponent implements OnInit {
       });
     }
   }
-
 }
