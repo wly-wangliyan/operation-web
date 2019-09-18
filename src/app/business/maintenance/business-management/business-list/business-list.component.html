@@ -62,6 +62,7 @@
                         data.VehicleFirm?.vehicle_brand?.vehicle_brand_name+'·'+data.VehicleFirm?.vehicle_firm_name:
                         data.VehicleFirm?.vehicle_brand?.vehicle_brand_name?data.VehicleFirm?.vehicle_brand?.vehicle_brand_name:
                             data.VehicleFirm?.vehicle_firm_name?data.VehicleFirm?.vehicle_firm_name:'--'}}</td>
+                    <td>{{data.service_telephone?data.service_telephone:'--'}}</td>
                     <td>
                         <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                                    (ngModelChange)="onSwitchChange(data.upkeep_merchant_id,$event)"></nz-switch>
