@@ -70,7 +70,7 @@
         </button>
       </div>
       <form *ngIf="projectParams" autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal"
-        #editForm="ngForm">
+        #projectEditForm="ngForm">
         <div class="row">
           <label class="control-label">
             <b>*</b>
@@ -155,7 +155,7 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!projectEditForm.form.valid"
             (appZDebounceClick)="onEditFormSubmit()">
             保存
           </button>
