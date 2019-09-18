@@ -51,8 +51,8 @@
         <select class="form-control" style="width: 100px;" [(ngModel)]="is_original" (change)="onChangeOriginal($event)"
           name="is_original">
           <option value="">全部</option>
-          <option value="true">是</option>
-          <option value="false">否</option>
+          <option value="True">是</option>
+          <option value="False">否</option>
         </select>
       </div>
       <app-search-vehicle-type-group [display_series]="true" (selectBrandFirmSeries)="onChangeSearchParams($event)">

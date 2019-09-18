@@ -151,7 +151,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // 变更是否原厂
   public onChangeOriginal(event: any) {
     if (event.target.value) {
-      this.searchParams.is_original = event.target.value === 'false' ? false : true;
+      // this.searchParams.is_original = event.target.value === 'false' ? false : true;
+      this.searchParams.is_original = event.target.value;
     } else {
       this.searchParams.is_original = null;
     }

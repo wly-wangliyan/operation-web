@@ -75,7 +75,7 @@ export class SearchParams extends EntityBase {
   public upkeep_item_category: number = undefined; // 所属类别 1:保养项目 2:清洗养护项目 3:维修项目
   public upkeep_item_id: string = undefined; // 项目id
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
-  public is_original = undefined; // 是否原厂
+  public is_original: string = undefined; // 是否原厂
   public serial_number: string = undefined; // 零件编号
   public page_num = 1; // 页码 默认:1
   public page_size = 45; // 每页条数 默认:15
