@@ -79,7 +79,6 @@ export class BusinessEditComponent implements OnInit {
     public ngOnInit(): void {
         this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
             .subscribe(res => {
-                debugger;
                 this.currentBusiness = res;
                 this.service_telephones = res.service_telephone ? res.service_telephone.split(',') : [''];
                 this.is_add_tel = this.service_telephones.length >= 2 ? false : true;

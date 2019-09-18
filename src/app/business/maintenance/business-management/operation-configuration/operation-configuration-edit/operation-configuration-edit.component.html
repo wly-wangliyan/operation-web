@@ -65,18 +65,18 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>配件名称</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                             <b>*</b>
                             <span>是否原厂</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>&nbsp;</b>
                             <span>所属厂商</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name" name="telephone" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" readonly>
                             <b>&nbsp;</b>
                             <span>零件编号</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -86,7 +86,7 @@
                             <label class="price-label price-label-input">元</label>
                             <b>&nbsp;</b>
                             <span>规格</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -108,7 +108,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>服务名称</span>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -174,18 +174,18 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>配件名称</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                             <b>*</b>
                             <span>是否原厂</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>&nbsp;</b>
                             <span>所属厂商</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name" name="telephone" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" readonly>
                             <b>&nbsp;</b>
                             <span>零件编号</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -217,7 +217,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>服务名称</span>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -283,18 +283,18 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>配件名称</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                             <b>*</b>
                             <span>是否原厂</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>&nbsp;</b>
                             <span>所属厂商</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name" name="telephone" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" readonly>
                             <b>&nbsp;</b>
                             <span>零件编号</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -304,7 +304,7 @@
                             <label class="price-label price-label-input">元</label>
                             <b>&nbsp;</b>
                             <span>规格</span>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification" readonly>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
@@ -326,7 +326,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>服务名称</span>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name" readonly>
+                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" readonly>
                         </div>
                         <div class="maintenance-content">
                             <b>*</b>
