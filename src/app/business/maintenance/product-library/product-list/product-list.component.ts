@@ -72,7 +72,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.productList.push(new ProductEntity());
     this.generateProductList();
     this.requestProjectList();
   }

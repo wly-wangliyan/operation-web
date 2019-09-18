@@ -69,8 +69,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;
         </button>
       </div>
-      <form *ngIf="projectParams" autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal"
-        #projectEditForm="ngForm">
+      <form *ngIf="projectParams" autocomplete="off" class="form-horizontal" #projectEditForm="ngForm">
         <div class="row">
           <label class="control-label">
             <b>*</b>

@@ -65,6 +65,8 @@ export class ManualListComponent implements OnInit {
       this.manualList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
     });
   }
 
@@ -121,10 +123,6 @@ export class ManualListComponent implements OnInit {
   public onImportProject() {
     $('#importManualPromptDiv').modal('show');
     this.importViewModel.initImportData();
-    console.log('导入');
-    if (true) {
-      this.searchText$.next();
-    }
   }
 
   // 取消导入
@@ -140,7 +138,7 @@ export class ManualListComponent implements OnInit {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
-      if (type !== '.xlsx' && type !== '.xls' && type !== '.csv') {
+      if (type !== '.xlsx' && type !== '.csv') {
         this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
         return;
       }
@@ -163,9 +161,11 @@ export class ManualListComponent implements OnInit {
                 const tempErr = JSON.parse(err.responseText);
                 const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
                 if (error.field === 'FILE' && error.code === 'invalid') {
-                  this.globalService.promptBox.open('导入文件不能为空！');
+                  this.globalService.promptBox.open('导入文件不能为空！', null, 2000, null, false);
                 } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
-                  this.globalService.promptBox.open('文件格式错误！');
+                  this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+                  this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
                 }
               }
             }

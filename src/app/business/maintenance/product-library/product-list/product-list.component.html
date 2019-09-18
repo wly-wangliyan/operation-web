@@ -79,9 +79,6 @@
             <th>零件编号</th>
             <th>是否原厂</th>
             <th>品牌</th>
-            <!-- <th>原价</th> -->
-            <!-- <th>销售单价</th> -->
-            <!-- <th>销量</th> -->
             <th>操作</th>
           </tr>
         </thead>
@@ -97,16 +94,24 @@
               {{product.upkeep_item.upkeep_item_name | zMaxLength:10}}</td>
             <td *ngIf="!product.upkeep_item">--</td>
             <td>{{product.upkeep_accessory_type | projectType}}</td>
-            <td>{{product.serial_number ? product.serial_number : '--'}}</td>
-            <td *ngIf="product.upkeep_accessory_type===projectTypes[0]">{{product.is_original ? '是' : '否'}}</td>
-            <td *ngIf="product.upkeep_accessory_type===projectTypes[1]">--</td>
-            <td *ngIf="product.is_original && product.vehicle_brand && product.vehicle_firm ">
-              {{(product.vehicle_brand.vehicle_brand_name + ' > ' + product.vehicle_firm.vehicle_firm_name) | zMaxLength:10}}
-            </td>
-            <td *ngIf="!product.is_original || !product.vehicle_brand || !product.vehicle_firm">--</td>
-            <!-- <td>{{product.original_amount}}</td> -->
-            <!-- <td>{{product.sale_amount}}</td> -->
-            <!-- <td>{{product.upkeep_accessory_name}}</td> -->
+            <ng-container *ngIf="product.upkeep_accessory_type===projectTypes[0]">
+              <td>{{product.serial_number ? product.serial_number : '--'}}</td>
+              <td>{{product.is_original ? '是' : '否'}}</td>
+              <td *ngIf="product.vehicle_brand && product.vehicle_firm">
+                {{product.vehicle_brand.vehicle_brand_name + ' > ' + product.vehicle_firm.vehicle_firm_name}}
+              </td>
+              <td *ngIf="product.vehicle_brand && !product.vehicle_firm">
+                {{product.vehicle_brand.vehicle_brand_name}}
+              </td>
+              <td *ngIf="!product.vehicle_brand && product.vehicle_firm">
+                {{product.vehicle_firm.vehicle_firm_name}}
+              </td>
+            </ng-container>
+            <ng-container *ngIf="product.upkeep_accessory_type===projectTypes[1]">
+              <td>--</td>
+              <td>--</td>
+              <td>--</td>
+            </ng-container>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',product.upkeep_accessory_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',product.upkeep_accessory_id]">编辑</a>

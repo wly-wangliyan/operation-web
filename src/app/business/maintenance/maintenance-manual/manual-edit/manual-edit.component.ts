@@ -214,7 +214,15 @@ export class ManualEditComponent implements OnInit {
     this.manualService.requestChangeSwitchData(this.switchParams).subscribe(res => {
       this.requestManualDetail();
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          let errMsg = '开启失败,请重试';
+          if (status) {
+            errMsg = '关闭失败，请重试';
+          }
+          this.globalService.promptBox.open(errMsg, null, 2000, null, false);
+        }
+      }
     });
   }
 
