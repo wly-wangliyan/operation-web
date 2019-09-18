@@ -4,11 +4,13 @@
   align-items: center;
 }
 
-.menu-item:hover, .menu-item:active {
+.menu-item:hover,
+.menu-item:active {
   color: #fff !important;
 }
 
-.icon-menu, .icon-arrow {
+.icon-menu,
+.icon-arrow {
   display: inline-block;
   width: 15px;
   height: 15px;
@@ -16,24 +18,29 @@
   vertical-align: -2px;
 }
 
-.menu-container > li:nth-of-type(1) .icon-menu {
+.menu-container>li:nth-of-type(1) .icon-menu {
   background: url('/assets/images/icon_menu_parking.png') no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
 }
 
-.menu-container > li:nth-of-type(2) .icon-menu {
+.menu-img {
+  margin-left: -11px;
+  margin-right: 20px;
+}
+
+.menu-container>li:nth-of-type(2) .icon-menu {
   -webkit-background-size: contain;
   background-size: contain;
 }
 
 /* 悬浮或激活时使用高亮背景覆盖原默认图 */
-.ant-menu:not(.ant-menu-horizontal) .selected:nth-of-type(1)  .icon-menu{
+.ant-menu:not(.ant-menu-horizontal) .selected:nth-of-type(1) .icon-menu {
   -webkit-background-size: contain;
   background-size: contain;
 }
 
-.ant-menu:not(.ant-menu-horizontal) .selected:nth-of-type(2)  .icon-menu{
+.ant-menu:not(.ant-menu-horizontal) .selected:nth-of-type(2) .icon-menu {
   -webkit-background-size: contain;
   background-size: contain;
 }
@@ -59,20 +66,24 @@
   background-size: contain;
 }
 
-.subMenuItem{
+.subMenuItem {
   display: inline-block;
-  width:100px;
-  height:30px;
-  background-color:transparent;
+  width: 100px;
+  height: 30px;
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 30px;
 }
 
-.menu-container, .ant-menu, .ant-menu-root, .ant-menu-light, .ant-menu-inline{
-  width:100%;
-  border-right: 0!important;
+.menu-container,
+.ant-menu,
+.ant-menu-root,
+.ant-menu-light,
+.ant-menu-inline {
+  width: 100%;
+  border-right: 0 !important;
 }
 
 .submenu div {

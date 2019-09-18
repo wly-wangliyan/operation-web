@@ -122,7 +122,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 订单管理
   private generateOrderManagementMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('订单管理', '/main/maintenance/order-management');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_order.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -130,7 +130,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养 》车型管理
   private generateVehicleTypeMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('车型管理', '/main/maintenance/vehicle-type-management');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_car.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -138,7 +138,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养 》保养手册
   private generateMaintenanceManualMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('保养手册', '/main/maintenance/maintenance-manual');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_manual.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -146,7 +146,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养 》保养项目管理
   private generateProjectMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('保养项目管理', '/main/maintenance/project-management');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_product.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -154,7 +154,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养 》商家管理
   private generateBusinessMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('商家管理', '/main/maintenance/business-management');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_merchant.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -162,7 +162,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养 》产品库
   private generateProductMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('产品库', '/main/maintenance/product-library');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_part.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }

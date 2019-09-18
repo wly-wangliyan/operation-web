@@ -5,7 +5,7 @@
         [class.selected]="menuItem.isSelect">
         <span title>
           <div *ngIf="menuItem.isSelect"></div>
-          <i [class.icon-menu]="menu_icon"></i>
+          <img *ngIf='menuItem.icon!=="team"' draggable="false" class='menu-img' [src]='menuItem.icon'>
           <span>{{menuItem.title}}</span>
         </span>
       </li>
