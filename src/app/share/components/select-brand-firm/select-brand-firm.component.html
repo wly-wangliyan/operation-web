@@ -10,17 +10,18 @@
             <div class="leter-list">
               <ul>
                 <li *ngFor="let leter of letter_list">
-                  <nz-anchor [nzAffix]="false">
-                    <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
-                  </nz-anchor>
+                  <!-- <nz-anchor [nzAffix]="false" [nzTarget]="brand">
+                    <nz-link nzHref="#{{leter}}" (nzClick)="goDistance(leter)" nzTitle="{{leter}}"></nz-link>
+                  </nz-anchor> -->
+                  <a (click)="goDistance(leter)">{{leter}}</a>
                 </li>
               </ul>
             </div>
             <div class="brand-list">
-              <ul>
+              <ul id="brand">
                 <li *ngFor="let leter of letter_list">
                   <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
-                    <p id="{{leter}}" class="leter-title">{{leter}}</p>
+                    <p [id]="leter" class="leter-title">{{leter}}</p>
                     <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
                       (click)="onBrandClick(vehicleBrand)"
                       [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
