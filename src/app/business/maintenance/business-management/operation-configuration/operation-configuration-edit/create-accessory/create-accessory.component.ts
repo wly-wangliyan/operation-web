@@ -223,11 +223,6 @@ export class CreateAccessoryComponent implements OnInit {
       return false;
     }
 
-    if (!this.productRecord.image_url) {
-      this.productErrMsg = '请上传图片！';
-      return false;
-    }
-
     if (this.productRecord.original_amount < this.productRecord.sale_amount) {
       this.productErrMsg = '原价不能小于销售单价！';
       return false;

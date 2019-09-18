@@ -51,6 +51,7 @@
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                            (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
                 <span class="serve-title">服务</span>
+                <span style="margin-left: 10px">{{data.source.upkeep_handbook_item.item_name}}</span>
                 <div class="maintenance-price">
                     <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
@@ -160,6 +161,7 @@
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                            (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
                 <span class="serve-title">服务</span>
+                <span style="margin-left: 10px">{{data.source.upkeep_handbook_item.item_name}}</span>
                 <div class="maintenance-price">
                     <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
@@ -269,6 +271,7 @@
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                            (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
                 <span class="serve-title">服务</span>
+                <span style="margin-left: 10px">{{data.source.upkeep_handbook_item.item_name}}</span>
                 <div class="maintenance-price">
                     <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">

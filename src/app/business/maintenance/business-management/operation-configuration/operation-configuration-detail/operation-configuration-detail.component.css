@@ -124,11 +124,13 @@
     height: 30px;
     margin-right: 20px;
     border-radius: 1px;
+    font-size: 13px;
 }
 
 .maintenance-content span {
     width: 80px;
     line-height: 30px;
+    font-size: 13px;
 }
 
 .serve-title {
