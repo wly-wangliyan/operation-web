@@ -195,7 +195,7 @@ export class BusinessEditComponent implements OnInit {
 
     // 限制input[type='number']输入e
     public inputNumberLimit(event: any): boolean {
-        const reg = /[\d]/;
+        const reg = /^\d*?\.?\d*?$/;
         const keyCode = String.fromCharCode(event.keyCode);
         return (keyCode && reg.test(keyCode));
     }

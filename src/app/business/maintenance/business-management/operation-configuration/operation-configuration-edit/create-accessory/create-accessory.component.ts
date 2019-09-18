@@ -187,15 +187,21 @@ export class CreateAccessoryComponent implements OnInit {
   public onEditFormSubmit() {
     this.onClearErrMsg();
     this.clearParams();
-    this.productImgSelectComponent.upload().subscribe(() => {
-      const imageUrl = this.productImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.productRecord.image_url = imageUrl.join(',');
+    if (this.productImgSelectComponent.imageList.length > 0) {
+      this.productImgSelectComponent.upload().subscribe(() => {
+        const imageUrl = this.productImgSelectComponent.imageList.map(i => i.sourceUrl);
+        this.productRecord.image_url = imageUrl.join(',');
+        if (this.generateAndCheckParamsValid()) {
+          this.requestAddProduct();
+        }
+      }, err => {
+        this.upLoadErrMsg(err);
+      });
+    } else {
       if (this.generateAndCheckParamsValid()) {
         this.requestAddProduct();
       }
-    }, err => {
-      this.upLoadErrMsg(err);
-    });
+    }
   }
 
   // 添加

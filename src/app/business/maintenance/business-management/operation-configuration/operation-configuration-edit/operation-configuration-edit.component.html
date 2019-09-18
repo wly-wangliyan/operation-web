@@ -91,7 +91,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>所需数量</span>
-                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputNumberLimit($event)"
+                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputOnlyNumberLimit($event)"
                                    (change)="onInputNumber($event, i)" style="margin-right: 0;width: 95px" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <b>*</b>
@@ -200,7 +200,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>所需数量</span>
-                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputNumberLimit($event)"
+                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputOnlyNumberLimit($event)"
                                    (change)="onInputNumber($event, i)" style="margin-right: 0;width: 95px" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <b>*</b>
@@ -309,7 +309,7 @@
                         <div class="maintenance-content">
                             <b>*</b>
                             <span>所需数量</span>
-                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputNumberLimit($event)"
+                            <input class="form-control" [ngModel]="item.source.number" type="number" [name]="'number' + i" (keypress)="inputOnlyNumberLimit($event)"
                                    (change)="onInputNumber($event, i)" style="margin-right: 0;width: 95px" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <b>*</b>
