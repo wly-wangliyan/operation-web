@@ -182,6 +182,7 @@ export class ProjectListComponent implements OnInit {
       this.isCreateProject = true;
       this.project_category = '';
       this.project_type = '';
+      this.relation_id = '';
       this.projectParams = new ProjectParams();
     }
   }

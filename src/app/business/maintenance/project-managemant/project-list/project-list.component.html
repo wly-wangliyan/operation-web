@@ -117,7 +117,7 @@
           </label>
           <div class="control-input">
             <input class="form-control" placeholder="以项目类别的ID开头，不可重复" [(ngModel)]="projectParams.upkeep_item_num"
-              (focus)="onClearErrMsg()" minlength="2" maxlength="6" oninput="value=value.replace(/[^\d]/g,'')"
+              (focus)="onClearErrMsg()" minlength="2" maxlength="10" oninput="value=value.replace(/[^\d]/g,'')"
               appIgnoreSpace name="upkeep_item_num" required>
           </div>
         </div>
