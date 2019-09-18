@@ -357,7 +357,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <app-choose-accessory (selectAccessory)="onChooseClick($event)"></app-choose-accessory>
-            <div style="margin: -65px 0 0 15px">
+            <div style="margin: -65px 0 15px 15px">
                 <button class="sure-btn" nz-button nzType="primary"
                          (click)="onAddAccessoryClick()">
                      {{currentProject.upkeep_handbook_item?.upkeep_item_type===1?'新建配件':'新建服务'}}
