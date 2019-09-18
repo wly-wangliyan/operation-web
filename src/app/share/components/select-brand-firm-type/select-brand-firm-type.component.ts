@@ -27,6 +27,7 @@ class VehicleSeriesItem {
 
 class VehicleTypeItem {
   public checked = false;
+  public disable = false;
   public source: VehicleTypeEntity;
 
   constructor(source: VehicleTypeEntity) {
@@ -75,6 +76,8 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   public currentType: VehicleTypeEntity = new VehicleTypeEntity(); // 选中品牌
 
+  public vehicleYearList = [];
+
   private requestBrandSubscription: Subscription; // 获取品牌数据
 
   private requestFirmSubscription: Subscription; // 获取厂商数据
@@ -84,6 +87,8 @@ export class SelectBrandFirmTypeComponent implements OnInit {
   private requestTypeSubscription: Subscription; // 获取厂商数据
 
   public tipMsg = ''; // 提示信息
+
+  @Input() public disableVehicleType = [];
 
   @Output('selectBrandFirm') public selectBrandFirm = new EventEmitter();
 
@@ -149,12 +154,15 @@ export class SelectBrandFirmTypeComponent implements OnInit {
   // 勾选车系
   public onChangeSeriesCheck(vehicleSeries: VehicleSeriesEntity) {
     this.currentSeries = vehicleSeries;
+    this.currentType = new VehicleTypeEntity();
     this.requestTypeList(vehicleSeries.vehicle_series_id);
   }
 
   // 勾选车型
-  public onChangeTypeCheck(vehicleType: VehicleTypeEntity) {
-    this.currentType = vehicleType;
+  public onChangeTypeCheck(vehicleType: VehicleTypeItem) {
+    if (!vehicleType.disable) {
+      this.currentType = vehicleType.source;
+    }
   }
 
   // 获取对应厂商列表
@@ -196,10 +204,16 @@ export class SelectBrandFirmTypeComponent implements OnInit {
     this.vehicleService.requestVehicleTypeList(vehicle_series_id).subscribe(res => {
       this.vehicleTypeList = res;
       const vehicleTypeItem = [];
+      this.vehicleYearList = [];
       this.vehicleTypeList.forEach(item => {
+        this.vehicleYearList.push(item.vehicle_year_model);
         const typeItem = new VehicleTypeItem(item);
+        if (this.disableVehicleType.includes(item.vehicle_type_id)) {
+          typeItem.disable = true;
+        }
         vehicleTypeItem.push(typeItem);
       });
+      this.vehicleYearList = Array.from(new Set(this.vehicleYearList));
       this.vehicleTypeItem = vehicleTypeItem;
     }, err => {
       this.vehicleTypeItem = [];

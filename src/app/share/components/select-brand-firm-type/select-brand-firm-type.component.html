@@ -10,14 +10,14 @@
             <div class="leter-list">
               <ul>
                 <li *ngFor="let leter of letter_list">
-                  <nz-anchor [nzAffix]="false">
+                  <nz-anchor [nzAffix]="false" [nzTarget]="anchorContainer">
                     <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
                   </nz-anchor>
                 </li>
               </ul>
             </div>
             <div class="brand-list">
-              <ul>
+              <ul #anchorContainer>
                 <li *ngFor="let leter of letter_list">
                   <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
                     <p id="{{leter}}" class="leter-title">{{leter}}</p>
@@ -59,10 +59,14 @@
           <div class="content-list">
             <ng-container *ngIf="vehicleTypeItem && vehicleTypeItem.length > 0">
               <ul>
-                <li *ngFor="let vehicleType of vehicleTypeItem" style="display: block">
-                  <label style="text-indent: 0">{{vehicleType.source.vehicle_year_model}}</label>
-                  <div (click)="onChangeTypeCheck(vehicleType.source)" [class.active]="vehicleType.source.vehicle_type_id === currentType.vehicle_type_id">
-                    <span style="padding-left: 20px">{{vehicleType.source.vehicle_type_name}}</span>
+                <li *ngFor="let vehicleYear of vehicleYearList">
+                  <label style="text-indent: 0">{{vehicleYear}}</label>
+                  <div *ngFor="let vehicleType of vehicleTypeItem">
+                    <div *ngIf="vehicleType.source.vehicle_year_model===vehicleYear"
+                         (click)="onChangeTypeCheck(vehicleType)"
+                         [class.active]="vehicleType.source.vehicle_type_id === currentType.vehicle_type_id && !vehicleType.disable">
+                      <span style="padding-left: 20px" [class.disabled-color]="vehicleType.disable">{{vehicleType.source.vehicle_type_name}}</span>
+                    </div>
                   </div>
                 </li>
               </ul>

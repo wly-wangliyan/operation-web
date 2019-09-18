@@ -143,9 +143,8 @@
 
 .vehicle-list {
     background: #fff;
-    margin-left: 13%;
-    margin-top: 10px;
-    width: 85%;
+    margin: 10px 20px 0 13%;
+    /*width: 85%;*/
     height: 100%;
     padding: 20px 0 30px 30px;
     box-shadow:0px 0px 4px 0px rgba(0,0,0,0.2);

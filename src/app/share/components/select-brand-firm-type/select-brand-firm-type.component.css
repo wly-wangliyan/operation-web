@@ -91,7 +91,7 @@
 
 .content-right .content-list>ul>li {
   /*padding-left: 30px;*/
-  display: flex;
+  /*display: flex;*/
   align-items: center;
 }
 
@@ -172,4 +172,10 @@ ul::-webkit-scrollbar-track {
   padding-left: 25px;
   color: #3E71F7;
   margin-bottom: 1rem!important;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.disabled-color {
+  color: #888888;
 }
