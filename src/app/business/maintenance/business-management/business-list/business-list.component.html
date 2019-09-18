@@ -16,9 +16,9 @@
                 <span>汽车品牌：</span>
                 <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id" name="car_brands">
                     <option value="">全部</option>
-                    <option value="1">关闭</option>
-                    <option value="2">异常</option>
-                    <option value="3">运行中</option>
+                    <option *ngFor="let data of vehicleBrandList" [value]="data.vehicle_brand_id">
+                        {{data.vehicle_brand_name}}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
@@ -58,11 +58,10 @@
                     <td [title]="data.upkeep_merchant_name">{{data.upkeep_merchant_name|zMaxLength:20}}</td>
                     <td>{{data.UpkeepCompany?.company_name}}</td>
                     <td>{{data.upkeep_merchant_type===1?'4S品牌店':'--'}}</td>
-                    <td>{{data.VehicleFirm?.vehicle_brand?.vehicle_brand_name&&data.VehicleFirm?.vehicle_firm_name?
+                    <td>{{data.VehicleFirm?.vehicle_brand?.vehicle_brand_name && data.VehicleFirm?.vehicle_firm_name?
                         data.VehicleFirm?.vehicle_brand?.vehicle_brand_name+'·'+data.VehicleFirm?.vehicle_firm_name:
                         data.VehicleFirm?.vehicle_brand?.vehicle_brand_name?data.VehicleFirm?.vehicle_brand?.vehicle_brand_name:
                             data.VehicleFirm?.vehicle_firm_name?data.VehicleFirm?.vehicle_firm_name:'--'}}</td>
-                    <td>{{data.service_telephone?data.service_telephone:'--'}}</td>
                     <td>
                         <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                                    (ngModelChange)="onSwitchChange(data.upkeep_merchant_id,$event)"></nz-switch>

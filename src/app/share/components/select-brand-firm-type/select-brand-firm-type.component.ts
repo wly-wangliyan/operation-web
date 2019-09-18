@@ -119,6 +119,7 @@ export class SelectBrandFirmTypeComponent implements OnInit {
     this.tipMsg = '';
     this.vehicleBrandList = [];
     this.vehicleFirmItem = [];
+    this.vehicleTypeItem = [];
     this.currentBrand = new VehicleBrandEntity();
   }
 
@@ -137,8 +138,12 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 选中品牌
   public onBrandClick(vehicleBrand: VehicleBrandEntity) {
+    this.currentType = new VehicleTypeEntity();
+    this.currentSeries = new VehicleSeriesEntity();
     this.currentBrand = vehicleBrand;
+    this.vehicleTypeItem = [];
     this.requestFirmSeriesListByBrand(vehicleBrand.vehicle_brand_id);
+    this.requestFirmListByBrand(vehicleBrand.vehicle_brand_id);
   }
 
   // 勾选车系
@@ -150,6 +155,23 @@ export class SelectBrandFirmTypeComponent implements OnInit {
   // 勾选车型
   public onChangeTypeCheck(vehicleType: VehicleTypeEntity) {
     this.currentType = vehicleType;
+  }
+
+  // 获取对应厂商列表
+  private requestFirmListByBrand(vehicle_brand_id: string) {
+    this.vehicleService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
+      this.vehicleFirmList = res;
+      const vehicleFirmItem = [];
+      this.vehicleFirmList.forEach(item => {
+        const firmItem = new VehicleFirmItem(item);
+        vehicleFirmItem.push(firmItem);
+      });
+      this.vehicleFirmItem = vehicleFirmItem;
+    }, err => {
+      this.vehicleFirmList = [];
+      $('#selectBrandFirmModal').modal('hide');
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 获取对应厂商车系列表
@@ -188,13 +210,6 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 回传选中事件
   public onSelectEmit() {
-    // const firmItem = this.vehicleFirmItem.filter(item => item.checked);
-    /*if (firmItem.length > 0) {
-      this.selectBrandFirm.emit({ firm: firmItem });
-      $('#selectBrandFirmModal').modal('hide');
-    } else {
-      this.tipMsg = '请选择厂商';
-    }*/
     this.selectBrandFirm.emit({ vehicle_type: this.currentType });
     $('#selectBrandFirmModal').modal('hide');
   }

@@ -126,7 +126,7 @@ export class CreateAccessoryComponent implements OnInit {
   // 选择所属厂商回调函数
   public onSelectedBrandFirm(event: any) {
     if (event && event.firm) {
-      const firm = event.firm[0].source;
+      const firm = event.firm[0];
       const brand = firm.vehicle_brand;
       this.productRecord.vehicle_brand_id = brand.vehicle_brand_id;
       this.productRecord.vehicle_firm_id = firm.vehicle_firm_id;
