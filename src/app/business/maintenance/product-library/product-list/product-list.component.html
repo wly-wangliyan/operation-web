@@ -106,6 +106,7 @@
               <td *ngIf="!product.vehicle_brand && product.vehicle_firm">
                 {{product.vehicle_firm.vehicle_firm_name}}
               </td>
+              <td *ngIf="!product.vehicle_brand && !product.vehicle_firm">--</td>
             </ng-container>
             <ng-container *ngIf="product.upkeep_accessory_type===projectTypes[1]">
               <td>--</td>
