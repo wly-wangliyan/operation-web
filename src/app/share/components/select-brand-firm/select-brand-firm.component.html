@@ -1,6 +1,5 @@
 <!--选择所属项目-->
 <div class="modal fade" id="selectBrandFirmModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
-<<<<<<< HEAD
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
     <div class="modal-dialog modal-dialog-common" role="document">
         <div class="modal-content modal-content-common">
@@ -52,35 +51,6 @@
                         <ng-container *ngIf="!vehicleFirmItem || vehicleFirmItem.length === 0">
                             <div class="no-data">暂无数据</div>
                         </ng-container>
-=======
-  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
-  <div class="modal-dialog modal-dialog-common" role="document">
-    <div class="modal-content modal-content-common">
-      <div class="content-box">
-        <div class="content-left">
-          <div class="content-title">品牌</div>
-          <div class="content-list">
-            <div class="leter-list">
-              <ul>
-                <li *ngFor="let leter of letter_list">
-                  <!-- <nz-anchor [nzAffix]="false" [nzTarget]="brand">
-                    <nz-link nzHref="#{{leter}}" (nzClick)="goDistance(leter)" nzTitle="{{leter}}"></nz-link>
-                  </nz-anchor> -->
-                  <a (click)="goDistance(leter)">{{leter}}</a>
-                </li>
-              </ul>
-            </div>
-            <div class="brand-list">
-              <ul id="brand">
-                <li *ngFor="let leter of letter_list">
-                  <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
-                    <p [id]="leter" class="leter-title">{{leter}}</p>
-                    <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
-                      (click)="onBrandClick(vehicleBrand)"
-                      [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
-                      <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
-                      {{vehicleBrand.vehicle_brand_name}}
->>>>>>> b81e742ec8ee6fddbad5f104b16600d032c60d96
                     </div>
                 </div>
             </div>
