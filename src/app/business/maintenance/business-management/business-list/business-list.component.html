@@ -57,11 +57,13 @@
                     <td>{{i+(pageIndex-1)*15+1}}</td>
                     <td [title]="data.upkeep_merchant_name">{{data.upkeep_merchant_name|zMaxLength:20}}</td>
                     <td>{{data.UpkeepCompany?.company_name}}</td>
-                    <td>{{data.upkeep_merchant_type===1?'4S品牌店':'--'}}</td>
-                    <td>{{data.VehicleFirm?.vehicle_brand?.vehicle_brand_name && data.VehicleFirm?.vehicle_firm_name?
-                        data.VehicleFirm?.vehicle_brand?.vehicle_brand_name+'·'+data.VehicleFirm?.vehicle_firm_name:
-                        data.VehicleFirm?.vehicle_brand?.vehicle_brand_name?data.VehicleFirm?.vehicle_brand?.vehicle_brand_name:
-                            data.VehicleFirm?.vehicle_firm_name?data.VehicleFirm?.vehicle_firm_name:'--'}}</td>
+                    <td>{{data.upkeep_merchant_type===1?'4S品牌店':data.upkeep_merchant_type===2?'汽修店':'--'}}</td>
+                    <td>
+                        <span *ngFor="let item of data.VehicleFirm;let i=index">
+                            {{item.vehicle_brand?.vehicle_brand_name}}·{{item.vehicle_firm_name}};
+                        </span>
+                        <span *ngIf="data.VehicleFirm.length===0">--</span>
+                    </td>
                     <td>{{data.service_telephone?data.service_telephone:'--'}}</td>
                     <td>
                         <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On" nzUnCheckedChildren="Off"

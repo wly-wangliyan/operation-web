@@ -138,7 +138,7 @@ export class BusinessEditComponent implements OnInit {
         this.service_telephones.forEach(value => {
             if (!ValidateHelper.Phone(value)) {
                 this.errPositionItem.service_telephone.isError = true;
-                this.errPositionItem.service_telephone.errMes = '客户电话格式错误！';
+                this.errPositionItem.service_telephone.errMes = '客服电话格式错误！';
                 isCheck = false;
             }
         });
@@ -190,6 +190,10 @@ export class BusinessEditComponent implements OnInit {
 
     // 选择汽车品牌、厂商
     public openChooseBrandModal() {
+        this.currentBusiness.VehicleFirm.forEach(value => {
+            this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
+            this.firm_ids.push(value.vehicle_firm_id);
+        });
         this.selectBrandFirmComponent.open();
     }
 

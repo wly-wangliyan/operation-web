@@ -28,10 +28,10 @@
                     <span>类型</span>
                 </label>
                 <div class="control-input">
-                    <select class="form-control" [(ngModel)]="currentBusiness.merchant_status" name="merchant_status" disabled>
+                    <select class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_type" name="upkeep_merchant_type" disabled>
                         <option value="">全部</option>
-                        <option value="1">营业中</option>
-                        <option value="2">停业休息</option>
+                        <option value="1">4S品牌店</option>
+                        <option value="2">汽修店</option>
                     </select>
                 </div>
             </div>
@@ -71,7 +71,8 @@
                 </label>
                 <div class="control-input" style="width: 540px!important;">
                     <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
-                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" disabled>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address"
+                          [title]="currentBusiness.address" name="address" disabled>
                 </div>
             </div>
             <div class="row">
@@ -145,7 +146,7 @@
             <div style="margin-left: 120px;height: 15px;">
                 <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
             </div>
-            <div style="margin-top: 40px">
+            <div style="margin-top: 40px;margin-bottom: 40px">
                 <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
                         (appZDebounceClick)="onEditFormSubmit()">保存
                 </button>
@@ -158,4 +159,4 @@
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
 <!--选择品牌厂商控件-->
-<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="false" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
+<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
