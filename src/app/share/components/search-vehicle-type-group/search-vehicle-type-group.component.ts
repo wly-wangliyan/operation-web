@@ -94,24 +94,22 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
 
   // 变更品牌
   public onChangeBrand(event: any) {
+    this.vehicle_firm_id = '';
+    this.vehicleFirmList = [];
+    this.vehicle_series_id = '';
+    this.vehicleSeriesList = [];
     if (event.target.value && !this.display_firm) {
       this.requestFirmListByBrand(event.target.value);
-    } else {
-      this.vehicle_firm_id = '';
-      this.vehicleFirmList = [];
-      this.vehicle_series_id = '';
-      this.vehicleSeriesList = [];
     }
     this.sendEmitter();
   }
 
   // 变更厂商
   public onChangeFirm(event: any) {
+    this.vehicle_series_id = '';
+    this.vehicleSeriesList = [];
     if (event.target.value && !this.display_series) {
       this.requestSeriesList(event.target.value);
-    } else {
-      this.vehicle_series_id = '';
-      this.vehicleSeriesList = [];
     }
     this.sendEmitter();
   }

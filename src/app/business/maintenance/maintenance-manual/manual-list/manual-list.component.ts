@@ -68,6 +68,20 @@ export class ManualListComponent implements OnInit {
     });
   }
 
+  // 品牌、厂商、车系回调
+  public onChangeSearchParams(event: any) {
+    if (event) {
+      this.searchParams.vehicle_brand = event.brand;
+      this.searchParams.vehicle_firm = event.firm;
+      this.searchParams.vehicle_series = event.series;
+    }
+  }
+
+  // 条件筛选
+  public onSearchBtnClick() {
+    this.searchText$.next();
+  }
+
   /** 删除 */
   public onDeleteProgect(data: VehicleTypeEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {

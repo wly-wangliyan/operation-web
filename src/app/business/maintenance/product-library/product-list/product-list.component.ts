@@ -98,11 +98,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
-      if (!this.globalService.httpErrorProcess(err)) {
-        if (err.status === 422) {
-
-        }
-      }
+      this.globalService.httpErrorProcess(err);
     });
   }
 

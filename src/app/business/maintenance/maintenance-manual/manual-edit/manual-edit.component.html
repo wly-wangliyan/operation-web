@@ -17,6 +17,11 @@
       <label>{{vehicleTypeInfo.vehicle_type_name ? vehicleTypeInfo.vehicle_type_name : ''}}</label>
     </div>
   </div>
+  <div class="content-middle" *ngIf="loading">
+    <div class="spin-loading">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+  </div>
   <div class="content-middle" *ngIf="isShowSetting">
     <ng-container *ngFor="let category of projectCategories">
       <div class="category-item" *ngIf="mapOfShow[category]">
@@ -24,9 +29,9 @@
         <table class="table">
           <thead>
             <tr>
-              <th>项目</th>
+              <th style="min-width: 200px;">项目</th>
               <th *ngIf="isEdit">操作</th>
-              <th>描述</th>
+              <th style="min-width: 200px;">描述</th>
               <ng-container *ngIf="mapOfColumns[category]">
                 <th *ngFor="let column of mapOfColumns[category]">
                   {{column.month>=0?column.month+'个月':''}}&nbsp;
@@ -39,7 +44,8 @@
             <ng-container *ngFor="let project of mapOfProject[category]">
               <tr *ngIf="isEdit ||(!isEdit && mapOfSetting[project.upkeep_item_id] &&
                   mapOfSetting[project.upkeep_item_id].switch)">
-                <td [title]="project.upkeep_item_name">{{project.upkeep_item_name | zMaxLength:20}}</td>
+                <td [title]="project.upkeep_item_name">
+                  {{project.upkeep_item_name | zMaxLength:10}}</td>
                 <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
                     [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"
@@ -52,7 +58,7 @@
                 </td>
                 <td
                   *ngIf="!isEdit && mapOfSetting[project.upkeep_item_id] || isEdit && !mapOfSetting[project.upkeep_item_id].switch">
-                  {{mapOfSetting[project.upkeep_item_id].description}}
+                  {{mapOfSetting[project.upkeep_item_id].description ? mapOfSetting[project.upkeep_item_id].description : '--'}}
                 </td>
                 <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"

@@ -69,13 +69,14 @@ export class ProductEntity extends EntityBase {
 
 // 产品列表条件筛选参数
 export class SearchParams extends EntityBase {
-  public vehicle_brand_id: string = undefined; // 汽车品牌
-  public vehicle_firm_id: string = undefined; // 汽车厂商
+  public vehicle_brand_id = ''; // 汽车品牌
+  public vehicle_firm_id = ''; // 汽车厂商
   public upkeep_accessory_name: string = undefined; // 配件/服务名称
   public upkeep_item_category: number = undefined; // 所属类别 1:保养项目 2:清洗养护项目 3:维修项目
   public upkeep_item_id: string = undefined; // 项目id
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
-  public is_original: boolean = undefined; // 是否原厂
+  public is_original = undefined; // 是否原厂
+  public serial_number: string = undefined; // 零件编号
   public page_num = 1; // 页码 默认:1
   public page_size = 45; // 每页条数 默认:15
 }

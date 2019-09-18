@@ -148,8 +148,8 @@ export class UpkeepMerchantProjectEntity extends EntityBase {
     public vehicle_type: VehicleTypeEntity = undefined; //	object	汽车车型-外键
     public upkeep_merchant_product: UpkeepMerchantProductEntity = undefined; //	object	保养商家产品-外键
     public upkeep_handbook_item: HandbookItemEntity = undefined; //	object	保养手册项目-外键
-    public work_original_amount = 0; //	float	原价工时费 单位:元
-    public work_sale_amount = 0; //	float	售价工时费 单位:元
+    public work_original_amount = undefined; //	float	原价工时费 单位:元
+    public work_sale_amount = undefined; //	float	售价工时费 单位:元
     public switch = undefined; //	boolean	商家项目开关 True:开 False:关
     public accessory_count = undefined; //	float	已选配件数
     public created_time: number = undefined; 	// float 	创建时间
@@ -173,6 +173,7 @@ export class UpkeepMerchantAccessoryEntity extends EntityBase {
     public upkeep_accessory: ProductEntity = undefined; //	object	保养产品/配件库
     public number: number = undefined; //	integer	所需数量 单位:件
     public sale_amount: number = undefined; //	float	销售单价 单位:元
+    public original_amount: number = undefined; //	float	销售单价 单位:元
     public created_time: number = undefined; 	// float 	创建时间
     public updated_time: number = undefined; 	// float 	修改时间
 

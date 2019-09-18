@@ -18,25 +18,17 @@
             <form class="search-form">
                 <div class="form-group">
                     <span>状态：</span>
-                    <select class="form-control" [(ngModel)]="searchParams.status" name="network_status">
+                    <select class="form-control" [(ngModel)]="searchParams.status" name="status" style="width: 150px">
                         <option value="">全部</option>
-                        <option value="1">营业中</option>
-                        <option value="2">停业休息</option>
+                        <option value=1>销售中</option>
+                        <option value=2>未上架</option>
                     </select>
                 </div>
+                <app-search-vehicle-type-group (selectBrandFirmSeries)="selectBrandFirmSeries($event)"></app-search-vehicle-type-group>
                 <div class="form-group">
-                    <span>汽车品牌：</span>
-                    <select class="form-control" [(ngModel)]="searchParams.car_brands" name="car_brands">
-                        <option value="">全部</option>
-                        <option value="1">关闭</option>
-                        <option value="2">异常</option>
-                        <option value="3">运行中</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <span>商家名称：</span>
-                    <input class="form-control" placeholder="请输入商家名称" autocomplete="off"
-                           name="project_name" [(ngModel)]="searchParams.gpu_model"/>
+                    <span>车型名称：</span>
+                    <input class="form-control" placeholder="请输入配件名称" autocomplete="off"
+                           name="vehicle_type_name" [(ngModel)]="searchParams.vehicle_type_name"/>
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
                         </button>
@@ -103,12 +95,12 @@
                     </div>
                     <label>加价</label>
                     <input class="form-control" type="number" [(ngModel)]="item.operation_time_amount" name="price" (keypress)="inputNumberLimit($event)" [disabled]="!item.isEdit">
-                    <span style="float:left">元</span>
+                    <label class="price-label price-label-input">元</label>
                     <div style="float:left;margin-left: 61px">
                         <button class="close-btn" nz-button (click)="onTimeAddBtn()">添加</button>
                         <button *ngIf="i > 0" class="close-btn" nz-button (click)="onTimeDelBtn(i)">移除</button>
                         <button *ngIf="!item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="item.isEdit=true">编辑</button>
-                        <button *ngIf="item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="onTimeSaveBtn(item);item.isEdit=false"
+                        <button *ngIf="item.isEdit" class="sure-btn" nz-button nzType="primary" (click)="onTimeSaveBtn(item, i);item.isEdit=false"
                         [disabled]="!item.operation_time_amount">保存</button>
                     </div>
                     <div style="clear: both;"></div>
