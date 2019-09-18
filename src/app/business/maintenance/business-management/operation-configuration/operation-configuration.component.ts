@@ -117,32 +117,36 @@ export class OperationConfigurationComponent implements OnInit {
   public onTabClicked(index) {
     this.tabIndex = index;
     if (index === 2) {
-      this.bookingTimes = [];
-      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription =
-          this.businessManagementService.requestUpkeepMerchantOperationList(this.upkeep_merchant_id).subscribe(res => {
-            res.forEach(value => {
-              const timeObj = {
-                begin_time: DateFormatHelper.getMinuteOrTime(value.start_time),
-                end_time: DateFormatHelper.getMinuteOrTime(value.end_time),
-                upkeep_merchant_operation_id: value.upkeep_merchant_operation_id,
-                operation_time_amount: value.operation_time_amount,
-                isEdit: false
-              };
-              this.bookingTimes.push(timeObj);
-            });
-            if (res.length === 0) {
-              const timeObj = {
-                begin_time: DateFormatHelper.getMinuteOrTime(28800),
-                end_time: DateFormatHelper.getMinuteOrTime(64800),
-                isEdit: false
-              };
-              this.bookingTimes.push(timeObj);
-            }
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+      this.requestUpkeepMerchantOperation();
     }
+  }
+
+  private requestUpkeepMerchantOperation() {
+    this.bookingTimes = [];
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    this.continueRequestSubscription =
+        this.businessManagementService.requestUpkeepMerchantOperationList(this.upkeep_merchant_id).subscribe(res => {
+          res.forEach(value => {
+            const timeObj = {
+              begin_time: DateFormatHelper.getMinuteOrTime(value.start_time),
+              end_time: DateFormatHelper.getMinuteOrTime(value.end_time),
+              upkeep_merchant_operation_id: value.upkeep_merchant_operation_id,
+              operation_time_amount: value.operation_time_amount,
+              isEdit: false
+            };
+            this.bookingTimes.push(timeObj);
+          });
+          if (res.length === 0) {
+            const timeObj = {
+              begin_time: DateFormatHelper.getMinuteOrTime(28800),
+              end_time: DateFormatHelper.getMinuteOrTime(64800),
+              isEdit: false
+            };
+            this.bookingTimes.push(timeObj);
+          }
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   // 创建产品
@@ -179,23 +183,43 @@ export class OperationConfigurationComponent implements OnInit {
     const timeObj = {
       begin_time: DateFormatHelper.getMinuteOrTime(0),
       end_time: DateFormatHelper.getMinuteOrTime(0),
-      isEdit: false
+      isEdit: false,
     };
     this.bookingTimes.push(timeObj);
   }
 
   // 保存预定时间段
-  public onTimeSaveBtn(data) {
+  public onTimeSaveBtn(data, index) {
     const params = {
       start_time: DateFormatHelper.getSecondTimeSum(data.begin_time),
       end_time: DateFormatHelper.getSecondTimeSum(data.end_time),
       operation_time_amount: data.operation_time_amount
     };
+    if (params.start_time >= params.end_time) {
+      this.globalService.promptBox.open('预定时段开始时间需小于结束时间！', null, 2000, '/assets/images/warning.png');
+      this.requestUpkeepMerchantOperation();
+      return;
+    }
+    let is_pass = true;
+    this.bookingTimes.forEach(value => {
+      const start_time = DateFormatHelper.getSecondTimeSum(value.begin_time);
+      const end_time = DateFormatHelper.getSecondTimeSum(value.end_time);
+      if (data.upkeep_merchant_operation_id !== value.upkeep_merchant_operation_id &&
+          ((params.start_time >= start_time && params.start_time <= end_time)
+              || (params.end_time >= start_time && params.end_time <= end_time))) {
+        this.globalService.promptBox.open('预定时段时间不可重叠！', null, 2000, '/assets/images/warning.png');
+        is_pass = false;
+      }
+    });
+    if (!is_pass) {
+      this.requestUpkeepMerchantOperation();
+      return;
+    }
     if (data.upkeep_merchant_operation_id) {
       // 调用编辑接口
       this.businessManagementService.requestUpdateUpkeepOperation(this.upkeep_merchant_id, data.upkeep_merchant_operation_id, params)
           .subscribe((e) => {
-            this.globalService.promptBox.open('保存成功！');
+            this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
           }, err => {
             this.globalService.httpErrorProcess(err);
           });
@@ -203,7 +227,7 @@ export class OperationConfigurationComponent implements OnInit {
       // 调用创建接口
       this.businessManagementService.requestAddUpkeepOperation(this.upkeep_merchant_id, params)
           .subscribe((e) => {
-            this.globalService.promptBox.open('保存成功！');
+            this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
           }, err => {
             this.globalService.httpErrorProcess(err);
           });

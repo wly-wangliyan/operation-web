@@ -147,7 +147,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   // 编辑配件、服务
   public onEditClick(data) {
     if (data.sale_amount > data.original_amount) {
-      this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, null, false);
+      this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
       return;
     }
     const params = {
@@ -160,7 +160,7 @@ export class OperationConfigurationEditComponent implements OnInit {
           this.globalService.promptBox.open('保存成功！', () => {
             const index = this.accessoryItemList.findIndex(v => v.source.upkeep_merchant_accessory_id === data.upkeep_merchant_accessory_id);
             this.accessoryItemList[index].is_edit_price = false;
-          }, 2000, null, true);
+          }, 2000, '/assets/images/success.png');
         }, err => {
           this.errorProcess(err);
         });
@@ -177,7 +177,7 @@ export class OperationConfigurationEditComponent implements OnInit {
               this.projectItemList[index].is_show_accessory = false;
             }
             this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count - 1;
-          });
+          }, 2000, '/assets/images/success.png');
         }, err => {
           this.errorProcess(err);
         });
@@ -199,7 +199,7 @@ export class OperationConfigurationEditComponent implements OnInit {
         const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
         this.projectItemList[index].is_show_accessory = true;
         this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
-      });
+      }, 2000, '/assets/images/success.png');
     }, err => {
       this.errorProcess(err);
     });
@@ -274,7 +274,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   // 保存工时费
   public onProjectSaveClick(data) {
     if (data.work_sale_amount > data.work_original_amount) {
-      this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, null, false);
+      this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, '/assets/images/warning.png');
       return;
     }
     this.currentProjectId = data.upkeep_merchant_project_id;
@@ -286,7 +286,7 @@ export class OperationConfigurationEditComponent implements OnInit {
           this.globalService.promptBox.open('保存成功！', () => {
             const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
             this.projectItemList[index].is_edit_price = false;
-          }, 2000, null, true);
+          }, 2000, '/assets/images/success.png');
         }, err => {
           this.errorProcess(err);
         });
