@@ -6,6 +6,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { Router } from '@angular/router';
 import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../business-management.service';
+import { VehicleBrandEntity, VehicleTypeManagementService } from '../../vehicle-type-management/vehicle-type-management.service';
 
 const PageSize = 15;
 
@@ -20,6 +21,7 @@ export class BusinessListComponent implements OnInit {
   public businessList: Array<UpkeepMerchantEntity> = [];
   public pageIndex = 1;
   public noResultText = '数据加载中...';
+  public vehicleBrandList: Array<VehicleBrandEntity> = [];
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -36,6 +38,7 @@ export class BusinessListComponent implements OnInit {
 
   constructor(private globalService: GlobalService,
               private businessManagementService: BusinessManagementService,
+              private vehicleTypeManagementService: VehicleTypeManagementService,
               private router: Router) {
   }
 
@@ -52,9 +55,13 @@ export class BusinessListComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
-    // const temp = [];
-    // temp.push({aa: '1', bb: '2'});
-    // this.businessList = temp;
+
+    this.continueRequestSubscription =
+        this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
+          this.vehicleBrandList = res.results;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   // 进入编辑商家页面

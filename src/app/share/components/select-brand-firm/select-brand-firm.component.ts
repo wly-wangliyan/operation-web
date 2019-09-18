@@ -108,7 +108,7 @@ export class SelectBrandFirmComponent implements OnInit {
           this.requestFirmListByBrand(this.currentBrand.vehicle_brand_id);
         }
       } else if (this.multi && this.selectedBrand) {
-        const brands = this.selectedBrand.split(',');
+        const brands = this.selectedBrand.length > 0 ? this.selectedBrand.split(',') : [];
         if (brands && brands.length > 0) {
           brands.forEach(brandId => {
             const isfindIndex = this.vehicleBrandList.some(brand => brand.vehicle_brand_id === brandId);

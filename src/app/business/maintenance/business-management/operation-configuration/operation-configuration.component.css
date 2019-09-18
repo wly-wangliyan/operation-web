@@ -73,9 +73,17 @@
   line-height: 34px;
 }
 
-.form-control {
+.booking-times .form-control {
     width: 140px;
     height: 34px;
     float: left;
     background: #F7F8FA;
+}
+
+.search-form .form-group {
+    margin-right: 20px;
+}
+
+.search-btn-group {
+    margin: 0 0 0 30px;
 }

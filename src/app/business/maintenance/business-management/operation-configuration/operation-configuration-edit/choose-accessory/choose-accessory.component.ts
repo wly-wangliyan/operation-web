@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../../../business-management.service';
 import { Subject, Subscription } from 'rxjs';
 import { BusinessEditComponent } from '../../../business-edit/business-edit.component';
@@ -7,6 +7,11 @@ import { Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductEntity, ProductLibraryHttpService, SearchParams } from '../../../../product-library/product-library-http.service';
 import { HttpErrorEntity } from '../../../../../../core/http.service';
+import {
+  VehicleBrandEntity,
+  VehicleFirmEntity,
+  VehicleTypeManagementService
+} from '../../../../vehicle-type-management/vehicle-type-management.service';
 
 const PageSize = 15;
 
@@ -27,6 +32,10 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public upkeep_item_type: number;
 
+  public vehicleBrandList: Array<VehicleBrandEntity> = [];
+
+  public vehicleFirmList: Array<VehicleFirmEntity> = [];
+
   private searchText$ = new Subject<any>();
 
   private continueRequestSubscription: Subscription; // 分页获取数据
@@ -44,12 +53,22 @@ export class ChooseAccessoryComponent implements OnInit {
 
   constructor(private globalService: GlobalService,
               private productLibraryService: ProductLibraryHttpService,
-              private businessManagementService: BusinessManagementService,
+              private vehicleTypeManagementService: VehicleTypeManagementService,
               private router: Router) {
   }
 
   ngOnInit() {
     this.productList.push(new ProductEntity());
+    this.continueRequestSubscription =
+        this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
+          this.vehicleBrandList = res.results;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+  }
+
+  public initAccessoryType() {
+    this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
     this.generateProductList();
   }
 
@@ -100,5 +119,15 @@ export class ChooseAccessoryComponent implements OnInit {
   // 选择配件
   public onChooseClick(data) {
     this.selectAccessory.emit(data);
+  }
+
+  public onBrandChange() {
+    this.vehicleFirmList = [];
+    this.continueRequestSubscription =
+        this.vehicleTypeManagementService.requestVehicleFirmList(this.searchParams.vehicle_brand_id).subscribe(res => {
+          this.vehicleFirmList = res;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 }

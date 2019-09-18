@@ -137,6 +137,8 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 选中品牌
   public onBrandClick(vehicleBrand: VehicleBrandEntity) {
+    this.currentType = new VehicleTypeEntity();
+    this.currentSeries = new VehicleSeriesEntity();
     this.currentBrand = vehicleBrand;
     this.requestFirmSeriesListByBrand(vehicleBrand.vehicle_brand_id);
   }

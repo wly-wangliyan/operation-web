@@ -38,7 +38,7 @@
           <div class="content-list">
             <ng-container *ngIf="vehicleSeriesItem && vehicleSeriesItem.length > 0">
               <ul>
-                <li *ngFor="let vehicleFirm of vehicleSeriesItem" style="width: 221px">
+                <li *ngFor="let vehicleFirm of vehicleSeriesItem" style="width: 230px">
                   <label>{{vehicleFirm.source.vehicle_firm.vehicle_firm_name}}</label>
                   <div (click)="onChangeSeriesCheck(vehicleFirm.source)" [class.active]="vehicleFirm.source.vehicle_series_id === currentSeries.vehicle_series_id">
                     <span>{{vehicleFirm.source.vehicle_series_name}}</span>
@@ -56,9 +56,10 @@
           <div class="content-list">
             <ng-container *ngIf="vehicleTypeItem && vehicleTypeItem.length > 0">
               <ul>
-                <li *ngFor="let vehicleType of vehicleTypeItem">
+                <li *ngFor="let vehicleType of vehicleTypeItem" style="display: block">
+                  <label style="text-indent: 0">{{vehicleType.source.vehicle_year_model}}</label>
                   <div (click)="onChangeTypeCheck(vehicleType.source)" [class.active]="vehicleType.source.vehicle_type_id === currentType.vehicle_type_id">
-                    <span style="padding-left: 0;line-height: 25px">{{vehicleType.source.vehicle_type_name}}</span>
+                    <span style="padding-left: 20px">{{vehicleType.source.vehicle_type_name}}</span>
                   </div>
                 </li>
               </ul>

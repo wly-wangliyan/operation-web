@@ -12,6 +12,8 @@ import {
   UpkeepMerchantProductEntity
 } from '../business-management.service';
 import { SelectBrandFirmTypeComponent } from '../../../../share/components/select-brand-firm-type/select-brand-firm-type.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
+import { SearchVehicleTypeGroupComponent } from '../../../../share/components/search-vehicle-type-group/search-vehicle-type-group.component';
 
 const PageSize = 15;
 
@@ -36,6 +38,7 @@ export class OperationConfigurationComponent implements OnInit {
 
   @ViewChild(BusinessEditComponent, {static: true}) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, {static: true}) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
+  @ViewChild(SearchVehicleTypeGroupComponent, {static: true}) public searchVehicleTypeGroupComponent: SearchVehicleTypeGroupComponent;
 
   private get pageCount(): number {
     if (this.productList.length % PageSize === 0) {
@@ -149,8 +152,8 @@ export class OperationConfigurationComponent implements OnInit {
 
   // 查看详情
   public onDetailBtnClick(data) {
-    this.router.navigate(['/main/maintenance/business-management/operation-configuration/detail'],
-        { queryParams: {} });
+    this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/detail`],
+        { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id} });
   }
 
   // 删除预定时间段
@@ -240,14 +243,25 @@ export class OperationConfigurationComponent implements OnInit {
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
-          if (event) {
-            this.globalService.promptBox.open('上架失败，请重试', null, 2000, '/assets/images/warning.png');
-          } else {
-            this.globalService.promptBox.open('下架失败，请重试', null, 2000, '/assets/images/warning.png');
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'data_scarcity' && content.resource === 'data') {
+              this.globalService.promptBox.open('产品数据不完整！', null, 2000, '/assets/images/warning.png');
+            } else if (event) {
+              this.globalService.promptBox.open('上架失败，请重试！', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('下架失败，请重试！', null, 2000, '/assets/images/warning.png');
+            }
           }
         }
       }
       this.searchText$.next();
     });
+  }
+
+  public selectBrandFirmSeries(event) {
+    this.searchParams.vehicle_brand_id = event.brand;
+    this.searchParams.vehicle_firm_id = event.firm;
+    this.searchParams.vehicle_series_id = event.series;
   }
 }

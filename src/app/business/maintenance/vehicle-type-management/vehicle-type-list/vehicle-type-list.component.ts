@@ -137,7 +137,7 @@ export class VehicleTypeListComponent implements OnInit {
               } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
                 this.globalService.promptBox.open('文件格式错误！');
               } else if (error.resource === 'FILE' && error.code === 'scale_out') {
-                this.globalService.promptBox.open('文件超过限长！');
+                this.globalService.promptBox.open('单次最大可导入200条，请重新上传！');
               }
             }
           }
