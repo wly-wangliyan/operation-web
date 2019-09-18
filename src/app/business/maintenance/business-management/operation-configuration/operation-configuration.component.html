@@ -110,4 +110,4 @@
     </div>
 </div>
 <!--选择品牌厂商车型控件-->
-<app-select-brand-firm-type [selectedBrand]="" [selectedFirm]="" [multi]="true" (selectBrandFirm)="onEditBtnClick($event, false)"></app-select-brand-firm-type>
+<app-select-brand-firm-type [disableVehicleType]="disableVehicleType" [multi]="false" (selectBrandFirm)="onEditBtnClick($event, false)"></app-select-brand-firm-type>

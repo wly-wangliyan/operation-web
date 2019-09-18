@@ -30,6 +30,7 @@ export class OperationConfigurationComponent implements OnInit {
   public noResultText = '数据加载中...';
   public tabIndex = 1;
   public bookingTimes = [];
+  public disableVehicleType = [];
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -75,6 +76,23 @@ export class OperationConfigurationComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
+    this.requestUpkeepProductAll();
+  }
+
+  // 获取全部产品
+  private requestUpkeepProductAll() {
+    this.disableVehicleType.push('e7ed3bbcd3b811e992d0309c23b28564');
+    const params = new SearchUpkeepProductParams();
+    params.page_size = 1000;
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    this.continueRequestSubscription =
+        this.businessManagementService.requestUpkeepProductList(this.upkeep_merchant_id, params).subscribe(res => {
+          res.results.forEach(value => {
+            this.disableVehicleType.push(value.vehicle_type.vehicle_type_id);
+          });
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   // 显示添加编辑项目modal
@@ -86,7 +104,7 @@ export class OperationConfigurationComponent implements OnInit {
       this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, data.vehicle_type.vehicle_type_id).subscribe(res => {
         this.globalService.promptBox.open('创建成功！', () => {
           this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
-              { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: res.body.upkeep_product_id} });
+              { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: res.body.upkeep_merchant_product_id} });
         });
       }, err => {
         this.globalService.httpErrorProcess(err);

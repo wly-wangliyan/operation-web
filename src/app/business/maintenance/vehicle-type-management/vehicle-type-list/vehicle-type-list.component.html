@@ -5,11 +5,12 @@
             <a (click)="onImportClick()">导入</a>
         </li>
         <li class="big-bg">
-            <a href="/assets/download/vehicle_info.csv" download="vehicle_info.csv" style="color: #fff">下载模板</a>
+            <a href="/assets/download/vehicle_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
         </li>
     </ul>
 </div>
 <div class="content-flow">
+    <nz-empty style="margin-top: 10%" *ngIf="!vehicleBrandList || vehicleBrandList.length===0"></nz-empty>
     <div class="brand-list">
         <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)" [class.width]="item.vehicle_brand_id===vehicle_brand_id">
             <img class="brand-img" [src]="item.vehicle_brand_image">
@@ -17,7 +18,6 @@
             <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
         </li>
     </div>
-
     <div class="vehicle-list" *ngIf="vehicleBrandList.length>0">
         <nz-tree [nzData]="vehicleFirmList" nzAsyncData nzShowIcon (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
                  [nzTreeTemplate]="nzTreeTemplate" [nzExpandedIcon]="mutiExpandedIconTpl">

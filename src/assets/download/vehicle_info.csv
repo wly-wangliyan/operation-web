@@ -1,7 +1,0 @@
-brandId,brand_images,brand,cron,facturer,series,series_id,yearname,car_id,car_name,price,level,energy,listing_time,engine,transmission_case,lwh,body_structure,facturer_id,source
-33,https://uustorage.uucin.com/media/park/87795478383c7de970195ef5db76b845.jpg,奥迪,A,一汽-大众奥迪,奥迪A3,3170,2019,36622,奥迪A3 2019款 Sportback 35 TFSI 进取型 国V,18.86万,紧凑型车,汽油,2018.1,1.4T 150马力 L4,7挡双离合,4312*1785*1426,5门5座两厢车,1,1
-33,https://uustorage.uucin.com/media/park/87795478383c7de970195ef5db76b845.jpg,奥迪,A,一汽-大众奥迪,奥迪A3,3170,2019,36623,奥迪A3 2019款 Sportback 35 TFSI 时尚型 国V,21.28万,紧凑型车,汽油,2018.1,1.4T 150马力 L4,7挡双离合,4321*1785*1426,5门5座两厢车,1,1
-33,https://uustorage.uucin.com/media/park/87795478383c7de970195ef5db76b845.jpg,奥迪,A,一汽-大众奥迪,奥迪A3,3170,2019,36624,奥迪A3 2019款 Sportback 35 TFSI 风尚型 国V,22.67万,紧凑型车,汽油,2018.1,1.4T 150马力 L4,7挡双离合,4312*1785*1426,5门5座两厢车,1,1
-33,https://uustorage.uucin.com/media/park/87795478383c7de970195ef5db76b845.jpg,奥迪,A,一汽-大众奥迪,奥迪A3,3170,2019,36625,奥迪A3 2019款 Sportback 35 TFSI 运动型 国V,22.67万,紧凑型车,汽油,2018.1,1.4T 150马力 L4,7挡双离合,4321*1785*1426,5门5座两厢车,1,1
-,,,,,,,,,,,,,,,,,,,
-,"最后的facturer_id为厂商id 导入请选择32以后的数字(包括32), ps:这是第一次导入的数据内容,下次导入请自行记录厂商id,依次顺延,source为来源,汽车之家用1,其它用2(使用时删掉这段话)",,,,,,,,,,,,,,,,,,
