@@ -259,9 +259,9 @@ export class OperationConfigurationComponent implements OnInit {
     const params = {status: swith};
     this.businessManagementService.requestProductStatus(this.upkeep_merchant_id, upkeep_merchant_product_id, params).subscribe(res => {
       if (event) {
-        this.globalService.promptBox.open('上架成功');
+        this.globalService.promptBox.open('上架成功', null, 2000, '/assets/images/success.png');
       } else {
-        this.globalService.promptBox.open('下架成功');
+        this.globalService.promptBox.open('下架成功', null, 2000, '/assets/images/success.png');
       }
       this.searchText$.next();
     }, err => {

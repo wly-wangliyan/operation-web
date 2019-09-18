@@ -78,6 +78,7 @@
     height: 34px;
     float: left;
     background: #F7F8FA;
+    border-radius: 1px;
 }
 
 .search-form .form-group {
@@ -86,4 +87,18 @@
 
 .search-btn-group {
     margin: 0 0 0 30px;
+}
+
+.price-label {
+    border: 0.5px solid rgba(136, 136, 136, 0.3);
+    border-radius: 1px;
+    border-left: none;
+    text-align: center !important;
+    line-height: 34px;
+}
+
+.price-label-input {
+    height: 34px;
+    width: 34px!important;
+    margin: 0 !important;
 }

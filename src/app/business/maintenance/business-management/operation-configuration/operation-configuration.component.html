@@ -95,7 +95,7 @@
                     </div>
                     <label>加价</label>
                     <input class="form-control" type="number" [(ngModel)]="item.operation_time_amount" name="price" (keypress)="inputNumberLimit($event)" [disabled]="!item.isEdit">
-                    <span style="float:left">元</span>
+                    <label class="price-label price-label-input">元</label>
                     <div style="float:left;margin-left: 61px">
                         <button class="close-btn" nz-button (click)="onTimeAddBtn()">添加</button>
                         <button *ngIf="i > 0" class="close-btn" nz-button (click)="onTimeDelBtn(i)">移除</button>
