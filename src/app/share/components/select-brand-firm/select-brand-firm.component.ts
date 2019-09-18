@@ -212,10 +212,4 @@ export class SelectBrandFirmComponent implements OnInit {
       this.tipMsg = '请选择厂商';
     }
   }
-
-  public goDistance(leter: string) {
-    console.log(leter);
-    console.log($(".leter-title"));
-    // this.distannceD.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
-  }
 }

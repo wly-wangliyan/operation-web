@@ -1,9 +1,20 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养手册'" [level2Name]="title"></app-crumb>
-  <ul class="header-right" *ngIf="!isEdit">
-    <li class="big-bg">
+  <ul class="header-right">
+    <li class="big-bg" *ngIf="!isEdit">
       <a (click)="onEditClick()">编辑</a>
     </li>
+    <ng-container *ngIf="isEdit && isShowSetting">
+      <li>
+        <button name="sure_btn" class="header-btn" [disabled]="saveBtnStatus()" nz-button nzType="primary"
+          (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+      </li>
+      <li class="big-bg big-white-btn">
+        <a (click)="onCancelClick()">取消</a>
+      </li>
+    </ng-container>
   </ul>
 </div>
 <div class="content-flow">
@@ -71,11 +82,11 @@
         </table>
       </div>
     </ng-container>
-    <div class="content-footer" *ngIf="isEdit">
+    <!-- <div class="content-footer" *ngIf="isEdit && isShowSetting">
       <button name="sure_btn" class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
         保存
       </button>
       <button name="close_btn" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
-    </div>
+    </div> -->
   </div>
 </div>
