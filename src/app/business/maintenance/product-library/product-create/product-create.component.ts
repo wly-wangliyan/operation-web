@@ -330,4 +330,8 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
+  // 取消编辑
+  public onCancelClick() {
+    this.router.navigate(['../../list'], { relativeTo: this.route });
+  }
 }
