@@ -1,31 +1,28 @@
 <ul nz-menu [nzMode]="'inline'" class="menu-container">
   <ng-container *ngFor="let menuItem of menuItems">
     <ng-container *ngIf="menuItem.children.length===0">
-      <li class="menu-item" nz-menu-item
-          (click)="onMenuItemClick(menuItem,menuItem.title)"
-          [class.selected]="menuItem.isSelect">
-      <span title>
-        <i [class.icon-menu]="menu_icon"></i>
-        <span>{{menuItem.title}}</span>
-      </span>
+      <li class="submenu menu-item" nz-menu-item (click)="onMenuItemClick(menuItem,menuItem.title)"
+        [class.selected]="menuItem.isSelect">
+        <span title>
+          <div *ngIf="menuItem.isSelect"></div>
+          <i [class.icon-menu]="menu_icon"></i>
+          <span>{{menuItem.title}}</span>
+        </span>
       </li>
     </ng-container>
     <ng-container *ngIf="menuItem.children.length>0">
-      <li class="submenu" nz-submenu
-          [(nzOpen)]="menuItem.isSelect"
-          [class.selected]="menuItem.isSelect">
-      <span title>
-        <div *ngIf="menuItem.isSelect"></div>
-        <i class="icon-menu"></i>
-        <span>{{menuItem.title}}</span>
-        <i class="icon-arrow" [ngClass]="{'menu-open':!menuItem.isSelect,'menu-close':menuItem.isSelect}"></i>
-      </span>
+      <li class="submenu" nz-submenu [(nzOpen)]="menuItem.isSelect" [class.selected]="menuItem.isSelect">
+        <span title>
+          <div *ngIf="menuItem.isSelect"></div>
+          <i class="icon-menu"></i>
+          <span>{{menuItem.title}}</span>
+          <i class="icon-arrow" [ngClass]="{'menu-open':!menuItem.isSelect,'menu-close':menuItem.isSelect}"></i>
+        </span>
         <ul *ngIf="menuItem.children.length>0">
           <li class="menu-item" nz-menu-item *ngFor="let subMenuItem of menuItem.children"
-              [nzSelected]="subMenuItem.isSelect"
-              (click)="onMenuItemClick(subMenuItem,menuItem.title)">
+            [nzSelected]="subMenuItem.isSelect" (click)="onMenuItemClick(subMenuItem,menuItem.title)">
             <span class="subMenuItem">
-                 {{subMenuItem.title}}
+              {{subMenuItem.title}}
             </span>
           </li>
         </ul>

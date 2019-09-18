@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Subscription, timer } from 'rxjs';
 import { MenuHelper, SideMenuItem } from './menu-ui.model';
 import { GlobalService } from '../../../core/global.service';
+import { isTemplateRef } from 'ng-zorro-antd';
 
 /* 左侧菜单栏 */
 
@@ -54,6 +55,7 @@ export class ExpandedMenuComponent implements OnInit {
         item.reset();
       }
     });
+    menuItem.isSelect = true;
     timer(0).subscribe(() => {
       this.router.navigateByUrl(menuItem.path);
     });
@@ -204,8 +206,6 @@ export class ExpandedMenuComponent implements OnInit {
         routeItem.isSelect = true;
         const childRouteItem = this.routeLinkList[index].children[childIndex];
         MenuHelper.Select(this.menuItems, childRouteItem);
-      } else {
-        MenuHelper.Select(this.menuItems, routeItem);
       }
     }
   }
