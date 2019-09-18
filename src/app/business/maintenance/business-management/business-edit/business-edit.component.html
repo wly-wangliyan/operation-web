@@ -1,5 +1,6 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家列表'" [level3Name]="'编辑'" [level2RelativePath]="'../list'"></app-crumb>
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家列表'" [level3Name]="'编辑'"
+               [level2RelativePath]="'../list'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="content-main">
@@ -19,7 +20,8 @@
                     <span>店铺名称</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name"
+                           name="upkeep_merchant_name" readonly>
                 </div>
             </div>
             <div class="row">
@@ -28,7 +30,8 @@
                     <span>类型</span>
                 </label>
                 <div class="control-input">
-                    <select class="form-control" [(ngModel)]="currentBusiness.merchant_status" name="merchant_status" disabled>
+                    <select class="form-control" [(ngModel)]="currentBusiness.merchant_status" name="merchant_status"
+                            disabled>
                         <option value="">全部</option>
                         <option value="1">营业中</option>
                         <option value="2">停业休息</option>
@@ -69,7 +72,8 @@
                 </label>
                 <div class="control-input" style="width: 540px!important;">
                     <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
-                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" readonly>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址"
+                           [(ngModel)]="currentBusiness.address" name="address" readonly>
                 </div>
             </div>
             <div class="row">
@@ -78,7 +82,8 @@
                     <span>地图坐标</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon"
+                           readonly>
                     <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
                 </div>
             </div>
@@ -89,7 +94,7 @@
                 </label>
                 <div class="control-input">
                     <button class="common-btn" style="border-left: 1px solid #d9d9d9" nz-button
-                            (click)="openChooseBrandModal()">{{currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length===0?'选择':'重新选择'}}</button>
+                            (click)="openChooseBrandModal()">{{currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length === 0 ? '选择' : '重新选择'}}</button>
                 </div>
             </div>
             <div class="brand-list" *ngIf="currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length>0">
@@ -122,29 +127,36 @@
                 </label>
                 <div class="control-input">
                     <input class="form-control" (change)="errPositionItem.booking.isError=false" required
-                           type="number" [(ngModel)]="currentBusiness.booking" name="booking" (keypress)="inputNumberLimit($event)">
+                           type="number" [(ngModel)]="currentBusiness.booking" name="booking"
+                           (keypress)="inputNumberLimit($event)">
                     <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
                 </div>
-                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
+                <span class="msg-tip"
+                      *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
             </div>
-            <!--<div class="row">
+            <div class="row">
                 <label class="control-label">
                     <b>*</b>
                     <span>客服电话</span>
                 </label>
-                <div class="control-input" *ngFor="let data of service_telephones_list;let i=index" [class.tel-input]="i!==0">
-                    <input class="form-control" placeholder="请输入座机或手机号" (change)="onInputServiceTelephone($event, i)"
-                           [(ngModel)]="data" name="serviceTel_{{i}}" required>
+                <div class="control-input"
+                     *ngFor="let telephoneData of service_telephones_list;let telephoneIndex=index"
+                     [class.tel-input]="telephoneIndex!==0">
+                    <input class="form-control" placeholder="请输入座机或手机号" (change)="onInputServiceTelephone($event, telephoneIndex)" [ngModel]="telephoneData" [name]="telephoneData" required>
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
+                    <button class="common-btn" nz-button (click)="onDelTelClick(telephoneIndex)" *ngIf="!is_add_tel">
+                        移除
+                    </button>
                 </div>
                 <span class="msg-span">注：最多可添加2个</span>
-            </div>-->
+            </div>
             <div style="margin-left: 120px;height: 15px;">
-                <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
+                <span class="msg-tip"
+                      *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
             </div>
             <div style="margin-top: 40px">
-                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
+                <button class="sure-btn" nz-button nzType="primary"
+                        [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
                         (appZDebounceClick)="onEditFormSubmit()">保存
                 </button>
                 <button class="close-btn" nz-button (click)="onClose()">取消</button>
@@ -156,4 +168,5 @@
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
 <!--选择品牌厂商控件-->
-<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
+<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true"
+                       [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>

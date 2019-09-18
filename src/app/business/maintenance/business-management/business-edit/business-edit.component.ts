@@ -50,7 +50,7 @@ export class BusinessEditComponent implements OnInit {
     public errPositionItem: ErrPositionItem = new ErrPositionItem();
     public mapItem: MapItem = new MapItem();
     public is_add_tel = true;
-    public service_telephones_list = [];
+    public service_telephones_list: Array<string> = [];
     public company_name: string;
     public brand_ids = [];
     public firm_ids = [];
@@ -90,7 +90,6 @@ export class BusinessEditComponent implements OnInit {
                     this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
                     this.firm_ids.push(value.vehicle_firm_id);
                 });
-                console.log(this.brand_ids.join(','), this.firm_ids.join(','));
             }, err => {
                 this.globalService.httpErrorProcess(err);
             });
