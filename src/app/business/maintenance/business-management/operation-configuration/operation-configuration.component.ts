@@ -81,7 +81,6 @@ export class OperationConfigurationComponent implements OnInit {
 
   // 获取全部产品
   private requestUpkeepProductAll() {
-    this.disableVehicleType.push('e7ed3bbcd3b811e992d0309c23b28564');
     const params = new SearchUpkeepProductParams();
     params.page_size = 1000;
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
@@ -304,8 +303,8 @@ export class OperationConfigurationComponent implements OnInit {
   }
 
   public selectBrandFirmSeries(event) {
-    this.searchParams.vehicle_brand_id = event.brand;
-    this.searchParams.vehicle_firm_id = event.firm;
-    this.searchParams.vehicle_series_id = event.series;
+    this.searchParams.vehicle_brand_id = event.brand ? event.brand : '';
+    this.searchParams.vehicle_firm_id = event.brand ? event.brand : '';
+    this.searchParams.vehicle_series_id = event.brand ? event.brand : '';
   }
 }

@@ -6,25 +6,25 @@
         <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
             <div class="row">
                 <label class="control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>所属企业</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="company_name" name="company_name" readonly>
+                    <input class="form-control" [(ngModel)]="company_name" name="company_name" disabled>
                 </div>
             </div>
             <div class="row">
                 <label class="control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>店铺名称</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" disabled>
                 </div>
             </div>
             <div class="row">
                 <label class="control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>类型</span>
                 </label>
                 <div class="control-input">
@@ -37,48 +37,50 @@
             </div>
             <div class="row" style="height: 110px">
                 <label class=" control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>商家图片</span>
                 </label>
-                <div class="control-input">
-                    <img [src]="currentBusiness.image_url">
-                </div>
+                <ul style="display: flex">
+                    <li *ngFor="let item of currentBusiness.image_url;let i=index;" style="margin-right: 15px">
+                        <img [src]="item" style="width: 100px;height: 100px">
+                    </li>
+                </ul>
             </div>
             <div class="row">
                 <label class="control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>联系人</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.contact" name="contact" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.contact" name="contact" disabled>
                 </div>
             </div>
             <div class="row">
                 <label class="control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>联系电话</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.telephone" name="telephone" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.telephone" name="telephone" disabled>
                 </div>
             </div>
             <div class="row">
                 <label class=" control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>门店地址</span>
                 </label>
                 <div class="control-input" style="width: 540px!important;">
                     <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
-                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" readonly>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address" name="address" disabled>
                 </div>
             </div>
             <div class="row">
                 <label class=" control-label">
-                    <b>*</b>
+                    <b>&nbsp;</b>
                     <span>地图坐标</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon" readonly>
+                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon" disabled>
                     <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
                 </div>
             </div>
@@ -133,7 +135,7 @@
                     <span>客服电话</span>
                 </label>
                 <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
-                    <input class="form-control" name="service_telephone{{i}}" required
+                    <input class="form-control" name="service_telephone{{i}}" required maxlength="12"
                            (change)="onInputServiceTelephone($event, i)" [ngModel]="item" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
                     <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
