@@ -50,7 +50,7 @@ export class BusinessEditComponent implements OnInit {
     public errPositionItem: ErrPositionItem = new ErrPositionItem();
     public mapItem: MapItem = new MapItem();
     public is_add_tel = true;
-    public service_telephones_list: Array<string> = [];
+    public service_telephones = [];
     public company_name: string;
     public brand_ids = [];
     public firm_ids = [];
@@ -80,8 +80,8 @@ export class BusinessEditComponent implements OnInit {
         this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
             .subscribe(res => {
                 this.currentBusiness = res;
-                this.service_telephones_list = res.service_telephone ? res.service_telephone.split(',') : [''];
-                this.is_add_tel = this.service_telephones_list.length >= 2 ? false : true;
+                this.service_telephones = res.service_telephone ? res.service_telephone.split(',') : [''];
+                this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
                 this.company_name = res.UpkeepCompany.company_name;
                 const regionObj = new RegionEntity(this.currentBusiness);
                 this.proCityDistSelectComponent.regionsObj = regionObj;
@@ -90,6 +90,7 @@ export class BusinessEditComponent implements OnInit {
                     this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
                     this.firm_ids.push(value.vehicle_firm_id);
                 });
+                console.log(this.brand_ids.join(','), this.firm_ids.join(','));
             }, err => {
                 this.globalService.httpErrorProcess(err);
             });
@@ -115,7 +116,7 @@ export class BusinessEditComponent implements OnInit {
             const params = {
                 vehicle_firm_ids: firms.join(','),
                 booking: this.currentBusiness.booking,
-                service_telephone: this.service_telephones_list.join(',')
+                service_telephone: this.service_telephones.join(',')
             };
             this.businessManagementService.requestUpdateUpkeepMerchant(this.upkeep_merchant_id, params).subscribe(() => {
                 this.onClose();
@@ -135,7 +136,7 @@ export class BusinessEditComponent implements OnInit {
             this.errPositionItem.booking.errMes = '可提前预定天数范围为1到60！';
             isCheck = false;
         }
-        this.service_telephones_list.forEach(value => {
+        this.service_telephones.forEach(value => {
             if (!ValidateHelper.Phone(value)) {
                 this.errPositionItem.service_telephone.isError = true;
                 this.errPositionItem.service_telephone.errMes = '客户电话格式错误！';
@@ -203,31 +204,31 @@ export class BusinessEditComponent implements OnInit {
     // 添加客服联系电话
     public onAddTelClick() {
         this.is_add_tel = false;
-        this.service_telephones_list.push('');
+        this.service_telephones.push('');
     }
 
     // 移除客服联系电话
     public onDelTelClick(index) {
-        if (this.service_telephones_list.length === 1) {
-            this.service_telephones_list = [];
+        if (this.service_telephones.length === 1) {
+            this.service_telephones = [];
         } else {
             this.is_add_tel = true;
-            this.service_telephones_list.splice(index, 1);
+            this.service_telephones.splice(index, 1);
         }
     }
 
     // 移除汽车品牌、厂商
     public onDelBrandClick(data) {
-      this.continueRequestSubscription = this.businessManagementService.requestFirmsAllowRemove(this.upkeep_merchant_id, data.vehicle_firm_id)
-          .subscribe(res => {
-            if (res.allow_remove) {
-                this.currentBusiness.VehicleFirm = this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
-            } else {
-              this.globalService.promptBox.open('该品牌厂商不可移除！', null, 2000, null, false);
-            }
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+        this.continueRequestSubscription = this.businessManagementService.requestFirmsAllowRemove(this.upkeep_merchant_id, data.vehicle_firm_id)
+            .subscribe(res => {
+                if (res.allow_remove) {
+                    this.currentBusiness.VehicleFirm = this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
+                } else {
+                    this.globalService.promptBox.open('该品牌厂商不可移除！', null, 2000, null, false);
+                }
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
     }
 
     // 选择完厂商后回调方法
@@ -239,8 +240,7 @@ export class BusinessEditComponent implements OnInit {
 
     // 手动赋值客服联系电话
     public onInputServiceTelephone(event: any, index: number) {
-        this.service_telephones_list[index] = event.target.value;
+        this.service_telephones[index] = event.target.value;
         this.errPositionItem.service_telephone.isError = false;
     }
 }
-
