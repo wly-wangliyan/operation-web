@@ -219,16 +219,16 @@ export class BusinessEditComponent implements OnInit {
 
     // 移除汽车品牌、厂商
     public onDelBrandClick(data) {
-      this.continueRequestSubscription = this.businessManagementService.requestFirmsAllowRemove(this.upkeep_merchant_id, data.vehicle_firm_id)
-          .subscribe(res => {
-            if (res.allow_remove) {
-                this.currentBusiness.VehicleFirm = this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
-            } else {
-              this.globalService.promptBox.open('该品牌厂商不可移除！', null, 2000, null, false);
-            }
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+        this.continueRequestSubscription = this.businessManagementService.requestFirmsAllowRemove(this.upkeep_merchant_id, data.vehicle_firm_id)
+            .subscribe(res => {
+                if (res.allow_remove) {
+                    this.currentBusiness.VehicleFirm = this.currentBusiness.VehicleFirm.filter( v => v.vehicle_firm_id !== data.vehicle_firm_id);
+                } else {
+                    this.globalService.promptBox.open('该品牌厂商不可移除！', null, 2000, null, false);
+                }
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
     }
 
     // 选择完厂商后回调方法
@@ -244,4 +244,3 @@ export class BusinessEditComponent implements OnInit {
         this.errPositionItem.service_telephone.isError = false;
     }
 }
-

@@ -195,7 +195,7 @@ export class ZMapSelectPointComponent {
   /**
    * 保存相关坐标信息
    */
-  private saveMarker() {
+  public saveMarker() {
     this.selectedMarkerInfo.emit({selectedMarker: this.selectedMarker});
     this.closeMap();
   }

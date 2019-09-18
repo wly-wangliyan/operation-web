@@ -134,7 +134,7 @@
                 </label>
                 <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
                     <input class="form-control" name="service_telephone{{i}}" required
-                           (change)="onInputServiceTelephone($event, i)" [(ngModel)]="item" placeholder="请输入座机或手机号">
+                           (change)="onInputServiceTelephone($event, i)" [ngModel]="item" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
                     <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
                 </div>
@@ -156,4 +156,4 @@
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
 <!--选择品牌厂商控件-->
-<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
+<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="false" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>

@@ -50,8 +50,8 @@ export class OperationConfigurationEditComponent implements OnInit {
   private upkeep_merchant_product_id: string;
   private continueRequestSubscription: Subscription;
   private searchText$ = new Subject<any>();
-  private currentProjectId: string;
-  private currentProject = new UpkeepMerchantProjectEntity();
+  public currentProjectId: string;
+  public currentProject = new UpkeepMerchantProjectEntity();
 
   @ViewChild('chooseAccessoryPromptDiv', { static: true }) public chooseAccessoryPromptDiv: ElementRef;
   @ViewChild('addAccessoryPromptDiv', { static: true }) public addAccessoryPromptDiv: ElementRef;
