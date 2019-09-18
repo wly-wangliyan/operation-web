@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, ɵConsole } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
 import {
@@ -34,7 +34,7 @@ export class SelectBrandFirmComponent implements OnInit {
 
   @Input() private selectedFirm: string; // 已选中的厂商
 
-  @Input() private multi = true; // 标记厂商是否多选
+  @Input() private multi = false; // 标记厂商是否多选
 
   @Input() private isDisabled = false; // 标记是否对厂商禁用
 
@@ -55,6 +55,9 @@ export class SelectBrandFirmComponent implements OnInit {
   // private isFirstRender = true; // 用于标记第一次渲染已勾选厂商
 
   public tipMsg = ''; // 提示信息
+
+  @ViewChild('A', { static: false }) distannceA: ElementRef;
+  @ViewChild('D', { static: false }) distannceD: ElementRef;
 
   @Output('selectBrandFirm') public selectBrandFirm = new EventEmitter();
 
@@ -208,5 +211,11 @@ export class SelectBrandFirmComponent implements OnInit {
     } else {
       this.tipMsg = '请选择厂商';
     }
+  }
+
+  public goDistance(leter: string) {
+    console.log(leter);
+    console.log($(".leter-title"));
+    // this.distannceD.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
   }
 }

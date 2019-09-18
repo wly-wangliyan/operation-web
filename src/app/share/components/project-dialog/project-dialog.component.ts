@@ -116,7 +116,7 @@ export class ProjectDialogComponent implements OnInit {
         });
       $('#selectProjectModal').modal('hide');
     } else {
-      this.tipMsg = '请选择所属项目';
+      this.tipMsg = '请选择配件/服务';
     }
   }
 }

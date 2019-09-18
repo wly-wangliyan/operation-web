@@ -119,6 +119,10 @@
   border-bottom: 1px solid #D8D8D8;
 }
 
+.leter-title {
+  margin-bottom: 0;
+}
+
 .tip-msg {
   font-size: 14px;
   font-family: STHeitiSC-Medium;
