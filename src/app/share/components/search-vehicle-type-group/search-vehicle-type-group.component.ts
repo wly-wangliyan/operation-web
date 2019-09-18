@@ -48,6 +48,7 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
     private vehicleService: VehicleTypeManagementService) { }
 
   public ngOnInit() {
+    this.sendEmitter();
     this.requestBrandList();
   }
 

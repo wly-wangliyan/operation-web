@@ -218,6 +218,25 @@ export class ManualEditComponent implements OnInit {
     });
   }
 
+  // 保存按钮可用状态
+  public saveBtnStatus(): boolean {
+    const uh_items = [];
+    this.projectList.forEach(project => {
+      if (this.mapOfSetting[project.upkeep_item_id].switch) {
+        const projectItemParams = new ProjectItemParams();
+        projectItemParams.item_id = project.upkeep_item_id;
+        projectItemParams.vehicle_type_id = this.vehicle_type_id;
+        let description = this.mapOfSetting[project.upkeep_item_id].description;
+        if (!this.mapOfSetting[project.upkeep_item_id].description) {
+          description = '';
+        }
+        projectItemParams.description = description;
+        uh_items.push(projectItemParams);
+      }
+    });
+    return uh_items && uh_items.length > 0 ? false : true;
+  }
+
   // 批量保存描述
   public onEditFormSubmit() {
     const uh_items = [];
