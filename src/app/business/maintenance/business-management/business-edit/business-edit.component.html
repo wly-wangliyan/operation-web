@@ -10,7 +10,7 @@
                     <span>所属企业</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="company_name" name="company_name" readonly>
+                    <input class="form-control" [(ngModel)]="company_name" name="company_name_1" readonly>
                 </div>
             </div>
             <div class="row">
@@ -127,19 +127,19 @@
                 </div>
                 <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
             </div>
-            <div class="row">
+            <!--<div class="row">
                 <label class="control-label">
                     <b>*</b>
                     <span>客服电话</span>
                 </label>
-                <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
-                    <input class="form-control" name="service_telephone{{i}}" required
-                           (change)="onInputServiceTelephone($event, i)" [(ngModel)]="item" placeholder="请输入座机或手机号">
+                <div class="control-input" *ngFor="let data of service_telephones_list;let i=index" [class.tel-input]="i!==0">
+                    <input class="form-control" placeholder="请输入座机或手机号" (change)="onInputServiceTelephone($event, i)"
+                           [(ngModel)]="data" name="serviceTel_{{i}}" required>
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
                     <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
                 </div>
                 <span class="msg-span">注：最多可添加2个</span>
-            </div>
+            </div>-->
             <div style="margin-left: 120px;height: 15px;">
                 <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
             </div>

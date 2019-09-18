@@ -50,7 +50,7 @@ export class BusinessEditComponent implements OnInit {
     public errPositionItem: ErrPositionItem = new ErrPositionItem();
     public mapItem: MapItem = new MapItem();
     public is_add_tel = true;
-    public service_telephones = [];
+    public service_telephones_list = [];
     public company_name: string;
     public brand_ids = [];
     public firm_ids = [];
@@ -80,8 +80,8 @@ export class BusinessEditComponent implements OnInit {
         this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
             .subscribe(res => {
                 this.currentBusiness = res;
-                this.service_telephones = res.service_telephone ? res.service_telephone.split(',') : [''];
-                this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
+                this.service_telephones_list = res.service_telephone ? res.service_telephone.split(',') : [''];
+                this.is_add_tel = this.service_telephones_list.length >= 2 ? false : true;
                 this.company_name = res.UpkeepCompany.company_name;
                 const regionObj = new RegionEntity(this.currentBusiness);
                 this.proCityDistSelectComponent.regionsObj = regionObj;
@@ -116,7 +116,7 @@ export class BusinessEditComponent implements OnInit {
             const params = {
                 vehicle_firm_ids: firms.join(','),
                 booking: this.currentBusiness.booking,
-                service_telephone: this.service_telephones.join(',')
+                service_telephone: this.service_telephones_list.join(',')
             };
             this.businessManagementService.requestUpdateUpkeepMerchant(this.upkeep_merchant_id, params).subscribe(() => {
                 this.onClose();
@@ -136,7 +136,7 @@ export class BusinessEditComponent implements OnInit {
             this.errPositionItem.booking.errMes = '可提前预定天数范围为1到60！';
             isCheck = false;
         }
-        this.service_telephones.forEach(value => {
+        this.service_telephones_list.forEach(value => {
             if (!ValidateHelper.Phone(value)) {
                 this.errPositionItem.service_telephone.isError = true;
                 this.errPositionItem.service_telephone.errMes = '客户电话格式错误！';
@@ -204,16 +204,16 @@ export class BusinessEditComponent implements OnInit {
     // 添加客服联系电话
     public onAddTelClick() {
         this.is_add_tel = false;
-        this.service_telephones.push('');
+        this.service_telephones_list.push('');
     }
 
     // 移除客服联系电话
     public onDelTelClick(index) {
-        if (this.service_telephones.length === 1) {
-            this.service_telephones = [];
+        if (this.service_telephones_list.length === 1) {
+            this.service_telephones_list = [];
         } else {
             this.is_add_tel = true;
-            this.service_telephones.splice(index, 1);
+            this.service_telephones_list.splice(index, 1);
         }
     }
 
@@ -240,7 +240,7 @@ export class BusinessEditComponent implements OnInit {
 
     // 手动赋值客服联系电话
     public onInputServiceTelephone(event: any, index: number) {
-        this.service_telephones[index] = event.target.value;
+        this.service_telephones_list[index] = event.target.value;
         this.errPositionItem.service_telephone.isError = false;
     }
 }
