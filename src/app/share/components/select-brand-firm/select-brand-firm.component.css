@@ -84,6 +84,10 @@
   height: 38px;
 }
 
+.leter-list>ul :ng-deep .ant-anchor-wrapper {
+  background: #D8D8D8 !important;
+}
+
 
 .content-right .content-list>ul>li {
   padding-left: 30px;
