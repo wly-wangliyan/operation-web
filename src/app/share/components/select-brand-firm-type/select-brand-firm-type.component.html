@@ -38,10 +38,13 @@
           <div class="content-list">
             <ng-container *ngIf="vehicleSeriesItem && vehicleSeriesItem.length > 0">
               <ul>
-                <li *ngFor="let vehicleFirm of vehicleSeriesItem" style="width: 230px">
-                  <label>{{vehicleFirm.source.vehicle_firm.vehicle_firm_name}}</label>
-                  <div (click)="onChangeSeriesCheck(vehicleFirm.source)" [class.active]="vehicleFirm.source.vehicle_series_id === currentSeries.vehicle_series_id">
-                    <span>{{vehicleFirm.source.vehicle_series_name}}</span>
+                <li *ngFor="let vehicleFirm of vehicleFirmItem" style="width: 230px">
+                  <label>{{vehicleFirm.source.vehicle_firm_name}}</label>
+                  <div *ngFor="let vehicleSeries of vehicleSeriesItem" style="width: 230px">
+                    <div *ngIf="vehicleFirm.source.vehicle_firm_id===vehicleSeries.source.vehicle_firm.vehicle_firm_id"
+                         (click)="onChangeSeriesCheck(vehicleSeries.source)" [class.active]="vehicleSeries.source.vehicle_series_id === currentSeries.vehicle_series_id">
+                      <span>{{vehicleSeries.source.vehicle_series_name}}</span>
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -72,7 +75,7 @@
       </div>
       <p class="tip-msg">{{tipMsg}}</p>
       <div class="modal-footer">
-        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectEmit()">
+        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectEmit()" [disabled]="!this.currentType.vehicle_type_id">
           下一步，编辑产品
         </button>
         <button class="close-btn" nz-button data-dismiss="modal">取消</button>
