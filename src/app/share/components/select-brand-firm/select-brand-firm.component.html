@@ -1,64 +1,66 @@
 <!--选择所属项目-->
 <div class="modal fade" id="selectBrandFirmModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
-  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
-  <div class="modal-dialog modal-dialog-common" role="document">
-    <div class="modal-content modal-content-common">
-      <div class="content-box">
-        <div class="content-left">
-          <div class="content-title">品牌</div>
-          <div class="content-list">
-            <div class="leter-list">
-              <ul>
-                <li *ngFor="let leter of letter_list">
-                  <nz-anchor [nzAffix]="false">
-                    <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
-                  </nz-anchor>
-                </li>
-              </ul>
-            </div>
-            <div class="brand-list">
-              <ul>
-                <li *ngFor="let leter of letter_list">
-                  <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
-                    <p id="{{leter}}" class="leter-title">{{leter}}</p>
-                    <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
-                      (click)="onBrandClick(vehicleBrand)"
-                      [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
-                      <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
-                      {{vehicleBrand.vehicle_brand_name}}
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+    <div class="modal-dialog modal-dialog-common" role="document">
+        <div class="modal-content modal-content-common">
+            <div class="content-box">
+                <div class="content-left">
+                    <div class="content-title">品牌</div>
+                    <div class="content-list">
+                        <div class="leter-list">
+                            <ul>
+                                <li *ngFor="let leter of letter_list">
+                                    <nz-anchor [nzAffix]="false" [nzTarget]="anchorContainer">
+                                        <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
+                                    </nz-anchor>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="brand-list">
+                            <ul #anchorContainer>
+                                <li *ngFor="let leter of letter_list">
+                                    <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
+                                        <p id="{{leter}}" class="leter-title">{{leter}}</p>
+                                        <div class="leter-box" *ngFor="let vehicleBrand of mapOfBrand[leter]"
+                                             (click)="onBrandClick(vehicleBrand)"
+                                             [class.active]="vehicleBrand.vehicle_brand_id === currentBrand.vehicle_brand_id">
+                                            <img class="brand-img" [src]="vehicleBrand.vehicle_brand_image">
+                                            {{vehicleBrand.vehicle_brand_name}}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
+                </div>
+                <div class="content-right">
+                    <div class="content-title">厂商</div>
+                    <div class="content-list">
+                        <ng-container *ngIf="vehicleFirmItem && vehicleFirmItem.length > 0">
+                            <ul>
+                                <li *ngFor="let vehicleFirm of vehicleFirmItem">
+                                    <input id="firm_{{vehicleFirm.source.vehicle_firm_id}}"
+                                           (change)="onChangeFirmCheck(vehicleFirm)"
+                                           [(ngModel)]="vehicleFirm.checked" [disabled]="vehicleFirm.disabled"
+                                           type="checkbox"/>
+                                    <label
+                                            for="firm_{{vehicleFirm.source.vehicle_firm_id}}">{{vehicleFirm.source.vehicle_firm_name}}</label>
+                                </li>
+                            </ul>
+                        </ng-container>
+                        <ng-container *ngIf="!vehicleFirmItem || vehicleFirmItem.length === 0">
+                            <div class="no-data">暂无数据</div>
+                        </ng-container>
+                    </div>
+                </div>
             </div>
-          </div>
+            <p class="tip-msg">{{tipMsg}}</p>
+            <div class="modal-footer">
+                <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectEmit()">
+                    确定
+                </button>
+                <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+            </div>
         </div>
-        <div class="content-right">
-          <div class="content-title">厂商</div>
-          <div class="content-list">
-            <ng-container *ngIf="vehicleFirmItem && vehicleFirmItem.length > 0">
-              <ul>
-                <li *ngFor="let vehicleFirm of vehicleFirmItem">
-                  <input id="firm_{{vehicleFirm.source.vehicle_firm_id}}" (change)="onChangeFirmCheck(vehicleFirm)"
-                    [(ngModel)]="vehicleFirm.checked" [disabled]="vehicleFirm.disabled" type="checkbox" />
-                  <label
-                    for="firm_{{vehicleFirm.source.vehicle_firm_id}}">{{vehicleFirm.source.vehicle_firm_name}}</label>
-                </li>
-              </ul>
-            </ng-container>
-            <ng-container *ngIf="!vehicleFirmItem || vehicleFirmItem.length === 0">
-              <div class="no-data">暂无数据</div>
-            </ng-container>
-          </div>
-        </div>
-      </div>
-      <p class="tip-msg">{{tipMsg}}</p>
-      <div class="modal-footer">
-        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectEmit()">
-          确定
-        </button>
-        <button class="close-btn" nz-button data-dismiss="modal">取消</button>
-      </div>
     </div>
-  </div>
 </div>
