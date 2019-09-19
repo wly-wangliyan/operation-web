@@ -38,9 +38,9 @@
 }
 
 .detail_info {
-  font-size: 14px;
+  font-size: 16px;
   font-family: PingFangSC;
-  font-weight: 400;
+  font-weight: 800;
   color: rgba(35, 36, 47, 1);
   margin: 20px 2px 17px;
 }
@@ -76,7 +76,7 @@
   font-weight: 400;
   color: rgba(35, 36, 47, 1);
   text-align: left;
-  padding-left: 30px !important;
+  padding-left: 20px !important;
 }
 
 .image {
