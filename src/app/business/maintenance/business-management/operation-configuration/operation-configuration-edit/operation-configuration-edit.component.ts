@@ -232,7 +232,11 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   public onAmountChange(event: any) {
+    if (!isNaN(Number(event.target.value))) {
     event.target.value = Number(event.target.value).toFixed(2);
+    } else {
+      event.target.value = '';
+    }
   }
 
   // 保存工时费

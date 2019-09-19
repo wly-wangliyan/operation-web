@@ -32,13 +32,13 @@ export class OperationConfigurationComponent implements OnInit {
   public tabIndex = 1;
   public bookingTimes = [];
   public disableVehicleType = [];
+  public brand_ids = [];
+  public firm_ids = [];
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
   private upkeep_merchant_id: string;
-  private brand_ids = [];
-  private firm_ids = [];
 
   @ViewChild(BusinessEditComponent, {static: true}) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, {static: true}) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
