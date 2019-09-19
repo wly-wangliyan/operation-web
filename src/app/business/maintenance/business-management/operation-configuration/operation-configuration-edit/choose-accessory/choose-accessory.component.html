@@ -1,99 +1,99 @@
 <div class="content-flow">
-    <div class="search-container">
-        <form class="search-form">
-            <div *ngIf="upkeep_item_type===1">
-                <div class="form-group">
-                    <span>汽车品牌：</span>
-                    <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id" name="car_brands" (change)="onBrandChange()">
-                        <option value="">全部</option>
-                        <option *ngFor="let data of vehicleBrandList" [value]="data.vehicle_brand_id">
-                            {{data.vehicle_brand_name}}
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <span>厂商：</span>
-                    <select class="form-control" [(ngModel)]="searchParams.vehicle_firm_id" name="vehicle_firm_id">
-                        <option value="">全部</option>
-                        <option *ngFor="let data of vehicleFirmList" [value]="data.vehicle_firm_id">
-                            {{data.vehicle_firm_name}}
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <span>是否原厂：</span>
-                    <select class="form-control" [(ngModel)]="searchParams.is_original" name="is_original">
-                        <option value="undefined">全部</option>
-                        <option value="True">是</option>
-                        <option value="False">否</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <span>配件名称：</span>
-                    <input class="form-control" placeholder="请输入配件名称" autocomplete="off"
-                           name="upkeep_accessory_name" [(ngModel)]="searchParams.upkeep_accessory_name"/>
-                </div>
-                <div class="form-group">
-                    <span>零件编号：</span>
-                    <input class="form-control" placeholder="请输入零件编号" autocomplete="off"
-                           name="serial_number" [(ngModel)]="searchParams.serial_number"/>
-                    <div class="search-btn-group">
-                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group" *ngIf="upkeep_item_type===2">
-                <span>服务名称：</span>
-                <input class="form-control" placeholder="请输入服务名称" autocomplete="off"
-                       name="upkeep_accessory_name" [(ngModel)]="searchParams.upkeep_accessory_name"/>
-                <div class="search-btn-group">
-                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="table-container">
-        <div class="zmy-table">
-            <nz-table [nzData]="productList"
-                      [nzShowPagination]="true"
-                      [nzNoResult]="noResultText"
-                      [nzPageSize]="'15'"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)"
-                      [(nzPageIndex)]="pageIndex" #basicTable>
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>配件/服务名称</th>
-                    <th *ngIf="upkeep_item_type===1">是否原厂</th>
-                    <th *ngIf="upkeep_item_type===1" style="width: 200px">品牌</th>
-                    <th *ngIf="upkeep_item_type===1">零件编号</th>
-                    <th *ngIf="upkeep_item_type===1">规格</th>
-                    <th style="width: 100px">原价</th>
-                    <th style="width: 100px">销售单价</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let product of basicTable.data; let i=index">
-                    <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="product.upkeep_accessory_name">{{product.upkeep_accessory_name|zMaxLength:8}}</td>
-                    <td *ngIf="upkeep_item_type===1">{{product.is_original ? '是' : '否'}}</td>
-                    <td style="width: 200px" *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
+  <div class="search-container">
+    <form class="search-form">
+      <div *ngIf="upkeep_item_type===1">
+        <div class="form-group">
+          <span>汽车品牌：</span>
+          <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id" name="car_brands"
+            (change)="onBrandChange()">
+            <option value="">全部</option>
+            <option *ngFor="let data of vehicleBrandList" [value]="data.vehicle_brand_id">
+              {{data.vehicle_brand_name}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <span>厂商：</span>
+          <select class="form-control" [(ngModel)]="searchParams.vehicle_firm_id" name="vehicle_firm_id">
+            <option value="">全部</option>
+            <option *ngFor="let data of vehicleFirmList" [value]="data.vehicle_firm_id">
+              {{data.vehicle_firm_name}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <span>是否原厂：</span>
+          <select class="form-control" [(ngModel)]="searchParams.is_original" name="is_original">
+            <option value="undefined">全部</option>
+            <option value="True">是</option>
+            <option value="False">否</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <span>配件名称：</span>
+          <input class="form-control" placeholder="请输入配件名称" autocomplete="off" name="upkeep_accessory_name"
+            [(ngModel)]="searchParams.upkeep_accessory_name" maxlength="20" appIgnoreSpace />
+        </div>
+        <div class="form-group">
+          <span>零件编号：</span>
+          <input class="form-control" placeholder="请输入零件编号" autocomplete="off" name="serial_number"
+            [(ngModel)]="searchParams.serial_number" maxlength="25"
+            oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')" />
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="upkeep_item_type===2">
+        <span>服务名称：</span>
+        <input class="form-control" placeholder="请输入服务名称" autocomplete="off" name="upkeep_accessory_name"
+          [(ngModel)]="searchParams.upkeep_accessory_name" appIgnoreSpace />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="productList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>配件/服务名称</th>
+            <th *ngIf="upkeep_item_type===1">是否原厂</th>
+            <th *ngIf="upkeep_item_type===1" style="width: 200px">品牌</th>
+            <th *ngIf="upkeep_item_type===1">零件编号</th>
+            <th *ngIf="upkeep_item_type===1">规格</th>
+            <th style="width: 100px">原价</th>
+            <th style="width: 100px">销售单价</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of basicTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td [title]="product.upkeep_accessory_name">{{product.upkeep_accessory_name|zMaxLength:8}}</td>
+            <td *ngIf="upkeep_item_type===1">{{product.is_original ? '是' : '否'}}</td>
+            <td style="width: 200px" *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name+'·'+product.vehicle_firm?.vehicle_firm_name:
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name?product.vehicle_firm?.vehicle_brand?.vehicle_brand_name:
                             product.vehicle_firm?.vehicle_firm_name?product.vehicle_firm?.vehicle_firm_name:'--'}}</td>
-                    <td [title]="product.serial_number" *ngIf="upkeep_item_type===1">{{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
-                    <td [title]="product.specification" *ngIf="upkeep_item_type===1">{{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
-                    <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
-                    <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
-                    <td class="operation">
-                        <a [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
-                    </td>
-                </tr>
-                </tbody>
-            </nz-table>
-        </div>
+            <td [title]="product.serial_number" *ngIf="upkeep_item_type===1">
+              {{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
+            <td [title]="product.specification" *ngIf="upkeep_item_type===1">
+              {{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
+            <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
+            <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
+            <td class="operation">
+              <a [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
     </div>
+  </div>
 </div>
