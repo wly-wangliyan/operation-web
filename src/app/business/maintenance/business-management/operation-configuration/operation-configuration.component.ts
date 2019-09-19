@@ -62,11 +62,6 @@ export class OperationConfigurationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bookingTimes.push({
-      begin_time: DateFormatHelper.getMinuteOrTime(28800),
-      end_time: DateFormatHelper.getMinuteOrTime(64800),
-      isEdit: false
-    });
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>
@@ -181,8 +176,8 @@ export class OperationConfigurationComponent implements OnInit {
           });
           if (res.length === 0) {
             const timeObj = {
-              begin_time: DateFormatHelper.getMinuteOrTime(28800),
-              end_time: DateFormatHelper.getMinuteOrTime(64800),
+              begin_time: DateFormatHelper.getMinuteOrTime(0),
+              end_time: DateFormatHelper.getMinuteOrTime(0),
               isEdit: false
             };
             this.bookingTimes.push(timeObj);

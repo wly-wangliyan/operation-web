@@ -108,7 +108,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>
@@ -122,7 +122,8 @@
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                             [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -151,7 +152,8 @@
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                 </li>
             </div>
@@ -244,7 +246,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>
@@ -258,7 +260,8 @@
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -287,7 +290,8 @@
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                 </li>
             </div>
@@ -380,7 +384,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>
@@ -394,7 +398,8 @@
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -423,7 +428,8 @@
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button class="close-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
                     </div>
                 </li>
             </div>

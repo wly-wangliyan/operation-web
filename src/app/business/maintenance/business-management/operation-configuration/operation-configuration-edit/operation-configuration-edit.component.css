@@ -207,3 +207,9 @@ b {
 .img-height {
     margin-bottom: 40px!important;
 }
+
+.del-btn {
+    color: #fff;
+    background-color: rgba(232,32,56,1);
+    border: none;
+}

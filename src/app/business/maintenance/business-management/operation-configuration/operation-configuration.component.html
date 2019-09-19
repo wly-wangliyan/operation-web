@@ -27,7 +27,7 @@
                 <app-search-vehicle-type-group (selectBrandFirmSeries)="selectBrandFirmSeries($event)"></app-search-vehicle-type-group>
                 <div class="form-group">
                     <span>车型名称：</span>
-                    <input class="form-control" placeholder="请输入车型名称" autocomplete="off"
+                    <input class="form-control" placeholder="请输入车型名称" autocomplete="off" maxlength="20"
                            name="vehicle_type_name" [(ngModel)]="searchParams.vehicle_type_name"/>
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
