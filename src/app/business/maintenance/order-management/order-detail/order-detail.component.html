@@ -75,7 +75,7 @@
             {{upkeepOrderData.reserve_time?(upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="下单时间：">
-            {{upkeepOrderData.reserve_time?(upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+            {{upkeepOrderData.created_time?(upkeepOrderData.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="支付时间：">
             {{upkeepOrderData.pay_time?(upkeepOrderData.pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
