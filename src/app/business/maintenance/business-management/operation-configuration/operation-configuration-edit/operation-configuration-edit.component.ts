@@ -226,27 +226,27 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.createAccessoryComponent.open(this.currentProject);
     $(this.addAccessoryPromptDiv.nativeElement).modal('show');
   }
-  // list中数据金额赋值
+  // list中数据销量赋值
   public onInputNumber(event: any, index: number) {
     this.accessoryList[index].number = Number(event.target.value);
   }
 
   // list中数据金额赋值
   public onInputSaleAmount(event: any, index: number) {
-    this.accessoryList[index].sale_amount = Number(event.target.value.toFixed(2));
+    this.accessoryList[index].sale_amount = Number(Number(event.target.value).toFixed(2));
   }
 
   // list中数据金额赋值
   public onInputWorkOriginalAmount(event: any, index: number, data: any) {
     switch (data.upkeep_handbook_item.item_category) {
       case 1:
-        this.projectList_maintain[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_maintain[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 2:
-        this.projectList_clear[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_clear[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 3:
-        this.projectList_fix[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_fix[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
     }
   }
@@ -255,20 +255,20 @@ export class OperationConfigurationEditComponent implements OnInit {
   public onInputWorkSaleAmount(event: any, index: number, data: any) {
     switch (data.upkeep_handbook_item.item_category) {
       case 1:
-        this.projectList_maintain[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_maintain[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 2:
-        this.projectList_clear[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_clear[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 3:
-        this.projectList_fix[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_fix[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
     }
   }
 
   // list中数据金额赋值
   public onInputOriginalAmount(event: any, index: number) {
-    this.accessoryList[index].original_amount = Number(event.target.value.toFixed(2));
+    this.accessoryList[index].original_amount = Number(Number(event.target.value).toFixed(2));
   }
 
   // 保存工时费
