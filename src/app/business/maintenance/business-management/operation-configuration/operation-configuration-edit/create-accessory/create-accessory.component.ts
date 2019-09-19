@@ -152,7 +152,8 @@ export class CreateAccessoryComponent implements OnInit {
       if (isNaN(parseFloat(String(this.productRecord.original_amount)))) {
         this.productRecord.original_amount = null;
       } else {
-        this.productRecord.original_amount = parseFloat(String(this.productRecord.original_amount));
+        const original_amount = parseFloat(String(this.productRecord.original_amount)).toFixed(2);
+        this.productRecord.original_amount = parseFloat(original_amount);
       }
     }
 
@@ -160,7 +161,8 @@ export class CreateAccessoryComponent implements OnInit {
       if (isNaN(parseFloat(String(this.productRecord.sale_amount)))) {
         this.productRecord.sale_amount = null;
       } else {
-        this.productRecord.sale_amount = parseFloat(String(this.productRecord.sale_amount));
+        const sale_amount = parseFloat(String(this.productRecord.sale_amount)).toFixed(2);
+        this.productRecord.sale_amount = parseFloat(sale_amount);
       }
     }
   }
