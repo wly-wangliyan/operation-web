@@ -80,7 +80,11 @@ export class BusinessEditComponent implements OnInit {
         this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
             .subscribe(res => {
                 this.currentBusiness = res;
-                this.service_telephones = res.service_telephone ? res.service_telephone.split(',') : [''];
+                this.currentBusiness.image_url = res.image_url.length > 0 ? res.image_url : ['/assets/images/image_space.png'];
+                const telList = res.service_telephone ? res.service_telephone.split(',') : [''];
+                telList.forEach(value => {
+                    this.service_telephones.push({tel: value, time: new Date().getTime()});
+                });
                 this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
                 this.company_name = res.UpkeepCompany.company_name;
                 const regionObj = new RegionEntity(this.currentBusiness);
@@ -112,10 +116,11 @@ export class BusinessEditComponent implements OnInit {
             this.currentBusiness.VehicleFirm.forEach(value => {
                 firms.push(value.vehicle_firm_id);
             });
+            const telList = this.service_telephones.map(value => value.tel);
             const params = {
                 vehicle_firm_ids: firms.join(','),
                 booking: this.currentBusiness.booking,
-                service_telephone: this.service_telephones.join(',')
+                service_telephone: telList.join(',')
             };
             this.businessManagementService.requestUpdateUpkeepMerchant(this.upkeep_merchant_id, params).subscribe(() => {
                 this.onClose();
@@ -136,7 +141,7 @@ export class BusinessEditComponent implements OnInit {
             isCheck = false;
         }
         this.service_telephones.forEach(value => {
-            if (!ValidateHelper.Phone(value)) {
+            if (!ValidateHelper.Phone(value.tel)) {
                 this.errPositionItem.service_telephone.isError = true;
                 this.errPositionItem.service_telephone.errMes = '客服电话格式错误！';
                 isCheck = false;
@@ -209,7 +214,7 @@ export class BusinessEditComponent implements OnInit {
     // 添加客服联系电话
     public onAddTelClick() {
         this.is_add_tel = false;
-        this.service_telephones.push('');
+        this.service_telephones.push({tel: '', time: new Date().getTime()});
     }
 
     // 移除客服联系电话

@@ -109,8 +109,8 @@ export class VehicleTypeManagementService {
      * 请求获取品牌列表
      * @returns Observable<BrokerageLinkResponse>
      */
-    public requestVehicleBrandList(): Observable<VehicleBrandLinkResponse> {
-        return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_brands`)
+    public requestVehicleBrandList(params?: any): Observable<VehicleBrandLinkResponse> {
+        return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_brands`, params)
             .pipe(map(res => new VehicleBrandLinkResponse(res)));
     }
 
@@ -157,6 +157,18 @@ export class VehicleTypeManagementService {
     public requestVehicleSeriesListByBrand(vehicle_brand_id: string): Observable<Array<VehicleSeriesEntity>> {
         const params = {vehicle_brand: vehicle_brand_id};
         return this.httpService.get(environment.OPERATION_SERVE + `/vehicle_series`, params)
+            .pipe(map(data => {
+                const tempResults = data.body;
+                return tempResults;
+            }));
+    }
+
+    /**
+     * 根据品牌获取汽车厂商列表
+     * @returns Observable<Array<VehicleSeriesEntity>
+     */
+    public requestVehicleFirmListByIDs(params?: any): Observable<Array<VehicleFirmEntity>> {
+        return this.httpService.get(environment.OPERATION_SERVE + `/vehicle_firms`, params)
             .pipe(map(data => {
                 const tempResults = data.body;
                 return tempResults;

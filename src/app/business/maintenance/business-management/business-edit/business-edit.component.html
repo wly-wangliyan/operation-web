@@ -136,10 +136,8 @@
                     <span>客服电话</span>
                 </label>
                 <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
-                    <input nz-input *ngIf="i===0" class="form-control" name="123" required maxlength="12"
-                           (input)="onInputServiceTelephone($event, i)" [ngModel]="item" placeholder="请输入座机或手机号">
-                    <input *ngIf="i===1" class="form-control" name="234" required maxlength="12"
-                           onInput="onInputServiceTelephone($event, i)" [ngModel]="item" placeholder="请输入座机或手机号">
+                    <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" required maxlength="12"
+                            [(ngModel)]="item.tel" placeholder="请输入座机或手机号">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
                     <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
                 </div>

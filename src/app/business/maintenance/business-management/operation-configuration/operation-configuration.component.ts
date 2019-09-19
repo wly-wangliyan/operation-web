@@ -14,6 +14,7 @@ import {
 import { SelectBrandFirmTypeComponent } from '../../../../share/components/select-brand-firm-type/select-brand-firm-type.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { SearchVehicleTypeGroupComponent } from '../../../../share/components/search-vehicle-type-group/search-vehicle-type-group.component';
+import { RegionEntity } from '../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
 
 const PageSize = 15;
 
@@ -36,6 +37,8 @@ export class OperationConfigurationComponent implements OnInit {
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
   private upkeep_merchant_id: string;
+  private brand_ids = [];
+  private firm_ids = [];
 
   @ViewChild(BusinessEditComponent, {static: true}) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, {static: true}) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
@@ -77,6 +80,20 @@ export class OperationConfigurationComponent implements OnInit {
     });
     this.searchText$.next();
     this.requestUpkeepProductAll();
+    this.requestUpkeepDetail();
+  }
+
+  // 获取商家详情，以方便过滤品牌、厂商
+  private requestUpkeepDetail() {
+    this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
+        .subscribe(res => {
+          res.VehicleFirm.forEach(value => {
+            this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
+            this.firm_ids.push(value.vehicle_firm_id);
+          });
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   // 获取全部产品
@@ -104,7 +121,7 @@ export class OperationConfigurationComponent implements OnInit {
         this.globalService.promptBox.open('创建成功！', () => {
           this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
               { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: res.body.upkeep_merchant_product_id} });
-        });
+        }, 2000, '/assets/images/success.png');
       }, err => {
         if (err.status === 422) {
           const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
@@ -271,6 +288,10 @@ export class OperationConfigurationComponent implements OnInit {
 
   // 删除商家
   public onDelBtnClick(data: UpkeepMerchantProductEntity) {
+    if (data.status === 1) {
+      this.globalService.promptBox.open('该产品已上架，不能删除！', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.globalService.confirmationBox.open('警告', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
       this.businessManagementService.requestDeleteUpkeepProduct(this.upkeep_merchant_id, data.upkeep_merchant_product_id).subscribe((e) => {
