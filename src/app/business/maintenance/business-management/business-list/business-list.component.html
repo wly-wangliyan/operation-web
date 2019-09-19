@@ -60,7 +60,7 @@
               </span>
               <span *ngIf="data.VehicleFirm.length===0">--</span>
             </td>
-            <td [title]="data.service_telephone">
+            <td [title]="data.service_telephone?data.service_telephone:''">
               {{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}
             </td>
             <td>

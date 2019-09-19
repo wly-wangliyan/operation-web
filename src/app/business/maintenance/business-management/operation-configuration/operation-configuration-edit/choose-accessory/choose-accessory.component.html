@@ -82,9 +82,9 @@
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name+'·'+product.vehicle_firm?.vehicle_firm_name:
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name?product.vehicle_firm?.vehicle_brand?.vehicle_brand_name:
                             product.vehicle_firm?.vehicle_firm_name?product.vehicle_firm?.vehicle_firm_name:'--'}}</td>
-            <td [title]="product.serial_number" *ngIf="upkeep_item_type===1">
+            <td [title]="product.serial_number?product.serial_number:''" *ngIf="upkeep_item_type===1">
               {{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
-            <td [title]="product.specification" *ngIf="upkeep_item_type===1">
+            <td [title]="product.specification?product.specification:''" *ngIf="upkeep_item_type===1">
               {{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
             <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
             <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
