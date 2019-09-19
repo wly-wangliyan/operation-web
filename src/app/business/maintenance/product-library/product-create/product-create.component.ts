@@ -198,6 +198,13 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
+  // 限制input[type='number']输入e
+  public inputNumberLimit(event: any): boolean {
+    const reg = /^\d*?\.?\d*?$/;
+    const keyCode = String.fromCharCode(event.keyCode);
+    return (keyCode && reg.test(keyCode));
+  }
+
   /** 金额 keyup 事件 */
   public onMoneyKeyUp() {
     if (this.productRecord.original_amount) {

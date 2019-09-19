@@ -131,8 +131,8 @@
           </label>
           <div class="control-input small-group">
             <input class="form-control small-input" maxlength="12" (focus)="onClearErrMsg()"
-              [(ngModel)]="productRecord.original_amount" (change)="onMoneyKeyUp()" name="original_amount"
-              appIgnoreSpace required />
+              [(ngModel)]="productRecord.original_amount" (keypress)="inputNumberLimit($event)"
+              (change)="onMoneyKeyUp()" name="original_amount" appIgnoreSpace required />
             <label class="one-word-lable">元</label>
           </div>
 
@@ -142,8 +142,8 @@
           </label>
           <div class="control-input small-group">
             <input class="form-control small-input" maxlength="12" (focus)="onClearErrMsg()"
-              [(ngModel)]="productRecord.sale_amount" name="sale_amount" (change)="onMoneyKeyUp()" appIgnoreSpace
-              required />
+              [(ngModel)]="productRecord.sale_amount" (keypress)="inputNumberLimit($event)" name="sale_amount"
+              (change)="onMoneyKeyUp()" appIgnoreSpace required />
             <label class="one-word-lable">元</label>
           </div>
 
