@@ -54,6 +54,10 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   @Input() private multi = false; // 标记厂商是否多选
 
+  @Input() private brand_ids = []; // 商家品牌
+
+  @Input() private firm_ids = []; // 商家厂商
+
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
   public currentBrand: VehicleBrandEntity = new VehicleBrandEntity(); // 选中品牌
@@ -130,7 +134,8 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 获取品牌列表
   private requestBrandList() {
-    this.requestBrandSubscription = this.vehicleService.requestVehicleBrandList().subscribe(res => {
+    const parmas = {vehicle_brand_ids: this.brand_ids};
+    this.requestBrandSubscription = this.vehicleService.requestVehicleBrandList(parmas).subscribe(res => {
       this.vehicleBrandList = res.results;
       this.letter_list.forEach(leter => {
         this.mapOfBrand[leter] = this.vehicleBrandList.filter(brand => brand.vehicle_brand_initial === leter);
@@ -166,8 +171,9 @@ export class SelectBrandFirmTypeComponent implements OnInit {
   }
 
   // 获取对应厂商列表
-  private requestFirmListByBrand(vehicle_brand_id: string) {
-    this.vehicleService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
+  private requestFirmListByBrand(vehicle_brandId: string) {
+    const parmas = {vehicle_brand_id: vehicle_brandId, vehicle_firm_ids: this.firm_ids};
+    this.vehicleService.requestVehicleFirmListByIDs(parmas).subscribe(res => {
       this.vehicleFirmList = res;
       const vehicleFirmItem = [];
       this.vehicleFirmList.forEach(item => {

@@ -1,158 +1,161 @@
 <div class="content-flow">
-    <div class="content-container">
-        <form autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal" #productForm="ngForm">
-            <ng-container>
-                <div class="row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>产品名称</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" [(ngModel)]="productRecord.upkeep_accessory_name" placeholder="输入1-20个字标题"
-                               maxlength="20" name="upkeep_accessory_name" (focus)="onClearErrMsg()" appIgnoreSpace required>
-                    </div>
-                </div>
-                <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>是否原厂</span>
-                        </label>
-                        <div class="control-input">
-                            <select class="form-control" [(ngModel)]="productRecord.is_original" (change)="onChangeOriginal($event)"
-                                    name="project_id" required>
-                                <option value="true" selected>是</option>
-                                <option value="false">否</option>
-                            </select>
-                        </div>
-                    </div>
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #productForm="ngForm">
+      <ng-container>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品名称</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" [(ngModel)]="productRecord.upkeep_accessory_name" placeholder="输入1-20个字标题"
+              maxlength="20" name="upkeep_accessory_name" (focus)="onClearErrMsg()"
+              oninput="value=value.replace(/\s+/g,'')" appIgnoreSpace required>
+          </div>
+        </div>
+        <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>是否原厂</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="productRecord.is_original" (change)="onChangeOriginal($event)"
+                name="project_id" required>
+                <option value="true" selected>是</option>
+                <option value="false">否</option>
+              </select>
+            </div>
+          </div>
 
-                    <ng-container *ngIf="productRecord.is_original">
-                        <div class="row">
-                            <label class="control-label">
-                                <b>*</b>
-                                <span>所属厂商</span>
-                            </label>
-                            <div class="control-input">
-                                <input class="form-control" [(ngModel)]="selected_brand_firm_info" placeholder="请选择所属厂商"
-                                       name="project_name" required readonly>
-                                <button name="select_firm_btn" class="two-word-btn" nz-button
-                                        (click)="onOpenBrandFirmModal()">选择</button>
-                            </div>
-                            <div class="control-input check-group" style="width: 200px;">
-                                <input name="is_brand_special" type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
-                                <label class="control-label">此品牌厂商专用</label>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!productRecord.is_original">
-                        <div class="row">
-                            <label class="control-label">
-                                <b>*</b>
-                                <span>品牌说明</span>
-                            </label>
-                            <div class="control-input">
-                                <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.brand_instruction"
-                                       placeholder="输入1-20个字说明" maxlength="20" name="brand_instruction" required>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <div class="row">
-                        <label class="control-label">
-                            <b>&nbsp;</b>
-                            <span>零件编号</span>
-                        </label>
-                        <div class="control-input">
-                            <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.serial_number"
-                                   placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="control-label">
-                            <b>&nbsp;</b>
-                            <span>规格</span>
-                        </label>
-                        <div class="control-input">
-                            <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.specification"
-                                   placeholder="请输入规格" name="specification" />
-                        </div>
-                    </div>
-                </ng-container>
-                <div class="row">
-                    <label class="control-label">
-                        <b>&nbsp;</b>
-                        <span>图片</span>
-                    </label>
-                    <div>
-                        <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                            [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="productImg"
-                                            [imageUrls]="cover_url" [imageAddHeight]="100" [minCropBoxWidth]="400"
-                                            [minCropBoxHeight]="400">
-                        </app-z-photo-select>
-                        <div class="row row-message" style="height: 20px!important;margin-top: -6px">
-                            <div class="control-input err-message">
-                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
-                            </div>
-                        </div>
-                        <p class="cover-hint">注：尺寸400*400px，格式PNG或JPG，大小2M以内</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>原价</span>
-                    </label>
-                    <div class="control-input small-group">
-                        <input class="form-control small-input" (focus)="onClearErrMsg()"
-                               [(ngModel)]="productRecord.original_amount" (change)="onMoneyKeyUp()" name="original_amount"
-                               appIgnoreSpace required />
-                        <label class="one-word-lable">元</label>
-                    </div>
-
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>销售单价</span>
-                    </label>
-                    <div class="control-input small-group">
-                        <input class="form-control small-input" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.sale_amount"
-                               name="sale_amount" (change)="onMoneyKeyUp()" appIgnoreSpace required />
-                        <label class="one-word-lable">元</label>
-                    </div>
-
-                    <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>所需数量</span>
-                        </label>
-                        <div class="control-input small-group">
-                            <input type="text" class="form-control small-input" oninput="value=value.replace(/[^\d]/g,'')"
-                                   [(ngModel)]="productRecord.number" name="need_number" (focus)="onClearErrMsg()" appIgnoreSpace
-                                   (keyup)="onNumberKeyUp()" required />
-                            <label class="one-word-lable">件</label>
-                        </div>
-                    </ng-container>
-                </div>
-            </ng-container>
+          <ng-container *ngIf="productRecord.is_original">
             <div class="row">
+              <label class="control-label">
+                <b>*</b>
+                <span>所属厂商</span>
+              </label>
+              <div class="control-input">
+                <input class="form-control" [(ngModel)]="selected_brand_firm_info" placeholder="请选择所属厂商"
+                  name="project_name" required readonly>
+                <button name="select_firm_btn" class="two-word-btn" nz-button type="button"
+                  (click)="onOpenBrandFirmModal()">选择</button>
+              </div>
+              <div class="control-input check-group" style="width: 200px;">
+                <input name="is_brand_special" type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
+                <label class="control-label">此品牌厂商专用</label>
+              </div>
             </div>
-            <div class="row row-message">
-                <label class="control-label"></label>
-                <div class="control-input err-message">
-                    <span>{{productErrMsg}}</span>
-                </div>
-            </div>
+          </ng-container>
+          <ng-container *ngIf="!productRecord.is_original">
             <div class="row">
-                <button name="sure_btn" class="sure-btn" nz-button nzType="primary" [disabled]="!productForm.form.valid"
-                        (appZDebounceClick)="onEditFormSubmit()">
-                    保存
-                </button>
-                <button name="close_btn" class="close-btn" nz-button data-dismiss="modal">取消</button>
+              <label class="control-label">
+                <b>*</b>
+                <span>品牌说明</span>
+              </label>
+              <div class="control-input">
+                <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.brand_instruction"
+                  placeholder="输入1-20个字说明" maxlength="20" name="brand_instruction" required>
+              </div>
             </div>
-        </form>
-    </div>
+          </ng-container>
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>零件编号</span>
+            </label>
+            <div class="control-input">
+              <input class="form-control" (focus)="onClearErrMsg()" maxlength="25"
+                [(ngModel)]="productRecord.serial_number" oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
+            </div>
+          </div>
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>规格</span>
+            </label>
+            <div class="control-input">
+              <input class="form-control" (focus)="onClearErrMsg()" maxlength="20"
+                oninput="value=value.replace(/\s+/g,'')" [(ngModel)]="productRecord.specification" placeholder="请输入规格"
+                name="specification" />
+            </div>
+          </div>
+        </ng-container>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>图片</span>
+          </label>
+          <div>
+            <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="productImg"
+              [imageUrls]="cover_url" [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
+            </app-z-photo-select>
+            <div class="row row-message" style="height: 20px!important;margin-top: -6px">
+              <div class="control-input err-message">
+                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+              </div>
+            </div>
+            <p class="cover-hint">注：尺寸400*400px，格式PNG或JPG，大小2M以内</p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>原价</span>
+          </label>
+          <div class="control-input small-group">
+            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="12"
+              [(ngModel)]="productRecord.original_amount" (keypress)="inputNumberLimit($event)"
+              (change)="onMoneyKeyUp()" name="original_amount" appIgnoreSpace required />
+            <label class="one-word-lable">元</label>
+          </div>
+
+          <label class="control-label">
+            <b>*</b>
+            <span>销售单价</span>
+          </label>
+          <div class="control-input small-group">
+            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="12"
+              [(ngModel)]="productRecord.sale_amount" (keypress)="inputNumberLimit($event)" name="sale_amount"
+              (change)="onMoneyKeyUp()" appIgnoreSpace required />
+            <label class="one-word-lable">元</label>
+          </div>
+
+          <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
+            <label class="control-label">
+              <b>*</b>
+              <span>所需数量</span>
+            </label>
+            <div class="control-input small-group">
+              <input type="text" class="form-control small-input" maxlength="8"
+                oninput="value=value.replace(/[^\d]/g,'')" [(ngModel)]="productRecord.number" name="need_number"
+                (focus)="onClearErrMsg()" appIgnoreSpace (keyup)="onNumberKeyUp()" required />
+              <label class="one-word-lable">件</label>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+      <div class="row">
+      </div>
+      <div class="row row-message">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{productErrMsg}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!productForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button data-dismiss="modal">取消</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- 选择所属厂商 -->
 <app-select-brand-firm [selectedBrand]='selectedCategory' [selectedFirm]="selectedProjectid"
-                       (selectBrandFirm)="onSelectedBrandFirm($event)">
+  (selectBrandFirm)="onSelectedBrandFirm($event)">
 </app-select-brand-firm>

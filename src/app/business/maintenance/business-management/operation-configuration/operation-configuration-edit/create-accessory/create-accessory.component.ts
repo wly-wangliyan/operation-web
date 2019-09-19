@@ -146,13 +146,21 @@ export class CreateAccessoryComponent implements OnInit {
     }
   }
 
+  // 限制input[type='number']输入e
+  public inputNumberLimit(event: any): boolean {
+    const reg = /^\d*?\.?\d*?$/;
+    const keyCode = String.fromCharCode(event.keyCode);
+    return (keyCode && reg.test(keyCode));
+  }
+
   /** 金额 keyup 事件 */
   public onMoneyKeyUp() {
     if (this.productRecord.original_amount) {
       if (isNaN(parseFloat(String(this.productRecord.original_amount)))) {
         this.productRecord.original_amount = null;
       } else {
-        this.productRecord.original_amount = parseFloat(String(this.productRecord.original_amount));
+        const original_amount = parseFloat(String(this.productRecord.original_amount)).toFixed(2);
+        this.productRecord.original_amount = parseFloat(original_amount);
       }
     }
 
@@ -160,7 +168,8 @@ export class CreateAccessoryComponent implements OnInit {
       if (isNaN(parseFloat(String(this.productRecord.sale_amount)))) {
         this.productRecord.sale_amount = null;
       } else {
-        this.productRecord.sale_amount = parseFloat(String(this.productRecord.sale_amount));
+        const sale_amount = parseFloat(String(this.productRecord.sale_amount)).toFixed(2);
+        this.productRecord.sale_amount = parseFloat(sale_amount);
       }
     }
   }

@@ -22,7 +22,7 @@ export class UpkeepMerchantEntity extends EntityBase {
     public VehicleFirm: Array<VehicleFirmEntity> = undefined; 	//	object	汽车厂商-多对多
     public upkeep_merchant_name: string = undefined; 	//	string	名称
     public upkeep_merchant_type: number = undefined; 	//	integer	类型 1:4S品牌店
-    public image_url: string = undefined; 	//	string	图片
+    public image_url = undefined; 	//	string	图片
     public contact: string = undefined; 	//	string	联系人
     public telephone: string = undefined; 	//	string	电话
     public province: string = undefined; 	//	string	省

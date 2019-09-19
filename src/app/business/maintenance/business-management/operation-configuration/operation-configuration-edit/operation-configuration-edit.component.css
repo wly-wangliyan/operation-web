@@ -113,7 +113,7 @@
 }
 
 .maintenance-content input {
-    width: 125px;
+    width: 30%;
     height: 30px;
     margin-right: 20px;
     border-radius: 1px;
@@ -121,9 +121,13 @@
 }
 
 .maintenance-content span {
-    width: 80px;
+    width: 70px;
     line-height: 30px;
     font-size: 13px;
+}
+
+.maintenance-content div {
+    width: 80px;
 }
 
 .serve-title {
@@ -169,7 +173,7 @@ b {
 
 .price-label-input {
     height: 30px;
-    width: 30px;
+    width: 25px;
     line-height: 30px;
     margin-top: 0;
     margin-right: 20px;

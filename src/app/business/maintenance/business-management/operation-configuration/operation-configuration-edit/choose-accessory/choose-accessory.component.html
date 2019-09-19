@@ -65,12 +65,12 @@
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>配件名称</th>
+                    <th>配件/服务名称</th>
                     <th *ngIf="upkeep_item_type===1">是否原厂</th>
                     <th *ngIf="upkeep_item_type===1" style="width: 200px">品牌</th>
                     <th *ngIf="upkeep_item_type===1">零件编号</th>
                     <th *ngIf="upkeep_item_type===1">规格</th>
-                    <th style="width: 100px">原件</th>
+                    <th style="width: 100px">原价</th>
                     <th style="width: 100px">销售单价</th>
                     <th>操作</th>
                 </tr>
@@ -86,8 +86,8 @@
                             product.vehicle_firm?.vehicle_firm_name?product.vehicle_firm?.vehicle_firm_name:'--'}}</td>
                     <td [title]="product.serial_number" *ngIf="upkeep_item_type===1">{{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
                     <td [title]="product.specification" *ngIf="upkeep_item_type===1">{{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
-                    <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
                     <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
+                    <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
                     <td class="operation">
                         <a [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
                     </td>

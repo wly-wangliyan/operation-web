@@ -14,6 +14,7 @@ import { CreateAccessoryComponent } from './create-accessory/create-accessory.co
 class ProjectItem {
   public is_show_accessory = false;
   public is_edit_price = false;
+  public time = new Date().getTime();
   public source: UpkeepMerchantProjectEntity;
 
   constructor(source: UpkeepMerchantProjectEntity) {
@@ -23,6 +24,7 @@ class ProjectItem {
 
 class AccessoryItem {
   public is_edit_price = false;
+  public time = new Date().getTime();
   public source: UpkeepMerchantAccessoryEntity;
 
   constructor(source: UpkeepMerchantAccessoryEntity) {
@@ -154,8 +156,8 @@ export class OperationConfigurationEditComponent implements OnInit {
     }
     const params = {
       number: data.number ? data.number : 0,
-      sale_amount: data.sale_amount,
-      original_amount: data.original_amount
+      sale_amount: Number(data.sale_amount).toFixed(2),
+      original_amount: Number(data.original_amount).toFixed(2)
     };
     this.businessManagementService.requestUpdateUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, data.upkeep_merchant_accessory_id, params)
         .subscribe(() => {
@@ -228,49 +230,13 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.createAccessoryComponent.open(this.currentProject);
     $(this.addAccessoryPromptDiv.nativeElement).modal('show');
   }
-  // list中数据销量赋值
-  public onInputNumber(event: any, index: number) {
-    this.accessoryList[index].number = Number(event.target.value);
-  }
 
-  // list中数据金额赋值
-  public onInputSaleAmount(event: any, index: number) {
-    this.accessoryList[index].sale_amount = Number(Number(event.target.value).toFixed(2));
-  }
-
-  // list中数据金额赋值
-  public onInputWorkOriginalAmount(event: any, index: number, data: any) {
-    switch (data.upkeep_handbook_item.item_category) {
-      case 1:
-        this.projectList_maintain[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
-        break;
-      case 2:
-        this.projectList_clear[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
-        break;
-      case 3:
-        this.projectList_fix[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
-        break;
+  public onAmountChange(event: any) {
+    if (!isNaN(Number(event.target.value))) {
+    event.target.value = Number(event.target.value).toFixed(2);
+    } else {
+      event.target.value = '';
     }
-  }
-
-  // list中数据金额赋值
-  public onInputWorkSaleAmount(event: any, index: number, data: any) {
-    switch (data.upkeep_handbook_item.item_category) {
-      case 1:
-        this.projectList_maintain[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
-        break;
-      case 2:
-        this.projectList_clear[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
-        break;
-      case 3:
-        this.projectList_fix[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
-        break;
-    }
-  }
-
-  // list中数据金额赋值
-  public onInputOriginalAmount(event: any, index: number) {
-    this.accessoryList[index].original_amount = Number(Number(event.target.value).toFixed(2));
   }
 
   // 保存工时费
@@ -281,8 +247,9 @@ export class OperationConfigurationEditComponent implements OnInit {
     }
     this.currentProjectId = data.upkeep_merchant_project_id;
     const params = {
-      work_original_amount: data.work_original_amount,
-      work_sale_amount: data.work_sale_amount};
+      work_original_amount: Number(data.work_original_amount).toFixed(2),
+      work_sale_amount: Number(data.work_sale_amount).toFixed(2)
+    };
     this.businessManagementService.requestUpdateUpkeepProject(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, params)
         .subscribe(() => {
           this.globalService.promptBox.open('保存成功！', () => {
