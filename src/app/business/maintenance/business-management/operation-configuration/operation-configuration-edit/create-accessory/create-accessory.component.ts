@@ -68,10 +68,10 @@ export class CreateAccessoryComponent implements OnInit {
   @Output('saveSuccess') public saveSuccess = new EventEmitter();
 
   constructor(
-      private route: ActivatedRoute,
-      private router: Router,
-      private globalService: GlobalService,
-      private productLibraryService: ProductLibraryHttpService) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private globalService: GlobalService,
+    private productLibraryService: ProductLibraryHttpService) {
   }
 
   public ngOnInit() {
@@ -130,7 +130,7 @@ export class CreateAccessoryComponent implements OnInit {
       const brand = firm.vehicle_brand;
       this.productRecord.vehicle_brand_id = brand.vehicle_brand_id;
       this.productRecord.vehicle_firm_id = firm.vehicle_firm_id;
-      this.selected_brand_firm_info = brand.vehicle_brand_name + ' > ' + firm.vehicle_firm_name;
+      this.selected_brand_firm_info = brand.vehicle_brand_name + '·' + firm.vehicle_firm_name;
     }
   }
 

@@ -70,7 +70,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private initForm() {
-    this.brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
+    this.brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + '·'
       + this.productRecord.vehicle_firm.vehicle_firm_name) : '--';
     this.productRecord.upkeep_item_id = this.productRecord.upkeep_item.upkeep_item_id;
     this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;

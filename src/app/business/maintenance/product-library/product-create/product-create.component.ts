@@ -125,7 +125,7 @@ export class ProductCreateComponent implements OnInit {
         this.selectedFirmId = this.productRecord.vehicle_firm.vehicle_firm_id;
         this.productRecord.vehicle_brand_id = this.productRecord.vehicle_brand.vehicle_brand_id;
         this.productRecord.vehicle_firm_id = this.productRecord.vehicle_firm.vehicle_firm_id;
-        this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + ' > '
+        this.selected_brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + '·'
           + this.productRecord.vehicle_firm.vehicle_firm_name) : null;
       }
     }
@@ -182,7 +182,7 @@ export class ProductCreateComponent implements OnInit {
       this.selectedBrandId = brand.vehicle_brand_id;
       this.productRecord.vehicle_firm_id = firm.vehicle_firm_id;
       this.selectedFirmId = firm.vehicle_firm_id;
-      this.selected_brand_firm_info = brand.vehicle_brand_name + ' > ' + firm.vehicle_firm_name;
+      this.selected_brand_firm_info = brand.vehicle_brand_name + '·' + firm.vehicle_firm_name;
     }
   }
 
