@@ -78,11 +78,18 @@
                             <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
-                            <div>
+                            <div *ngIf="item.source.upkeep_accessory.is_original">
                                 <b>&nbsp;</b>
                                 <span>所属厂商</span>
                             </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <input class="form-control" *ngIf="item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <div *ngIf="!item.source.upkeep_accessory.is_original">
+                                <b>&nbsp;</b>
+                                <span>品牌说明</span>
+                            </div>
+                            <input class="form-control" *ngIf="!item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.brand_instruction" name="brand_instruction{{i}}" disabled>
                             <div>
                                 <b>&nbsp;</b>
                                 <span>零件编号</span>
@@ -217,11 +224,18 @@
                             <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
-                            <div>
+                            <div *ngIf="item.source.upkeep_accessory.is_original">
                                 <b>&nbsp;</b>
                                 <span>所属厂商</span>
                             </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <input class="form-control" *ngIf="item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <div *ngIf="!item.source.upkeep_accessory.is_original">
+                                <b>&nbsp;</b>
+                                <span>品牌说明</span>
+                            </div>
+                            <input class="form-control" *ngIf="!item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.brand_instruction" name="brand_instruction{{i}}" disabled>
                             <div>
                                 <b>&nbsp;</b>
                                 <span>零件编号</span>
@@ -356,11 +370,18 @@
                             <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
-                            <div>
+                            <div *ngIf="item.source.upkeep_accessory.is_original">
                                 <b>&nbsp;</b>
                                 <span>所属厂商</span>
                             </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_merchant_project.vehicle_type.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <input class="form-control" *ngIf="item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <div *ngIf="!item.source.upkeep_accessory.is_original">
+                                <b>&nbsp;</b>
+                                <span>品牌说明</span>
+                            </div>
+                            <input class="form-control" *ngIf="!item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.brand_instruction" name="brand_instruction{{i}}" disabled>
                             <div>
                                 <b>&nbsp;</b>
                                 <span>零件编号</span>
