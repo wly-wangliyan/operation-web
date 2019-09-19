@@ -61,8 +61,11 @@
         <span>配件/服务名称：</span>
         <input class="form-control" placeholder="请输入配件/服务名称" autocomplete="off" name="upkeep_accessory_name"
           [(ngModel)]="searchParams.upkeep_accessory_name" maxlength="20" appIgnoreSpace />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
       </div>
-      <div class="form-group"><button nz-button nzType="primary" (click)="onSearchBtnClick()">查询</button></div>
     </form>
   </div>
   <div class="table-container">
