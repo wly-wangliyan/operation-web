@@ -3,7 +3,7 @@
 </div>
 <div class="content-flow">
   <div class="content-container">
-    <form autocomplete="off" (keydown)="onKeydownEvent($event)" class="form-horizontal" #productForm="ngForm">
+    <form autocomplete="off" class="form-horizontal" #productForm="ngForm">
       <div class="row">
         <label class="control-label">
           <b>*</b>
@@ -87,8 +87,8 @@
               <span>零件编号</span>
             </label>
             <div class="control-input">
-              <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.serial_number"
-                placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
+              <input class="form-control" (focus)="onClearErrMsg()" maxlength="25"
+                [(ngModel)]="productRecord.serial_number" placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
             </div>
           </div>
           <div class="row">
@@ -97,8 +97,8 @@
               <span>规格</span>
             </label>
             <div class="control-input">
-              <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.specification"
-                placeholder="请输入规格" name="specification" />
+              <input class="form-control" (focus)="onClearErrMsg()" maxlength="20"
+                [(ngModel)]="productRecord.specification" placeholder="请输入规格" name="specification" />
             </div>
           </div>
         </ng-container>
@@ -126,7 +126,7 @@
             <span>原价</span>
           </label>
           <div class="control-input small-group">
-            <input class="form-control small-input" (focus)="onClearErrMsg()"
+            <input class="form-control small-input" maxlength="12" (focus)="onClearErrMsg()"
               [(ngModel)]="productRecord.original_amount" (change)="onMoneyKeyUp()" name="original_amount"
               appIgnoreSpace required />
             <label class="one-word-lable">元</label>
@@ -137,8 +137,9 @@
             <span>销售单价</span>
           </label>
           <div class="control-input small-group">
-            <input class="form-control small-input" (focus)="onClearErrMsg()" [(ngModel)]="productRecord.sale_amount"
-              name="sale_amount" (change)="onMoneyKeyUp()" appIgnoreSpace required />
+            <input class="form-control small-input" maxlength="12" (focus)="onClearErrMsg()"
+              [(ngModel)]="productRecord.sale_amount" name="sale_amount" (change)="onMoneyKeyUp()" appIgnoreSpace
+              required />
             <label class="one-word-lable">元</label>
           </div>
 
@@ -148,9 +149,9 @@
               <span>所需数量</span>
             </label>
             <div class="control-input small-group">
-              <input type="text" class="form-control small-input" oninput="value=value.replace(/[^\d]/g,'')"
-                [(ngModel)]="productRecord.number" name="need_number" (focus)="onClearErrMsg()" appIgnoreSpace
-                (keyup)="onNumberKeyUp()" required />
+              <input type="text" class="form-control small-input" maxlength="8"
+                oninput="value=value.replace(/[^\d]/g,'')" [(ngModel)]="productRecord.number" name="need_number"
+                (focus)="onClearErrMsg()" appIgnoreSpace (keyup)="onNumberKeyUp()" required />
               <label class="one-word-lable">件</label>
             </div>
           </ng-container>

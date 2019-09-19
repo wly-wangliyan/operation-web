@@ -69,6 +69,7 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public initAccessoryType() {
     this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
+    this.searchParams = new SearchParams();
     this.generateProductList();
   }
 

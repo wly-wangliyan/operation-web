@@ -9,9 +9,10 @@
 
 .img-item {
   border: 1px solid #d4d4d4;
-  width: 200px;
-  height: 200px;
+  width: 202px;
+  height: 202px;
   margin: 0 25px;
+  border-radius: 2px;
 }
 
 .img-item img {

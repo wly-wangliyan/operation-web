@@ -210,7 +210,7 @@ export class OperationConfigurationComponent implements OnInit {
     const params = {
       start_time: DateFormatHelper.getSecondTimeSum(data.begin_time),
       end_time: DateFormatHelper.getSecondTimeSum(data.end_time),
-      operation_time_amount: data.operation_time_amount.toFixed(2)
+      operation_time_amount: Number(data.operation_time_amount).toFixed(2)
     };
     if (params.start_time >= params.end_time) {
       this.globalService.promptBox.open('预定时段开始时间需小于结束时间！', null, 2000, '/assets/images/warning.png');
@@ -218,10 +218,10 @@ export class OperationConfigurationComponent implements OnInit {
       return;
     }
     let is_pass = true;
-    this.bookingTimes.forEach(value => {
+    this.bookingTimes.forEach((value, i) => {
       const start_time = DateFormatHelper.getSecondTimeSum(value.begin_time);
       const end_time = DateFormatHelper.getSecondTimeSum(value.end_time);
-      if (data.upkeep_merchant_operation_id !== value.upkeep_merchant_operation_id &&
+      if (index !== i &&
           ((params.start_time >= start_time && params.start_time <= end_time)
               || (params.end_time >= start_time && params.end_time <= end_time))) {
         this.globalService.promptBox.open('预定时段时间不可重叠！', null, 2000, '/assets/images/warning.png');

@@ -42,12 +42,13 @@
             <td>{{manual.vehicle_brand? manual.vehicle_brand.vehicle_brand_name : '--'}}</td>
             <td>{{manual.vehicle_firm? manual.vehicle_firm.vehicle_firm_name : '--'}}</td>
             <td>{{manual.vehicle_series? manual.vehicle_series.vehicle_series_name : '--'}}</td>
-            <td>
+            <td *ngIf="manual.vehicle_year_model || manual.vehicle_type_name">
               <a [routerLink]="['../detail',manual.vehicle_type_id]">
                 {{manual.vehicle_year_model ? manual.vehicle_year_model : ''}}
                 {{manual.vehicle_type_name ? manual.vehicle_type_name : ''}}
               </a>
             </td>
+            <td *ngIf="!manual.vehicle_year_model && !manual.vehicle_type_name">--</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',manual.vehicle_type_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',manual.vehicle_type_id]">编辑</a>

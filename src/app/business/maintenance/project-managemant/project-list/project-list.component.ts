@@ -182,6 +182,7 @@ export class ProjectListComponent implements OnInit {
       this.isCreateProject = true;
       this.project_category = '';
       this.project_type = '';
+      this.relation_id = '';
       this.projectParams = new ProjectParams();
     }
   }
@@ -331,6 +332,14 @@ export class ProjectListComponent implements OnInit {
         for (const content of error.errors) {
           if (content.resource === 'upkeep_item_relation' && content.code === 'invalid') {
             this.projectErrMsg = '所选配套项目不存在！';
+            return;
+          }
+          if (content.resource === 'upkeep_item_num' && content.code === 'already_exits') {
+            this.projectErrMsg = '项目ID已存在！';
+            return;
+          }
+          if (content.field === 'upkeep_item_name' && content.code === 'invalid') {
+            this.projectErrMsg = '数据错误，保存失败！';
             return;
           }
         }

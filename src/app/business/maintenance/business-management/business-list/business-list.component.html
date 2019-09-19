@@ -55,14 +55,16 @@
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.upkeep_merchant_name">{{data.upkeep_merchant_name|zMaxLength:20}}</td>
-                    <td>{{data.UpkeepCompany?.company_name}}</td>
-                    <td>{{data.upkeep_merchant_type===1?'4S品牌店':'--'}}</td>
-                    <td>{{data.VehicleFirm?.vehicle_brand?.vehicle_brand_name && data.VehicleFirm?.vehicle_firm_name?
-                        data.VehicleFirm?.vehicle_brand?.vehicle_brand_name+'·'+data.VehicleFirm?.vehicle_firm_name:
-                        data.VehicleFirm?.vehicle_brand?.vehicle_brand_name?data.VehicleFirm?.vehicle_brand?.vehicle_brand_name:
-                            data.VehicleFirm?.vehicle_firm_name?data.VehicleFirm?.vehicle_firm_name:'--'}}</td>
-                    <td>{{data.service_telephone?data.service_telephone:'--'}}</td>
+                    <td [title]="data.upkeep_merchant_name">{{data.upkeep_merchant_name|zMaxLength:10}}</td>
+                    <td [title]="data.UpkeepCompany?.company_name">{{data.UpkeepCompany?.company_name|zMaxLength:10}}</td>
+                    <td>{{data.upkeep_merchant_type===1?'4S品牌店':data.upkeep_merchant_type===2?'汽修店':'--'}}</td>
+                    <td style="width: 200px">
+                        <span *ngFor="let item of data.VehicleFirm;let i=index">
+                            {{item.vehicle_brand?.vehicle_brand_name}}·{{item.vehicle_firm_name}};
+                        </span>
+                        <span *ngIf="data.VehicleFirm.length===0">--</span>
+                    </td>
+                    <td [title]="data.service_telephone">{{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}</td>
                     <td>
                         <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                                    (ngModelChange)="onSwitchChange(data.upkeep_merchant_id,$event)"></nz-switch>
