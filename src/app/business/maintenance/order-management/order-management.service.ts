@@ -77,6 +77,7 @@ export class UpkeepOrderEntity extends EntityBase {
   public work_amount_total: number = undefined; // 	float	工时费合计 单位元
   public work_amount_discounted: number = undefined; // float	工时费优惠 单位元
   public total_amount: number = undefined; // 	float	合计应付
+  public discounted_amount: number = undefined; // 	float	优惠
   public total_real_amount: number = undefined; // 	float	合计实付 单位元
   public fee_amount: number = undefined; // float	优惠前金额(应付)
   public discounted_fee_amount: number = undefined; // 	float	优惠后金额
