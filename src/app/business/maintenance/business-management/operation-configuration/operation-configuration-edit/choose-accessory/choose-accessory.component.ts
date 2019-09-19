@@ -72,8 +72,8 @@ export class ChooseAccessoryComponent implements OnInit {
     if (this.upkeep_item_type === 1) {
       this.searchParams.logo = 1;
       this.searchParams.vehicle_brand_id = data.vehicle_type.vehicle_brand.vehicle_brand_id;
-      this.searchParams.cur_vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
       this.searchParams.vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
+      this.searchParams.cur_vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
       this.onBrandChange();
     }
     this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
@@ -120,6 +120,7 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public onBrandChange() {
     this.vehicleFirmList = [];
+    this.searchParams.vehicle_firm_id = '';
     this.continueRequestSubscription =
         this.vehicleTypeManagementService.requestVehicleFirmList(this.searchParams.vehicle_brand_id).subscribe(res => {
           this.vehicleFirmList = res;

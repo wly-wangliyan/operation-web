@@ -157,7 +157,8 @@
             </td>
             <td [title]='data.upkeep_merchant_name'>{{(data.upkeep_merchant_name|zMaxLength:4)||'--'}}</td>
             <td *ngIf='data.item_categorys&&data.item_categorys.length!==0'>
-              <span *ngFor="let obj of data.item_categorys; "> {{obj|projectCategory}}<span *ngIf='data.item_categorys&&data.item_categorys.length>1'>;</span> </span>
+              <span *ngFor="let obj of data.item_categorys; "> {{obj|projectCategory}}<span
+                  *ngIf='data.item_categorys&&data.item_categorys.length>1'>; </span> </span>
             </td>
             <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>--</td>
             <td>{{data.upkeep_item_category_count||'--'}}</td>
