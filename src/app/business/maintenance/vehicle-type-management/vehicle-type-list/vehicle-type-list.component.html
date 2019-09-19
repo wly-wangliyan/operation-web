@@ -10,7 +10,10 @@
     </ul>
 </div>
 <div class="content-flow">
-    <nz-empty style="margin-top: 10%" *ngIf="!vehicleBrandList || vehicleBrandList.length===0"></nz-empty>
+    <div *ngIf="isLoading" style="text-align: center;margin: 150px 0 0 -80px">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <nz-empty style="margin-top: 10%" *ngIf="(!vehicleBrandList || vehicleBrandList.length===0) && !isLoading"></nz-empty>
     <div class="brand-list">
         <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)" [class.width]="item.vehicle_brand_id===vehicle_brand_id">
             <img class="brand-img" [src]="item.vehicle_brand_image">
