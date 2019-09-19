@@ -7,6 +7,7 @@ import { BusinessEditComponent } from '../business-edit/business-edit.component'
 import { Router } from '@angular/router';
 import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../business-management.service';
 import { VehicleBrandEntity, VehicleTypeManagementService } from '../../vehicle-type-management/vehicle-type-management.service';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 const PageSize = 15;
 
@@ -100,18 +101,21 @@ export class BusinessListComponent implements OnInit {
     const params = {status: swith};
     this.businessManagementService.requestUpkeepMerchants(upkeep_merchant_id, params).subscribe(res => {
       if (event) {
-        this.globalService.promptBox.open('开启成功');
+        this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
       } else {
-        this.globalService.promptBox.open('关闭成功');
+        this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
       }
       this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
-          if (event) {
-            this.globalService.promptBox.open('开启失败，请重试', null, 2000, '/assets/images/warning.png');
-          } else {
-            this.globalService.promptBox.open('关闭失败，请重试', null, 2000, '/assets/images/warning.png');
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'not_allowed' && content.resource === 'status') {
+              this.globalService.promptBox.open('该商家下没有产品，不允许开启！', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
+            }
           }
         }
       }

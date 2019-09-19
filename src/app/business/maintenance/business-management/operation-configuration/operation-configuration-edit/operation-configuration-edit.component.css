@@ -149,6 +149,7 @@ b {
 
 .modal-content {
     width: 1000px;
+    top: 65px;
 }
 
 .modal-dialog {
