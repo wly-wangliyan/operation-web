@@ -32,7 +32,7 @@
 }
 
 .maintenance-space {
-    width:86%;
+    width:90%;
     height:50px;
     background:rgba(255,255,255,1);
     border-radius:4px;
@@ -80,6 +80,7 @@
     padding: 12px 6px;
     margin-top: 7px;
     margin-left: 10px;
+    cursor: pointer;
 }
 
 .maintenance-price label {
@@ -92,20 +93,24 @@
 }
 
 .space-width img {
-    float: left;
-    margin: 29px 20px 100px;
+    /* float: left; */
+    margin: 29px 20px;
     width: 100px;
     height: 100px;
+    border: 1px solid #D8D8D8;
+    border-radius: 2px;
 }
 
 .space-width {
     /*height: 240px;*/
-    width: calc(43% - 5px);
+    /* width: calc(43% - 5px); */
+    width: 90%;
     margin-right: 10px;
-    float: left;
+    /* float: left; */
     background: #fff;
     margin-top: 10px;
     list-style: none;
+    display: flex;
 }
 
 .space-height {
@@ -113,9 +118,9 @@
 }
 
 .maintenance-content {
-    width: 70%;
-    height: 30px;
-    margin-bottom: 10px;
+    width: 32%;
+    /* height: 30px; */
+    /* margin-bottom: 10px; */
     display: inline-flex;
 }
 
@@ -131,6 +136,25 @@
     width: 80px;
     line-height: 30px;
     font-size: 13px;
+}
+
+.maintenance-content {
+  margin: 9px 0 5px 0;
+  padding-right: 10px;
+  word-break: break-word;
+}
+
+.maintenance-content label:first-child {
+  color: #23242F;
+  width: 70px;
+  min-width: 70px;
+  margin-bottom: 0;
+}
+
+.maintenance-content label:last-child {
+  color: #888;
+  word-break: break-word;
+  margin-bottom: 0;
 }
 
 .serve-title {
