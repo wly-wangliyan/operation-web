@@ -25,14 +25,13 @@
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="购买人：">{{upkeepOrderData.payer_name||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="手机号：">{{upkeepOrderData.payer_phone||'--'}}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="汽车品牌：">{{upkeepOrderData.vehicle_brand_name||'--'}}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle=""></nz-descriptions-item>
-          <nz-descriptions-item nzTitle="车型：">
+          <nz-descriptions-item nzTitle="车型：" nzSpan="2">
             <span
-              [title]='upkeepOrderData.vehicle_firm_name+upkeepOrderData.vehicle_series_name+upkeepOrderData.vehicle_year_model+upkeepOrderData.vehicle_type_name'>
-              {{(upkeepOrderData.vehicle_firm_name+upkeepOrderData.vehicle_series_name+upkeepOrderData.vehicle_year_model+upkeepOrderData.vehicle_type_name)|zMaxLength:13}}
+              [title]="upkeepOrderData.vehicle_firm_name+' '+upkeepOrderData.vehicle_series_name+' '+upkeepOrderData.vehicle_year_model+' '+upkeepOrderData.vehicle_type_name">
+              {{(upkeepOrderData.vehicle_firm_name+' '+upkeepOrderData.vehicle_series_name+' '+upkeepOrderData.vehicle_year_model+' '+upkeepOrderData.vehicle_type_name)|zMaxLength:50}}
             </span>
           </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="汽车品牌：">{{upkeepOrderData.vehicle_brand_name||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="购车时间：">
             {{upkeepOrderData.car_pay_time?(upkeepOrderData.car_pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
           </nz-descriptions-item>
