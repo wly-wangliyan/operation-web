@@ -134,6 +134,10 @@ export class SelectBrandFirmTypeComponent implements OnInit {
 
   // 获取品牌列表
   private requestBrandList() {
+    if (!this.brand_ids) {
+      this.vehicleBrandList = [];
+      return;
+    }
     const parmas = {vehicle_brand_ids: this.brand_ids};
     this.requestBrandSubscription = this.vehicleService.requestVehicleBrandList(parmas).subscribe(res => {
       this.vehicleBrandList = res.results;
