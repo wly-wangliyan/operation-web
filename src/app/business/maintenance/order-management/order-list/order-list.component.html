@@ -152,8 +152,8 @@
             <td>{{data.payer_phone||'--'}}</td>
             <td>{{data.vehicle_brand_name||'--'}}</td>
             <td
-              [title]='data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name'>
-              {{(data.vehicle_firm_name+data.vehicle_series_name+data.vehicle_year_model+data.vehicle_type_name)|zMaxLength:4}}
+              [title]="data.vehicle_firm_name+' '+data.vehicle_series_name+' '+data.vehicle_year_model+' '+data.vehicle_type_name">
+              {{(data.vehicle_firm_name+' '+data.vehicle_series_name+' '+data.vehicle_year_model+' '+data.vehicle_type_name)|zMaxLength:4}}
             </td>
             <td [title]='data.upkeep_merchant_name'>{{(data.upkeep_merchant_name|zMaxLength:4)||'--'}}</td>
             <td *ngIf='data.item_categorys&&data.item_categorys.length!==0'>
