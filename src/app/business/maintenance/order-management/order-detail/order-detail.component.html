@@ -115,13 +115,13 @@
           <tbody>
             <tr *ngFor="let data of rowSelectionTable.data; let i=index">
               <td [attr.rowspan]=itemRowSpan1 *ngIf="itemRowSpan1!==0&&i === 0" class='pro_type'>
-                {{data.item_category|projectCategory}}
+                <img src="/assets/images/upkeep.png">{{data.item_category|projectCategory}}
               </td>
               <td [attr.rowspan]=itemRowSpan2 *ngIf="itemRowSpan2!==0&&i === itemRowSpan1" class='pro_type'>
-                {{data.item_category|projectCategory}}</td>
+                <img src="/assets/images/wash.png">{{data.item_category|projectCategory}}</td>
               <td [attr.rowspan]=itemRowSpan3 *ngIf="itemRowSpan3!==0&&i === (itemRowSpan1+itemRowSpan2)"
                 class='pro_type'>
-                {{data.item_category|projectCategory}}</td>
+                <img src="/assets/images/fix.png">{{data.item_category|projectCategory}}</td>
               <td>
                 <span class='image' *ngIf='data.image_url'><img [src]=data.image_url></span>
                 <ul class='name-ul'>
