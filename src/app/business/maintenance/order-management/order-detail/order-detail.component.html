@@ -31,12 +31,12 @@
               {{(upkeepOrderData.vehicle_firm_name+' '+upkeepOrderData.vehicle_series_name+' '+upkeepOrderData.vehicle_year_model+' '+upkeepOrderData.vehicle_type_name)|zMaxLength:50}}
             </span>
           </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="汽车品牌：">{{upkeepOrderData.vehicle_brand_name||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="购车时间：">
-            {{upkeepOrderData.car_pay_time?(upkeepOrderData.car_pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+            {{upkeepOrderData.car_pay_time?(upkeepOrderData.car_pay_time* 1000 | date:"y-MM"):'--'}}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="行驶公里数：">{{upkeepOrderData.kilometers?(upkeepOrderData.kilometers+'km'):'--'}}
           </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="车架号：">{{upkeepOrderData.frame_number||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="配件/服务费合计：">
             {{(upkeepOrderData.accessory_amount_total | zCompleteNumber)||0}}<span
               *ngIf="upkeepOrderData.accessory_amount_total||upkeepOrderData.accessory_amount_total===0">
