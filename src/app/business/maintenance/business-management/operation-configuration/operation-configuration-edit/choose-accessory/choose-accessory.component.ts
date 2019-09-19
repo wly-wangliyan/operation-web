@@ -67,33 +67,27 @@ export class ChooseAccessoryComponent implements OnInit {
         });
   }
 
-  public initAccessoryType() {
+  public initAccessoryType(data) {
     this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
     this.searchParams = new SearchParams();
-    this.generateProductList();
-  }
-
-  // 初始化获取产品列表
-  private generateProductList() {
-    // 定义查询延迟时间
-    this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestProductList();
-    });
-    this.searchText$.next();
+    if (this.upkeep_item_type === 1) {
+      this.searchParams.logo = 1;
+      this.searchParams.upkeep_item_category = data.upkeep_handbook_item.item_category;
+      this.searchParams.vehicle_brand_id = data.vehicle_type.vehicle_brand.vehicle_brand_id;
+      this.searchParams.vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
+    }
+    this.onBrandChange();
+    this.requestProductList();
   }
 
   // 请求产品列表
   private requestProductList() {
-    this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
+    this.continueRequestSubscription = this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
-      if (!this.globalService.httpErrorProcess(err)) {
-        if (err.status === 422) {
-
-        }
-      }
+      this.globalService.httpErrorProcess(err);
     });
   }
 
@@ -114,7 +108,7 @@ export class ChooseAccessoryComponent implements OnInit {
   }
 
   public onSearchBtnClick() {
-    this.searchText$.next();
+    this.requestProductList();
   }
 
   // 选择配件

@@ -106,7 +106,16 @@ export class OperationConfigurationComponent implements OnInit {
               { queryParams: {upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: res.body.upkeep_merchant_product_id} });
         });
       }, err => {
-        this.globalService.httpErrorProcess(err);
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'not found upkeep_handbook' && content.resource === 'vehicle_type') {
+              this.globalService.promptBox.open('该车型没有关联保养手册，不能创建产品！', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        } else {
+          this.globalService.httpErrorProcess(err);
+        }
       });
     }
   }
@@ -266,6 +275,7 @@ export class OperationConfigurationComponent implements OnInit {
       this.globalService.confirmationBox.close();
       this.businessManagementService.requestDeleteUpkeepProduct(this.upkeep_merchant_id, data.upkeep_merchant_product_id).subscribe((e) => {
         this.productList = this.productList.filter(v => v.upkeep_merchant_product_id !== data.upkeep_merchant_product_id);
+        this.disableVehicleType = this.disableVehicleType.filter(v => v !== data.vehicle_type.vehicle_type_id);
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

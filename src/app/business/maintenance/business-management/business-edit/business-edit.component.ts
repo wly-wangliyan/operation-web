@@ -190,14 +190,12 @@ export class BusinessEditComponent implements OnInit {
 
     // 选择汽车品牌、厂商
     public openChooseBrandModal() {
+        this.brand_ids = [];
+        this.firm_ids = [];
         this.currentBusiness.VehicleFirm.forEach(value => {
             this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
             this.firm_ids.push(value.vehicle_firm_id);
         });
-        if (this.currentBusiness.VehicleFirm.length === 0) {
-            this.brand_ids = [];
-            this.firm_ids = [];
-        }
         this.selectBrandFirmComponent.open();
     }
 

@@ -67,28 +67,27 @@
                     <th>序号</th>
                     <th>配件名称</th>
                     <th *ngIf="upkeep_item_type===1">是否原厂</th>
-                    <th *ngIf="upkeep_item_type===1">品牌</th>
+                    <th *ngIf="upkeep_item_type===1" style="width: 200px">品牌</th>
                     <th *ngIf="upkeep_item_type===1">零件编号</th>
                     <th *ngIf="upkeep_item_type===1">规格</th>
-                    <th>原件</th>
-                    <th>销售单价</th>
+                    <th style="width: 100px">原件</th>
+                    <th style="width: 100px">销售单价</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let product of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td>{{product.upkeep_accessory_name}}</td>
+                    <td [title]="product.upkeep_accessory_name">{{product.upkeep_accessory_name|zMaxLength:8}}</td>
                     <td *ngIf="upkeep_item_type===1">{{product.is_original ? '是' : '否'}}</td>
-                   <!-- <td *ngIf="upkeep_item_type===1">{{product.vehicle_brand?.vehicle_brand_name || '&#45;&#45;'}}</td>-->
-                    <td *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
+                    <td style="width: 200px" *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name+'·'+product.vehicle_firm?.vehicle_firm_name:
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name?product.vehicle_firm?.vehicle_brand?.vehicle_brand_name:
                             product.vehicle_firm?.vehicle_firm_name?product.vehicle_firm?.vehicle_firm_name:'--'}}</td>
-                    <td *ngIf="upkeep_item_type===1">{{product.serial_number ? product.serial_number : '--'}}</td>
-                    <td *ngIf="upkeep_item_type===1">{{product.specification ? product.specification : '--'}}</td>
-                    <td>{{product.sale_amount?product.sale_amount:'--'}}</td>
-                    <td>{{product.original_amount?product.original_amount:'--'}}</td>
+                    <td [title]="product.serial_number" *ngIf="upkeep_item_type===1">{{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
+                    <td [title]="product.specification" *ngIf="upkeep_item_type===1">{{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
+                    <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
+                    <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
                     <td class="operation">
                         <a [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
                     </td>

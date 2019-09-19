@@ -44,7 +44,6 @@ export class OperationConfigurationEditComponent implements OnInit {
   public projectList_clear: Array<ProjectItem> = [];
   public projectList_fix: Array<ProjectItem> = [];
   public projectItemList: Array<ProjectItem> = [];
-  public upkeep_accessory_type: number;
 
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id: string;
@@ -84,13 +83,16 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   // 选择配件
-  public onChooseAccessory(data) {
+  public onChooseAccessory(data: UpkeepMerchantProjectEntity) {
+    if (data.accessory_count >= 10) {
+      this.globalService.promptBox.open('每个项目最多可添加10个产品!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.currentProject = data;
-    this.upkeep_accessory_type = data.upkeep_handbook_item.upkeep_accessory_type;
     this.currentProjectId = data.upkeep_merchant_project_id;
     $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
     this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-    this.chooseAccessoryComponent.initAccessoryType();
+    this.chooseAccessoryComponent.initAccessoryType(data);
     this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
   }
 
@@ -226,27 +228,27 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.createAccessoryComponent.open(this.currentProject);
     $(this.addAccessoryPromptDiv.nativeElement).modal('show');
   }
-  // list中数据金额赋值
+  // list中数据销量赋值
   public onInputNumber(event: any, index: number) {
     this.accessoryList[index].number = Number(event.target.value);
   }
 
   // list中数据金额赋值
   public onInputSaleAmount(event: any, index: number) {
-    this.accessoryList[index].sale_amount = Number(event.target.value.toFixed(2));
+    this.accessoryList[index].sale_amount = Number(Number(event.target.value).toFixed(2));
   }
 
   // list中数据金额赋值
   public onInputWorkOriginalAmount(event: any, index: number, data: any) {
     switch (data.upkeep_handbook_item.item_category) {
       case 1:
-        this.projectList_maintain[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_maintain[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 2:
-        this.projectList_clear[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_clear[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 3:
-        this.projectList_fix[index].source.work_original_amount = Number(event.target.value).toFixed(2);
+        this.projectList_fix[index].source.work_original_amount = Number(Number(event.target.value).toFixed(2));
         break;
     }
   }
@@ -255,20 +257,20 @@ export class OperationConfigurationEditComponent implements OnInit {
   public onInputWorkSaleAmount(event: any, index: number, data: any) {
     switch (data.upkeep_handbook_item.item_category) {
       case 1:
-        this.projectList_maintain[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_maintain[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 2:
-        this.projectList_clear[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_clear[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
       case 3:
-        this.projectList_fix[index].source.work_sale_amount = Number(event.target.value).toFixed(2);
+        this.projectList_fix[index].source.work_sale_amount = Number(Number(event.target.value).toFixed(2));
         break;
     }
   }
 
   // list中数据金额赋值
   public onInputOriginalAmount(event: any, index: number) {
-    this.accessoryList[index].original_amount = Number(event.target.value.toFixed(2));
+    this.accessoryList[index].original_amount = Number(Number(event.target.value).toFixed(2));
   }
 
   // 保存工时费
