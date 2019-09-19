@@ -12,7 +12,8 @@
         <div class="control-input">
           <input class="form-control" [(ngModel)]="selected_project_info" placeholder="请选择项目类别" name="select_project"
             required readonly>
-          <button name="select_project_btn" class="two-word-btn" nz-button (click)="onOpenProjectModal()">选择</button>
+          <button name="select_project_btn" type="button" class="two-word-btn" nz-button
+            (click)="onOpenProjectModal()">选择</button>
         </div>
       </div>
       <ng-container *ngIf="!this.isCreateProduct || productRecord.upkeep_item_id">
@@ -33,7 +34,8 @@
           </label>
           <div class="control-input">
             <input class="form-control" [(ngModel)]="productRecord.upkeep_accessory_name" placeholder="输入1-20个字标题"
-              maxlength="20" name="upkeep_accessory_name" (focus)="onClearErrMsg()" appIgnoreSpace required>
+              maxlength="20" name="upkeep_accessory_name" (focus)="onClearErrMsg()"
+              oninput="value=value.replace(/\s+/g,'')" appIgnoreSpace required>
           </div>
         </div>
         <ng-container *ngIf="productRecord.upkeep_accessory_type === projectTypes[0]">
@@ -60,7 +62,7 @@
               <div class="control-input">
                 <input class="form-control" [(ngModel)]="selected_brand_firm_info" placeholder="请选择所属厂商"
                   name="project_name" required readonly>
-                <button name="select_firm_btn" class="two-word-btn" nz-button
+                <button name="select_firm_btn" class="two-word-btn" nz-button type="button"
                   (click)="onOpenBrandFirmModal()">选择</button>
               </div>
               <div class="control-input check-group">
@@ -88,7 +90,8 @@
             </label>
             <div class="control-input">
               <input class="form-control" (focus)="onClearErrMsg()" maxlength="25"
-                [(ngModel)]="productRecord.serial_number" placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
+                [(ngModel)]="productRecord.serial_number" oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                placeholder="请输入零件编号" name="serial_number" appIgnoreSpace />
             </div>
           </div>
           <div class="row">
@@ -98,7 +101,8 @@
             </label>
             <div class="control-input">
               <input class="form-control" (focus)="onClearErrMsg()" maxlength="20"
-                [(ngModel)]="productRecord.specification" placeholder="请输入规格" name="specification" />
+                [(ngModel)]="productRecord.specification" placeholder="请输入规格" name="specification"
+                oninput="value=value.replace(/\s+/g,'')" appIgnoreSpace />
             </div>
           </div>
         </ng-container>
@@ -167,11 +171,11 @@
         </div>
       </div>
       <div class="row">
-        <button name="sure_btn" class="sure-btn" nz-button nzType="primary" [disabled]="!productForm.form.valid"
-          (appZDebounceClick)="onEditFormSubmit()">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!productForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
-        <button name="close_btn" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
       </div>
     </form>
   </div>
