@@ -5,6 +5,7 @@
   display: flex;
   background: #fff;
   align-items: center;
+  font-size: 13px;
 }
 
 .img-item {

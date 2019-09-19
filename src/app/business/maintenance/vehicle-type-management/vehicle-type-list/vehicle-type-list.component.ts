@@ -26,6 +26,7 @@ export class VehicleTypeListComponent implements OnInit {
   public vehicle_brand_id: string;
   public index = 0;
   public importMsg = '';
+  public isLoading = true;
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -45,6 +46,7 @@ export class VehicleTypeListComponent implements OnInit {
         switchMap(() =>
             this.vehicleTypeManagementService.requestVehicleBrandList())
     ).subscribe(res => {
+      this.isLoading = false;
       this.vehicleBrandList = res.results;
       if (this.vehicleBrandList.length > 0) {
         this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
