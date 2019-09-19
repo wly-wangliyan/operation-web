@@ -40,7 +40,7 @@
              </span>
             <div *ngIf="node.isLeaf" class="vehicle-info">
                 <div style="width: 400px">&nbsp;</div>
-                <span>{{ node.origin.vehicle_type_name }}</span>
+                <span>{{ node.origin.vehicle_year_model }}款 {{ node.origin.vehicle_type_name }}</span>
                 <span style="font-weight: 400">
                     {{node.origin.vehicle_level}} / {{node.origin.vehicle_energy_type}} / {{node.origin.vehicle_sold_time}}
                     / {{node.origin.vehicle_price}} / {{node.origin.vehicle_engine}} / {{node.origin.vehicle_gearbox}}
