@@ -206,6 +206,8 @@ export class ExpandedMenuComponent implements OnInit {
         routeItem.isSelect = true;
         const childRouteItem = this.routeLinkList[index].children[childIndex];
         MenuHelper.Select(this.menuItems, childRouteItem);
+      } else {
+        routeItem.isSelect = true;
       }
     }
   }
