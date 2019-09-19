@@ -74,7 +74,7 @@
                 <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"
                     [disabled]="!isEdit || !mapOfSetting[project.upkeep_item_id].switch"
-                    (click)=onChangeBtnRecommend(handbook,mapOfSetting[project.upkeep_item_id].uh_item_id)>{{project.upkeep_item_type===1?'换':'荐'}}</button>
+                    (click)=onChangeBtnRecommend(handbook,mapOfSetting[project.upkeep_item_id].uh_item_id)>{{category===1?'换':'荐'}}</button>
                 </td>
               </tr>
             </ng-container>
