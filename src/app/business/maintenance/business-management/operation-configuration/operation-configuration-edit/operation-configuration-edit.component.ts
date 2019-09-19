@@ -44,7 +44,6 @@ export class OperationConfigurationEditComponent implements OnInit {
   public projectList_clear: Array<ProjectItem> = [];
   public projectList_fix: Array<ProjectItem> = [];
   public projectItemList: Array<ProjectItem> = [];
-  public upkeep_accessory_type: number;
 
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id: string;
@@ -84,13 +83,16 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   // 选择配件
-  public onChooseAccessory(data) {
+  public onChooseAccessory(data: UpkeepMerchantProjectEntity) {
+    if (data.accessory_count >= 10) {
+      this.globalService.promptBox.open('每个项目最多可添加10个产品!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.currentProject = data;
-    this.upkeep_accessory_type = data.upkeep_handbook_item.upkeep_accessory_type;
     this.currentProjectId = data.upkeep_merchant_project_id;
     $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
     this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-    this.chooseAccessoryComponent.initAccessoryType();
+    this.chooseAccessoryComponent.initAccessoryType(data);
     this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
   }
 
