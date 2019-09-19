@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
           <span>厂商：</span>
-          <select class="form-control" [(ngModel)]="searchParams.cur_vehicle_firm_id" name="vehicle_firm_id">
+          <select class="form-control" [(ngModel)]="searchParams.vehicle_firm_id" name="vehicle_firm_id">
             <option value="">全部</option>
             <option *ngFor="let data of vehicleFirmList" [value]="data.vehicle_firm_id">
               {{data.vehicle_firm_name}}
