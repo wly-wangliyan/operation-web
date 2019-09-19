@@ -8,7 +8,7 @@
 .info_title {
   float: left;
   width: 150px;
-  border: 1px solid #E5E6EB;
+  border: 1px solid #e5e6eb;
   border-right: 0;
   text-align: center;
   font-size: 12px;
@@ -30,7 +30,7 @@
 .info_title .order_info {
   height: 200px;
   line-height: 200px;
-  border-top: 1px solid #E5E6EB;
+  border-top: 1px solid #e5e6eb;
 }
 
 .pro_width {
@@ -62,11 +62,11 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-:host ::ng-deep .ant-table>tr {
+:host ::ng-deep .ant-table > tr {
   border-bottom: 1px solid #e8e8e8;
 }
 
-:host ::ng-deep.ant-table-tbody>tr:nth-child(even) {
+:host ::ng-deep.ant-table-tbody > tr:nth-child(even) {
   background: #fff !important;
 }
 
@@ -85,7 +85,6 @@
   height: 40px;
   display: inline-block;
   margin: 10px;
-
 }
 
 .image img {
@@ -100,6 +99,13 @@
 .name-ul .item-name {
   font-family: PingFangSC;
   font-weight: 600;
+  color: rgba(35, 36, 47, 1);
+}
+
+.tbody {
+  font-size: 12px;
+  font-family: PingFangSC;
+  font-weight: 400;
   color: rgba(35, 36, 47, 1);
 }
 

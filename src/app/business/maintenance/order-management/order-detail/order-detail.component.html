@@ -111,7 +111,7 @@
               <th>实付</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class='tbody'>
             <tr *ngFor="let data of rowSelectionTable.data; let i=index">
               <td [attr.rowspan]=itemRowSpan1 *ngIf="itemRowSpan1!==0&&i === 0" class='pro_type'>
                 <img src="/assets/images/upkeep.png">{{data.item_category|projectCategory}}
