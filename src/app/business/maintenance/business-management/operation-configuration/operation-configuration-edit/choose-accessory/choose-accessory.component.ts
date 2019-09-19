@@ -68,15 +68,17 @@ export class ChooseAccessoryComponent implements OnInit {
   }
 
   public initAccessoryType(data) {
-    this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
     this.searchParams = new SearchParams();
     if (this.upkeep_item_type === 1) {
       this.searchParams.logo = 1;
-      this.searchParams.upkeep_item_category = data.upkeep_handbook_item.item_category;
       this.searchParams.vehicle_brand_id = data.vehicle_type.vehicle_brand.vehicle_brand_id;
+      this.searchParams.cur_vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
       this.searchParams.vehicle_firm_id = data.vehicle_type.vehicle_firm.vehicle_firm_id;
+      this.onBrandChange();
     }
-    this.onBrandChange();
+    this.searchParams.upkeep_accessory_type = this.upkeep_item_type;
+    this.searchParams.upkeep_item_category = data.upkeep_handbook_item.item_category;
+    this.searchParams.upkeep_item_id = data.upkeep_handbook_item.item_id;
     this.requestProductList();
   }
 

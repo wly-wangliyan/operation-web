@@ -89,7 +89,8 @@ export class SearchParams extends EntityBase {
   public upkeep_accessory_type: number = undefined; // 项目类型 1:配件 2:服务
   public is_original: string = undefined; // 是否原厂
   public serial_number: string = undefined; // 零件编号
-  public logo: number = undefined;  //
+  public logo: number = undefined;  // 区别是否原厂件
+  public cur_vehicle_firm_id: string = undefined; // 当前汽车厂商
   public page_num = 1; // 页码 默认:1
   public page_size = 45; // 每页条数 默认:15
 }
