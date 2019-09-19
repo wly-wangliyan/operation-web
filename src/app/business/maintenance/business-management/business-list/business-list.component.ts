@@ -112,9 +112,9 @@ export class BusinessListComponent implements OnInit {
           const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
           for (const content of error.errors) {
             if (content.code === 'not_allowed' && content.resource === 'status') {
-              this.globalService.promptBox.open('该商家未开通支付账号，请开通后再试！', null, 2000, '/assets/images/warning.png');
+              this.globalService.promptBox.open('该商家下没有产品，不允许开启！', null, 2000, '/assets/images/warning.png');
             } else if (content.code === 'config_not_allowed' && content.resource === 'status') {
-              this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
+              this.globalService.promptBox.open('该商家未开通支付账号，请开通后再试！', null, 2000, '/assets/images/warning.png');
             } else {
               this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
             }
