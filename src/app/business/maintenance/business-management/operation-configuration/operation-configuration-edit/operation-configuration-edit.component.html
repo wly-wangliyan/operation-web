@@ -62,7 +62,8 @@
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
-                    <img [src]="'/assets/images/image_space.png'" [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                    <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
+                     [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
                         <div class="maintenance-content">
                             <div>
@@ -108,7 +109,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   maxlength="5" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>
@@ -200,7 +201,8 @@
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
-                    <img [src]="'/assets/images/image_space.png'" [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                    <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
+                         [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
                         <div class="maintenance-content">
                             <div>
@@ -246,7 +248,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   maxlength="5" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>
@@ -338,7 +340,8 @@
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
-                    <img [src]="'/assets/images/image_space.png'" [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                    <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
+                          [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
                         <div class="maintenance-content">
                             <div>
@@ -384,7 +387,7 @@
                                 <span>所需数量</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   (change)="item.source.number<=0?item.source.number=1:null" maxlength="6" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                                   maxlength="5" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">件</label>
                             <div>
                                 <b>*</b>

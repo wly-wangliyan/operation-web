@@ -46,6 +46,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   public projectList_clear: Array<ProjectItem> = [];
   public projectList_fix: Array<ProjectItem> = [];
   public projectItemList: Array<ProjectItem> = [];
+  public image_space = '../../../../../../assets/images/image_space.png'; // 默认图片
 
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id: string;
@@ -152,6 +153,10 @@ export class OperationConfigurationEditComponent implements OnInit {
   public onEditClick(data) {
     if (data.sale_amount > data.original_amount) {
       this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
+    if (data.number <= 0 || data.number > 100) {
+      this.globalService.promptBox.open('所需数量应大于0小于100!', null, 2000, '/assets/images/warning.png');
       return;
     }
     const params = {
