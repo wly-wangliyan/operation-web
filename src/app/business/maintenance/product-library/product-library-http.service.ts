@@ -9,6 +9,14 @@ import { ProjectEntity } from '../project-managemant/project-managemant-http.ser
 import { VehicleBrandEntity, VehicleFirmEntity } from '../vehicle-type-management/vehicle-type-management.service';
 import { file_import } from '../../../../utils/file-import';
 
+// 保养商家
+export class MerchantEntity extends EntityBase {
+  public upkeep_merchant_id: string = undefined; // 保养商家-主键ID
+  public upkeep_merchant_name: string = undefined; // 保养商家名称
+  public created_time: number = undefined;
+  public updated_time: string = undefined;
+}
+
 // 产品
 export class ProductEntity extends EntityBase {
   public upkeep_accessory_id: string = undefined; // 保养配件库-主键ID
@@ -30,6 +38,7 @@ export class ProductEntity extends EntityBase {
   public sale_amount: number = undefined; // 销售单价 单位:元
   public number = 1; // 所需数量 单位:件
   public upkeep_merchants: Array<any> = undefined; // 在售保养商家ID集合
+  public upkeep_merchant_objects: Array<MerchantEntity> = undefined; // 在售保养商家对象集合
   public created_time: number = undefined;
   public updated_time: string = undefined;
 
@@ -42,6 +51,9 @@ export class ProductEntity extends EntityBase {
     }
     if (propertyName === 'vehicle_firm') {
       return VehicleFirmEntity;
+    }
+    if (propertyName === 'upkeep_merchant_objects') {
+      return MerchantEntity;
     }
     return null;
   }
@@ -98,14 +110,6 @@ export class AddProductParams extends EntityBase {
   public original_amount: number = undefined; // 原价 单位:元
   public sale_amount: number = undefined; // 销售单价 单位:元
   public number: number = undefined; // 所需数量 单位:件
-}
-
-// 保养商家
-export class MerchantEntity extends EntityBase {
-  public upkeep_merchant_id: string = undefined; // 保养商家-主键ID
-  public upkeep_merchant_name: string = undefined; // 保养商家名称
-  public created_time: number = undefined;
-  public updated_time: string = undefined;
 }
 
 export class ProductLinkResponse extends LinkResponse {

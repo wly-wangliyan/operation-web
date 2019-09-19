@@ -15,7 +15,7 @@ export class ProductDetailComponent implements OnInit {
 
   public title = this.titles[0]; // 页面标题
 
-  public no_img_url = '../../../../../assets/images/icon_no_img.png'; // 默认图片
+  public no_img_url = '../../../../../assets/images/image_space_big.png'; // 默认图片
 
   public product_id: string; // 产品id
 

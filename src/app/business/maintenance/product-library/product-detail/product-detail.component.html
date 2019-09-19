@@ -91,13 +91,15 @@
           <tr>
             <td>在售商家：</td>
             <td colspan="5">
-              <ng-container *ngIf="productRecord.upkeep_merchants && productRecord.upkeep_merchants.length > 0">
-                <ng-container *ngFor="let merchant of productRecord.upkeep_merchants;let index = index">
+              <ng-container
+                *ngIf="productRecord.upkeep_merchant_objects && productRecord.upkeep_merchant_objects.length > 0">
+                <ng-container *ngFor="let merchant of productRecord.upkeep_merchant_objects;let index = index">
                   <span>{{merchant.upkeep_merchant_name}}</span>
-                  <span *ngIf="productRecord.upkeep_merchants.length-1>index">,</span>
+                  <span *ngIf="productRecord.upkeep_merchant_objects.length-1>index">, </span>
                 </ng-container>
               </ng-container>
-              <ng-container *ngIf="!productRecord.upkeep_merchants || productRecord.upkeep_merchants.length===0">--
+              <ng-container
+                *ngIf="!productRecord.upkeep_merchant_objects || productRecord.upkeep_merchant_objects.length===0">--
               </ng-container>
             </td>
           </tr>
