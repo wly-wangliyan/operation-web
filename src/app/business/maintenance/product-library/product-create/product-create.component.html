@@ -66,8 +66,9 @@
                   (click)="onOpenBrandFirmModal()">选择</button>
               </div>
               <div class="control-input check-group small-group">
-                <input name="is_brand_special" type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
-                <label class="control-label">此品牌厂商专用</label>
+                <input id="check_brand_special" name="is_brand_special" type="checkbox"
+                  [(ngModel)]="productRecord.is_brand_special" />
+                <label class="control-label" for="check_brand_special">此品牌厂商专用</label>
               </div>
             </div>
           </ng-container>
