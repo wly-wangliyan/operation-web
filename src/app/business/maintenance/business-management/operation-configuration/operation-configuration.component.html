@@ -50,7 +50,7 @@
                         <th>品牌</th>
                         <th>厂商</th>
                         <th>车系</th>
-                        <th>车型名称</th>
+                        <th>年款和车型</th>
                         <!--<th>配件/服务费合计</th>
                         <th>工时费合计</th>
                         <th>销量</th>-->
@@ -67,7 +67,7 @@
                         <td *ngIf="!data.vehicle_type.vehicle_type_name">--</td>
                         <td *ngIf="data.vehicle_type.vehicle_type_name">
                             <a [routerLink]="" (click)="onDetailBtnClick(data)">
-                                {{data.vehicle_type.vehicle_type_name}}
+                                {{data.vehicle_type.vehicle_year_model}} {{data.vehicle_type.vehicle_type_name}}
                             </a>
                         </td>
                         <td>
