@@ -36,10 +36,8 @@
             <div class="maintenance-price maintenance-space-float">
               <label>工时费原价 <span>{{data.source.work_original_amount}}</span> 元</label>
               <label>工时费售价 <span>{{data.source.work_sale_amount}}</span> 元</label>
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
@@ -48,10 +46,8 @@
             <span class="serve-title">服务</span>
             <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
             <div class="maintenance-price">
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
@@ -140,10 +136,8 @@
             <div class="maintenance-price maintenance-space-float">
               <label>工时费原价 <span>{{data.source.work_original_amount}}</span> 元</label>
               <label>工时费售价 <span>{{data.source.work_sale_amount}}</span> 元</label>
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
@@ -152,10 +146,8 @@
             <span class="serve-title">服务</span>
             <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
             <div class="maintenance-price">
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
@@ -246,10 +238,8 @@
             <div class="maintenance-price maintenance-space-float">
               <label>工时费原价 <span>{{data.source.work_original_amount}}</span> 元</label>
               <label>工时费售价 <span>{{data.source.work_sale_amount}}</span> 元</label>
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
@@ -258,10 +248,8 @@
             <span class="serve-title">服务</span>
             <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
             <div class="maintenance-price">
-              <img *ngIf="!data.is_show_accessory" src="/assets/images/icon_up.png"
-                (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-              <img *ngIf="data.is_show_accessory" src="/assets/images/icon_down.png"
-                (click)="data.is_show_accessory = false">
+              <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+              <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
             </div>
             <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}}
               </span>件</label>
