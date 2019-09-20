@@ -268,6 +268,8 @@ export class CreateAccessoryComponent implements OnInit {
           if (content.resource === 'object' && content.code === 'already_existed') {
             this.productErrMsg = '此配置已存在！';
             return;
+          } else {
+            this.productErrMsg = '参数错误或无效！';
           }
         }
       }

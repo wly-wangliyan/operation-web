@@ -153,6 +153,10 @@ export class ProjectListComponent implements OnInit {
                   this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
                 } else if (error.resource === 'FILE' && error.code === 'scale_out') {
                   this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
+                } else if (error.resource === 'FILE' && error.code === 'upkeep_item_nums repeated') {
+                  this.globalService.promptBox.open('存在重复的项目ID，请重新上传！', null, 2000, null, false);
+                } else {
+                  this.globalService.promptBox.open('导入失败，请重新上传！', null, 2000, null, false);
                 }
               }
             }
@@ -333,13 +337,14 @@ export class ProjectListComponent implements OnInit {
           if (content.resource === 'upkeep_item_relation' && content.code === 'invalid') {
             this.projectErrMsg = '所选配套项目不存在！';
             return;
-          }
-          if (content.resource === 'upkeep_item_num' && content.code === 'already_exits') {
+          } else if (content.resource === 'upkeep_item_num' && content.code === 'already_exits') {
             this.projectErrMsg = '项目ID已存在！';
             return;
-          }
-          if (content.field === 'upkeep_item_name' && content.code === 'invalid') {
+          } else if (content.field === 'upkeep_item_name' && content.code === 'invalid') {
             this.projectErrMsg = '数据错误，保存失败！';
+            return;
+          } else {
+            this.projectErrMsg = '参数错误或无效Q！';
             return;
           }
         }

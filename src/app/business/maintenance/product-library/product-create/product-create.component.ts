@@ -287,7 +287,7 @@ export class ProductCreateComponent implements OnInit {
   /** 校验项目新增参数是否合法 */
   private generateAndCheckParamsValid(): boolean {
 
-    if (!this.productRecord.upkeep_item_id || !this.selected_project_info) {
+    if (!this.productRecord.upkeep_item_id || !this.selected_project_info || !this.productRecord.upkeep_accessory_type) {
       this.productErrMsg = '请选择所属项目！';
       return false;
     }
@@ -333,6 +333,8 @@ export class ProductCreateComponent implements OnInit {
           if (content.resource === 'object' && content.code === 'already_existed') {
             this.productErrMsg = '此配置已存在！';
             return;
+          } else {
+            this.globalService.promptBox.open('参数错误或无效！', null, 2000, null, false);
           }
         }
       }

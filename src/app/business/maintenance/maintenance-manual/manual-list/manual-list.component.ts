@@ -166,6 +166,8 @@ export class ManualListComponent implements OnInit {
                   this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
                 } else if (error.resource === 'FILE' && error.code === 'scale_out') {
                   this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
+                } else {
+                  this.globalService.promptBox.open('导入失败，请重新上传！', null, 2000, null, false);
                 }
               }
             }

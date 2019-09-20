@@ -199,6 +199,8 @@ export class ManualEditComponent implements OnInit {
             if (content.field === 'parameter' && content.code === 'format_wrong') {
               this.globalService.promptBox.open('数据缺失,请重试！', null, 2000, null, false);
               return;
+            } else {
+              this.globalService.promptBox.open('参数错误或无效！', null, 2000, null, false);
             }
           }
         }

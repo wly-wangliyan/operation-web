@@ -34,7 +34,7 @@ export class BrokerageCompanyEditComponent {
   @ViewChild('pagePromptDiv', { static: true }) public pagePromptDiv: ElementRef;
 
   constructor(private globalService: GlobalService,
-              private insuranceService: InsuranceService) {
+    private insuranceService: InsuranceService) {
   }
 
   // 键盘按下事件
@@ -78,34 +78,34 @@ export class BrokerageCompanyEditComponent {
   private rquestInsuranceList() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription = this.insuranceService.requestInsuranceUseList()
-        .subscribe(res => {
-          res.results.forEach(value => {
-            this.insuranceList.push(new InsuranceEntityItem(value));
-          });
-          this.rquestBrokerageDetail();
-        }, err => {
-          this.globalService.httpErrorProcess(err);
+      .subscribe(res => {
+        res.results.forEach(value => {
+          this.insuranceList.push(new InsuranceEntityItem(value));
         });
+        this.rquestBrokerageDetail();
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 获取经纪公司详情
   private rquestBrokerageDetail() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription =
-         this.insuranceService.requestBrokerDetail(this.brokerage_id).subscribe(res => {
-           this.currentBrokerage = res;
-           for (const i in res.ic_company) {
-             if (res.ic_company.hasOwnProperty(i)) {
-               for (const j in this.insuranceList) {
-                 if (res.ic_company[i].ic_id === this.insuranceList[j].source.ic_id) {
-                   this.insuranceList[j].checked = true;
-                 }
-               }
-             }
-           }
-         }, err => {
-           this.globalService.httpErrorProcess(err);
-         });
+      this.insuranceService.requestBrokerDetail(this.brokerage_id).subscribe(res => {
+        this.currentBrokerage = res;
+        for (const i in res.ic_company) {
+          if (res.ic_company.hasOwnProperty(i)) {
+            for (const j in this.insuranceList) {
+              if (res.ic_company[i].ic_id === this.insuranceList[j].source.ic_id) {
+                this.insuranceList[j].checked = true;
+              }
+            }
+          }
+        }
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // form提交
@@ -166,7 +166,7 @@ export class BrokerageCompanyEditComponent {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
           if (content.code === 'invalid' && content.field === 'ic_name') {
-            this.insuranceErrMes = '授权保险公司错误活无效！';
+            this.insuranceErrMes = '授权保险公司错误或无效！';
             return;
           }
         }
