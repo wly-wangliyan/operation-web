@@ -207,8 +207,9 @@ export class ProductCreateComponent implements OnInit {
 
   // 格式化金额
   public onAmountChange(event: any) {
-    if (!isNaN(Number(event.target.value))) {
-      event.target.value = parseFloat(Number(event.target.value).toFixed(2));
+    if (!isNaN(parseFloat(String(event.target.value)))) {
+      const amount = parseFloat(String(event.target.value)).toFixed(2);
+      event.target.value = parseFloat(amount);
     } else {
       event.target.value = null;
     }
@@ -318,17 +319,16 @@ export class ProductCreateComponent implements OnInit {
       return false;
     }
 
-    if (!this.productRecord.number || this.productRecord.number === 0) {
-      this.productErrMsg = '所需数量应大于0！';
-      return false;
-    }
-
     if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
       if (this.productRecord.is_original) {
         if (!this.selected_brand_firm_info || !this.productRecord.vehicle_brand_id || !this.productRecord.vehicle_firm_id) {
           this.productErrMsg = '请选择所属厂商！';
           return false;
         }
+      }
+      if (!this.productRecord.number || this.productRecord.number === 0) {
+        this.productErrMsg = '所需数量应为1-99！';
+        return false;
       }
     }
 
