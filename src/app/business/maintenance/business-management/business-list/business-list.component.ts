@@ -115,6 +115,8 @@ export class BusinessListComponent implements OnInit {
               this.globalService.promptBox.open('该商家下没有产品，不允许开启！', null, 2000, '/assets/images/warning.png');
             } else if (content.code === 'config_not_allowed' && content.resource === 'status') {
               this.globalService.promptBox.open('该商家未开通支付账号，请开通后再试！', null, 2000, '/assets/images/warning.png');
+            } else if (content.code === 'missing_operation_times' && content.resource === 'upkeep_merchant') {
+              this.globalService.promptBox.open('未设置运营时段，请设置后再试！', null, 2000, '/assets/images/warning.png');
             } else {
               this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
             }

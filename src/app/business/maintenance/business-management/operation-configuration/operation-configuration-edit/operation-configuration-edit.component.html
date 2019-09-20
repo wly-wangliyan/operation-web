@@ -45,8 +45,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
@@ -57,8 +57,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
@@ -191,8 +191,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
@@ -203,8 +203,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
@@ -337,8 +337,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
@@ -349,8 +349,8 @@
                     <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
                     <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
             <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
                 <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
