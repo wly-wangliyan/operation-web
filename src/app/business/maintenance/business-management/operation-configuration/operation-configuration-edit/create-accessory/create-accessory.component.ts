@@ -109,7 +109,8 @@ export class CreateAccessoryComponent implements OnInit {
     this.productRecord.upkeep_item_id = event.upkeep_handbook_item.item_id;
     this.productRecord.upkeep_accessory_type = event.upkeep_handbook_item.upkeep_item_type;
     this.selectedCategory = event.upkeep_handbook_item.item_category;
-    this.selected_project_info = this.projectCategory[event.upkeep_handbook_item.item_category] + ' > ' + event.upkeep_handbook_item.item_name;
+    this.selected_project_info = this.projectCategory[event.upkeep_handbook_item.item_category]
+      + ' > ' + event.upkeep_handbook_item.item_name;
   }
 
   // 变更是否原厂
@@ -153,6 +154,15 @@ export class CreateAccessoryComponent implements OnInit {
     return (keyCode && reg.test(keyCode));
   }
 
+  // 格式化金额
+  public onAmountChange(event: any) {
+    if (!isNaN(Number(event.target.value))) {
+      event.target.value = parseFloat(Number(event.target.value).toFixed(2));
+    } else {
+      event.target.value = null;
+    }
+  }
+
   /** 金额 keyup 事件 */
   public onMoneyKeyUp() {
     if (this.productRecord.original_amount) {
@@ -178,9 +188,6 @@ export class CreateAccessoryComponent implements OnInit {
   public onNumberKeyUp() {
     if (this.productRecord.number) {
       this.productRecord.number = Number(this.productRecord.number);
-      if (!this.productRecord.number) {
-        this.productRecord.number = 1;
-      }
     }
   }
 
@@ -232,8 +239,23 @@ export class CreateAccessoryComponent implements OnInit {
       return false;
     }
 
+    if (!this.productRecord.original_amount || Number(this.productRecord.original_amount) === 0) {
+      this.productErrMsg = '原价应大于0！';
+      return false;
+    }
+
+    if (!this.productRecord.sale_amount || Number(this.productRecord.sale_amount) === 0) {
+      this.productErrMsg = '销售单价应大于0！';
+      return false;
+    }
+
     if (this.productRecord.original_amount < this.productRecord.sale_amount) {
       this.productErrMsg = '原价不能小于销售单价！';
+      return false;
+    }
+
+    if (!this.productRecord.number || this.productRecord.number === 0) {
+      this.productErrMsg = '所需数量应大于0！';
       return false;
     }
 
