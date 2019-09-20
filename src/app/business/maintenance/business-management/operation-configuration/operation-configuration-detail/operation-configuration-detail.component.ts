@@ -71,52 +71,15 @@ export class OperationConfigurationDetailComponent implements OnInit {
       .subscribe(res => {
         this.projectList = res;
         res.forEach(value => {
-          this.projectItemList.push(new ProjectItem(value));
+          if (value.switch) {
+            this.projectItemList.push(new ProjectItem(value));
+          }
         });
         this.projectList_maintain = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 1);
         this.projectList_clear = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 2);
         this.projectList_fix = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 3);
       }, err => {
         this.globalService.httpErrorProcess(err);
-      });
-  }
-
-  // 选择配件
-  public onChooseAccessory(data) {
-    this.currentProject = data;
-    this.currentProjectId = data.upkeep_merchant_project_id;
-    $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
-    this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-  }
-
-  public onClose() {
-    $(this.chooseAccessoryPromptDiv.nativeElement).modal('hide');
-  }
-
-  // 编辑商家项目状态
-  public onSwitchChange(data, event) {
-    const swith = event ? true : false;
-    const params = { switch: swith };
-    this.businessManagementService.requestUpkeepProductStatus
-      (this.upkeep_merchant_id, data.upkeep_merchant_product.upkeep_merchant_product_id, data.upkeep_merchant_project_id, params)
-      .subscribe(res => {
-        if (event) {
-          this.globalService.promptBox.open('开启成功');
-        } else {
-          this.globalService.promptBox.open('关闭成功');
-        }
-        this.searchText$.next();
-      }, err => {
-        if (!this.globalService.httpErrorProcess(err)) {
-          if (err.status === 422) {
-            if (event) {
-              this.globalService.promptBox.open('开启失败，请重试', null, 2000, '/assets/images/warning.png');
-            } else {
-              this.globalService.promptBox.open('关闭失败，请重试', null, 2000, '/assets/images/warning.png');
-            }
-          }
-        }
-        this.searchText$.next();
       });
   }
 
