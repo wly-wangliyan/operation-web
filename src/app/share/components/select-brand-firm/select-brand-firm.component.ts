@@ -212,7 +212,7 @@ export class SelectBrandFirmComponent implements OnInit {
       }
     }
     if (firmItem_checked.length > 0) {
-      if (firmItem.length >= this.maxFirmLength) {
+      if (firmItem.length > this.maxFirmLength) {
         this.tipMsg = `最多可选择${this.maxFirmLength}个厂商！`;
       } else {
         this.selectBrandFirm.emit({ firm: firmItem_checked });
