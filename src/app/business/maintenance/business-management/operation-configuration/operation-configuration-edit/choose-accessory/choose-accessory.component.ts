@@ -32,6 +32,8 @@ export class ChooseAccessoryComponent implements OnInit {
 
   public upkeep_item_type: number;
 
+  public accessory_ids = [];
+
   public vehicleBrandList: Array<VehicleBrandEntity> = [];
 
   public vehicleFirmList: Array<VehicleFirmEntity> = [];
@@ -68,6 +70,7 @@ export class ChooseAccessoryComponent implements OnInit {
   }
 
   public initAccessoryType(data) {
+    this.productList = [];
     this.searchParams = new SearchParams();
     if (this.upkeep_item_type === 1) {
       this.searchParams.logo = 1;
@@ -86,6 +89,9 @@ export class ChooseAccessoryComponent implements OnInit {
   private requestProductList() {
     this.continueRequestSubscription = this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
+      this.productList.forEach(value => {
+        console.log(this.accessory_ids, value.upkeep_accessory_id, this.accessory_ids.includes(value.upkeep_accessory_id));
+      });
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {

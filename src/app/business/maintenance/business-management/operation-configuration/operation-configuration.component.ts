@@ -240,13 +240,16 @@ export class OperationConfigurationComponent implements OnInit {
     }
     let is_pass = true;
     this.bookingTimes.forEach((value, i) => {
-      const start_time = DateFormatHelper.getSecondTimeSum(value.begin_time);
-      const end_time = DateFormatHelper.getSecondTimeSum(value.end_time);
-      if (index !== i &&
-          ((params.start_time >= start_time && params.start_time <= end_time)
-              || (params.end_time >= start_time && params.end_time <= end_time))) {
-        this.globalService.promptBox.open('预定时段时间不可重叠！', null, 2000, '/assets/images/warning.png');
-        is_pass = false;
+      if (!value.isEdit || value.upkeep_merchant_operation_id) {
+        const start_time = DateFormatHelper.getSecondTimeSum(value.begin_time);
+        const end_time = DateFormatHelper.getSecondTimeSum(value.end_time);
+        if (index !== i &&
+            ((params.start_time >= start_time && params.start_time < end_time)
+                || (params.start_time <= start_time && params.end_time > start_time)
+                || (params.end_time > start_time && params.end_time <= end_time))) {
+          this.globalService.promptBox.open('预定时段时间不可重叠！', null, 2000, '/assets/images/warning.png');
+          is_pass = false;
+        }
       }
     });
     if (!is_pass) {
@@ -257,7 +260,7 @@ export class OperationConfigurationComponent implements OnInit {
       // 调用编辑接口
       this.businessManagementService.requestUpdateUpkeepOperation(this.upkeep_merchant_id, data.upkeep_merchant_operation_id, params)
           .subscribe((e) => {
-            this.bookingTimes[index].operation_time_amount = data.operation_time_amount.toFixed(2);
+            this.bookingTimes[index].operation_time_amount = Number(data.operation_time_amount).toFixed(2);
             this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
           }, err => {
             this.globalService.httpErrorProcess(err);

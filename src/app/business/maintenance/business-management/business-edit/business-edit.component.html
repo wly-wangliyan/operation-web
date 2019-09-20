@@ -92,23 +92,26 @@
                 </label>
                 <div class="control-input">
                     <button class="common-btn" style="border-left: 1px solid #d9d9d9" nz-button
-                            (click)="openChooseBrandModal()">{{currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length===0?'选择':'重新选择'}}</button>
+                            (click)="openChooseBrandModal()" [disabled]="currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length>=20">
+                        {{currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length===0?'选择':'重新选择'}}</button>
                 </div>
             </div>
             <div class="brand-list" *ngIf="currentBusiness.VehicleFirm && currentBusiness.VehicleFirm.length>0">
                 <nz-table [nzData]="currentBusiness.VehicleFirm"
-                          [nzShowPagination]="false"
+                          [nzShowPagination]="false" [nzPageSize]="currentBusiness.VehicleFirm.length"
                           [nzPageSize]="currentBusiness.VehicleFirm.length"
                           #basicTable>
                     <thead>
                     <tr>
+                        <th></th>
                         <th>品牌</th>
-                        <th>厂家</th>
+                        <th>厂商</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
+                        <td>{{i+1}}</td>
                         <td>{{data.vehicle_brand?.vehicle_brand_name}}</td>
                         <td>{{data.vehicle_firm_name}}</td>
                         <td class="operation">
@@ -159,4 +162,5 @@
 <!-- 地图组件 -->
 <app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>
 <!--选择品牌厂商控件-->
-<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>
+<app-select-brand-firm [selectedBrand]="brand_ids.join(',')" [selectedFirm]="firm_ids.join(',')" [isDisabled]="true"
+                       [maxFirmLength]="20" [multi]="true" (selectBrandFirm)="selectBrandFirm($event)"></app-select-brand-firm>

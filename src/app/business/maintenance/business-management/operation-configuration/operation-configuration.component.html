@@ -64,14 +64,19 @@
                         <td [title]="data.vehicle_brand?.vehicle_brand_name">{{data.vehicle_brand?.vehicle_brand_name|zMaxLength:20}}</td>
                         <td>{{data.vehicle_firm.vehicle_firm_name}}</td>
                         <td>{{data.vehicle_series.vehicle_series_name}}</td>
-                        <td>{{data.vehicle_type.vehicle_type_name}}</td>
+                        <td *ngIf="!data.vehicle_type.vehicle_type_name">--</td>
+                        <td *ngIf="data.vehicle_type.vehicle_type_name">
+                            <a [routerLink]="" (click)="onDetailBtnClick(data)">
+                                {{data.vehicle_type.vehicle_type_name}}
+                            </a>
+                        </td>
                         <td>
                             <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="上架" nzUnCheckedChildren="下架"
                                        (ngModelChange)="onSwitchChange(data.upkeep_merchant_product_id,$event)"></nz-switch>
                         </td>
                         <td class="operation">
                             <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
-                            <a [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>
+                            <a *ngIf="data.status!==1" [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>
                             <!--<a [title]="'复制'" (click)="onEditBtnClick(data)">复制</a>-->
                             <a [title]="'删除'" (click)="onDelBtnClick(data)">删除</a>
                         </td>
