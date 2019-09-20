@@ -124,7 +124,7 @@
                   <li class='item-name'>{{data.item_name}}</li>
                   <li *ngIf='data.is_original'>原厂件</li>
                   <li *ngIf='!data.is_original'><span
-                      [title]='data.brand_instruction'>{{(data.brand_instruction|zMaxLength:8)||'--'}}</span></li>
+                      [title]='data.brand_instruction||""'>{{(data.brand_instruction|zMaxLength:8)||'--'}}</span></li>
                 </ul>
               </td>
               <td>{{data.upkeep_accessory_name||'--'}}</td>
