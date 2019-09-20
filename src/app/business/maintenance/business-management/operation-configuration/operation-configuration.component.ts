@@ -269,7 +269,7 @@ export class OperationConfigurationComponent implements OnInit {
       // 调用创建接口
       this.businessManagementService.requestAddUpkeepOperation(this.upkeep_merchant_id, params)
           .subscribe((e) => {
-            this.bookingTimes[index].operation_time_amount = data.operation_time_amount.toFixed(2);
+            this.bookingTimes[index].operation_time_amount = Number(data.operation_time_amount).toFixed(2);
             this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
           }, err => {
             this.globalService.httpErrorProcess(err);

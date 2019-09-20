@@ -41,8 +41,9 @@
                   (click)="onOpenBrandFirmModal()">选择</button>
               </div>
               <div class="control-input check-group" style="width: 200px;">
-                <input name="is_brand_special" type="checkbox" [(ngModel)]="productRecord.is_brand_special" />
-                <label class="control-label">此品牌厂商专用</label>
+                <input id="check_brand_special" name="is_brand_special" type="checkbox"
+                  [(ngModel)]="productRecord.is_brand_special" />
+                <label class="control-label" for="check_brand_special">此品牌厂商专用</label>
               </div>
             </div>
           </ng-container>
@@ -105,9 +106,9 @@
             <span>原价</span>
           </label>
           <div class="control-input small-group">
-            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="12"
+            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="9"
               [(ngModel)]="productRecord.original_amount" (keypress)="inputNumberLimit($event)"
-              (change)="onMoneyKeyUp()" name="original_amount" appIgnoreSpace required />
+              (change)="onAmountChange($event)" name="original_amount" appIgnoreSpace required />
             <label class="one-word-lable">元</label>
           </div>
 
@@ -116,9 +117,9 @@
             <span>销售单价</span>
           </label>
           <div class="control-input small-group">
-            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="12"
+            <input class="form-control small-input" (focus)="onClearErrMsg()" maxlength="9"
               [(ngModel)]="productRecord.sale_amount" (keypress)="inputNumberLimit($event)" name="sale_amount"
-              (change)="onMoneyKeyUp()" appIgnoreSpace required />
+              (change)="onAmountChange($event)" appIgnoreSpace required />
             <label class="one-word-lable">元</label>
           </div>
 
@@ -128,7 +129,7 @@
               <span>所需数量</span>
             </label>
             <div class="control-input small-group">
-              <input type="text" class="form-control small-input" maxlength="8"
+              <input type="text" class="form-control small-input" maxlength="2"
                 oninput="value=value.replace(/[^\d]/g,'')" [(ngModel)]="productRecord.number" name="need_number"
                 (focus)="onClearErrMsg()" appIgnoreSpace (keyup)="onNumberKeyUp()" required />
               <label class="one-word-lable">件</label>

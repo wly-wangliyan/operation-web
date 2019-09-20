@@ -42,8 +42,8 @@
                     <button *ngIf="data.is_edit_price" nz-button nzType="primary" class="price-save-btn" (click)="onProjectSaveClick(data.source)"
                             [disabled]="(!data.source.work_original_amount && data.source.work_original_amount!==0)
                             || (!data.source.work_sale_amount && data.source.work_sale_amount!==0)"></button>
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
@@ -54,8 +54,8 @@
                 <span class="serve-title">服务</span>
                 <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
                 <div class="maintenance-price">
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
@@ -188,8 +188,8 @@
                     <button *ngIf="data.is_edit_price" nz-button nzType="primary" class="price-save-btn" (click)="onProjectSaveClick(data.source)"
                             [disabled]="(!data.source.work_original_amount && data.source.work_original_amount!==0)
                             || (!data.source.work_sale_amount && data.source.work_sale_amount!==0)"></button>
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
@@ -200,8 +200,8 @@
                 <span class="serve-title">服务</span>
                 <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
                 <div class="maintenance-price">
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
@@ -334,8 +334,8 @@
                     <button *ngIf="data.is_edit_price" nz-button nzType="primary" class="price-save-btn" (click)="onProjectSaveClick(data.source)"
                             [disabled]="(!data.source.work_original_amount && data.source.work_original_amount!==0)
                             || (!data.source.work_sale_amount && data.source.work_sale_amount!==0)"></button>
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
@@ -346,8 +346,8 @@
                 <span class="serve-title">服务</span>
                 <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
                 <div class="maintenance-price">
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="data.is_show_accessory = false">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
                 </div>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
