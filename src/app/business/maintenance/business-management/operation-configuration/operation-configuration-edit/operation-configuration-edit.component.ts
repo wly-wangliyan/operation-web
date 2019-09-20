@@ -99,7 +99,9 @@ export class OperationConfigurationEditComponent implements OnInit {
         .subscribe(res => {
           this.accessoryList = res;
           res.forEach(value => {
-            this.accessoryItemList.push(new AccessoryItem(value));
+            if (this.accessoryItemList.length === 0) {
+              this.accessoryItemList.push(new AccessoryItem(value));
+            }
             this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
           });
           $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
