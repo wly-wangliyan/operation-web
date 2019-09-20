@@ -156,16 +156,6 @@ export class CreateAccessoryComponent implements OnInit {
 
   // 格式化金额
   public onAmountChange(event: any) {
-    if (!isNaN(parseFloat(String(event.target.value)))) {
-      const amount = parseFloat(String(event.target.value)).toFixed(2);
-      event.target.value = parseFloat(amount);
-    } else {
-      event.target.value = null;
-    }
-  }
-
-  /** 金额 keyup 事件 */
-  public onMoneyKeyUp() {
     if (this.productRecord.original_amount) {
       if (isNaN(parseFloat(String(this.productRecord.original_amount)))) {
         this.productRecord.original_amount = null;

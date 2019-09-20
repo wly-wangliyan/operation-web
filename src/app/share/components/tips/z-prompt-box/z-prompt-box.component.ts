@@ -52,6 +52,7 @@ export class ZPromptBoxComponent implements AfterViewInit {
   public open(message: string, closeFunc: any = null, delay: number = 2000, src?: string, isSuccess: boolean = true) {
     timer(0).subscribe(() => {
       this.message = message;
+      this.src = '/assets/images/success.png';
       this.src = src ? src : this.src;
       this.src = isSuccess ? this.src : this.errSrc;
       $(this.promptDiv.nativeElement).modal('show');
