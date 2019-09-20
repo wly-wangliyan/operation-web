@@ -325,11 +325,14 @@ export class OperationConfigurationComponent implements OnInit {
                     const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
                     for (const content of error.errors) {
                         if (content.code === 'data_scarcity' && content.resource === 'data') {
-                            this.globalService.promptBox.open('产品数据不完整！', null, 2000, '/assets/images/warning.png');
+                            this.globalService.promptBox.open('产品数据不完整！', () => {
+                            }, 2000, '/assets/images/warning.png');
                         } else if (event) {
-                            this.globalService.promptBox.open('上架失败，请重试！', null, 2000, '/assets/images/warning.png');
+                            this.globalService.promptBox.open('上架失败，请重试！', () => {
+                            }, 2000, '/assets/images/warning.png');
                         } else {
-                            this.globalService.promptBox.open('下架失败，请重试！', null, 2000, '/assets/images/warning.png');
+                            this.globalService.promptBox.open('下架失败，请重试！', () => {
+                            }, 2000, '/assets/images/warning.png');
                         }
                     }
                 }
