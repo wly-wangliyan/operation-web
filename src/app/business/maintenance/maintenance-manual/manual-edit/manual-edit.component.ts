@@ -156,8 +156,11 @@ export class ManualEditComponent implements OnInit {
           if (this.mapOfColumns[project.upkeep_item_category]) {
             const handbookRecords = this.mapOfHandbook[project.upkeep_item_id];
             this.mapOfColumns[project.upkeep_item_category].forEach((column, index) => {
-              const handbookIndex = this.mapOfHandbook[project.upkeep_item_id].findIndex(handbook =>
-                column.month === handbook.month && column.kilometer === handbook.kilometer);
+              let handbookIndex = -1;
+              if (this.mapOfHandbook[project.upkeep_item_id]) {
+                handbookIndex = this.mapOfHandbook[project.upkeep_item_id].findIndex(handbook =>
+                  column.month === handbook.month && column.kilometer === handbook.kilometer);
+              }
               if (handbookIndex === -1) {
                 const handbook = new HandbookEntity();
                 handbook.month = column.month;
