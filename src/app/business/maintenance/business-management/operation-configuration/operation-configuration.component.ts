@@ -266,6 +266,7 @@ export class OperationConfigurationComponent implements OnInit {
             this.businessManagementService.requestUpdateUpkeepOperation(this.upkeep_merchant_id, data.upkeep_merchant_operation_id, params)
                 .subscribe((e) => {
                     this.bookingTimes[index].operation_time_amount = Number(data.operation_time_amount).toFixed(2);
+                    this.requestUpkeepMerchantOperation();
                     this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
                 }, err => {
                     this.globalService.httpErrorProcess(err);
@@ -275,6 +276,7 @@ export class OperationConfigurationComponent implements OnInit {
             this.businessManagementService.requestAddUpkeepOperation(this.upkeep_merchant_id, params)
                 .subscribe((e) => {
                     this.bookingTimes[index].operation_time_amount = Number(data.operation_time_amount).toFixed(2);
+                    this.requestUpkeepMerchantOperation();
                     this.globalService.promptBox.open('保存成功！', null, 2000, '/assets/images/success.png');
                 }, err => {
                     this.globalService.httpErrorProcess(err);
