@@ -87,6 +87,7 @@ export class UpkeepOrderEntity extends EntityBase {
   public reserve_time: number = undefined; // float	预定时间
   public upkeep_merchant_operation: UpkeepMerchantOperationEntity = undefined; // obj	保养商家运营时段对象
   public pay_status: number = undefined; // int	订单状态 1未支付 2已支付 3已完成
+  public operation_time_amount: number = undefined; // float	运营时段加/减价金额
   public write_off_code: number = undefined; // int	核销码
   public order_detail: Array<OrderDetailEntity> = undefined; // Array	保养项目及配件对象列表
   public order_complete_time: number = undefined; // float	订单完成时间

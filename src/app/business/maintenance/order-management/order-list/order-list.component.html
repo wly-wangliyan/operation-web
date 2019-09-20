@@ -136,9 +136,8 @@
             <th>所属商家</th>
             <th>项目类别</th>
             <th>数量</th>
-            <th>应付</th>
-            <th>优惠</th>
-            <th>实付</th>
+            <!-- 合计实收 -->
+            <th>合计实收</th>
             <th>支付时间</th>
             <th>预订时间</th>
             <th>状态</th>
@@ -162,11 +161,7 @@
             </td>
             <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>--</td>
             <td>{{data.upkeep_item_category_count||'--'}}</td>
-            <td>{{(data.total_amount | zCompleteNumber)||0}}<span *ngIf="data.total_amount||data.total_amount===0">
-                元</span></td>
-            <td>{{(data.discounted_amount | zCompleteNumber)||0}}<span
-                *ngIf="data.discounted_amount||data.discounted_amount===0">
-                元</span></td>
+            <!-- 合计实收 -->
             <td>{{(data.total_real_amount | zCompleteNumber)||0}}<span
                 *ngIf="data.total_real_amount||data.total_real_amount===0">
                 元</span></td>
