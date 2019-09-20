@@ -344,7 +344,7 @@ export class ProjectListComponent implements OnInit {
             this.projectErrMsg = '数据错误，保存失败！';
             return;
           } else {
-            this.projectErrMsg = '参数错误或无效Q！';
+            this.projectErrMsg = '参数错误或无效！';
             return;
           }
         }
