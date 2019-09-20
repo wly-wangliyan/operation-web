@@ -94,31 +94,21 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.currentProject = data;
     this.currentProjectId = data.upkeep_merchant_project_id;
     this.chooseAccessoryComponent.accessory_ids = [];
-    if (this.accessoryItemList.length === 0) {
-      this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
-      (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
-          .subscribe(res => {
-            this.accessoryList = res;
-            res.forEach(value => {
-              this.accessoryItemList.push(new AccessoryItem(value));
-              this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
-            });
-            $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
-            this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-            this.chooseAccessoryComponent.initAccessoryType(data);
-            this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-          }, err => {
-            this.globalService.httpErrorProcess(err);
+    this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
+    (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
+        .subscribe(res => {
+          this.accessoryList = res;
+          res.forEach(value => {
+            this.accessoryItemList.push(new AccessoryItem(value));
+            this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
           });
-    } else {
-      this.accessoryList.forEach(value => {
-        this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
-      });
-      $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
-      this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-      this.chooseAccessoryComponent.initAccessoryType(data);
-      this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-    }
+          $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
+          this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+          this.chooseAccessoryComponent.initAccessoryType(data);
+          this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
   }
 
   public onClose() {
