@@ -104,7 +104,8 @@ export class CreateAccessoryComponent implements OnInit {
   public open(event) {
     this.selectedProjectid = event.upkeep_merchant_project_id;
     this.productRecord = new ProductEntity();
-    this.selected_brand_firm_info = null;
+    this.selected_brand_firm_info = event.upkeep_merchant_product.vehicle_brand.vehicle_brand_name
+        + '·' + event.upkeep_merchant_product.vehicle_firm.vehicle_firm_name;
     this.cover_url = [];
     this.productRecord.upkeep_item_id = event.upkeep_handbook_item.item_id;
     this.productRecord.upkeep_accessory_type = event.upkeep_handbook_item.upkeep_item_type;
