@@ -107,6 +107,8 @@ nz-range-picker {
 .brand-list {
     margin: 0 0 10px 140px;
     width: 600px;
+    overflow-y: auto;
+    height: 300px;
 }
 
 :host::ng-deep .ant-table {

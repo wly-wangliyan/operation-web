@@ -89,7 +89,8 @@
             <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
             <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
             <td class="operation">
-              <a [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
+              <a *ngIf="!accessory_ids.includes(product.upkeep_accessory_id)" [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
+              <a *ngIf="accessory_ids.includes(product.upkeep_accessory_id)" (click)="onChooseClick(product)">已选择</a>
             </td>
           </tr>
         </tbody>

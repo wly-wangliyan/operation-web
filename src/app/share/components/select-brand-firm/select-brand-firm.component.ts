@@ -38,6 +38,8 @@ export class SelectBrandFirmComponent implements OnInit {
 
   @Input() private isDisabled = false; // 标记是否对厂商禁用
 
+  @Input() private maxFirmLength: number; // 可勾选最大厂商数
+
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
   public mapOfBrand: { [key: string]: Array<VehicleBrandEntity> } = {}; // 字母对应品牌
@@ -196,18 +198,26 @@ export class SelectBrandFirmComponent implements OnInit {
   // 回传选中事件
   public onSelectEmit() {
     const firmItem_checked = [];
+    const firmItem = [];
     for (const i in this.mapOfFirm) {
       if (this.mapOfFirm.hasOwnProperty(i)) {
         this.mapOfFirm[i].forEach(firm => {
           if (firm.checked && !firm.disabled) {
             firmItem_checked.push(firm.source);
           }
+          if (firm.checked) {
+            firmItem.push(firm.source);
+          }
         });
       }
     }
     if (firmItem_checked.length > 0) {
-      this.selectBrandFirm.emit({ firm: firmItem_checked });
-      $('#selectBrandFirmModal').modal('hide');
+      if (firmItem.length >= this.maxFirmLength) {
+        this.tipMsg = `最多可选择${this.maxFirmLength}个厂商！`;
+      } else {
+        this.selectBrandFirm.emit({ firm: firmItem_checked });
+        $('#selectBrandFirmModal').modal('hide');
+      }
     } else {
       this.tipMsg = '请选择厂商';
     }

@@ -93,10 +93,32 @@ export class OperationConfigurationEditComponent implements OnInit {
     }
     this.currentProject = data;
     this.currentProjectId = data.upkeep_merchant_project_id;
-    $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
-    this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-    this.chooseAccessoryComponent.initAccessoryType(data);
-    this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+    this.chooseAccessoryComponent.accessory_ids = [];
+    if (this.accessoryItemList.length === 0) {
+      this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
+      (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
+          .subscribe(res => {
+            this.accessoryList = res;
+            res.forEach(value => {
+              this.accessoryItemList.push(new AccessoryItem(value));
+              this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
+            });
+            $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
+            this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+            this.chooseAccessoryComponent.initAccessoryType(data);
+            this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    } else {
+      this.accessoryList.forEach(value => {
+        this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
+      });
+      $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
+      this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+      this.chooseAccessoryComponent.initAccessoryType(data);
+      this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+    }
   }
 
   public onClose() {
@@ -111,9 +133,9 @@ export class OperationConfigurationEditComponent implements OnInit {
     (this.upkeep_merchant_id, data.upkeep_merchant_product.upkeep_merchant_product_id, data.upkeep_merchant_project_id, params)
         .subscribe(res => {
       if (event) {
-        this.globalService.promptBox.open('开启成功');
+        this.globalService.promptBox.open('开启成功', '/assets/images/success.png');
       } else {
-        this.globalService.promptBox.open('关闭成功');
+        this.globalService.promptBox.open('关闭成功', '/assets/images/success.png');
       }
       this.searchText$.next();
     }, err => {
@@ -136,9 +158,16 @@ export class OperationConfigurationEditComponent implements OnInit {
       value.is_show_accessory = false;
     });
     this.currentProjectId = upkeep_merchant_project_id;
+    if (this.accessoryItemList.length === 0 ||
+        upkeep_merchant_project_id !== this.accessoryItemList[0].source.upkeep_merchant_project.upkeep_merchant_project_id) {
+      this.requestProjectAccessoriesList();
+    }
+  }
+
+  private requestProjectAccessoriesList() {
     this.accessoryItemList = [];
     this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
-    (this.upkeep_merchant_id, this.upkeep_merchant_product_id, upkeep_merchant_project_id)
+    (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
         .subscribe(res => {
           this.accessoryList = res;
           res.forEach(value => {
@@ -150,7 +179,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   // 编辑配件、服务
-  public onEditClick(data) {
+  public onEditClick(data: UpkeepMerchantAccessoryEntity) {
     if (data.sale_amount > data.original_amount) {
       this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
       return;
@@ -176,7 +205,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   // 删除配件、服务
-  public onDelClick(data) {
+  public onDelClick(data: UpkeepMerchantAccessoryEntity) {
     this.businessManagementService.requestDeleteUpkeepAccessory(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, data.upkeep_merchant_accessory_id)
         .subscribe(() => {
           this.globalService.promptBox.open('删除成功！', () => {
@@ -204,7 +233,7 @@ export class OperationConfigurationEditComponent implements OnInit {
         .subscribe(() => {
       this.globalService.promptBox.open('保存成功！', () => {
         this.onClose();
-        this.onShowAccessory(this.currentProjectId);
+        this.requestProjectAccessoriesList();
         const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
         this.projectItemList[index].is_show_accessory = true;
         this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
