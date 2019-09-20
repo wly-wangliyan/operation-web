@@ -180,19 +180,19 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   // 编辑配件、服务
   public onEditClick(data: UpkeepMerchantAccessoryEntity) {
-    if (data.sale_amount > data.original_amount) {
-      this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
-    if (data.number <= 0 || data.number > 100) {
-      this.globalService.promptBox.open('所需数量应大于0小于100!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
     const params = {
       number: data.number ? data.number : 0,
       sale_amount: Number(data.sale_amount).toFixed(2),
       original_amount: Number(data.original_amount).toFixed(2)
     };
+    if (params.sale_amount > params.original_amount) {
+      this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
+    if (params.number <= 0 || params.number > 100) {
+      this.globalService.promptBox.open('所需数量应大于0小于100!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.businessManagementService.requestUpdateUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, data.upkeep_merchant_accessory_id, params)
         .subscribe(() => {
           this.globalService.promptBox.open('保存成功！', () => {
@@ -275,15 +275,15 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   // 保存工时费
   public onProjectSaveClick(data) {
-    if (data.work_sale_amount > data.work_original_amount) {
-      this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
     this.currentProjectId = data.upkeep_merchant_project_id;
     const params = {
       work_original_amount: Number(data.work_original_amount).toFixed(2),
       work_sale_amount: Number(data.work_sale_amount).toFixed(2)
     };
+    if (params.work_sale_amount > params.work_original_amount) {
+      this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, '/assets/images/warning.png');
+      return;
+    }
     this.businessManagementService.requestUpdateUpkeepProject(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, params)
         .subscribe(() => {
           this.globalService.promptBox.open('保存成功！', () => {
