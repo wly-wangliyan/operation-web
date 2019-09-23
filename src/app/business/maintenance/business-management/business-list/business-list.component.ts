@@ -86,6 +86,7 @@ export class BusinessListComponent implements OnInit {
     }
   }
   public onSearchBtnClick() {
+    this.pageIndex = 1;
     this.searchText$.next();
   }
 

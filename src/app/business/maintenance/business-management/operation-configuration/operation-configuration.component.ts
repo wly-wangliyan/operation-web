@@ -153,6 +153,7 @@ export class OperationConfigurationComponent implements OnInit {
     }
 
     public onSearchBtnClick() {
+        this.pageIndex = 1;
         this.searchText$.next();
         this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     }

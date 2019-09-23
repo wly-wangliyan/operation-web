@@ -159,6 +159,7 @@ export class OrderListComponent implements OnInit {
     } else if (this.getTimeValid() === 'reserve_time') {
       this.globalService.promptBox.open('查询失败', '预定开始时间不能大于结束时间!');
     } else {
+      this.pageIndex = 1;
       this.searchText$.next();
     }
   }

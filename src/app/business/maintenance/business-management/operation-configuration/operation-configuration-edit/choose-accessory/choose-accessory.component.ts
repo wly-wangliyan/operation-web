@@ -89,9 +89,6 @@ export class ChooseAccessoryComponent implements OnInit {
   private requestProductList() {
     this.continueRequestSubscription = this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
-      this.productList.forEach(value => {
-        console.log(this.accessory_ids, value.upkeep_accessory_id, this.accessory_ids.includes(value.upkeep_accessory_id));
-      });
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       this.pageIndex = 1;
