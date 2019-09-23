@@ -82,6 +82,7 @@ export class ManualListComponent implements OnInit {
   // 条件筛选
   public onSearchBtnClick() {
     this.searchText$.next();
+    this.initPageIndex();
   }
 
   /** 删除 */

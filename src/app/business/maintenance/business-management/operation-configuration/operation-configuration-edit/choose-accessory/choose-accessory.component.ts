@@ -54,19 +54,19 @@ export class ChooseAccessoryComponent implements OnInit {
   }
 
   constructor(private globalService: GlobalService,
-              private productLibraryService: ProductLibraryHttpService,
-              private vehicleTypeManagementService: VehicleTypeManagementService,
-              private router: Router) {
+    private productLibraryService: ProductLibraryHttpService,
+    private vehicleTypeManagementService: VehicleTypeManagementService,
+    private router: Router) {
   }
 
   ngOnInit() {
     this.productList.push(new ProductEntity());
     this.continueRequestSubscription =
-        this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
-          this.vehicleBrandList = res.results;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
+        this.vehicleBrandList = res.results;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   public initAccessoryType(data) {
@@ -94,6 +94,7 @@ export class ChooseAccessoryComponent implements OnInit {
       });
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
+      this.pageIndex = 1;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -106,12 +107,12 @@ export class ChooseAccessoryComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.productLibraryService.continueProductListData(this.linkUrl)
-          .subscribe(res => {
-            this.productList = this.productList.concat(res.results);
-            this.linkUrl = res.linkUrl;
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+        .subscribe(res => {
+          this.productList = this.productList.concat(res.results);
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 
@@ -128,10 +129,10 @@ export class ChooseAccessoryComponent implements OnInit {
     this.vehicleFirmList = [];
     this.searchParams.vehicle_firm_id = '';
     this.continueRequestSubscription =
-        this.vehicleTypeManagementService.requestVehicleFirmList(this.searchParams.vehicle_brand_id).subscribe(res => {
-          this.vehicleFirmList = res;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      this.vehicleTypeManagementService.requestVehicleFirmList(this.searchParams.vehicle_brand_id).subscribe(res => {
+        this.vehicleFirmList = res;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 }
