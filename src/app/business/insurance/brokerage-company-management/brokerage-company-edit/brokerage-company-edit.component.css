@@ -5,7 +5,7 @@
 .modal-dialog{
     width:600px!important;
     min-height: 600px!important;
-    height: 661px!important;
+    /* height: 661px!important; */
     max-width: 600px!important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -14,7 +14,9 @@
 }
 
 .modal-content {
-    top: 50px!important;
+    top: 0px!important;
+    margin-bottom: 20px;
+    margin: auto !important;
 }
 
 .row{
@@ -32,7 +34,7 @@
 .control-label{
     padding-left: 40px!important;
     margin-bottom:20px!important;
-    width:106px!important;
+    width:125px!important;
     padding-right: 10px;
     padding-left:0!important;
 }
@@ -105,7 +107,7 @@
 }
 
 .modal {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .checkbox {
