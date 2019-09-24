@@ -28,7 +28,7 @@ export class BusinessListComponent implements OnInit {
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
-  @ViewChild(BusinessEditComponent, {static: true}) public businessEditComponent: BusinessEditComponent;
+  @ViewChild(BusinessEditComponent, { static: true }) public businessEditComponent: BusinessEditComponent;
 
   private get pageCount(): number {
     if (this.businessList.length % PageSize === 0) {
@@ -37,38 +37,40 @@ export class BusinessListComponent implements OnInit {
     return this.businessList.length / PageSize + 1;
   }
 
-  constructor(private globalService: GlobalService,
-              private businessManagementService: BusinessManagementService,
-              private vehicleTypeManagementService: VehicleTypeManagementService,
-              private router: Router) {
+  constructor(
+    private globalService: GlobalService,
+    private businessManagementService: BusinessManagementService,
+    private vehicleTypeManagementService: VehicleTypeManagementService,
+    private router: Router) {
   }
 
   ngOnInit() {
     this.searchText$.pipe(
-        debounceTime(500),
-        switchMap(() =>
-            this.businessManagementService.requestUpkeepMerchantList(this.searchParams))
+      debounceTime(500),
+      switchMap(() =>
+        this.businessManagementService.requestUpkeepMerchantList(this.searchParams))
     ).subscribe(res => {
       this.businessList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
+      this.pageIndex = 1;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
 
     this.continueRequestSubscription =
-        this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
-          this.vehicleBrandList = res.results;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
+        this.vehicleBrandList = res.results;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 进入编辑商家页面
   public onEditBtnClick(data: UpkeepMerchantEntity) {
     this.router.navigate(['/main/maintenance/business-management/edit'],
-        { queryParams: {upkeep_merchant_id: data.upkeep_merchant_id} });
+      { queryParams: { upkeep_merchant_id: data.upkeep_merchant_id } });
   }
 
   // 翻页方法
@@ -93,13 +95,13 @@ export class BusinessListComponent implements OnInit {
   // 进入运营页面
   public onOperationBtnClick(data: UpkeepMerchantEntity) {
     this.router.navigate(['/main/maintenance/business-management/operation-configuration'],
-        { queryParams: {upkeep_merchant_id: data.upkeep_merchant_id} });
+      { queryParams: { upkeep_merchant_id: data.upkeep_merchant_id } });
   }
 
   // 开启、关闭营业状态
   public onSwitchChange(upkeep_merchant_id, event) {
     const swith = event ? true : false;
-    const params = {status: swith};
+    const params = { status: swith };
     this.businessManagementService.requestUpkeepMerchants(upkeep_merchant_id, params).subscribe(res => {
       if (event) {
         this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
