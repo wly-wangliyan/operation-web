@@ -3,6 +3,7 @@ import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { BrokerageEntity, InsuranceEntity, InsuranceService, UpdateBrokerageEntity } from '../../insurance.service';
+import { ValidateHelper } from '../../../../../utils/validate-helper';
 
 class InsuranceEntityItem {
   public checked = false;
@@ -23,6 +24,8 @@ export class BrokerageCompanyEditComponent {
   public currentBrokerage: BrokerageEntity = new BrokerageEntity();
   public insuranceList: Array<InsuranceEntityItem> = [];
   public insuranceErrMes = '';
+  public secret_nums = []; // 隐私号
+  public secret_num = ''; // 新建隐私号
 
   private continueRequestSubscription: Subscription;
   private sureCallback: any;
@@ -70,6 +73,8 @@ export class BrokerageCompanyEditComponent {
     this.closeCallback = closeFunc;
     this.insuranceErrMes = '';
     this.insuranceList = [];
+    this.secret_nums = [];
+    this.secret_num = '';
     this.rquestInsuranceList();
     openPageModal();
   }
@@ -94,6 +99,7 @@ export class BrokerageCompanyEditComponent {
     this.continueRequestSubscription =
       this.insuranceService.requestBrokerDetail(this.brokerage_id).subscribe(res => {
         this.currentBrokerage = res;
+        this.secret_nums = res.secret_nums ? res.secret_nums : [];
         for (const i in res.ic_company) {
           if (res.ic_company.hasOwnProperty(i)) {
             for (const j in this.insuranceList) {
@@ -106,6 +112,34 @@ export class BrokerageCompanyEditComponent {
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
+  }
+
+  // 增加隐私号
+  public onAddSecretNumClick() {
+    this.insuranceErrMes = '';
+    if (!this.secret_num) {
+      return;
+    }
+    if (ValidateHelper.Telephone(this.secret_num)) {
+      if (this.secret_nums.indexOf(this.secret_num) !== -1) {
+        this.globalService.promptBox.open('隐私号已存在，请重新输入！', null, -1, null, false);
+        return;
+      }
+      this.insuranceService.requestCheckMiddleNumber(this.secret_num).subscribe(res => {
+        this.secret_nums.push(this.secret_num);
+        this.secret_num = '';
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            this.globalService.promptBox.open('隐私号无效，请重新输入！', null, -1, null, false);
+          } else {
+            this.globalService.promptBox.open('隐私号无效，请重新输入！', null, -1, null, false);
+          }
+        }
+      });
+    } else {
+      this.globalService.promptBox.open('隐私号格式错误，请重新输入！', null, -1, null, false);
+    }
   }
 
   // form提交
@@ -121,6 +155,7 @@ export class BrokerageCompanyEditComponent {
       const params = new UpdateBrokerageEntity();
       params.describe = this.currentBrokerage.describe;
       params.ic_company = insurance_id.join(',');
+      params.secret_nums = this.secret_nums.join(',');
       this.insuranceService.requestModifyBrokerage(params, this.brokerage_id).subscribe(() => {
         this.onClose();
         this.globalService.promptBox.open('保存成功！', () => {
@@ -134,19 +169,23 @@ export class BrokerageCompanyEditComponent {
 
   // 表单提交校验
   private verification(insurance_id: any) {
-    let isCheck = true;
-    if (insurance_id.length === 0) {
-      this.insuranceErrMes = '请选择授权保险公司！';
-      isCheck = false;
+    let result_value = true;
+    if (this.secret_nums.length === 0) {
+      this.insuranceErrMes = '请添加隐私号！';
+      result_value = false;
     }
-    /*if (this.insuranceList.length === 0) {
+    /*if (insurance_id.length === 0) {
+      this.insuranceErrMes = '请选择授权保险公司！';
+      result_value = false;
+    }
+    if (this.insuranceList.length === 0) {
       this.insuranceErrMes = '请启用保险公司！';
       isCheck = false;
     } else if (insurance_id.length === 0) {
       this.insuranceErrMes = '请选择授权保险公司！';
       isCheck = false;
     }*/
-    return isCheck;
+    return result_value;
   }
 
   // 确定按钮回调
@@ -167,6 +206,9 @@ export class BrokerageCompanyEditComponent {
         for (const content of error.errors) {
           if (content.code === 'invalid' && content.field === 'ic_name') {
             this.insuranceErrMes = '授权保险公司错误或无效！';
+            return;
+          } else if (content.code === 'invalid' && content.field === 'secret_nums') {
+            this.insuranceErrMes = '隐私号错误或无效！';
             return;
           }
         }

@@ -124,6 +124,8 @@
     float: left;
     width: 200px;
     color: #888888;
+    display: flex;
+    align-items: center;
 }
 
 .row-message{
@@ -135,4 +137,59 @@
     font-family:STHeitiSC-Medium;
     font-weight:500;
     color:rgba(232,32,56,1);
+}
+
+.secret-num-group>ul {
+  padding-top: 10px;
+}
+
+.secret-num-group>ul>li{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tag-input,
+.secret-num-group div {
+  width: 150px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 34px;
+  color: #3E71F7;
+  background: rgba(62, 113, 247, 0.22);
+  border: none;
+}
+
+.tag-span {
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 34px;
+  background-color: rgba(62, 113, 247, 1);
+  cursor: pointer;
+}
+
+.secret-num-group .disabled {
+  cursor: not-allowed;
+}
+
+.tag-input::-webkit-input-placeholder {
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: rgba(62, 113, 247, 1);
 }
