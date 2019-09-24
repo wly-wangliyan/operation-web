@@ -60,7 +60,6 @@ export class ChooseAccessoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.productList.push(new ProductEntity());
     this.continueRequestSubscription =
       this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
         this.vehicleBrandList = res.results;

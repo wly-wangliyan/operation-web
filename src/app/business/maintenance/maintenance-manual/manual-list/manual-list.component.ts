@@ -64,6 +64,7 @@ export class ManualListComponent implements OnInit {
     this.manualService.requestManualListData(this.searchParams).subscribe(res => {
       this.manualList = res.results;
       this.linkUrl = res.linkUrl;
+      this.initPageIndex();
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -82,7 +83,6 @@ export class ManualListComponent implements OnInit {
   // 条件筛选
   public onSearchBtnClick() {
     this.searchText$.next();
-    this.initPageIndex();
   }
 
   /** 删除 */

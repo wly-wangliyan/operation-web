@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
@@ -16,12 +16,13 @@ const PageSize = 15;
   templateUrl: './business-list.component.html',
   styleUrls: ['./business-list.component.css']
 })
-export class BusinessListComponent implements OnInit {
+export class BusinessListComponent implements OnInit, OnDestroy {
 
   public searchParams = new SearchUpkeepMerchantParams();
   public businessList: Array<UpkeepMerchantEntity> = [];
   public pageIndex = 1;
   public noResultText = '数据加载中...';
+  private requestBrandSubscription: Subscription;
   public vehicleBrandList: Array<VehicleBrandEntity> = [];
 
   private searchText$ = new Subject<any>();
@@ -59,12 +60,17 @@ export class BusinessListComponent implements OnInit {
     });
     this.searchText$.next();
 
-    this.continueRequestSubscription =
+    this.requestBrandSubscription =
       this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
         this.vehicleBrandList = res.results;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
+  }
+
+  public ngOnDestroy() {
+    this.requestBrandSubscription && this.requestBrandSubscription.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 进入编辑商家页面

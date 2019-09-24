@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { GlobalService } from '../../../../core/global.service';
@@ -23,7 +23,7 @@ const PageSize = 15;
   templateUrl: './operation-configuration.component.html',
   styleUrls: ['./operation-configuration.component.css']
 })
-export class OperationConfigurationComponent implements OnInit {
+export class OperationConfigurationComponent implements OnInit, OnDestroy {
 
   public searchParams = new SearchUpkeepProductParams();
   public productList: Array<UpkeepMerchantProductEntity>;
@@ -34,7 +34,9 @@ export class OperationConfigurationComponent implements OnInit {
   public disableVehicleType = [];
   public brand_ids = [];
   public firm_ids = [];
-
+  private requestProductSubscription: Subscription;
+  private requestDetailSubscription: Subscription;
+  private requestMerchantSubscription: Subscription;
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
@@ -80,9 +82,16 @@ export class OperationConfigurationComponent implements OnInit {
     this.requestUpkeepDetail();
   }
 
+  public ngOnDestroy() {
+    this.requestProductSubscription && this.requestProductSubscription.unsubscribe();
+    this.requestDetailSubscription && this.requestDetailSubscription.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    this.requestMerchantSubscription && this.requestMerchantSubscription.unsubscribe();
+  }
+
   // 获取商家详情，以方便过滤品牌、厂商
   private requestUpkeepDetail() {
-    this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
+    this.requestDetailSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
       .subscribe(res => {
         res.VehicleFirm.forEach(value => {
           this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
@@ -97,8 +106,7 @@ export class OperationConfigurationComponent implements OnInit {
   private requestUpkeepProductAll() {
     const params = new SearchUpkeepProductParams();
     params.page_size = 1000;
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-    this.continueRequestSubscription =
+    this.requestProductSubscription =
       this.businessManagementService.requestUpkeepProductList(this.upkeep_merchant_id, params).subscribe(res => {
         res.results.forEach(value => {
           this.disableVehicleType.push(value.vehicle_type.vehicle_type_id);
@@ -157,7 +165,6 @@ export class OperationConfigurationComponent implements OnInit {
   public onSearchBtnClick() {
     this.pageIndex = 1;
     this.searchText$.next();
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 切换Tab
@@ -165,13 +172,15 @@ export class OperationConfigurationComponent implements OnInit {
     this.tabIndex = index;
     if (index === 2) {
       this.requestUpkeepMerchantOperation();
+    } else {
+      this.pageIndex = 1;
     }
   }
 
   private requestUpkeepMerchantOperation() {
     this.bookingTimes = [];
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-    this.continueRequestSubscription =
+    this.requestMerchantSubscription && this.requestMerchantSubscription.unsubscribe();
+    this.requestMerchantSubscription =
       this.businessManagementService.requestUpkeepMerchantOperationList(this.upkeep_merchant_id).subscribe(res => {
         res.forEach(value => {
           const timeObj = {
@@ -305,6 +314,7 @@ export class OperationConfigurationComponent implements OnInit {
       this.businessManagementService.requestDeleteUpkeepProduct(this.upkeep_merchant_id, data.upkeep_merchant_product_id).subscribe((e) => {
         this.productList = this.productList.filter(v => v.upkeep_merchant_product_id !== data.upkeep_merchant_product_id);
         this.disableVehicleType = this.disableVehicleType.filter(v => v !== data.vehicle_type.vehicle_type_id);
+        this.pageIndex = 1;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

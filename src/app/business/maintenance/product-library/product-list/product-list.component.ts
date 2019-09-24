@@ -95,6 +95,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
       this.linkUrl = res.linkUrl;
+      this.initPageIndex();
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -168,7 +169,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // 搜索
   public onSearchBtnClick() {
     this.searchText$.next();
-    this.initPageIndex();
   }
 
   /** 删除产品 */
@@ -249,7 +249,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
             this.importViewModel.initImportData();
             $('#importProductPromptDiv').modal('hide');
             this.searchText$.next();
-            this.initPageIndex();
           }, -1);
         }, err => {
           this.progressModalComponent.openOrClose(false);
