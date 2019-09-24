@@ -62,15 +62,15 @@
         (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
         <thead>
           <tr>
-            <th>序号</th>
+            <th style="min-width: 60px">序号</th>
             <th>配件/服务名称</th>
-            <th *ngIf="upkeep_item_type===1">是否原厂</th>
+            <th *ngIf="upkeep_item_type===1" style="min-width: 86px">是否原厂</th>
             <th *ngIf="upkeep_item_type===1" style="width: 200px">品牌</th>
-            <th *ngIf="upkeep_item_type===1">零件编号</th>
-            <th *ngIf="upkeep_item_type===1">规格</th>
-            <th style="width: 100px">原价</th>
-            <th style="width: 100px">销售单价</th>
-            <th>操作</th>
+            <th *ngIf="upkeep_item_type===1" style="width: 100px">零件编号</th>
+            <th *ngIf="upkeep_item_type===1" style="width: 100px">规格</th>
+            <th style="min-width: 100px">原价</th>
+            <th style="min-width: 100px">销售单价</th>
+            <th style="min-width: 60px">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -78,19 +78,21 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td [title]="product.upkeep_accessory_name">{{product.upkeep_accessory_name|zMaxLength:8}}</td>
             <td *ngIf="upkeep_item_type===1">{{product.is_original ? '是' : '否'}}</td>
-            <td style="width: 200px" *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
+            <td *ngIf="upkeep_item_type===1">{{product.vehicle_firm?.vehicle_brand?.vehicle_brand_name&&product.vehicle_firm?.vehicle_firm_name?
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name+'·'+product.vehicle_firm?.vehicle_firm_name:
                         product.vehicle_firm?.vehicle_brand?.vehicle_brand_name?product.vehicle_firm?.vehicle_brand?.vehicle_brand_name:
                             product.vehicle_firm?.vehicle_firm_name?product.vehicle_firm?.vehicle_firm_name:'--'}}</td>
-            <td [title]="product.serial_number?product.serial_number:''" *ngIf="upkeep_item_type===1">
-              {{product.serial_number ? (product.serial_number|zMaxLength:8) : '--'}}</td>
+            <td *ngIf="upkeep_item_type===1">
+              {{product.serial_number ? product.serial_number : '--'}}</td>
             <td [title]="product.specification?product.specification:''" *ngIf="upkeep_item_type===1">
               {{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
-            <td style="width: 100px">{{product.original_amount?product.original_amount:'--'}}</td>
-            <td style="width: 100px">{{product.sale_amount?product.sale_amount:'--'}}</td>
+            <td>{{product.original_amount?product.original_amount:'--'}}</td>
+            <td>{{product.sale_amount?product.sale_amount:'--'}}</td>
             <td>
-              <a *ngIf="!accessory_ids.includes(product.upkeep_accessory_id)" [title]="'选择'" (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
-              <a *ngIf="accessory_ids.includes(product.upkeep_accessory_id)" style="color: rgba(232,32,56,1)!important;" (click)="onChooseClick(product)">已选择</a>
+              <a *ngIf="!accessory_ids.includes(product.upkeep_accessory_id)" [title]="'选择'"
+                (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
+              <a *ngIf="accessory_ids.includes(product.upkeep_accessory_id)" style="color: rgba(232,32,56,1)!important;"
+                (click)="onChooseClick(product)">已选择</a>
             </td>
           </tr>
         </tbody>
