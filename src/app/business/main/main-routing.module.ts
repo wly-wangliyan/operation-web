@@ -11,8 +11,8 @@ const routes: Routes = [{
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
     {
-      path: 'parking',
-      loadChildren: () => import('../mx-parking/mx-parking.module').then(m => m.MxParkingModule),
+      path: 'operation',
+      loadChildren: () => import('../operation/operation.module').then(m => m.OperationModule),
     },
     {
       path: 'insurance',

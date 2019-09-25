@@ -1,11 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
-import { GlobalService } from '../../../../core/global.service';
+import { GlobalService } from '../../../../../core/global.service';
 import { isUndefined } from 'util';
-import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
+import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import { FirstPageIconEntity, FirstPageIconService, VersionEntity } from '../first-page-icon.service';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
-import { HttpErrorEntity } from '../../../../core/http.service';
+import { ValidateHelper } from '../../../../../../utils/validate-helper';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 export class ErrMessageItem {
   public isError = false;

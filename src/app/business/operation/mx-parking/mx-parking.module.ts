@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {ShareModule} from '../../share/share.module';
+import {ShareModule} from '../../../share/share.module';
 import {MxParkingRoutingModule} from './mx-parking-routing.module';
 import { MxParkingComponent } from './mx-parking.component';
 import { FirstPageIconComponent } from './first-page-icon/first-page-icon-list/first-page-icon.component';
@@ -11,8 +11,8 @@ import { AppAddComponent } from './version-management/app-add/app-add.component'
 import { VersionAddComponent } from './version-management/version-add/version-add.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
-import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
-import { environment } from '../../../environments/environment';
+import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../../core/upload.service';
+import { environment } from '../../../../environments/environment';
 
 const uploadToken: UploadConfig = {
     reportProcess: true,
