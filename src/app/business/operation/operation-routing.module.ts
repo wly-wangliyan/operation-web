@@ -15,7 +15,7 @@ const routes: Routes = [{
       loadChildren: () => import('./mx-parking/mx-parking.module').then(m => m.MxParkingModule),
       canLoad: [AuthGuardService]
     },
-    // {path: 'comment-list', component: CommentListComponent},
+    {path: 'comment-list', component: CommentListComponent},
     {path: '**', redirectTo: 'parking', pathMatch: 'full'}
   ]
 }];
