@@ -1,11 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
-import { AppAddComponent, ErrItem } from '../app-add/app-add.component';
-import { GlobalService } from '../../../../core/global.service';
-import { ErrPositionItem } from '../../first-page-icon/first-page-icon-edit/first-page-icon-edit.component';
-import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
-import { HttpErrorEntity } from '../../../../core/http.service';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
+import { timer } from 'rxjs';
+import { ErrItem } from '../app-add/app-add.component';
+import { GlobalService } from '../../../../../core/global.service';
+import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
+import { ValidateHelper } from '../../../../../../utils/validate-helper';
 import { AddVersionParams, VersionManagementService } from '../version-management.service';
 
 const PageSize = 15;

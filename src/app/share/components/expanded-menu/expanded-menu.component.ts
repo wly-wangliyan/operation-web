@@ -66,6 +66,7 @@ export class ExpandedMenuComponent implements OnInit {
     this.menu_icon = true;
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
+    menusItem.push(this.generateCommentMenu());
     return menusItem;
   }
 
@@ -95,10 +96,20 @@ export class ExpandedMenuComponent implements OnInit {
   private generateParkingMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('美行停车', null);
     systemMenu.icon = 'team';
-    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/parking/first-page-icon', systemMenu);
-    const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/parking/version-management', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/operation/parking/first-page-icon', systemMenu);
+    const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/operation/parking/version-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     systemMenu.children.push(subFinanceMenu2);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 评论管理
+  private generateCommentMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('评论管理', null);
+    systemMenu.icon = 'team';
+    const subFinanceMenu1 = new SideMenuItem('评论列表', '/main/operation/comment-list', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

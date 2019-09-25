@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
-import { GlobalService } from '../../../../core/global.service';
-import { FirstPageIconEditComponent } from '../../first-page-icon/first-page-icon-edit/first-page-icon-edit.component';
+import { GlobalService } from '../../../../../core/global.service';
 import { AppAddComponent } from '../app-add/app-add.component';
 import { Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
@@ -62,7 +61,7 @@ export class AppListComponent implements OnInit {
   }
 
   public onVersionBtnClick(data) {
-    this.router.navigate(['/main/parking/version-management/version-list'],
+    this.router.navigate(['/main/operation/parking/version-management/version-list'],
         { queryParams: { application_name: data.application_name, application_id: data.application_id} });
   }
 

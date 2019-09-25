@@ -1,11 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Subject, timer } from 'rxjs';
-import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
-import { GlobalService } from '../../../../core/global.service';
+import { timer } from 'rxjs';
+import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
+import { GlobalService } from '../../../../../core/global.service';
 import { isUndefined } from 'util';
-import { AddApplicationParams, AppEntity, VersionManagementService } from '../version-management.service';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
-import { HttpErrorEntity } from '../../../../core/http.service';
+import { AddApplicationParams, VersionManagementService } from '../version-management.service';
+import { ValidateHelper } from '../../../../../../utils/validate-helper';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 export class ErrMsgItem {
   public isError = false;

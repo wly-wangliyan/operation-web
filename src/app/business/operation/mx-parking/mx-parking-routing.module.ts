@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {AuthGuardService} from '../../core/auth-guard.service';
-import {RouteMonitorService} from '../../core/route-monitor.service';
+import {AuthGuardService} from '../../../core/auth-guard.service';
+import {RouteMonitorService} from '../../../core/route-monitor.service';
 import { MxParkingComponent } from './mx-parking.component';
 import { FirstPageIconComponent } from './first-page-icon/first-page-icon-list/first-page-icon.component';
 import { AppListComponent } from './version-management/app-list/app-list.component';

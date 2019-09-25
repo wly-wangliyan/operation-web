@@ -1,24 +1,28 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AppEntity,
+  FirstPageIconEntity,
+  FirstPageIconService,
+} from '../../mx-parking/first-page-icon/first-page-icon.service';
 import { Subject, Subscription, timer } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { FirstPageIconEditComponent } from '../../mx-parking/first-page-icon/first-page-icon-edit/first-page-icon-edit.component';
 import { GlobalService } from '../../../../core/global.service';
-import { FirstPageIconEditComponent } from '../first-page-icon-edit/first-page-icon-edit.component';
-import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { AppEntity, FirstPageIconEntity, FirstPageIconService, SearchFirstPageIconParams } from '../first-page-icon.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { SearchCommentParams } from '../comment-management.service';
 
 const PageSize = 15;
 
 @Component({
-  selector: 'app-first-page-icon',
-  templateUrl: './first-page-icon.component.html',
-  styleUrls: ['./first-page-icon.component.css']
+  selector: 'app-comment-list',
+  templateUrl: './comment-list.component.html',
+  styleUrls: ['./comment-list.component.css']
 })
-export class FirstPageIconComponent implements OnInit {
+export class CommentListComponent implements OnInit {
+
   public iconList: Array<FirstPageIconEntity> = [];
-  // public iconList: Array<any> = [];
   public appList: Array<AppEntity> = [];
   public pageIndex = 1;
-  public searchParams: SearchFirstPageIconParams = new SearchFirstPageIconParams();
+  public searchParams: SearchCommentParams = new SearchCommentParams();
   public noResultText = '数据加载中...';
   public application_id: string;
 
@@ -72,14 +76,14 @@ export class FirstPageIconComponent implements OnInit {
     const app = this.appList.filter(v => v.application_id === this.application_id);
     const menu_id = data ? data.menu_id : null;
     this.firstPageIconEditComponent.open(menu_id, app[0], () => {
-       this.firstPageIconEditComponent.clear();
-       this.pageIndex = 1;
-       timer(0).subscribe(() => {
-         this.searchText$.next();
-       });
-     }, '保存', () => {
-       this.firstPageIconEditComponent.clear();
-     });
+      this.firstPageIconEditComponent.clear();
+      this.pageIndex = 1;
+      timer(0).subscribe(() => {
+        this.searchText$.next();
+      });
+    }, '保存', () => {
+      this.firstPageIconEditComponent.clear();
+    });
   }
 
   // 翻页方法
@@ -127,33 +131,15 @@ export class FirstPageIconComponent implements OnInit {
   }
 
   //  切换应用
-  public onCheckStatusClicked(application_id) {
-    this.application_id = application_id;
+  public onCheckStatusClicked(status) {
+    this.searchParams.status = status;
     this.searchText$.next();
   }
 
-  // 列表排序
-  public drop(event: CdkDragDrop<string[]>, data): void {
-    if (event.previousIndex === event.currentIndex) {
-      return;
-    }
-    let param = {};
-    if (event.previousIndex > event.currentIndex) {
-      const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
-      param = {move_num: this.iconList[index].sort_num};
-      if (event.currentIndex === 0 && this.iconList[index].sort_num === 1) {
-        param = {move_num: 0};
-      }
-    } else {
-      param = {move_num: this.iconList[event.currentIndex].sort_num};
-    }
-    moveItemInArray(data, event.previousIndex, event.currentIndex);
-    this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {
-      this.searchText$.next();
-      this.globalService.promptBox.open('排序成功');
-    }, err => {
-      this.globalService.httpErrorProcess(err);
-      this.searchText$.next();
-    });
+  // 查询按钮
+  public onSearchBtnClick() {
+    this.pageIndex = 1;
+    this.searchText$.next();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 }

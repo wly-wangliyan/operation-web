@@ -1,9 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FirstPageIconEntity, FirstPageIconService, VersionEntity } from '../../../mx-parking/first-page-icon/first-page-icon.service';
 import { Subscription, timer } from 'rxjs';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../core/global.service';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { isUndefined } from 'util';
 import { InsuranceEntity, InsuranceService, UpdateInsueranceEntity } from '../../insurance.service';

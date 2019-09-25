@@ -1,9 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import {HttpService, LinkResponse} from '../../../core/http.service';
-import {environment} from '../../../../environments/environment';
+import {HttpService, LinkResponse} from '../../../../core/http.service';
+import {environment} from '../../../../../environments/environment';
 import {Observable} from 'rxjs/index';
 import {map} from 'rxjs/internal/operators';
-import {EntityBase} from '../../../../utils/z-entity';
+import {EntityBase} from '../../../../../utils/z-entity';
 import {HttpResponse} from '@angular/common/http';
 
 export class FirstPageIconEntity extends EntityBase {
