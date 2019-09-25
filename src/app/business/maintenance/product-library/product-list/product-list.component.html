@@ -88,6 +88,8 @@
             <th>零件编号</th>
             <th>是否原厂</th>
             <th>品牌</th>
+            <th>原价</th>
+            <th>销售单价</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -122,6 +124,10 @@
               <td>--</td>
               <td>--</td>
             </ng-container>
+            <td>{{(product.original_amount | zCompleteNumber)||0}}
+              <span *ngIf="product.original_amount||product.original_amount===0"> 元</span></td>
+            <td>{{(product.sale_amount | zCompleteNumber)||0}}
+              <span *ngIf="product.sale_amount||product.sale_amount===0"> 元</span></td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',product.upkeep_accessory_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',product.upkeep_accessory_id]">编辑</a>

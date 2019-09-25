@@ -30,12 +30,12 @@
           </tr>
           <tr>
             <td>原价：</td>
-            <td>
-              {{productRecord.original_amount ? (productRecord.original_amount|number:'1.2-2') + '元' : '--' }}
+            <td>{{(productRecord.original_amount | zCompleteNumber)||0}}
+              <span *ngIf="productRecord.original_amount||productRecord.original_amount===0"> 元</span>
             </td>
-            <td>零售单价：</td>
-            <td>
-              {{productRecord.sale_amount ? (productRecord.sale_amount|number:'1.2-2') + '元' : '--' }}
+            <td>销售单价：</td>
+            <td>{{(productRecord.sale_amount | zCompleteNumber)||0}}
+              <span *ngIf="productRecord.sale_amount||productRecord.sale_amount===0"> 元</span>
             </td>
             <td></td>
             <td></td>
@@ -127,12 +127,12 @@
           </tr>
           <tr>
             <td>原价：</td>
-            <td>
-              {{productRecord.original_amount ? (productRecord.original_amount|number:'1.2-2') + '元' : '--' }}
+            <td>{{(productRecord.original_amount | zCompleteNumber)||0}}
+              <span *ngIf="productRecord.original_amount||productRecord.original_amount===0"> 元</span>
             </td>
-            <td>零售单价：</td>
-            <td>
-              {{productRecord.sale_amount ? (productRecord.sale_amount|number:'1.2-2') + '元' : '--' }}
+            <td>销售单价：</td>
+            <td>{{(productRecord.sale_amount | zCompleteNumber)||0}}
+              <span *ngIf="productRecord.sale_amount||productRecord.sale_amount===0"> 元</span>
             </td>
             <td></td>
             <td></td>
