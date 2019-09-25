@@ -124,10 +124,8 @@
               <td>--</td>
               <td>--</td>
             </ng-container>
-            <td>{{(product.original_amount | zCompleteNumber)||0}}
-              <span *ngIf="product.original_amount||product.original_amount===0"> 元</span></td>
-            <td>{{(product.sale_amount | zCompleteNumber)||0}}
-              <span *ngIf="product.sale_amount||product.sale_amount===0"> 元</span></td>
+            <td>{{(product.original_amount | zCompleteNumber)||0}} 元</td>
+            <td>{{(product.sale_amount | zCompleteNumber)||0}} 元</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',product.upkeep_accessory_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',product.upkeep_accessory_id]">编辑</a>

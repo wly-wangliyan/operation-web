@@ -86,8 +86,8 @@
               {{product.serial_number ? product.serial_number : '--'}}</td>
             <td [title]="product.specification?product.specification:''" *ngIf="upkeep_item_type===1">
               {{product.specification ? (product.specification|zMaxLength:8) : '--'}}</td>
-            <td>{{product.original_amount?product.original_amount:'--'}}</td>
-            <td>{{product.sale_amount?product.sale_amount:'--'}}</td>
+            <td>{{(product.original_amount | zCompleteNumber)||0}} 元</td>
+            <td>{{(product.sale_amount | zCompleteNumber)||0}} 元</td>
             <td>
               <a *ngIf="!accessory_ids.includes(product.upkeep_accessory_id)" [title]="'选择'"
                 (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
