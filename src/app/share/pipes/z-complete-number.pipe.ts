@@ -16,8 +16,8 @@ export class ZCompleteNumberPipe implements PipeTransform {
     if (number && number !== 0 && !`'${number}'`.includes('.')) {
       return `${number}.00`;
     }
-    if (number && number !== 0 && `'${number}'`.includes('.')) {
-      return number.toFixed(2);
+    if (!isNaN(number) && number && number !== 0 && `'${number}'`.includes('.')) {
+      return Number(number).toFixed(2);
     }
     return number;
   }
