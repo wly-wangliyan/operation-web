@@ -19,21 +19,29 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
 
   @Input() public display_series = false; // 标记是否隐藏车系
 
+  @Input() public display_year = false; // 标记是否隐藏年款
+
   public vehicleBrandList: Array<VehicleBrandEntity> = []; // 车辆品牌列表
 
   public vehicleFirmList: Array<VehicleFirmEntity> = []; // 当前类别下厂商列表
 
   public vehicleSeriesList: Array<VehicleSeriesEntity> = []; // 当前厂商下车系列表
 
+  public vehicleYearList: Array<any> = []; // 当前车系下年款列表
+
   private tmpMapOfFirm: { [key: string]: Array<VehicleFirmEntity> } = {}; // 临时存储已获取的品牌对应厂商
 
   private tmpMapOfSeries: { [key: string]: Array<VehicleSeriesEntity> } = {}; // 临时存储已获取的品牌对应厂商
+
+  private tmpMapOfYears: { [key: string]: Array<any> } = {}; // 临时存储已获取的车系对应车型年款
 
   public vehicle_brand_id = ''; // 品牌
 
   public vehicle_firm_id = ''; // 厂商
 
   public vehicle_series_id = ''; // 车系
+
+  public vehicle_year_model = ''; // 年款
 
   private requestBrandSubscription: Subscription; // 获取品牌数据
 
@@ -93,12 +101,28 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 根据车系获取车型年款
+  private requestYearList(vehicle_series_id: string) {
+    if (this.tmpMapOfYears[vehicle_series_id] && this.tmpMapOfYears[vehicle_series_id].length > 0) {
+      this.vehicleYearList = this.tmpMapOfYears[vehicle_series_id];
+    } else {
+      this.vehicleService.requestVehicleYearList(vehicle_series_id).subscribe(res => {
+        this.vehicleYearList = res;
+        this.tmpMapOfYears[vehicle_series_id] = res;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }
+  }
+
   // 变更品牌
   public onChangeBrand(event: any) {
     this.vehicle_firm_id = '';
     this.vehicleFirmList = [];
     this.vehicle_series_id = '';
     this.vehicleSeriesList = [];
+    this.vehicle_year_model = '';
+    this.vehicleYearList = [];
     if (event.target.value && !this.display_firm) {
       this.requestFirmListByBrand(event.target.value);
     }
@@ -109,6 +133,8 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
   public onChangeFirm(event: any) {
     this.vehicle_series_id = '';
     this.vehicleSeriesList = [];
+    this.vehicle_year_model = '';
+    this.vehicleYearList = [];
     if (event.target.value && !this.display_series) {
       this.requestSeriesList(event.target.value);
     }
@@ -117,6 +143,11 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
 
   // 变更车系
   public onChangeSeries(event: any) {
+    this.vehicle_year_model = '';
+    this.vehicleYearList = [];
+    if (event.target.value && !this.display_year) {
+      this.requestYearList(event.target.value);
+    }
     this.sendEmitter();
   }
 
@@ -125,7 +156,8 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
     const emitter = {
       brand: this.vehicle_brand_id,
       firm: this.vehicle_firm_id,
-      series: this.vehicle_series_id
+      series: this.vehicle_series_id,
+      year: this.vehicle_year_model
     };
     if (!this.vehicle_brand_id) {
       emitter.brand = null;
@@ -135,6 +167,9 @@ export class SearchVehicleTypeGroupComponent implements OnInit, OnDestroy {
     }
     if (!this.vehicle_series_id) {
       emitter.series = null;
+    }
+    if (!this.vehicle_year_model) {
+      emitter.year = null;
     }
     timer(0).subscribe(() => {
       this.selectBrandFirmSeries.emit(emitter);

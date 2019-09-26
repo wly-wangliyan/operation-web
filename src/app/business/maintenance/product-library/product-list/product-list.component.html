@@ -55,7 +55,8 @@
           <option value="False">否</option>
         </select>
       </div>
-      <app-search-vehicle-type-group [display_series]="true" (selectBrandFirmSeries)="onChangeSearchParams($event)">
+      <app-search-vehicle-type-group [display_series]="true" [display_year]="true"
+        (selectBrandFirmSeries)="onChangeSearchParams($event)">
       </app-search-vehicle-type-group>
       <div class="form-group">
         <span>配件/服务名称：</span>
