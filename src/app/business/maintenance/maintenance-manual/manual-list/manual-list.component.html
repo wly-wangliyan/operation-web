@@ -36,7 +36,10 @@
             <th>厂商</th>
             <th>车系</th>
             <th>年款和车型</th>
-            <th>操作</th>
+            <th>发动机</th>
+            <th>变速箱</th>
+            <th>车身结构</th>
+            <th style="width: 125px;">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -52,6 +55,12 @@
               </a>
             </td>
             <td *ngIf="!manual.vehicle_year_model && !manual.vehicle_type_name">--</td>
+            <td [title]="manual.vehicle_engine?manual.vehicle_engine:''">
+              {{manual.vehicle_engine?(manual.vehicle_engine|zMaxLength:10):'--'}}</td>
+            <td [title]="manual.vehicle_gearbox?manual.vehicle_gearbox:''">
+              {{manual.vehicle_gearbox?(manual.vehicle_gearbox|zMaxLength:10):'--'}}</td>
+            <td [title]="manual.vehicle_structure?manual.vehicle_structure:''">
+              {{manual.vehicle_structure?(manual.vehicle_structure|zMaxLength:10):'--'}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',manual.vehicle_type_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',manual.vehicle_type_id]">编辑</a>
