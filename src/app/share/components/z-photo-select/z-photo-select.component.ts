@@ -47,17 +47,17 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public imageAddHeight = null;
 
-  @Input() public minCropBoxWidth = 150;
+  @Input() public minCropBoxWidth = 150; // 剪裁框的最小宽度
 
-  @Input() public minCropBoxHeight = 150;
+  @Input() public minCropBoxHeight = 150; // 最大值400
 
   public get transformLineHeight(): string {
     return (Number(this.imageHeight) - 2).toString();
   }
 
-  @Input() public zoomWidth = '1000';
+  @Input() public zoomWidth = '1000'; // 图像剪裁模态框的宽
 
-  @Input() public zoomHeight = '560';
+  @Input() public zoomHeight = '560'; // 图像剪裁模态框的高
 
   public get transformZoomLineHeight(): string {
     return (Number(this.zoomHeight) - 36).toString();
@@ -73,7 +73,7 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Output() public selectedImgChange = new EventEmitter(); // 选择图片错误
 
-  @Input() public dragCrop = false; // 是否可以按比例自由截取
+  @Input() public dragCrop = false; // 是否可以重画
 
   @Input() public aspectRatio = 1 / 1; // 截取图片比例
 
@@ -95,17 +95,17 @@ export class ZPhotoSelectComponent implements OnInit {
 
   private isValidImg = true;
 
-  @ViewChild('imageModal', { static: true }) public imageModal: ElementRef;
+  @ViewChild('imageModal', { static: true }) public imageModal: ElementRef; // 图片查看模态框
 
-  @ViewChild('cutCoverUrlModal', { static: true }) public cutCoverUrlModal: ElementRef;
+  @ViewChild('cutCoverUrlModal', { static: true }) public cutCoverUrlModal: ElementRef; // 裁剪图片模态框
 
-  @ViewChild('imgContainer', { static: true }) public imgContainer: ElementRef;
+  @ViewChild('imgContainer', { static: true }) public imgContainer: ElementRef; // 成像区域
 
-  @ViewChild('cutCoverImg', { static: true }) public cutCoverImg: ElementRef;
+  @ViewChild('cutCoverImg', { static: true }) public cutCoverImg: ElementRef; // 被建材图片
 
   @ViewChildren('progressBgList') public progressBgList: QueryList<ElementRef>;
 
-  @ViewChildren('progressBarList') public progressBarList: QueryList<ElementRef>;
+  @ViewChildren('progressBarList') public progressBarList: QueryList<ElementRef>; // 进度条
 
   constructor(@Optional() private uploadService: UploadService, private sanitizer: DomSanitizer, private renderer2: Renderer2) {
   }
@@ -327,7 +327,7 @@ export class ZPhotoSelectComponent implements OnInit {
       });
       $(this.imgContainer.nativeElement).css({
         width: (Number(this.zoomWidth) / 1.78) + 'px',
-        height: (Number(this.zoomHeight) / 1.78) + 'px'
+        height: (Number(this.zoomHeight) / 1.78) < Number(this.minCropBoxHeight) ? Number(this.minCropBoxHeight) : (Number(this.zoomHeight) / 1.78) + 'px'
       });
       $(this.cutCoverUrlModal.nativeElement).modal('show');
       this.cutCoverImgUrl = this.imageItem.showUrl ? this.imageItem.showUrl : '';
