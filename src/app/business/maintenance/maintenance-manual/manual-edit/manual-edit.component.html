@@ -21,11 +21,14 @@
   <div class="content-top">
     <i></i>
     <div class="manual-info">
-      <label>{{vehicleTypeInfo.vehicle_brand?vehicleTypeInfo.vehicle_brand.vehicle_brand_name:'--'}}</label>
-      <label>{{vehicleTypeInfo.vehicle_firm?vehicleTypeInfo.vehicle_firm.vehicle_firm_name:'--'}}</label>
-      <label>{{vehicleTypeInfo.vehicle_series? vehicleTypeInfo.vehicle_series.vehicle_series_name : '--'}}</label>
-      <label>{{vehicleTypeInfo.vehicle_year_model ? vehicleTypeInfo.vehicle_year_model : ''}}</label>
-      <label>{{vehicleTypeInfo.vehicle_type_name ? vehicleTypeInfo.vehicle_type_name : ''}}</label>
+      <label>{{vehicleTypeInfo.vehicle_brand ? vehicleTypeInfo.vehicle_brand.vehicle_brand_name : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_firm ? vehicleTypeInfo.vehicle_firm.vehicle_firm_name : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_series ? vehicleTypeInfo.vehicle_series.vehicle_series_name : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_year_model ? vehicleTypeInfo.vehicle_year_model+'款' : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_type_name ? vehicleTypeInfo.vehicle_type_name : '--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_engine ? vehicleTypeInfo.vehicle_engine :'--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_gearbox ? vehicleTypeInfo.vehicle_gearbox :'--'}}</label>
+      <label>{{vehicleTypeInfo.vehicle_structure ? vehicleTypeInfo.vehicle_structure :'--'}}</label>
     </div>
   </div>
   <div class="content-middle" *ngIf="loading">
