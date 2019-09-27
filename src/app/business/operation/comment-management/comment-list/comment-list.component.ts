@@ -1,14 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {
-  AppEntity,
-  FirstPageIconEntity,
-  FirstPageIconService,
-} from '../../mx-parking/first-page-icon/first-page-icon.service';
 import { Subject, Subscription, timer } from 'rxjs';
-import { FirstPageIconEditComponent } from '../../mx-parking/first-page-icon/first-page-icon-edit/first-page-icon-edit.component';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { SearchCommentParams } from '../comment-management.service';
+import { CommentEntity, CommentService, SearchCommentParams } from '../comment-management.service';
+import { differenceInCalendarDays } from 'date-fns';
+import { Router } from '@angular/router';
+import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 
 const PageSize = 15;
 
@@ -19,71 +16,46 @@ const PageSize = 15;
 })
 export class CommentListComponent implements OnInit {
 
-  public iconList: Array<FirstPageIconEntity> = [];
-  public appList: Array<AppEntity> = [];
+  public commentList: Array<CommentEntity> = [];
   public pageIndex = 1;
   public searchParams: SearchCommentParams = new SearchCommentParams();
   public noResultText = '数据加载中...';
   public application_id: string;
+  public start_pay_time = null; // 支付时间
+  public end_pay_time = null;
+  public imageUrls = ['/assets/images/icon_top.png'];
 
   private searchText$ = new Subject<any>();
-  private searchAppText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
-  @ViewChild(FirstPageIconEditComponent, { static: true }) public firstPageIconEditComponent: FirstPageIconEditComponent;
+  @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
   @ViewChild('basicTable', { static: true }) public basicTable: ElementRef;
 
   private get pageCount(): number {
-    if (this.iconList.length % PageSize === 0) {
-      return this.iconList.length / PageSize;
+    if (this.commentList.length % PageSize === 0) {
+      return this.commentList.length / PageSize;
     }
-    return this.iconList.length / PageSize + 1;
+    return this.commentList.length / PageSize + 1;
   }
 
   constructor(private globalService: GlobalService,
-              private firstPageIconService: FirstPageIconService) {
+              private commentService: CommentService,
+              private router: Router) {
     this.searchParams.page_size = PageSize * 3;
   }
 
   ngOnInit() {
-    this.searchAppText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestAppList()))
+    this.searchText$.pipe(debounceTime(500), switchMap(() => this.commentService.requestCommentList(this.searchParams)))
         .subscribe(res => {
-          this.appList = res;
-          this.application_id = this.appList.length > 0 ? this.appList[0].application_id : null;
-          this.requestFirstPageIconList();
+          this.commentList = res.results;
+          this.linkUrl = res.linkUrl;
+          this.noResultText = '暂无数据';
+          this.pageIndex = 1;
         }, err => {
           this.globalService.httpErrorProcess(err);
         });
-    this.searchAppText$.next();
-  }
-
-  //  请求App首页图标配置信息
-  private requestFirstPageIconList() {
-    this.searchText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestFirstPageIconList(this.application_id))
-    ).subscribe(res => {
-      this.iconList = res.results;
-      this.linkUrl = res.linkUrl;
-      this.noResultText = '暂无数据';
-    }, err => {
-      this.globalService.httpErrorProcess(err);
-    });
     this.searchText$.next();
-  }
-
-  // 显示添加编辑项目modal
-  public onShowModal(data) {
-    const app = this.appList.filter(v => v.application_id === this.application_id);
-    const menu_id = data ? data.menu_id : null;
-    this.firstPageIconEditComponent.open(menu_id, app[0], () => {
-      this.firstPageIconEditComponent.clear();
-      this.pageIndex = 1;
-      timer(0).subscribe(() => {
-        this.searchText$.next();
-      });
-    }, '保存', () => {
-      this.firstPageIconEditComponent.clear();
-    });
   }
 
   // 翻页方法
@@ -92,8 +64,8 @@ export class CommentListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.firstPageIconService.continueFirstPageIconList(this.linkUrl).subscribe(res => {
-        this.iconList = this.iconList.concat(res.results);
+      this.continueRequestSubscription = this.commentService.continueCommentList(this.linkUrl).subscribe(res => {
+        this.commentList = this.commentList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -101,16 +73,16 @@ export class CommentListComponent implements OnInit {
     }
   }
 
-  // 隐藏、开启按钮触发事件
-  public onHideBtnClick(data: any, dispaly: boolean) {
-    const icon_display = this.iconList.filter(v => !v.is_display);
-    if (!dispaly && icon_display.length >= 10) {
-      this.globalService.promptBox.open('每个系统最大可同时显示10个icon!', null, 2000, '/assets/images/warning.png');
-      return;
-    }
-    const param = {is_display: dispaly};
-    this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
-      const msg = dispaly ? '隐藏成功！' : '显示成功！';
+  // 查看详情
+  public onShowDetailClick(data) {
+    this.router.navigate(['/main/operation/comment/comment-detail'],
+        { queryParams: { comment_id: data.comment_id} });
+  }
+
+  // 通过、驳回按钮触发事件
+  public onPassClick(data: CommentEntity, status: number) {
+    this.commentService.requestUpdateStatus(data.comment_id, status).subscribe((e) => {
+      const msg = status === 2 ? '通过成功！' : '驳回成功！';
       this.globalService.promptBox.open(msg);
       this.searchText$.next();
     }, err => {
@@ -118,19 +90,29 @@ export class CommentListComponent implements OnInit {
     });
   }
 
-  // 删除某一App首页图标配置
-  public onDeleteBtnClick(data: any) {
-    this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
-      this.globalService.confirmationBox.close();
-      this.firstPageIconService.requestDeleteFirstPageIcon(data.menu_id, this.application_id).subscribe((e) => {
-        this.iconList = this.iconList.filter(icon => icon.menu_id !== data.menu_id);
+  // 置顶、取消置顶按钮触发事件
+  public onTopClick(data: CommentEntity, status: number) {
+    if (status === 1) {
+      this.globalService.confirmationBox.open('提示', '确认置顶？', () => {
+        this.globalService.confirmationBox.close();
+        this.commentService.requestUpdateTop(data.comment_id, status).subscribe((e) => {
+          this.globalService.promptBox.open('置顶成功！');
+          this.searchText$.next();
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+      });
+    } else {
+      this.commentService.requestUpdateTop(data.comment_id, status).subscribe((e) => {
+        this.globalService.promptBox.open('取消置顶成功！');
+        this.searchText$.next();
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
-    });
+    }
   }
 
-  //  切换应用
+  //  切换状态
   public onCheckStatusClicked(status) {
     this.searchParams.status = status;
     this.searchText$.next();
@@ -138,8 +120,68 @@ export class CommentListComponent implements OnInit {
 
   // 查询按钮
   public onSearchBtnClick() {
-    this.pageIndex = 1;
+    if (this.getTimeValid() === 'pay_time') {
+      this.globalService.promptBox.open('查询失败', '评论开始时间不能大于结束时间!');
+      return;
+    }
     this.searchText$.next();
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+  }
+
+  // 查询时间校验
+  private getTimeValid(): string {
+    this.searchParams.section = (this.start_pay_time || this.end_pay_time)
+        ? this.getSectionTime(this.start_pay_time, this.end_pay_time) : '';
+    const pay_time = this.searchParams.section;
+    if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
+      return 'pay_time';
+    } else {
+      return '';
+    }
+  }
+
+  // 获取预定时间时间戳
+  public getSectionTime(start, end): string {
+    const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
+        new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
+    const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
+        new Date(end).getMinutes(), 59, 0) / 1000).toString() : 253402185600;
+    return `${startTime},${endTime}`;
+  }
+
+  // 评论开始时间校验
+  public disabledStartPayDate = (startValue: Date): boolean => {
+    if (differenceInCalendarDays(startValue, new Date()) > 0) {
+      return true;
+    } else if (!startValue || !this.end_pay_time) {
+      return false;
+    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.end_pay_time).setHours(0, 0, 0, 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // 支付结束时间校验
+  public disabledEndPayDate = (endValue: Date): boolean => {
+    if (differenceInCalendarDays(endValue, new Date()) > 0) {
+      return true;
+    } else if (!endValue || !this.start_pay_time) {
+      return false;
+    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.start_pay_time).setHours(0, 0, 0, 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * 打开放大图片组件
+   */
+  public openZoomPictureModal(data, index) {
+    this.imageUrls = data.image_urls ? data.image_urls.split(',') : [];
+    timer(0).subscribe(() => {
+      this.ZPhotoSelectComponent.zoomPicture(index);
+    });
   }
 }

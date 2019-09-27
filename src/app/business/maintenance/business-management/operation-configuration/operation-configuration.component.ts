@@ -358,7 +358,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
 
   public selectBrandFirmSeries(event) {
     this.searchParams.vehicle_brand_id = event.brand ? event.brand : '';
-    this.searchParams.vehicle_firm_id = event.brand ? event.brand : '';
-    this.searchParams.vehicle_series_id = event.brand ? event.brand : '';
+    this.searchParams.vehicle_firm_id = event.firm ? event.firm : '';
+    this.searchParams.vehicle_series_id = event.series ? event.series : '';
   }
 }

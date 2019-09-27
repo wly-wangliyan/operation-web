@@ -3,7 +3,6 @@ import {Routes, RouterModule} from '@angular/router';
 import {RouteMonitorService} from '../../core/route-monitor.service';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { OperationComponent } from './operation.component';
-import { CommentListComponent } from './comment-management/comment-list/comment-list.component';
 
 const routes: Routes = [{
   path: '', component: OperationComponent,
@@ -15,7 +14,11 @@ const routes: Routes = [{
       loadChildren: () => import('./mx-parking/mx-parking.module').then(m => m.MxParkingModule),
       canLoad: [AuthGuardService]
     },
-    {path: 'comment-list', component: CommentListComponent},
+    {
+      path: 'comment',
+      loadChildren: () => import('./comment-management/comment-management.module').then(m => m.CommentManagementModule),
+      canLoad: [AuthGuardService]
+    },
     {path: '**', redirectTo: 'parking', pathMatch: 'full'}
   ]
 }];

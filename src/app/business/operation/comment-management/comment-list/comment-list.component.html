@@ -1,21 +1,16 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'"></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg">
-            <a (click)="onShowModal(null)">新建</a>
-        </li>
-    </ul>
+    <app-crumb [level1Name]="'评论列表'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="tab-bar">
         <ul>
             <li [class.active]="!searchParams.status"
-                (click)="onCheckStatusClicked(null)">全部</li>
-            <li [class.active]="searchParams.status===1"
+                (click)="onCheckStatusClicked('')">全部</li>
+            <li [class.active]="searchParams.status==1"
                 (click)="onCheckStatusClicked(1)">待审核</li>
-            <li [class.active]="searchParams.status===2"
+            <li [class.active]="searchParams.status==2"
                 (click)="onCheckStatusClicked(2)">已审核</li>
-            <li [class.active]="searchParams.status===3"
+            <li [class.active]="searchParams.status==3"
                 (click)="onCheckStatusClicked(3)">被驳回</li>
         </ul>
     </div>
@@ -29,15 +24,20 @@
             <div class="form-group">
                 <span>置顶状态：</span>
                 <select class="form-control" [(ngModel)]="searchParams.is_top" name="is_top">
-                    <option value=undefined>全部</option>
-                    <option value=true>已置顶</option>
-                    <option value=false>未置顶</option>
+                    <option value=''>全部</option>
+                    <option value=1>已置顶</option>
+                    <option value=2>未置顶</option>
                 </select>
             </div>
             <div class="form-group">
                 <span>评论时间：</span>
-                <input class="form-control" placeholder="请输入车型名称" autocomplete="off" maxlength="20"
-                       name="vehicle_type_name" [(ngModel)]="searchParams.section"/>
+                <nz-date-picker [(ngModel)]="start_pay_time" [nzShowToday]=false [nzDisabledDate]="disabledStartPayDate"
+                                name='start_pay_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_pay_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayDate"
+                                name='end_pay_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
                     </button>
@@ -47,7 +47,7 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="iconList"
+            <nz-table [nzData]="commentList"
                       [nzShowPagination]="true"
                       [nzNoResult]="noResultText"
                       [nzPageSize]="'15'"
@@ -67,20 +67,27 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
-                    <td>
-                        <img [src]="data.icon" style="height: 20px;width: 20px">
+                    <td>{{data.user_id}}</td>
+                    <td [title]="data.object_name?data.object_name:''">{{data.object_name|zMaxLength:20}}</td>
+                    <td [title]="data.comment_content?data.comment_content:''">
+                        <img *ngIf="data.is_top===1" src="/assets/images/icon_top.png" style="margin-top: -2px">
+                        <img *ngIf="data.is_top===2" src="" style="width: 32px;">
+                        {{data.comment_content?(data.comment_content|zMaxLength:30):'--'}}</td>
+                    <td *ngIf="data.image_urls">
+                        <img *ngFor="let item of data.image_urls.split(',');let i=index" [src]="item"
+                             style="height: 30px;width: 30px;margin-right: 5px" (click)="openZoomPictureModal(data, i)">
                     </td>
-                    <td [title]="data.title">{{data.title|zMaxLength:20}}</td>
-                    <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
-                    <td>{{data.version}}</td>
-                    <td>{{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.jump_link|zMaxLength:25}}</td>
-                    <td>{{data.menu_describe|zMaxLength:15}}</td>
+                    <td *ngIf="!data.image_urls">
+                        <img src="/assets/images/image_space.png" style="height: 30px;width: 30px">
+                    </td>
+                    <td>{{data.created_time?(data.created_time * 1000 | date: "yyyy-MM-dd HH:mm:ss"):'--'}}</td>
+                    <td>{{data.status===1?'待审核':data.status===2?'已审核':data.status===3?'被驳回':'--'}}</td>
                     <td class="operation">
-                        <a [title]="'详情'" (click)="onHideBtnClick(data, true)">详情</a>
-                        <a *ngIf="data.is_display" [title]="'通过'" (click)="onHideBtnClick(data, false)">通过</a>
-                        <a *ngIf="data.is_display" [title]="'驳回'" (click)="onHideBtnClick(data, false)">驳回</a>
-                        <a [title]="'置顶'" (click)="onShowModal(data)">置顶</a>
-                        <a [title]="'取消置顶'" (click)="onDeleteBtnClick(data)">取消置顶</a>
+                        <a [title]="'详情'" (click)="onShowDetailClick(data)">详情</a>
+                        <a *ngIf="data.status===1 || data.status===3" [title]="'审核'" (click)="onPassClick(data, 2)">审核</a>
+                        <a *ngIf="data.status===1 || data.status===2" [title]="'驳回'" (click)="onPassClick(data, 3)">驳回</a>
+                        <a *ngIf="data.status===2 && data.is_top===2" [title]="'置顶'" (click)="onTopClick(data, 1)">置顶</a>
+                        <a *ngIf="data.status===2 && data.is_top===1" [title]="'取消置顶'" (click)="onTopClick(data, 2)">取消置顶</a>
                     </td>
                 </tr>
                 </tbody>
@@ -89,3 +96,5 @@
     </div>
 </div>
 
+<!-- 图片放大 -->
+<app-z-photo-select [isShowMinImg]="true" zoomWidth="350" zoomHeight="400" [imageUrls]="imageUrls"></app-z-photo-select>

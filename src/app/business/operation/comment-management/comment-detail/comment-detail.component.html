@@ -1,0 +1,40 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'评论列表'" [level2Name]="'评论详情'" [level1RelativePath]="'../'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="tab-bar">
+        <ul>
+            <li class="active">{{currentComment.status===1?'待审核':currentComment.status===2?'已审核':'被驳回'}}</li>
+        </ul>
+    </div>
+    <div class="content-main">
+        <form class="form-horizontal" #editForm="ngForm">
+            <div class="user-info">
+                <img src="/assets/images/image_space.png">
+                <div>
+                    <label>{{currentComment.object_name}}</label>
+                </div>
+                <div>
+                    <span>ID: {{currentComment.user_id}}</span>
+                    <span>手机号: {{currentComment.phone_num}}</span>
+                    <span>评论时间: {{currentComment.created_time * 1000 | date: "yyyy-MM-dd HH:mm:ss"}}</span>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div style="margin: 25px 75px">
+                <img *ngIf="currentComment.is_top===1" src="/assets/images/icon_top_big.png" style="width: 32px;margin: 0 10px 0 -42px">
+                <span>{{currentComment.comment_content}}</span>
+                <div *ngIf="currentComment.image_urls">
+                    <img *ngFor="let item of currentComment.image_urls.split(',')" [src]="item" class="img-space">
+                </div>
+            </div>
+            <div class="operation-btn">
+                <button *ngIf="currentComment.status===1 || currentComment.status===3" nz-button nzType="primary" (click)="onPassClick(2)">审核</button>
+                <button *ngIf="currentComment.status===1 || currentComment.status===2" style="background: #F5A623;" nz-button (click)="onPassClick(3)">驳回</button>
+                <button *ngIf="currentComment.status===2 && currentComment.is_top===2" style="background: #E82038" nz-button (click)="onTopClick(true)">置顶</button>
+                <button *ngIf="currentComment.status===2 && currentComment.is_top===1" nzType="primary" nz-button (click)="onTopClick(false)">取消置顶</button>
+            </div>
+        </form>
+    </div>
+</div>
+

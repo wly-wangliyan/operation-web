@@ -64,7 +64,7 @@
               {{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}
             </td>
             <td>
-              <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On"
+              <nz-switch [ngModel]="data.merchant_status===1?true:false" nzCheckedChildren="On" style="height: 10px"
                 nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.upkeep_merchant_id,$event)"></nz-switch>
             </td>
             <td class="operation">

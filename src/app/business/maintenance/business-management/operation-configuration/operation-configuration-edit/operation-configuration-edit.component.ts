@@ -47,13 +47,14 @@ export class OperationConfigurationEditComponent implements OnInit {
   public projectList_fix: Array<ProjectItem> = [];
   public projectItemList: Array<ProjectItem> = [];
   public image_space = '../../../../../../assets/images/image_space.png'; // 默认图片
+  public currentProjectId: string;
+  public currentProject = new UpkeepMerchantProjectEntity();
 
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id: string;
   private continueRequestSubscription: Subscription;
   private searchText$ = new Subject<any>();
-  public currentProjectId: string;
-  public currentProject = new UpkeepMerchantProjectEntity();
+  private currentAccessory: string;
 
   @ViewChild('chooseAccessoryPromptDiv', { static: true }) public chooseAccessoryPromptDiv: ElementRef;
   @ViewChild('addAccessoryPromptDiv', { static: true }) public addAccessoryPromptDiv: ElementRef;
@@ -304,5 +305,16 @@ export class OperationConfigurationEditComponent implements OnInit {
     const reg = /[\d]/;
     const keyCode = String.fromCharCode(event.keyCode);
     return (keyCode && reg.test(keyCode));
+  }
+
+  // 点击编辑按钮，暂存数据，取消时重新恢复数据
+  public onDoEditClick(data) {
+    const param = JSON.stringify(data);
+    this.currentAccessory = param;
+  }
+
+  // 点击取消按钮，恢复未保存的数据
+  public onConcleClick(index) {
+    this.accessoryItemList[index].source = JSON.parse(this.currentAccessory);
   }
 }

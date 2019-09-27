@@ -20,6 +20,15 @@
             <div>
                 <span>{{projectItemList[0].source.vehicle_type.vehicle_type_name}}</span>
             </div>
+            <div>
+                <span>{{projectItemList[0].source.vehicle_type.vehicle_engine?projectItemList[0].source.vehicle_type.vehicle_engine:'--'}}</span>
+            </div>
+            <div>
+                <span>{{projectItemList[0].source.vehicle_type.vehicle_gearbox?projectItemList[0].source.vehicle_type.vehicle_gearbox:'--'}}</span>
+            </div>
+            <div>
+                <span>{{projectItemList[0].source.vehicle_type.vehicle_structure?projectItemList[0].source.vehicle_type.vehicle_structure:'--'}}</span>
+            </div>
         </div>
         <!--保养项目-->
         <img *ngIf="projectList_maintain && projectList_maintain.length>0" style="margin-top: 20px" src="/assets/images/manual/icon_category1.png">
@@ -126,12 +135,12 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                             [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source)">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -157,11 +166,11 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source);">取消</button>
                     </div>
                 </li>
             </div>
@@ -272,12 +281,12 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source)">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -303,11 +312,11 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source);">取消</button>
                     </div>
                 </li>
             </div>
@@ -418,12 +427,12 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
                             || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source)">取消</button>
                     </div>
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
                         <div class="maintenance-content">
@@ -449,11 +458,11 @@
                                    (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
                             <label class="price-label price-label-input">元</label>
                         </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="item.is_edit_price=true">编辑</button>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
                                 [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
                         <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false">取消</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(item.source);">取消</button>
                     </div>
                 </li>
             </div>

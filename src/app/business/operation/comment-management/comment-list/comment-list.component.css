@@ -67,3 +67,15 @@
 .search-form select {
     width: 120px;
 }
+
+.line {
+    margin: 0 8px;
+}
+
+::ng-deep .ant-input:placeholder-shown {
+    height: 34px;
+}
+
+.search-btn-group {
+    margin-top: -1px !important;
+}

@@ -6,8 +6,6 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.ser
 import { environment } from '../../../environments/environment';
 import { OperationComponent } from './operation.component';
 import { OperationRoutingModule } from './operation-routing.module';
-import { CommentManagementComponent } from './comment-management/comment-management.component';
-import { CommentListComponent } from './comment-management/comment-list/comment-list.component';
 
 const uploadToken: UploadConfig = {
     reportProcess: true,
@@ -24,8 +22,6 @@ const uploadToken: UploadConfig = {
     ],
   declarations: [
       OperationComponent,
-      CommentManagementComponent,
-      CommentListComponent
   ],
     providers: [{
         provide: UPLOAD_TOKEN,

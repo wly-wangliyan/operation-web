@@ -23,6 +23,15 @@
         <div>
           <span>{{projectItemList[0].source.vehicle_type.vehicle_type_name}}</span>
         </div>
+        <div>
+          <span>{{projectItemList[0].source.vehicle_type.vehicle_engine?projectItemList[0].source.vehicle_type.vehicle_engine:'--'}}</span>
+        </div>
+        <div>
+          <span>{{projectItemList[0].source.vehicle_type.vehicle_gearbox?projectItemList[0].source.vehicle_type.vehicle_gearbox:'--'}}</span>
+        </div>
+        <div>
+          <span>{{projectItemList[0].source.vehicle_type.vehicle_structure?projectItemList[0].source.vehicle_type.vehicle_structure:'--'}}</span>
+        </div>
       </div>
     </div>
     <!--保养项目-->

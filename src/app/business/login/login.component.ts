@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
 
   // login
   public onLogin() {
+    debugger;
     if (!this.loginParams.username || !this.loginParams.username.trim() || !this.loginParams.password) {
       this.loginError = true;
       this.errorMsg = '用户名称与密码不能为空!';

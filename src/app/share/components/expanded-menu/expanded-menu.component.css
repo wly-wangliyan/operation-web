@@ -30,6 +30,7 @@
 }
 
 .menu-container>li:nth-of-type(2) .icon-menu {
+  background: url('/assets/images/menu_comment.png') no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
 }

@@ -99,6 +99,7 @@ export class SearchUpkeepProductParams extends EntityBase {
     public vehicle_brand_id = ''; // 	string(32)	F	汽车品牌ID
     public vehicle_firm_id = ''; // 	string(32)	F	汽车厂商ID
     public vehicle_series_id = ''; // 	string(32)	F	车系ID
+    public vehicle_year_model = ''; //  年款
     public vehicle_type_name = ''; // 	string	F	车型名称
     public page_size = 45; // integer	F	每页条数 默认20
     public page_num = 1; // integer	F	页码 默认1

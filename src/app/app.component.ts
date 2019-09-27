@@ -86,7 +86,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     const url = this.router.routerState.snapshot.url;
     switch (index) {
       case 1:
-        if (!url.includes('operation')) {
+        if (!url.includes('operation/')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus();
           this.router.navigate(['/main/home']);
         } else if (url.includes('home')) {

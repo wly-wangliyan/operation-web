@@ -49,7 +49,7 @@
 <!-- 图片查看模态框 -->
 <div class="modal fade image-modal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel" aria-hidden="true" #imageModal>
-  <div class="modal-dialog">
+  <div class="modal-dialog" [class.dialog-left]="zoomWidth < 600">
     <div class="modal-content" [ngStyle]="{'line-height': transformZoomLineHeight + 'px'}">
       <div class="modal-body img-list" *ngIf="(imageList.length>0)&&(!hasDeletePicture)">
         <div class="lside-img-arrow" (click)="selectedShowImage(true)"
@@ -67,6 +67,6 @@
           [class.invisible]="currentImgNum==imageList.length"></div>
       </div>
     </div>
-    <div class="close-img" (click)="closeShowZoomPicture()"></div>
+    <div class="close-img" [ngStyle]="{'margin-left': (zoomWidth - 30) + 'px'}" (click)="closeShowZoomPicture()"></div>
   </div>
 </div>

@@ -12,15 +12,18 @@
 }
 
 .vehicle-space div {
-    width: 100px;
+    width: 130px;
     text-align: center;
     vertical-align: middle;
     line-height: 50px;
     border-right: 1px solid #D8D8D8;
 }
 
+.vehicle-space div:nth-of-type(5) {
+    width: 480px;
+}
+
 .vehicle-space div:last-child {
-    width: 514px;
     border-right: none;
 }
 

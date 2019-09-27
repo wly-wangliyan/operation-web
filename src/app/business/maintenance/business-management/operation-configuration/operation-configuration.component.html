@@ -26,6 +26,11 @@
                 </div>
                 <app-search-vehicle-type-group (selectBrandFirmSeries)="selectBrandFirmSeries($event)"></app-search-vehicle-type-group>
                 <div class="form-group">
+                    <span>年款：</span>
+                    <input class="form-control" placeholder="请输入年款" autocomplete="off" maxlength="4" oninput="value=value.replace(/[^\d]/g,'')"
+                           name="vehicle_year_model" [(ngModel)]="searchParams.vehicle_year_model"/>
+                </div>
+                <div class="form-group">
                     <span>车型名称：</span>
                     <input class="form-control" placeholder="请输入车型名称" autocomplete="off" maxlength="20"
                            name="vehicle_type_name" [(ngModel)]="searchParams.vehicle_type_name"/>
@@ -51,6 +56,9 @@
                         <th>厂商</th>
                         <th>车系</th>
                         <th>年款和车型</th>
+                        <th>发动机</th>
+                        <th>变速箱</th>
+                        <th>车身结构</th>
                         <!--<th>配件/服务费合计</th>
                         <th>工时费合计</th>
                         <th>销量</th>-->
@@ -70,6 +78,9 @@
                                 {{data.vehicle_type.vehicle_year_model}} {{data.vehicle_type.vehicle_type_name}}
                             </a>
                         </td>
+                        <td>{{data.vehicle_type.vehicle_engine}}</td>
+                        <td>{{data.vehicle_type.vehicle_gearbox}}</td>
+                        <td>{{data.vehicle_type.vehicle_structure}}</td>
                         <td>
                             <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="上架" nzUnCheckedChildren="下架"
                                        (ngModelChange)="onSwitchChange(data.upkeep_merchant_product_id,$event)"></nz-switch>
