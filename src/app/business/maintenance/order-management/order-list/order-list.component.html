@@ -162,9 +162,7 @@
             <td *ngIf='!data.item_categorys||data.item_categorys.length===0'>--</td>
             <td>{{data.upkeep_item_category_count||'--'}}</td>
             <!-- 合计实收 -->
-            <td>{{(data.total_real_amount | zCompleteNumber)||0}}<span
-                *ngIf="data.total_real_amount||data.total_real_amount===0">
-                元</span></td>
+            <td>{{(data.total_real_amount | zCompleteNumber)||0}} 元</td>
             <td>{{data.pay_time?(data.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{data.reserve_time?(data.reserve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td style='min-width: 70px;'>{{data.pay_status|payStatus}}</td>

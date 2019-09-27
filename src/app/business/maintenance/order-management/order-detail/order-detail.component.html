@@ -40,27 +40,19 @@
 
           <!-- 配件/服务合计实收 -->
           <nz-descriptions-item nzTitle="配件/服务合计实收：">
-            {{(upkeepOrderData.accessory_amount_discounted | zCompleteNumber)||0}}<span
-              *ngIf="upkeepOrderData.accessory_amount_discounted||upkeepOrderData.accessory_amount_discounted===0">
-              元</span>
+            {{(upkeepOrderData.accessory_amount_discounted | zCompleteNumber)||0}} 元
           </nz-descriptions-item>
           <!-- 工时费合计实收 -->
           <nz-descriptions-item nzTitle="工时费合计实收：">
-            {{(upkeepOrderData.work_amount_discounted | zCompleteNumber)||0}}<span
-              *ngIf="upkeepOrderData.work_amount_discounted||upkeepOrderData.work_amount_discounted===0">
-              元</span>
+            {{(upkeepOrderData.work_amount_discounted | zCompleteNumber)||0}} 元
           </nz-descriptions-item>
           <!-- 时段加价 -->
           <nz-descriptions-item nzTitle="时段加价：">
-            {{(upkeepOrderData.operation_time_amount | zCompleteNumber)||0}}<span
-              *ngIf="upkeepOrderData.operation_time_amount||upkeepOrderData.operation_time_amount===0">
-              元</span>
+            {{(upkeepOrderData.operation_time_amount | zCompleteNumber)||0}} 元
           </nz-descriptions-item>
           <!-- 合计实收 -->
           <nz-descriptions-item nzTitle="合计实收：">
-            {{(upkeepOrderData.total_real_amount | zCompleteNumber)||0}}<span
-              *ngIf="upkeepOrderData.total_real_amount||upkeepOrderData.total_real_amount===0">
-              元</span>
+            {{(upkeepOrderData.total_real_amount | zCompleteNumber)||0}} 元
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle=""></nz-descriptions-item>
           <nz-descriptions-item nzTitle=""></nz-descriptions-item>
@@ -132,16 +124,11 @@
               <td>{{data.specification||'--'}}</td>
               <td>{{data.serial_number||'--'}}</td>
               <!-- 配件/服务实收-->
-              <td>{{(data.sale_amount | zCompleteNumber)||0}}<span *ngIf="data.sale_amount||data.sale_amount===0">
-                  元</span></td>
+              <td>{{(data.sale_amount | zCompleteNumber)||0}} 元</td>
               <!-- 工时费实收 -->
-              <td>{{(data.work_sale_amount | zCompleteNumber)||0}}<span
-                  *ngIf="data.work_sale_amount||data.work_sale_amount===0">
-                  元</span></td>
+              <td>{{(data.work_sale_amount | zCompleteNumber)||0}} 元</td>
               <!-- 合计实收 -->
-              <td>{{(data.real_pay_amount | zCompleteNumber)||0}}<span
-                  *ngIf="data.real_pay_amount||data.real_pay_amount===0">
-                  元</span></td>
+              <td>{{(data.real_pay_amount | zCompleteNumber)||0}} 元</td>
             </tr>
           </tbody>
         </nz-table>
