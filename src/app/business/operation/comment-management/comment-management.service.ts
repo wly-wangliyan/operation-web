@@ -14,7 +14,7 @@ export class CommentEntity extends EntityBase {
   public object_name: string = undefined ; 	// 	string	object_name
   public order_id: string = undefined ; 	// 	string	订单id
   public status: number = undefined ; 	// 	integer	评论状态 1:待审核,2:已通过,3:被驳回
-  public is_top: number = undefined ; 	// 	bool	是否置顶该评论
+  public is_top: number = undefined ; 	// 	integer	是否置顶该评论
   public user_id: string = undefined ; 	// 	string	用户id
   public nickname: string = undefined ; 	// 	string	用户昵称
   public avatar: string = undefined ; 	// 	string	用户头像

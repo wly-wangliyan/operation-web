@@ -31,8 +31,8 @@
             <div class="operation-btn">
                 <button *ngIf="currentComment.status===1 || currentComment.status===3" nz-button nzType="primary" (click)="onPassClick(2)">审核</button>
                 <button *ngIf="currentComment.status===1 || currentComment.status===2" style="background: #F5A623;" nz-button (click)="onPassClick(3)">驳回</button>
-                <button *ngIf="currentComment.status===2 && currentComment.is_top===2" style="background: #E82038" nz-button (click)="onTopClick(true)">置顶</button>
-                <button *ngIf="currentComment.status===2 && currentComment.is_top===1" nzType="primary" nz-button (click)="onTopClick(false)">取消置顶</button>
+                <button *ngIf="currentComment.status===2 && currentComment.is_top===2" style="background: #E82038" nz-button (click)="onTopClick(1)">置顶</button>
+                <button *ngIf="currentComment.status===2 && currentComment.is_top===1" nzType="primary" nz-button (click)="onTopClick(2)">取消置顶</button>
             </div>
         </form>
     </div>
