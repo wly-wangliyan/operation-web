@@ -45,6 +45,7 @@
   border-left: 1px solid #d4d4d4;
   border-right: 1px solid #d4d4d4;
   border-top: 1px solid #d4d4d4;
+  cursor: default;
 }
 
 .table-item table tr>td:nth-child(odd) {
