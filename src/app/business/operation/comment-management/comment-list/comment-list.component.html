@@ -7,11 +7,11 @@
             <li [class.active]="!searchParams.status"
                 (click)="onCheckStatusClicked('')">全部</li>
             <li [class.active]="searchParams.status==1"
-                (click)="onCheckStatusClicked(1)">待审核</li>
+                (click)="onCheckStatusClicked('1')">待审核</li>
             <li [class.active]="searchParams.status==2"
-                (click)="onCheckStatusClicked(2)">已审核</li>
+                (click)="onCheckStatusClicked('2')">已审核</li>
             <li [class.active]="searchParams.status==3"
-                (click)="onCheckStatusClicked(3)">被驳回</li>
+                (click)="onCheckStatusClicked('3')">被驳回</li>
         </ul>
     </div>
     <div class="search-container">
