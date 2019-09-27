@@ -116,10 +116,10 @@ export class BrokerageCompanyEditComponent {
 
   // 增加隐私号
   public onAddSecretNumClick() {
-    this.insuranceErrMes = '';
     if (!this.secret_num) {
       return;
     }
+    this.insuranceErrMes = '';
     if (ValidateHelper.Telephone(this.secret_num)) {
       if (this.secret_nums.indexOf(this.secret_num) !== -1) {
         this.globalService.promptBox.open('隐私号已存在，请重新输入！', null, -1, null, false);
