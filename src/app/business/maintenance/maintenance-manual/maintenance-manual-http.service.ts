@@ -85,6 +85,7 @@ export class SearchParams extends EntityBase {
   public vehicle_brand: string = undefined; // F	品牌
   public vehicle_firm: string = undefined; // F	厂商
   public vehicle_series: string = undefined; // 	F	车系
+  public vehicle_year_model: string = undefined; // 年款
   public page_num = 1; // 页数 默认1
   public page_size = 45; // 每页数量 默认15
 }

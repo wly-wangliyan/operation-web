@@ -15,6 +15,12 @@
       <app-search-vehicle-type-group (selectBrandFirmSeries)="onChangeSearchParams($event)">
       </app-search-vehicle-type-group>
       <div class="form-group">
+        <span>年款：</span>
+        <input class="form-control" placeholder="请输入车型年款" name="vehicle_year_model" autocomplete="off"
+          [(ngModel)]="searchParams.vehicle_year_model" oninput="value=value.replace(/[^\d]/g,'')" maxlength="4"
+          appIgnoreSpace />
+      </div>
+      <div class="form-group">
         <span>车型名称：</span>
         <input class="form-control" placeholder="请输入车型名称" name="vehicle_type_name" autocomplete="off"
           [(ngModel)]="searchParams.vehicle_type_name" maxlength="20" appIgnoreSpace />
@@ -50,7 +56,7 @@
             <td>{{manual.vehicle_series? manual.vehicle_series.vehicle_series_name : '--'}}</td>
             <td *ngIf="manual.vehicle_year_model || manual.vehicle_type_name">
               <a [routerLink]="['../detail',manual.vehicle_type_id]">
-                {{manual.vehicle_year_model ? manual.vehicle_year_model : ''}}
+                {{manual.vehicle_year_model ? manual.vehicle_year_model+'款' : ''}}
                 {{manual.vehicle_type_name ? manual.vehicle_type_name : ''}}
               </a>
             </td>

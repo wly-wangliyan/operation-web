@@ -151,18 +151,6 @@ export class VehicleTypeManagementService {
   }
 
   /**
-   * 根据车系获取汽车车型年款列表
-   * @returns Observable<Array<any>
-   */
-  public requestVehicleYearList(vehicle_series_id: string): Observable<Array<any>> {
-    return this.httpService.get(environment.OPERATION_SERVE + `/vehicle/vehicle_series/${vehicle_series_id}/vehicle_types`)
-      .pipe(map(data => {
-        const tempResults = data.body;
-        return tempResults;
-      }));
-  }
-
-  /**
    * 根据厂商获取汽车车系列表
    * @returns Observable<Array<VehicleSeriesEntity>
    */
