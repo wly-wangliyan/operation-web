@@ -6,15 +6,16 @@
 .content-top {
   padding: 20px;
   background: #fff;
-  height: 142px;
+  min-height: 142px;
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 }
 
 .manual-info {
-  height: 50px;
+  min-height: 50px;
   display: flex;
+  flex-wrap: wrap;
   /* justify-content: space-around; */
 }
 
@@ -55,13 +56,15 @@
   text-align: center;
   display: block;
   background: #f7f8fa;
+  margin-bottom: 10px;
 }
 
 .content-middle {
   padding: 20px;
   background: #fff;
   overflow-x: auto;
-  height: calc(100% - 180px);
+  height: calc(100% - 190px);
+  margin-bottom: 20px;
 }
 
 .category-item {
