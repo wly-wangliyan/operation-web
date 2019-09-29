@@ -91,7 +91,8 @@
             <td>
               <a *ngIf="!accessory_ids.includes(product.upkeep_accessory_id)" [title]="'选择'"
                 (click)="onChooseClick(product)" style="color: #3E71F7!important;">选择</a>
-              <a *ngIf="accessory_ids.includes(product.upkeep_accessory_id)" style="color: rgba(232,32,56,1)!important;">已选择</a>
+              <a *ngIf="accessory_ids.includes(product.upkeep_accessory_id)"
+                style="color: rgba(232,32,56,1)!important;cursor: default">已选择</a>
             </td>
           </tr>
         </tbody>
