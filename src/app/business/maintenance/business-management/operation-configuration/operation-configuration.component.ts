@@ -171,6 +171,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
   public onTabClicked(index) {
     this.tabIndex = index;
     if (index === 2) {
+      this.searchParams = new SearchUpkeepProductParams();
       this.requestUpkeepMerchantOperation();
     } else {
       this.pageIndex = 1;

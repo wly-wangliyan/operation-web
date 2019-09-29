@@ -179,7 +179,11 @@ export class OperationConfigurationEditComponent implements OnInit {
       original_amount: Number(data.original_amount).toFixed(2)
     };
     if (params.sale_amount > params.original_amount) {
-      this.globalService.promptBox.open('配件原价不能小于销售单价!', null, 2000, '/assets/images/warning.png');
+      if (data.upkeep_accessory.upkeep_accessory_type === 1) {
+        this.globalService.promptBox.open(`配件原价不能小于销售单价!`, null, 2000, '/assets/images/warning.png');
+      } else {
+        this.globalService.promptBox.open(`服务原价不能小于销售单价!`, null, 2000, '/assets/images/warning.png');
+      }
       return;
     }
     if (params.number <= 0 || params.number > 100) {
