@@ -54,7 +54,9 @@ export class CommentDetailComponent implements OnInit {
   public onPassClick(status: number) {
     this.commentService.requestUpdateStatus(this.comment_id, status).subscribe((e) => {
       const msg = status === 2 ? '通过成功！' : '驳回成功！';
-      this.globalService.promptBox.open(msg);
+      this.globalService.promptBox.open(msg, () => {
+        this.router.navigate(['/main/operation/comment/comment-list']);
+      });
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -64,7 +66,9 @@ export class CommentDetailComponent implements OnInit {
   public onTopClick(status: number) {
     this.commentService.requestUpdateTop(this.comment_id, status).subscribe((e) => {
       const msg = status ? '置顶成功！' : '取消置顶成功！';
-      this.globalService.promptBox.open(msg);
+      this.globalService.promptBox.open(msg, () => {
+        this.router.navigate(['/main/operation/comment/comment-list']);
+      });
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

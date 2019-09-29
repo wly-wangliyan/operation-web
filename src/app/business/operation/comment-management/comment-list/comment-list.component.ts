@@ -114,6 +114,7 @@ export class CommentListComponent implements OnInit {
 
   //  切换状态
   public onCheckStatusClicked(status) {
+    this.searchParams = new SearchCommentParams();
     this.searchParams.status = status;
     this.searchText$.next();
   }

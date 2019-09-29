@@ -148,7 +148,7 @@
                                 <b>*</b>
                                 <span>服务名称</span>
                             </div>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
+                            <input class="form-control" style="width: 82%;margin-right: 0" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
                             <div>
@@ -156,15 +156,15 @@
                                 <span>服务原价</span>
                             </div>
                             <input class="form-control" name="original_amount_{{i}}_{{item.time}}" [(ngModel)]="item.source.original_amount" [disabled]="!item.is_edit_price"
-                                   style="margin-right: 0;width: calc(30% - 25px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
+                                   style="margin-right: 0;width: calc(30% - 35px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
                             <label class="price-label price-label-input">元</label>
                             <div>
                                 <b>*</b>
                                 <span>销售单价</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.sale_amount" name="sale_amount_{{i}}_{{item.time}}" (keypress)="inputNumberLimit($event)"
-                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">元</label>
+                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 35px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input" style="margin-right: 0">元</label>
                         </div>
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
@@ -294,7 +294,7 @@
                                 <b>*</b>
                                 <span>服务名称</span>
                             </div>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
+                            <input class="form-control" style="width: 82%;margin-right: 0" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
                             <div>
@@ -302,15 +302,15 @@
                                 <span>服务原价</span>
                             </div>
                             <input class="form-control" name="original_amount_{{i}}_{{item.time}}" [(ngModel)]="item.source.original_amount" [disabled]="!item.is_edit_price"
-                                   style="margin-right: 0;width: calc(30% - 25px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
+                                   style="margin-right: 0;width: calc(30% - 35px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
                             <label class="price-label price-label-input">元</label>
                             <div>
                                 <b>*</b>
                                 <span>销售单价</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.sale_amount" name="sale_amount_{{i}}_{{item.time}}" (keypress)="inputNumberLimit($event)"
-                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">元</label>
+                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 35px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input" style="margin-right: 0">元</label>
                         </div>
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
@@ -440,7 +440,7 @@
                                 <b>*</b>
                                 <span>服务名称</span>
                             </div>
-                            <input class="form-control" style="width: 359px" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
+                            <input class="form-control" style="width: 82%;margin-right: 0" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
                         </div>
                         <div class="maintenance-content">
                             <div>
@@ -448,15 +448,15 @@
                                 <span>服务原价</span>
                             </div>
                             <input class="form-control" name="original_amount_{{i}}_{{item.time}}" [(ngModel)]="item.source.original_amount" [disabled]="!item.is_edit_price"
-                                   style="margin-right: 0;width: calc(30% - 25px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
+                                   style="margin-right: 0;width: calc(30% - 35px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
                             <label class="price-label price-label-input">元</label>
                             <div>
                                 <b>*</b>
                                 <span>销售单价</span>
                             </div>
                             <input class="form-control" [(ngModel)]="item.source.sale_amount" name="sale_amount_{{i}}_{{item.time}}" (keypress)="inputNumberLimit($event)"
-                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">元</label>
+                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 35px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input" style="margin-right: 0">元</label>
                         </div>
                         <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
                         <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
