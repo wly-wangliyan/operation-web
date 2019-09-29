@@ -244,6 +244,15 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
     this.bookingTimes.push(timeObj);
   }
 
+  // 编辑预定时间段
+  public onTimeEditBtn(index) {
+    this.bookingTimes.forEach((value, i) => {
+      if (i !== index) {
+        value.isDisable = true;
+      }
+    });
+  }
+
   // 保存预定时间段
   public onTimeSaveBtn(data, index) {
     const params = {
@@ -258,12 +267,12 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
     }
     let is_pass = true;
     this.bookingTimes.forEach((value, i) => {
-      if (!value.isEdit || value.upkeep_merchant_operation_id) {
+      if (value.upkeep_merchant_operation_id) {
         const start_time = DateFormatHelper.getSecondTimeSum(value.begin_time);
         const end_time = DateFormatHelper.getSecondTimeSum(value.end_time);
         if (index !== i &&
           ((params.start_time >= start_time && params.start_time < end_time)
-            || (params.start_time <= start_time && params.end_time > start_time)
+            || (params.start_time < start_time && params.end_time > start_time)
             || (params.end_time > start_time && params.end_time <= end_time))) {
           this.globalService.promptBox.open('预定时段时间不可重叠！', null, 2000, '/assets/images/warning.png');
           is_pass = false;
