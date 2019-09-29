@@ -1,96 +1,95 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'车型管理'" [level2Name]=""></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg big-white-btn">
-            <a (click)="onImportClick()">导入</a>
-        </li>
-        <li class="big-bg">
-            <a href="/assets/download/vehicle_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
-        </li>
-    </ul>
+  <app-crumb [level1Name]="'车型管理'" [level2Name]=""></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg big-white-btn">
+      <a (click)="onImportClick()">导入</a>
+    </li>
+    <li class="big-bg">
+      <a href="/assets/download/vehicle_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
-    <div *ngIf="isLoading" style="text-align: center;margin: 150px 0 0 -80px">
-        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
-    </div>
-    <nz-empty style="margin-top: 10%" *ngIf="(!vehicleBrandList || vehicleBrandList.length===0) && !isLoading"></nz-empty>
-    <div class="brand-list">
-        <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)" [class.width]="item.vehicle_brand_id===vehicle_brand_id">
-            <img class="brand-img" [src]="item.vehicle_brand_image">
-            <span>{{item.vehicle_brand_name}}</span>
-            <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
-        </li>
-    </div>
-    <div class="vehicle-list" *ngIf="vehicleBrandList.length>0">
-        <nz-tree [nzData]="vehicleFirmList" nzAsyncData nzShowIcon (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
-                 [nzTreeTemplate]="nzTreeTemplate" [nzExpandedIcon]="mutiExpandedIconTpl">
-        </nz-tree>
-        <ng-template #mutiExpandedIconTpl let-node>
-            <img *ngIf="!node.isExpanded && node.level===0" src="/assets/images/open_tree.png">
-            <img *ngIf="node.isExpanded && node.level===0" src="/assets/images/close_tree.png">
-            <img *ngIf="!node.isExpanded && node.level===1" src="/assets/images/open_tree_one.png">
-            <img *ngIf="node.isExpanded && node.level===1" src="/assets/images/close_tree_one.png">
-        </ng-template>
-        <ng-template #nzTreeTemplate let-node>
-            <span *ngIf="!node.isLeaf">
-                 <label *ngIf="node.level===0" style="font-size: 16px;font-weight: 500;">
-                     {{ node.origin.vehicle_firm_name }}
-                 </label>
-                 <label *ngIf="node.level===1" style="font-size: 14px;font-weight: 400;">
-                     {{ node.origin.vehicle_series_name }}
-                 </label>
-                 <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
-             </span>
-            <div *ngIf="node.isLeaf" class="vehicle-info">
-                <div style="width: 400px">&nbsp;</div>
-                <span>{{ node.origin.vehicle_year_model }}款 {{ node.origin.vehicle_type_name }}</span>
-                <span style="font-weight: 400">
-                    {{node.origin.vehicle_level}} / {{node.origin.vehicle_energy_type}} / {{node.origin.vehicle_sold_time}}
-                    / {{node.origin.vehicle_price}} / {{node.origin.vehicle_engine}} / {{node.origin.vehicle_gearbox}}
-                    / {{node.origin.vehicle_size}} / {{node.origin.vehicle_structure}}</span>
-                <!--<span class="btn-del-info" (click)="onDeleteVehicleClick()"></span>-->
-            </div>
-        </ng-template>
-    </div>
+  <div *ngIf="isLoading" style="text-align: center;margin: 150px 0 0 -80px">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+  </div>
+  <nz-empty style="margin-top: 10%" *ngIf="(!vehicleBrandList || vehicleBrandList.length===0) && !isLoading"></nz-empty>
+  <div class="brand-list">
+    <li *ngFor="let item of vehicleBrandList; let i=index" (click)="onBrandClick(item)"
+      [class.width]="item.vehicle_brand_id===vehicle_brand_id">
+      <img class="brand-img" [src]="item.vehicle_brand_image">
+      <span>{{item.vehicle_brand_name}}</span>
+      <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
+    </li>
+  </div>
+  <div class="vehicle-list" *ngIf="vehicleBrandList.length>0">
+    <nz-tree [nzData]="vehicleFirmList" nzAsyncData nzShowIcon (nzClick)="nzEvent($event)"
+      (nzExpandChange)="nzEvent($event)" [nzTreeTemplate]="nzTreeTemplate" [nzExpandedIcon]="mutiExpandedIconTpl">
+    </nz-tree>
+    <ng-template #mutiExpandedIconTpl let-node>
+      <img *ngIf="!node.isExpanded && node.level===0" src="/assets/images/open_tree.png">
+      <img *ngIf="node.isExpanded && node.level===0" src="/assets/images/close_tree.png">
+      <img *ngIf="!node.isExpanded && node.level===1" src="/assets/images/open_tree_one.png">
+      <img *ngIf="node.isExpanded && node.level===1" src="/assets/images/close_tree_one.png">
+    </ng-template>
+    <ng-template #nzTreeTemplate let-node>
+      <span *ngIf="!node.isLeaf">
+        <label *ngIf="node.level===0" style="font-size: 16px;font-weight: 500;">
+          {{ node.origin.vehicle_firm_name }}
+        </label>
+        <label *ngIf="node.level===1" style="font-size: 14px;font-weight: 400;">
+          {{ node.origin.vehicle_series_name }}
+        </label>
+        <!--<img src="/assets/images/icon_clear_gray.png" (click)="onDeleteVehicleClick()">-->
+      </span>
+      <div *ngIf="node.isLeaf" class="vehicle-info">
+        <div style="width: 400px">&nbsp;</div>
+        <span>{{ node.origin.vehicle_year_model }}款 {{ node.origin.vehicle_type_name }}</span>
+        <span style="font-weight: 400">
+          {{node.origin.vehicle_level}} / {{node.origin.vehicle_energy_type}} / {{node.origin.vehicle_sold_time}}
+          / {{node.origin.vehicle_price}} / {{node.origin.vehicle_engine}} / {{node.origin.vehicle_gearbox}}
+          / {{node.origin.vehicle_size}} / {{node.origin.vehicle_structure}}</span>
+        <!--<span class="btn-del-info" (click)="onDeleteVehicleClick()"></span>-->
+      </div>
+    </ng-template>
+  </div>
 </div>
 
 <!--上传-->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" id="importBerthPromptDiv">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">导入数据</span>
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true" (click)="onCancelData()">&times;
-                </button>
-            </div>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <span>使用Excel编辑批量操作文件模板时，请确认输入的内容为文本格式，保存的内容和输入的内容保持一致</span>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
-                           placeholder="请选择文件"
-                           disabled>
-                    <div class="select-file">
-                        <a class="choose-file">
-                            <span class="download">选择文件</span>
-                            <input #berthFileImportInput type="file"
-                                   (change)="importViewModel.selectedFile($event,berthFileImportInput)" title=""/>
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group import-tip">
-                    <span>每次只能上传200条数据</span>
-                </div>
-                <div class="modal-footer">
-                    <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()">上传</button>
-                </div>
-            </form>
+  aria-labelledby="myModalLabel" aria-hidden="true" id="importBerthPromptDiv">
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">导入数据</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCancelData()">&times;
+        </button>
+      </div>
+      <form class="form-horizontal import-form">
+        <div class="form-group">
+          <span>使用Excel编辑批量操作文件模板时，请确认输入的内容为文本格式，保存的内容和输入的内容保持一致</span>
         </div>
+        <div class="form-group">
+          <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
+            placeholder="请选择文件" disabled>
+          <div class="select-file">
+            <a class="choose-file">
+              <span class="download">选择文件</span>
+              <input #berthFileImportInput type="file"
+                (change)="importViewModel.selectedFile($event,berthFileImportInput)" title="" />
+            </a>
+          </div>
+        </div>
+        <div class="form-group import-tip">
+          <span>每次只能上传200条数据</span>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()">上传</button>
+        </div>
+      </form>
     </div>
-    <!--进度条-->
-    <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
+  </div>
+  <!--进度条-->
+  <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
 </div>

@@ -76,6 +76,7 @@
     padding: 12px 6px;
     margin-top: 7px;
     margin-left: 10px;
+    cursor: pointer;
 }
 
 .maintenance-price label {
