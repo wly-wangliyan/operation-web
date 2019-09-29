@@ -315,6 +315,7 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   // 点击取消按钮，恢复未保存的数据
   public onConcleClick(index) {
+    debugger;
     this.accessoryItemList[index].source = JSON.parse(this.currentAccessory);
   }
 }
