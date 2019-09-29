@@ -25,7 +25,9 @@ export class ZPromptBoxComponent implements AfterViewInit {
       if (this.callback) {
         const temp = this.callback;
         this.callback = null;
-        this.delaySubscription && this.delaySubscription.unsubscribe();
+        if (this.delaySubscription) {
+          this.delaySubscription.unsubscribe();
+        }
         this.delaySubscription = null;
         temp();
       }
@@ -36,7 +38,9 @@ export class ZPromptBoxComponent implements AfterViewInit {
    * 取消按钮触发关闭模态框，释放订阅。
    */
   public close() {
-    this.delaySubscription && this.delaySubscription.unsubscribe();
+    if (this.delaySubscription) {
+      this.delaySubscription.unsubscribe();
+    }
     $(this.promptDiv.nativeElement).modal('hide');
   }
 
