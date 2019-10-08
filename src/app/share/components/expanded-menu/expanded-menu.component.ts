@@ -34,6 +34,8 @@ export class ExpandedMenuComponent implements OnInit {
       this.menuItems = this.generateMenus_insurance();
     } else if (this.globalService.menu_index === 4) {
       this.menuItems = this.generateMenus_maintenance();
+    } else if (this.globalService.menu_index === 5) {
+      this.menuItems = this.generateMenus_ticket();
     }
   }
 
@@ -89,6 +91,15 @@ export class ExpandedMenuComponent implements OnInit {
     menusItem.push(this.generateProjectMenu());
     menusItem.push(this.generateBusinessMenu());
     menusItem.push(this.generateVehicleTypeMenu());
+    return menusItem;
+  }
+
+  // 票务菜单
+  public generateMenus_ticket(): Array<SideMenuItem> {
+    this.menu_icon = false;
+    const menusItem: Array<SideMenuItem> = [];
+    menusItem.push(this.generateTicketProductMenu());
+    menusItem.push(this.generateTicketOrderMenu());
     return menusItem;
   }
 
@@ -174,6 +185,22 @@ export class ExpandedMenuComponent implements OnInit {
   private generateProductMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('产品库', '/main/maintenance/product-library');
     brokerageMenu.icon = '/assets/images/menu_part.png';
+    this.routeLinkList.push(brokerageMenu);
+    return brokerageMenu;
+  }
+
+  // 票务 》产品管理
+  private generateTicketProductMenu(): SideMenuItem {
+    const brokerageMenu = new SideMenuItem('产品管理', '/main/ticket/product-management');
+    brokerageMenu.icon = '/assets/images/menu_part.png';
+    this.routeLinkList.push(brokerageMenu);
+    return brokerageMenu;
+  }
+
+  // 票务 》订单管理
+  private generateTicketOrderMenu(): SideMenuItem {
+    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/product-management');
+    brokerageMenu.icon = '/assets/images/menu_order.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }

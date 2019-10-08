@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import {GlobalService} from './core/global.service';
-import {AuthService} from './core/auth.service';
-import {DateFormatHelper} from '../utils/date-format-helper';
-import {RouteMonitorService} from './core/route-monitor.service';
-import {Http403TipComponent} from './share/components/tips/http403-tip/http403-tip.component';
-import {Http500TipComponent} from './share/components/tips/http500-tip/http500-tip.component';
-import {Subscription} from 'rxjs/index';
-import {ZConfirmationBoxComponent} from './share/components/tips/z-confirmation-box/z-confirmation-box.component';
-import {ZPromptBoxComponent} from './share/components/tips/z-prompt-box/z-prompt-box.component';
+import { GlobalService } from './core/global.service';
+import { AuthService } from './core/auth.service';
+import { DateFormatHelper } from '../utils/date-format-helper';
+import { RouteMonitorService } from './core/route-monitor.service';
+import { Http403TipComponent } from './share/components/tips/http403-tip/http403-tip.component';
+import { Http500TipComponent } from './share/components/tips/http500-tip/http500-tip.component';
+import { Subscription } from 'rxjs/index';
+import { ZConfirmationBoxComponent } from './share/components/tips/z-confirmation-box/z-confirmation-box.component';
+import { ZPromptBoxComponent } from './share/components/tips/z-prompt-box/z-prompt-box.component';
 import { ExpandedMenuComponent } from './share/components/expanded-menu/expanded-menu.component';
 import { Router } from '@angular/router';
 
@@ -21,12 +21,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   public user: string;
   public menu: number;
 
-  @ViewChild(ZPromptBoxComponent, {static: false} ) private promptBox: ZPromptBoxComponent;
-  @ViewChild(ZConfirmationBoxComponent, {static: false}) private confirmationBox: ZConfirmationBoxComponent;
-  @ViewChild(Http403TipComponent, {static: false}) public global403Tip: Http403TipComponent;
-  @ViewChild(Http500TipComponent, {static: false}) public global500Tip: Http500TipComponent;
-  @ViewChild('routerDiv', {static: false}) public routerDiv: ElementRef;
-  @ViewChild(ExpandedMenuComponent, {static: false} ) private menuComponent: ExpandedMenuComponent;
+  @ViewChild(ZPromptBoxComponent, { static: false }) private promptBox: ZPromptBoxComponent;
+  @ViewChild(ZConfirmationBoxComponent, { static: false }) private confirmationBox: ZConfirmationBoxComponent;
+  @ViewChild(Http403TipComponent, { static: false }) public global403Tip: Http403TipComponent;
+  @ViewChild(Http500TipComponent, { static: false }) public global500Tip: Http500TipComponent;
+  @ViewChild('routerDiv', { static: false }) public routerDiv: ElementRef;
+  @ViewChild(ExpandedMenuComponent, { static: false }) private menuComponent: ExpandedMenuComponent;
 
   private routePathSubscription: Subscription;
 
@@ -107,6 +107,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           this.router.navigate(['/main']);
         } else if (url.includes('home')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
+        }
+        break;
+      case 5:
+        if (!url.includes('/ticket')) {
+          this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+          this.router.navigate(['/main']);
+        } else if (url.includes('home')) {
+          this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
         }
     }
   }
