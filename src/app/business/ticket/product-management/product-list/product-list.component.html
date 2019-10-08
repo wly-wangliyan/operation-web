@@ -1,1 +1,87 @@
-<p>product-list works!</p>
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" [routerLink]="['../create']">
+      <a>新建</a>
+    </li>
+  </ul>
+</div>
+
+<div class="content-flow">
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <span>销售状态：</span>
+        <select class="form-control" style="width: 100px;" name="status" [(ngModel)]="sale_status"
+          (change)="onChangeSearchStatus($event)">
+          <option value="">全部</option>
+          <option *ngFor="let status of saleStatus" [value]="status">
+            {{status}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>产品名称：</span>
+        <input class="form-control" placeholder="请输入产品名称" autocomplete="off" name="product_name" maxlength="20"
+          appIgnoreSpace />
+      </div>
+      <div class="form-group">
+        <span>上架时间：</span>
+        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+          name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        <span class='line'>-</span>
+        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime" name='end_time'
+          [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="productList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #ticketProductTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>产品信息</th>
+            <th>所属商家</th>
+            <th>市场价</th>
+            <th>售价</th>
+            <th>结算价</th>
+            <th>销量</th>
+            <th>上架时间</th>
+            <th>销售状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of ticketProductTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <a></a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="operation">
+              <a [title]="'查看'">查看</a>
+              <a [title]="'编辑'">编辑</a>
+              <a [title]="'下架'" (click)="onChangeSaleStatus(product)">下架</a>
+              <a [title]="'上架'" (click)="onChangeSaleStatus(product)">上架</a>
+              <a [title]="'删除'" (click)="onDeleteProduct(product)">删除</a>
+              <a [title]="'设为推荐'" (click)="onChangeTopStatus(product)">设为推荐</a>
+              <a [title]="'取消推荐'" (click)="onChangeTopStatus(product)">取消推荐</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
