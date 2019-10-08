@@ -199,7 +199,7 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 票务 》订单管理
   private generateTicketOrderMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/product-management');
+    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/order-management');
     brokerageMenu.icon = '/assets/images/menu_order.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
