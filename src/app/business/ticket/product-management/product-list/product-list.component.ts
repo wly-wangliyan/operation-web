@@ -15,7 +15,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   // public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
-  public saleStatus = [1, 2, 3]; // 销售状态 1:销售中 2:未上架 3:已下架
+  public saleStatus = [1, 2]; // 销售状态 1:销售中 2:已下架
 
   public sale_status = ''; // 销售状态
 
@@ -69,7 +69,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   // 请求产品列表
   private requestProductList() {
-    // this.productService.requestProductListData(this.searchParams).subscribe(res => {
+    // this.requestSubscription = this.productService.requestProductListData(this.searchParams).subscribe(res => {
     //   this.productList = res.results;
     //   this.linkUrl = res.linkUrl;
     this.initPageIndex();

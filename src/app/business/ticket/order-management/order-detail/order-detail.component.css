@@ -1,0 +1,10 @@
+.content-flow {
+  margin-left: 25px;
+  font-size: 14px;
+}
+
+.line {
+  width: calc(100% - 15px);
+  margin-top: 5px;
+  border: 1px solid rgba(136, 136, 136, .3);
+}

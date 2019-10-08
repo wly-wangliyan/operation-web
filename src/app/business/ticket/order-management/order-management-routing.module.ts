@@ -4,6 +4,7 @@ import { AuthGuardService } from '../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { OrderManagementComponent } from './order-management.component';
 import { OrderListComponent } from './order-list/order-list.component';
+import { OrderDetailComponent } from './order-detail/order-detail.component';
 
 const routes: Routes = [{
   path: '', component: OrderManagementComponent,
@@ -11,6 +12,7 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: OrderListComponent },
+    { path: 'detail', component: OrderDetailComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];

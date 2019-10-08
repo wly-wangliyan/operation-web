@@ -1,6 +1,7 @@
 .search-container {
   margin-left: 15px;
   width: calc(100% - 30px);
+  padding: 0;
 }
 
 .search-form .form-group {
