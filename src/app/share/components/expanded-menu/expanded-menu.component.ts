@@ -106,7 +106,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 美行停车
   private generateParkingMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('美行停车', null);
-    systemMenu.icon = 'team';
+    systemMenu.icon = '/assets/images/icon_menu_parking.png';
     const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/operation/parking/first-page-icon', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/operation/parking/version-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
@@ -191,16 +191,20 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 票务 》产品管理
   private generateTicketProductMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品管理', '/main/ticket/product-management');
+    const brokerageMenu = new SideMenuItem('产品管理', null);
     brokerageMenu.icon = '/assets/images/menu_part.png';
+    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management/list', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
 
   // 票务 》订单管理
   private generateTicketOrderMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/order-management');
+    const brokerageMenu = new SideMenuItem('订单管理', null);
     brokerageMenu.icon = '/assets/images/menu_order.png';
+    const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/ticket/order-management/list', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }

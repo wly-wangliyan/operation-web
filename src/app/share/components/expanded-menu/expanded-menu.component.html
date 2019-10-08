@@ -5,7 +5,7 @@
         [class.selected]="menuItem.isSelect">
         <span title>
           <div *ngIf="menuItem.isSelect"></div>
-          <img *ngIf='menuItem.icon!=="team"' draggable="false" class='menu-img' [src]='menuItem.icon'>
+          <img *ngIf='menuItem.icon!=="team"' draggable="false" class='icon-menu' [src]='menuItem.icon'>
           <span>{{menuItem.title}}</span>
         </span>
       </li>
@@ -14,7 +14,8 @@
       <li class="submenu" nz-submenu [(nzOpen)]="menuItem.isSelect" [class.selected]="menuItem.isSelect">
         <span title>
           <div *ngIf="menuItem.isSelect"></div>
-          <i class="icon-menu"></i>
+          <!-- <i class="icon-menu"></i> -->
+          <img draggable="false" class='icon-menu' [src]='menuItem.icon'>
           <span>{{menuItem.title}}</span>
           <i class="icon-arrow" [ngClass]="{'menu-open':!menuItem.isSelect,'menu-close':menuItem.isSelect}"></i>
         </span>
