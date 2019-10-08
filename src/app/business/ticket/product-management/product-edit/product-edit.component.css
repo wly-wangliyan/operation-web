@@ -1,0 +1,18 @@
+.operation-title {
+  height: 70px;
+  position: fixed;
+  top: 126px;
+  background: #fff;
+  width: calc(100% - 235px);
+  line-height: 70px;
+}
+
+.op-return {
+  float: left;
+  margin-left: 15px;
+}
+
+.op-save {
+  float: right;
+  margin-right: 15px;
+}
