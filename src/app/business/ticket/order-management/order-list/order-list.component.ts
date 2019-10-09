@@ -50,7 +50,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     private orderService: OrderManagementService) { }
 
   public ngOnInit() {
-    this.generateOrderList();
+    // this.generateOrderList();
   }
 
   public ngOnDestroy() {

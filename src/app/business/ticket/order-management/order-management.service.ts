@@ -51,4 +51,15 @@ export class OrderManagementService {
   public continueOrderListData(url: string): Observable<OrderLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new OrderLinkResponse(res)));
   }
+
+  /**
+   * 获取订单详情
+   * @param order_id 订单ID
+   * @returns Observable<OrderEntity>
+   */
+  public requestOrderDetailData(order_id: string): Observable<OrderEntity> {
+    const httpUrl = `${this.domain}/${order_id}`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => OrderEntity.Create(res.body)));
+  }
 }
