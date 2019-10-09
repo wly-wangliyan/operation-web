@@ -270,6 +270,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
             }
           });
         });
+    } else {
+      this.globalService.promptBox.open('文件地址不能为空，请选择！', null, 2000, null, false);
     }
   }
 }
