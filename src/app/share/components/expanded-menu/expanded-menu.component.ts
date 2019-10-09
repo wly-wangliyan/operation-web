@@ -128,7 +128,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保险公司管理
   private generateInsuranceMenu(): SideMenuItem {
     const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-company-list');
-    insuranceMenu.icon = 'team';
+    insuranceMenu.icon = '/assets/images/menu_insurance.png';
     this.routeLinkList.push(insuranceMenu);
     return insuranceMenu;
   }
@@ -136,7 +136,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 经纪公司管理
   private generateBrokerageMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance');
-    brokerageMenu.icon = 'team';
+    brokerageMenu.icon = '/assets/images/menu_business.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
