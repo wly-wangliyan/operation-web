@@ -14,15 +14,20 @@
     <div class="user">
       <!--<div class="user_photo"></div>
       <div class="user_name">{{authService.user?.username}}</div>-->
+      <div class="notice-btn" (click)="onNoticeCenterClick()">
+        <nz-badge [nzCount]="100">
+          <i class="main-header-notice"></i>
+        </nz-badge>
+      </div>
       <div class="logout-btn" (click)="onLoginoutClick()">
         <i class="main-header-logout"></i>退出
       </div>
     </div>
   </div>
-  <div class="main-left-layout">
+  <div class="main-left-layout" [class.main-left-layout-none]="!authService.isShowExpandMenu">
     <app-expanded-menu></app-expanded-menu>
   </div>
-  <div class="main-right-layout">
+  <div class="main-right-layout" [class.main-right-layout-all]="!authService.isShowExpandMenu">
     <div class="content-router-outlet" #routerDiv>
       <router-outlet></router-outlet>
       <router-outlet name="popup"></router-outlet>

@@ -29,6 +29,10 @@
   background-size: 100% 100%;
 }
 
+.main-left-layout-none {
+  width: 0;
+}
+
 .main-right-layout {
   width: calc(100% - 220px);
   height: calc(100% - 76px);
@@ -38,6 +42,10 @@
   overflow: hidden;
   background: #f3f7fd;
   position: relative;
+}
+
+.main-right-layout-all {
+  width: 100%;
 }
 
 .content-router-outlet {
@@ -110,7 +118,7 @@
   margin-left: -5px;
 }
 
-.logout-btn {
+.logout-btn,.notice-btn {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -120,7 +128,8 @@
   line-height:18px;
 }
 
-.logout-btn i {
+.logout-btn i,
+.notice-btn i {
   width: 22px;
   height: 22px;
   display: inline-block;
@@ -143,4 +152,17 @@
 
 .herder-active {
   background:rgba(0,0,0,0.33);
+}
+
+.notice-btn {
+  color: #fff;
+  margin-right: 20px;
+}
+
+.nz-badge {
+  margin-right: 20px;
+}
+
+.notice-btn i {
+  background: url('../assets/images/main-notice.png') no-repeat center;
 }

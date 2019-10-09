@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanLoad, Route,
   CanActivateChild
 } from '@angular/router';
-import {AuthService} from './auth.service';
-import {GlobalConst} from '../share/global-const';
+import { AuthService } from './auth.service';
+import { GlobalConst } from '../share/global-const';
 
 /* 权限守卫 */
 @Injectable({
@@ -28,6 +28,7 @@ export class AuthGuardService implements CanActivate, CanLoad, CanActivateChild 
   }
 
   private checkLogin(url: string): boolean {
+    this.authService.isShowExpandMenu = !url.includes('/notice-center');
     // 根据当前的登录状态来控制页面跳转
     if (url === '/login') {
       if (this.authService.isLoggedIn) {

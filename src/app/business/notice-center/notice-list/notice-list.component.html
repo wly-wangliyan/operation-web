@@ -1,0 +1,19 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'通知中心'"></app-crumb>
+</div>
+
+<div class="content-flow">
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="noticeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #noticeTable>
+        <tbody>
+          <tr *ngFor="let notice of noticeTable.data; let i=index">
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

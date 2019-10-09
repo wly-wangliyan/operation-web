@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpService} from './http.service';
-import {isNullOrUndefined} from 'util';
-import {GlobalConst} from '../share/global-const';
-import {environment} from '../../environments/environment';
-import {EntityBase} from '../../utils/z-entity';
-import {ZPromptBoxComponent} from '../share/components/tips/z-prompt-box/z-prompt-box.component';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpService } from './http.service';
+import { isNullOrUndefined } from 'util';
+import { GlobalConst } from '../share/global-const';
+import { environment } from '../../environments/environment';
+import { EntityBase } from '../../utils/z-entity';
+import { ZPromptBoxComponent } from '../share/components/tips/z-prompt-box/z-prompt-box.component';
 import { LocalStorageProvider } from '../share/localstorage-provider';
 
 export class UserEntity extends EntityBase {
@@ -31,6 +31,7 @@ export class AuthService {
     return this._user;
   }
 
+  public isShowExpandMenu: boolean; // 用于设置菜单栏是否显示
 
   constructor(private router: Router, private httpService: HttpService) {
   }

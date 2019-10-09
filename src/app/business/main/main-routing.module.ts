@@ -25,6 +25,10 @@ const routes: Routes = [{
     {
       path: 'ticket',
       loadChildren: () => import('../ticket/ticket.module').then(m => m.TicketModule)
+    },
+    {
+      path: 'notice-center',
+      loadChildren: () => import('../notice-center/notice-center.module').then(m => m.NoticeCenterModule)
     }
   ]
 }];

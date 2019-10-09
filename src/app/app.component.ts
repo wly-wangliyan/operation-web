@@ -40,7 +40,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       return new Date(globalService.timeStamp * 1000);
     };
     const url = this.router.routerState.snapshot.url;
-    this.menu = url.includes('insurance') ? 3 : url.includes('maintenance') ? 4 : url.includes('ticket') ? 5 : 1;
+    this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/notice-center') ? null : 1;
     this.globalService.menu_index = this.menu;
   }
 
@@ -77,12 +77,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  public onMainMenuClick(index) {
+  public onMainMenuClick(index: any) {
     this.menu = index;
     this.getMenuList(index);
   }
 
-  private getMenuList(index) {
+  private getMenuList(index: any) {
     const url = this.router.routerState.snapshot.url;
     switch (index) {
       case 1:
@@ -117,6 +117,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
         }
     }
+  }
+
+  // 打开通知中心
+  public onNoticeCenterClick() {
+    this.menu = null;
+    this.router.navigateByUrl('/main/notice-center/list');
   }
 }
 
