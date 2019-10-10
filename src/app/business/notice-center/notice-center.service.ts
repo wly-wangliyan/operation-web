@@ -6,7 +6,12 @@ import { map } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
 
 export class NoticeEntity extends EntityBase {
-
+  public message_id: string = undefined; // 通知-主键
+  public action_time: string = undefined; // 变更时间
+  public message_info: string = undefined; // 消息内容
+  public status: number = undefined; // 通知状态 1：已读 2：未读
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 更新时间
 }
 
 export class NoticeLinkResponse extends LinkResponse {
@@ -33,7 +38,7 @@ export class NoticeCenterService {
    * 获取通知列表
    */
   public requestNoticeListData(): Observable<NoticeLinkResponse> {
-    const httpUrl = `${this.domain}`;
+    const httpUrl = `${this.domain}/messages`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new NoticeLinkResponse(res)));
   }

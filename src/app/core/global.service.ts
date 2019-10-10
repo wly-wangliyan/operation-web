@@ -6,6 +6,9 @@ import { Http500TipComponent } from '../share/components/tips/http500-tip/http50
 import { Http403TipComponent } from '../share/components/tips/http403-tip/http403-tip.component';
 import { ZPromptBoxComponent } from '../share/components/tips/z-prompt-box/z-prompt-box.component';
 import { ZConfirmationBoxComponent } from '../share/components/tips/z-confirmation-box/z-confirmation-box.component';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -51,5 +54,11 @@ export class GlobalService {
       console.error(err);
       return false;
     }
+  }
+
+  // 获取通知中心未读数量
+  public requestUnreadCount(): Observable<HttpResponse<any>> {
+    const httpUrl = `${environment.OPERATION_SERVE}/messages`;
+    return this.httpService.get(httpUrl);
   }
 }

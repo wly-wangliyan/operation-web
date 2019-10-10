@@ -193,7 +193,7 @@ export class ExpandedMenuComponent implements OnInit {
   private generateTicketProductMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('产品管理', null);
     brokerageMenu.icon = '/assets/images/menu_part.png';
-    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management/list', brokerageMenu);
+    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
@@ -203,7 +203,7 @@ export class ExpandedMenuComponent implements OnInit {
   private generateTicketOrderMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('订单管理', null);
     brokerageMenu.icon = '/assets/images/menu_order.png';
-    const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/ticket/order-management/list', brokerageMenu);
+    const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/ticket/order-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;

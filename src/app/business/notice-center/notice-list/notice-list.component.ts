@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
-import { NoticeCenterService } from '../notice-center.service';
+import { NoticeCenterService, NoticeEntity } from '../notice-center.service';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { IntervalService } from '../interval.service';
 
 const PageSize = 15;
 
@@ -13,7 +14,7 @@ const PageSize = 15;
 })
 export class NoticeListComponent implements OnInit, OnDestroy {
 
-  public noticeList: Array<any> = []; // 通知列表
+  public noticeList: Array<NoticeEntity> = []; // 通知列表
 
   private requestSubscription: Subscription; // 获取数据
 
@@ -36,10 +37,14 @@ export class NoticeListComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
-    private noticeCenterService: NoticeCenterService) { }
+    private noticeCenterService: NoticeCenterService,
+    private intervalService: IntervalService) { }
 
   public ngOnInit() {
-    // this.requestNoticeList();
+    this.generateNoticeList();
+    this.intervalService.timer_5minutes.subscribe(() => {
+      this.searchText$.next();
+    });
   }
 
   public ngOnDestroy() {
@@ -64,6 +69,7 @@ export class NoticeListComponent implements OnInit, OnDestroy {
       this.initPageIndex();
       this.noResultText = '暂无数据';
     }, err => {
+      this.noResultText = '暂无数据';
       this.initPageIndex();
       this.globalService.httpErrorProcess(err);
     });

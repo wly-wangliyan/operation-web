@@ -1,0 +1,55 @@
+.content-flow {
+  margin-left: 25px;
+  font-size: 14px;
+}
+
+.content-container {
+  padding: 0;
+}
+
+.table-container{
+  margin: 0;
+}
+
+.zmy-table ::ng-deep .ant-table {
+  border: none;
+  background-color: #fff;
+}
+
+.zmy-table ::ng-deep .ant-table-body {
+  padding: 0 15px;
+}
+
+.ant-table-tbody>tr {
+  background:#fff;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody > tr > td,
+.zmy-table ::ng-deep .ant-table-placeholder {
+  border-bottom: 1px solid #888;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr>td:first-child {
+  text-align: left;
+  padding: 0 18px !important;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr>td:last-child {
+  text-align: right;
+  padding: 0 18px !important;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr:last-child>td {
+  border-bottom: none;
+}
+
+.zmy-table ::ng-deep .ant-table-placeholder {
+  border-top: none;
+  border-radius: 0;
+  border-bottom: none;
+}
+
+.ant-list-item {
+  display: flex;
+  justify-content: space-between;
+}

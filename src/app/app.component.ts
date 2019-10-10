@@ -10,6 +10,7 @@ import { ZConfirmationBoxComponent } from './share/components/tips/z-confirmatio
 import { ZPromptBoxComponent } from './share/components/tips/z-prompt-box/z-prompt-box.component';
 import { ExpandedMenuComponent } from './share/components/expanded-menu/expanded-menu.component';
 import { Router } from '@angular/router';
+import { IntervalService } from './business/notice-center/interval.service';
 
 @Component({
   selector: 'app-root',
@@ -30,18 +31,22 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private routePathSubscription: Subscription;
 
+  public notice_Count = 0; // 通知中心未读数量
+
   constructor(
     public authService: AuthService,
     private globalService: GlobalService,
     private routeMonitorService: RouteMonitorService,
     private renderer2: Renderer2,
-    private router: Router) {
+    private router: Router,
+    private intervalService: IntervalService) {
     DateFormatHelper.NowBlock = () => {
       return new Date(globalService.timeStamp * 1000);
     };
     const url = this.router.routerState.snapshot.url;
     this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/notice-center') ? null : 1;
     this.globalService.menu_index = this.menu;
+    // this.intervalService.startTimer(); // 1.6启动定时
   }
 
   ngAfterViewInit() {
@@ -55,10 +60,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.global403Tip.http403Flag = false;
       this.global500Tip.http500Flag = false;
     });
+
+    // 1.6定时刷新通知中心未读数量
+    // this.requestUnreadCount();
+    // this.intervalService.timer_5minutes.subscribe(() => {
+    //   this.requestUnreadCount();
+    // });
   }
 
   ngOnDestroy() {
     this.routePathSubscription && this.routePathSubscription.unsubscribe();
+    this.intervalService.stopTimer();
   }
 
   // 退出
@@ -123,6 +135,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   public onNoticeCenterClick() {
     this.menu = null;
     this.router.navigateByUrl('/main/notice-center/list');
+  }
+
+  private requestUnreadCount() {
+    this.globalService.requestUnreadCount().subscribe(res => {
+      this.notice_Count = res.body ? res.body : 0;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 }
 

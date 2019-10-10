@@ -3,17 +3,20 @@
 </div>
 
 <div class="content-flow">
-  <div class="table-container">
-    <div class="zmy-table">
-      <nz-table [nzData]="noticeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #noticeTable>
-        <tbody>
-          <tr *ngFor="let notice of noticeTable.data; let i=index">
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </nz-table>
+  <div class="content-container">
+    <div class="table-container">
+      <div class="zmy-table">
+        <nz-table [nzData]="noticeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+          (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #noticeTable>
+          <tbody>
+            <tr *ngFor="let notice of noticeTable.data; let i=index">
+              <td><img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />xxxxx产品价格变动通知
+              </td>
+              <td>2019年10月9日</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
     </div>
   </div>
 </div>
