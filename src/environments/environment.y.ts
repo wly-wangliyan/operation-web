@@ -3,4 +3,5 @@ export const environment = {
   version: 'y',
   OPERATION_SERVE: '//operation-server-y.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
+  TICKET_SERVER: '//ticket-server-y.parkone.cn'
 };

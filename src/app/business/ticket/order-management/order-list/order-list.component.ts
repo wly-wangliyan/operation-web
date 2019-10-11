@@ -50,7 +50,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     private orderService: OrderManagementService) { }
 
   public ngOnInit() {
-    // this.generateOrderList();
+    this.generateOrderList();
   }
 
   public ngOnDestroy() {
@@ -58,17 +58,17 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
-  // 初始化获取产品列表
+  // 初始化获取订单列表
   private generateOrderList() {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestProductList();
+      this.requestOrderList();
     });
     this.searchText$.next();
   }
 
-  // 请求产品列表
-  private requestProductList() {
+  // 请求订单列表
+  private requestOrderList() {
     this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
       this.orderList = res.results;
       this.linkUrl = res.linkUrl;

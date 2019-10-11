@@ -3,5 +3,6 @@ export const environment = {
   version: 'develop',
   OPERATION_SERVE: '//operation-server.parkone.cn',
   COMMENT_SERVE: '//comment-server.parkone.cn',
+  TICKET_SERVER: '//ticket-server.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
 };

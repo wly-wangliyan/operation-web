@@ -4,6 +4,7 @@ export const environment = {
   OPERATION_SERVE: '//operation-server.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
   COMMENT_SERVE: '//comment-server.parkone.cn',
+  TICKET_SERVER: '//ticket-server.parkone.cn',
   X_CLIENT_ID: '2f0ac90ac7a411e9b8270242ac160002',
   X_CLIENT_MD5: '2ee90f194b122776ac4f57af2ae2e0e8',
 };

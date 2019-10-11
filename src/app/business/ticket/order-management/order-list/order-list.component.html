@@ -17,22 +17,22 @@
       </div>
       <div class="form-group">
         <span>产品名称：</span>
-        <input class="form-control" placeholder="请输入产品名称" autocomplete="off" name="product_name" maxlength="20"
-          appIgnoreSpace />
+        <input class="form-control" [(ngModel)]="searchParams.project_name" placeholder="请输入产品名称" autocomplete="off"
+          name="product_name" maxlength="20" appIgnoreSpace />
       </div>
       <div class="form-group">
         <span>订单编号：</span>
-        <input class="form-control" placeholder="请输入订单编号" autocomplete="off" name="order_num" maxlength="20"
-          appIgnoreSpace />
+        <input class="form-control" [(ngModel)]="searchParams.order_id" placeholder="请输入订单编号" autocomplete="off"
+          name="order_num" maxlength="" appIgnoreSpace />
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <span>购买渠道：</span>
         <select class="form-control" name="source" [(ngModel)]="source" (change)="onChangeSearchSource($event)">
           <option value="">全部</option>
           <option value="1">美行停车App</option>
           <option value="2">美行停车小程序</option>
         </select>
-      </div>
+      </div> -->
       <div class="form-group">
         <span>下单时间：</span>
         <nz-date-picker [(ngModel)]="order_start_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderStartTime"
@@ -67,7 +67,7 @@
             <th>数量</th>
             <th>应收</th>
             <th>实收</th>
-            <th>购买渠道</th>
+            <!-- <th>购买渠道</th> -->
             <th>下单时间</th>
             <th>支付时间</th>
             <th>订单状态</th>
@@ -76,13 +76,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of ticketOrderTable.data; let i=index">
+          <tr *ngFor="let order of ticketOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td></td>
+            <td>{{order.order_id}}</td>
             <td>
-              <a></a>
+              <a>{{order.}}</a>
             </td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>

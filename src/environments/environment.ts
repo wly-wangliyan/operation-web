@@ -12,6 +12,7 @@ export const environment = {
   // OPERATION_SERVE: '//192.168.6.43:8000', // 测试用 商硕
   // OPERATION_SERVE: '//192.168.6.119:8001', // 测试用 李国强
   COMMENT_SERVE: '//comment-server-d.parkone.cn',
+  TICKET_SERVER: '//ticket-server-d.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
   X_CLIENT_ID: '5bc90c26c7a011e996b10242ac1a0004',
   X_CLIENT_MD5: 'e13ea48916a1584962d883573e14a371',
