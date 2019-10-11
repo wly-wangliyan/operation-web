@@ -239,4 +239,5 @@ ul {
 
 .vehicle-title span {
     margin-left: 15px;
+    cursor: pointer;
 }
