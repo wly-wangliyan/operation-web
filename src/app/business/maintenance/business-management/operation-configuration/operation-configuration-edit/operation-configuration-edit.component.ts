@@ -53,10 +53,10 @@ export class OperationConfigurationEditComponent implements OnInit {
   public currentProjectId_copy: string; // 当前被复制的产品项目id
   public currentProject = new UpkeepMerchantProjectEntity();
   public isLoading = true; // 是否加载中
+  public upkeep_merchant_product_id: string; // 商家产品id
+  public upkeep_merchant_product_id_copy: string; // 被复制的产品id
 
   private upkeep_merchant_id: string; // 商家id
-  private upkeep_merchant_product_id: string; // 商家产品id
-  private upkeep_merchant_product_id_copy: string; // 被复制的产品id
   private continueRequestSubscription: Subscription;
   private searchText$ = new Subject<any>();
   private currentAccessory: string; // 当前配件
