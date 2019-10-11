@@ -1,10 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  MapItem,
-  MapType,
-  ZMapSelectPointComponent
-} from '../../../../share/components/z-map-select-point/z-map-select-point.component';
-import { ProCityDistSelectComponent } from '../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
+import { Component, OnInit } from '@angular/core';
+import { GlobalService } from '../../../../core/global.service';
+import { isUndefined } from 'util';
+export class ErrMessageItem {
+  public isError = false;
+  public errMes: string;
+
+  constructor(isError?: boolean, errMes?: string) {
+    if (!isError || isUndefined(errMes)) {
+      return;
+    }
+    this.isError = isError;
+    this.errMes = errMes;
+  }
+}
+
+export class ErrPositionItem {
+  icon: ErrMessageItem = new ErrMessageItem();
+  ic_name: ErrMessageItem = new ErrMessageItem();
+
+  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
+              corner?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(ic_name)) {
+      return;
+    }
+    this.icon = icon;
+    this.ic_name = ic_name;
+  }
+}
 
 @Component({
   selector: 'app-product-edit',
@@ -13,13 +35,12 @@ import { ProCityDistSelectComponent } from '../../../../share/components/pro-cit
 })
 export class ProductEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(private globalService: GlobalService,
+  ) { }
 
   public productTicketList: Array<any> = [];
   public isShowInsutructions = false;
-  @ViewChild('applicationPro', { static: true }) public proCityDistSelectComponent: ProCityDistSelectComponent;
-
-  @ViewChild(ZMapSelectPointComponent, { static: true }) public zMapSelectPointComponent: ZMapSelectPointComponent;
+  public errPositionItem: ErrPositionItem = new ErrPositionItem();
 
   ngOnInit() {
     setTimeout(() => {
@@ -53,12 +74,34 @@ export class ProductEditComponent implements OnInit {
 
   public onShowInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = true;
-    console.log(1, this.productTicketList);
 
   }
 
   public onHideInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = false;
+  }
+
+  public onReImportData() {
+    this.globalService.confirmationBox.open('提示', '重新导入会覆盖现有票务详情，确定导入？', () => {
+    });
+  }
+
+  // 清空
+  public clear() {
+    this.errPositionItem.icon.isError = false;
+    this.errPositionItem.ic_name.isError = false;
+  }
+
+  // 选择图片时校验图片格式
+  public onSelectedPicture(event) {
+    this.errPositionItem.icon.isError = false;
+    if (event === 'type_error') {
+      this.errPositionItem.icon.isError = true;
+      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
+    } else if (event === 'size_over') {
+      this.errPositionItem.icon.isError = true;
+      this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
+    }
   }
 
 }

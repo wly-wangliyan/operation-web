@@ -20,6 +20,7 @@
             <th>产品名称</th>
             <th>地址</th>
             <th>状态</th>
+            <th>产品ID</th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +29,7 @@
             <td>沈阳清河半岛温泉门票</td>
             <td>xx省沈阳xx区xx街道xxxx号</td>
             <td>在售</td>
+            <td>54525655656</td>
           </tr>
         </tbody>
       </nz-table>
@@ -38,15 +40,15 @@
       <form nz-form class="content-layout" #registerForm="ngForm">
         <div class="card_content">
           <nz-form-item nzFlex>
-            <nz-form-label nzRequired>产品标题</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
             <nz-form-control>
               <input class="main-title" placeholder="输入1-20字产品标题用于前端显示" nz-input autocomplete="off" name="main-title"
                 required maxlength='20' />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label>副标题</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]='true' class="ml_10">副标题</nz-form-label>
+            <nz-form-control class="ml_-10">
               <input class="subheading" placeholder=" 输入0-80字副标题，在标题下显示" nz-input autocomplete="off" name="Subheading"
                 required maxlength='80' />
             </nz-form-control>
@@ -100,24 +102,26 @@
       </nz-table>
     </div>
     <!-- 票务详情 -->
-    <div class='mt_50'><span class='card-title'>票务详情</span><a class='import-btn'>重新导入</a>
+    <div class='mt_50'><span class='card-title'>票务详情</span><a class='import-btn' (click)='onReImportData()'>重新导入</a>
     </div>
     <div>
       <form nz-form class="content-layout" #registerForm="ngForm">
         <div class="card_content">
           <nz-form-item nzFlex>
-            <nz-form-label nzRequired class="mr_10">产品图片</nz-form-label>
-            <nz-form-control class="ml_10">
+            <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
+            <nz-form-control>
               <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                 [isCutCoverImg]="true" [maxLength]="6" (selectedImgChange)="onSelectedPicture($event)"
                 file_id="productImg" [imageWidth]='100' [imageHeight]='100' [imageUrls]="cover_url"
                 [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
               </app-z-photo-select>
+              <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
+                <span class="input-error input_time_valid">{{ errPositionItem?.icon?.errMes}}</span>
+              </div>
               <div>注：图片比例为1:1，格式PNG或JPG，大小2M以内，图片名称只支持中文或数字，最多上传6张</div>
             </nz-form-control>
 
             <!-- <nz-form-control class="ml_10">
-          <img *ngIf='price_image_url.length<=0&&editSwitch' src="/assets/images/default_pic.png">
           <app-z-photo-select *ngIf='editSwitch' [hasAddPicture]="false" [hasDeletePicture]="false" [maxLength]="6"
             [class.hide]="price_image_url.length<=0" [imageUrls]="price_image_url" #parkingImg>
           </app-z-photo-select>
@@ -132,21 +136,22 @@
 
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label class="mr_10">营业时间</nz-form-label>
-            <nz-form-control>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
+            <nz-form-control class="ml_-10">
               <input class="detail-input" nz-input autocomplete="off" name="Subheading" required maxlength='20'
                 disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label class="mr_10">联系电话</nz-form-label>
-            <nz-form-control>
-              <input class="detail-input" nz-input autocomplete="off" name="Subheading" required maxlength='12' />
+            <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
+            <nz-form-control class="ml_-10">
+              <input class="detail-input" nz-input autocomplete="off" name="Subheading" required maxlength='12'
+                disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label class="mr_10">地址</nz-form-label>
-            <nz-form-control>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
+            <nz-form-control class="ml_-10">
               <input class="address" nz-input autocomplete="off" name="country" placeholder="省" disabled />
               <input class="address" nz-input autocomplete="off" name="city" placeholder="市" disabled />
               <input class="address" nz-input autocomplete="off" name="region" placeholder="区" disabled />
@@ -155,21 +160,21 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label nzRequired class="mr_10">交通指南</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
               <textarea name="editor1" id="editor1" rows="10" cols="150"></textarea>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nzFlex>
-            <nz-form-label nzRequired class="mr_10">预订须知</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
               <textarea name="editor2" id="editor2" rows="10" cols="150"></textarea>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nzFlex>
-            <nz-form-label nzRequired class="mr_10">景区介绍</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
             <nz-form-control>
               <textarea name="editor3" id="editor3" rows="10" cols="150"></textarea>
             </nz-form-control>

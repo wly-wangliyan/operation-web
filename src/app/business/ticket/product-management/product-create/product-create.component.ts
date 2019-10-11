@@ -14,6 +14,6 @@ export class ProductCreateComponent implements OnInit {
   }
 
   public onAddProduct() {
-    this.router.navigate(['/main/ticket/product-management/edit']);
+    this.router.navigate(['/main/ticket/product-management/detail']);
   }
 }

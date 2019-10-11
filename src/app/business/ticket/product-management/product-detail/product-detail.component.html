@@ -1,1 +1,157 @@
-<p>product-detail works!</p>
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../'" [level2Name]="'查看产品'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class='des_card'>
+    <div class='card-title'>产品信息</div>
+    <div>
+      <nz-table #basicTable [nzNoResult]="'暂无数据'" nzBordered>
+        <thead>
+          <tr>
+            <th>产品主图</th>
+            <th>产品名称</th>
+            <th>地址</th>
+            <th>状态</th>
+            <th>产品ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="/assets/images/pro_default.png"></td>
+            <td>沈阳清河半岛温泉门票</td>
+            <td>xx省沈阳xx区xx街道xxxx号</td>
+            <td>在售</td>
+            <td>54525655656</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- 产品运营信息 -->
+    <div class='card-title mt_50'>产品运营信息</div>
+    <div>
+      <form nz-form class="content-layout" #registerForm="ngForm">
+        <div class="card_content">
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
+            <nz-form-control>
+              <input class="main-title" placeholder="输入1-20字产品标题用于前端显示" nz-input autocomplete="off" name="main-title"
+                required maxlength='20' />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
+            <nz-form-control class="ml_-10">
+              <input class="subheading" placeholder=" 输入0-80字副标题，在标题下显示" nz-input autocomplete="off" name="Subheading"
+                required maxlength='80' />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+    </div>
+
+    <!-- 产品门票信息 -->
+    <div class='card-title mt_50'>产品门票信息</div>
+    <div>
+      <nz-table #basicTable [nzNoResult]="'暂无数据'" [nzData]="productTicketList" [nzShowPagination]="false"
+        [nzFrontPagination]='false' nzBordered>
+        <thead>
+          <tr>
+            <th>门票名称</th>
+            <th>购票须知</th>
+            <th>市场价</th>
+            <th>建议零售价</th>
+            <th>结算价</th>
+            <th>售价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i=index">
+            <td>
+              <img class='top-img' src="/assets/images/top_icon.png">
+              <span class='name'>{{data.name}}</span>
+            </td>
+            <td class='insutructions'>
+              <div class='text' *ngIf='!data.isShowInsutructions'>
+                <p>{{data.time}}</p>
+                <span (click)='onShowInsutructions(i)'>展开</span>
+              </div>
+              <div class='text' *ngIf='data.isShowInsutructions'>
+                <p>{{data.costIncludes}}</p>
+                <span (click)='onHideInsutructions(i)'>收起</span>
+              </div>
+            </td>
+            <td>{{data.marketPrice}}</td>
+            <td>{{data.proposalPrice}}</td>
+            <td>{{data.settlementPrice}}</td>
+            <td>{{data.price}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- 票务详情 -->
+    <div class='mt_50'><span class='card-title'>票务详情</span></div>
+    <div>
+      <form nz-form class="content-layout" #registerForm="ngForm">
+        <div class="card_content">
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
+            <nz-form-control>
+              <img src="/assets/images/pro_default.png">
+              <app-z-photo-select [hasAddPicture]="false" [hasDeletePicture]="false" [maxLength]="6"
+                [imageUrls]="price_image_url" #parkingImg>
+              </app-z-photo-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
+            <nz-form-control class="ml_-10">
+              24小时
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
+            <nz-form-control class="ml_-10">
+              13988888888
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
+            <nz-form-control class="ml_-10">
+              辽宁省沈阳市浑南区xx街xx号（xxxx附近）
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
+            <nz-form-control>
+              自驾：市府广场—青年大街—北陵大街—泰山路—金山路—鸭绿江北街—文储路—孝信街—沿蒲南路向西行驶1公里左右—向北行驶即可到达目的地 铁西广场—重工街向北—白山路—黄河北大街—七星大街（方特方向）—蒲南路—景区
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
+            <nz-form-control>
+              特惠政策
+
+              门票：1.4米（不含）以下儿童免票
+
+              温馨提示
+
+              至6月30日；周一周二门票特惠 单温泉票129元；套票159元
+
+              由于景区有区域限制，车牌号是铁岭、抚顺地区的请不要购买，以免耽误您正常使用。
+
+              在收到景区预定短信收1小时方可生效入园。
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
+            <nz-form-control>
+              <textarea name="editor3" id="editor3" rows="10" cols="150"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -3,9 +3,23 @@
 }
 
 ::ng-deep .ant-form-item-label {
-  width: 100px;
+  width: 80px;
+  text-align: left;
 }
 
+.header-right>li.big-white-btn:hover {
+  background: #fff;
+  border: 1px solid #3E71F7;
+  color: #3E71F7;
+}
+
+.ml_10 {
+  margin-left: 10px;
+}
+
+.ml_-10 {
+  margin-left: -10px;
+}
 
 .des_card {
   min-width: 1300px;

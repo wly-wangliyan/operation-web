@@ -1,0 +1,98 @@
+::ng-deep .ant-form-item {
+  margin-bottom: 0;
+}
+
+::ng-deep .ant-form-item-label {
+  width: 80px;
+  text-align: left;
+}
+
+.ml_10 {
+  margin-left: 10px;
+}
+
+.ml_-10 {
+  margin-left: -10px;
+}
+
+.des_card {
+  min-width: 1300px;
+  height: auto;
+  padding: 30px 20px;
+  background: #fff;
+}
+
+.card-title {
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFangSC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+}
+
+.mt_50 {
+  margin-top: 50px;
+}
+
+.main-title {
+  width: 453px;
+}
+
+.subheading {
+  width: 453px;
+}
+
+.import-btn {
+  margin-left: 14px;
+  font-size: 14px;
+  font-family: PingFangSC-Semibold, PingFangSC;
+  font-weight: 600;
+  color: rgba(62, 113, 247, 1) !important;
+}
+
+.insutructions {
+  width: 360px;
+  padding-top: 20px !important;
+}
+
+.text>p {
+  width: 260px;
+  display: inline-block;
+  text-align: left;
+}
+
+.text>span {
+  margin-left: 20px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 127, 254, 1);
+}
+
+.detail-input {
+  width: 644px;
+}
+
+.address {
+  width: 100px;
+  margin-right: 10px;
+}
+
+.address-input {
+  width: 315px;
+}
+
+.opera>a {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFangSC;
+  font-weight: 400;
+  color: rgba(62, 113, 247, 1);
+}
+
+.top-img {
+  float: left;
+  margin-left: 100px;
+}
+
+.name {
+  margin-left: -140px;
+}
