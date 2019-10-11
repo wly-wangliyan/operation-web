@@ -16,21 +16,7 @@ export class ProductEditComponent implements OnInit {
   constructor() { }
 
   public productTicketList: Array<any> = [];
-  public mapObj: MapItem = {
-    point: [],
-    type: MapType.edit,
-    address: '',
-    hasDetailedAddress: false,
-    cityCode: ''
-  };
-
-  public parkingDetail = {
-    address: '',
-    lon: '',
-    lat: '',
-    region_id: ''
-  };
-
+  public isShowInsutructions = false;
   @ViewChild('applicationPro', { static: true }) public proCityDistSelectComponent: ProCityDistSelectComponent;
 
   @ViewChild(ZMapSelectPointComponent, { static: true }) public zMapSelectPointComponent: ZMapSelectPointComponent;
@@ -43,59 +29,36 @@ export class ProductEditComponent implements OnInit {
     }, 0);
     this.productTicketList = [
       {
-        name: '赠项目门票', time: '提前1小时', costIncludes: '15项自费项目任选其一门票一张',
+        name: '赠项目门票', isShowInsutructions: false, time: '提前1小时', costIncludes: '15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
         useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245
+        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
       },
       {
-        name: '温泉门票', time: '提前2小时', costIncludes: '25项自费项目任选其一门票一张',
+        name: '温泉门票', isShowInsutructions: false, time: '提前2小时', costIncludes: '25项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
         useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245
+        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
       },
       {
-        name: '游乐场门票', time: '提前3小时', costIncludes: '35项自费项目任选其一门票一张',
+        name: '游乐场门票', isShowInsutructions: false, time: '提前3小时', costIncludes: '35项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
         useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245
+        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
       },
       {
-        name: '洗浴门票', time: '提前4小时', costIncludes: '45项自费项目任选其一门票一张',
+        name: '洗浴门票', isShowInsutructions: false, time: '提前4小时', costIncludes: '45项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
         useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245
+        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
       },
     ];
   }
 
-  // 省市区code改变时清空详细地址等数据
-  public onRegionIdChanged(event) {
-    // this.parkingDetail.region_id = event;
-    this.parkingDetail.address = this.parkingDetail.lon = this.parkingDetail.lat = '';
+  public onShowInsutructions(i: number) {
+    this.productTicketList[i].isShowInsutructions = true;
+    console.log(1, this.productTicketList);
+
   }
 
-  // 打开地图组件
-  public openMapModal() {
-    this.mapObj.point = [];
-    this.parkingDetail.address = this.parkingDetail.address ? this.parkingDetail.address : '';
-    if (this.parkingDetail.address) {
-      this.mapObj.hasDetailedAddress = true;
-    }
-    if (this.parkingDetail.lon && this.parkingDetail.lat) {
-      this.mapObj.point.push(Number(this.parkingDetail.lon));
-      this.mapObj.point.push(Number(this.parkingDetail.lat));
-    }
-    this.mapObj.address = this.proCityDistSelectComponent.selectedAddress + this.parkingDetail.address;
-    this.zMapSelectPointComponent.openMap();
-  }
-
-  // 获取地图选择结果
-  public getSelectedMarker(event) {
-    if (event.selectedMarker && event.selectedMarker.regeocode) {
-      const regeocode = event.selectedMarker.regeocode;
-      const addressComponent = regeocode.addressComponent;
-      this.parkingDetail.region_id = addressComponent.adcode;
-      // this.parkingDetail.address = regeocode.formattedAddress.replace(addressComponent.province + addressComponent.city + addressComponent.district, '');
-      this.parkingDetail.lon = event.selectedMarker.point.lng;
-      this.parkingDetail.lat = event.selectedMarker.point.lat;
-    }
+  public onHideInsutructions(i: number) {
+    this.productTicketList[i].isShowInsutructions = false;
   }
 
 }

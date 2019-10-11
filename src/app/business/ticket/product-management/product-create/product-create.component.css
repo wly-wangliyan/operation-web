@@ -1,26 +1,28 @@
-.operation-title {
-  height: 70px;
-  position: fixed;
-  top: 76px;
+.des_card {
+  min-width: 1300px;
+  height: 200px;
+  padding: 30px 20px;
   background: #fff;
-  width: calc(100% - 235px);
-  line-height: 70px;
 }
 
-.op-return {
-  float: left;
-  margin-left: 15px;
-}
-
-.op-save {
-  float: right;
-  margin-right: 15px;
-}
-
-.detail_info {
-  font-size: 16px;
-  font-family: PingFangSC;
-  font-weight: 800;
+.card-title {
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFangSC;
+  font-weight: 500;
   color: rgba(35, 36, 47, 1);
-  margin: 20px 2px 17px;
+}
+
+.add {
+  position: absolute;
+  left: 50%;
+  margin-left: -36px;
+  cursor: pointer;
+}
+
+.choose {
+  margin-top: 11px;
+  font-size: 14px;
+  font-family: PingFangSC-Medium, PingFangSC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
 }

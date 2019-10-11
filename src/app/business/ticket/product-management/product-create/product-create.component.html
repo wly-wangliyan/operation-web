@@ -1,17 +1,17 @@
-<div class='operation-title'>
-  <div class='op-return' [routerLink]="['../list']">
-    返回</div>
-  <div class='op-save'>保存
-  </div>
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../'" [level2Name]="'添加产品'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg">
+      <a>保存</a>
+    </li>
+  </ul>
 </div>
-<div style="margin-top: 100px;">
-  <div class="content-flow">
-    <div>
-      <div class='detail_info'>产品信息</div>
-      <div>
-        <div><img src="/assets/images/owner.png"></div>
-        <div><a [routerLink]="['../edit']">请选择产品</a></div>
-      </div>
+<div class="content-flow">
+  <div class='des_card'>
+    <div class='card-title'>产品信息</div>
+    <div (click)='onAddProduct()' class='add'>
+      <div><img src="/assets/images/pro_add.png"></div>
+      <div class='choose'>请选择产品</div>
     </div>
   </div>
 </div>

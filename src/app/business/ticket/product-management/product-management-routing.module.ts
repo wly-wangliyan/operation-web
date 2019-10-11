@@ -13,12 +13,12 @@ const routes: Routes = [{
   path: '', component: ProductManagementComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
-    { path: '', redirectTo: 'create', pathMatch: 'full' },
+    { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: ProductListComponent },
     { path: 'create', component: ProductCreateComponent, canDeactivate: [RoutePreventService] },
     { path: 'edit', component: ProductEditComponent, canDeactivate: [RoutePreventService] },
     { path: 'detail', component: ProductDetailComponent, canDeactivate: [RoutePreventService] },
-    { path: '**', redirectTo: 'create', pathMatch: 'full' }
+    { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];
 
