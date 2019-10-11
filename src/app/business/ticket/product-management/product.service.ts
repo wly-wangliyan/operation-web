@@ -18,17 +18,28 @@ export class ThirdProductEntity extends EntityBase {
   public district: string = undefined; // 区
   public address: string = undefined; // 第三方产品详细地址
   public introduce: string = undefined; // 第三方产品介绍
+  public grade: string = undefined; // 第三方产品等级
   public notice: string = undefined; // 第三方产品须知
   public run_time: number = undefined; // 第三方产品营业时间
+  public saler_id: string = undefined; // 第三方产品资源id
   public sale_status: string = undefined; // 第三方产品销售状态
   public telephone: string = undefined; // 第三方联系电话
+  public topics: string = undefined; // 第三方旅游主题
   public traffic_guide: string = undefined; // 第三方交通指南
   public open_time: number = undefined; // 第三方开放时间
   public retail_price: number = undefined; // 第三方零售价
   public buy_price: number = undefined; // 第三方结算价
   public add_status: number = undefined; // 第三方产品添加状态
+  public tickets: Array<TicketEntity> = []; // 门票实体
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'tickets') {
+      return TicketEntity;
+    }
+    return null;
+  }
 }
 
 export class ThirdProductLinkResponse extends LinkResponse {
@@ -247,4 +258,50 @@ export class ProductService {
     const httpUrl = `${this.domain}/products/${product_id}`;
     return this.httpService.delete(httpUrl);
   }
+
+  /**
+   * 产品详情
+   * @param string third_product_id 第三方产品id
+   * @returns Observable<ThirdProductEntity>
+   */
+  public requestThirdProductsDetail(third_product_id: string): Observable<ThirdProductEntity> {
+    return this.httpService.get(`${this.domain}/third_products/${third_product_id}`
+    ).pipe(map(res => {
+      return ThirdProductEntity.Create(res.body);
+    }));
+  }
+
+  /**
+   * 置顶
+   * @param product_id 产品id
+   * @param is_top 是否置顶
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestIsTopProduct(product_id: string, is_top: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/products/${product_id}/is_top`;
+    const body = {
+      is_top
+    };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 编辑产品
+   * @param string product_id 产品id
+   * @param thirdProductData ThirdProductEntity 数据源
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestSetProductData(product_id: string, thirdProductData: ThirdProductEntity): Observable<HttpResponse<any>> {
+    return this.httpService.put(`${this.domain}/products/${product_id}`, {
+      project_name: thirdProductData.third_product_name,
+      project_subtitle: thirdProductData.topics,
+      image_urls: thirdProductData.third_product_image,
+      telephone: thirdProductData.telephone,
+      traffic_guide: thirdProductData.traffic_guide,
+      notice: thirdProductData.notice,
+      product_introduce: thirdProductData.introduce,
+    }
+    );
+  }
+
 }
