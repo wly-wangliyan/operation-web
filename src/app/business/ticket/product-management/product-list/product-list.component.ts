@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
+import { ProductService, TicketProductEntity, SearchParams } from '../product.service';
 
 const PageSize = 15;
 @Component({
@@ -13,7 +14,7 @@ const PageSize = 15;
 })
 export class ProductListComponent implements OnInit, OnDestroy {
 
-  // public searchParams: SearchParams = new SearchParams(); // 条件筛选
+  public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
   public saleStatus = [1, 2]; // 销售状态 1:销售中 2:已下架
 
@@ -47,7 +48,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private globalService: GlobalService, ) { }
+    private globalService: GlobalService,
+    private productService: ProductService) { }
 
   public ngOnInit() {
     this.generateProductList();
@@ -69,22 +71,23 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   // 请求产品列表
   private requestProductList() {
-    // this.requestSubscription = this.productService.requestProductListData(this.searchParams).subscribe(res => {
-    //   this.productList = res.results;
-    //   this.linkUrl = res.linkUrl;
-    this.initPageIndex();
-    this.noResultText = '暂无数据';
-    // }, err => {
-    // this.initPageIndex();
-    //   this.globalService.httpErrorProcess(err);
-    // });
+    this.requestSubscription = this.productService.requestProductListData(this.searchParams).subscribe(res => {
+      this.productList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.initPageIndex();
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.initPageIndex();
+      this.noResultText = '暂无数据';
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   public onChangeSearchStatus(event: any) {
     const status = event.target.value;
-    // this.searchParams.status = null;
+    this.searchParams.status = null;
     if (status) {
-      // this.searchParams.status = Number(status);
+      this.searchParams.status = Number(status);
     }
   }
 
@@ -101,13 +104,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      // this.continueRequestSubscription = this.productService.continueProductListData(this.linkUrl)
-      //   .subscribe(res => {
-      //     this.productList = this.productList.concat(res.results);
-      //     this.linkUrl = res.linkUrl;
-      //   }, err => {
-      //     this.globalService.httpErrorProcess(err);
-      //   });
+      this.continueRequestSubscription = this.productService.continueProductListData(this.linkUrl)
+        .subscribe(res => {
+          this.productList = this.productList.concat(res.results);
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 

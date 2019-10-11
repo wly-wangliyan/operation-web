@@ -8,6 +8,7 @@ import { ProductCreateComponent } from './product-create/product-create.componen
 import { RoutePreventService } from '../../../core/route-prevent.service';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ThirdProductListComponent } from './third-product-list/third-product-list.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     ProductListComponent,
     ProductCreateComponent,
     ProductEditComponent,
-    ProductDetailComponent],
+    ProductDetailComponent,
+    ThirdProductListComponent],
   imports: [
     ShareModule,
     CommonModule,

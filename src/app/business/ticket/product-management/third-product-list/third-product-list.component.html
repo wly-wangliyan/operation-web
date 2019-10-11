@@ -1,0 +1,50 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'添加产品'"></app-crumb>
+</div>
+
+<div class="content-flow">
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <input class="form-control" [(ngModel)]="product_name" placeholder="请输入关键字" autocomplete="off"
+          name="third_product_name" maxlength="20" appIgnoreSpace (keyup)="searchText$.next()" />
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="thirdProductList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #thirdProductTable>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>缩略图</th>
+            <th>产品名称</th>
+            <th>所在地区</th>
+            <th>状态</th>
+            <th>建议零售价</th>
+            <th>结算价</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of thirdProductTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <img src="{{product.third_product_image}}" />
+            </td>
+            <td>{{product.third_product_name}}</td>
+            <td>{{product.provice}}{{product.city}}<span *ngIf="product.district">{{product.district}}</span></td>
+            <td>{{product.sale_status}}</td>
+            <td>{{(product.retail_price | zCompleteNumber)||0}} 元</td>
+            <td>{{(product.buy_price | zCompleteNumber)||0}} 元</td>
+            <td class="operation">
+              <a [title]="'详情'" [routerLink]="['../detail']">详情</a>
+              <a [title]="'选用'" *ngIf="product.add_status===2" (click)="onChooseClick(product)">选用</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
