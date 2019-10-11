@@ -16,6 +16,17 @@
         </select>
       </div>
       <div class="form-group">
+        <span>使用状态：</span>
+        <select class="form-control" style="width: 100px;" name="use_status" [(ngModel)]="order_use_status"
+          (change)="onChangeSearchUseStatus($event)">
+          <option value="">全部</option>
+          <option value="1">已使用</option>
+          <option value="2">已取消</option>
+          <option value="3">未使用</option>
+          <option value="4">已过期</option>
+        </select>
+      </div>
+      <div class="form-group">
         <span>产品名称：</span>
         <input class="form-control" [(ngModel)]="searchParams.project_name" placeholder="请输入产品名称" autocomplete="off"
           name="product_name" maxlength="20" appIgnoreSpace />
@@ -23,7 +34,7 @@
       <div class="form-group">
         <span>订单编号：</span>
         <input class="form-control" [(ngModel)]="searchParams.order_id" placeholder="请输入订单编号" autocomplete="off"
-          name="order_num" maxlength="" appIgnoreSpace />
+          name="order_num" maxlength="32" appIgnoreSpace />
       </div>
       <!-- <div class="form-group">
         <span>购买渠道：</span>
@@ -67,7 +78,6 @@
             <th>数量</th>
             <th>应收</th>
             <th>实收</th>
-            <!-- <th>购买渠道</th> -->
             <th>下单时间</th>
             <th>支付时间</th>
             <th>订单状态</th>
@@ -79,16 +89,24 @@
           <tr *ngFor="let order of ticketOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>{{order.order_id}}</td>
-            <td>
-              <a></a>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <ng-container *ngIf="order.product">
+              <td>
+                <img src="{{order.product.image_urls[0]}}" />
+                <a>{{order.product.project_name}}</a>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="!order.product">
+              <td>
+                <img src="/assets/images/image_space.png" />--
+              </td>
+            </ng-container>
+            <td>{{order.buy_num}} 张</td>
+            <td>{{(order.right_price | zCompleteNumber)||0}} 元</td>
+            <td>{{(order.real_price | zCompleteNumber)||0}} 元</td>
+            <td>{{order.place_order_time?(order.place_order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{order.pay_time?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{order.status | orderStatus}}</td>
+            <td>{{order.use_status | orderUseStatus}}</td>
             <td class="operation">
               <a [title]="'查看'">查看</a>
             </td>

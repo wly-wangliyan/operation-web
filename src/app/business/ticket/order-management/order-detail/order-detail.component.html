@@ -9,35 +9,35 @@
         <caption>订单信息</caption>
         <tr>
           <td>产品名称：</td>
-          <td>清河半岛温泉门票</td>
+          <td>{{orderDetail.product?orderDetail.product.product_name:'--'}}</td>
           <td>订单状态：</td>
-          <td>已支付</td>
+          <td>{{orderDetail.status}}</td>
           <td>订单号：</td>
-          <td>231323213321</td>
+          <td>{{orderDetail.order_id}}</td>
         </tr>
         <tr>
           <td>应收：</td>
-          <td>300 元</td>
+          <td>{{(orderDetail.right_price | zCompleteNumber)||0}} 元</td>
           <td>实收：</td>
-          <td>150 元</td>
+          <td>{{(orderDetail.real_price | zCompleteNumber)||0}} 元</td>
           <td></td>
           <td></td>
         </tr>
         <tr>
           <td>支付方式：</td>
-          <td>微信</td>
-          <td>购买渠道：</td>
-          <td>美行停车App</td>
+          <td>{{orderDetail.pay_type}}</td>
           <td>下单时间：</td>
-          <td>2019-08-06 10:20</td>
+          <td>{{orderDetail.place_order_time?(orderDetail.place_order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <td>支付时间：</td>
-          <td>2019-08-06 10:20</td>
+          <td>{{orderDetail.pay_time?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
           <td>平台交易单号：</td>
-          <td>asda7sd09a0as4da68465</td>
+          <td>{{orderDetail.order_id}}</td>
           <td>第三方交易单号：</td>
-          <td>3463646544</td>
+          <td>{{orderDetail.third_order_id}}</td>
         </tr>
       </table>
     </div>
@@ -55,15 +55,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>全天票</td>
-            <td>1张</td>
-            <td>2019-09-24至2019-06-24</td>
-            <td>已撤改</td>
+            <td>{{ticketInfo.ticket_name}}</td>
+            <td>{{orderDetail.buy_num || 0}} 张</td>
+            <td>{{ticketInfo.valid_time}}</td>
+            <td>{{ticketInfo.ticket_use_status}}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="table-item">
+    <div class="table-item" *ngIf="visitorList && visitorList.length>0">
       <table class="detail-table">
         <caption>游客信息</caption>
         <thead>
@@ -74,10 +74,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>张三</td>
-            <td>415*********552</td>
-            <td>13020202020</td>
+          <tr *ngFor="let visitor_info of visitorList">
+            <td>{{visitor_info.name}}</td>
+            <td>{{visitor_info.certificate_id?visitor_info.certificate_id:'--'}}</td>
+            <td>{{visitor_info.telephone?visitor_info.telephone:'--'}}</td>
           </tr>
         </tbody>
       </table>

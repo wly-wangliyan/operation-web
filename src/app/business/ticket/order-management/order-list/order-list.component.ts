@@ -3,7 +3,7 @@ import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
-import { OrderManagementService, OrderEntity, SearchParams } from '../order-management.service';
+import { OrderManagementService, TicketOrderEntity, SearchParams } from '../order-management.service';
 
 const PageSize = 15;
 
@@ -18,7 +18,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   public order_status = ''; // 订单状态
 
-  public orderList: Array<OrderEntity> = []; // 产品订单列表
+  public order_use_status = ''; // 使用状态
+
+  public orderList: Array<TicketOrderEntity> = []; // 产品订单列表
 
   private requestSubscription: Subscription; // 获取数据
 
@@ -76,6 +78,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.noResultText = '暂无数据';
     }, err => {
       this.initPageIndex();
+      this.noResultText = '暂无数据';
       this.globalService.httpErrorProcess(err);
     });
   }
@@ -83,18 +86,18 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 变更订单状态
   public onChangeSearchStatus(event: any) {
     const status = event.target.value;
-    // this.searchParams.status = null;
+    this.searchParams.status = null;
     if (status) {
-      // this.searchParams.status = Number(status);
+      this.searchParams.status = Number(status);
     }
   }
 
-  // 变更购买渠道
-  public onChangeSearchSource(event: any) {
-    const source = event.target.value;
-    // this.searchParams.status = null;
-    if (source) {
-      // this.searchParams.status = Number(status);
+  // 变更使用状态
+  public onChangeSearchUseStatus(event: any) {
+    const status = event.target.value;
+    this.searchParams.use_status = null;
+    if (status) {
+      this.searchParams.use_status = Number(status);
     }
   }
 
@@ -184,18 +187,27 @@ export class OrderListComponent implements OnInit, OnDestroy {
       new Date(this.order_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(new Date(this.order_end_time).getHours(),
       new Date(this.order_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-    // this.searchParams.section = `${sTimestamp},${eTimeStamp}`;
     const sPayTimestamp = this.pay_start_time ? (new Date(this.pay_start_time).setHours(new Date(this.pay_start_time).getHours(),
       new Date(this.pay_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const ePayTimeStamp = this.pay_end_time ? (new Date(this.pay_end_time).setHours(new Date(this.pay_end_time).getHours(),
       new Date(this.pay_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-    // this.searchParams.car_time = this.searchParams.status === '2' ? `${sCheckTimestamp},${eCheckTimeStamp}` : '';
     if (sTimestamp > eTimeStamp) {
       this.globalService.promptBox.open('下单开始时间不能大于结束时间！');
       return false;
     } else if (sPayTimestamp > ePayTimeStamp) {
       this.globalService.promptBox.open('支付开始时间不能大于结束时间！');
       return false;
+    }
+    if (this.order_start_time || this.order_end_time) {
+      this.searchParams.order_section = `${sTimestamp},${eTimeStamp}`;
+    } else {
+      this.searchParams.order_section = null;
+    }
+
+    if (this.pay_start_time || this.pay_end_time) {
+      this.searchParams.pay_section = this.searchParams.status === 2 ? `${sPayTimestamp},${ePayTimeStamp}` : null;
+    } else {
+      this.searchParams.pay_section = null;
     }
     return true;
   }

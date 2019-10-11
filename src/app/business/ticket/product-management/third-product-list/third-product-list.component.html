@@ -29,17 +29,17 @@
         </thead>
         <tbody>
           <tr *ngFor="let product of thirdProductTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>{{product.third_product_id}}</td>
             <td>
               <img src="{{product.third_product_image}}" />
             </td>
             <td>{{product.third_product_name}}</td>
             <td>{{product.provice}}{{product.city}}<span *ngIf="product.district">{{product.district}}</span></td>
-            <td>{{product.sale_status}}</td>
+            <td>{{product.sale_status | thirdSaleStatus}}</td>
             <td>{{(product.retail_price | zCompleteNumber)||0}} 元</td>
             <td>{{(product.buy_price | zCompleteNumber)||0}} 元</td>
             <td class="operation">
-              <a [title]="'详情'" [routerLink]="['../detail']">详情</a>
+              <a [title]="'详情'" [routerLink]="['../detail',2,product.third_product_id]">详情</a>
               <a [title]="'选用'" *ngIf="product.add_status===2" (click)="onChooseClick(product)">选用</a>
             </td>
           </tr>
