@@ -110,11 +110,11 @@
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
             <nz-form-control>
-              <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              <!-- <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                 [isCutCoverImg]="true" [maxLength]="6" (selectedImgChange)="onSelectedPicture($event)"
                 file_id="productImg" [imageWidth]='100' [imageHeight]='100' [imageUrls]="cover_url"
                 [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
-              </app-z-photo-select>
+              </app-z-photo-select> -->
               <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
                 <span class="input-error input_time_valid">{{ errPositionItem?.icon?.errMes}}</span>
               </div>
