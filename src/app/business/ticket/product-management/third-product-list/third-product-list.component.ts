@@ -44,10 +44,7 @@ export class ThirdProductListComponent implements OnInit, OnDestroy {
     private productService: ProductService) { }
 
   public ngOnInit() {
-    // this.generateThirdProductList();
-    this.thirdProductList.push(new ThirdProductEntity());
-    this.thirdProductList[0].district = 'ddd';
-    console.log(this.thirdProductList);
+    this.generateThirdProductList();
   }
 
   public ngOnDestroy() {

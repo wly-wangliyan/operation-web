@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
@@ -24,7 +23,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   public end_time = ''; // 上架结束时间
 
-  public productList: Array<any> = []; // 产品列表
+  public productList: Array<TicketProductEntity> = []; // 产品列表
 
   private requestSubscription: Subscription; // 获取数据
 
@@ -46,8 +45,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private globalService: GlobalService,
     private productService: ProductService) { }
 
@@ -120,24 +117,52 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   /** 删除产品 */
-  public onDeleteProduct(data: any) {
+  public onDeleteProduct(data: TicketProductEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      console.log('调用删除接口');
+      this.productService.requestDeleteProductData(data.product_id).subscribe(() => {
+        this.globalService.promptBox.open('删除成功', () => {
+          this.searchText$.next();
+        });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     });
   }
 
   /** 上架/下架产品 */
-  public onChangeSaleStatus(data: any) {
-    this.globalService.confirmationBox.open('提示', '是否确认上架？', () => {
+  public onChangeSaleStatus(data: TicketProductEntity) {
+    const msg = data.status === 1 ? '下架' : '上架';
+    const status = data.status === 1 ? 2 : 1;
+    this.globalService.confirmationBox.open('提示', '确认' + msg + '此产品？', () => {
       this.globalService.confirmationBox.close();
-      console.log('调用上架/下架接口');
+      this.productService.requestChangeSaleStatusData(data.product_id, status).subscribe(res => {
+        this.globalService.promptBox.open(msg + '成功', () => {
+          this.searchText$.next();
+        });
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            this.globalService.promptBox.open('产品已被第三方停售，无法上架！', () => {
+              this.searchText$.next();
+            });
+          }
+        }
+      });
     });
   }
 
   /** 推荐/取消推荐产品 */
-  public onChangeTopStatus(data: any) {
-    console.log('调用推荐/取消推荐接口');
+  public onChangeTopStatus(data: TicketProductEntity) {
+    const is_top = data.is_top === 1 ? 2 : 1;
+    const msg = data.is_top === 1 ? '取消推荐' : '设为推荐';
+    this.productService.requestChangeTopStatusData(data.product_id, is_top).subscribe(res => {
+      this.globalService.promptBox.open(msg + '成功', () => {
+        this.searchText$.next();
+      });
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 上架开始时间的禁用部分
@@ -172,11 +197,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
       new Date(this.start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.end_time ? (new Date(this.end_time).setHours(new Date(this.end_time).getHours(),
       new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-    // this.searchParams.section = `${sTimestamp},${eTimeStamp}`;
 
     if (sTimestamp > eTimeStamp) {
       this.globalService.promptBox.open('上架开始时间不能大于结束时间！');
       return false;
+    }
+
+    if (this.start_time || this.end_time) {
+      this.searchParams.section = `${sTimestamp},${eTimeStamp}`;
+    } else {
+      this.searchParams.section = null;
     }
     return true;
   }

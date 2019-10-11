@@ -17,8 +17,8 @@ const routes: Routes = [{
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: ProductListComponent },
     { path: 'create', component: ProductCreateComponent, canDeactivate: [RoutePreventService] },
-    { path: 'edit', component: ProductEditComponent, canDeactivate: [RoutePreventService] },
-    { path: 'detail', component: ProductDetailComponent, canDeactivate: [RoutePreventService] },
+    { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [RoutePreventService] },
+    { path: 'detail/:type/:product_id', component: ProductDetailComponent, canDeactivate: [RoutePreventService] },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
