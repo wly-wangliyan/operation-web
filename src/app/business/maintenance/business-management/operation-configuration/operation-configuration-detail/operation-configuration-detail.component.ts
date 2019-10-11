@@ -39,13 +39,12 @@ export class OperationConfigurationDetailComponent implements OnInit {
   public projectList_clear: Array<ProjectItem> = []; // 清洗养护项目列表
   public projectList_fix: Array<ProjectItem> = []; // 维修项目列表
   public projectItemList: Array<ProjectItem> = []; // 格式化后保养商家产品下项目列表
+  public isLoading = true; // 是否加载中
 
   private upkeep_merchant_id: string; // 保养商户id
   private upkeep_merchant_product_id: string; // 保养商户产品id
   private continueRequestSubscription: Subscription;
-  private searchText$ = new Subject<any>();
   public currentProjectId: string; // 配件id
-  public currentProject = new UpkeepMerchantProjectEntity(); // 当前选择的配件
 
   public image_space = '../../../../../../assets/images/image_space.png'; // 默认图片
 
@@ -78,6 +77,7 @@ export class OperationConfigurationDetailComponent implements OnInit {
         this.projectList_maintain = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 1);
         this.projectList_clear = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 2);
         this.projectList_fix = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 3);
+        this.isLoading = false;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

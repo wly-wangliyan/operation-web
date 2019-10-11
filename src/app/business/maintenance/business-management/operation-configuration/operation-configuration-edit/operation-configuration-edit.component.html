@@ -3,7 +3,16 @@
 </div>
 <div class="content-flow">
     <div class="content-main">
-        <img src="/assets/images/manual/icon_vehicle.png">
+        <div *ngIf="isLoading" style="text-align: center;margin: 150px 0 0 -80px">
+            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        </div>
+        <nz-empty style="margin-top: 10%" *ngIf="(!projectList || projectList.length===0) && !isLoading"></nz-empty>
+        <div class="vehicle-title">
+            <img *ngIf="projectList && projectList.length>0" src="/assets/images/manual/icon_vehicle.png">
+            <span *ngIf="projectList.length>0 && upkeep_merchant_product_id_copy && projectList_copy[0]?.vehicle_type?.vehicle_type_name" class="project-import" (click)="onImportProjectClick()">一键导入：
+                {{projectList_copy[0]?.vehicle_type?.vehicle_firm?.vehicle_firm_name+' '+projectList_copy[0]?.vehicle_type?.vehicle_series?.vehicle_series_name
+                +' '+projectList_copy[0]?.vehicle_type?.vehicle_year_model+'款 '+projectList_copy[0]?.vehicle_type?.vehicle_type_name}}</span>
+        </div>
         <div class="vehicle-space" *ngIf="projectItemList.length>0">
             <div>
                 <span>{{projectItemList[0].source.vehicle_type.vehicle_brand.vehicle_brand_name}}</span>
@@ -69,154 +78,9 @@
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
-            <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
-                <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
-                    <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
-                     [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
-                    <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
-                        <div class="maintenance-content">
-                            <div>
-                                <b>*</b>
-                                <span>配件名称</span>
-                            </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name_{{i}}" disabled>
-                            <div>
-                                <b>*</b>
-                                <span>是否原厂</span>
-                            </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" disabled>
-                        </div>
-                        <div class="maintenance-content">
-                            <div *ngIf="item.source.upkeep_accessory.is_original">
-                                <b>&nbsp;</b>
-                                <span>所属厂商</span>
-                            </div>
-                            <input class="form-control" *ngIf="item.source.upkeep_accessory.is_original"
-                                   [ngModel]="item.source.upkeep_accessory.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
-                            <div *ngIf="!item.source.upkeep_accessory.is_original">
-                                <b>&nbsp;</b>
-                                <span>品牌说明</span>
-                            </div>
-                            <input class="form-control" *ngIf="!item.source.upkeep_accessory.is_original"
-                                   [ngModel]="item.source.upkeep_accessory.brand_instruction" name="brand_instruction{{i}}" disabled>
-                            <div>
-                                <b>&nbsp;</b>
-                                <span>零件编号</span>
-                            </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number{{i}}" disabled>
-                        </div>
-                        <div class="maintenance-content">
-                            <div>
-                                <b>*</b>
-                                <span>配件原价</span>
-                            </div>
-                            <input class="form-control" style="margin-right: 0;width: calc(30% - 25px)" [(ngModel)]="item.source.original_amount" name="original_amount_{{i}}_{{item.time}}"
-                                   (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">元</label>
-                            <div>
-                                <b>&nbsp;</b>
-                                <span>规格</span>
-                            </div>
-                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification{{i}}" disabled>
-                        </div>
-                        <div class="maintenance-content">
-                            <div>
-                                <b>*</b>
-                                <span>所需数量</span>
-                            </div>
-                            <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
-                                   maxlength="5" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">件</label>
-                            <div>
-                                <b>*</b>
-                                <span>销售单价</span>
-                            </div>
-                            <input class="form-control" [(ngModel)]="item.source.sale_amount" [name]="'sale_amount' + i + item.time" (keypress)="inputNumberLimit($event)"
-                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input">元</label>
-                        </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
-                        <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
-                            [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
-                            || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i)">取消</button>
-                    </div>
-                    <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
-                        <div class="maintenance-content">
-                            <div>
-                                <b>*</b>
-                                <span>服务名称</span>
-                            </div>
-                            <input class="form-control" style="width: 82%;margin-right: 0" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
-                        </div>
-                        <div class="maintenance-content">
-                            <div>
-                                <b>*</b>
-                                <span>服务原价</span>
-                            </div>
-                            <input class="form-control" name="original_amount_{{i}}_{{item.time}}" [(ngModel)]="item.source.original_amount" [disabled]="!item.is_edit_price"
-                                   style="margin-right: 0;width: calc(30% - 35px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
-                            <label class="price-label price-label-input">元</label>
-                            <div>
-                                <b>*</b>
-                                <span>销售单价</span>
-                            </div>
-                            <input class="form-control" [(ngModel)]="item.source.sale_amount" name="sale_amount_{{i}}_{{item.time}}" (keypress)="inputNumberLimit($event)"
-                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 35px)" [disabled]="!item.is_edit_price">
-                            <label class="price-label price-label-input" style="margin-right: 0">元</label>
-                        </div>
-                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
-                        <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
-                                [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
-                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
-                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i);">取消</button>
-                    </div>
-                </li>
-            </div>
-            <div style="clear: both"></div>
-        </div>
-        <!--清洗项目-->
-        <img *ngIf="projectList_clear && projectList_clear.length>0" style="margin-top: 20px" src="/assets/images/manual/icon_category2.png">
-        <div *ngFor="let data of projectList_clear;let i=index">
-            <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
-                <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
-                           (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
-                <span class="maintenance-title">配件</span>
-                <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
-                <div class="maintenance-price maintenance-space-float">
-                    <label>工时费原价</label>
-                    <input class="form-control" [(ngModel)]="data.source.work_original_amount" name="work_original_amount_{{i}}_{{data.time}}" (keypress)="inputNumberLimit($event)"
-                           (change)="onAmountChange($event)" maxlength="9" [disabled]="!data.is_edit_price">
-                    <label class="price-label">元</label>
-                    <label>工时费售价</label>
-                    <input class="form-control" [(ngModel)]="data.source.work_sale_amount" name="work_sale_amount_{{i}}_{{data.time}}" (keypress)="inputNumberLimit($event)"
-                           (change)="onAmountChange($event)" maxlength="9" [disabled]="!data.is_edit_price">
-                    <label class="price-label" style="margin-right: 0">元</label>
-                    <button *ngIf="!data.is_edit_price" nz-button class="price-save-btn price-save-back" (click)="data.is_edit_price=true"></button>
-                    <button *ngIf="data.is_edit_price" nz-button nzType="primary" class="price-save-btn" (click)="onProjectSaveClick(data.source)"
-                            [disabled]="(!data.source.work_original_amount && data.source.work_original_amount!==0)
-                            || (!data.source.work_sale_amount && data.source.work_sale_amount!==0)"></button>
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
-                </div>
-                <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
-            </div>
-            <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
-                <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
-                           (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
-                <span class="serve-title">服务</span>
-                <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
-                <div class="maintenance-price">
-                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
-                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
-                </div>
-                <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
-                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
-            </div>
-            <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
-                <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
+            <ul *ngFor="let item of accessoryItemList;let i=index;">
+                <li class="space-width" *ngIf="(data.source.upkeep_merchant_project_id===item.source.upkeep_merchant_project.upkeep_merchant_project_id
+                 || data.upkeep_merchant_project_id_copy===item.source.upkeep_merchant_project.upkeep_merchant_project_id) && data.is_show_accessory">
                     <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
                          [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
@@ -319,12 +183,12 @@
                         <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i);">取消</button>
                     </div>
                 </li>
-            </div>
+            </ul>
             <div style="clear: both"></div>
         </div>
-<!--维修项目-->
-        <img *ngIf="projectList_fix && projectList_fix.length>0" style="margin-top: 20px" src="/assets/images/manual/icon_category3.png">
-        <div *ngFor="let data of projectList_fix;let i=index">
+        <!--清洗项目-->
+        <img *ngIf="projectList_clear && projectList_clear.length>0" style="margin-top: 20px" src="/assets/images/manual/icon_category2.png">
+        <div *ngFor="let data of projectList_clear;let i=index">
             <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
                 <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
                            (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
@@ -361,10 +225,11 @@
                 <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
                 <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
-            <div *ngIf="data.source.upkeep_merchant_project_id===currentProjectId && data.is_show_accessory">
-                <li class="space-width" *ngFor="let item of accessoryItemList;let i=index;">
+            <ul *ngFor="let item of accessoryItemList;let i=index;">
+                <li class="space-width" *ngIf="(data.source.upkeep_merchant_project_id===item.source.upkeep_merchant_project.upkeep_merchant_project_id
+                 || data.upkeep_merchant_project_id_copy===item.source.upkeep_merchant_project.upkeep_merchant_project_id) && data.is_show_accessory">
                     <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
-                          [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                         [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
                     <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
                         <div class="maintenance-content">
                             <div>
@@ -465,7 +330,154 @@
                         <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i);">取消</button>
                     </div>
                 </li>
+            </ul>
+            <div style="clear: both"></div>
+        </div>
+<!--维修项目-->
+        <img *ngIf="projectList_fix && projectList_fix.length>0" style="margin-top: 20px" src="/assets/images/manual/icon_category3.png">
+        <div *ngFor="let data of projectList_fix;let i=index">
+            <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
+                <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
+                           (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
+                <span class="maintenance-title">配件</span>
+                <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
+                <div class="maintenance-price maintenance-space-float">
+                    <label>工时费原价</label>
+                    <input class="form-control" [(ngModel)]="data.source.work_original_amount" name="work_original_amount_{{i}}_{{data.time}}" (keypress)="inputNumberLimit($event)"
+                           (change)="onAmountChange($event)" maxlength="9" [disabled]="!data.is_edit_price">
+                    <label class="price-label">元</label>
+                    <label>工时费售价</label>
+                    <input class="form-control" [(ngModel)]="data.source.work_sale_amount" name="work_sale_amount_{{i}}_{{data.time}}" (keypress)="inputNumberLimit($event)"
+                           (change)="onAmountChange($event)" maxlength="9" [disabled]="!data.is_edit_price">
+                    <label class="price-label" style="margin-right: 0">元</label>
+                    <button *ngIf="!data.is_edit_price" nz-button class="price-save-btn price-save-back" (click)="data.is_edit_price=true"></button>
+                    <button *ngIf="data.is_edit_price" nz-button nzType="primary" class="price-save-btn" (click)="onProjectSaveClick(data.source)"
+                            [disabled]="(!data.source.work_original_amount && data.source.work_original_amount!==0)
+                            || (!data.source.work_sale_amount && data.source.work_sale_amount!==0)"></button>
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
+                </div>
+                <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择配件</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
             </div>
+            <div class="maintenance-space" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                <nz-switch [ngModel]="data.source.switch" nzCheckedChildren="On" nzUnCheckedChildren="Off"
+                           (ngModelChange)="onSwitchChange(data.source,$event)" *ngIf="data.source.upkeep_handbook_item.item_category!==1"></nz-switch>
+                <span class="serve-title">服务</span>
+                <span style="margin-left: 10px"><b style="color: #23242F">{{data.source.upkeep_handbook_item.item_name}}</b></span>
+                <div class="maintenance-price">
+                    <img *ngIf="!data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_down.png" (click)="onShowAccessory(data.source.upkeep_merchant_project_id);data.is_show_accessory=true;">
+                    <img *ngIf="data.is_show_accessory && data.source.accessory_count>0" src="/assets/images/icon_up.png" (click)="data.is_show_accessory = false">
+                </div>
+                <button class="maintenance-space-float" nz-button nzType="primary" (click)="onChooseAccessory(data.source)">选择服务</button>
+                <label class="maintenance-space-float">已选择<span style="color: #3E71F7"> {{data.source.accessory_count}} </span>件</label>
+            </div>
+            <ul *ngFor="let item of accessoryItemList;let i=index;">
+                <li class="space-width" *ngIf="(data.source.upkeep_merchant_project_id===item.source.upkeep_merchant_project.upkeep_merchant_project_id
+                 || data.upkeep_merchant_project_id_copy===item.source.upkeep_merchant_project.upkeep_merchant_project_id) && data.is_show_accessory">
+                    <img src="{{item.source.upkeep_accessory.image_url?item.source.upkeep_accessory.image_url:image_space}}"
+                         [class.img-height]="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                    <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===1">
+                        <div class="maintenance-content">
+                            <div>
+                                <b>*</b>
+                                <span>配件名称</span>
+                            </div>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name_{{i}}" disabled>
+                            <div>
+                                <b>*</b>
+                                <span>是否原厂</span>
+                            </div>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.is_original?'是':'否'" name="is_original{{i}}" disabled>
+                        </div>
+                        <div class="maintenance-content">
+                            <div *ngIf="item.source.upkeep_accessory.is_original">
+                                <b>&nbsp;</b>
+                                <span>所属厂商</span>
+                            </div>
+                            <input class="form-control" *ngIf="item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.vehicle_firm.vehicle_firm_name" name="vehicle_firm_name{{i}}" disabled>
+                            <div *ngIf="!item.source.upkeep_accessory.is_original">
+                                <b>&nbsp;</b>
+                                <span>品牌说明</span>
+                            </div>
+                            <input class="form-control" *ngIf="!item.source.upkeep_accessory.is_original"
+                                   [ngModel]="item.source.upkeep_accessory.brand_instruction" name="brand_instruction{{i}}" disabled>
+                            <div>
+                                <b>&nbsp;</b>
+                                <span>零件编号</span>
+                            </div>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.serial_number" name="serial_number{{i}}" disabled>
+                        </div>
+                        <div class="maintenance-content">
+                            <div>
+                                <b>*</b>
+                                <span>配件原价</span>
+                            </div>
+                            <input class="form-control" style="margin-right: 0;width: calc(30% - 25px)" [(ngModel)]="item.source.original_amount" name="original_amount_{{i}}_{{item.time}}"
+                                   (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input">元</label>
+                            <div>
+                                <b>&nbsp;</b>
+                                <span>规格</span>
+                            </div>
+                            <input class="form-control" [ngModel]="item.source.upkeep_accessory.specification" name="specification{{i}}" disabled>
+                        </div>
+                        <div class="maintenance-content">
+                            <div>
+                                <b>*</b>
+                                <span>所需数量</span>
+                            </div>
+                            <input class="form-control" [(ngModel)]="item.source.number" [name]="'number' + i + item.time" (keypress)="inputOnlyNumberLimit($event)"
+                                   maxlength="5" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input">件</label>
+                            <div>
+                                <b>*</b>
+                                <span>销售单价</span>
+                            </div>
+                            <input class="form-control" [(ngModel)]="item.source.sale_amount" [name]="'sale_amount' + i + item.time" (keypress)="inputNumberLimit($event)"
+                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 25px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input">元</label>
+                        </div>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
+                        <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
+                                [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.number && item.source.number!==0)
+                            || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i)">取消</button>
+                    </div>
+                    <div style="margin-top: 20px" *ngIf="data.source.upkeep_handbook_item.upkeep_item_type===2">
+                        <div class="maintenance-content">
+                            <div>
+                                <b>*</b>
+                                <span>服务名称</span>
+                            </div>
+                            <input class="form-control" style="width: 82%;margin-right: 0" [ngModel]="item.source.upkeep_accessory.upkeep_accessory_name" name="upkeep_accessory_name{{i}}" disabled>
+                        </div>
+                        <div class="maintenance-content">
+                            <div>
+                                <b>*</b>
+                                <span>服务原价</span>
+                            </div>
+                            <input class="form-control" name="original_amount_{{i}}_{{item.time}}" [(ngModel)]="item.source.original_amount" [disabled]="!item.is_edit_price"
+                                   style="margin-right: 0;width: calc(30% - 35px)" (change)="onAmountChange($event)" maxlength="9" (keypress)="inputNumberLimit($event)">
+                            <label class="price-label price-label-input">元</label>
+                            <div>
+                                <b>*</b>
+                                <span>销售单价</span>
+                            </div>
+                            <input class="form-control" [(ngModel)]="item.source.sale_amount" name="sale_amount_{{i}}_{{item.time}}" (keypress)="inputNumberLimit($event)"
+                                   (change)="onAmountChange($event)" maxlength="9" style="margin-right: 0;width: calc(30% - 35px)" [disabled]="!item.is_edit_price">
+                            <label class="price-label price-label-input" style="margin-right: 0">元</label>
+                        </div>
+                        <button *ngIf="!item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onDoEditClick(item.source);item.is_edit_price=true">编辑</button>
+                        <button *ngIf="item.is_edit_price" class="sure-btn" nz-button nzType="primary" (click)="onEditClick(item.source)"
+                                [disabled]="(!item.source.original_amount && item.source.original_amount!==0) || (!item.source.sale_amount && item.source.sale_amount!==0)">保存</button>
+                        <button *ngIf="!item.is_edit_price" class="close-btn del-btn" nz-button (click)="onDelClick(item.source)">移除</button>
+                        <button *ngIf="item.is_edit_price" class="close-btn" nz-button (click)="item.is_edit_price=false;onConcleClick(i);">取消</button>
+                    </div>
+                </li>
+            </ul>
             <div style="clear: both"></div>
         </div>
     </div>

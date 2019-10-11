@@ -14,6 +14,7 @@ import { CreateAccessoryComponent } from './create-accessory/create-accessory.co
 class ProjectItem {
   public is_show_accessory = false;
   public is_edit_price = false;
+  public upkeep_merchant_project_id_copy: string;
   public time = new Date().getTime();
   public source: UpkeepMerchantProjectEntity;
 
@@ -39,22 +40,26 @@ class AccessoryItem {
 })
 export class OperationConfigurationEditComponent implements OnInit {
 
-  public accessoryList: Array<UpkeepMerchantAccessoryEntity> = [];
-  public accessoryItemList: Array<AccessoryItem> = [];
-  public projectList: Array<UpkeepMerchantProjectEntity> = [];
-  public projectList_maintain: Array<ProjectItem> = [];
-  public projectList_clear: Array<ProjectItem> = [];
-  public projectList_fix: Array<ProjectItem> = [];
-  public projectItemList: Array<ProjectItem> = [];
+  public accessoryList: Array<UpkeepMerchantAccessoryEntity> = []; // 保养商户配件列表
+  public accessoryItemList: Array<AccessoryItem> = []; // 格式化后的保养商户配件列表
+  public projectList: Array<UpkeepMerchantProjectEntity> = []; // 项目列表
+  public projectList_copy: Array<UpkeepMerchantProjectEntity> = []; // 被复制的产品项目列表
+  public projectList_maintain: Array<ProjectItem> = []; // 格式化后的保养项目列表
+  public projectList_clear: Array<ProjectItem> = []; // 格式化后的清洗项目列表
+  public projectList_fix: Array<ProjectItem> = []; // 格式化后的维修项目列表
+  public projectItemList: Array<ProjectItem> = []; // 格式化后的项目列表
   public image_space = '../../../../../../assets/images/image_space.png'; // 默认图片
-  public currentProjectId: string;
+  public currentProjectId: string; // 当前项目id
+  public currentProjectId_copy: string; // 当前被复制的产品项目id
   public currentProject = new UpkeepMerchantProjectEntity();
+  public isLoading = true; // 是否加载中
 
-  private upkeep_merchant_id: string;
-  private upkeep_merchant_product_id: string;
+  private upkeep_merchant_id: string; // 商家id
+  private upkeep_merchant_product_id: string; // 商家产品id
+  private upkeep_merchant_product_id_copy: string; // 被复制的产品id
   private continueRequestSubscription: Subscription;
   private searchText$ = new Subject<any>();
-  private currentAccessory: string;
+  private currentAccessory: string; // 当前配件
 
   @ViewChild('chooseAccessoryPromptDiv', { static: true }) public chooseAccessoryPromptDiv: ElementRef;
   @ViewChild('addAccessoryPromptDiv', { static: true }) public addAccessoryPromptDiv: ElementRef;
@@ -68,6 +73,7 @@ export class OperationConfigurationEditComponent implements OnInit {
     activatedRoute.queryParams.subscribe(queryParams => {
       this.upkeep_merchant_id = queryParams.upkeep_merchant_id;
       this.upkeep_merchant_product_id = queryParams.upkeep_merchant_product_id;
+      this.upkeep_merchant_product_id_copy = queryParams.upkeep_merchant_product_id_copy;
     });
   }
 
@@ -81,9 +87,19 @@ export class OperationConfigurationEditComponent implements OnInit {
             this.projectList_maintain = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 1);
             this.projectList_clear = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 2);
             this.projectList_fix = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 3);
+            this.isLoading = false;
         }, err => {
           this.globalService.httpErrorProcess(err);
         });
+    // 如果是复制功能的编辑页，请求被复制产品的项目列表
+    if (this.upkeep_merchant_product_id_copy) {
+      this.businessManagementService.requestUpkeepProjectList(this.upkeep_merchant_id, this.upkeep_merchant_product_id_copy)
+          .subscribe(res => {
+            this.projectList_copy = res;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    }
   }
 
   // 选择配件
@@ -114,6 +130,7 @@ export class OperationConfigurationEditComponent implements OnInit {
         });
   }
 
+  // 关闭配件选择页
   public onClose() {
     $(this.chooseAccessoryPromptDiv.nativeElement).modal('hide');
   }
@@ -151,12 +168,14 @@ export class OperationConfigurationEditComponent implements OnInit {
       value.is_show_accessory = false;
     });
     this.currentProjectId = upkeep_merchant_project_id;
+    // 配件列表有内容时不再重新请求
     if (this.accessoryItemList.length === 0 ||
         upkeep_merchant_project_id !== this.accessoryItemList[0].source.upkeep_merchant_project.upkeep_merchant_project_id) {
       this.requestProjectAccessoriesList();
     }
   }
 
+  // 获取项目配件列表
   private requestProjectAccessoriesList() {
     this.accessoryItemList = [];
     this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
@@ -171,6 +190,37 @@ export class OperationConfigurationEditComponent implements OnInit {
         });
   }
 
+  // 复制功能获取被复制产品下的项目配件列表
+  private requestCopyAccessoriesList() {
+    this.accessoryItemList = [];
+    this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
+    (this.upkeep_merchant_id, this.upkeep_merchant_product_id_copy, this.currentProjectId_copy)
+        .subscribe(res => {
+          this.accessoryList = res;
+          res.forEach(value => {
+            const accessory = new AccessoryItem(value);
+            // accessory.is_edit_price = true;
+            this.accessoryItemList.push(accessory);
+            // 循环关联配件和新产品下的项目
+            if (this.accessoryItemList.length === 0 && (!this.currentProject.accessory_count || this.currentProject.accessory_count === 0)) {
+              const param = {
+                upkeep_accessory_id: value.upkeep_accessory.upkeep_accessory_id,
+                number: value.number,
+                sale_amount: value.sale_amount,
+                original_amount: value.original_amount
+              };
+              this.projectItemList.forEach(value1 => {
+                if (value1.upkeep_merchant_project_id_copy === value.upkeep_merchant_project.upkeep_merchant_project_id) {
+                  this.onChooseClick(param, value1.source.upkeep_merchant_project_id, true);
+                }
+              });
+            }
+          });
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+  }
+
   // 编辑配件、服务
   public onEditClick(data: UpkeepMerchantAccessoryEntity) {
     const params = {
@@ -178,7 +228,7 @@ export class OperationConfigurationEditComponent implements OnInit {
       sale_amount: Number(data.sale_amount).toFixed(2),
       original_amount: Number(data.original_amount).toFixed(2)
     };
-    if (params.sale_amount > params.original_amount) {
+    if (Number(params.sale_amount) > Number(params.original_amount)) {
       if (data.upkeep_accessory.upkeep_accessory_type === 1) {
         this.globalService.promptBox.open(`配件原价不能小于销售单价!`, null, 2000, '/assets/images/warning.png');
       } else {
@@ -190,7 +240,7 @@ export class OperationConfigurationEditComponent implements OnInit {
       this.globalService.promptBox.open('所需数量应大于0小于100!', null, 2000, '/assets/images/warning.png');
       return;
     }
-    this.businessManagementService.requestUpdateUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, data.upkeep_merchant_accessory_id, params)
+    this.businessManagementService.requestUpdateUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, data.upkeep_merchant_project.upkeep_merchant_project_id, data.upkeep_merchant_accessory_id, params)
         .subscribe(() => {
           this.globalService.promptBox.open('保存成功！', () => {
             const index = this.accessoryItemList.findIndex(v => v.source.upkeep_merchant_accessory_id === data.upkeep_merchant_accessory_id);
@@ -219,22 +269,27 @@ export class OperationConfigurationEditComponent implements OnInit {
   }
 
   // 选择配件
-  public onChooseClick(event) {
+  public onChooseClick(event, project_id ?: string, is_copy ?: boolean) {
     const params = {
       upkeep_accessory_id: event.upkeep_accessory_id,
       number: event.number ? event.number : 0,
       sale_amount: event.sale_amount,
       original_amount: event.original_amount
     };
-    this.businessManagementService.requestAddUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, params)
+    const projectId = project_id ? project_id : this.currentProjectId;
+    this.businessManagementService.requestAddUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, projectId, params)
         .subscribe(() => {
-      this.globalService.promptBox.open('保存成功！', () => {
-        this.onClose();
-        this.requestProjectAccessoriesList();
-        const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
-        this.projectItemList[index].is_show_accessory = true;
-        this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
-      }, 2000, '/assets/images/success.png');
+          if (is_copy) {
+            this.globalService.promptBox.open('导入成功！', () => {}, 2000, '/assets/images/success.png');
+          } else {
+            this.globalService.promptBox.open('保存成功！', () => {
+              this.onClose();
+              this.requestProjectAccessoriesList();
+              const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
+              this.projectItemList[index].is_show_accessory = true;
+              this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
+            }, 2000, '/assets/images/success.png');
+          }
     }, err => {
       this.errorProcess(err);
     });
@@ -322,5 +377,25 @@ export class OperationConfigurationEditComponent implements OnInit {
     if (this.accessoryItemList && this.accessoryItemList[index]) {
       this.accessoryItemList[index].source = JSON.parse(this.currentAccessory);
     }
+  }
+
+  // 点击一键导入项目信息
+  public onImportProjectClick() {
+    this.projectItemList.forEach(value => {
+      this.projectList_copy.forEach(value1 => {
+        if (value.source.upkeep_handbook_item.item_id === value1.upkeep_handbook_item.item_id && value1.switch) {
+          this.currentProjectId = value.source.upkeep_merchant_project_id;
+          this.currentProjectId_copy = value1.upkeep_merchant_project_id;
+          this.currentProject = value.source;
+          value.source.accessory_count = value1.accessory_count;
+          value.source.work_original_amount = value1.work_original_amount;
+          value.source.work_sale_amount = value1.work_sale_amount;
+          value.is_edit_price = true;
+          value.is_show_accessory = true;
+          value.upkeep_merchant_project_id_copy = value1.upkeep_merchant_project_id;
+          this.requestCopyAccessoriesList();
+        }
+      });
+    });
   }
 }

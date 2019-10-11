@@ -222,3 +222,21 @@ b {
     background-color: rgba(232,32,56,1);
     border: none;
 }
+
+.project-import {
+    color: #3E71F7;
+    line-height: 40px;
+}
+
+ul {
+    margin-bottom: 0;
+}
+
+.vehicle-title {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.vehicle-title span {
+    margin-left: 15px;
+}
