@@ -4,9 +4,13 @@
 </div>
 <div class="content-flow">
   <div class="content-main">
+    <div *ngIf="isLoading" style="text-align: center;margin: 150px 0 0 -80px">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <nz-empty style="margin-top: 10%" *ngIf="(!projectList || projectList.length===0) && !isLoading"></nz-empty>
     <!--所属车型-->
     <div>
-      <img src="/assets/images/manual/icon_vehicle.png">
+      <img *ngIf="projectItemList && projectItemList.length>0" src="/assets/images/manual/icon_vehicle.png">
       <div class="vehicle-space" *ngIf="projectItemList.length>0">
         <div>
           <span>{{projectItemList[0].source.vehicle_type.vehicle_brand.vehicle_brand_name}}</span>

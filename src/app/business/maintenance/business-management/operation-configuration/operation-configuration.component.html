@@ -78,9 +78,9 @@
                                 {{data.vehicle_type.vehicle_year_model}} {{data.vehicle_type.vehicle_type_name}}
                             </a>
                         </td>
-                        <td>{{data.vehicle_type.vehicle_engine}}</td>
-                        <td>{{data.vehicle_type.vehicle_gearbox}}</td>
-                        <td>{{data.vehicle_type.vehicle_structure}}</td>
+                        <td>{{data.vehicle_type.vehicle_engine?data.vehicle_type.vehicle_engine:'--'}}</td>
+                        <td>{{data.vehicle_type.vehicle_gearbox?data.vehicle_type.vehicle_gearbox:'--'}}</td>
+                        <td>{{data.vehicle_type.vehicle_structure?data.vehicle_type.vehicle_structure:'--'}}</td>
                         <td>
                             <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="上架" nzUnCheckedChildren="下架"
                                        (ngModelChange)="onSwitchChange(data.upkeep_merchant_product_id,$event)"></nz-switch>
@@ -88,7 +88,7 @@
                         <td class="operation">
                             <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
                             <a *ngIf="data.status!==1" [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>
-                            <!--<a [title]="'复制'" (click)="onEditBtnClick(data)">复制</a>-->
+                            <a [title]="'复制'" (click)="onCopyBtnClick(data)">复制</a>
                             <a [title]="'删除'" (click)="onDelBtnClick(data)">删除</a>
                         </td>
                     </tr>

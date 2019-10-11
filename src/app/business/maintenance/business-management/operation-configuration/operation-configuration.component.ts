@@ -14,7 +14,6 @@ import {
 import { SelectBrandFirmTypeComponent } from '../../../../share/components/select-brand-firm-type/select-brand-firm-type.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { SearchVehicleTypeGroupComponent } from '../../../../share/components/search-vehicle-type-group/search-vehicle-type-group.component';
-import { RegionEntity } from '../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
 
 const PageSize = 15;
 
@@ -41,6 +40,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
   private upkeep_merchant_id: string;
+  private upkeep_merchant_product_id_copy: string;
 
   @ViewChild(BusinessEditComponent, { static: true }) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, { static: true }) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
@@ -116,37 +116,6 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
       });
   }
 
-  // 显示添加编辑项目modal
-  public onEditBtnClick(data, isEdit) {
-    if (isEdit) {
-      this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
-        { queryParams: { upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id } });
-    } else {
-      this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, data.vehicle_type.vehicle_type_id).subscribe(res => {
-        this.globalService.promptBox.open('创建成功！', () => {
-          this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
-            {
-              queryParams: {
-                upkeep_merchant_id: this.upkeep_merchant_id,
-                upkeep_merchant_product_id: res.body.upkeep_merchant_product_id
-              }
-            });
-        }, 2000, '/assets/images/success.png');
-      }, err => {
-        if (err.status === 422) {
-          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-          for (const content of error.errors) {
-            if (content.code === 'not found upkeep_handbook' && content.resource === 'vehicle_type') {
-              this.globalService.promptBox.open('该车型没有关联保养手册，不能创建产品！', null, 2000, '/assets/images/warning.png');
-            }
-          }
-        } else {
-          this.globalService.httpErrorProcess(err);
-        }
-      });
-    }
-  }
-
   // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
@@ -162,6 +131,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 查询按钮事件
   public onSearchBtnClick() {
     this.pageIndex = 1;
     this.searchText$.next();
@@ -181,6 +151,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 检索运营时段列表
   private requestUpkeepMerchantOperation() {
     this.bookingTimes = [];
     this.requestMerchantSubscription && this.requestMerchantSubscription.unsubscribe();
@@ -209,8 +180,48 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
       });
   }
 
+  // 显示添加编辑项目modal
+  public onEditBtnClick(data, isEdit) {
+    if (isEdit) {
+      this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
+          { queryParams: { upkeep_merchant_id: this.upkeep_merchant_id, upkeep_merchant_product_id: data.upkeep_merchant_product_id } });
+    } else {
+      this.businessManagementService.requestAddUpkeepProduct(this.upkeep_merchant_id, data.vehicle_type.vehicle_type_id).subscribe(res => {
+        this.globalService.promptBox.open('创建成功！', () => {
+          this.router.navigate([`/main/maintenance/business-management/operation-configuration/${this.upkeep_merchant_id}/edit`],
+              {
+                queryParams: {
+                  upkeep_merchant_id: this.upkeep_merchant_id,
+                  upkeep_merchant_product_id: res.body.upkeep_merchant_product_id,
+                  upkeep_merchant_product_id_copy: this.upkeep_merchant_product_id_copy
+                }
+              });
+        }, 2000, '/assets/images/success.png');
+      }, err => {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'not found upkeep_handbook' && content.resource === 'vehicle_type') {
+              this.globalService.promptBox.open('该车型没有关联保养手册，不能创建产品！', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        } else {
+          this.globalService.httpErrorProcess(err);
+        }
+      });
+    }
+  }
+
   // 创建产品
   public onAddClick() {
+    this.selectBrandFirmTypeComponent.open();
+  }
+
+  // 复制
+  public onCopyBtnClick(data: UpkeepMerchantProductEntity) {
+    this.upkeep_merchant_product_id_copy = data.upkeep_merchant_product_id;
+    this.brand_ids = [data.vehicle_brand.vehicle_brand_id];
+    this.firm_ids = [data.vehicle_firm.vehicle_firm_id];
     this.selectBrandFirmTypeComponent.open();
   }
 
@@ -369,6 +380,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 汽车品牌、厂商、车型筛选条件组件回调赋值
   public selectBrandFirmSeries(event) {
     this.searchParams.vehicle_brand_id = event.brand ? event.brand : '';
     this.searchParams.vehicle_firm_id = event.firm ? event.firm : '';
