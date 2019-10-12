@@ -5,6 +5,7 @@ import { map } from 'rxjs/internal/operators';
 import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
+import { FileUpdate } from '../../../../utils/file-update';
 
 // 第三方产品实体
 export class ThirdProductEntity extends EntityBase {
@@ -163,6 +164,7 @@ export class SearchParams extends EntityBase {
 export class ProductService {
 
   private domain = environment.TICKET_SERVER; // 票务域名
+  private imageDomain: string = environment.STORAGE_DOMAIN;
 
   constructor(private httpService: HttpService) { }
 
@@ -302,6 +304,23 @@ export class ProductService {
       product_introduce: thirdProductData.introduce,
     }
     );
+  }
+
+  /**
+   * 上传图片
+   * @param file
+   * @returns {any}
+   */
+  public requestUploadPicture(file: any): Observable<any> {
+    const url = this.imageDomain + `/storages/images`;
+    return Observable.create(observer => {
+      FileUpdate(file, url, (sourceUrl) => {
+        observer.next({ sourceUrl });
+        observer.complete();
+      }, (err) => {
+        observer.error(err);
+      });
+    });
   }
 
 }

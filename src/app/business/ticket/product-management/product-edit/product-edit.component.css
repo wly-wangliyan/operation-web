@@ -102,3 +102,8 @@
 .name {
   margin-left: -140px;
 }
+
+input[type=file],
+input[type=file]:focus {
+  outline: none !important;
+}

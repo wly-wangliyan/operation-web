@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, ThirdProductEntity, SearchParams } from '../product.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService, ThirdProductEntity } from '../product.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,17 +18,25 @@ export class ProductDetailComponent implements OnInit {
   public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
   public thirdProductInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
-  public noResultInfoText = '数据加载中...';
   public noResultTicketText = '数据加载中...';
+  public noResultInfoText = '数据加载中...';
+  public tempContent1: string;
+  public type: string;
+  public product_id: string;
 
   private searchText$ = new Subject<any>();
 
   ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      this.type = params.type;
+      this.product_id = params.product_id;
+    });
+    // this.tempContent1 = '<p><img src=" https://uustorage-t.uucin.com/media/park/70c6b65252061b63357bffb61c07c65b.png " />&nbsp;5454354222222222</p>';
     // 第三方产品详情
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.productService.requestThirdProductsDetail('1212'))
+        this.productService.requestThirdProductsDetail(this.product_id))
     ).subscribe(res => {
       this.thirdProductData = res;
       this.thirdProductInfoList = [
@@ -46,7 +54,7 @@ export class ProductDetailComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    this.searchText$.next();
+    // this.searchText$.next();
 
     this.productTicketList = [
       {
@@ -86,7 +94,7 @@ export class ProductDetailComponent implements OnInit {
   public onChooseTicket() {
     this.globalService.confirmationBox.open('提示', '确定选用此产品吗？', () => {
       this.globalService.confirmationBox.close();
-      this.productService.requestAddProductData('121221').subscribe(res => {
+      this.productService.requestAddProductData(this.product_id).subscribe(res => {
         this.globalService.promptBox.open('选用成功！', () => {
           timer(0).subscribe(() => {
             this.router.navigateByUrl('/main/ticket/product-management');

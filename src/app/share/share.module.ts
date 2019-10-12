@@ -30,6 +30,7 @@ import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-typ
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
 import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusPipe } from './pipes/ticket-format.pipe';
+import { HtmlPipe } from './pipes/html.pipe';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusP
     ThirdSaleStatusPipe,
     OrderStatusPipe,
     OrderUseStatusPipe,
+    HtmlPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -120,6 +122,7 @@ import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusP
     ThirdSaleStatusPipe,
     OrderStatusPipe,
     OrderUseStatusPipe,
+    HtmlPipe,
 
     // 指令
     IgnoreSpaceDirective,

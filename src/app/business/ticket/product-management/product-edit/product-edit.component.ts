@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
-import { Subject, timer } from 'rxjs/index';
+import { Subject } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, ThirdProductEntity, SearchParams } from '../product.service';
+import { ProductService, ThirdProductEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 
@@ -40,7 +41,6 @@ export class ErrPositionItem {
   styleUrls: ['./product-edit.component.css']
 })
 export class ProductEditComponent implements OnInit {
-
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
   public thirdProductInfoList: Array<any> = [];
@@ -48,26 +48,29 @@ export class ProductEditComponent implements OnInit {
   public noResultInfoText = '数据加载中...';
   public noResultTicketText = '数据加载中...';
   public product_image_url: Array<any> = [];
+  public tempContent1: string; // 交通指南富文本框内容
+  public tempContent2: string; // 预定须知富文本框内容
+  public tempContent3: string; // 景区介绍富文本框内容
+  public flag = 0;
+  public uploadImg: string;
+  public product_id: string;
 
   private searchText$ = new Subject<any>();
 
   @ViewChild('coverImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  constructor(private globalService: GlobalService, private productService: ProductService,
-
+  constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
   ) { }
   ngOnInit() {
-    setTimeout(() => {
-      CKEDITOR.replace('editor1');
-      CKEDITOR.replace('editor2');
-      CKEDITOR.replace('editor3');
-    }, 0);
+    this.route.params.subscribe((params: Params) => {
+      this.product_id = params.product_id;
+    });
 
     // 第三方产品详情
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.productService.requestThirdProductsDetail('1212'))
+        this.productService.requestThirdProductsDetail(this.product_id))
     ).subscribe(res => {
       this.thirdProductData = res;
       this.thirdProductInfoList = [
@@ -167,7 +170,13 @@ export class ProductEditComponent implements OnInit {
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
         this.thirdProductData.third_product_image = JSON.stringify(this.product_image_url);
-        this.productService.requestSetProductData('34324', this.thirdProductData).subscribe(() => {
+        this.tempContent1 = CKEDITOR.instances.editor1.getData();
+        this.tempContent2 = CKEDITOR.instances.editor2.getData();
+        this.tempContent3 = CKEDITOR.instances.editor3.getData();
+        this.thirdProductData.traffic_guide = this.tempContent1;
+        this.thirdProductData.notice = this.tempContent2;
+        this.thirdProductData.introduce = this.tempContent3;
+        this.productService.requestSetProductData(this.product_id, this.thirdProductData).subscribe(() => {
           this.searchText$.next();
           this.globalService.promptBox.open('保存成功');
         }, err => {
@@ -193,5 +202,6 @@ export class ProductEditComponent implements OnInit {
       });
     }
   }
+
 
 }

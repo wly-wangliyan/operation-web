@@ -102,3 +102,7 @@
 .name {
   margin-left: -140px;
 }
+
+.temp-content {
+  max-width: 600px;
+}

@@ -9,6 +9,10 @@ import { RoutePreventService } from '../../../core/route-prevent.service';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ThirdProductListComponent } from './third-product-list/third-product-list.component';
+import { UploadService } from '../../../core/upload.service';
+import { ProductEditor2Component } from './product-edit/product-editor2/product-editor2.component';
+import { ProductEditor1Component } from './product-edit/product-editor1/product-editor1.component';
+import { ProductEditor3Component } from './product-edit/product-editor3/product-editor3.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,10 @@ import { ThirdProductListComponent } from './third-product-list/third-product-li
     ProductCreateComponent,
     ProductEditComponent,
     ProductDetailComponent,
-    ThirdProductListComponent],
+    ThirdProductListComponent,
+    ProductEditor2Component,
+    ProductEditor1Component,
+    ProductEditor3Component],
   imports: [
     ShareModule,
     CommonModule,
@@ -25,6 +32,7 @@ import { ThirdProductListComponent } from './third-product-list/third-product-li
   ],
   providers: [
     RoutePreventService,
+    UploadService,
   ],
 })
 export class ProductManagementModule { }
