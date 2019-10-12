@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../create']">
+    <li class="big-bg" [routerLink]="['../third-product']">
       <a>新建</a>
     </li>
   </ul>
@@ -16,7 +16,7 @@
           (change)="onChangeSearchStatus($event)">
           <option value="">全部</option>
           <option *ngFor="let status of saleStatus" [value]="status">
-            {{status}}
+            {{status | saleStatus}}
           </option>
         </select>
       </div>
@@ -51,7 +51,6 @@
             <th>市场价</th>
             <th>售价</th>
             <th>结算价</th>
-            <th>销量</th>
             <th>上架时间</th>
             <th>销售状态</th>
             <th>操作</th>
@@ -61,23 +60,30 @@
           <tr *ngFor="let product of ticketProductTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>
-              <a></a>
+              <img *ngIf="product.image_urls" src="{{product.image_urls}}" />
+              <a>{{product.product_name}}</a>
             </td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <ng-container *ngIf="product.third_product">
+              <td></td>
+              <td>{{(product.third_product.retail_price|zCompleteNumber) || 0}} 元起</td>
+              <td>{{(product.third_product.buy_price|zCompleteNumber) || 0}} 元起</td>
+            </ng-container>
+            <ng-container *ngIf="!product.third_product">
+              <td>--</td>
+              <td>--</td>
+              <td>--</td>
+            </ng-container>
+            <td>{{product.shelve_time?(product.shelve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{product.status | saleStatus}}</td>
             <td class="operation">
-              <a [title]="'查看'">查看</a>
-              <a [title]="'编辑'">编辑</a>
-              <a [title]="'下架'" (click)="onChangeSaleStatus(product)">下架</a>
-              <a [title]="'上架'" (click)="onChangeSaleStatus(product)">上架</a>
+              <a [title]="'查看'" [routerLink]="['../detail', 1, product.product_id]">查看</a>
+              <a [title]="'编辑'" [routerLink]="['../edit', product.product_id]">编辑</a>
+              <a [title]="'下架'" *ngIf="product.status===saleStatus[0]" (click)="onChangeSaleStatus(product)">下架</a>
+              <a [title]="'上架'" *ngIf="product.status===saleStatus[1]" (click)="onChangeSaleStatus(product)">上架</a>
               <a [title]="'删除'" (click)="onDeleteProduct(product)">删除</a>
-              <a [title]="'设为推荐'" (click)="onChangeTopStatus(product)">设为推荐</a>
-              <a [title]="'取消推荐'" (click)="onChangeTopStatus(product)">取消推荐</a>
+              <a [title]="'设为推荐'" *ngIf="product.is_top===2" (click)="onChangeTopStatus(product)">设为推荐</a>
+              <a [title]="'取消推荐'" *ngIf="product.is_top===1" (click)="onChangeTopStatus(product)">取消推荐</a>
             </td>
           </tr>
         </tbody>

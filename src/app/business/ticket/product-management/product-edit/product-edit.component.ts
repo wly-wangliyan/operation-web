@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
+import { Subject, timer } from 'rxjs/index';
+import { debounceTime, switchMap } from 'rxjs/internal/operators';
+import { ProductService, ThirdProductEntity, SearchParams } from '../product.service';
+import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
+
 export class ErrMessageItem {
   public isError = false;
   public errMes: string;
@@ -35,19 +41,52 @@ export class ErrPositionItem {
 })
 export class ProductEditComponent implements OnInit {
 
-  constructor(private globalService: GlobalService,
-  ) { }
-
-  public productTicketList: Array<any> = [];
-  public isShowInsutructions = false;
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
+  public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
+  public thirdProductInfoList: Array<any> = [];
+  public productTicketList: Array<any> = [];
+  public noResultInfoText = '数据加载中...';
+  public noResultTicketText = '数据加载中...';
+  public product_image_url: Array<any> = [];
 
+  private searchText$ = new Subject<any>();
+
+  @ViewChild('coverImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
+
+  constructor(private globalService: GlobalService, private productService: ProductService,
+
+  ) { }
   ngOnInit() {
     setTimeout(() => {
       CKEDITOR.replace('editor1');
       CKEDITOR.replace('editor2');
       CKEDITOR.replace('editor3');
     }, 0);
+
+    // 第三方产品详情
+    this.searchText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.productService.requestThirdProductsDetail('1212'))
+    ).subscribe(res => {
+      this.thirdProductData = res;
+      this.thirdProductInfoList = [
+        {
+          third_product_id: this.thirdProductData.third_product_id,
+          third_product_name: this.thirdProductData.third_product_name,
+          third_product_image: this.thirdProductData.third_product_image,
+          third_address: `${this.thirdProductData.provice}${this.thirdProductData.city}${this.thirdProductData.district}
+          ${this.thirdProductData.district}`,
+          sale_status: this.thirdProductData.sale_status,
+        }
+      ];
+      this.noResultInfoText = '暂无数据';
+      this.noResultTicketText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchText$.next();
+
     this.productTicketList = [
       {
         name: '赠项目门票', isShowInsutructions: false, time: '提前1小时', costIncludes: '15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
@@ -72,19 +111,33 @@ export class ProductEditComponent implements OnInit {
     ];
   }
 
+  // 展开
   public onShowInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = true;
-
   }
 
+  // 收起
   public onHideInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = false;
   }
 
+  // 重新导入
   public onReImportData() {
     this.globalService.confirmationBox.open('提示', '重新导入会覆盖现有票务详情，确定导入？', () => {
     });
   }
+
+  // 置顶
+  public onIsTopProduct(product_id, is_top) {
+    this.productService.requestIsTopProduct(product_id, is_top).subscribe(res => {
+      this.globalService.promptBox.open('置顶成功！');
+      this.searchText$.next();
+    }, err => {
+      this.globalService.promptBox.open('置顶失败，请重试！');
+    });
+  }
+
+
 
   // 清空
   public clear() {
@@ -101,6 +154,43 @@ export class ProductEditComponent implements OnInit {
     } else if (event === 'size_over') {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
+    }
+  }
+
+  // 保存基础数据调用接口
+  public onSaveFormData() {
+    if (this.coverImgSelectComponent.imageList.length === 0) {
+      this.errPositionItem.icon.isError = true;
+      this.errPositionItem.icon.errMes = '请上传产品图片！';
+    } else {
+      this.clear();
+      this.coverImgSelectComponent.upload().subscribe(() => {
+        this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+        this.thirdProductData.third_product_image = JSON.stringify(this.product_image_url);
+        this.productService.requestSetProductData('34324', this.thirdProductData).subscribe(() => {
+          this.searchText$.next();
+          this.globalService.promptBox.open('保存成功');
+        }, err => {
+          if (!this.globalService.httpErrorProcess(err)) {
+            if (err.status === 422) {
+              const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+              for (const content of error.errors) {
+                const field = content.field === 'project_name' ? '产品名称' : content.field === 'project_subtitle' ? '副标题' :
+                  content.field === 'image_urls' ? '产品图片' : content.field === 'traffic_guide' ? '交通指南' :
+                    content.field === 'notice' ? '预订须知' : content.field === 'product_introduce' ? '景区介绍' : '';
+                if (content.code === 'missing_field') {
+                  this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+                  return;
+                } else if (content.code === 'invalid') {
+                  this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+                } else {
+                  this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+                }
+              }
+            }
+          }
+        });
+      });
     }
   }
 

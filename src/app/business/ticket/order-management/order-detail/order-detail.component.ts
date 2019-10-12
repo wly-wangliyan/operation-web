@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderManagementService, OrderEntity } from '../order-management.service';
+import { OrderManagementService, TicketOrderEntity, TicketInfo, VisitorInfo } from '../order-management.service';
 import { GlobalService } from '../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class OrderDetailComponent implements OnInit {
 
-  public orderDetail: OrderEntity = new OrderEntity(); // 订单信息
+  public orderDetail: TicketOrderEntity = new TicketOrderEntity(); // 订单信息
+
+  public ticketInfo: TicketInfo = new TicketInfo(); // 票务信息
+
+  public visitorList: Array<VisitorInfo> = []; // 游客信息
 
   private order_id: string; // 订单id
 
@@ -36,6 +40,8 @@ export class OrderDetailComponent implements OnInit {
   private getOrderDetail() {
     this.orderService.requestOrderDetailData(this.order_id).subscribe(res => {
       this.orderDetail = res;
+      this.ticketInfo = res.ticket_info ? res.ticket_info : new TicketInfo();
+      this.visitorList = res.visitor_info ? res.visitor_info : [];
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

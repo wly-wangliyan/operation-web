@@ -29,6 +29,7 @@ import { DateClockComponent } from './components/date-clock/date-clock.component
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
+import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusPipe } from './pipes/ticket-format.pipe';
 
 
 @NgModule({
@@ -70,6 +71,10 @@ import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-typ
     ProjectCategoryPipe,
     ZCompleteNumberPipe,
     PayStatusPipe,
+    TicketFormatPipe,
+    ThirdSaleStatusPipe,
+    OrderStatusPipe,
+    OrderUseStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -111,6 +116,10 @@ import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-typ
     ProjectCategoryPipe,
     ZCompleteNumberPipe,
     PayStatusPipe,
+    TicketFormatPipe,
+    ThirdSaleStatusPipe,
+    OrderStatusPipe,
+    OrderUseStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
