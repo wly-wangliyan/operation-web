@@ -6,7 +6,7 @@ import {
   UpkeepMerchantAccessoryEntity,
   UpkeepMerchantProjectEntity
 } from '../../business-management.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { ChooseAccessoryComponent } from './choose-accessory/choose-accessory.component';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { CreateAccessoryComponent } from './create-accessory/create-accessory.component';
@@ -60,6 +60,7 @@ export class OperationConfigurationEditComponent implements OnInit {
   private continueRequestSubscription: Subscription;
   private searchText$ = new Subject<any>();
   private currentAccessory: string; // 当前配件
+  private is_first_copy = true; // 是否首次复制
 
   @ViewChild('chooseAccessoryPromptDiv', { static: true }) public chooseAccessoryPromptDiv: ElementRef;
   @ViewChild('addAccessoryPromptDiv', { static: true }) public addAccessoryPromptDiv: ElementRef;
@@ -202,7 +203,7 @@ export class OperationConfigurationEditComponent implements OnInit {
             // accessory.is_edit_price = true;
             this.accessoryItemList.push(accessory);
             // 循环关联配件和新产品下的项目
-            if (this.accessoryItemList.length === 0 && (!this.currentProject.accessory_count || this.currentProject.accessory_count === 0)) {
+            if (this.is_first_copy) {
               const param = {
                 upkeep_accessory_id: value.upkeep_accessory.upkeep_accessory_id,
                 number: value.number,
@@ -396,6 +397,9 @@ export class OperationConfigurationEditComponent implements OnInit {
           this.requestCopyAccessoriesList();
         }
       });
+    });
+    timer(500).subscribe(() => {
+      this.is_first_copy = false;
     });
   }
 }
