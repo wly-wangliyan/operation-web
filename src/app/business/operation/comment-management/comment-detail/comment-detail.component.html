@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'评论列表'" [level2Name]="'评论详情'" [level1RelativePath]="'../'"></app-crumb>
+  <app-crumb [level1Name]="'评论管理'" [level2Name]="'评论列表'" [level3Name]="'评论详情'" [level2RelativePath]="'../'"></app-crumb>
 </div>
 <div class="content-flow">
   <div class="tab-bar">
@@ -16,9 +16,10 @@
           <label>{{currentComment.nickname}}</label>
         </div>
         <div>
-          <span>ID: {{currentComment.user_id}}</span>
-          <span>手机号: {{currentComment.phone_num}}</span>
-          <span>评论时间: {{currentComment.created_time * 1000 | date: "yyyy-MM-dd HH:mm:ss"}}</span>
+          <span *ngIf="currentComment.user_id">ID: {{currentComment.user_id}}</span>
+          <span *ngIf="currentComment.phone_num">手机号: {{currentComment.phone_num}}</span>
+          <span *ngIf="currentComment.category">类别: {{currentComment.category===1?'用户发起':'系统创建'}}</span>
+          <span>评论时间: {{currentComment.created_time * 1000 | date: "yyyy-MM-dd HH:mm"}}</span>
         </div>
       </div>
       <div class="line"></div>
@@ -26,8 +27,8 @@
         <img *ngIf="currentComment.is_top===1" src="/assets/images/icon_top_big.png"
           style="width: 32px;margin: 0 10px 0 -42px">
         <span>{{currentComment.comment_content}}</span>
-        <div *ngIf="currentComment.image_urls">
-          <img *ngFor="let item of currentComment.image_urls.split(',')" [src]="item" class="img-space">
+        <div *ngIf="imageUrls">
+          <img *ngFor="let item of imageUrls" [src]="item" class="img-space" (click)="onOpenZoomPictureModal(i)">
         </div>
       </div>
       <div class="operation-btn">
@@ -43,3 +44,6 @@
     </form>
   </div>
 </div>
+
+<!-- 图片放大 -->
+<app-z-photo-select [isShowMinImg]="true" zoomWidth="350" zoomHeight="400" [imageUrls]="imageUrls"></app-z-photo-select>
