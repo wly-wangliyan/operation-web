@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../edit','434']">
+    <li class="big-bg" [routerLink]="['../third-product']">
       <a>新建</a>
     </li>
   </ul>
@@ -60,10 +60,18 @@
           <tr *ngFor="let product of ticketProductTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>
-              <img *ngIf="product.image_urls" src="{{product.image_urls}}" />
+              <div class="img-box">
+                <ng-container *ngIf="product.image_urls">
+                  <ng-container *ngFor="let image_url of product.image_urls.split(',');let i=index">
+                    <img *ngIf="i===0" src="{{image_url}}" />
+                  </ng-container>
+                </ng-container>
+                <img *ngIf="!product.image_urls" src="/assets/images/image_space_3_2.png" />
+                <i *ngIf="product.is_top===1" class="recommend">荐</i>
+              </div>
               <a>{{product.product_name}}</a>
             </td>
-            <td></td>
+            <td>甜程网</td>
             <ng-container *ngIf="product.third_product">
               <td></td>
               <td>{{(product.third_product.retail_price|zCompleteNumber) || 0}} 元起</td>
@@ -77,7 +85,7 @@
             <td>{{product.shelve_time?(product.shelve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{product.status | saleStatus}}</td>
             <td class="operation">
-              <a [title]="'查看'" [routerLink]="['../detail', 1, product.product_id]">查看</a>
+              <a [title]="'查看'" [routerLink]="['../detail', product.product_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit', product.product_id]">编辑</a>
               <a [title]="'下架'" *ngIf="product.status===saleStatus[0]" (click)="onChangeSaleStatus(product)">下架</a>
               <a [title]="'上架'" *ngIf="product.status===saleStatus[1]" (click)="onChangeSaleStatus(product)">上架</a>

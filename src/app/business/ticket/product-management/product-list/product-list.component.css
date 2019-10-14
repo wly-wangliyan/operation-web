@@ -19,3 +19,24 @@
 .search-btn-group {
   margin-top: -1px !important;
 }
+
+.img-box {
+  width: 90px;
+  height: 60px;
+  position: relative;
+}
+
+.img-box img {
+  width: 90px;
+  height: 60px;
+}
+
+.recommend {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-color: #08D5B1;
+  color: #fff;
+  right: -10px;
+  bottom: 0;
+}

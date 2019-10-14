@@ -143,7 +143,13 @@ export class ZPhotoSelectComponent implements OnInit {
         this.validateImg(imageItemList);
         this.cutWriteCoverUrl();
       } else {
-        this.formatImgInfo();
+        const imageItemList: Array<ZPhotoImageEntity> = [];
+        imageItemList.push(this.imageItem);
+        // 检查选择照片是否是有效图片
+        this.validateImg(imageItemList);
+        if (this.isValidImg) {
+          this.formatImgInfo();
+        }
       }
     }
   }
