@@ -74,26 +74,26 @@ export class CommentCreateComponent implements OnInit {
   }
 
   // 选择头像图片时校验图片格式
-  public onSelectedPicture(event) {
-    this.errPositionItem.icon.isError = false;
+  public onSelectedPicture(event: any) {
+    this.onClearErrMsg();
     if (event === 'type_error') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
+      this.commentErrMsg = '格式错误，请重新上传！';
+      return;
     } else if (event === 'size_over') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '图片大小不得高于1M！';
+      this.commentErrMsg = '图片大小不得高于1M！';
+      return;
     }
   }
 
   // 选择晒图时校验图片格式
-  public onSelectedImagePicture(event) {
-    this.errPositionItem.icon.isError = false;
+  public onSelectedImagePicture(event: any) {
+    this.onClearErrMsg();
     if (event === 'type_error') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
+      this.commentErrMsg = '格式错误，请重新上传！';
+      return;
     } else if (event === 'size_over') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
+      this.commentErrMsg = '图片大小不得高于2M！';
+      return;
     }
   }
 
@@ -115,10 +115,6 @@ export class CommentCreateComponent implements OnInit {
   // 评论时间的禁用部分
   public disabledCommentTime = (startValue: Date): boolean => {
     if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.created_time) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.created_time).setHours(0, 0, 0, 0)) {
       return true;
     } else {
       return false;
