@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'保养手册'" [level2Name]="title"></app-crumb>
+  <app-crumb [level1Name]="'保养手册'" [level2Name]="title" [level1RelativePath]="'../'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg" *ngIf="!isEdit">
       <a (click)="onEditClick()">编辑</a>

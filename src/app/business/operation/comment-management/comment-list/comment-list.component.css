@@ -72,3 +72,7 @@
 .search-btn-group {
     margin-top: -1px !important;
 }
+
+::ng-deep .ant-table-body {
+    padding: 2px;
+}

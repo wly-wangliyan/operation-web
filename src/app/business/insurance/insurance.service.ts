@@ -18,6 +18,7 @@ export class BrokerageEntity extends EntityBase {
   public telephone: number = undefined; 	// 	int	电话
   public email: string = undefined; 	// 	string	邮箱
   public describe: string = undefined; 	// string 描述
+  public discontinue_use: boolean = undefined; // bool 是否启用
   public ic_company: Array<InsuranceEntity> = undefined; 	// 	Array	保险公司
   public ic_company_name: string = undefined; 	// 	string	保险公司名称
   public secret_nums: Array<any> = undefined; // 隐私号
@@ -36,6 +37,7 @@ export class InsuranceEntity extends EntityBase {
   public ic_id: string = undefined; 	// 	string 保险公司id
   public ic_name: string = undefined; 	// 	string 保险公司名称
   public ic_image: string = undefined; 	// 保险公司logo
+  public details_link: string = undefined;  // string 详情链接
   public describe = ''; 	// 	string 保险公司描述
   public discontinue_use = undefined; 	// 	bool 是否启用 false为启用，true为不启用
   public sort_num: number = undefined; 	// 	number 排序数字
@@ -72,13 +74,15 @@ export class UpdateInsueranceEntity extends EntityBase {
   public ic_name: string = undefined; 	// 	string	T	保险公司名称
   public ic_image: string = undefined; 	// 	string	T	保险公司logo
   public tag: string = undefined; 	// 	string	T	标签
+  public details_link: string = undefined; 	// 	string 详情链接
 
-  constructor(describe?: string, ic_name?: string, ic_image?: string, tag?: string) {
+  constructor(describe?: string, ic_name?: string, ic_image?: string, tag?: string, details_link?: string) {
     super();
     this.describe = describe;
     this.ic_name = ic_name;
     this.ic_image = ic_image;
     this.tag = tag;
+    this.details_link = details_link;
   }
 
   public toEditJson(): any {
@@ -238,6 +242,16 @@ export class InsuranceService {
    */
   public requestCheckMiddleNumber(middleNumber: string): Observable<HttpResponse<any>> {
     return this.httpService.get(environment.OPERATION_SERVE + `/admin/secret_nums/${middleNumber}`);
+  }
+
+  /**
+   * 停用、启用经纪公司
+   * @param menu_id 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestOpenBrokerCompany(broker_company_id, params: any): Observable<HttpResponse<any>> {
+    return this.httpService.patch(environment.OPERATION_SERVE +
+        `/admin/broker/${broker_company_id}`, params);
   }
 }
 

@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd';
-import { Subject, Subscription, timer } from 'rxjs';
+import { NzFormatEmitEvent } from 'ng-zorro-antd';
+import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
-import { debounceTime, switchMap } from 'rxjs/operators';
 import {
   VehicleBrandEntity,
   VehicleFirmEntity,
   VehicleSeriesEntity, VehicleTypeEntity,
   VehicleTypeManagementService
 } from '../vehicle-type-management.service';
+import { VehicleTypeDataService } from '../vehicle-type-data.service';
 
 @Component({
   selector: 'app-vehicle-type-list',
@@ -25,48 +25,37 @@ export class VehicleTypeListComponent implements OnInit {
   public vehicleTypeList: Array<VehicleTypeEntity> = [];
   public vehicle_brand_id: string;
   public index = 0;
-  public importMsg = '';
   public isLoading = true;
 
-  private searchText$ = new Subject<any>();
-  private continueRequestSubscription: Subscription;
   private importSpotSubscription: Subscription;
   public importViewModel: FileImportViewModel = new FileImportViewModel();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
   constructor(private globalService: GlobalService,
-    private vehicleTypeManagementService: VehicleTypeManagementService) {
+              private vehicleTypeManagementService: VehicleTypeManagementService,
+              private vehicleDataService: VehicleTypeDataService) {
   }
 
   ngOnInit() {
     // 获取车辆品牌列表
-    this.searchText$.pipe(
-      debounceTime(500),
-      switchMap(() =>
-        this.vehicleTypeManagementService.requestVehicleBrandList())
-    ).subscribe(res => {
+    this.vehicleDataService.requestVehicleBrandList();
+    timer(500).subscribe(() => {
       this.isLoading = false;
-      this.vehicleBrandList = res.results;
+      this.vehicleBrandList = this.vehicleDataService.vehicleBrandList;
       if (this.vehicleBrandList.length > 0) {
         this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
         this.requestVehicleFirmsList(this.vehicleBrandList[0].vehicle_brand_id);
       }
-    }, err => {
-      this.globalService.httpErrorProcess(err);
     });
-    this.searchText$.next();
   }
 
   // 获取厂商列表
   private requestVehicleFirmsList(vehicle_brand_id: string) {
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-    this.continueRequestSubscription =
-      this.vehicleTypeManagementService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
-        this.vehicleFirmList = res;
-      }, err => {
-        this.globalService.httpErrorProcess(err);
-      });
+    this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id);
+    timer(500).subscribe(() => {
+      this.vehicleFirmList = this.vehicleDataService.vehicleFirmList;
+    });
   }
 
   nzEvent(event: Required<NzFormatEmitEvent>): void {
