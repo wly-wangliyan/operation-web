@@ -121,6 +121,8 @@ export class ExpandedMenuComponent implements OnInit {
     systemMenu.icon = '/assets/images/menu_comment.png';
     const subFinanceMenu1 = new SideMenuItem('评论列表', '/main/operation/comment/comment-list', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('评论配置', '/main/operation/comment/comment-setting', systemMenu);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

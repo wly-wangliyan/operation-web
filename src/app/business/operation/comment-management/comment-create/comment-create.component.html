@@ -1,0 +1,114 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'评论管理'" [level2Name]="'评论列表'" [level2RelativePath]="'../comment-list'" [level3Name]="'新建评论'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #addCommentForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>业务线</span>
+        </label>
+        <div class="control-input">
+          <label style="font-size: 14px;text-indent: 14px;">{{work_name}}</label>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>产品ID</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="commentParams.object_id"
+            placeholder="请输入产品ID" maxlength="32" name="object_id" appIgnoreSpace required>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>产品名称</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="commentParams.object_name"
+            placeholder="输入1-20个字产品名称" maxlength="20" name="object_name" appIgnoreSpace required>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>头像</span>
+        </label>
+        <div>
+          <app-z-photo-select #avatarImg [resizable]="true" [hasAddPicture]="true" [hasDeletePicture]="true"
+            [limitImgSize]="1" [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)"
+            file_id="avatarImg" [imageUrls]="avatar_url" [imageWidth]="100" [imageHeight]="100">
+          </app-z-photo-select>
+          <p class="cover-hint">注：尺寸 1:1，格式PNG或JPG，大小1M以内</p>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>昵称</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="commentParams.nickname"
+            placeholder="输入1-10个字昵称" maxlength="10" name="nickname" appIgnoreSpace required>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>评论内容</span>
+        </label>
+        <div class="control-input">
+          <textarea class="form-control" rows="4" placeholder="输入1-200字描述" [(ngModel)]="commentParams.comment_content"
+            (focus)="onClearErrMsg()" name="comment_content" maxlength="200">
+            </textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>晒图</span>
+        </label>
+        <div>
+          <app-z-photo-select #commentImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+            [maxLength]="6" [isCutCoverImg]="false" (selectedImgChange)="onSelectedImagePicture($event)"
+            file_id="commentImg" [imageUrls]="image_urls" [imageWidth]="120" [imageHeight]="100">
+          </app-z-photo-select>
+          <p class="cover-hint">注：最多上传6张，每张大小不超过2M</p>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>评论时间</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="created_time" [nzShowToday]=false [nzDisabledDate]="disabledCommentTime"
+            name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <!-- <nz-date-picker [(ngModel)]="created_time" [nzShowToday]=false [nzDisabledDate]="disabledCommentTime"
+            name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker> -->
+        </div>
+      </div>
+
+      <div class="row row-message">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{commentErrMsg}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!addCommentForm.form.valid || !comment_time" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+      </div>
+    </form>
+  </div>
+</div>

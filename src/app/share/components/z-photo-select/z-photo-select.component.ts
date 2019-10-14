@@ -75,6 +75,8 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public dragCrop = false; // 是否可以重画
 
+  @Input() public resizable = false; // 是否可以按比例自由截取
+
   @Input() public aspectRatio = 1 / 1; // 截取图片比例
 
   public imageList: Array<ZPhotoImageEntity> = [];
@@ -352,7 +354,7 @@ export class ZPhotoSelectComponent implements OnInit {
           toggleDragModeOnDblclick: false,
           checkImageOrigin: true,
           dragCrop: this.dragCrop,
-          resizable: false,
+          resizable: this.resizable,
           autoCropArea: 0.2
         });
       });
