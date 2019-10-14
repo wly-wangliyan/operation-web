@@ -1,0 +1,92 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'评论管理'" [level2Name]="'评论配置'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" class="header-btn" [disabled]="settingList.length>=10" nz-button nzType="primary"
+        (click)="onShowModal()">新建
+      </button>
+    </li>
+  </ul>
+</div>
+
+<div class="content-flow">
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="settingList" [nzShowPagination]="false" [nzFrontPagination]='false'
+        [nzNoResult]="noResultText" #settingTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>业务线名称</th>
+            <th>描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let setting of settingTable.data; let i=index">
+            <td>{{i + 1}}</td>
+            <td>{{setting.work_id}}</td>
+            <td>{{setting.work_name}}</td>
+            <td [title]="setting.remark?setting.remark:''">{{setting.remark|zMaxLength:20}}</td>
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onShowModal(setting)">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+
+
+<!--新增/编辑评论配置-->
+<div class="modal fade" id="editSettingModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #settingPromptDiv>
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">{{isCreateSetting ? '新建' : '编辑'}}</span>
+        <button type="button" class="close" data-dismiss="modal">&times;
+        </button>
+      </div>
+      <form *ngIf="settingParams" autocomplete="off" class="form-horizontal" #settingEditForm="ngForm">
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>业务线名称</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="输入1-5字业务线名称" [(ngModel)]="settingParams.work_name"
+              (focus)="onClearErrMsg()" maxlength="5" name="work_name" appIgnoreSpace required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>描述</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="4" placeholder="输入0-100字描述" [(ngModel)]="settingParams.remark"
+              (focus)="onClearErrMsg()" name="remark" maxlength="100">
+            </textarea>
+          </div>
+        </div>
+        <div class="row row-message" style="margin-top:-20px">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span>{{settingErrMsg}}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!settingEditForm.form.valid"
+            (appZDebounceClick)="onEditFormSubmit()">
+            保存
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

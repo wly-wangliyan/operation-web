@@ -9,6 +9,8 @@ import { environment } from '../../../../environments/environment';
 import { CommentManagementComponent } from './comment-management.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
 import { CommentDetailComponent } from './comment-detail/comment-detail.component';
+import { CommentSettingComponent } from './comment-setting/comment-setting.component';
+import { CommentCreateComponent } from './comment-create/comment-create.component';
 
 const uploadToken: UploadConfig = {
     reportProcess: true,
@@ -27,7 +29,9 @@ const uploadToken: UploadConfig = {
   declarations: [
       CommentManagementComponent,
       CommentListComponent,
-      CommentDetailComponent
+      CommentDetailComponent,
+      CommentSettingComponent,
+      CommentCreateComponent
   ],
     providers: [{
         provide: UPLOAD_TOKEN,
