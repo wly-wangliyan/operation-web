@@ -10,7 +10,7 @@ import { FileUpdate } from '../../../../utils/file-update';
 // 第三方产品实体
 export class ThirdProductEntity extends EntityBase {
   public third_product_id: string = undefined; // 第三方产品id
-  public third_product_name: string = undefined; // 第三方产品名称
+  public third_product_name = ''; // 第三方产品名称
   public add_time: number = undefined; // 第三方产品添加时间
   public third_product_image: string = undefined; // 第三方产品缩略图
   public type: string = undefined; // 第三方产品类型(A:景点 B:线路 C:酒店 F:套票 H:演出)

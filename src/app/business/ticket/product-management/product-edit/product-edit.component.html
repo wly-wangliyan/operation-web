@@ -1,8 +1,15 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../'" [level2Name]="'编辑产品'"></app-crumb>
+  <!-- <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../'" [level2Name]="'编辑产品'"></app-crumb> -->
+  <!-- <a [routerLink]="['/product_management']">产品管理</a>
+  <span> 》编辑产品</span> -->
+  <div class="header-left">
+    <i></i>
+    <a [routerLink]="['../']">产品管理</a>
+    <span> >><span class='second-crumb'>编辑产品</span></span>
+  </div>
   <ul class="header-right">
     <li class="big-bg big-white-btn">
-      <a [routerLink]="['../list']">返回</a>
+      <a [routerLink]="['../']">返回</a>
     </li>
     <li class="big-bg">
       <a (click)='onSaveFormData()'>保存</a>
@@ -41,20 +48,20 @@
     <!-- 产品运营信息 -->
     <div class='card-title mt_50'>产品运营信息</div>
     <div>
-      <form nz-form class="content-layout" #registerForm="ngForm">
+      <form nz-form class="content-layout" #productInfoForm="ngForm">
         <div class="card_content">
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
             <nz-form-control>
-              <input class="main-title" ([ngModel])="this.thirdProductData.third_product_name" placeholder="输入1-20字产品名称"
+              <input class="main-title" [(ngModel)]="this.thirdProductData.third_product_name" placeholder="输入1-20字产品名称"
                 nz-input autocomplete="off" name="main-title" required maxlength='20' />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="subheading" ([ngModel])="this.thirdProductData.introduce" placeholder=" 输入0-80字副标题" nz-input
-                autocomplete="off" name="subheading" required maxlength='80' />
+              <input class="subheading" [(ngModel)]="this.thirdProductData.introduce" placeholder=" 输入0-80字副标题" nz-input
+                autocomplete="off" name="subheading" maxlength='80' />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -109,7 +116,7 @@
     <div class='mt_50'><span class='card-title'>票务详情</span><a class='import-btn' (click)='onReImportData()'>重新导入</a>
     </div>
     <div>
-      <form nz-form class="content-layout" #registerForm="ngForm">
+      <form nz-form class="content-layout" #ticketDetailForm="ngForm">
         <div class="card_content">
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
@@ -128,38 +135,38 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="detail-input" ([ngModel])="this.thirdProductData.run_time" nz-input autocomplete="off"
+              <input class="detail-input" [(ngModel)]="this.thirdProductData.run_time" nz-input autocomplete="off"
                 name="run_time" required maxlength='20' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="detail-input" ([ngModel])="this.thirdProductData.telephone" nz-input autocomplete="off"
+              <input class="detail-input" [(ngModel)]="this.thirdProductData.telephone" nz-input autocomplete="off"
                 name="telephone" required maxlength='12' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="address" nz-input ([ngModel])="this.thirdProductData.provice" autocomplete="off"
+              <input class="address" nz-input [(ngModel)]="this.thirdProductData.provice" autocomplete="off"
                 name="provice" placeholder="省" disabled />
-              <input class="address" nz-input ([ngModel])="this.thirdProductData.city" autocomplete="off" name="city"
+              <input class="address" nz-input [(ngModel)]="this.thirdProductData.city" autocomplete="off" name="city"
                 placeholder="市" disabled />
-              <input class="address" nz-input ([ngModel])="this.thirdProductData.district" autocomplete="off"
+              <input class="address" nz-input [(ngModel)]="this.thirdProductData.district" autocomplete="off"
                 name="district" placeholder="区" disabled />
-              <input class="address-input" ([ngModel])="this.thirdProductData.address" placeholder="详细地址" nz-input
+              <input class="address-input" [(ngModel)]="this.thirdProductData.address" placeholder="详细地址" nz-input
                 autocomplete="off" name="address" maxlength='100' disabled />
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nzFlex>
+          <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
               <app-product-editor1 #editor1></app-product-editor1>
             </nz-form-control>
           </nz-form-item>
 
-          <nz-form-item nzFlex>
+          <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
               <app-product-editor2 #editor2></app-product-editor2>

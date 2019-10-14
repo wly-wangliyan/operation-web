@@ -7,7 +7,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductCreateComponent } from './product-create/product-create.component';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { RoutePreventService } from '../../../core/route-prevent.service';
+import { ExternalPreventService } from '../../../core/external-prevent.service';
 import { ThirdProductListComponent } from './third-product-list/third-product-list.component';
 
 const routes: Routes = [{
@@ -16,9 +16,9 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: ProductListComponent },
-    { path: 'create', component: ProductCreateComponent, canDeactivate: [RoutePreventService] },
-    { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [RoutePreventService] },
-    { path: 'detail/:type/:product_id', component: ProductDetailComponent, canDeactivate: [RoutePreventService] },
+    { path: 'create', component: ProductCreateComponent },
+    { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService] },
+    { path: 'detail/:type/:product_id', component: ProductDetailComponent },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
