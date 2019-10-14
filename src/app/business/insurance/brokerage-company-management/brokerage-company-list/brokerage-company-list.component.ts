@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { BrokerageEntity, InsuranceService } from '../../insurance.service';
 import { BrokerageCompanyEditComponent } from '../brokerage-company-edit/brokerage-company-edit.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 const PageSize = 15;
 
@@ -80,5 +81,29 @@ export class BrokerageCompanyListComponent implements OnInit {
         this.globalService.httpErrorProcess(err);
       });
     }
+  }
+
+  // 开启、关闭经济公司
+  public onSwitchChange(broker_company_id, event) {
+    const swith = event ? false : true;
+    const params = { discontinue_use: swith };
+    this.insuranceService.requestOpenBrokerCompany(broker_company_id, params).subscribe(res => {
+      if (event) {
+        this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
+      } else {
+        this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
+      }
+      this.searchText$.next();
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
+          }
+        }
+      }
+      this.searchText$.next();
+    });
   }
 }

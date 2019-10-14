@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { BrokerageEntity, InsuranceService } from '../../../insurance/insurance.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { BusinessEditComponent } from '../business-edit/business-edit.component';
 import { Router } from '@angular/router';
 import { BusinessManagementService, SearchUpkeepMerchantParams, UpkeepMerchantEntity } from '../business-management.service';
 import { VehicleBrandEntity, VehicleTypeManagementService } from '../../vehicle-type-management/vehicle-type-management.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
+import { VehicleTypeDataService } from '../../vehicle-type-management/vehicle-type-data.service';
 
 const PageSize = 15;
 
@@ -42,6 +42,7 @@ export class BusinessListComponent implements OnInit, OnDestroy {
     private globalService: GlobalService,
     private businessManagementService: BusinessManagementService,
     private vehicleTypeManagementService: VehicleTypeManagementService,
+    private vehicleDataService: VehicleTypeDataService,
     private router: Router) {
   }
 
@@ -60,12 +61,11 @@ export class BusinessListComponent implements OnInit, OnDestroy {
     });
     this.searchText$.next();
 
-    this.requestBrandSubscription =
-      this.vehicleTypeManagementService.requestVehicleBrandList().subscribe(res => {
-        this.vehicleBrandList = res.results;
-      }, err => {
-        this.globalService.httpErrorProcess(err);
-      });
+    // 获取车辆品牌列表
+    this.vehicleDataService.requestVehicleBrandList();
+    timer(500).subscribe(() => {
+      this.vehicleBrandList = this.vehicleDataService.vehicleBrandList;
+    });
   }
 
   public ngOnDestroy() {

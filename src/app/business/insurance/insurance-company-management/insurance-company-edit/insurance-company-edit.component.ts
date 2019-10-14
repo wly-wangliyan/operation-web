@@ -5,6 +5,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { isUndefined } from 'util';
 import { InsuranceEntity, InsuranceService, UpdateInsueranceEntity } from '../../insurance.service';
+import { ValidateHelper } from '../../../../../utils/validate-helper';
 
 export class ErrMessageItem {
   public isError = false;
@@ -22,14 +23,16 @@ export class ErrMessageItem {
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   ic_name: ErrMessageItem = new ErrMessageItem();
+  details_link: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(ic_name)) {
+  constructor(icon?: ErrMessageItem, ic_name?: ErrMessageItem,
+              details_link?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(ic_name) || isUndefined(details_link)) {
       return;
     }
     this.icon = icon;
     this.ic_name = ic_name;
+    this.details_link = details_link;
   }
 }
 
@@ -122,6 +125,11 @@ export class InsuranceCompanyEditComponent implements OnInit {
   // form提交
   public onEditFormSubmit() {
     this.clear();
+    if (!ValidateHelper.checkUrl(this.currentInsurance.details_link)) {
+      this.errPositionItem.details_link.isError = true;
+      this.errPositionItem.details_link.errMes = '详情链接格式错误！';
+      return;
+    }
     this.coverImgSelectComponent.upload().subscribe( () => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       const params = new UpdateInsueranceEntity();
@@ -129,6 +137,7 @@ export class InsuranceCompanyEditComponent implements OnInit {
       params.ic_name = this.currentInsurance.ic_name;
       params.describe = this.currentInsurance.describe;
       params.tag = this.tagList.join(',');
+      params.details_link = this.currentInsurance.details_link;
       if (this.isCreateInsurance) {
         // 添加项目
         this.insuranceService.requestAddInsurance(params).subscribe(() => {
@@ -158,6 +167,7 @@ export class InsuranceCompanyEditComponent implements OnInit {
   public clear() {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.ic_name.isError = false;
+    this.errPositionItem.details_link.isError = false;
   }
 
   // 确定按钮回调

@@ -70,6 +70,23 @@
           </div>
         </div>
         <div class="row row-message"></div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>详情链接</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请输入http/https开头的超链接" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                   maxlength="100" autocomplete="off" style="width: 448px!important;" required
+                   (change)="errPositionItem.details_link.isError=false">
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.details_link?.isError">{{errPositionItem?.details_link?.errMes}}</span>
+          </div>
+        </div>
         <div class="row" style="height: 70px">
           <label class=" control-label">
             <b>&nbsp;&nbsp;</b>

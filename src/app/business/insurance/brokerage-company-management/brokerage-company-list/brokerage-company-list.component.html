@@ -14,6 +14,7 @@
             <th>手机号</th>
             <th>地址</th>
             <th>授权保险公司</th>
+            <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -26,6 +27,10 @@
             <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
             <td [title]="data.ic_company_name?data.ic_company_name:''">
               {{data.ic_company_name?(data.ic_company_name|zMaxLength:20):'--'}}
+            </td>
+            <td>
+              <nz-switch [ngModel]="!data.discontinue_use" nzCheckedChildren="On" style="height: 10px"
+                         nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.broker_company_id,$event)"></nz-switch>
             </td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onEditBtnClick(data)">编辑</a>
