@@ -12,6 +12,7 @@ export class CommentEntity extends EntityBase {
   public client: string = undefined; 	// 	Object	终端对象 Client
   public object_id: string = undefined; 	// 	string	object_id
   public object_name: string = undefined; 	// 	string	object_name
+  public category: number = undefined; // 类别 1用户发起 2系统创建
   public order_id: string = undefined; 	// 	string	订单id
   public status: number = undefined; 	// 	integer	评论状态 1:待审核,2:已通过,3:被驳回
   public is_top: number = undefined; 	// 	integer	是否置顶该评论
@@ -49,11 +50,12 @@ export class WorkEntity extends EntityBase {
 }
 
 export class SearchCommentParams extends EntityBase {
-  public status = ''; 	// 	int 	F 	1:待审核,2:已通过,3:被驳回
-  public work_id = '08432b8edf6711e9a9fc309c23b285a0'; 	// 	String 	T 	评论业务id
-  public object_name = ''; 	// 	string 	F 	object_name
-  public is_top = ''; 	// 	bool 	F 	是否置顶
-  public section = ''; 	// 	string 	F 	操作时间戳区间(小,大) 例:"1560415182.165, 1560415182.265"
+  public status: any = ''; 	// 	int 	F 	1:待审核,2:已通过,3:被驳回
+  public work_id: string = undefined; 	// 	String 	T 	评论业务id
+  public object_name: string = undefined; 	// 	string 	F 	object_name
+  public category: any = ''; // 类别
+  public is_top: any = ''; 	// 	bool 	F 	是否置顶
+  public section: string = undefined; 	// 	string 	F 	操作时间戳区间(小,大) 例:"1560415182.165, 1560415182.265"
   public page_size = 45; // integer	F	每页条数 默认20
   public page_num = 1; // integer	F	页码 默认1
 }
@@ -96,7 +98,7 @@ export class CommentService {
    */
   public requestCommentList(params: SearchCommentParams): Observable<CommentLinkResponse> {
     return this.httpService.get(environment.COMMENT_SERVE + `/comments`,
-      params).pipe(map(res => new CommentLinkResponse(res)));
+      params.json()).pipe(map(res => new CommentLinkResponse(res)));
   }
 
   /**

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { CommentEntity, CommentService, SearchCommentParams } from '../comment-management.service';
+import { CommentEntity, CommentService, SearchCommentParams, WorkEntity } from '../comment-management.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { Router } from '@angular/router';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
@@ -23,11 +23,17 @@ export class CommentListComponent implements OnInit {
   public application_id: string;
   public start_pay_time = null; // 支付时间
   public end_pay_time = null;
-  public imageUrls = ['/assets/images/icon_top.png'];
+  public imageUrls = [];
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
+
+  public settingList: Array<WorkEntity> = []; // 评论配置列表
+
+  public work_id = ''; // 当前业务线id
+
+  public work_name = ''; // 当前业务线名称
 
   @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
   @ViewChild('basicTable', { static: true }) public basicTable: ElementRef;
@@ -39,23 +45,35 @@ export class CommentListComponent implements OnInit {
     return this.commentList.length / PageSize + 1;
   }
 
-  constructor(private globalService: GlobalService,
-              private commentService: CommentService,
-              private router: Router) {
-    this.searchParams.page_size = PageSize * 3;
+  constructor(
+    private globalService: GlobalService,
+    private commentService: CommentService,
+    private router: Router) { }
+
+  public ngOnInit() {
+    this.requestSettingList();
   }
 
-  ngOnInit() {
-    this.searchText$.pipe(debounceTime(500), switchMap(() => this.commentService.requestCommentList(this.searchParams)))
-        .subscribe(res => {
-          this.commentList = res.results;
-          this.linkUrl = res.linkUrl;
-          this.noResultText = '暂无数据';
-          this.pageIndex = 1;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+  // 初始化评论列表
+  private generateCommentList() {
+    // 定义查询延迟时间
+    this.searchText$.pipe(debounceTime(500)).subscribe(() => {
+      this.requestCommentList();
+    });
     this.searchText$.next();
+  }
+
+  // 请求评论列表
+  private requestCommentList() {
+    this.commentService.requestCommentList(this.searchParams).subscribe(res => {
+      this.commentList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+      this.pageIndex = 1;
+    }, err => {
+      this.noResultText = '暂无数据';
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 翻页方法
@@ -76,7 +94,7 @@ export class CommentListComponent implements OnInit {
   // 查看详情
   public onShowDetailClick(data) {
     this.router.navigate(['/main/operation/comment/comment-detail'],
-        { queryParams: { comment_id: data.comment_id} });
+      { queryParams: { comment_id: data.comment_id } });
   }
 
   // 通过、驳回按钮触发事件
@@ -118,13 +136,14 @@ export class CommentListComponent implements OnInit {
     this.start_pay_time = null;
     this.end_pay_time = null;
     this.searchParams.status = status;
+    this.searchParams.work_id = this.work_id;
     this.searchText$.next();
   }
 
   // 查询按钮
   public onSearchBtnClick() {
     if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('查询失败', '评论开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('评论开始时间不能大于结束时间!');
       return;
     }
     this.searchText$.next();
@@ -134,7 +153,7 @@ export class CommentListComponent implements OnInit {
   // 查询时间校验
   private getTimeValid(): string {
     this.searchParams.section = (this.start_pay_time || this.end_pay_time)
-        ? this.getSectionTime(this.start_pay_time, this.end_pay_time) : '';
+      ? this.getSectionTime(this.start_pay_time, this.end_pay_time) : '';
     const pay_time = this.searchParams.section;
     if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
       return 'pay_time';
@@ -146,9 +165,9 @@ export class CommentListComponent implements OnInit {
   // 获取预定时间时间戳
   public getSectionTime(start, end): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
-        new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
+      new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
     const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
-        new Date(end).getMinutes(), 59, 0) / 1000).toString() : 253402185600;
+      new Date(end).getMinutes(), 59, 0) / 1000).toString() : 253402185600;
     return `${startTime},${endTime}`;
   }
 
@@ -181,10 +200,40 @@ export class CommentListComponent implements OnInit {
   /**
    * 打开放大图片组件
    */
-  public openZoomPictureModal(data, index) {
+  public onOpenZoomPictureModal(data: CommentEntity, index: number) {
     this.imageUrls = data.image_urls ? data.image_urls.split(',') : [];
     timer(0).subscribe(() => {
       this.ZPhotoSelectComponent.zoomPicture(index);
     });
+  }
+
+  // 新建评论
+  public onAddCommentClick() {
+    this.router.navigate(['/main/operation/comment/comment-create'],
+      { queryParams: { work_id: this.work_id, work_name: this.work_name } });
+  }
+
+  // 请求配置列表
+  private requestSettingList() {
+    this.commentService.requestCommentSettingListData().subscribe(res => {
+      this.settingList = res;
+      if (this.settingList && this.settingList.length > 0) {
+        this.work_id = this.settingList[0].work_id;
+        this.work_name = this.settingList[0].work_name;
+        this.searchParams.work_id = this.settingList[0].work_id;
+        this.generateCommentList();
+      }
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 切换业务线
+  public onTabItemClick() {
+    this.onCheckStatusClicked(null);
+    this.searchParams.work_id = this.work_id;
+    const currentTab = this.settingList.filter(setting => setting.work_id === this.work_id);
+    this.work_name = currentTab[0].work_name;
+    this.searchText$.next();
   }
 }
