@@ -1,12 +1,21 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../../../'" [level2Name]="'查看产品'"></app-crumb>
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'门票列表'" [level3Name]="'门票详情'" [level1RelativePath]="'../../../'"
+    [level2RelativePath]="'../../../third-product'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg big-white-btn">
+      <a [routerLink]="['../../third-product']">返回</a>
+    </li>
+    <li class="big-bg">
+      <a (click)='onChooseTicket()'>选用</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class='des_card'>
     <div class='card-title'>产品信息</div>
     <div>
-      <nz-table #productInfoTable [nzData]="productInfoList" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
-        nzBordered>
+      <nz-table #thirdProductInfoTable [nzData]="thirdProductInfoList" [nzShowPagination]="false"
+        [nzNoResult]="noResultInfoText" nzBordered>
         <thead>
           <tr>
             <th>产品主图</th>
@@ -17,43 +26,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of productInfoTable.data; let i=index">
+          <tr *ngFor="let data of thirdProductInfoTable.data; let i=index">
             <td>
-              <img *ngIf='!data.product_image' src="/assets/images/pro_default.png">
-              <img *ngIf='data.product_image' class='pro-img' [src]="data.product_image">
+              <img *ngIf='!data.third_product_image' src="/assets/images/pro_default.png">
+              <img *ngIf='data.third_product_image' class='pro-img' [src]="data.third_product_image">
             </td>
-            <td>{{data.product_name}}</td>
-            <td>{{data.address}}</td>
-            <td>{{data.status| thirdSaleStatus}}</td>
-            <td>{{data.product_id}}</td>
+            <td>{{data.third_product_name}}</td>
+            <td>{{data.third_address}}</td>
+            <td>{{data.sale_status| thirdSaleStatus}}</td>
+            <td>{{data.third_product_id}}</td>
           </tr>
         </tbody>
       </nz-table>
     </div>
-    <!-- 产品运营信息 -->
-    <div class='card-title mt_50'>产品运营信息</div>
-    <div>
-      <form nz-form class="content-layout" #registerForm="ngForm">
-        <div class="card_content">
-          <nz-form-item nzFlex>
-            <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
-            <nz-form-control>{{productData.product_name}}
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item nzFlex>
-            <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
-            <nz-form-control class="ml_-10">
-              {{productData.product_subtitle}}
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </form>
-    </div>
-
     <!-- 产品门票信息 -->
     <div class='card-title mt_50'>产品门票信息</div>
     <div>
-      <nz-table #thirdProductTicketTable [nzData]="productData.tickets" [nzShowPagination]="false"
+      <nz-table #thirdProductTicketTable [nzData]="thirdProductData.tickets" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
@@ -106,42 +95,42 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.run_time}}
+              {{thirdProductData.run_time}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.telephone}}
+              {{thirdProductData.telephone}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.address}}
+              {{thirdProductData.address}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
-              <div class='temp-content' *ngIf='productData.traffic_guide'>
-                <div class="artcontent" [innerHTML]="productData.traffic_guide | htmlPipe"></div>
+              <div class='temp-content' *ngIf='thirdProductData.traffic_guide'>
+                <div class="artcontent" [innerHTML]="thirdProductData.traffic_guide | htmlPipe"></div>
               </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
-              <div class='temp-content' *ngIf='productData.notice'>
-                <div class="artcontent" [innerHTML]="productData.notice | htmlPipe"></div>
+              <div class='temp-content' *ngIf='thirdProductData.notice'>
+                <div class="artcontent" [innerHTML]="thirdProductData.notice | htmlPipe"></div>
               </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
             <nz-form-control>
-              <div class='temp-content' *ngIf='productData.product_introduce'>
-                <div class="artcontent" [innerHTML]="productData.product_introduce | htmlPipe"></div>
+              <div class='temp-content' *ngIf='thirdProductData.introduce'>
+                <div class="artcontent" [innerHTML]="thirdProductData.introduce | htmlPipe"></div>
               </div>
             </nz-form-control>
           </nz-form-item>

@@ -9,6 +9,7 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ExternalPreventService } from '../../../core/external-prevent.service';
 import { ThirdProductListComponent } from './third-product-list/third-product-list.component';
+import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
 
 const routes: Routes = [{
   path: '', component: ProductManagementComponent,
@@ -18,7 +19,8 @@ const routes: Routes = [{
     { path: 'list', component: ProductListComponent },
     { path: 'create', component: ProductCreateComponent },
     { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService] },
-    { path: 'detail/:type/:product_id', component: ProductDetailComponent },
+    { path: 'detail/:product_id', component: ProductDetailComponent },
+    { path: 'third-detail/:product_id', component: ThirdProductDetailComponent },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]

@@ -11,6 +11,7 @@ import { ThirdProductListComponent } from './third-product-list/third-product-li
 import { ProductEditor2Component } from './product-edit/product-editor2/product-editor2.component';
 import { ProductEditor1Component } from './product-edit/product-editor1/product-editor1.component';
 import { ProductEditor3Component } from './product-edit/product-editor3/product-editor3.component';
+import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ProductEditor3Component } from './product-edit/product-editor3/product-
     ThirdProductListComponent,
     ProductEditor2Component,
     ProductEditor1Component,
-    ProductEditor3Component],
+    ProductEditor3Component,
+    ThirdProductDetailComponent],
   imports: [
     ShareModule,
     CommonModule,

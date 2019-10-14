@@ -4,7 +4,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
 import { Subject } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, ThirdProductEntity } from '../product.service';
+import { ProductService, TicketProductEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
@@ -43,9 +43,10 @@ export class ErrPositionItem {
 })
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
-  public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
-  public thirdProductInfoList: Array<any> = [];
+  public productData: TicketProductEntity = new TicketProductEntity();
+  public productInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
+  public imgUrls: Array<any> = [];
   public noResultInfoText = '数据加载中...';
   public noResultTicketText = '数据加载中...';
   public product_image_url: Array<any> = [];
@@ -57,12 +58,10 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public product_id: string;
 
   private searchText$ = new Subject<any>();
-  private third_product_name = '';
-  private introduce: string = undefined;
+  private product_name = '';
+  private product_subtitle: string = undefined;
 
   @ViewChild('coverImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
-  @ViewChild('productInfoForm', { static: false }) public productInfoForm: any;
-  // @ViewChild('ticketDetailForm', { static: true }) public ticketDetailForm: any;
 
   constructor(private globalService: GlobalService, private productService: ProductService,
               private routerInfo: ActivatedRoute, private router: Router) { }
@@ -72,26 +71,25 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.product_id = params.product_id;
     });
 
-    // 第三方产品详情
+    // 产品详情
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.productService.requestThirdProductsDetail(this.product_id))
+        this.productService.requestProductsDetail(this.product_id))
     ).subscribe(res => {
-      this.thirdProductData = res;
-      this.third_product_name = this.thirdProductData.third_product_name;
-      this.introduce = this.thirdProductData.introduce;
-      this.thirdProductInfoList = [
+      this.productData = res;
+      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
+      this.productInfoList = [
         {
-          third_product_id: this.thirdProductData.third_product_id,
-          third_product_name: this.thirdProductData.third_product_name,
-          third_product_image: this.thirdProductData.third_product_image,
-          third_address: `${this.thirdProductData.provice}${this.thirdProductData.city}${this.thirdProductData.district}
-          ${this.thirdProductData.district}`,
-          sale_status: this.thirdProductData.sale_status,
+          product_id: this.productData.product_id,
+          product_name: '',
+          product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
+          address: this.productData.address,
+          status: this.productData.status,
         }
       ];
-      this.getEditorData();
+      this.product_name = this.productData.product_name;
+      this.product_subtitle = this.productData.product_subtitle;
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
     }, err => {
@@ -125,9 +123,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   // 富文本数据处理
   private getEditorData() {
-    this.tempContent1 = this.thirdProductData.traffic_guide;
-    this.tempContent2 = this.thirdProductData.notice;
-    this.tempContent3 = this.thirdProductData.introduce;
+    this.tempContent1 = this.productData.traffic_guide;
+    this.tempContent2 = this.productData.notice;
+    this.tempContent3 = this.productData.product_introduce;
     const editor1 = CKEDITOR.replace('editor1'); // 创建富文本,解决刷新页面才能显示值的问题
     editor1.setData(this.tempContent1);
     const editor2 = CKEDITOR.replace('editor2'); // 创建富文本,解决刷新页面才能显示值的问题
@@ -138,8 +136,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   // 允许跳转
   public canDeactivate(): boolean {
-    return this.thirdProductData.third_product_name === this.third_product_name &&
-      this.thirdProductData.introduce === this.introduce && CKEDITOR.instances.editor1.getData() === this.tempContent1
+    return this.productData.product_name === this.product_name &&
+      this.productData.product_subtitle === this.product_subtitle && CKEDITOR.instances.editor1.getData() === this.tempContent1
       && CKEDITOR.instances.editor2.getData() === this.tempContent2 && CKEDITOR.instances.editor3.getData() === this.tempContent3;
   }
 
@@ -197,11 +195,11 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.clear();
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-        this.thirdProductData.third_product_image = JSON.stringify(this.product_image_url);
-        this.thirdProductData.traffic_guide = CKEDITOR.instances.editor1.getData();
-        this.thirdProductData.notice = CKEDITOR.instances.editor2.getData();
-        this.thirdProductData.introduce = CKEDITOR.instances.editor3.getData();
-        this.productService.requestSetProductData(this.product_id, this.thirdProductData).subscribe(() => {
+        this.productData.image_urls = JSON.stringify(this.product_image_url);
+        this.productData.traffic_guide = CKEDITOR.instances.editor1.getData();
+        this.productData.notice = CKEDITOR.instances.editor2.getData();
+        this.productData.product_introduce = CKEDITOR.instances.editor3.getData();
+        this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
           this.searchText$.next();
           this.globalService.promptBox.open('保存成功');
         }, err => {
@@ -209,7 +207,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
             if (err.status === 422) {
               const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
               for (const content of error.errors) {
-                const field = content.field === 'project_name' ? '产品名称' : content.field === 'project_subtitle' ? '副标题' :
+                const field = content.field === 'product_name' ? '产品名称' : content.field === 'product_subtitle' ? '副标题' :
                   content.field === 'image_urls' ? '产品图片' : content.field === 'traffic_guide' ? '交通指南' :
                     content.field === 'notice' ? '预订须知' : content.field === 'product_introduce' ? '景区介绍' : '';
                 if (content.code === 'missing_field') {

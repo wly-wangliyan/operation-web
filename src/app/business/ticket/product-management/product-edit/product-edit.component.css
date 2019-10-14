@@ -103,6 +103,14 @@
   margin-left: -140px;
 }
 
+.pro-img {
+  width: 90px;
+}
+
+input[disabled] {
+  background: #F0F0F0 !important;
+}
+
 input[type=file],
 input[type=file]:focus {
   outline: none !important;

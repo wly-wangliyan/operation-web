@@ -1,7 +1,4 @@
 <div class="content-header">
-  <!-- <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../'" [level2Name]="'编辑产品'"></app-crumb> -->
-  <!-- <a [routerLink]="['/product_management']">产品管理</a>
-  <span> 》编辑产品</span> -->
   <div class="header-left">
     <i></i>
     <a [routerLink]="['../']">产品管理</a>
@@ -20,8 +17,8 @@
   <div class='des_card'>
     <div class='card-title'>产品信息</div>
     <div>
-      <nz-table #thirdProductInfoTable [nzData]="thirdProductInfoList" [nzShowPagination]="false"
-        [nzNoResult]="noResultInfoText" nzBordered>
+      <nz-table #productInfoTable [nzData]="productInfoList" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
+        nzBordered>
         <thead>
           <tr>
             <th>产品主图</th>
@@ -32,15 +29,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of thirdProductInfoTable.data; let i=index">
+          <tr *ngFor="let data of productInfoTable.data; let i=index">
             <td>
-              <img *ngIf='!data.third_product_image' src="/assets/images/pro_default.png">
-              <img *ngIf='data.third_product_image' [src]="data.third_product_image">
+              <img *ngIf='!data.product_image' src="/assets/images/pro_default.png">
+              <img *ngIf='data.product_image' class='pro-img' [src]="data.product_image">
             </td>
-            <td>{{data.third_product_name}}</td>
-            <td>{{data.third_address}}</td>
-            <td>{{data.sale_status}}</td>
-            <td>{{data.third_product_id}}</td>
+            <td>{{data.product_name}}</td>
+            <td>{{data.address}}</td>
+            <td>{{data.status| thirdSaleStatus}}</td>
+            <td>{{data.product_id}}</td>
           </tr>
         </tbody>
       </nz-table>
@@ -53,14 +50,14 @@
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
             <nz-form-control>
-              <input class="main-title" [(ngModel)]="this.thirdProductData.third_product_name" placeholder="输入1-20字产品名称"
-                nz-input autocomplete="off" name="main-title" required maxlength='20' />
+              <input class="main-title" [(ngModel)]="productData.product_name" placeholder="输入1-20字产品名称" nz-input
+                autocomplete="off" name="main-title" required maxlength='20' />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="subheading" [(ngModel)]="this.thirdProductData.introduce" placeholder=" 输入0-80字副标题" nz-input
+              <input class="subheading" [(ngModel)]="productData.product_subtitle" placeholder=" 输入0-80字副标题" nz-input
                 autocomplete="off" name="subheading" maxlength='80' />
             </nz-form-control>
           </nz-form-item>
@@ -71,7 +68,7 @@
     <!-- 产品门票信息 -->
     <div class='card-title mt_50'>产品门票信息</div>
     <div>
-      <nz-table #thirdProductTicketTable [nzData]="this.thirdProductData.tickets" [nzShowPagination]="false"
+      <nz-table #productTicketTable [nzData]="productData.tickets" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
@@ -85,7 +82,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of thirdProductTicketTable.data; let i=index">
+          <tr *ngFor="let data of productTicketTable.data; let i=index">
             <td>
               <img *ngIf='data.is_top===1' class='top-img' src="/assets/images/top_icon.png">
               <span class='name'>{{data.ticket_name}}</span>
@@ -121,11 +118,11 @@
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
             <nz-form-control>
-              <!-- <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              <app-z-photo-select #productImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                 [isCutCoverImg]="true" [maxLength]="6" (selectedImgChange)="onSelectedPicture($event)"
-                file_id="productImg" [imageWidth]='100' [imageHeight]='100' [imageUrls]="cover_url"
-                [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
-              </app-z-photo-select> -->
+                file_id="productImg" [imageWidth]='100' [imageHeight]='100' [imageUrls]="imgUrls" [imageAddHeight]="100"
+                [minCropBoxWidth]="400" [minCropBoxHeight]="400">
+              </app-z-photo-select>
               <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
                 <span class="input-error input_time_valid">{{ errPositionItem?.icon?.errMes}}</span>
               </div>
@@ -135,28 +132,22 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="detail-input" [(ngModel)]="this.thirdProductData.run_time" nz-input autocomplete="off"
-                name="run_time" required maxlength='20' disabled />
+              <input class="detail-input" [(ngModel)]="productData.run_time" nz-input autocomplete="off" name="run_time"
+                required maxlength='20' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="detail-input" [(ngModel)]="this.thirdProductData.telephone" nz-input autocomplete="off"
+              <input class="detail-input" [(ngModel)]="productData.telephone" nz-input autocomplete="off"
                 name="telephone" required maxlength='12' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="address" nz-input [(ngModel)]="this.thirdProductData.provice" autocomplete="off"
-                name="provice" placeholder="省" disabled />
-              <input class="address" nz-input [(ngModel)]="this.thirdProductData.city" autocomplete="off" name="city"
-                placeholder="市" disabled />
-              <input class="address" nz-input [(ngModel)]="this.thirdProductData.district" autocomplete="off"
-                name="district" placeholder="区" disabled />
-              <input class="address-input" [(ngModel)]="this.thirdProductData.address" placeholder="详细地址" nz-input
-                autocomplete="off" name="address" maxlength='100' disabled />
+              <input class="detail-input" [(ngModel)]="productData.address" placeholder="地址" nz-input autocomplete="off"
+                name="address" maxlength='100' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex style="margin-bottom: 10px;">

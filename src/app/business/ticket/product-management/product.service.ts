@@ -10,7 +10,7 @@ import { FileUpdate } from '../../../../utils/file-update';
 // 第三方产品实体
 export class ThirdProductEntity extends EntityBase {
   public third_product_id: string = undefined; // 第三方产品id
-  public third_product_name = ''; // 第三方产品名称
+  public third_product_name: string = undefined; // 第三方产品名称
   public add_time: number = undefined; // 第三方产品添加时间
   public third_product_image: string = undefined; // 第三方产品缩略图
   public type: string = undefined; // 第三方产品类型(A:景点 B:线路 C:酒店 F:套票 H:演出)
@@ -57,8 +57,8 @@ export class ThirdProductLinkResponse extends LinkResponse {
 export class TicketProductEntity extends EntityBase {
   public product_id: string = undefined; // 产品id
   public third_product: ThirdProductEntity = undefined; // 第三方产品对象
-  public product_name: string = undefined; // 产品名称
-  public product_subtitle: string = undefined; // 产品副名称
+  public product_name = ''; // 产品名称
+  public product_subtitle = ''; // 产品副名称
   public sale_num: number = undefined; // 销量
   public image_urls: string = undefined; // 产品图片集合
   public run_time: number = undefined; // 营业时间
@@ -75,12 +75,15 @@ export class TicketProductEntity extends EntityBase {
   public is_deleted: number = undefined; // 是否删除 1:删除 2:未删除
   public shelve_time: number = undefined; // 上架时间
   public status: number = undefined; // 销售状态 1:销售中 2:已下架
+  public tickets: Array<TicketEntity> = []; // 门票实体
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'third_product') {
       return ThirdProductEntity;
+    } else if (propertyName === 'tickets') {
+      return TicketEntity;
     }
     return null;
   }
@@ -262,7 +265,19 @@ export class ProductService {
   }
 
   /**
-   * 产品详情
+     * 产品详情
+     * @param string product_id 产品id
+     * @returns Observable<ThirdProductEntity>
+     */
+  public requestProductsDetail(product_id: string): Observable<TicketProductEntity> {
+    return this.httpService.get(`${this.domain}/products/${product_id}`
+    ).pipe(map(res => {
+      return TicketProductEntity.Create(res.body);
+    }));
+  }
+
+  /**
+   * 第三方产品详情
    * @param string third_product_id 第三方产品id
    * @returns Observable<ThirdProductEntity>
    */
@@ -290,18 +305,18 @@ export class ProductService {
   /**
    * 编辑产品
    * @param string product_id 产品id
-   * @param thirdProductData ThirdProductEntity 数据源
+   * @param productData ThirdProductEntity 数据源
    * @returns Observable<HttpResponse<any>>
    */
-  public requestSetProductData(product_id: string, thirdProductData: ThirdProductEntity): Observable<HttpResponse<any>> {
+  public requestSetProductData(product_id: string, productData: TicketProductEntity): Observable<HttpResponse<any>> {
     return this.httpService.put(`${this.domain}/products/${product_id}`, {
-      project_name: thirdProductData.third_product_name,
-      project_subtitle: thirdProductData.topics,
-      image_urls: thirdProductData.third_product_image,
-      telephone: thirdProductData.telephone,
-      traffic_guide: thirdProductData.traffic_guide,
-      notice: thirdProductData.notice,
-      product_introduce: thirdProductData.introduce,
+      product_name: productData.product_name,
+      product_subtitle: productData.product_subtitle,
+      image_urls: productData.image_urls,
+      telephone: productData.telephone,
+      traffic_guide: productData.traffic_guide,
+      notice: productData.notice,
+      product_introduce: productData.product_introduce,
     }
     );
   }

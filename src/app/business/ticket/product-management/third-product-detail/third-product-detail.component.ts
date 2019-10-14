@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
-import { Subject } from 'rxjs/index';
+import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, TicketProductEntity } from '../product.service';
+import { ProductService, ThirdProductEntity } from '../product.service';
 
 @Component({
-  selector: 'app-product-detail',
-  templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css']
+  selector: 'app-third-product-detail',
+  templateUrl: './third-product-detail.component.html',
+  styleUrls: ['./third-product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit {
+export class ThirdProductDetailComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
               private router: Router) { }
 
-  public productData: TicketProductEntity = new TicketProductEntity();
-  public productInfoList: Array<any> = [];
+  public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
+  public thirdProductInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
   public noResultTicketText = '数据加载中...';
@@ -31,23 +31,23 @@ export class ProductDetailComponent implements OnInit {
       this.product_id = params.product_id;
     });
 
-    // 产品详情
+    // 第三方产品详情
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.productService.requestProductsDetail(this.product_id))
+        this.productService.requestThirdProductsDetail(this.product_id))
     ).subscribe(res => {
-      this.productData = res;
-      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
-      this.productInfoList = [
+      this.thirdProductData = res;
+      this.thirdProductInfoList = [
         {
-          product_id: this.productData.product_id,
-          product_name: '',
-          product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
-          address: this.productData.address,
-          status: this.productData.status,
+          third_product_id: this.thirdProductData.third_product_id,
+          third_product_name: this.thirdProductData.third_product_name,
+          third_product_image: this.thirdProductData.third_product_image,
+          third_address: this.thirdProductData.address,
+          sale_status: this.thirdProductData.sale_status,
         }
       ];
+      this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
     }, err => {
@@ -87,6 +87,23 @@ export class ProductDetailComponent implements OnInit {
   // 收起
   public onHideInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = false;
+  }
+
+  // 选用
+  public onChooseTicket() {
+    this.globalService.confirmationBox.open('提示', '确定选用此产品吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.productService.requestAddProductData(this.product_id).subscribe(res => {
+        this.globalService.promptBox.open('选用成功！', () => {
+          timer(0).subscribe(() => {
+            this.router.navigateByUrl('/main/ticket/product-management');
+          });
+        });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+        this.globalService.promptBox.open('选用失败，请重试！');
+      });
+    });
   }
 
 }

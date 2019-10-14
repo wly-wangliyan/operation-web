@@ -74,6 +74,10 @@
   color: rgba(74, 127, 254, 1);
 }
 
+.pro-img {
+  width: 90px;
+}
+
 .detail-input {
   width: 644px;
 }
@@ -97,10 +101,6 @@
 .top-img {
   float: left;
   margin-left: 100px;
-}
-
-.pro-img {
-  width: 90px;
 }
 
 .name {
