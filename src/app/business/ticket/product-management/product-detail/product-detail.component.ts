@@ -21,6 +21,7 @@ export class ProductDetailComponent implements OnInit {
   public imgUrls: Array<any> = [];
   public noResultTicketText = '数据加载中...';
   public noResultInfoText = '数据加载中...';
+  public loading = true;
   public tempContent1: string;
   public product_id: string;
 
@@ -54,6 +55,7 @@ export class ProductDetailComponent implements OnInit {
       }));
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
+      this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

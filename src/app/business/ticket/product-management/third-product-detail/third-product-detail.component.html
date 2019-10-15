@@ -10,7 +10,10 @@
     </li>
   </ul>
 </div>
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" *ngIf="!loading">
   <div class='des_card'>
     <div class='card-title'>产品信息</div>
     <div>

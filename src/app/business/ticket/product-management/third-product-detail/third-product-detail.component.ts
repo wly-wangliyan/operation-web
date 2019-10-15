@@ -19,6 +19,7 @@ export class ThirdProductDetailComponent implements OnInit {
   public thirdProductInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
+  public loading = true;
   public noResultTicketText = '数据加载中...';
   public noResultInfoText = '数据加载中...';
   public tempContent1: string;
@@ -54,6 +55,7 @@ export class ThirdProductDetailComponent implements OnInit {
       this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
+      this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

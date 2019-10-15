@@ -56,8 +56,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public tempContent1 = ''; // 交通指南富文本框内容
   public tempContent2 = ''; // 预定须知富文本框内容
   public tempContent3 = ''; // 景区介绍富文本框内容
-  public flag = 0;
-  public uploadImg: string;
+  public loading = true;
   public product_id: string;
   public productNameErrors = '';
   public trafficGuideErrors = '';
@@ -103,6 +102,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
       this.getEditorData();
+      this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
