@@ -76,9 +76,9 @@
               </div>
             </td>
             <td>¥ {{data.market_price}}</td>
-            <td>¥ {{data.price_calendar.retail_price}}</td>
-            <td>¥ {{data.price_calendar.buy_price}}</td>
-            <td>¥ {{data.price_calendar.retail_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price|centPriceChange}}</td>
+            <td>¥ {{data.price_calendar.buy_price|centPriceChange}}</td>
+            <td>¥ {{data.price_calendar.retail_price|centPriceChange}}</td>
           </tr>
         </tbody>
       </nz-table>

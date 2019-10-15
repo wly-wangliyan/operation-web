@@ -106,9 +106,9 @@
               </div>
             </td>
             <td>¥ {{data.market_price}}</td>
-            <td>¥ {{data.price_calendar.retail_price}}</td>
-            <td>¥ {{data.price_calendar.buy_price}}</td>
-            <td>¥ {{data.price_calendar.retail_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price|centPriceChange}}</td>
+            <td>¥ {{data.price_calendar.buy_price|centPriceChange}}</td>
+            <td>¥ {{data.price_calendar.retail_price|centPriceChange}}</td>
             <td class="opera">
               <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
               <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>

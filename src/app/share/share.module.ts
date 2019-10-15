@@ -29,7 +29,7 @@ import { DateClockComponent } from './components/date-clock/date-clock.component
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
-import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusPipe } from './pipes/ticket-format.pipe';
+import { TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusPipe, CentPriceChangePipe } from './pipes/ticket-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 
 
@@ -76,6 +76,7 @@ import { HtmlPipe } from './pipes/html.pipe';
     ThirdSaleStatusPipe,
     OrderStatusPipe,
     OrderUseStatusPipe,
+    CentPriceChangePipe,
     HtmlPipe,
 
     // 指令
@@ -122,6 +123,7 @@ import { HtmlPipe } from './pipes/html.pipe';
     ThirdSaleStatusPipe,
     OrderStatusPipe,
     OrderUseStatusPipe,
+    CentPriceChangePipe,
     HtmlPipe,
 
     // 指令

@@ -49,6 +49,25 @@ export class ThirdSaleStatusPipe implements PipeTransform {
   }
 }
 
+/** 钱数：分转换成元 */
+
+@Pipe({
+  name: 'centPriceChange'
+})
+export class CentPriceChangePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === null || value === undefined || value === '') {
+      return '--';
+    }
+    if (value) {
+      return (Number(value) / 100).toFixed(2);
+    } else {
+      return value;
+    }
+  }
+}
+
 /** 订单状态 */
 const OrderStatus = {
   1: '待支付',
