@@ -17,7 +17,7 @@
 }
 
 .zmy-table ::ng-deep .ant-table-body {
-  padding: 0 15px;
+  /* padding: 0 15px; */
 }
 
 .ant-table-tbody>tr {

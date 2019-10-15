@@ -4,6 +4,7 @@ import { EntityBase } from 'src/utils/z-entity';
 import { Observable } from 'rxjs/index';
 import { map } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
+import { HttpResponse } from '@angular/common/http';
 
 export class NoticeEntity extends EntityBase {
   public message_id: string = undefined; // 通知-主键
@@ -50,5 +51,19 @@ export class NoticeCenterService {
    */
   public continueNoticeListData(url: string): Observable<NoticeLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new NoticeLinkResponse(res)));
+  }
+
+  /**
+   * 修改通知状态
+   * @param notice_id 产品id
+   * @param status 是否已读 1:已读 2:未读
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestChangeReadStatusData(notice_id: string, status: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/messages/${notice_id}/status`;
+    const body = {
+      status
+    };
+    return this.httpService.patch(httpUrl, body);
   }
 }
