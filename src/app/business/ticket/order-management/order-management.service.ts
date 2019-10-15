@@ -10,7 +10,7 @@ import { PriceCalendarEntity, TicketEntity, TicketProductEntity } from '../produ
 export class SearchParams extends EntityBase {
   public status: number = undefined; // 订单状态 1:待支付 2：已支付 3：已取消
   public use_status: number = undefined; // 使用状态 1:已使用,2:已取消,3:未使用,4:已过期
-  public project_name: string = undefined; // 产品名称
+  public product_name: string = undefined; // 产品名称
   public order_id: string = undefined; // 订单编号
   public order_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
@@ -43,7 +43,6 @@ export class TicketOrderEntity extends EntityBase {
   public right_price: number = undefined; // 应收价格
   public real_price: number = undefined; // 实收价格
   public pay_type: string = undefined; // 支付方式 悠悠:UU 微信:WX
-  public place_order_time: number = undefined; // 下单时间
   public pay_time: number = undefined; // 支付时间
   public third_order_id: string = undefined; // 第三方订单id
   public order_code: string = undefined; // 凭证码/消费码
@@ -52,7 +51,7 @@ export class TicketOrderEntity extends EntityBase {
   public status: number = undefined; // 订单状态 1:待支付 2：已支付 3：已取消
   public use_status: number = undefined; // 使用状态 1:已使用,2:已取消,3:未使用,4:已过期
   public updated_time: number = undefined; // 更新时间
-  public created_time: number = undefined; // 创建时间
+  public created_time: number = undefined; // 创建时间/下单时间
 
   public ticket_info: TicketInfo = undefined; // 票务信息
   public visitor_info: Array<VisitorInfo> = undefined; // 游客信息
@@ -117,7 +116,7 @@ export class OrderManagementService {
    * @returns Observable<OrderEntity>
    */
   public requestOrderDetailData(order_id: string): Observable<TicketOrderEntity> {
-    const httpUrl = `${this.domain}/order/${order_id}`;
+    const httpUrl = `${this.domain}/orders/${order_id}`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => TicketOrderEntity.Create(res.body)));
   }

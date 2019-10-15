@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'订单管理'"></app-crumb>
+  <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
 </div>
 
 <div class="content-flow">
@@ -10,8 +10,8 @@
         <select class="form-control" style="width: 100px;" name="status" [(ngModel)]="order_status"
           (change)="onChangeSearchStatus($event)">
           <option value="">全部</option>
-          <option value="1">已支付</option>
-          <option value="2">待支付</option>
+          <option value="1">待支付</option>
+          <option value="2">已支付</option>
           <option value="3">已取消</option>
         </select>
       </div>
@@ -28,7 +28,7 @@
       </div>
       <div class="form-group">
         <span>产品名称：</span>
-        <input class="form-control" [(ngModel)]="searchParams.project_name" placeholder="请输入产品名称" autocomplete="off"
+        <input class="form-control" [(ngModel)]="searchParams.product_name" placeholder="请输入产品名称" autocomplete="off"
           name="product_name" maxlength="20" appIgnoreSpace />
       </div>
       <div class="form-group">
@@ -90,25 +90,31 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>{{order.order_id}}</td>
             <ng-container *ngIf="order.product">
-              <td>
-                <img src="{{order.product.image_urls[0]}}" />
-                <a>{{order.product.project_name}}</a>
+              <td class="img-item">
+                <ng-container *ngIf="order.product.image_urls">
+                  <ng-container *ngFor="let image_url of order.product.image_urls.split(',');let i=index">
+                    <img *ngIf="i===0" style="width: 90px;" src="{{image_url}}" />
+                  </ng-container>
+                </ng-container>
+                <img *ngIf="!order.product.image_urls" src="/assets/images/image_space_3_2.png" />
+                <a [title]="order.product.product_name"
+                  style="word-break: keep-all;">{{order.product.product_name | zMaxLength:10}}</a>
               </td>
             </ng-container>
             <ng-container *ngIf="!order.product">
               <td>
-                <img src="/assets/images/image_space.png" />--
+                <img src="/assets/images/image_space_3_2.png" />
               </td>
             </ng-container>
-            <td>{{order.buy_num}} 张</td>
+            <td>{{order.buy_num || 0}} 张</td>
             <td>{{(order.right_price | zCompleteNumber)||0}} 元</td>
             <td>{{(order.real_price | zCompleteNumber)||0}} 元</td>
-            <td>{{order.place_order_time?(order.place_order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-            <td>{{order.pay_time?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{order.pay_time && order.status ===2 ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{order.status | orderStatus}}</td>
             <td>{{order.use_status | orderUseStatus}}</td>
             <td class="operation">
-              <a [title]="'查看'">查看</a>
+              <a [title]="'查看'" [routerLink]="['../detail', order.order_id]">查看</a>
             </td>
           </tr>
         </tbody>

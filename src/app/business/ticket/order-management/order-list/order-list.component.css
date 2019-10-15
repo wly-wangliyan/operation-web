@@ -19,3 +19,9 @@
 .search-btn-group {
   margin-top: -1px !important;
 }
+
+.img-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
