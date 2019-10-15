@@ -70,13 +70,13 @@
                 <i *ngIf="product.is_top===1" class="recommend">荐</i>
               </div>
               <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
-                [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:10}}</a>
+                [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:15}}</a>
             </td>
             <td>甜程网</td>
             <ng-container *ngIf="product.third_product">
-              <td></td>
-              <td>{{(product.third_product.retail_price|zCompleteNumber) || 0}} 元起</td>
-              <td>{{(product.third_product.buy_price|zCompleteNumber) || 0}} 元起</td>
+              <td>{{(product.third_product.market_price|zCompleteNumber) || 0}} 元起</td>
+              <td>{{(product.third_product.retail_price|centPriceChange)+' 元起'}} </td>
+              <td>{{(product.third_product.buy_price|centPriceChange)+' 元起'}}</td>
             </ng-container>
             <ng-container *ngIf="!product.third_product">
               <td>--</td>
