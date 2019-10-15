@@ -28,6 +28,7 @@ export class ThirdProductEntity extends EntityBase {
   public topics: string = undefined; // 第三方旅游主题
   public traffic_guide: string = undefined; // 第三方交通指南
   public open_time: number = undefined; // 第三方开放时间
+  public market_price: number = undefined; // 第三方市场价
   public retail_price: number = undefined; // 第三方零售价
   public buy_price: number = undefined; // 第三方结算价
   public add_status: number = undefined; // 第三方产品添加状态

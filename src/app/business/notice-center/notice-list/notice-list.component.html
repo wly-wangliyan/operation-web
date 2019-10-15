@@ -10,9 +10,10 @@
           (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #noticeTable>
           <tbody>
             <tr *ngFor="let notice of noticeTable.data; let i=index">
-              <td><img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />xxxxx产品价格变动通知
+              <td><img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />
+                <a [ngStyle]="{color: notice.status===1?'#888':'#23242F'}">{{notice.message_info}}</a>
               </td>
-              <td>2019年10月9日</td>
+              <td>{{notice.action_time}}</td>
             </tr>
           </tbody>
         </nz-table>
