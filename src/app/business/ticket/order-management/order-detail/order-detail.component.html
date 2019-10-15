@@ -18,9 +18,9 @@
         </tr>
         <tr>
           <td>应收：</td>
-          <td>{{(orderDetail.right_price | zCompleteNumber)||0}} 元</td>
+          <td>{{orderDetail.right_price ? (orderDetail.right_price | centPriceChange)+' 元' : '--'}}</td>
           <td>实收：</td>
-          <td>{{(orderDetail.real_price | zCompleteNumber)||0}} 元</td>
+          <td>{{orderDetail.real_price ? (orderDetail.real_price | centPriceChange)+' 元' : '--'}}</td>
           <td>支付方式：</td>
           <td>{{orderDetail.pay_type && orderDetail.status === 2?payType[orderDetail.pay_type]:'--'}}</td>
         </tr>
@@ -53,7 +53,12 @@
           <tr>
             <td>{{ticketInfo.ticket_name}}</td>
             <td>{{orderDetail.buy_num || 0}} 张</td>
-            <td>{{ticketInfo.valid_time}}</td>
+            <td>
+              {{orderDetail.order_begin_time?(orderDetail.order_begin_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+              <span *ngIf="orderDetail.order_begin_time && orderDetail.order_end_time">-</span>
+              {{orderDetail.order_end_time?(orderDetail.order_end_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+              <span *ngIf="!orderDetail.order_begin_time && !orderDetail.order_end_time">--</span>
+            </td>
             <td>{{orderDetail.use_status | orderUseStatus}}</td>
             <td>甜程网</td>
           </tr>

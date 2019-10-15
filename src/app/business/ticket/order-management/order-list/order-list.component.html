@@ -88,7 +88,7 @@
         <tbody>
           <tr *ngFor="let order of ticketOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td>{{order.order_id}}</td>
+            <td [title]="order.order_id">{{order.order_id | zMaxLength:10}}</td>
             <ng-container *ngIf="order.product">
               <td class="img-item">
                 <ng-container *ngIf="order.product.image_urls">
@@ -98,7 +98,7 @@
                 </ng-container>
                 <img *ngIf="!order.product.image_urls" src="/assets/images/image_space_3_2.png" />
                 <a [title]="order.product.product_name"
-                  style="word-break: keep-all;">{{order.product.product_name | zMaxLength:10}}</a>
+                  style="word-break: keep-all;">{{order.product.product_name | zMaxLength:15}}</a>
               </td>
             </ng-container>
             <ng-container *ngIf="!order.product">
@@ -107,8 +107,8 @@
               </td>
             </ng-container>
             <td>{{order.buy_num || 0}} 张</td>
-            <td>{{(order.right_price | zCompleteNumber)||0}} 元</td>
-            <td>{{(order.real_price | zCompleteNumber)||0}} 元</td>
+            <td>{{order.right_price ? (order.right_price | centPriceChange)+' 元' : '--'}}</td>
+            <td>{{order.real_price ? (order.real_price | centPriceChange)+' 元' : '--'}}</td>
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{order.pay_time && order.status ===2 ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{order.status | orderStatus}}</td>

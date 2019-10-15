@@ -23,5 +23,6 @@
 .img-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 10px;
 }

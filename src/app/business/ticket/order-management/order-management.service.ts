@@ -49,6 +49,8 @@ export class TicketOrderEntity extends EntityBase {
   public order_code_url: string = undefined; // 订单详情及二维码
   public order_code_image: string = undefined; // 二维码图片
   public status: number = undefined; // 订单状态 1:待支付 2：已支付 3：已取消
+  public order_begin_time: number; // 有效开始时间
+  public order_end_time: number; // 有效结束时间
   public use_status: number = undefined; // 使用状态 1:已使用,2:已取消,3:未使用,4:已过期
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间/下单时间
