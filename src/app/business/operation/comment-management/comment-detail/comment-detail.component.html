@@ -28,7 +28,9 @@
           style="width: 32px;margin: 0 10px 0 -42px">
         <span>{{currentComment.comment_content}}</span>
         <div *ngIf="imageUrls">
-          <img *ngFor="let item of imageUrls" [src]="item" class="img-space" (click)="onOpenZoomPictureModal(i)">
+          <app-z-photo-select *ngIf='imageUrls.length!==0' [hasAddPicture]="false" [hasDeletePicture]="false"
+            [maxLength]="6" [imageUrls]="imageUrls" #commentImg>
+          </app-z-photo-select>
         </div>
       </div>
       <div class="operation-btn">
@@ -44,6 +46,3 @@
     </form>
   </div>
 </div>
-
-<!-- 图片放大 -->
-<app-z-photo-select [isShowMinImg]="true" zoomWidth="350" zoomHeight="400" [imageUrls]="imageUrls"></app-z-photo-select>

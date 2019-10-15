@@ -98,3 +98,15 @@
  .tab-bar-list ::ng-deep .ant-radio-button-wrapper:last-child {
    border-radius: 0 4px 0 0;
  }
+
+ .icon-top {
+   display: inline-block;
+   color: #fff;
+   font-style:normal;
+   font-size: 14px;
+   width: 32px;
+   height: 18px;
+   background-color: #3E71F7;
+   border-radius: 2px;
+   margin: auto;
+ }

@@ -1,6 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { timer } from 'rxjs';
-import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommentEntity, CommentService } from '../comment-management.service';
@@ -17,9 +15,6 @@ export class CommentDetailComponent implements OnInit {
   private comment_id: string; // 评论id
 
   public imageUrls = []; // 放大图片集合
-
-  // 图片放大组件
-  @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -56,21 +51,12 @@ export class CommentDetailComponent implements OnInit {
   // 置顶、取消置顶按钮触发事件
   public onTopClick(status: number) {
     this.commentService.requestUpdateTop(this.comment_id, status).subscribe((e) => {
-      const msg = status ? '置顶成功！' : '取消置顶成功！';
+      const msg = status === 1 ? '置顶成功！' : '取消置顶成功！';
       this.globalService.promptBox.open(msg, () => {
         this.router.navigate(['/main/operation/comment/comment-list']);
       });
     }, err => {
       this.globalService.httpErrorProcess(err);
-    });
-  }
-
-  /**
-   * 打开放大图片组件
-   */
-  public onOpenZoomPictureModal(index: number) {
-    timer(0).subscribe(() => {
-      this.ZPhotoSelectComponent.zoomPicture(index);
     });
   }
 }
