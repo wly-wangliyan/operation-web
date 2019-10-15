@@ -19,8 +19,8 @@
           <tr>
             <th>ID</th>
             <th>缩略图</th>
-            <th>产品名称</th>
-            <th>所在地区</th>
+            <th style="width: 200px;">产品名称</th>
+            <th style="min-width: 150px;">所在地区</th>
             <th>状态</th>
             <th>建议零售价</th>
             <th>结算价</th>
@@ -31,10 +31,11 @@
           <tr *ngFor="let product of thirdProductTable.data; let i=index">
             <td>{{product.third_product_id}}</td>
             <td>
-              <img src="{{product.third_product_image}}" />
+              <img *ngIf='!product.third_product_image' src="/assets/images/pro_default.png">
+              <img *ngIf='product.third_product_image' style="width: 90px;" [src]="product.third_product_image">
             </td>
             <td>{{product.third_product_name}}</td>
-            <td>{{product.provice}}{{product.city}}<span *ngIf="product.district">{{product.district}}</span></td>
+            <td>{{product.province}}{{product.city}}<span *ngIf="product.district">{{product.district}}</span></td>
             <td>{{product.sale_status | thirdSaleStatus}}</td>
             <td>{{(product.retail_price | zCompleteNumber)||0}} 元</td>
             <td>{{(product.buy_price | zCompleteNumber)||0}} 元</td>

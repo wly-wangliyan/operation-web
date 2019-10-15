@@ -99,16 +99,18 @@ export class ThirdProductListComponent implements OnInit, OnDestroy {
 
   // 点击选用
   public onChooseClick(product: ThirdProductEntity) {
-    this.globalService.confirmationBox.open('提示', '确定添加该产品吗？', () => {
+    this.globalService.confirmationBox.open('提示', '确定选用此产品吗？', () => {
       this.globalService.confirmationBox.close();
       this.productService.requestAddProductData(product.third_product_id).subscribe(res => {
-        this.globalService.promptBox.open('添加成功', () => {
+        this.globalService.promptBox.open('选用成功', () => {
           timer(0).subscribe(() => {
             this.router.navigateByUrl('/main/ticket/product-management');
           });
         });
       }, err => {
-        this.globalService.httpErrorProcess(err);
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('选用失败，请重试！', null, 2000, null, false);
+        }
       });
     });
   }
