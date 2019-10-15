@@ -1,6 +1,6 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'" [level2Name]="'门票列表'" [level3Name]="'门票详情'" [level1RelativePath]="'../../../'"
-    [level2RelativePath]="'../../../third-product'"></app-crumb>
+    [level2RelativePath]="'../../third-product'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg big-white-btn">
       <a [routerLink]="['../../third-product']">返回</a>
@@ -42,7 +42,7 @@
     <!-- 产品门票信息 -->
     <div class='card-title mt_50'>产品门票信息</div>
     <div>
-      <nz-table #thirdProductTicketTable [nzData]="thirdProductData.tickets" [nzShowPagination]="false"
+      <nz-table #thirdProductTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
@@ -57,8 +57,10 @@
         <tbody>
           <tr *ngFor="let data of thirdProductTicketTable.data; let i=index">
             <td>
-              <img *ngIf='data.is_top===1' class='top-img' src="/assets/images/top_icon.png">
-              <span class='name'>{{data.ticket_name}}</span>
+              <div class='top-img'>
+                <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
+              </div>
+              <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
             </td>
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
@@ -70,10 +72,10 @@
                 <span (click)='onHideInsutructions(i)'>收起</span>
               </div>
             </td>
-            <td>{{data.market_price}}</td>
-            <td>{{data.retail_price}}</td>
-            <td>{{data.buy_price}}</td>
-            <td>{{data.price}}</td>
+            <td>¥ {{data.market_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price}}</td>
+            <td>¥ {{data.price_calendar.buy_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price}}</td>
           </tr>
         </tbody>
       </nz-table>

@@ -52,6 +52,9 @@
             <nz-form-control>
               <input class="main-title" [(ngModel)]="productData.product_name" placeholder="输入1-20字产品名称" nz-input
                 autocomplete="off" name="main-title" required maxlength='20' />
+              <div *ngIf="productNameErrors" class="text-danger">
+                <span class="input-error">{{productNameErrors}}</span>
+              </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
@@ -68,7 +71,7 @@
     <!-- 产品门票信息 -->
     <div class='card-title mt_50'>产品门票信息</div>
     <div>
-      <nz-table #productTicketTable [nzData]="productData.tickets" [nzShowPagination]="false"
+      <nz-table #productTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
@@ -84,8 +87,10 @@
         <tbody>
           <tr *ngFor="let data of productTicketTable.data; let i=index">
             <td>
-              <img *ngIf='data.is_top===1' class='top-img' src="/assets/images/top_icon.png">
-              <span class='name'>{{data.ticket_name}}</span>
+              <div class='top-img'>
+                <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
+              </div>
+              <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
             </td>
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
@@ -97,13 +102,13 @@
                 <span (click)='onHideInsutructions(i)'>收起</span>
               </div>
             </td>
-            <td>{{data.market_price}}</td>
-            <td>{{data.retail_price}}</td>
-            <td>{{data.buy_price}}</td>
-            <td>{{data.price}}</td>
+            <td>¥ {{data.market_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price}}</td>
+            <td>¥ {{data.price_calendar.buy_price}}</td>
+            <td>¥ {{data.price_calendar.retail_price}}</td>
             <td class="opera">
-              <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,2)'>置顶</a>
-              <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,1)'>取消置顶</a>
+              <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
+              <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>
             </td>
           </tr>
         </tbody>
@@ -126,7 +131,7 @@
               <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
                 <span class="input-error input_time_valid">{{ errPositionItem?.icon?.errMes}}</span>
               </div>
-              <div>注：图片比例为1:1，格式PNG或JPG，大小2M以内，图片名称只支持中文或数字，最多上传6张</div>
+              <div>注：图片比例为1:1，格式PNG或JPG或JPEG，大小2M以内，图片名称只支持中文或数字，最多上传6张</div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
@@ -146,14 +151,17 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
             <nz-form-control class="ml_-10">
-              <input class="detail-input" [(ngModel)]="productData.address" placeholder="地址" nz-input autocomplete="off"
-                name="address" maxlength='100' disabled />
+              <input class="detail-input" [(ngModel)]="productData.address" nz-input autocomplete="off" name="address"
+                maxlength='100' disabled />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
               <app-product-editor1 #editor1></app-product-editor1>
+              <div *ngIf="trafficGuideErrors" class="text-danger">
+                <span class="input-error">{{trafficGuideErrors}}</span>
+              </div>
             </nz-form-control>
           </nz-form-item>
 
@@ -161,6 +169,9 @@
             <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
               <app-product-editor2 #editor2></app-product-editor2>
+              <div *ngIf="noticeErrors" class="text-danger">
+                <span class="input-error">{{noticeErrors}}</span>
+              </div>
             </nz-form-control>
           </nz-form-item>
 
@@ -168,6 +179,9 @@
             <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
             <nz-form-control>
               <app-product-editor3 #editor3></app-product-editor3>
+              <div *ngIf="productIntroduceErrors" class="text-danger">
+                <span class="input-error">{{productIntroduceErrors}}</span>
+              </div>
             </nz-form-control>
           </nz-form-item>
         </div>

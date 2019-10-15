@@ -42,41 +42,22 @@ export class ProductDetailComponent implements OnInit {
       this.productInfoList = [
         {
           product_id: this.productData.product_id,
-          product_name: '',
+          product_name: this.productData.product_name,
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
         }
       ];
+      this.productTicketList = this.productData.tickets.map(i => ({
+        ...i,
+        isShowInsutructions: false
+      }));
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
-
-    this.productTicketList = [
-      {
-        name: '赠项目门票', isShowInsutructions: false, time: '提前1小时', costIncludes: '15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
-      },
-      {
-        name: '温泉门票', isShowInsutructions: false, time: '提前2小时', costIncludes: '25项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
-      },
-      {
-        name: '游乐场门票', isShowInsutructions: false, time: '提前3小时', costIncludes: '35项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
-      },
-      {
-        name: '洗浴门票', isShowInsutructions: false, time: '提前4小时', costIncludes: '45项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
-      },
-    ];
   }
 
   // 展开

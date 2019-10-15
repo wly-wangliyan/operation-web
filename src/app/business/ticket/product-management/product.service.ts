@@ -106,6 +106,7 @@ export class TicketEntity extends EntityBase {
   public third_product: ThirdProductEntity = undefined; // 第三方门票id
   public third_price_id: string = undefined; // 第三方价格id
   public product: TicketProductEntity = undefined; // 产品对象
+  public price_calendar: PriceCalendarEntity = undefined; // 门票价格日历
   public notes: string = undefined; // 购票须知
   public ticket_name: string = undefined; // 门票名称
   public pay: string = undefined; // 支付方式--UUpay 0:现场支付，1:在线支付
@@ -122,9 +123,12 @@ export class TicketEntity extends EntityBase {
       return ThirdProductEntity;
     } else if (propertyName === 'product') {
       return TicketProductEntity;
+    } else if (propertyName === 'price_calendar') {
+      return PriceCalendarEntity;
     }
     return null;
   }
+
 }
 
 // 门票价格日历
@@ -294,8 +298,8 @@ export class ProductService {
    * @param is_top 是否置顶
    * @returns Observable<HttpResponse<any>>
    */
-  public requestIsTopProduct(product_id: string, is_top: number): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/products/${product_id}/is_top`;
+  public requestIsTopProduct(product_id: string, ticket_id: string, is_top: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/products/${product_id}/tickets/${ticket_id}/is_top`;
     const body = {
       is_top
     };

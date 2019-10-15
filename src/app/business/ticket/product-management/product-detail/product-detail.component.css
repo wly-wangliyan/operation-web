@@ -72,6 +72,7 @@
   font-family: PingFangSC-Regular, PingFangSC;
   font-weight: 400;
   color: rgba(74, 127, 254, 1);
+  cursor: pointer;
 }
 
 .detail-input {
@@ -95,18 +96,20 @@
 }
 
 .top-img {
-  float: left;
-  margin-left: 100px;
+  width: 37px;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 .pro-img {
   width: 90px;
 }
 
-.name {
-  margin-left: -140px;
+.temp-content {
+  margin-top: 10px;
+  max-width: 600px;
 }
 
-.temp-content {
-  max-width: 600px;
+.subtitle {
+  max-width: 800px;
 }

@@ -13,11 +13,16 @@
       <div class="modal-body modal-body-upload">
         <div class="select-file-upload-container">
           <div class="select-file-upload-contain">
-            <div class=" select-file-upload">
-              <a class=" choose-file-upload">
-                <input #productFileImportInput1 type="file" name="files1" id="file-upload"
-                  (change)="importViewModel.selectedFile($event,productFileImportInput1)" accept="image/*" />
-              </a>
+            <div class="form-group">
+              <input type="text" class="form-control file-input" [(ngModel)]="importViewModel.address" name="address"
+                placeholder="请选择文件" disabled>
+              <div class="select-file">
+                <a class="choose-file">
+                  <span class="choose-btn">选择文件</span>
+                  <input #productFileImportInput1 type="file" name="files1" id="file-upload"
+                    (change)="importViewModel.selectedFile($event,productFileImportInput1)" accept="image/*" />
+                </a>
+              </div>
             </div>
             <div class="upload-hint" *ngIf='this.importViewModel.hasErrorTip'>{{this.importViewModel.errorTip}}</div>
           </div>

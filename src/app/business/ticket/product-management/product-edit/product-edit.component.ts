@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
-import { Subject } from 'rxjs/index';
+import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { ProductService, TicketProductEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
@@ -42,6 +42,9 @@ export class ErrPositionItem {
   styleUrls: ['./product-edit.component.css']
 })
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
+
+  constructor(private globalService: GlobalService, private productService: ProductService,
+              private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public productInfoList: Array<any> = [];
@@ -56,15 +59,17 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public flag = 0;
   public uploadImg: string;
   public product_id: string;
+  public productNameErrors = '';
+  public trafficGuideErrors = '';
+  public noticeErrors = '';
+  public productIntroduceErrors = '';
 
   private searchText$ = new Subject<any>();
   private product_name = '';
-  private product_subtitle: string = undefined;
+  private product_subtitle = '';
+  private isReImportant = false;
 
-  @ViewChild('coverImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
-
-  constructor(private globalService: GlobalService, private productService: ProductService,
-              private routerInfo: ActivatedRoute, private router: Router) { }
+  @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -79,66 +84,54 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     ).subscribe(res => {
       this.productData = res;
       this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
+      this.product_name = this.productData.product_name;
+      this.product_subtitle = this.productData.product_subtitle;
       this.productInfoList = [
         {
           product_id: this.productData.product_id,
-          product_name: '',
+          product_name: this.product_name,
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
         }
       ];
-      this.product_name = this.productData.product_name;
-      this.product_subtitle = this.productData.product_subtitle;
+      this.productData.product_name = this.productData.product_name.substring(0, 20);
+      this.productTicketList = this.productData.tickets.map(i => ({
+        ...i,
+        isShowInsutructions: false
+      }));
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
+      this.getEditorData();
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
-
-    this.productTicketList = [
-      {
-        name: '赠项目门票', isShowInsutructions: false, time: '提前1小时', costIncludes: '15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元,15项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
-      },
-      {
-        name: '温泉门票', isShowInsutructions: false, time: '提前2小时', costIncludes: '25项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
-      },
-      {
-        name: '游乐场门票', isShowInsutructions: false, time: '提前3小时', costIncludes: '35项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 2
-      },
-      {
-        name: '洗浴门票', isShowInsutructions: false, time: '提前4小时', costIncludes: '45项自费项目任选其一门票一张,至5月31日；周一周二特惠套票159元',
-        useInstructions: '至5月31日；周一周二特惠套票159元', withdrawalNotice: '未验证可退改', marketPrice: 300,
-        proposalPrice: 230, settlementPrice: 260, price: 245, status: 1
-      },
-    ];
   }
 
   // 富文本数据处理
-  private getEditorData() {
+  public getEditorData() {
+    CKEDITOR.instances.editor1.destroy(true);
+    CKEDITOR.instances.editor2.destroy(true);
+    CKEDITOR.instances.editor3.destroy(true);
     this.tempContent1 = this.productData.traffic_guide;
     this.tempContent2 = this.productData.notice;
     this.tempContent3 = this.productData.product_introduce;
-    const editor1 = CKEDITOR.replace('editor1'); // 创建富文本,解决刷新页面才能显示值的问题
-    editor1.setData(this.tempContent1);
-    const editor2 = CKEDITOR.replace('editor2'); // 创建富文本,解决刷新页面才能显示值的问题
-    editor2.setData(this.tempContent2);
-    const editor3 = CKEDITOR.replace('editor3'); // 创建富文本,解决刷新页面才能显示值的问题
-    editor3.setData(this.tempContent3);
+    CKEDITOR.replace('editor1').setData(this.tempContent1);
+    CKEDITOR.replace('editor2').setData(this.tempContent2);
+    CKEDITOR.replace('editor3').setData(this.tempContent3);
   }
 
   // 允许跳转
   public canDeactivate(): boolean {
+    const pro_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+    const pro_image_str = pro_image.join(',');
     return this.productData.product_name === this.product_name &&
-      this.productData.product_subtitle === this.product_subtitle && CKEDITOR.instances.editor1.getData() === this.tempContent1
-      && CKEDITOR.instances.editor2.getData() === this.tempContent2 && CKEDITOR.instances.editor3.getData() === this.tempContent3;
+      this.productData.product_subtitle === this.product_subtitle &&
+      CKEDITOR.instances.editor1.getData().trim() === this.tempContent1.trim()
+      && CKEDITOR.instances.editor2.getData().trim() === this.tempContent2.trim() &&
+      CKEDITOR.instances.editor3.getData().trim() === this.tempContent3.trim() &&
+      !this.isReImportant && pro_image_str === this.imgUrls.join(',');
   }
 
   // 展开
@@ -154,17 +147,34 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   // 重新导入
   public onReImportData() {
     this.globalService.confirmationBox.open('提示', '重新导入会覆盖现有票务详情，确定导入？', () => {
-      this.getEditorData();
+      this.globalService.confirmationBox.close();
+      this.clear();
+      // 产品图片
+      this.imgUrls = this.productData.third_product.third_product_image
+        ? this.productData.third_product.third_product_image.split(',') : [];
+      CKEDITOR.instances.editor1.destroy(true);
+      CKEDITOR.instances.editor2.destroy(true);
+      CKEDITOR.instances.editor3.destroy(true);
+      const editor1 = CKEDITOR.replace('editor1'); // 交通指南
+      editor1.setData(this.productData.third_product.topics);
+      const editor2 = CKEDITOR.replace('editor2'); // 预订须知
+      editor2.setData(this.productData.third_product.notice);
+      const editor3 = CKEDITOR.replace('editor3'); // 景区介绍
+      editor3.setData(this.productData.third_product.introduce);
+      this.isReImportant = true;
+    }, '确定', () => {
+      this.isReImportant = false;
     });
   }
 
   // 置顶
-  public onIsTopProduct(product_id, is_top) {
-    this.productService.requestIsTopProduct(product_id, is_top).subscribe(res => {
-      this.globalService.promptBox.open('置顶成功！');
+  public onIsTopProduct(product_id, ticket_id, is_top) {
+    const text = is_top === 1 ? '置顶' : '取消置顶';
+    this.productService.requestIsTopProduct(product_id, ticket_id, is_top).subscribe(res => {
       this.searchText$.next();
+      this.globalService.promptBox.open(`${text}成功！`);
     }, err => {
-      this.globalService.promptBox.open('置顶失败，请重试！');
+      this.globalService.promptBox.open(`${text}失败，请重试!`);
     });
   }
 
@@ -172,6 +182,10 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public clear() {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.ic_name.isError = false;
+    this.productNameErrors = '';
+    this.trafficGuideErrors = '';
+    this.noticeErrors = '';
+    this.productIntroduceErrors = '';
   }
 
   // 选择图片时校验图片格式
@@ -188,17 +202,30 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   // 保存基础数据调用接口
   public onSaveFormData() {
-    if (this.coverImgSelectComponent.imageList.length === 0) {
+    this.productData.traffic_guide = CKEDITOR.instances.editor1.getData();
+    this.productData.notice = CKEDITOR.instances.editor2.getData();
+    this.productData.product_introduce = CKEDITOR.instances.editor3.getData();
+    if (!this.productData.product_name) {
+      this.clear();
+      this.productNameErrors = '请输入产品名称！';
+    } else if (this.coverImgSelectComponent.imageList.length === 0) {
+      this.clear();
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传产品图片！';
+    } else if (!CKEDITOR.instances.editor1.getData()) {
+      this.clear();
+      this.trafficGuideErrors = '请填写交通指南！';
+    } else if (!CKEDITOR.instances.editor2.getData()) {
+      this.clear();
+      this.noticeErrors = '请填写预订须知！';
+    } else if (!CKEDITOR.instances.editor3.getData()) {
+      this.clear();
+      this.productIntroduceErrors = '请填写景区介绍！';
     } else {
       this.clear();
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-        this.productData.image_urls = JSON.stringify(this.product_image_url);
-        this.productData.traffic_guide = CKEDITOR.instances.editor1.getData();
-        this.productData.notice = CKEDITOR.instances.editor2.getData();
-        this.productData.product_introduce = CKEDITOR.instances.editor3.getData();
+        this.productData.image_urls = this.product_image_url.join(',');
         this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
           this.searchText$.next();
           this.globalService.promptBox.open('保存成功');
@@ -225,6 +252,4 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       });
     }
   }
-
-
 }
