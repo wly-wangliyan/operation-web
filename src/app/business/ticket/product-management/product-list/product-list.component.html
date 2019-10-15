@@ -22,8 +22,8 @@
       </div>
       <div class="form-group">
         <span>产品名称：</span>
-        <input class="form-control" placeholder="请输入产品名称" autocomplete="off" name="product_name" maxlength="20"
-          appIgnoreSpace />
+        <input class="form-control" [(ngModel)]="searchParams.product_name" placeholder="请输入产品名称" autocomplete="off"
+          name="product_name" maxlength="20" appIgnoreSpace />
       </div>
       <div class="form-group">
         <span>上架时间：</span>
@@ -59,7 +59,7 @@
         <tbody>
           <tr *ngFor="let product of ticketProductTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td>
+            <td class="img-item">
               <div class="img-box">
                 <ng-container *ngIf="product.image_urls">
                   <ng-container *ngFor="let image_url of product.image_urls.split(',');let i=index">
@@ -69,7 +69,8 @@
                 <img *ngIf="!product.image_urls" src="/assets/images/image_space_3_2.png" />
                 <i *ngIf="product.is_top===1" class="recommend">荐</i>
               </div>
-              <a>{{product.product_name}}</a>
+              <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
+                [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:10}}</a>
             </td>
             <td>甜程网</td>
             <ng-container *ngIf="product.third_product">
@@ -82,7 +83,9 @@
               <td>--</td>
               <td>--</td>
             </ng-container>
-            <td>{{product.shelve_time?(product.shelve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>
+              {{product.shelve_time && product.status ===saleStatus[0] ?(product.shelve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+            </td>
             <td>{{product.status | saleStatus}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail', product.product_id]">查看</a>

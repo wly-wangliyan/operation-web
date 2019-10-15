@@ -22,13 +22,13 @@
 
 .img-box {
   width: 90px;
-  height: 60px;
   position: relative;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .img-box img {
   width: 90px;
-  height: 60px;
 }
 
 .recommend {
@@ -37,6 +37,19 @@
   height: 22px;
   background-color: #08D5B1;
   color: #fff;
-  right: -10px;
+  right: 0px;
   bottom: 0;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.operation a {
+  margin: auto 5px;
+}
+
+.img-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

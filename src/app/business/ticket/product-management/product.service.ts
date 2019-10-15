@@ -14,7 +14,7 @@ export class ThirdProductEntity extends EntityBase {
   public add_time: number = undefined; // 第三方产品添加时间
   public third_product_image: string = undefined; // 第三方产品缩略图
   public type: string = undefined; // 第三方产品类型(A:景点 B:线路 C:酒店 F:套票 H:演出)
-  public provice: string = undefined; // 省
+  public province: string = undefined; // 省
   public city: string = undefined; // 市
   public district: string = undefined; // 区
   public address: string = undefined; // 第三方产品详细地址
@@ -63,7 +63,7 @@ export class TicketProductEntity extends EntityBase {
   public image_urls: string = undefined; // 产品图片集合
   public run_time: number = undefined; // 营业时间
   public telephone: string = undefined; // 联系电话
-  public provice: string = undefined; // 省
+  public province: string = undefined; // 省
   public city: string = undefined; // 市
   public district: string = undefined; // 区
   public address: string = undefined; // 详细地址
@@ -154,7 +154,7 @@ export class PriceCalendarEntity extends EntityBase {
 // 产品列表条件筛选
 export class SearchParams extends EntityBase {
   public status: number = undefined; // 销售状态 1:销售中 2:已下架
-  public project_name: string = undefined; // 产品名称
+  public product_name: string = undefined; // 产品名称
   public order_id: string = undefined; // 订单编号
   public section: string = undefined; // 上架时间section'xxx,xxx'
   public page_num = 1; // 页码
