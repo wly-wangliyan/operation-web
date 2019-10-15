@@ -98,7 +98,7 @@
                 </ng-container>
                 <img *ngIf="!order.product.image_urls" src="/assets/images/image_space_3_2.png" />
                 <a [title]="order.product.product_name"
-                  style="word-break: keep-all;">{{order.product.product_name | zMaxLength:15}}</a>
+                  style="word-break: keep-all;margin-left: 5px;">{{order.product.product_name | zMaxLength:15}}</a>
               </td>
             </ng-container>
             <ng-container *ngIf="!order.product">
