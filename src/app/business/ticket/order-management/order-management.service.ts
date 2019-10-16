@@ -42,7 +42,7 @@ export class TicketOrderEntity extends EntityBase {
   public buy_num: number = undefined; // 购买数量
   public right_price: number = undefined; // 应收价格
   public real_price: number = undefined; // 实收价格
-  public pay_type: string = undefined; // 支付方式 悠悠:UU 微信:WX
+  public pay_type: string = undefined; // 支付方式 悠悠:UU-UU 微信:UU-WX,WX-WX
   public pay_time: number = undefined; // 支付时间
   public third_order_id: string = undefined; // 第三方订单id
   public order_code: string = undefined; // 凭证码/消费码

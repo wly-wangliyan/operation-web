@@ -21,8 +21,10 @@ export class OrderDetailComponent implements OnInit {
 
   // 支付方式
   public payType = {
-    UU: '悠悠',
-    WX: '微信'
+    'UU-UU': '悠悠',
+    'UU-WX': '微信',
+    'WX-WX': '微信',
+    'other': '其他'
   };
 
   constructor(
