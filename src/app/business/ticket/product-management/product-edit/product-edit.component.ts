@@ -27,7 +27,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -44,7 +44,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-              private routerInfo: ActivatedRoute, private router: Router) { }
+    private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public productInfoList: Array<any> = [];
@@ -126,12 +126,22 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public canDeactivate(): boolean {
     const pro_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
     const pro_image_str = pro_image.join(',');
-    return this.productData.product_name === this.product_name &&
-      this.productData.product_subtitle === this.product_subtitle &&
-      CKEDITOR.instances.editor1.getData().trim() === this.tempContent1.trim()
-      && CKEDITOR.instances.editor2.getData().trim() === this.tempContent2.trim() &&
-      CKEDITOR.instances.editor3.getData().trim() === this.tempContent3.trim() &&
-      !this.isReImportant && pro_image_str === this.imgUrls.join(',');
+    if (this.tempContent1.includes('<p>')) {
+      return this.productData.product_name === this.product_name &&
+        this.productData.product_subtitle === this.product_subtitle &&
+        CKEDITOR.instances.editor1.getData().trim() === this.tempContent1.trim()
+        && CKEDITOR.instances.editor2.getData().trim() === this.tempContent2.trim() &&
+        CKEDITOR.instances.editor3.getData().trim() === this.tempContent3.trim() &&
+        !this.isReImportant && pro_image_str === this.imgUrls.join(',');
+    } else {
+      return this.productData.product_name === this.product_name &&
+        this.productData.product_subtitle === this.product_subtitle &&
+        CKEDITOR.instances.editor1.getData().replace(/<p>/g, '').trim() === this.tempContent1.trim()
+        && CKEDITOR.instances.editor2.getData().replace(/<p>/g, '').trim() === this.tempContent2.trim() &&
+        CKEDITOR.instances.editor3.getData().replace(/<p>/g, '').trim() === this.tempContent3.trim() &&
+        !this.isReImportant && pro_image_str === this.imgUrls.join(',');
+    }
+
   }
 
   // 展开

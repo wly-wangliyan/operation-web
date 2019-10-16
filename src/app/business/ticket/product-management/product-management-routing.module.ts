@@ -18,14 +18,14 @@ const routes: Routes = [{
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: ProductListComponent },
     { path: 'create', component: ProductCreateComponent },
-    { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService] },
+    { path: 'edit/:product_id', component: ProductEditComponent },
     { path: 'detail/:product_id', component: ProductDetailComponent },
     { path: 'third-detail/:product_id', component: ThirdProductDetailComponent },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];
-
+// , canDeactivate: [ExternalPreventService]
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
