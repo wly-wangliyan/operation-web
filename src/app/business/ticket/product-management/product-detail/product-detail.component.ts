@@ -12,8 +12,9 @@ import { ProductService, TicketProductEntity } from '../product.service';
 })
 export class ProductDetailComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
-              private router: Router) { }
+  constructor(
+    private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
+    private router: Router) { }
 
   public productData: TicketProductEntity = new TicketProductEntity();
   public productInfoList: Array<any> = [];
@@ -24,6 +25,7 @@ export class ProductDetailComponent implements OnInit {
   public loading = true;
   public tempContent1: string;
   public product_id: string;
+  public isShowContent = true;
 
   private searchText$ = new Subject<any>();
 
@@ -57,7 +59,15 @@ export class ProductDetailComponent implements OnInit {
       this.noResultTicketText = '暂无数据';
       this.loading = false;
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 404) {
+          this.loading = false;
+          this.isShowContent = false;
+          this.globalService.promptBox.open('该产品不存在', () => {
+            window.history.back();
+          }, 2000, null, false);
+        }
+      }
     });
     this.searchText$.next();
   }
