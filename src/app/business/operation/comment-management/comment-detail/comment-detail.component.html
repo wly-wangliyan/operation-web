@@ -16,9 +16,9 @@
           <label>{{currentComment.nickname}}</label>
         </div>
         <div>
-          <span *ngIf="currentComment.user_id">ID: {{currentComment.user_id}}</span>
-          <span *ngIf="currentComment.phone_num">手机号: {{currentComment.phone_num}}</span>
-          <span *ngIf="currentComment.category">类别: {{currentComment.category===1?'用户发起':'系统创建'}}</span>
+          <span>ID: {{currentComment.user_id ? currentComment.user_id : '--'}}</span>
+          <span>手机号: {{currentComment.phone_num ? currentComment.phone_num : '--'}}</span>
+          <span>类别: {{currentComment.category ? (currentComment.category===1?'用户发起':'系统创建') : '--'}}</span>
           <span>评论时间: {{currentComment.created_time * 1000 | date: "yyyy-MM-dd HH:mm"}}</span>
         </div>
       </div>

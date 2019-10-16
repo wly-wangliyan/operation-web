@@ -107,8 +107,8 @@
               </td>
             </ng-container>
             <td>{{order.buy_num || 0}} 张</td>
-            <td>{{order.right_price ? (order.right_price | centPriceChange)+' 元' : '--'}}</td>
-            <td>{{order.real_price ? (order.real_price | centPriceChange)+' 元' : '--'}}</td>
+            <td>{{order.right_price ? ('￥ ' + (order.right_price | centPriceChange)) : '--'}}</td>
+            <td>{{order.real_price ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{order.pay_time && order.status ===2 ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{order.status | orderStatus}}</td>

@@ -18,9 +18,9 @@
         </tr>
         <tr>
           <td>应收：</td>
-          <td>{{orderDetail.right_price ? (orderDetail.right_price | centPriceChange)+' 元' : '--'}}</td>
+          <td>{{orderDetail.right_price ? ('￥ ' + (orderDetail.right_price | centPriceChange)) : '--'}}</td>
           <td>实收：</td>
-          <td>{{orderDetail.real_price ? (orderDetail.real_price | centPriceChange)+' 元' : '--'}}</td>
+          <td>{{orderDetail.real_price ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}</td>
           <td>支付方式：</td>
           <td>{{orderDetail.pay_type && orderDetail.status === 2?payType[orderDetail.pay_type]:'--'}}</td>
         </tr>
