@@ -109,7 +109,7 @@
             <nz-form-control>
               <img *ngIf='imgUrls.length===0' src="/assets/images/pro_default.png">
               <app-z-photo-select *ngIf='imgUrls.length!==0' [hasAddPicture]="false" [hasDeletePicture]="false"
-                [maxLength]="6" [imageUrls]="imgUrls" #parkingImg>
+                [maxLength]="6" [imageWidth]='120' [imageHeight]='90' [imageUrls]="imgUrls" #parkingImg>
               </app-z-photo-select>
             </nz-form-control>
           </nz-form-item>
