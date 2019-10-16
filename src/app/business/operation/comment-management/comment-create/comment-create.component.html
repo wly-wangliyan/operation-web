@@ -45,6 +45,9 @@
             [limitImgSize]="1" [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)"
             file_id="avatarImg" [imageUrls]="avatar_url" [imageWidth]="100" [imageHeight]="100">
           </app-z-photo-select>
+          <div class="row row-message" *ngIf="avatarErrMag">
+            <span class="err-message">{{avatarErrMag}}</span>
+          </div>
           <p class="cover-hint">注：尺寸 1:1，格式PNG或JPG，大小1M以内</p>
         </div>
       </div>
@@ -81,6 +84,9 @@
             [maxLength]="6" [isCutCoverImg]="false" (selectedImgChange)="onSelectedImagePicture($event)"
             file_id="commentImg" [imageUrls]="image_urls" [imageWidth]="120" [imageHeight]="100">
           </app-z-photo-select>
+          <div class="row row-message" *ngIf="imageErrMag">
+            <span class="err-message">{{imageErrMag}}</span>
+          </div>
           <p class="cover-hint">注：最多上传6张，每张大小2M以内</p>
         </div>
       </div>
@@ -90,8 +96,9 @@
           <span>评论时间</span>
         </label>
         <div class="control-input">
-          <nz-date-picker [(ngModel)]="created_time" [nzShowToday]=false [nzDisabledDate]="disabledCommentTime"
-            name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <nz-date-picker [(ngModel)]="created_time" (nzOnOpenChange)="onClearErrMsg()" [nzShowToday]=false
+            [nzDisabledDate]="disabledCommentTime" name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+            nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
           <!-- <nz-date-picker [(ngModel)]="created_time" [nzShowToday]=false [nzDisabledDate]="disabledCommentTime"
             name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker> -->
         </div>

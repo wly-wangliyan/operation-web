@@ -49,7 +49,11 @@ export class CommentCreateComponent implements OnInit {
 
   public avatar_url = []; // 头像图片
 
+  public avatarErrMag = ''; // 选择头像错误信息
+
   public image_urls = []; // 评论图片集合
+
+  public imageErrMag = ''; // 选择晒图错误信息
 
   public commentErrMsg = ''; // 错误信息
 
@@ -77,10 +81,10 @@ export class CommentCreateComponent implements OnInit {
   public onSelectedPicture(event: any) {
     this.onClearErrMsg();
     if (event === 'type_error') {
-      this.commentErrMsg = '格式错误，请重新上传！';
+      this.avatarErrMag = '格式错误，请重新上传！';
       return;
     } else if (event === 'size_over') {
-      this.commentErrMsg = '图片大小不得高于1M！';
+      this.avatarErrMag = '图片大小不得高于1M！';
       return;
     }
   }
@@ -89,10 +93,10 @@ export class CommentCreateComponent implements OnInit {
   public onSelectedImagePicture(event: any) {
     this.onClearErrMsg();
     if (event === 'type_error') {
-      this.commentErrMsg = '格式错误，请重新上传！';
+      this.imageErrMag = '格式错误，请重新上传！';
       return;
     } else if (event === 'size_over') {
-      this.commentErrMsg = '图片大小不得高于2M！';
+      this.imageErrMag = '图片大小不得高于2M！';
       return;
     }
   }
@@ -124,6 +128,8 @@ export class CommentCreateComponent implements OnInit {
   // 清除错误信息
   public onClearErrMsg() {
     this.commentErrMsg = '';
+    this.avatarErrMag = '';
+    this.imageErrMag = '';
   }
 
   // 校验数据
