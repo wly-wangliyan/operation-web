@@ -131,9 +131,6 @@ export class CommentCreateComponent implements OnInit {
     if (!this.commentParams.avatar) {
       this.commentErrMsg = '请上传头像！';
       return false;
-    } else if (!this.commentParams.image_urls) {
-      this.commentErrMsg = '请上传晒图！';
-      return false;
     } else if (!this.created_time) {
       this.commentErrMsg = '请选择评论时间！';
       return false;
