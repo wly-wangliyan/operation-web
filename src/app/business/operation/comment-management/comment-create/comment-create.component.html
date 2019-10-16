@@ -64,8 +64,9 @@
           <span>评论内容</span>
         </label>
         <div class="control-input">
-          <textarea class="form-control" rows="4" placeholder="输入1-200字评论内容" [(ngModel)]="commentParams.comment_content"
-            (focus)="onClearErrMsg()" name="comment_content" maxlength="200">
+          <textarea class="form-control" rows="4" placeholder="输入1-200个字评论内容"
+            [(ngModel)]="commentParams.comment_content" (focus)="onClearErrMsg()" name="comment_content"
+            maxlength="200">
             </textarea>
         </div>
       </div>

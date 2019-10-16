@@ -80,7 +80,7 @@
             <td [title]="data.object_name?data.object_name:''">{{data.object_name|zMaxLength:20}}</td>
             <td>{{data.category?(data.category===1?'用户发起':'系统创建'):'--'}}</td>
             <td [title]="data.comment_content?data.comment_content:''">
-              <img *ngIf="data.is_top===1" src="/assets/images/icon_top.png" style="margin-top: -2px">
+              <img *ngIf="data.is_top===1" src="/assets/images/icon_top_big.png" style="margin-top: -2px;width: 32px;">
               <img *ngIf="data.is_top===2" src="" style="width: 32px;">
               {{data.comment_content?(data.comment_content|zMaxLength:30):'--'}}</td>
             <td *ngIf="data.image_urls">

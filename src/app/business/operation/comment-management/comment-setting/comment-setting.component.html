@@ -59,7 +59,7 @@
             <span>业务线名称</span>
           </label>
           <div class="control-input">
-            <input class="form-control" placeholder="输入1-5字业务线名称" [(ngModel)]="settingParams.work_name"
+            <input class="form-control" placeholder="输入1-5个字业务线名称" [(ngModel)]="settingParams.work_name"
               (focus)="onClearErrMsg()" maxlength="5" name="work_name" appIgnoreSpace required>
           </div>
         </div>
@@ -69,7 +69,7 @@
             <span>描述</span>
           </label>
           <div class="control-input">
-            <textarea class="form-control" rows="4" placeholder="输入0-100字描述" [(ngModel)]="settingParams.remark"
+            <textarea class="form-control" rows="4" placeholder="输入0-100个字描述" [(ngModel)]="settingParams.remark"
               (focus)="onClearErrMsg()" name="remark" maxlength="100">
             </textarea>
           </div>
