@@ -64,7 +64,7 @@
           <span>评论内容</span>
         </label>
         <div class="control-input">
-          <textarea class="form-control" rows="4" placeholder="输入1-200字描述" [(ngModel)]="commentParams.comment_content"
+          <textarea class="form-control" rows="4" placeholder="输入1-200字评论内容" [(ngModel)]="commentParams.comment_content"
             (focus)="onClearErrMsg()" name="comment_content" maxlength="200">
             </textarea>
         </div>
@@ -104,7 +104,7 @@
       </div>
       <div class="row">
         <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-          [disabled]="!addCommentForm.form.valid || !comment_time" (appZDebounceClick)="onEditFormSubmit()">
+          [disabled]="!addCommentForm.form.valid || !created_time" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
         <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>

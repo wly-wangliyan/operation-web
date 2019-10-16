@@ -28,7 +28,8 @@
             <td>{{i + 1}}</td>
             <td>{{setting.work_id}}</td>
             <td>{{setting.work_name}}</td>
-            <td [title]="setting.remark?setting.remark:''">{{setting.remark|zMaxLength:20}}</td>
+            <td [title]="setting.remark?setting.remark:''">{{setting.remark ? (setting.remark|zMaxLength:20) : '--'}}
+            </td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onShowModal(setting)">编辑</a>
             </td>
