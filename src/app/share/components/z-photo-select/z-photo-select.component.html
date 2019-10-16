@@ -51,6 +51,7 @@
   aria-labelledby="myModalLabel" aria-hidden="true" #imageModal>
   <div class="modal-dialog" [class.dialog-left]="zoomWidth < 600">
     <div class="modal-content" [ngStyle]="{'line-height': transformZoomLineHeight + 'px'}">
+      <div class="close-img" (click)="closeShowZoomPicture()"></div>
       <div class="modal-body img-list" *ngIf="(imageList.length>0)&&(!hasDeletePicture)">
         <div class="lside-img-arrow" (click)="selectedShowImage(true)"
           [class.invisible]="currentImgNum==1 || imageList.length<=1"></div>
@@ -67,6 +68,7 @@
           [class.invisible]="currentImgNum==imageList.length"></div>
       </div>
     </div>
-    <div class="close-img" [ngStyle]="{'margin-left': (zoomWidth - 30) + 'px'}" (click)="closeShowZoomPicture()"></div>
+    <!-- <div class="close-img" [ngStyle]="{'margin-left': (zoomWidth - 30) + 'px'}" (click)="closeShowZoomPicture()"></!-->
+    -->
   </div>
 </div>

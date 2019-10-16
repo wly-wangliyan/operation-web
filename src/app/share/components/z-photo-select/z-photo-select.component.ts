@@ -55,7 +55,7 @@ export class ZPhotoSelectComponent implements OnInit {
     return (Number(this.imageHeight) - 2).toString();
   }
 
-  @Input() public zoomWidth = 1000; // 图像剪裁模态框的宽
+  @Input() public zoomWidth = '1000'; // 图像剪裁模态框的宽
 
   @Input() public zoomHeight = '560'; // 图像剪裁模态框的高
 
