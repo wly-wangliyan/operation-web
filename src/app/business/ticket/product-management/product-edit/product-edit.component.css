@@ -113,3 +113,10 @@ input[type=file],
 input[type=file]:focus {
   outline: none !important;
 }
+
+@media screen and (max-width: 1350px) {
+  .top-img {
+    margin-right: 5px;
+    margin-left: -15px;
+  }
+}
