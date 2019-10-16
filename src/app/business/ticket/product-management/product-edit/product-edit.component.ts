@@ -212,9 +212,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   // 保存基础数据调用接口
   public onSaveFormData() {
-    this.productData.traffic_guide = CKEDITOR.instances.editor1.getData();
-    this.productData.notice = CKEDITOR.instances.editor2.getData();
-    this.productData.product_introduce = CKEDITOR.instances.editor3.getData();
+    this.productData.traffic_guide = CKEDITOR.instances.editor1.getData().replace('\n\n', '\n');
+    this.productData.notice = CKEDITOR.instances.editor2.getData().replace('\n\n', '\n');
+    this.productData.product_introduce = CKEDITOR.instances.editor3.getData().replace('\n\n', '\n');
     if (!this.productData.product_name) {
       this.clear();
       this.productNameErrors = '请输入产品名称！';
