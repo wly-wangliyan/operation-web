@@ -25,7 +25,7 @@
       <div class="line"></div>
       <div style="margin: 25px 75px">
         <img *ngIf="currentComment.is_top===1" src="/assets/images/icon_top_big.png"
-          style="width: 32px;margin: 0 10px 0 -42px">
+          style="width: 32px;margin: -2px 10px 0 -42px;">
         <span>{{currentComment.comment_content}}</span>
         <div *ngIf="imageUrls">
           <app-z-photo-select *ngIf='imageUrls.length!==0' [hasAddPicture]="false" [hasDeletePicture]="false"
