@@ -79,7 +79,8 @@
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
                 <p>{{data.notes|nullDataFilter|zMaxLength:18}}</p>
-                <span *ngIf='data.notes.length>18||data.getaddr' (click)='onShowInsutructions(i)'>展开</span>
+                <span *ngIf='data.notes.length>18||(data.getaddr&&data.getaddr!=="0")'
+                  (click)='onShowInsutructions(i)'>展开</span>
               </div>
               <div class='text' *ngIf='data.isShowInsutructions'>
                 <p>{{data.notes}}<br>{{data.getaddr}}</p>
