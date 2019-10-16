@@ -104,7 +104,7 @@
       </div>
       <div class="row">
         <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-          [disabled]="!addCommentForm.form.valid || !comment_time" (appZDebounceClick)="onEditFormSubmit()">
+          [disabled]="!addCommentForm.form.valid || !created_time" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
         <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
