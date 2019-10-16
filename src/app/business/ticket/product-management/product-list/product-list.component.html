@@ -75,13 +75,13 @@
             <td>甜程网</td>
             <ng-container *ngIf="product.third_product">
               <td>
-                {{product.third_product.market_price ? ('￥ ' + (product.third_product.market_price|centPriceChange)) : '--'}}
+                {{product.third_product.market_price ? ('￥ ' + (product.third_product.market_price|centPriceChange) + ' 起') : '--'}}
               </td>
               <td>
-                {{product.third_product.retail_price ? ('￥ ' + (product.third_product.retail_price|centPriceChange)) : '--'}}
+                {{product.third_product.retail_price ? ('￥ ' + (product.third_product.retail_price|centPriceChange) + ' 起') : '--'}}
               </td>
               <td>
-                {{product.third_product.buy_price ? ('￥ ' + (product.third_product.buy_price|centPriceChange)) : '--'}}
+                {{product.third_product.buy_price ? ('￥ ' + (product.third_product.buy_price|centPriceChange) + ' 起') : '--'}}
               </td>
             </ng-container>
             <ng-container *ngIf="!product.third_product">
@@ -99,8 +99,10 @@
               <a [title]="'下架'" *ngIf="product.status===saleStatus[0]" (click)="onChangeSaleStatus(product)">下架</a>
               <a [title]="'上架'" *ngIf="product.status===saleStatus[1]" (click)="onChangeSaleStatus(product)">上架</a>
               <a [title]="'删除'" (click)="onDeleteProduct(product)">删除</a>
-              <a [title]="'设为推荐'" *ngIf="product.is_top===2" (click)="onChangeTopStatus(product)">设为推荐</a>
-              <a [title]="'取消推荐'" *ngIf="product.is_top===1" (click)="onChangeTopStatus(product)">取消推荐</a>
+              <ng-container *ngIf="product.status===saleStatus[0]">
+                <a [title]="'设为推荐'" *ngIf="product.is_top===2" (click)="onChangeTopStatus(product)">设为推荐</a>
+                <a [title]="'取消推荐'" *ngIf="product.is_top===1" (click)="onChangeTopStatus(product)">取消推荐</a>
+              </ng-container>
             </td>
           </tr>
         </tbody>
