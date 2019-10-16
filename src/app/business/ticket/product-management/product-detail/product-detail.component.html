@@ -79,7 +79,7 @@
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
                 <p>{{(data.notes)|zMaxLength:18}}</p>
-                <span (click)='onShowInsutructions(i)'>展开</span>
+                <span *ngIf='data.notes.length>18' (click)='onShowInsutructions(i)'>展开</span>
               </div>
               <div class='text' *ngIf='data.isShowInsutructions'>
                 <p>{{data.notes}}</p>
