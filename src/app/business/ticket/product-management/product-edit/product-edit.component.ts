@@ -239,6 +239,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
           this.searchText$.next();
           this.globalService.promptBox.open('保存成功');
+          timer(2000).subscribe(() => this.router.navigateByUrl('/main/ticket/product-management'));
         }, err => {
           if (!this.globalService.httpErrorProcess(err)) {
             if (err.status === 422) {

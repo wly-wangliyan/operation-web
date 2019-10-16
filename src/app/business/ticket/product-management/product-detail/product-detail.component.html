@@ -46,7 +46,7 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
             <nz-form-control class="ml_-10">
-              <div class='subtitle'>{{productData.product_subtitle}}</div>
+              <div class='subtitle'>{{productData.product_subtitle||'--'}}</div>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -78,7 +78,7 @@
             </td>
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
-                <p>{{(data.notes)|zMaxLength:20}}</p>
+                <p>{{(data.notes)|zMaxLength:18}}</p>
                 <span (click)='onShowInsutructions(i)'>展开</span>
               </div>
               <div class='text' *ngIf='data.isShowInsutructions'>
