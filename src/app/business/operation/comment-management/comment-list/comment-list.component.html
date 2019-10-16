@@ -90,7 +90,7 @@
             <td *ngIf="!data.image_urls">
               <img src="/assets/images/image_space.png" style="height: 30px;width: 30px">
             </td>
-            <td>{{data.created_time?(data.created_time * 1000 | date: "yyyy-MM-dd HH:mm:ss"):'--'}}</td>
+            <td>{{data.created_time?(data.created_time * 1000 | date: "yyyy-MM-dd HH:mm"):'--'}}</td>
             <td>{{data.status===1?'待审核':data.status===2?'已审核':data.status===3?'被驳回':'--'}}</td>
             <td class="operation">
               <a [title]="'详情'" (click)="onShowDetailClick(data)">详情</a>
