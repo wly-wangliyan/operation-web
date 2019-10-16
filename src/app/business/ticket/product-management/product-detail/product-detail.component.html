@@ -115,19 +115,19 @@
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>营业时间</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.run_time}}
+              {{productData.run_time|nullDataFilter}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>联系电话</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.telephone}}
+              {{productData.telephone|nullDataFilter}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>地址</nz-form-label>
             <nz-form-control class="ml_-10">
-              {{productData.address}}
+              {{productData.address|nullDataFilter}}
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>

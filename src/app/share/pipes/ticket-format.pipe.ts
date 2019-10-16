@@ -68,6 +68,22 @@ export class CentPriceChangePipe implements PipeTransform {
   }
 }
 
+/** 处理第三方数据为空返回‘0’的情况 */
+
+@Pipe({
+  name: 'nullDataFilter'
+})
+export class NullDataFilterPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === null || value === undefined || value === '' || value === '0') {
+      return '--';
+    } else {
+      return value;
+    }
+  }
+}
+
 /** 订单状态 */
 const OrderStatus = {
   1: '待支付',
