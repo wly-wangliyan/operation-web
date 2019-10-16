@@ -27,7 +27,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -44,7 +44,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-    private routerInfo: ActivatedRoute, private router: Router) { }
+              private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public productInfoList: Array<any> = [];
@@ -252,6 +252,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
                   return;
                 } else if (content.code === 'invalid') {
                   this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+                } else if (content.code === 'product_need_shelves') {
+                  this.globalService.promptBox.open(`请将产品下架后再进行编辑！`, null, 2000, '/assets/images/warning.png');
                 } else {
                   this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
                 }
