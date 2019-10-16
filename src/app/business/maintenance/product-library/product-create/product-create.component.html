@@ -118,7 +118,7 @@
               [imageUrls]="cover_url" [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
             </app-z-photo-select>
             <div class="row row-message" style="height: 20px!important;margin-top: -6px">
-              <div class="control-input err-message">
+              <div class="control-input " style="color: rgba(232,32,56,1);">
                 <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
               </div>
             </div>

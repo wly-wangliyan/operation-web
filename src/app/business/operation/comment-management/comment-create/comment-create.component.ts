@@ -86,6 +86,8 @@ export class CommentCreateComponent implements OnInit {
     } else if (event === 'size_over') {
       this.avatarErrMag = '图片大小不得高于1M！';
       return;
+    } else {
+      this.avatarErrMag = '';
     }
   }
 
@@ -98,6 +100,8 @@ export class CommentCreateComponent implements OnInit {
     } else if (event === 'size_over') {
       this.imageErrMag = '图片大小不得高于2M！';
       return;
+    } else {
+      this.imageErrMag = '';
     }
   }
 
@@ -128,8 +132,6 @@ export class CommentCreateComponent implements OnInit {
   // 清除错误信息
   public onClearErrMsg() {
     this.commentErrMsg = '';
-    this.avatarErrMag = '';
-    this.imageErrMag = '';
   }
 
   // 校验数据
