@@ -67,11 +67,11 @@
             </td>
             <td class='insutructions'>
               <div class='text' *ngIf='!data.isShowInsutructions'>
-                <p>{{(data.notes)|zMaxLength:18}}</p>
-                <span *ngIf='data.notes.length>18' (click)='onShowInsutructions(i)'>展开</span>
+                <p>{{data.notes|nullDataFilter|zMaxLength:18}}</p>
+                <span *ngIf='data.notes.length>18||data.getaddr' (click)='onShowInsutructions(i)'>展开</span>
               </div>
               <div class='text' *ngIf='data.isShowInsutructions'>
-                <p>{{data.notes}}</p>
+                <p>{{data.notes}}<br>{{data.getaddr}}</p>
                 <span (click)='onHideInsutructions(i)'>收起</span>
               </div>
             </td>

@@ -109,6 +109,7 @@ export class TicketEntity extends EntityBase {
   public product: TicketProductEntity = undefined; // 产品对象
   public price_calendar: PriceCalendarEntity = undefined; // 门票价格日历
   public notes: string = undefined; // 购票须知
+  public getaddr: string = undefined; // 取票信息
   public ticket_name: string = undefined; // 门票名称
   public pay: string = undefined; // 支付方式--UUpay 0:现场支付，1:在线支付
   public ticket_status: number = undefined; // 门票状态
