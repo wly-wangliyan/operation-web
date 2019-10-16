@@ -212,7 +212,6 @@ export class ExpandedMenuComponent implements OnInit {
   }
 
   private refreshMenu(path: string) {
-
     // 尝试父匹配
     let index = this.routeLinkList.findIndex(element => {
       return element.path === path;
@@ -245,8 +244,15 @@ export class ExpandedMenuComponent implements OnInit {
     }
 
     if (index !== -1) {
+
+
       const routeItem = this.routeLinkList[index];
       if (childIndex !== -1) {
+        this.routeLinkList.forEach(item => {
+          if (item.title !== routeItem.title) {
+            item.reset();
+          }
+        });
         routeItem.isSelect = true;
         const childRouteItem = this.routeLinkList[index].children[childIndex];
         MenuHelper.Select(this.menuItems, childRouteItem);
