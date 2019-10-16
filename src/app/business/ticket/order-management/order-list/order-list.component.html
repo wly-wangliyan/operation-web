@@ -99,6 +99,7 @@
                   </ng-container>
                   <img *ngIf="!order.product.image_urls" src="/assets/images/image_space_3_2.png" />
                   <a [title]="order.product.product_name"
+                    [routerLink]="['../../product-management/detail', order.product.product_id]"
                     style="word-break: keep-all;margin-left: 5px;">{{order.product.product_name | zMaxLength:15}}</a>
                 </div>
               </td>

@@ -205,7 +205,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
 
     if (this.pay_start_time || this.pay_end_time) {
-      this.searchParams.pay_section = this.searchParams.status === 2 ? `${sPayTimestamp},${ePayTimeStamp}` : null;
+      this.searchParams.pay_section = `${sPayTimestamp},${ePayTimeStamp}`;
     } else {
       this.searchParams.pay_section = null;
     }
