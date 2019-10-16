@@ -166,7 +166,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       CKEDITOR.instances.editor2.destroy(true);
       CKEDITOR.instances.editor3.destroy(true);
       const editor1 = CKEDITOR.replace('editor1'); // 交通指南
-      editor1.setData(this.productData.third_product.topics);
+      editor1.setData(this.productData.third_product.traffic_guide);
       const editor2 = CKEDITOR.replace('editor2'); // 预订须知
       editor2.setData(this.productData.third_product.notice);
       const editor3 = CKEDITOR.replace('editor3'); // 景区介绍
