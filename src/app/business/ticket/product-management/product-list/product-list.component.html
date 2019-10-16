@@ -59,18 +59,20 @@
         <tbody>
           <tr *ngFor="let product of ticketProductTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td class="img-item">
-              <div class="img-box">
-                <ng-container *ngIf="product.image_urls">
-                  <ng-container *ngFor="let image_url of product.image_urls.split(',');let i=index">
-                    <img *ngIf="i===0" src="{{image_url}}" />
+            <td>
+              <div class="img-item">
+                <div class="img-box">
+                  <ng-container *ngIf="product.image_urls">
+                    <ng-container *ngFor="let image_url of product.image_urls.split(',');let i=index">
+                      <img *ngIf="i===0" src="{{image_url}}" />
+                    </ng-container>
                   </ng-container>
-                </ng-container>
-                <img *ngIf="!product.image_urls" src="/assets/images/image_space_3_2.png" />
-                <i *ngIf="product.is_top===1" class="recommend">荐</i>
+                  <img *ngIf="!product.image_urls" src="/assets/images/image_space_3_2.png" />
+                  <i *ngIf="product.is_top===1" class="recommend">荐</i>
+                </div>
+                <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
+                  [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:15}}</a>
               </div>
-              <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
-                [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:15}}</a>
             </td>
             <td>甜程网</td>
             <ng-container *ngIf="product.third_product">
