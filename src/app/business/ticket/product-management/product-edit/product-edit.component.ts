@@ -253,8 +253,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
                   return;
                 } else if (content.code === 'invalid') {
                   this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
-                } else if (content.code === 'product_need_shelves') {
-                  this.globalService.promptBox.open(`请将产品下架后再进行编辑！`, null, 2000, '/assets/images/warning.png');
                 } else {
                   this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
                 }
