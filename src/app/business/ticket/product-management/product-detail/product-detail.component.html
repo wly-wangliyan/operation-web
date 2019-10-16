@@ -87,12 +87,12 @@
               </div>
             </td>
             <td><span *ngIf='data.market_price'>¥</span> {{data.market_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar.retail_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar.buy_price'>¥</span>
-              {{data.price_calendar.buy_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar.retail_price|centPriceChange}}</td>
+            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
+              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
+            <td><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
+              {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}</td>
+            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
+              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
           </tr>
         </tbody>
       </nz-table>
