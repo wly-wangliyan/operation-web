@@ -70,3 +70,21 @@
   word-break: keep-all;
   color: rgba(0, 0, 0, 0.65) !important;
 }
+
+.ant-table-body>table {
+  border: 0 !important;
+}
+
+.ant-table-thead>tr:first-child>th:last-child,
+.ant-table-tbody>tr>td:last-child {
+  border-right: none;
+}
+
+.ant-table-tbody>tr:last-child >td {
+  border-bottom: none;
+}
+
+.ant-table-thead>tr:first-child>th:first-child,
+.ant-table-thead>tr:first-child>th:last-child {
+  border-radius: 0;
+}
