@@ -1,3 +1,5 @@
+import { timer } from 'rxjs';
+
 export class SideMenuItem {
   public children: Array<SideMenuItem> = [];
   public parent: SideMenuItem;
@@ -33,12 +35,14 @@ export class SideMenuItem {
 }
 
 export class MenuHelper {
-  public static Select(menu: Array<SideMenuItem>, menuItem: SideMenuItem) {
+  public static Select(index: number, menu: Array<SideMenuItem>, menuItem: SideMenuItem, childIndex: number) {
     menu.forEach(item => {
       if (item.children.length === 0) {
         item.reset();
       }
     });
+    menu[index].isSelect = true;
+    menu[index].children[childIndex].isSelect = true;
     menuItem.isSelect = true;
   }
 }

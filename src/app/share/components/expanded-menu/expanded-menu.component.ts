@@ -20,7 +20,6 @@ export class ExpandedMenuComponent implements OnInit {
   public menuItems: Array<SideMenuItem> = [];
   public routeLinkList: Array<SideMenuItem> = [];
   public menu_icon = true;
-
   private routePathSubscription: Subscription;
 
   constructor(
@@ -40,7 +39,7 @@ export class ExpandedMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.routePathSubscription = this.routeMonitorService.routePathChanged.subscribe(path => {
+    this.routeMonitorService.routePathChanged.subscribe(path => {
       this.refreshMenu(path);
     });
     timer(0).subscribe(() => {
@@ -63,9 +62,12 @@ export class ExpandedMenuComponent implements OnInit {
     });
   }
 
+
+
   // 运营菜单
   public generateMenus(): Array<SideMenuItem> {
     this.menu_icon = true;
+    this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
     menusItem.push(this.generateCommentMenu());
@@ -75,6 +77,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保险菜单
   public generateMenus_insurance(): Array<SideMenuItem> {
     this.menu_icon = false;
+    this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateBrokerageMenu());
     menusItem.push(this.generateInsuranceMenu());
@@ -84,6 +87,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 保养菜单
   public generateMenus_maintenance(): Array<SideMenuItem> {
     this.menu_icon = false;
+    this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateOrderManagementMenu());
     menusItem.push(this.generateProductMenu());
@@ -97,6 +101,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 票务菜单
   public generateMenus_ticket(): Array<SideMenuItem> {
     this.menu_icon = false;
+    this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateTicketProductMenu());
     menusItem.push(this.generateTicketOrderMenu());
@@ -193,7 +198,7 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 票务 》产品管理
   private generateTicketProductMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品管理', null);
+    const brokerageMenu = new SideMenuItem('产品管理', '/main/ticket/product-management');
     brokerageMenu.icon = '/assets/images/menu_part.png';
     const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
@@ -203,7 +208,7 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 票务 》订单管理
   private generateTicketOrderMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('订单管理', null);
+    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/order-management');
     brokerageMenu.icon = '/assets/images/menu_order.png';
     const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/ticket/order-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
@@ -244,8 +249,6 @@ export class ExpandedMenuComponent implements OnInit {
     }
 
     if (index !== -1) {
-
-
       const routeItem = this.routeLinkList[index];
       if (childIndex !== -1) {
         this.routeLinkList.forEach(item => {
@@ -255,7 +258,7 @@ export class ExpandedMenuComponent implements OnInit {
         });
         routeItem.isSelect = true;
         const childRouteItem = this.routeLinkList[index].children[childIndex];
-        MenuHelper.Select(this.menuItems, childRouteItem);
+        MenuHelper.Select(index, this.menuItems, childRouteItem, childIndex);
       } else {
         routeItem.isSelect = true;
       }
