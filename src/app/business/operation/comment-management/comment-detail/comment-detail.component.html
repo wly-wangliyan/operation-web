@@ -13,7 +13,7 @@
         <img *ngIf="!currentComment.avatar" src="/assets/images/image_space.png">
         <img *ngIf="currentComment.avatar" src="{{currentComment.avatar}}">
         <div>
-          <label>{{currentComment.nickname}}</label>
+          <label>{{currentComment.nickname ? currentComment.nickname: '--'}}</label>
         </div>
         <div>
           <span>ID: {{currentComment.user_id ? currentComment.user_id : '--'}}</span>
