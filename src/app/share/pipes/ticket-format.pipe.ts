@@ -109,12 +109,15 @@ export class OrderStatusPipe implements PipeTransform {
   }
 }
 
-/** 订单状态 */
+/** 订单使用状态 */
 const OrderUseStatus = {
+  0: '未使用',
   1: '已使用',
-  2: '已取消',
-  3: '未使用',
-  4: '已过期'
+  2: '已过期',
+  3: '已取消',
+  5: '已撤改',
+  6: '已撤销',
+  7: '部分使用'
 };
 
 @Pipe({
@@ -123,15 +126,20 @@ const OrderUseStatus = {
 export class OrderUseStatusPipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
+    let result = '--';
     if (value === null || value === undefined || value === '') {
-      return '--';
+      return result;
     }
     if (value && (typeof value === 'string')) {
       // 当直接传递字符串时的处理
-      return OrderUseStatus[value];
+      result = OrderUseStatus[value];
     } else {
-      return OrderUseStatus[value];
+      result = OrderUseStatus[value];
     }
+    if (!result) {
+      result = '--';
+    }
+    return result;
   }
 }
 
