@@ -88,7 +88,8 @@ export class NullDataFilterPipe implements PipeTransform {
 const OrderStatus = {
   1: '待支付',
   2: '已支付',
-  3: '已取消'
+  3: '已取消',
+  4: '已完成'
 };
 
 @Pipe({
