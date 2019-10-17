@@ -30,7 +30,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="close-btn" type="button" nz-button (click)="cancleUpload()">取消</button>
+        <button class="close-btn" type="button" nz-button data-dismiss="modal" aria-hidden="true"
+          (click)="cancleUpload()">取消</button>
         <button class="sure-btn" type="button" nz-button nzType="primary"
           [ngClass]="{'btn-disabled':this.importViewModel.hasErrorTip || !this.importViewModel.file}"
           (click)="confirmUpload()"
