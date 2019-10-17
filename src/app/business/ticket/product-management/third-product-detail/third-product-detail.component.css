@@ -70,10 +70,6 @@
   width: 90px;
 }
 
-.detail-input {
-  width: 644px;
-}
-
 .address {
   width: 100px;
   margin-right: 10px;
@@ -98,5 +94,5 @@
 }
 
 .temp-content {
-  max-width: 900px;
+  max-width: 1000px;
 }
