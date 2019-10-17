@@ -117,7 +117,9 @@
             <td>{{order.right_price ? ('￥ ' + (order.right_price | centPriceChange)) : '--'}}</td>
             <td>{{order.real_price ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-            <td>{{order.pay_time && order.status ===2 ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>
+              {{order.pay_time && (order.status ===2 || order.status ===4) ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+            </td>
             <td>{{order.status | orderStatus}}</td>
             <td>{{order.use_status | orderUseStatus}}</td>
             <td class="operation">

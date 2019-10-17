@@ -22,14 +22,16 @@
           <td>实收：</td>
           <td>{{orderDetail.real_price ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}</td>
           <td>支付方式：</td>
-          <td>{{orderDetail.pay_type && orderDetail.status === 2?payType[orderDetail.pay_type]:'--'}}</td>
+          <td>
+            {{orderDetail.pay_type && (orderDetail.status === 2 || orderDetail.status === 4)?payType[orderDetail.pay_type]:'--'}}
+          </td>
         </tr>
         <tr>
           <td>下单时间：</td>
           <td>{{orderDetail.created_time?(orderDetail.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
           <td>支付时间：</td>
           <td>
-            {{orderDetail.pay_time && orderDetail.status===2?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+            {{orderDetail.pay_time && (orderDetail.status === 2 || orderDetail.status === 4)?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
           </td>
           <td>第三方交易单号：</td>
           <td>{{orderDetail.third_order_id ? orderDetail.third_order_id : '--'}}</td>
