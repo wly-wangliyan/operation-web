@@ -100,3 +100,9 @@
 .subtitle {
   max-width: 1000px;
 }
+
+.artcontent {
+  white-space: pre-line;
+  line-height: 28px;
+  margin-top: 5px;
+}
