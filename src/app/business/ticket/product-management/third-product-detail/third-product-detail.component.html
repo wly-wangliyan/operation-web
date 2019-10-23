@@ -1,5 +1,5 @@
 <div class="content-header" *ngIf='type==="1"'>
-  <app-crumb [level1Name]="'产品管理'" [level2Name]="'门票列表'" [level3Name]="'门票详情'" [level1RelativePath]="'../../../../../'"
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'第三方产品列表'" [level3Name]="'详情'" [level1RelativePath]="'../../../../../'"
     [level2RelativePath]="'../../../../third-product'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg big-white-btn">
@@ -10,7 +10,7 @@
     </li>
   </ul>
 </div>
-<div class="content-header">
+<div class="content-header" *ngIf='type==="2"'>
   <div class="header-left">
     <i></i>
     <a (click)='onBackNoticeList()'>通知中心</a>
