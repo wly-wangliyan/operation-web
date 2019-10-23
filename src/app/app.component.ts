@@ -44,7 +44,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     const url = this.router.routerState.snapshot.url;
     this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/notice-center') ? null : 1;
     this.globalService.menu_index = this.menu;
-    // this.intervalService.startTimer(); // 1.6启动定时
+    this.intervalService.startTimer(); // 1.6启动定时
   }
 
   ngAfterViewInit() {
