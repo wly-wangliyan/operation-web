@@ -10,9 +10,12 @@
     </li>
   </ul>
 </div>
-<div class="content-header" *ngIf='type==="2"'>
-  <app-crumb [level1Name]="'通知中心'" [level2Name]="'通知详情'" [level1RelativePath]="'/main/notice-center/list'">
-  </app-crumb>
+<div class="content-header">
+  <div class="header-left">
+    <i></i>
+    <a (click)='onBackNoticeList()'>通知中心</a>
+    <span> >><span class='second-crumb'>通知详情</span></span>
+  </div>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
   <nz-spin nzSimple></nz-spin>

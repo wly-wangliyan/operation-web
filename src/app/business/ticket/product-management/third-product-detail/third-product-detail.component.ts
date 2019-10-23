@@ -66,6 +66,12 @@ export class ThirdProductDetailComponent implements OnInit {
     this.searchText$.next();
   }
 
+  // 面包屑>>通知中心跳转
+  public onBackNoticeList() {
+    this.router.navigateByUrl('/main/notice-center/list');
+    this.globalService.menu_index = null;
+  }
+
   // 展开
   public onShowInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = true;
