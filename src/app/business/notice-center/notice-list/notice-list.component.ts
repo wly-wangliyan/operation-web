@@ -50,6 +50,7 @@ export class NoticeListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.generateNoticeList();
+    this.requestUnreadCount();
     this.intervalService.timer_5minutes.subscribe(() => {
       this.searchText$.next();
     });
