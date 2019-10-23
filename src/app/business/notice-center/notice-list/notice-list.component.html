@@ -4,13 +4,18 @@
 
 <div class="content-flow">
   <div class="content-container">
+    <div class='notice-title'>
+      通知中心
+    </div>
     <div class="table-container">
       <div class="zmy-table">
         <nz-table [nzData]="noticeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
           (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #noticeTable>
           <tbody>
-            <tr *ngFor="let notice of noticeTable.data; let i=index">
-              <td><img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />
+            <tr *ngFor="let notice of noticeTable.data; let i=index"
+              (click)='onChangeReadStatus(notice.message_id,notice.status,notice.third_product.third_product_id)'>
+              <td>
+                <img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />
                 <a [ngStyle]="{color: notice.status===1?'#888':'#23242F'}">{{notice.message_info}}</a>
               </td>
               <td>{{notice.action_time}}</td>
@@ -21,3 +26,4 @@
     </div>
   </div>
 </div>
+<app-expanded-menu></app-expanded-menu>

@@ -1,9 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
-import { NoticeCenterService, NoticeEntity } from '../notice-center.service';
+import { Router } from '@angular/router';
+import { timer } from 'rxjs/index';
+import { NoticeCenterService, NoticeEntity, SearchParams } from '../notice-center.service';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IntervalService } from '../interval.service';
+import { ExpandedMenuComponent } from '../../../share/components/expanded-menu/expanded-menu.component';
 
 const PageSize = 15;
 
@@ -13,6 +16,8 @@ const PageSize = 15;
   styleUrls: ['./notice-list.component.css']
 })
 export class NoticeListComponent implements OnInit, OnDestroy {
+
+  public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
   public noticeList: Array<NoticeEntity> = []; // 通知列表
 
@@ -35,10 +40,13 @@ export class NoticeListComponent implements OnInit, OnDestroy {
     return this.noticeList.length / PageSize + 1;
   }
 
+  @ViewChild(ExpandedMenuComponent, { static: true }) public menuComponent: ExpandedMenuComponent;
+
   constructor(
     private globalService: GlobalService,
     private noticeCenterService: NoticeCenterService,
-    private intervalService: IntervalService) { }
+    private intervalService: IntervalService,
+    private router: Router) { }
 
   public ngOnInit() {
     this.generateNoticeList();
@@ -52,6 +60,38 @@ export class NoticeListComponent implements OnInit, OnDestroy {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
+  // 修改通知状态
+  public onChangeReadStatus(message_id: string, status: number, third_product_id: string) {
+    if (status === 2) {// 变更为已读状态
+      this.noticeCenterService.requestChangeReadStatusData(message_id, 1).subscribe(res => {
+        this.initPageIndex();
+        this.requestNoticeList();
+        this.requestUnreadCount();
+        timer(0).subscribe(() => {
+          this.router.navigateByUrl(`/main/ticket/product-management/third-detail/${third_product_id}/1/2`);
+          this.globalService.menu_index = 5;
+        });
+      }, err => {
+        this.initPageIndex();
+        this.globalService.httpErrorProcess(err);
+      });
+    } else {// 已读数据点击直接跳转到第三方产品详情页面
+      timer(0).subscribe(() => {
+        this.router.navigateByUrl(`/main/ticket/product-management/third-detail/${third_product_id}/1/2`);
+        this.globalService.menu_index = 5;
+      });
+    }
+  }
+
+  // 通知中心未读数量
+  private requestUnreadCount() {
+    this.globalService.requestUnreadCount().subscribe(res => {
+      this.globalService.notice_Count = res.body ? res.body.unread_num : 0;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
   // 初始化获取通知列表
   private generateNoticeList() {
     // 定义查询延迟时间
@@ -63,7 +103,7 @@ export class NoticeListComponent implements OnInit, OnDestroy {
 
   // 请求通知列表
   private requestNoticeList() {
-    this.noticeCenterService.requestNoticeListData().subscribe(res => {
+    this.noticeCenterService.requestNoticeListData(this.searchParams).subscribe(res => {
       this.noticeList = res.results;
       this.linkUrl = res.linkUrl;
       this.initPageIndex();

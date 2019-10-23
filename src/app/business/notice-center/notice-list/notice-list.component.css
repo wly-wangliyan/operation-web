@@ -7,24 +7,33 @@
   padding: 0;
 }
 
-.table-container{
+.table-container {
   margin: 0;
 }
 
 .zmy-table ::ng-deep .ant-table {
   border: none;
   background-color: #fff;
+  padding: 18px !important;
 }
 
 .zmy-table ::ng-deep .ant-table-body {
   /* padding: 0 15px; */
 }
 
-.ant-table-tbody>tr {
-  background:#fff;
+.notice-title {
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+  padding: 40px 40px 10px;
 }
 
-.zmy-table ::ng-deep .ant-table-tbody > tr > td,
+.ant-table-tbody>tr {
+  background: #fff;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr>td,
 .zmy-table ::ng-deep .ant-table-placeholder {
   border-bottom: 1px solid #888;
 }
