@@ -24,12 +24,16 @@ export class ThirdProductDetailComponent implements OnInit {
   public noResultInfoText = '数据加载中...';
   public tempContent1: string;
   public product_id: string;
+  public add_status: string;
+  public type: string;
 
   private searchText$ = new Subject<any>();
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.product_id = params.product_id;
+      this.add_status = params.add_status;
+      this.type = params.type;
     });
 
     // 第三方产品详情

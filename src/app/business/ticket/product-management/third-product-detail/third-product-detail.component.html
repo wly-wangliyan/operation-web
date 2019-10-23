@@ -1,14 +1,18 @@
-<div class="content-header">
-  <app-crumb [level1Name]="'产品管理'" [level2Name]="'门票列表'" [level3Name]="'门票详情'" [level1RelativePath]="'../../../'"
-    [level2RelativePath]="'../../third-product'"></app-crumb>
+<div class="content-header" *ngIf='type==="1"'>
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'门票列表'" [level3Name]="'门票详情'" [level1RelativePath]="'../../../../../'"
+    [level2RelativePath]="'../../../../third-product'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg big-white-btn">
-      <a [routerLink]="['../../third-product']">返回</a>
+      <a [routerLink]="['../../../../third-product']">返回</a>
     </li>
-    <li class="big-bg">
+    <li class="big-bg" *ngIf='add_status==="2"'>
       <a (click)='onChooseTicket()'>选用</a>
     </li>
   </ul>
+</div>
+<div class="content-header" *ngIf='type==="2"'>
+  <app-crumb [level1Name]="'通知中心'" [level2Name]="'通知详情'" [level1RelativePath]="'/main/notice-center/list'">
+  </app-crumb>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
   <nz-spin nzSimple></nz-spin>

@@ -26,6 +26,7 @@ export class GlobalService {
   public http500Tip: Http500TipComponent = undefined;
   public http403Tip: Http403TipComponent = undefined;
   public menu_index = undefined;
+  public notice_Count = 0;
   private permissionErrorMessage = '授权失败，请重新登录';
 
   /**
@@ -58,7 +59,7 @@ export class GlobalService {
 
   // 获取通知中心未读数量
   public requestUnreadCount(): Observable<HttpResponse<any>> {
-    const httpUrl = `${environment.OPERATION_SERVE}/messages`;
+    const httpUrl = `${environment.TICKET_SERVER}/messages/unread_num`;
     return this.httpService.get(httpUrl);
   }
 }

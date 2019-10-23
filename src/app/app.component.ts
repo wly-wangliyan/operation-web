@@ -31,11 +31,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private routePathSubscription: Subscription;
 
-  public notice_Count = 0; // 通知中心未读数量
-
   constructor(
     public authService: AuthService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private routeMonitorService: RouteMonitorService,
     private renderer2: Renderer2,
     private router: Router,
@@ -61,11 +59,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.global500Tip.http500Flag = false;
     });
 
-    // 1.6定时刷新通知中心未读数量
-    // this.requestUnreadCount();
-    // this.intervalService.timer_5minutes.subscribe(() => {
-    //   this.requestUnreadCount();
-    // });
+    // 定时刷新通知中心未读数量;
+    this.requestUnreadCount();
+    this.intervalService.timer_5minutes.subscribe(() => {
+      this.requestUnreadCount();
+    });
   }
 
   ngOnDestroy() {
@@ -91,6 +89,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   public onMainMenuClick(index: any) {
     this.menu = index;
+    this.globalService.menu_index = this.menu;
     this.getMenuList(index);
   }
 
@@ -134,12 +133,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   // 打开通知中心
   public onNoticeCenterClick() {
     this.menu = null;
+    this.globalService.menu_index = this.menu;
+    this.getMenuList(this.menu);
     this.router.navigateByUrl('/main/notice-center/list');
   }
 
+  // 通知中心未读数量
   private requestUnreadCount() {
     this.globalService.requestUnreadCount().subscribe(res => {
-      this.notice_Count = res.body ? res.body : 0;
+      this.globalService.notice_Count = res.body ? res.body.unread_num : 0;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

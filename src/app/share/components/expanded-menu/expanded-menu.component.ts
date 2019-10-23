@@ -27,6 +27,21 @@ export class ExpandedMenuComponent implements OnInit {
     public routeMonitorService: RouteMonitorService,
     private globalService: GlobalService,
     public authService: AuthService) {
+    this.getMenuItems();
+  }
+
+  ngOnInit() {
+    this.routeMonitorService.routePathChanged.subscribe(path => {
+      this.getMenuItems();
+      this.refreshMenu(path);
+    });
+    timer(0).subscribe(() => {
+      this.refreshMenu(location.pathname);
+    });
+  }
+
+  // 获取菜单
+  private getMenuItems() {
     if (this.globalService.menu_index === 1) {
       this.menuItems = this.generateMenus();
     } else if (this.globalService.menu_index === 3) {
@@ -36,15 +51,6 @@ export class ExpandedMenuComponent implements OnInit {
     } else if (this.globalService.menu_index === 5) {
       this.menuItems = this.generateMenus_ticket();
     }
-  }
-
-  ngOnInit() {
-    this.routeMonitorService.routePathChanged.subscribe(path => {
-      this.refreshMenu(path);
-    });
-    timer(0).subscribe(() => {
-      this.refreshMenu(location.pathname);
-    });
   }
 
   public onMenuItemClick(menuItem: SideMenuItem, parentTitle: string = '') {

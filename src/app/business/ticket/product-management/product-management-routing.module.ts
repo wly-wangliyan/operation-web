@@ -20,7 +20,7 @@ const routes: Routes = [{
     { path: 'create', component: ProductCreateComponent },
     { path: 'edit/:product_id', component: ProductEditComponent },
     { path: 'detail/:product_id', component: ProductDetailComponent },
-    { path: 'third-detail/:product_id', component: ThirdProductDetailComponent },
+    { path: 'third-detail/:product_id/:add_status/:type', component: ThirdProductDetailComponent },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]

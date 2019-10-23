@@ -44,7 +44,7 @@
               {{product.buy_price ? ('￥ ' + (product.buy_price|centPriceChange)) : '--'}}
             </td>
             <td class="operation">
-              <a [title]="'详情'" [routerLink]="['../third-detail',product.third_product_id]">详情</a>
+              <a [title]="'详情'" [routerLink]="['../third-detail',product.third_product_id,product.add_status,1]">详情</a>
               <a [title]="'选用'" *ngIf="product.add_status===2" (click)="onChooseClick(product)">选用</a>
             </td>
           </tr>
