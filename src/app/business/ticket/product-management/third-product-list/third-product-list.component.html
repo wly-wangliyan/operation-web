@@ -29,7 +29,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let product of thirdProductTable.data; let i=index">
-            <td>{{product.third_product_id}}</td>
+            <td>{{product.tp_id}}</td>
             <td>
               <img *ngIf='!product.third_product_image' src="/assets/images/pro_default.png">
               <img *ngIf='product.third_product_image' style="width: 90px;" [src]="product.third_product_image">

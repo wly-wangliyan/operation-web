@@ -9,6 +9,7 @@ import { FileUpdate } from '../../../../utils/file-update';
 
 // 第三方产品实体
 export class ThirdProductEntity extends EntityBase {
+  public tp_id: string = undefined; // 产品id
   public third_product_id: string = undefined; // 第三方产品id
   public third_product_name: string = undefined; // 第三方产品名称
   public add_time: number = undefined; // 第三方产品添加时间
