@@ -132,6 +132,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   // 打开通知中心
   public onNoticeCenterClick() {
+    this.globalService.menu_last_index = this.menu;
     this.menu = null;
     this.globalService.menu_index = this.menu;
     this.getMenuList(this.menu);

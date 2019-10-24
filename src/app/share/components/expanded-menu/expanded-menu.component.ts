@@ -32,6 +32,19 @@ export class ExpandedMenuComponent implements OnInit {
 
   ngOnInit() {
     this.routeMonitorService.routePathChanged.subscribe(path => {
+      if (path.includes('/notice-center')) {
+        this.globalService.menu_index = null;
+      } else if (path.includes('operation/')) {
+        this.globalService.menu_index = 1;
+      } else if (path.includes('insurance')) {
+        this.globalService.menu_index = 3;
+      } else if (path.includes('maintenance')) {
+        this.globalService.menu_index = 4;
+      } else if (path.includes('/ticket')) {
+        this.globalService.menu_index = 5;
+      } else if (path.includes('/home')) {
+        this.globalService.menu_index = this.globalService.menu_last_index;
+      }
       this.getMenuItems();
       this.refreshMenu(path);
     });

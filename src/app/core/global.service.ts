@@ -26,6 +26,7 @@ export class GlobalService {
   public http500Tip: Http500TipComponent = undefined;
   public http403Tip: Http403TipComponent = undefined;
   public menu_index = undefined;
+  public menu_last_index = undefined;
   public notice_Count = 0;
   private permissionErrorMessage = '授权失败，请重新登录';
 
