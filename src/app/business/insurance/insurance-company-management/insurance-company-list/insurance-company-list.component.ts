@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { ActivatedRoute } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { InsuranceEntity, InsuranceService } from '../../insurance.service';
 import { InsuranceCompanyEditComponent } from '../insurance-company-edit/insurance-company-edit.component';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
-
-const PageSize = 15;
 
 @Component({
     selector: 'app-insurance-company-list',
@@ -80,7 +77,7 @@ export class InsuranceCompanyListComponent implements OnInit {
         }
     }
 
-    // 列表排序
+    // 列表排序(停用的保险公司不发送请求，位置没有发生变化的不发送请求)
     public drop(event: CdkDragDrop<string[]>, data): void {
         if (data[event.previousIndex].discontinue_use) {
             return;
