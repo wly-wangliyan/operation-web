@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
 import { AuthService } from '../../../core/auth.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { Router } from '@angular/router';
@@ -26,12 +27,10 @@ export class ExpandedMenuComponent implements OnInit {
     public router: Router,
     public routeMonitorService: RouteMonitorService,
     private globalService: GlobalService,
-    public authService: AuthService) {
-    this.getMenuItems();
-  }
-
-  ngOnInit() {
-    this.routeMonitorService.routePathChanged.subscribe(path => {
+    public authService: AuthService,
+    public platformLocation: PlatformLocation) {
+    platformLocation.onPopState(() => {
+      const path = location.pathname;
       if (path.includes('/notice-center')) {
         this.globalService.menu_index = null;
       } else if (path.includes('operation/')) {
@@ -45,6 +44,12 @@ export class ExpandedMenuComponent implements OnInit {
       } else if (path.includes('/home')) {
         this.globalService.menu_index = this.globalService.menu_last_index;
       }
+    });
+    this.getMenuItems();
+  }
+
+  ngOnInit() {
+    this.routeMonitorService.routePathChanged.subscribe(path => {
       this.getMenuItems();
       this.refreshMenu(path);
     });
