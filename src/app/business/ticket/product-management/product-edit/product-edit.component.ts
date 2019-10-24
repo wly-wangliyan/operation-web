@@ -165,9 +165,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       CKEDITOR.instances.editor1.destroy(true);
       CKEDITOR.instances.editor2.destroy(true);
       CKEDITOR.instances.editor3.destroy(true);
-      const tempContent1 = this.productData.traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-      const tempContent2 = this.productData.notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-      const tempContent3 = this.productData.product_introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+      const tempContent1 = this.productData.third_product.traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+      const tempContent2 = this.productData.third_product.notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+      const tempContent3 = this.productData.third_product.introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
       const editor1 = CKEDITOR.replace('editor1'); // 交通指南
       editor1.setData(tempContent1);
       const editor2 = CKEDITOR.replace('editor2'); // 预订须知
