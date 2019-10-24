@@ -333,7 +333,7 @@ export class OperationConfigurationEditComponent implements OnInit {
       work_original_amount: Number(data.work_original_amount).toFixed(2),
       work_sale_amount: Number(data.work_sale_amount).toFixed(2)
     };
-    if (params.work_sale_amount > params.work_original_amount) {
+    if (Number(params.work_sale_amount) > Number(params.work_original_amount)) {
       this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, '/assets/images/warning.png');
       return;
     }
