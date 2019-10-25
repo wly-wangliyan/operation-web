@@ -64,13 +64,13 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   @ViewChild('chooseAccessoryPromptDiv', { static: true }) public chooseAccessoryPromptDiv: ElementRef;
   @ViewChild('addAccessoryPromptDiv', { static: true }) public addAccessoryPromptDiv: ElementRef;
-  @ViewChild(ChooseAccessoryComponent, {static: true}) public chooseAccessoryComponent: ChooseAccessoryComponent;
-  @ViewChild(CreateAccessoryComponent, {static: true}) public createAccessoryComponent: CreateAccessoryComponent;
+  @ViewChild(ChooseAccessoryComponent, { static: true }) public chooseAccessoryComponent: ChooseAccessoryComponent;
+  @ViewChild(CreateAccessoryComponent, { static: true }) public createAccessoryComponent: CreateAccessoryComponent;
 
   constructor(private globalService: GlobalService,
-              private activatedRoute: ActivatedRoute,
-              private businessManagementService: BusinessManagementService,
-              private router: Router) {
+    private activatedRoute: ActivatedRoute,
+    private businessManagementService: BusinessManagementService,
+    private router: Router) {
     activatedRoute.queryParams.subscribe(queryParams => {
       this.upkeep_merchant_id = queryParams.upkeep_merchant_id;
       this.upkeep_merchant_product_id = queryParams.upkeep_merchant_product_id;
@@ -80,26 +80,26 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   ngOnInit() {
     this.businessManagementService.requestUpkeepProjectList(this.upkeep_merchant_id, this.upkeep_merchant_product_id)
-        .subscribe(res => {
-            this.projectList = res;
-            res.forEach(value => {
-              this.projectItemList.push(new ProjectItem(value));
-            });
-            this.projectList_maintain = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 1);
-            this.projectList_clear = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 2);
-            this.projectList_fix = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 3);
-            this.isLoading = false;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
+      .subscribe(res => {
+        this.projectList = res;
+        res.forEach(value => {
+          this.projectItemList.push(new ProjectItem(value));
         });
+        this.projectList_maintain = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 1);
+        this.projectList_clear = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 2);
+        this.projectList_fix = this.projectItemList.filter(v => v.source.upkeep_handbook_item.item_category === 3);
+        this.isLoading = false;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     // 如果是复制功能的编辑页，请求被复制产品的项目列表
     if (this.upkeep_merchant_product_id_copy) {
       this.businessManagementService.requestUpkeepProjectList(this.upkeep_merchant_id, this.upkeep_merchant_product_id_copy)
-          .subscribe(res => {
-            this.projectList_copy = res;
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+        .subscribe(res => {
+          this.projectList_copy = res;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 
@@ -113,22 +113,22 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.currentProjectId = data.upkeep_merchant_project_id;
     this.chooseAccessoryComponent.accessory_ids = [];
     this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
-    (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
-        .subscribe(res => {
-          this.accessoryList = res;
-          res.forEach(value => {
-            if (this.accessoryItemList.length === 0) {
-              this.accessoryItemList.push(new AccessoryItem(value));
-            }
-            this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
-          });
-          $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
-          this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-          this.chooseAccessoryComponent.initAccessoryType(data);
-          this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
+      (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
+      .subscribe(res => {
+        this.accessoryList = res;
+        res.forEach(value => {
+          if (this.accessoryItemList.length === 0) {
+            this.accessoryItemList.push(new AccessoryItem(value));
+          }
+          this.chooseAccessoryComponent.accessory_ids.push(value.upkeep_accessory.upkeep_accessory_id);
         });
+        $(this.chooseAccessoryPromptDiv.nativeElement).modal('show');
+        this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+        this.chooseAccessoryComponent.initAccessoryType(data);
+        this.chooseAccessoryComponent.upkeep_item_type = data.upkeep_handbook_item.upkeep_item_type;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 关闭配件选择页
@@ -139,28 +139,28 @@ export class OperationConfigurationEditComponent implements OnInit {
   // 编辑商家项目状态
   public onSwitchChange(data, event) {
     const swith = event ? true : false;
-    const params = {switch: swith};
+    const params = { switch: swith };
     this.businessManagementService.requestUpkeepProductStatus
-    (this.upkeep_merchant_id, data.upkeep_merchant_product.upkeep_merchant_product_id, data.upkeep_merchant_project_id, params)
-        .subscribe(res => {
-      if (event) {
-        this.globalService.promptBox.open('开启成功', '/assets/images/success.png');
-      } else {
-        this.globalService.promptBox.open('关闭成功', '/assets/images/success.png');
-      }
-      this.searchText$.next();
-    }, err => {
-      if (!this.globalService.httpErrorProcess(err)) {
-        if (err.status === 422) {
-          if (event) {
-            this.globalService.promptBox.open('开启失败，请重试', null, 2000, '/assets/images/warning.png');
-          } else {
-            this.globalService.promptBox.open('关闭失败，请重试', null, 2000, '/assets/images/warning.png');
+      (this.upkeep_merchant_id, data.upkeep_merchant_product.upkeep_merchant_product_id, data.upkeep_merchant_project_id, params)
+      .subscribe(res => {
+        if (event) {
+          this.globalService.promptBox.open('开启成功', '/assets/images/success.png');
+        } else {
+          this.globalService.promptBox.open('关闭成功', '/assets/images/success.png');
+        }
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            if (event) {
+              this.globalService.promptBox.open('开启失败，请重试', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('关闭失败，请重试', null, 2000, '/assets/images/warning.png');
+            }
           }
         }
-      }
-      this.searchText$.next();
-    });
+        this.searchText$.next();
+      });
   }
 
   // 获取配件列表并展示
@@ -171,7 +171,7 @@ export class OperationConfigurationEditComponent implements OnInit {
     this.currentProjectId = upkeep_merchant_project_id;
     // 配件列表有内容时不再重新请求
     if (this.accessoryItemList.length === 0 ||
-        upkeep_merchant_project_id !== this.accessoryItemList[0].source.upkeep_merchant_project.upkeep_merchant_project_id) {
+      upkeep_merchant_project_id !== this.accessoryItemList[0].source.upkeep_merchant_project.upkeep_merchant_project_id) {
       this.requestProjectAccessoriesList();
     }
   }
@@ -180,46 +180,46 @@ export class OperationConfigurationEditComponent implements OnInit {
   private requestProjectAccessoriesList() {
     this.accessoryItemList = [];
     this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
-    (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
-        .subscribe(res => {
-          this.accessoryList = res;
-          res.forEach(value => {
-            this.accessoryItemList.push(new AccessoryItem(value));
-          });
-        }, err => {
-          this.globalService.httpErrorProcess(err);
+      (this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId)
+      .subscribe(res => {
+        this.accessoryList = res;
+        res.forEach(value => {
+          this.accessoryItemList.push(new AccessoryItem(value));
         });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 复制功能获取被复制产品下的项目配件列表
   private requestCopyAccessoriesList() {
     this.accessoryItemList = [];
     this.continueRequestSubscription = this.businessManagementService.requestProjectAccessoriesList
-    (this.upkeep_merchant_id, this.upkeep_merchant_product_id_copy, this.currentProjectId_copy)
-        .subscribe(res => {
-          this.accessoryList = res;
-          res.forEach(value => {
-            const accessory = new AccessoryItem(value);
-            // accessory.is_edit_price = true;
-            this.accessoryItemList.push(accessory);
-            // 循环关联配件和新产品下的项目
-            if (this.is_first_copy) {
-              const param = {
-                upkeep_accessory_id: value.upkeep_accessory.upkeep_accessory_id,
-                number: value.number,
-                sale_amount: value.sale_amount,
-                original_amount: value.original_amount
-              };
-              this.projectItemList.forEach(value1 => {
-                if (value1.upkeep_merchant_project_id_copy === value.upkeep_merchant_project.upkeep_merchant_project_id) {
-                  this.onChooseClick(param, value1.source.upkeep_merchant_project_id, true);
-                }
-              });
-            }
-          });
-        }, err => {
-          this.globalService.httpErrorProcess(err);
+      (this.upkeep_merchant_id, this.upkeep_merchant_product_id_copy, this.currentProjectId_copy)
+      .subscribe(res => {
+        this.accessoryList = res;
+        res.forEach(value => {
+          const accessory = new AccessoryItem(value);
+          // accessory.is_edit_price = true;
+          this.accessoryItemList.push(accessory);
+          // 循环关联配件和新产品下的项目
+          if (this.is_first_copy) {
+            const param = {
+              upkeep_accessory_id: value.upkeep_accessory.upkeep_accessory_id,
+              number: value.number,
+              sale_amount: value.sale_amount,
+              original_amount: value.original_amount
+            };
+            this.projectItemList.forEach(value1 => {
+              if (value1.upkeep_merchant_project_id_copy === value.upkeep_merchant_project.upkeep_merchant_project_id) {
+                this.onChooseClick(param, value1.source.upkeep_merchant_project_id, true);
+              }
+            });
+          }
         });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 编辑配件、服务
@@ -242,35 +242,35 @@ export class OperationConfigurationEditComponent implements OnInit {
       return;
     }
     this.businessManagementService.requestUpdateUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, data.upkeep_merchant_project.upkeep_merchant_project_id, data.upkeep_merchant_accessory_id, params)
-        .subscribe(() => {
-          this.globalService.promptBox.open('保存成功！', () => {
-            const index = this.accessoryItemList.findIndex(v => v.source.upkeep_merchant_accessory_id === data.upkeep_merchant_accessory_id);
-            this.accessoryItemList[index].is_edit_price = false;
-          }, 2000, '/assets/images/success.png');
-        }, err => {
-          this.errorProcess(err);
-        });
+      .subscribe(() => {
+        this.globalService.promptBox.open('保存成功！', () => {
+          const index = this.accessoryItemList.findIndex(v => v.source.upkeep_merchant_accessory_id === data.upkeep_merchant_accessory_id);
+          this.accessoryItemList[index].is_edit_price = false;
+        }, 2000, '/assets/images/success.png');
+      }, err => {
+        this.errorProcess(err);
+      });
   }
 
   // 删除配件、服务
   public onDelClick(data: UpkeepMerchantAccessoryEntity) {
     this.businessManagementService.requestDeleteUpkeepAccessory(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, data.upkeep_merchant_accessory_id)
-        .subscribe(() => {
-          this.globalService.promptBox.open('删除成功！', () => {
-            this.accessoryItemList = this.accessoryItemList.filter(value => value.source.upkeep_merchant_accessory_id !== data.upkeep_merchant_accessory_id)
-            const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === data.upkeep_merchant_project.upkeep_merchant_project_id);
-            if (this.accessoryList.length === 0) {
-              this.projectItemList[index].is_show_accessory = false;
-            }
-            this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count - 1;
-          }, 2000, '/assets/images/success.png');
-        }, err => {
-          this.errorProcess(err);
-        });
+      .subscribe(() => {
+        this.globalService.promptBox.open('删除成功！', () => {
+          this.accessoryItemList = this.accessoryItemList.filter(value => value.source.upkeep_merchant_accessory_id !== data.upkeep_merchant_accessory_id)
+          const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === data.upkeep_merchant_project.upkeep_merchant_project_id);
+          if (this.accessoryList.length === 0) {
+            this.projectItemList[index].is_show_accessory = false;
+          }
+          this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count - 1;
+        }, 2000, '/assets/images/success.png');
+      }, err => {
+        this.errorProcess(err);
+      });
   }
 
   // 选择配件
-  public onChooseClick(event, project_id ?: string, is_copy ?: boolean) {
+  public onChooseClick(event, project_id?: string, is_copy?: boolean) {
     const params = {
       upkeep_accessory_id: event.upkeep_accessory_id,
       number: event.number ? event.number : 0,
@@ -279,21 +279,21 @@ export class OperationConfigurationEditComponent implements OnInit {
     };
     const projectId = project_id ? project_id : this.currentProjectId;
     this.businessManagementService.requestAddUpkeepAccessories(this.upkeep_merchant_id, this.upkeep_merchant_product_id, projectId, params)
-        .subscribe(() => {
-          if (is_copy) {
-            this.globalService.promptBox.open('导入成功！', () => {}, 2000, '/assets/images/success.png');
-          } else {
-            this.globalService.promptBox.open('保存成功！', () => {
-              this.onClose();
-              this.requestProjectAccessoriesList();
-              const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
-              this.projectItemList[index].is_show_accessory = true;
-              this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
-            }, 2000, '/assets/images/success.png');
-          }
-    }, err => {
-      this.errorProcess(err);
-    });
+      .subscribe(() => {
+        if (is_copy) {
+          this.globalService.promptBox.open('导入成功！', () => { }, 2000, '/assets/images/success.png');
+        } else {
+          this.globalService.promptBox.open('保存成功！', () => {
+            this.onClose();
+            this.requestProjectAccessoriesList();
+            const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
+            this.projectItemList[index].is_show_accessory = true;
+            this.projectItemList[index].source.accessory_count = this.projectItemList[index].source.accessory_count + 1;
+          }, 2000, '/assets/images/success.png');
+        }
+      }, err => {
+        this.errorProcess(err);
+      });
   }
 
   // 接口错误状态
@@ -302,11 +302,11 @@ export class OperationConfigurationEditComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-           if (content.code === 'already_existed' && content.resource === 'object') {
-             this.globalService.promptBox.open('配件已绑定项目！', null, 2000, '/assets/images/warning.png');
-           } else {
-             this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
-           }
+          if (content.code === 'already_existed' && content.resource === 'object') {
+            this.globalService.promptBox.open('配件已绑定项目！', null, 2000, '/assets/images/warning.png');
+          } else {
+            this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
+          }
         }
       }
     }
@@ -320,7 +320,7 @@ export class OperationConfigurationEditComponent implements OnInit {
 
   public onAmountChange(event: any) {
     if (!isNaN(Number(event.target.value))) {
-    event.target.value = Number(event.target.value).toFixed(2);
+      event.target.value = Number(event.target.value).toFixed(2);
     } else {
       event.target.value = '';
     }
@@ -338,14 +338,14 @@ export class OperationConfigurationEditComponent implements OnInit {
       return;
     }
     this.businessManagementService.requestUpdateUpkeepProject(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, params)
-        .subscribe(() => {
-          this.globalService.promptBox.open('保存成功！', () => {
-            const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
-            this.projectItemList[index].is_edit_price = false;
-          }, 2000, '/assets/images/success.png');
-        }, err => {
-          this.errorProcess(err);
-        });
+      .subscribe(() => {
+        this.globalService.promptBox.open('保存成功！', () => {
+          const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
+          this.projectItemList[index].is_edit_price = false;
+        }, 2000, '/assets/images/success.png');
+      }, err => {
+        this.errorProcess(err);
+      });
   }
 
   public saveSuccess() {
@@ -398,8 +398,8 @@ export class OperationConfigurationEditComponent implements OnInit {
         }
       });
     });
-    timer(500).subscribe(() => {
-      this.is_first_copy = false;
-    });
+    // timer(500).subscribe(() => {
+    //   this.is_first_copy = false;
+    // });
   }
 }
