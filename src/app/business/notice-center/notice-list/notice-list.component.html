@@ -15,7 +15,10 @@
             <tr *ngFor="let notice of noticeTable.data; let i=index"
               (click)='onChangeReadStatus(notice.message_id,notice.status,notice.third_product.third_product_id)'>
               <td>
-                <img style="margin-right: 15px;" src="../../../../assets/images/notice_ticket.png" />
+                <img *ngIf='notice.status===2' style="margin-right: 15px;"
+                  src="../../../../assets/images/notice_ticket.png" />
+                <img *ngIf='notice.status===1' style="margin-right: 15px;"
+                  src="../../../../assets/images/notice_ticket_read.png" />
                 <a [ngStyle]="{color: notice.status===1?'#888':'#23242F'}">{{notice.message_info}}</a>
               </td>
               <td>{{notice.action_time}}</td>
