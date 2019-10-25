@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
@@ -46,7 +47,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
-    private productService: ProductService) { }
+    private productService: ProductService,
+    private router: Router) { }
 
   public ngOnInit() {
     this.generateProductList();
@@ -92,6 +94,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   public onSearchBtnClick() {
     if (this.generateAndCheckParamsValid()) {
       this.searchText$.next();
+    }
+  }
+
+  // 编辑
+  public onEditProduct(status: number, product_id: string) {
+    if (status === 1) {
+      this.globalService.promptBox.open('请下架后再进行编辑！');
+    } else {
+      this.router.navigateByUrl(`/main/ticket/product-management/edit/${product_id}`);
     }
   }
 
