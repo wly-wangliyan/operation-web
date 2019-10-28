@@ -106,3 +106,236 @@
   line-height: 28px;
   margin-top: 5px;
 }
+
+.des_card {
+  height: auto;
+  padding: 20px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  display: inline-block;
+  font-size: 18px;
+  font-family: AlibabaPuHuiTiM;
+  color: rgba(255, 255, 255, 1);
+  background: #3E71F7;
+  height: 40px;
+  line-height: 40px;
+  margin-left: -20px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  text-align: center;
+}
+
+.wh_100 {
+  width: 100px;
+}
+
+.wh_140 {
+  width: 140px;
+}
+
+.mt_50 {
+  margin-top: 50px;
+}
+
+.main-title {
+  width: 453px;
+}
+
+.subheading {
+  width: 453px;
+}
+
+.import-btn {
+  margin-left: 14px;
+  font-size: 16px;
+  font-family: PingFangSC-Semibold, PingFangSC;
+  font-weight: 600;
+  color: rgba(62, 113, 247, 1) !important;
+}
+
+:host ::ng-deep .ticket-table .ant-table-bordered .ant-table-tbody>tr>td {
+  vertical-align: top;
+}
+
+.insutructions {
+  width: 360px;
+  padding-top: 20px !important;
+}
+
+.m_20 {
+  margin: 20px;
+}
+
+.ticket-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+}
+
+.ticket-btn {
+  float: right;
+  margin: 5px;
+}
+
+:host ::ng-deep .ticket-btn .ant-btn {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  border-radius: 0px !important;
+  padding: 0 10px;
+  height: 27px;
+  line-height: 27px;
+}
+
+.ticket-info {
+  width: 415px;
+}
+
+.info {
+  font-size: 12px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: rgba(35, 36, 47, 1);
+  padding-left: 10px;
+  display: inline-block;
+}
+
+.info-item {
+  height: 46px;
+  margin-bottom: 3px;
+}
+
+.info-title {
+  color: rgba(35, 36, 47, 1) !important;
+}
+
+.info-text {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.info-text>textarea {
+  width: 230px;
+  background: rgba(247, 248, 250, 1);
+  border: 1px solid rgba(136, 136, 136, 1);
+}
+
+.info-ul {
+  margin: 10px 20px;
+}
+
+
+
+.text>span {
+  float: right;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFangSC;
+  font-weight: 400;
+  color: rgba(74, 127, 254, 1);
+  cursor: pointer;
+}
+
+.detail-input {
+  width: 900px;
+}
+
+.address {
+  width: 100px;
+  margin-right: 10px;
+}
+
+.address-input {
+  width: 315px;
+}
+
+
+.opera>div>a {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+}
+
+.opera>div>a:hover {
+  color: rgba(74, 127, 254, 1);
+}
+
+.top-img {
+  width: 37px;
+  display: inline-block;
+  margin-right: 20px;
+  margin-left: -30px;
+}
+
+.pro-img {
+  width: 90px;
+}
+
+input[disabled] {
+  background: #F0F0F0 !important;
+}
+
+input[type=file],
+input[type=file]:focus {
+  outline: none !important;
+}
+
+.des-item {
+  margin-bottom: 5px;
+  line-height: 22px;
+}
+
+.des-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  min-width: 68px;
+  height: 100%;
+  display: inline-block;
+  text-align: justify;
+  vertical-align: top;
+}
+
+.des-title::after {
+  display: inline-block;
+  width: 100%;
+  content: '';
+}
+
+.des-content {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+  padding-left: 10px;
+  display: inline-block;
+  vertical-align: top;
+  max-width: 350px;
+}
+
+.price-data {
+  margin: -30px 0 0 20px;
+}
+
+.price-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  min-width: 68px;
+  display: inline-block;
+}
+
+.price-content {
+  font-size: 12px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: rgba(232, 32, 56, 1);
+  padding-left: 10px;
+  display: inline-block;
+}
