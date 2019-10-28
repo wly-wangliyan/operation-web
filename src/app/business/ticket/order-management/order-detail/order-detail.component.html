@@ -13,28 +13,55 @@
           <td>{{orderDetail.product?orderDetail.product.product_name:'--'}}</td>
           <td>订单状态：</td>
           <td>{{orderDetail.status | orderStatus}}</td>
-          <td>订单号：</td>
-          <td>{{orderDetail.order_id}}</td>
+          <!-- 使用状态 -->
+          <td>使用状态：</td>
+          <td>{{orderDetail.use_status | orderUseStatus}}</td>
         </tr>
         <tr>
           <td>应收：</td>
           <td>{{orderDetail.right_price ? ('￥ ' + (orderDetail.right_price | centPriceChange)) : '--'}}</td>
-          <td>实收：</td>
-          <td>{{orderDetail.real_price ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}</td>
-          <td>支付方式：</td>
-          <td>
-            {{orderDetail.pay_type && (orderDetail.status === 2 || orderDetail.status === 4)?payType[orderDetail.pay_type]:'--'}}
+          <!-- 平台立减 -->
+          <td>平台立减：</td>
+          <td>{{orderDetail.discount_price ? ('￥ ' + (orderDetail.discount_price | centPriceChange)) : '--'}}</td>
+          <!-- 优惠券 -->
+          <td>优惠券：</td>
+          <td>{{orderDetail.coupon_used_amount ? ('￥ ' + (orderDetail.coupon_used_amount | centPriceChange)) : '--'}}
           </td>
         </tr>
         <tr>
+          <td>实收：</td>
+          <td>{{orderDetail.real_price ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}</td>
+          <!-- 结算总价 -->
+          <td>结算总价：</td>
+          <td>{{orderDetail.buy_price ? ('￥ ' + (orderDetail.buy_price | centPriceChange)) : '--'}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>用户支付方式：</td>
+          <td>
+            {{orderDetail.pay_type && (orderDetail.status === 2 || orderDetail.status === 4)?payType[orderDetail.pay_type]:'--'}}
+          </td>
+          <!-- 订单号 -->
+          <td>订单号：</td>
+          <td>{{orderDetail.order_id}}</td>
+          <!-- 供应商订单号 -->
+          <td>供应商订单号：</td>
+          <td>{{orderDetail.third_order_id ? orderDetail.third_order_id : '--'}}</td>
+        </tr>
+        <tr>
+          <!-- OTA支付方式 -->
+          <td>OTA支付方式:</td>
+          <td>{{orderDetail.ota_pay_type | payType}}</td>
           <td>下单时间：</td>
           <td>{{orderDetail.created_time?(orderDetail.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
           <td>支付时间：</td>
           <td>
             {{orderDetail.pay_time && (orderDetail.status === 2 || orderDetail.status === 4)?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
           </td>
-          <td>第三方交易单号：</td>
-          <td>{{orderDetail.third_order_id ? orderDetail.third_order_id : '--'}}</td>
+          <!-- <td>第三方交易单号：</td>
+          <td>{{orderDetail.third_order_id ? orderDetail.third_order_id : '--'}}</td> -->
+          <!--  -->
         </tr>
       </table>
     </div>
@@ -47,7 +74,13 @@
             <th>产品名称</th>
             <th>预定份数</th>
             <th>有效期</th>
-            <th>使用状态</th>
+            <!-- <th>使用状态</th> -->
+            <!-- 新增字段 -->
+            <th>门市价/张</th>
+            <th>建议售价/张</th>
+            <th>结算价/张</th>
+            <th>平台售价/张</th>
+
             <th>供应商</th>
           </tr>
         </thead>
@@ -61,7 +94,13 @@
               {{orderDetail.order_end_time?(orderDetail.order_end_time* 1000 | date:"y-MM-dd HH:mm"):''}}
               <span *ngIf="!orderDetail.order_begin_time && !orderDetail.order_end_time">--</span>
             </td>
-            <td>{{orderDetail.use_status | orderUseStatus}}</td>
+            <!-- <td>{{orderDetail.use_status | orderUseStatus}}</td> -->
+            <!-- 新增字段 -->
+            <td>{{orderDetail.market_price ? ((orderDetail.market_price | centPriceChange)+'元') : '--'}}</td>
+            <td>{{orderDetail.retail_price ? ((orderDetail.retail_price | centPriceChange)+'元') : '--'}}</td>
+            <td>{{orderDetail.buy_price ? ((orderDetail.buy_price | centPriceChange)+'元') : '--'}}</td>
+            <td>{{orderDetail.platform_price ? ((orderDetail.platform_price | centPriceChange)+'元') : '--'}}</td>
+
             <td>甜程网</td>
           </tr>
         </tbody>

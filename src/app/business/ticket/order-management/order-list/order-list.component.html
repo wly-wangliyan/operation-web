@@ -81,7 +81,14 @@
             <th>产品名称</th>
             <th>数量</th>
             <th>应收</th>
+            <!-- 新增字段 -->
+            <th>平台立减</th>
+            <th>优惠券</th>
+
             <th>实收</th>
+            <!-- 新增字段 -->
+            <th>结算</th>
+
             <th>下单时间</th>
             <th>支付时间</th>
             <th>订单状态</th>
@@ -115,7 +122,14 @@
             </ng-container>
             <td>{{order.buy_num || 0}} 张</td>
             <td>{{order.right_price ? ('￥ ' + (order.right_price | centPriceChange)) : '--'}}</td>
+            <!--新增字段平台立减，优惠券  -->
+            <td>{{order.discount_price ? ('￥ ' + (order.discount_price | centPriceChange)) : '--'}}</td>
+            <td>{{order.coupon_used_amount ? ('￥ ' + (order.coupon_used_amount | centPriceChange)) : '--'}}</td>
+
             <td>{{order.real_price ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
+            <!-- 新增字段结算 -->
+            <td>{{order.buy_price ? ('￥ ' + (order.buy_price | centPriceChange)) : '--'}}</td>
+
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>
               {{order.pay_time && (order.status ===2 || order.status ===4) ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
