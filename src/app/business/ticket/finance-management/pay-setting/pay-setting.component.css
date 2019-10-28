@@ -1,0 +1,72 @@
+.pay-title {
+  font-size: 18px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+  padding-top: 20px;
+}
+
+.pay-content {
+  padding: 20px;
+  background: #fff;
+  height: 100%;
+}
+
+.pay-card {
+  position: absolute;
+  left: 50%;
+  margin-left: -220px;
+  width: 440px;
+  height: 180px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  top: 89px;
+}
+
+.radio-group {
+  margin: 43px 0 0 103px;
+}
+
+label {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-size: 14px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+  margin-right: 50px;
+  margin-left: 20px;
+}
+
+.credit-pay {
+  font-size: 14px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(124, 210, 57, 1);
+}
+
+.balance-pay {
+  font-size: 14px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(232, 32, 56, 1);
+}
+
+.btn {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  margin-left: -36px;
+}
+
+.btn button {
+  width: 72px;
+}
+
+.btn .save-btn {
+  margin-left: -48px;
+}

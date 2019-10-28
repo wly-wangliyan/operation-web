@@ -1,0 +1,26 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'财务管理'" [level2Name]="'支付设置'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class="pay-content">
+    <div class='pay-title'>
+      支付设置
+    </div>
+    <div class='pay-card'>
+      <nz-radio-group class="radio-group" [(ngModel)]="radioValue" [nzDisabled]="!isEditPaySetting">
+        <label nz-radio [nzValue]="item.pay_setting_id" *ngFor="let item of paySettingList">
+          <span class="name">{{item.pay_type|payType}}</span>
+          <span [ngClass]="item.pay_type===1?'credit-pay':'balance-pay'">{{item.balance|centPriceChange}}元</span>
+        </label>
+      </nz-radio-group>
+      <div class="btn">
+        <button *ngIf="!isEditPaySetting" nz-button nzType="primary" (click)="onEditPaySetting()">编辑</button>
+        <div class='save-btn' *ngIf="isEditPaySetting">
+          <button nz-button nzType="primary" style="margin-right:10px"
+            (click)="onSavePaySetting(radioValue)">保存</button>
+          <button nz-button nzType="default" (click)="onCancelPaySetting()">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
