@@ -57,22 +57,23 @@ export class VehicleSeriesEntity extends EntityBase {
 
 export class VehicleTypeEntity extends EntityBase {
   public vehicle_type_id: string = undefined; 	//	string	id
-  vehicle_type_name: string = undefined; 	//	string	车型名称
-  third_party_id: string = undefined; 	//	string	第三方id
-  third_party_source: string = undefined; 	//	string	第三方来源
-  vehicle_brand: VehicleBrandEntity = undefined; 	//	obj	品牌
-  vehicle_firm: VehicleFirmEntity = undefined; 	//	obj	厂商
-  vehicle_series: VehicleSeriesEntity = undefined; 	//	obj	车系
-  vehicle_year_model: string = undefined; 	//	string	年款
-  vehicle_price: string = undefined; 	//	string	指导价
-  vehicle_level: string = undefined; 	//	string	车辆级别
-  vehicle_energy_type: string = undefined; 	//	string	能源类型
-  vehicle_sold_time: string = undefined; 	//	string	上市时间
-  vehicle_engine: string = undefined; 	//	string	发动机
-  vehicle_gearbox: string = undefined; 	//	string	变速箱
-  vehicle_size: string = undefined; 	//	string	车辆尺寸
-  vehicle_structure: string = undefined; 	//	string	车辆结构
-  has_upkeep_handbook = undefined; 	//	bool	是否有保养手册
+  public vehicle_type_name: string = undefined; 	//	string	车型名称
+  public third_party_id: string = undefined; 	//	string	第三方id
+  public third_party_source: string = undefined; 	//	string	第三方来源
+  public vehicle_brand: VehicleBrandEntity = undefined; 	//	obj	品牌
+  public vehicle_firm: VehicleFirmEntity = undefined; 	//	obj	厂商
+  public vehicle_series: VehicleSeriesEntity = undefined; 	//	obj	车系
+  public vehicle_year_model: string = undefined; 	//	string	年款
+  public vehicle_price: string = undefined; 	//	string	指导价
+  public vehicle_level: string = undefined; 	//	string	车辆级别
+  public vehicle_energy_type: string = undefined; 	//	string	能源类型
+  public vehicle_sold_time: string = undefined; 	//	string	上市时间
+  public vehicle_engine: string = undefined; 	//	string	发动机
+  public vehicle_gearbox: string = undefined; 	//	string	变速箱
+  public vehicle_size: string = undefined; 	//	string	车辆尺寸
+  public vehicle_structure: string = undefined; 	//	string	车辆结构
+  public has_upkeep_handbook = undefined; 	//	bool	是否有保养手册
+  public status = undefined; // 是否启用 1为启用 2为不启用
   public created_time: number = undefined; 	// float 	创建时间
   public updated_time: number = undefined; 	// float 	修改时间
 
@@ -173,6 +174,17 @@ export class VehicleTypeManagementService {
         const tempResults = data.body;
         return tempResults;
       }));
+  }
+
+  /**
+   * 启用车型
+   * @param vehicle_type_id 车型id
+   * @param params 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestVehicleTypeStatus(vehicle_type_id: string, params: any): Observable<HttpResponse<any>> {
+    return this.httpService.patch(environment.OPERATION_SERVE +
+        `/vehicle/vehicle_types/${vehicle_type_id}/use`, params);
   }
 
   /**

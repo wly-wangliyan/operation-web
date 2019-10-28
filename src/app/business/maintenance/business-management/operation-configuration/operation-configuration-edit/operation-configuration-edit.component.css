@@ -241,3 +241,7 @@ ul {
     margin-left: 15px;
     cursor: pointer;
 }
+
+.active {
+    color: #888888;
+}

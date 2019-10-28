@@ -6,6 +6,7 @@ import {
   VehicleSeriesEntity, VehicleTypeEntity,
   VehicleTypeManagementService
 } from './vehicle-type-management.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,11 @@ export class VehicleTypeDataService {
     if (this.vehicleBrandList.length > 0) {
       return;
     }
-    this.vehicleTypeManagementService.requestVehicleBrandList(param).subscribe(res => {
+    return this.vehicleTypeManagementService.requestVehicleBrandList(param).pipe(map(res => {
       this.vehicleBrandList = res.results;
     }, err => {
       this.globalService.httpErrorProcess(err);
-    });
+    }));
   }
 
   // 获取厂商列表
@@ -43,12 +44,12 @@ export class VehicleTypeDataService {
       this.vehicleFirmList = this.tmpMapOfFirm[vehicle_brand_id];
       return;
     }
-    this.vehicleTypeManagementService.requestVehicleFirmList(vehicle_brand_id).subscribe(res => {
+    return this.vehicleTypeManagementService.requestVehicleFirmList(vehicle_brand_id).pipe(map(res => {
       this.vehicleFirmList = res;
       this.tmpMapOfFirm[vehicle_brand_id] = res;
     }, err => {
       this.globalService.httpErrorProcess(err);
-    });
+    }));
   }
 
   // 根据厂商获取汽车车系
@@ -57,12 +58,12 @@ export class VehicleTypeDataService {
       this.vehicleSeriesList = this.tmpMapOfSeries[vehicle_firm_id];
       return;
     }
-    this.vehicleTypeManagementService.requestVehicleSeriesList(vehicle_firm_id).subscribe(res => {
+    return this.vehicleTypeManagementService.requestVehicleSeriesList(vehicle_firm_id).pipe(map(res => {
       this.vehicleSeriesList = res;
       this.tmpMapOfSeries[vehicle_firm_id] = res;
     }, err => {
       this.globalService.httpErrorProcess(err);
-    });
+    }));
   }
 
   // 根据车系获取汽车车型
@@ -71,12 +72,19 @@ export class VehicleTypeDataService {
       this.vehicleTypeList = this.tmpMapOfType[vehicle_series_id];
       return;
     }
-    this.vehicleTypeManagementService.requestVehicleTypeList(vehicle_series_id).subscribe(res => {
+    return this.vehicleTypeManagementService.requestVehicleTypeList(vehicle_series_id).pipe(map(res => {
       this.vehicleTypeList = res;
       this.tmpMapOfType[vehicle_series_id] = res;
     }, err => {
       this.globalService.httpErrorProcess(err);
-    });
+    }));
+  }
+
+  // 清空所有缓存数据
+  public clear() {
+    this.tmpMapOfFirm = {};
+    this.tmpMapOfSeries = {};
+    this.tmpMapOfType = {};
   }
 }
 

@@ -9,7 +9,8 @@
         <nz-empty style="margin-top: 10%" *ngIf="(!projectList || projectList.length===0) && !isLoading"></nz-empty>
         <div class="vehicle-title">
             <img *ngIf="projectList && projectList.length>0" src="/assets/images/manual/icon_vehicle.png">
-            <span *ngIf="projectList.length>0 && upkeep_merchant_product_id_copy && projectList_copy[0]?.vehicle_type?.vehicle_type_name" class="project-import" (click)="onImportProjectClick()">一键导入：
+            <span *ngIf="projectList.length>0 && upkeep_merchant_product_id_copy && projectList_copy[0]?.vehicle_type?.vehicle_type_name" class="project-import"
+                  [class.active]="!allow_copy" (click)="onImportProjectClick()">一键导入：
                 {{projectList_copy[0]?.vehicle_type?.vehicle_firm?.vehicle_firm_name+' '+projectList_copy[0]?.vehicle_type?.vehicle_series?.vehicle_series_name
                 +' '+projectList_copy[0]?.vehicle_type?.vehicle_year_model+'款 '+projectList_copy[0]?.vehicle_type?.vehicle_type_name}}</span>
         </div>

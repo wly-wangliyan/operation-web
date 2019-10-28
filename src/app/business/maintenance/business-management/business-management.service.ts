@@ -429,6 +429,20 @@ export class BusinessManagementService {
     }
 
     /**
+     * 请求创建商家配件(用于复制)
+     * @param string upkeep_merchant_id 参数
+     * @param string vehicle_typeId 参数
+     * @returns Observable<HttpResponse<any>>
+     */
+    public requestCopyUpkeepAccessories(params: any): Observable<HttpResponse<any>> {
+        const upkeep_merchant_id = params.upkeep_merchant_id;
+        const upkeep_product_id = params.upkeep_product_id;
+        const upkeep_project_id = params.upkeep_merchant_project_id_copy;
+        return this.httpService.post(environment.OPERATION_SERVE +
+            `/upkeep_merchants/${upkeep_merchant_id}/upkeep_products/${upkeep_product_id}/upkeep_projects/${upkeep_project_id}/upkeep_accessories`, params);
+    }
+
+    /**
      * 请求编辑商家配件
      * @param string upkeep_merchant_id 参数
      * @param string vehicle_typeId 参数

@@ -21,6 +21,7 @@
         </label>
         <div class="control-input">
           <input class="form-control" (focus)="onClearErrMsg()" [(ngModel)]="commentParams.object_id"
+                 oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
             placeholder="请输入产品ID" maxlength="32" name="object_id" appIgnoreSpace required>
         </div>
       </div>

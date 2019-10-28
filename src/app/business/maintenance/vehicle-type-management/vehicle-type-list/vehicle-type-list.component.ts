@@ -11,6 +11,7 @@ import {
   VehicleTypeManagementService
 } from '../vehicle-type-management.service';
 import { VehicleTypeDataService } from '../vehicle-type-data.service';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({
   selector: 'app-vehicle-type-list',
@@ -26,9 +27,10 @@ export class VehicleTypeListComponent implements OnInit {
   public vehicle_brand_id: string;
   public index = 0;
   public isLoading = true;
+  public importViewModel: FileImportViewModel = new FileImportViewModel();
 
   private importSpotSubscription: Subscription;
-  public importViewModel: FileImportViewModel = new FileImportViewModel();
+  private nzEnevt: any;
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
@@ -39,23 +41,34 @@ export class VehicleTypeListComponent implements OnInit {
 
   ngOnInit() {
     // 获取车辆品牌列表
-    this.vehicleDataService.requestVehicleBrandList();
-    timer(500).subscribe(() => {
+    if (!this.vehicleDataService.requestVehicleBrandList()) {
       this.isLoading = false;
       this.vehicleBrandList = this.vehicleDataService.vehicleBrandList;
       if (this.vehicleBrandList.length > 0) {
         this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
         this.requestVehicleFirmsList(this.vehicleBrandList[0].vehicle_brand_id);
       }
-    });
+    } else {
+      this.vehicleDataService.requestVehicleBrandList().subscribe(() => {
+        this.isLoading = false;
+        this.vehicleBrandList = this.vehicleDataService.vehicleBrandList;
+        if (this.vehicleBrandList.length > 0) {
+          this.vehicle_brand_id = this.vehicleBrandList[0].vehicle_brand_id;
+          this.requestVehicleFirmsList(this.vehicleBrandList[0].vehicle_brand_id);
+        }
+      });
+    }
   }
 
   // 获取厂商列表
   private requestVehicleFirmsList(vehicle_brand_id: string) {
-    this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id);
-    timer(500).subscribe(() => {
+    if (!this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id)) {
       this.vehicleFirmList = this.vehicleDataService.vehicleFirmList;
-    });
+    } else {
+      this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id).subscribe(() => {
+        this.vehicleFirmList = this.vehicleDataService.vehicleFirmList;
+      });
+    }
   }
 
   nzEvent(event: Required<NzFormatEmitEvent>): void {
@@ -71,6 +84,7 @@ export class VehicleTypeListComponent implements OnInit {
             this.globalService.httpErrorProcess(err);
           });
         } else if (node.level === 1) {
+          this.nzEnevt = event;
           // 根据车系获取汽车车型
           this.vehicleTypeManagementService.requestVehicleTypeList(node.origin.vehicle_series_id).subscribe(res => {
             this.vehicleTypeList = res;
@@ -78,6 +92,7 @@ export class VehicleTypeListComponent implements OnInit {
             temp = res;
             temp.forEach(value => {
               value.isLeaf = true;
+              value.status = value.status === 1 ? true : false;
             });
             node.addChildren(res);
           }, err => {
@@ -113,6 +128,7 @@ export class VehicleTypeListComponent implements OnInit {
           $('#dataImportModal').modal('hide');
           const date = JSON.parse(res.response);
           this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+            this.vehicleDataService.clear();
             this.importViewModel.initImportData();
             $('#importBerthPromptDiv').modal('hide');
           }, -1);
@@ -167,5 +183,34 @@ export class VehicleTypeListComponent implements OnInit {
   public onBrandClick(data: VehicleBrandEntity) {
     this.vehicle_brand_id = data.vehicle_brand_id;
     this.requestVehicleFirmsList(this.vehicle_brand_id);
+  }
+
+  // 上架、下架车辆
+  public onSwitchChange(vehicle_type_id: string, event: any) {
+    const swicth = event ? 1 : 2;
+    const params = { status: swicth };
+    const index = this.vehicleTypeList.findIndex(v => v.vehicle_type_id === vehicle_type_id);
+    this.vehicleTypeManagementService.requestVehicleTypeStatus(vehicle_type_id, params).subscribe(res => {
+      if (event) {
+        this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
+      } else {
+        this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
+      }
+      this.vehicleTypeList[index].status = event;
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'exists' && content.resource === 'product') {
+              this.globalService.promptBox.open('此车型未上架产品，无法开启！', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('参数错误或无效！', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      }
+      this.vehicleTypeList[index].status = event ? false : true;
+    });
   }
 }
