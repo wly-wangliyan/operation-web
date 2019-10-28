@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommentService, AddCommentParams } from '../comment-management.service';
 import { GlobalService } from '../../../../core/global.service';
-import { HttpErrorEntity } from '../../../../core/http.service';
 import { isUndefined } from 'util';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,8 +23,7 @@ export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   ic_name: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -58,6 +56,8 @@ export class CommentCreateComponent implements OnInit {
   public commentErrMsg = ''; // 错误信息
 
   public created_time: any = ''; // 评价时间（不大于当前时间）
+
+  private is_save = false; // 防止连续出发保存事件
 
   @ViewChild('avatarImg', { static: false }) public avatarImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('commentImg', { static: false }) public commentImgSelectComponent: ZPhotoSelectComponent;
@@ -158,6 +158,9 @@ export class CommentCreateComponent implements OnInit {
 
   // 保存
   public onEditFormSubmit() {
+    if (this.is_save) {
+      return;
+    }
     this.onClearErrMsg();
     this.avatarImgSelectComponent.upload().subscribe(() => {
       const avatar_urls = this.avatarImgSelectComponent.imageList.map(i => i.sourceUrl);
@@ -169,11 +172,14 @@ export class CommentCreateComponent implements OnInit {
           this.requestAddComment();
         }
       }, err => {
+        this.is_save = false;
         this.upLoadErrMsg(err);
       });
     }, err => {
+      this.is_save = false;
       this.upLoadErrMsg(err);
     });
+    this.is_save = true;
   }
 
   private requestAddComment() {

@@ -1,7 +1,7 @@
 <div class="content-header">
     <app-crumb [level1Name]="'商家管理'" [level2Name]="'商家运营配置'"  [level1RelativePath]="'../../'" [level2RelativePath]="'../'"></app-crumb>
     <ul class="header-right" *ngIf="tabIndex===1">
-        <li class="big-bg">
+        <li class="big-bg" [class.active]="loading">
             <a (click)="onAddClick()">新建</a>
         </li>
     </ul>
@@ -88,7 +88,7 @@
                         <td class="operation">
                             <a [title]="'查看'" (click)="onDetailBtnClick(data)">查看</a>
                             <a *ngIf="data.status!==1" [title]="'编辑'" (click)="onEditBtnClick(data, true)">编辑</a>
-                            <a [title]="'复制'" (click)="onCopyBtnClick(data)">复制</a>
+                            <a [title]="'复制'" (click)="onCopyBtnClick(data)" [class.copy-btn]="loading">复制</a>
                             <a [title]="'删除'" (click)="onDelBtnClick(data)">删除</a>
                         </td>
                     </tr>

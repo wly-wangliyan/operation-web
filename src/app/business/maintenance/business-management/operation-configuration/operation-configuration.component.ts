@@ -41,6 +41,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
   private linkUrl: string;
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id_copy: string;
+  private loading = true; // 用于标记数据是否全部查询完成
 
   @ViewChild(BusinessEditComponent, { static: true }) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, { static: true }) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
@@ -111,6 +112,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
         res.results.forEach(value => {
           this.disableVehicleType.push(value.vehicle_type.vehicle_type_id);
         });
+        this.loading = false;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
@@ -214,11 +216,17 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
 
   // 创建产品
   public onAddClick() {
+    if (this.loading) {
+      return;
+    }
     this.selectBrandFirmTypeComponent.open();
   }
 
   // 复制
   public onCopyBtnClick(data: UpkeepMerchantProductEntity) {
+    if (this.loading) {
+      return;
+    }
     this.upkeep_merchant_product_id_copy = data.upkeep_merchant_product_id;
     this.brand_ids = [data.vehicle_brand.vehicle_brand_id];
     this.firm_ids = [data.vehicle_firm.vehicle_firm_id];

@@ -102,3 +102,11 @@
     width: 34px!important;
     margin: 0 !important;
 }
+
+.active {
+    background: #8a8a8a!important;
+}
+
+.copy-btn:hover {
+    color: rgba(0, 0, 0, 0.65)!important;
+}
