@@ -18,7 +18,7 @@
 </div>
 <div class="content-flow" [hidden]="loading">
   <div class='des_card'>
-    <div class='card-title'>产品信息</div>
+    <div class='card-title wh_100'>产品信息</div>
     <div>
       <nz-table #productInfoTable [nzData]="productInfoList" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
         nzBordered>
@@ -45,8 +45,10 @@
         </tbody>
       </nz-table>
     </div>
-    <!-- 产品运营信息 -->
-    <div class='card-title mt_50'>产品运营信息</div>
+  </div>
+  <!-- 产品运营信息 -->
+  <div class='des_card'>
+    <div class='card-title wh_140'>产品运营信息</div>
     <div>
       <form nz-form class="content-layout" #productInfoForm="ngForm">
         <div class="card_content">
@@ -70,61 +72,180 @@
         </div>
       </form>
     </div>
+  </div>
 
-    <!-- 产品门票信息 -->
-    <div class='card-title mt_50'>产品门票信息</div>
+
+  <!-- 产品门票信息 -->
+  <div class='des_card'>
     <div>
+      <span class='card-title wh_140'>产品门票信息</span><a class='import-btn' (click)='onUpdateData()'>更新数据</a>
+    </div>
+    <div class='ticket-table'>
       <nz-table #productTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
             <th>门票名称</th>
             <th>购票须知</th>
-            <th>市场价</th>
-            <th>建议零售价</th>
-            <th>结算价</th>
-            <th>售价</th>
+            <th>门票描述</th>
+            <th>实时价格与库存</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of productTicketTable.data; let i=index">
             <td>
-              <div class='top-img'>
-                <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
-              </div>
-              <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
-            </td>
-            <td class='insutructions'>
-              <div class='text' *ngIf='!data.isShowInsutructions'>
-                <p>{{data.notes|nullDataFilter|zMaxLength:18}}</p>
-                <span *ngIf='data.notes.length>18||(data.getaddr&&data.getaddr!=="0")'
-                  (click)='onShowInsutructions(i)'>展开</span>
-              </div>
-              <div class='text' *ngIf='data.isShowInsutructions'>
-                <p>{{data.notes}}<br>{{data.getaddr}}</p>
-                <span (click)='onHideInsutructions(i)'>收起</span>
+              <div style="margin-top: 20px;">
+                <div class='top-img'>
+                  <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
+                </div>
+                <span class='ticket-title' [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
               </div>
             </td>
-            <td><span *ngIf='data.market_price||data.market_price===0'>¥</span> {{data.market_price|centPriceChange}}
+            <td nzAlign="left" class='ticket-info'>
+              <div class='ticket-btn'>
+                <button *ngIf="!data.isEditTicketInsutruction" nz-button nzType="primary"
+                  (click)="onEditTicketInsutruction(data)">编辑</button>
+                <div *ngIf="data.isEditTicketInsutruction">
+                  <button nz-button nzType="primary" style="margin-right:10px"
+                    (click)="onSaveTicketInsutruction(data)">保存</button>
+                  <button nz-button nzType="default" (click)="onCancelTicketInsutruction(data,i)">取消</button>
+                </div>
+              </div>
+              <div style="clear: both;"></div>
+              <ul *ngIf="!data.isEditTicketInsutruction" class='info-ul'>
+                <li class='des-item'>
+                  <span class='des-title'>预定时间</span>
+                  <span class='info'>{{data.preset_time||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>费用包含</span>
+                  <span class='info'>{{data.fee_contain||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>使用须知</span>
+                  <span class='info'>{{data.use_notice||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>退改须知</span>
+                  <span class='info'>{{data.rc_notice||'--'}}</span>
+                </li>
+              </ul>
+              <ul *ngIf="data.isEditTicketInsutruction" class='info-ul'>
+                <li class='info-item'>
+                  <span class='des-title info-title'>预定时间</span>
+                  <div class='info-text'>
+                    <textarea class="buy_remark" [(ngModel)]="data.preset_time" placeholder="200字以内..." maxlength="200"
+                      name="order_time"></textarea>
+                  </div>
+                </li>
+                <li class='info-item'>
+                  <span class='des-title info-title'>费用包含</span>
+                  <div class='info-text'>
+                    <textarea class="price" [(ngModel)]="data.fee_contain" placeholder="200字以内..." maxlength="200"
+                      name="price"></textarea>
+                  </div>
+                </li>
+                <li class='info-item'>
+                  <span class='des-title info-title'>使用须知</span>
+                  <div class='info-text'>
+                    <textarea class="buy_remark" [(ngModel)]="data.use_notice" placeholder="200字以内..." maxlength="200"
+                      name="remark"></textarea>
+                  </div>
+                </li>
+                <li class='info-item'>
+                  <span class='des-title info-title'>退改须知</span>
+                  <div class='info-text'>
+                    <textarea class="buy_remark" [(ngModel)]="data.rc_notice" placeholder="200字以内..." maxlength="200"
+                      name="notice"></textarea>
+                  </div>
+                </li>
+              </ul>
             </td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}
+            <td nzAlign="left" class='des_td'>
+              <ul class='m_20'>
+                <li class='des-item'>
+                  <span class='des-title'>产品说明</span>
+                  <span class='des-content'>{{data.notes||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>有效期</span>
+                  <span class='des-content'>{{data.delay_type|delayType}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>可验证时间</span>
+                  <span class='des-content'>{{data.validate_time_limit|validateTimeLimit}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>退票规则</span>
+                  <span class='des-content'>{{data.refund_rule|refundRule}}</span>
+                </li>
+                <!-- <li class='des-item'>
+                  <span class='des-title'>退票手续费</span>
+                  <span class='des-content'>基础扣费0元</span>
+                </li> -->
+                <!-- <li class='des-item'>
+                  <span class='des-title'>改期规则</span>
+                  <span class='des-content'>不允许改期</span>
+                </li>-->
+                <li class='des-item'>
+                  <span class='des-title'>取票信息</span>
+                  <span class='des-content'>{{data.getaddr||'--'}}</span>
+                </li>
+              </ul>
             </td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
-            <td class="opera">
-              <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
-              <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>
+            <td nzAlign="left">
+              <ul class='m_20'>
+                <li class='price-item'>
+                  <span class='price-title'>库存</span>
+                  <span class='price-content'>{{data.price_calendar&&data.price_calendar.storage||'--'}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>市场价</span>
+                  <span class='price-content'><span *ngIf='data.market_price'>¥</span>
+                    {{data.market_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>建议售价</span>
+                  <span class='price-content'><span
+                      *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>结算价</span>
+                  <span class='price-content'><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>平台售价</span>
+                  <span class='price-content'><span
+                      *ngIf='data.price_calendar&&data.price_calendar.platform_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.platform_price|centPriceChange}}</span>
+                </li>
+              </ul>
+            </td>
+
+            <td>
+              <div class='opera m_20'>
+                <div>
+                  <a (click)='onOpenPriceCalendar(data.ticket_id)'>价格日历</a>
+                </div>
+                <div>
+                  <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
+                  <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
       </nz-table>
     </div>
-    <!-- 票务详情 -->
-    <div class='mt_50'><span class='card-title'>票务详情</span><a class='import-btn' (click)='onReImportData()'>重新导入</a>
+  </div>
+
+  <!-- 票务详情 -->
+  <div class='des_card'>
+    <div>
+      <span class='card-title wh_100'>票务详情</span><a class='import-btn' (click)='onReImportData()'>重新导入</a>
     </div>
     <div>
       <form nz-form class="content-layout" #ticketDetailForm="ngForm">
@@ -199,3 +320,4 @@
     </div>
   </div>
 </div>
+<app-product-calendar #productPriceCalendar></app-product-calendar>

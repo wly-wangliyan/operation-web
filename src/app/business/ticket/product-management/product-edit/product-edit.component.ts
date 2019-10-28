@@ -8,6 +8,7 @@ import { ProductService, TicketProductEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
+import { ProductCalendarComponent } from '../product-edit/product-calendar/product-calendar.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -62,13 +63,20 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public trafficGuideErrors = '';
   public noticeErrors = '';
   public productIntroduceErrors = '';
+  public isEditTicketInsutruction = false;
+
 
   private searchText$ = new Subject<any>();
   private product_name = '';
   private product_subtitle = '';
   private isReImportant = false;
+  private preset_time: string;
+  private fee_contain: string;
+  private use_notice: string;
+  private rc_notice: string;
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -97,7 +105,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.productData.product_name = this.productData.product_name.substring(0, 20);
       this.productTicketList = this.productData.tickets.map(i => ({
         ...i,
-        isShowInsutructions: false
+        isShowInsutructions: false,
+        isEditTicketInsutruction: false,
       }));
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
@@ -107,6 +116,19 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
+  }
+
+  // 更新数据
+  public onUpdateData() {
+    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+      this.productTicketList = res.results.map(i => ({
+        ...i,
+        isShowInsutructions: false,
+        isEditTicketInsutruction: false,
+      }));
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 富文本数据处理
@@ -141,7 +163,61 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         CKEDITOR.instances.editor3.getData().replace(/<p>/g, '').trim() === this.tempContent3.trim() &&
         !this.isReImportant && pro_image_str === this.imgUrls.join(',');
     }
+  }
 
+  // 编辑购票须知
+  public onEditTicketInsutruction(item: any) {
+    item.isEditTicketInsutruction = true;
+    this.preset_time = item.preset_time;
+    this.fee_contain = item.fee_contain;
+    this.use_notice = item.use_notice;
+    this.rc_notice = item.rc_notice;
+  }
+
+  // 保存购票须知
+  public onSaveTicketInsutruction(item: any) {
+    this.productService.requestSetInstructions(this.product_id, item).subscribe(() => {
+      this.globalService.promptBox.open('购票须知保存成功！');
+      item.editBasePriceSwitch = true;
+      this.searchText$.next();
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            // tslint:disable-next-line:max-line-length
+            const field = content.field === 'preset_time' ? '预定时间' : content.field === 'fee_contain' ? '费用包含' : content.field === 'use_notice' ? '使用须知' : content.field === 'rc_notice' ? '退改须知' : '';
+            if (content.code === 'missing_field') {
+              this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+              return;
+            } else if (content.code === 'invalid') {
+              this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('购票须知保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // 取消计费规则的车辆信息
+  public onCancelTicketInsutruction(item: any, i: number) {
+    item.isEditTicketInsutruction = false;
+    this.productTicketList[i].preset_time = this.preset_time;
+    this.productTicketList[i].fee_contain = this.fee_contain;
+    this.productTicketList[i].use_notice = this.use_notice;
+    this.productTicketList[i].rc_notice = this.rc_notice;
+  }
+
+
+  // 价格日历
+  public onOpenPriceCalendar(ticket_id) {
+    this.productPriceCalendar.open(null, this.product_id, ticket_id, () => {
+      timer(1000).subscribe(() => {
+        this.searchText$.next();
+      });
+    });
   }
 
   // 展开
@@ -187,7 +263,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.searchText$.next();
       this.globalService.promptBox.open(`${text}成功！`);
     }, err => {
-      this.globalService.promptBox.open(`${text}失败，请重试!`);
+      this.globalService.promptBox.open(`${text}失败，请重试!`, null, 2000, '/assets/images/warning.png');
     });
   }
 

@@ -1,0 +1,46 @@
+<!-- 价格日历模态框 -->
+<div class="z-modal z-fade" data-keyboard="true" data-backdrop="false" tabindex="-1" role="dialog"
+  style="display: none; " #promptDiv>
+  <div class="z-modal-dialog">
+    <div class="z-modal-content">
+      <div class="z-modal-header z-color">
+        <button class="z-close-icon" nz-button nzType="default" (click)='close()'>关闭日历</button>
+      </div>
+      <!-- <div *ngIf="loading" style='text-align: center;margin-top: 80px;padding-bottom: 120px;'>
+        <nz-spin nzSimple></nz-spin>
+      </div> -->
+      <div class='calendar form-body'>
+        <nz-calendar [(ngModel)]="selectedDate" [(nzMode)]="mode" name='calendar'
+          (nzSelectChange)="onSelectChange($event)">
+          <ul *nzDateCell="let date" class="events">
+            <ng-container [ngSwitch]="date.getDate()">
+              <ng-container *ngFor="let key of calendarMapKey">
+                <li *ngIf='(date.getMonth()+1)===selectedDateMonth'>
+                  <div *ngSwitchCase="key">
+                    <div>
+                      <span>库存</span>
+                      <span>{{calendarMap[key].remain}}}</span>
+                    </div>
+                    <div>
+                      <span>建议售价</span>
+                      <span>{{calendarMap[key].retail_price|centPriceChange}}</span>
+                    </div>
+                    <div>
+                      <span>结算价</span>
+                      <span>{{calendarMap[key].buy_price|centPriceChange}}</span>
+                    </div>
+                    <div>
+                      <span>平台售价</span>
+                      <input [(ngModel)]="calendarMap[key].platform_price" name='platform_price' class='price-input'
+                        (blur)='onBlurSavePlatformPrice(calendarMap[key])'>
+                    </div>
+                  </div>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </nz-calendar>
+      </div>
+    </div>
+  </div>
+</div>
