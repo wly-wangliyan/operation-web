@@ -129,6 +129,7 @@ export class ExpandedMenuComponent implements OnInit {
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateTicketProductMenu());
     menusItem.push(this.generateTicketOrderMenu());
+    menusItem.push(this.generateTicketFinanceMenu());
     return menusItem;
   }
 
@@ -239,6 +240,18 @@ export class ExpandedMenuComponent implements OnInit {
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
+
+  // 票务 》财务管理
+  private generateTicketFinanceMenu(): SideMenuItem {
+    const brokerageMenu = new SideMenuItem('财务管理', '/main/ticket/finance-management');
+    brokerageMenu.icon = '/assets/images/menu_pay.png';
+    const subFinanceMenu1 = new SideMenuItem('支付设置', '/main/ticket/finance-management', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu1);
+    this.routeLinkList.push(brokerageMenu);
+    return brokerageMenu;
+  }
+
+
 
   private refreshMenu(path: string) {
     // 尝试父匹配

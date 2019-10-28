@@ -53,7 +53,7 @@ export class VehicleTypeDataService {
   }
 
   // 根据厂商获取汽车车系
-  public requestVehicleSeriesList(vehicle_firm_id) {
+  public requestVehicleSeriesList(vehicle_firm_id: string) {
     if (this.tmpMapOfSeries[vehicle_firm_id] && this.tmpMapOfSeries[vehicle_firm_id].length > 0) {
       this.vehicleSeriesList = this.tmpMapOfSeries[vehicle_firm_id];
       return;
@@ -67,7 +67,7 @@ export class VehicleTypeDataService {
   }
 
   // 根据车系获取汽车车型
-  public requestVehicleTypeList(vehicle_series_id) {
+  public requestVehicleTypeList(vehicle_series_id: string) {
     if (this.tmpMapOfType[vehicle_series_id] && this.tmpMapOfType[vehicle_series_id].length > 0) {
       this.vehicleTypeList = this.tmpMapOfType[vehicle_series_id];
       return;
