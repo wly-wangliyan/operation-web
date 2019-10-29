@@ -186,17 +186,18 @@ export class VehicleTypeListComponent implements OnInit {
   }
 
   // 上架、下架车辆
-  public onSwitchChange(vehicle_type_id: string, event: any) {
+  public onSwitchChange(vehicle_type_id: string, event: any, node: VehicleTypeEntity) {
     const swicth = event ? 1 : 2;
     const params = { status: swicth };
-    const index = this.vehicleTypeList.findIndex(v => v.vehicle_type_id === vehicle_type_id);
     this.vehicleTypeManagementService.requestVehicleTypeStatus(vehicle_type_id, params).subscribe(res => {
       if (event) {
         this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
       } else {
         this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
       }
-      this.vehicleTypeList[index].status = event;
+      timer(500).subscribe(() => {
+        node.status = event;
+      });
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
@@ -210,7 +211,9 @@ export class VehicleTypeListComponent implements OnInit {
           }
         }
       }
-      this.vehicleTypeList[index].status = event ? false : true;
+      timer(500).subscribe(() => {
+        node.status = event ? false : true;
+      });
     });
   }
 }
