@@ -1,0 +1,295 @@
+/*提示模态框*/
+.z-modal {
+  background: rgba(55, 60, 64, 0.77);
+  z-index: 100;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding-left: 0px !important;
+}
+
+.z-fade {
+  opacity: 0;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.z-fade.show {
+  opacity: 1;
+  transition-property: opacity;
+}
+
+.z-modal-title {
+  font-size: 26px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(9, 158, 91, 1);
+  margin-left: 56px;
+}
+
+.z-modal-dialog {
+  width: 1100px;
+  height: 350px;
+  margin: 80px auto 0;
+  border-radius: 10px;
+  animation-delay: 20ms;
+}
+
+.z-modal-header {
+  position: relative;
+  right: -9px;
+  top: 8px;
+}
+
+
+.z-modal-content {
+  color: #0e0e0e !important;
+  background: #fff;
+  box-shadow: none;
+  border: none;
+  border-radius: 10px;
+}
+
+.form_content {
+  margin: 0 39px 0 46px;
+}
+
+.form-body {
+  margin-top: 5px;
+}
+
+:host ::ng-deep .ant-form-item-label {
+  line-height: 36px;
+  min-width: 94px;
+  text-align: left;
+
+}
+
+:host ::ng-deep .ant-btn {
+  padding: 0 !important;
+}
+
+:host ::ng-deep .ant-form-item-label>label {
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .ant-form-item-control {
+  line-height: 36px;
+}
+
+:host ::ng-deep .ant-input {
+  width: 304px;
+  height: 48px;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 10px;
+  background: #fff;
+}
+
+
+.z-close-btn {
+  width: 200px;
+  height: 79px;
+  line-height: 79px;
+  border: none;
+  cursor: pointer;
+  outline: 0px;
+  border-right: 1px solid #E6E6E6;
+  border-radius: 0;
+  color: #999999;
+  border-radius: 0 0 0 10px;
+}
+
+.z-sure-btn {
+  width: 100%;
+  height: 79px;
+  line-height: 79px;
+  border: none;
+  cursor: pointer;
+  outline: 0px;
+  color: #099E5B;
+  border-radius: 0 0 10px 10px;
+}
+
+.z-sure-btn:hover {
+  background: #fff;
+  color: #099E5B;
+}
+
+.z-close-icon {
+  margin-right: 20px;
+  display: block;
+  float: right;
+  cursor: pointer;
+  width: 72px;
+  height: 24px;
+  margin-left: 20px;
+  border-radius: 0px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+}
+
+@-webkit-keyframes fade-in {
+
+  /*针对webkit内核*/
+  0% {
+    opacity: 0;
+  }
+
+  7.5% {
+    opacity: 0.5;
+  }
+
+  10% {
+    opacity: 1;
+  }
+}
+
+.z-form-horizontal {
+  text-align: center;
+  line-height: 76px;
+  margin-bottom: 34px;
+  font-size: 22px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+}
+
+.z-close,
+.close {
+  outline: none;
+  color: #fff;
+  opacity: 1;
+  border: 0;
+  float: right;
+  line-height: inherit;
+  background: none;
+  font-size: 24px;
+  font-family: PingFangSC-Medium;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+
+/*可变样式*/
+.z-font {
+  font-size: 18px;
+  font-family: PingFangSC-Medium;
+}
+
+.z-color {
+  text-align: center;
+  background: rgba(255, 255, 255, 1);
+}
+
+.z-close-btn.color {
+  background: #fff;
+}
+
+.price_input {
+  width: 72px;
+  height: 22px;
+  border-radius: 0;
+  margin-right: 9px;
+}
+
+.calendar {
+  padding-bottom: 20px;
+}
+
+:host ::ng-deep .ant-fullcalendar-fullscreen .ant-fullcalendar-month,
+.ant-fullcalendar-fullscreen .ant-fullcalendar-date {
+  height: 70px !important;
+}
+
+.date-cell {
+  height: 70px;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 5px;
+  top: 2px;
+}
+
+.events .ant-badge-status {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+.notes-month {
+  text-align: center;
+  font-size: 28px;
+}
+
+.notes-month section {
+  font-size: 28px;
+}
+
+div>span:first-child {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  width: 55px;
+  display: inline-block;
+}
+
+div>span:last-child {
+  font-size: 12px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: rgba(35, 36, 47, 1);
+}
+
+.price-input {
+  width: 61px;
+  height: 24px;
+  background: rgba(247, 248, 250, 1);
+  border-radius: 1px;
+  display: inline-block;
+  float: right;
+  border-color: #bfbfbf;
+  padding-left: 2px;
+}
+
+.calendar-content {
+  float: right;
+}
+
+.plat {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+:host ::ng-deep .ant-select-selection__rendered {
+  line-height: 24px !important;
+}
+
+:host ::ng-deep .ant-select-selection--single {
+  height: 24px;
+}
+
+@media screen and (max-width: 1350px) {
+  .z-modal-dialog {
+    margin: 60px auto 0;
+  }
+
+  .calendar {
+    padding-bottom: 10px;
+  }
+}

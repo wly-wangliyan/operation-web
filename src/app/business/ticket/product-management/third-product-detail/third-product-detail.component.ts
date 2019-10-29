@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { ProductService, ThirdProductEntity } from '../product.service';
+import { CalendarDetailComponent } from '../product-detail/calendar-detail/calendar-detail.component';
 
 @Component({
   selector: 'app-third-product-detail',
@@ -28,6 +29,7 @@ export class ThirdProductDetailComponent implements OnInit {
   public type: string;
 
   private searchText$ = new Subject<any>();
+  @ViewChild('priceCalendarDetail', { static: true }) public priceCalendarDetail: CalendarDetailComponent;
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -54,7 +56,8 @@ export class ThirdProductDetailComponent implements OnInit {
       ];
       this.productTicketList = this.thirdProductData.tickets.map(i => ({
         ...i,
-        isShowInsutructions: false
+        isShowInsutructions: false,
+        isShowDescriptions: false
       }));
       this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       this.noResultInfoText = '暂无数据';
@@ -72,6 +75,24 @@ export class ThirdProductDetailComponent implements OnInit {
     this.globalService.menu_index = null;
   }
 
+  // 更新数据
+  public onUpdateData() {
+    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+      this.productTicketList = res.results.map(i => ({
+        ...i,
+        isShowInsutructions: false,
+        isEditTicketInsutruction: false,
+      }));
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 价格日历
+  public onOpenPriceCalendar(ticket_id) {
+    this.priceCalendarDetail.open(null, 2, this.product_id, ticket_id, null);
+  }
+
   // 展开
   public onShowInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = true;
@@ -80,6 +101,16 @@ export class ThirdProductDetailComponent implements OnInit {
   // 收起
   public onHideInsutructions(i: number) {
     this.productTicketList[i].isShowInsutructions = false;
+  }
+
+  // 展开
+  public onShowDescriptions(i: number) {
+    this.productTicketList[i].isShowDescriptions = true;
+  }
+
+  // 收起
+  public onHideDescriptions(i: number) {
+    this.productTicketList[i].isShowDescriptions = false;
   }
 
   // 选用

@@ -6,7 +6,7 @@
 </div>
 <div class="content-flow" *ngIf="!loading && isShowContent">
   <div class='des_card'>
-    <div class='card-title'>产品信息</div>
+    <div class='card-title wh_100'>产品信息</div>
     <div>
       <nz-table #productInfoTable [nzData]="productInfoList" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
         nzBordered>
@@ -33,8 +33,10 @@
         </tbody>
       </nz-table>
     </div>
-    <!-- 产品运营信息 -->
-    <div class='card-title mt_50'>产品运营信息</div>
+  </div>
+  <!-- 产品运营信息 -->
+  <div class='des_card'>
+    <div class='card-title wh_140'>产品运营信息</div>
     <div>
       <form nz-form class="content-layout" #registerForm="ngForm">
         <div class="card_content">
@@ -52,55 +54,147 @@
         </div>
       </form>
     </div>
+  </div>
 
-    <!-- 产品门票信息 -->
-    <div class='card-title mt_50'>产品门票信息</div>
+
+  <!-- 产品门票信息 -->
+  <div class='des_card'>
     <div>
-      <nz-table #thirdProductTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
+      <span class='card-title wh_140'>产品门票信息</span><a class='import-btn' (click)='onUpdateData()'>更新数据</a>
+    </div>
+    <div>
+      <nz-table class="ticket-table" #thirdProductTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
         [nzNoResult]="noResultTicketText" [nzFrontPagination]='false' nzBordered>
         <thead>
           <tr>
             <th>门票名称</th>
             <th>购票须知</th>
-            <th>市场价</th>
-            <th>建议零售价</th>
-            <th>结算价</th>
-            <th>售价</th>
+            <th>门票描述</th>
+            <th>实时价格与库存</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of thirdProductTicketTable.data; let i=index">
             <td>
-              <div class='top-img'>
-                <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
-              </div>
-              <span [title]='data.ticket_name'>{{data.ticket_name|zMaxLength:15}}</span>
-            </td>
-            <td class='insutructions'>
-              <div class='text' *ngIf='!data.isShowInsutructions'>
-                <p>{{data.notes|nullDataFilter|zMaxLength:18}}</p>
-                <span *ngIf='data.notes.length>18||(data.getaddr&&data.getaddr!=="0")'
-                  (click)='onShowInsutructions(i)'>展开</span>
-              </div>
-              <div class='text' *ngIf='data.isShowInsutructions'>
-                <p>{{data.notes}}<br>{{data.getaddr}}</p>
-                <span (click)='onHideInsutructions(i)'>收起</span>
+              <div style="margin-top: 20px;">
+                <div class='top-img'>
+                  <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
+                </div>
+                <span [title]='data.ticket_name'>{{data.ticket_name|zMaxLength:15}}</span>
               </div>
             </td>
-            <td><span *ngIf='data.market_price||data.market_price===0'>¥</span> {{data.market_price|centPriceChange}}
+            <td nzAlign="left" class='ticket-info'>
+              <ul class='m_20'>
+                <li class='des-item'>
+                  <span class='des-title'>预定时间</span>
+                  <span class='info'>{{data.preset_time||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>费用包含</span>
+                  <span class='info'>{{data.fee_contain||'--'}}</span>
+                </li>
+                <li class='text' *ngIf='!data.isShowInsutructions'>
+                  <span (click)='onShowInsutructions(i)'>展开</span>
+                </li>
+                <li class='des-item' *ngIf='data.isShowInsutructions'>
+                  <span class='des-title'>使用须知</span>
+                  <span class='info'>{{data.use_notice||'--'}}</span>
+                </li>
+                <li class='des-item' *ngIf='data.isShowInsutructions'>
+                  <span class='des-title'>退改须知</span>
+                  <span class='info'>{{data.rc_notice||'--'}}</span>
+                </li>
+                <li class='text' *ngIf='data.isShowInsutructions'>
+                  <span (click)='onHideInsutructions(i)'>收起</span>
+                </li>
+              </ul>
             </td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}</td>
-            <td><span *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
-              {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</td>
+            <td nzAlign="left">
+              <ul class='m_20'>
+                <li class='des-item'>
+                  <span class='des-title'>产品说明</span>
+                  <span class='des-content'>{{data.notes||'--'}}</span>
+                </li>
+                <li class='des-item'>
+                  <span class='des-title'>有效期</span>
+                  <span class='des-content'>{{data.delay_type|delayType}}</span>
+                </li>
+                <li class='text' *ngIf='!data.isShowDescriptions'>
+                  <span (click)='onShowDescriptions(i)'>展开</span>
+                </li>
+                <li class='des-item' *ngIf='data.isShowDescriptions'>
+                  <span class='des-title'>可验证时间</span>
+                  <span class='des-content'>{{data.validate_time_limit|validateTimeLimit}}</span>
+                </li>
+                <li class='des-item' *ngIf='data.isShowDescriptions'>
+                  <span class='des-title'>退票规则</span>
+                  <span class='des-content'>{{data.refund_rule|refundRule}}</span>
+                </li>
+                <!-- <li class='des-item' *ngIf='data.isShowDescriptions'>
+                  <span class='des-title'>退票手续费</span>
+                  <span class='des-content'>基础扣费0元</span>
+                </li> -->
+                <!-- <li class='des-item' *ngIf='data.isShowDescriptions'>
+                  <span class='des-title'>改期规则</span>
+                  <span class='des-content'>不允许改期</span>
+                </li> -->
+                <li class='des-item' *ngIf='data.isShowDescriptions'>
+                  <span class='des-title'>取票信息</span>
+                  <span class='des-content'>{{data.getaddr||'--'}}</span>
+                </li>
+                <li class='text' *ngIf='data.isShowDescriptions'>
+                  <span (click)='onHideDescriptions(i)'>收起</span>
+                </li>
+              </ul>
+            </td>
+            <td nzAlign="left">
+              <ul class='m_20'>
+                <li class='price-item'>
+                  <span class='price-title'>库存</span>
+                  <span
+                    class='price-content'>{{(data.price_calendar&&data.price_calendar.remain|maxNumberDealPipe:999)||'--'}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>市场价</span>
+                  <span class='price-content'><span *ngIf='data.market_price'>¥</span>
+                    {{data.market_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>建议售价</span>
+                  <span class='price-content'><span
+                      *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>结算价</span>
+                  <span class='price-content'><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}</span>
+                </li>
+                <li class='price-item'>
+                  <span class='price-title'>平台售价</span>
+                  <span class='price-content'><span
+                      *ngIf='data.price_calendar&&data.price_calendar.platform_price'>¥</span>
+                    {{data.price_calendar&&data.price_calendar.platform_price|centPriceChange}}</span>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <div class='opera m_20'>
+                <div>
+                  <a (click)='onOpenPriceCalendar(data.ticket_id)'>价格日历</a>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </nz-table>
     </div>
-    <!-- 票务详情 -->
-    <div class='mt_50'><span class='card-title'>票务详情</span></div>
+  </div>
+
+  <!-- 票务详情 -->
+  <div class='des_card'>
+    <div><span class='card-title wh_140'>票务详情</span></div>
     <div style="margin-bottom: 20px;">
       <form nz-form class="content-layout" #registerForm="ngForm">
         <div class="card_content">
@@ -160,3 +254,4 @@
     </div>
   </div>
 </div>
+<app-calendar-detail #priceCalendarDetail></app-calendar-detail>

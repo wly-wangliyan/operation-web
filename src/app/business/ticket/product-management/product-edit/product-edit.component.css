@@ -23,15 +23,31 @@
 
 .des_card {
   height: auto;
-  padding: 30px 20px;
+  padding: 20px;
   background: #fff;
+  margin-bottom: 10px;
 }
 
 .card-title {
+  display: inline-block;
   font-size: 18px;
-  font-family: PingFangSC-Medium, PingFangSC;
-  font-weight: 500;
-  color: rgba(35, 36, 47, 1);
+  font-family: AlibabaPuHuiTiM;
+  color: rgba(255, 255, 255, 1);
+  background: #3E71F7;
+  height: 40px;
+  line-height: 40px;
+  margin-left: -20px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  text-align: center;
+}
+
+.wh_100 {
+  width: 100px;
+}
+
+.wh_140 {
+  width: 140px;
 }
 
 .mt_50 {
@@ -54,9 +70,79 @@
   color: rgba(62, 113, 247, 1) !important;
 }
 
+:host ::ng-deep .ticket-table .ant-table-bordered .ant-table-tbody>tr>td {
+  vertical-align: top;
+}
+
 .insutructions {
   width: 360px;
   padding-top: 20px !important;
+}
+
+.m_20 {
+  margin: 20px;
+}
+
+.ticket-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+}
+
+.ticket-btn {
+  float: right;
+  margin: 5px;
+}
+
+:host ::ng-deep .ticket-btn .ant-btn {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  border-radius: 0px !important;
+  padding: 0 10px;
+  height: 27px;
+  line-height: 27px;
+}
+
+.ticket-info {
+  width: 415px;
+}
+
+.info {
+  font-size: 12px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: rgba(35, 36, 47, 1);
+  padding-left: 10px;
+  display: inline-block;
+  white-space: pre-line;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
+.info-item {
+  height: 46px;
+  margin-bottom: 3px;
+}
+
+.info-title {
+  color: rgba(35, 36, 47, 1) !important;
+}
+
+.info-text {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.info-text>textarea {
+  width: 230px;
+  background: rgba(247, 248, 250, 1);
+  border: 1px solid #e8e8e8;
+}
+
+.info-ul {
+  margin: 10px 20px;
 }
 
 .text>p {
@@ -87,11 +173,16 @@
   width: 315px;
 }
 
-.opera>a {
+
+.opera>div>a {
   font-size: 12px;
-  font-family: PingFangSC-Regular, PingFangSC;
+  font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: rgba(62, 113, 247, 1);
+  color: rgba(35, 36, 47, 1);
+}
+
+.opera>div>a:hover {
+  color: rgba(74, 127, 254, 1);
 }
 
 .top-img {
@@ -114,9 +205,66 @@ input[type=file]:focus {
   outline: none !important;
 }
 
-@media screen and (max-width: 1350px) {
-  .top-img {
-    margin-right: 5px;
-    margin-left: -15px;
-  }
+.des-item {
+  margin-bottom: 5px;
+  line-height: 12px;
+}
+
+.price-item {
+  margin-bottom: 2px;
+  height: 22px;
+  line-height: 22px;
+}
+
+.des-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  min-width: 68px;
+  height: 100%;
+  display: inline-block;
+  text-align: justify;
+  vertical-align: top;
+}
+
+.des-title::after {
+  display: inline-block;
+  width: 100%;
+  content: '';
+}
+
+.des-content {
+  line-height: 22px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+  padding-left: 10px;
+  display: inline-block;
+  vertical-align: top;
+  max-width: 350px;
+  margin-top: -5px;
+}
+
+.price-data {
+  margin: -30px 0 0 20px;
+}
+
+.price-title {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(102, 102, 102, 1);
+  min-width: 68px;
+  display: inline-block;
+}
+
+.price-content {
+  font-size: 12px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: rgba(232, 32, 56, 1);
+  padding-left: 10px;
+  display: inline-block;
 }

@@ -14,6 +14,8 @@ import { ProductEditor2Component } from './product-edit/product-editor2/product-
 import { ProductEditor1Component } from './product-edit/product-editor1/product-editor1.component';
 import { ProductEditor3Component } from './product-edit/product-editor3/product-editor3.component';
 import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
+import { ProductCalendarComponent } from './product-edit/product-calendar/product-calendar.component';
+import { CalendarDetailComponent } from './product-detail/calendar-detail/calendar-detail.component';
 
 const uploadToken: UploadConfig = {
   reportProcess: true,
@@ -32,7 +34,9 @@ const uploadToken: UploadConfig = {
     ProductEditor2Component,
     ProductEditor1Component,
     ProductEditor3Component,
-    ThirdProductDetailComponent],
+    ThirdProductDetailComponent,
+    ProductCalendarComponent,
+    CalendarDetailComponent],
   imports: [
     ShareModule,
     CommonModule,

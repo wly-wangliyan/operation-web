@@ -19,6 +19,11 @@ const routes: Routes = [{
       loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'finance-management', /** 财务管理 */
+      loadChildren: () => import('./finance-management/finance-management.module').then(m => m.FinanceManagementModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'product-management', pathMatch: 'full' }
   ]
 }];

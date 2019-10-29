@@ -68,6 +68,26 @@ export class CentPriceChangePipe implements PipeTransform {
   }
 }
 
+/** 数字大于某个数就显示数字+ */
+/**
+ * 转换方法
+ * @param number 数字
+ * @param maxNumber 最大值
+ * @returns any
+ */
+
+@Pipe({
+  name: 'maxNumberDealPipe'
+})
+export class MaxNumberDealPipe implements PipeTransform {
+  public transform(number: any, maxNumber = 999): string {
+    if (number && Number(number) > maxNumber) {
+      return `${maxNumber}+`;
+    }
+    return number;
+  }
+}
+
 /** 处理第三方数据为空返回‘0’的情况 */
 
 @Pipe({
@@ -144,3 +164,100 @@ export class OrderUseStatusPipe implements PipeTransform {
   }
 }
 
+/** 销售状态 */
+const PayType = {
+  1: '授信支付',
+  2: '余额支付'
+};
+
+@Pipe({
+  name: 'payType'
+})
+export class PayTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === null || value === undefined || value === '') {
+      return '--';
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      return PayType[value];
+    } else {
+      return PayType[value];
+    }
+  }
+}
+
+/** 有效期 */
+const DelayType = {
+  0: '游玩日期起有效',
+  1: '下单日期起有效',
+  2: '期票模式',
+};
+
+@Pipe({
+  name: 'delayType'
+})
+export class DelayTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === null || value === undefined || value === '') {
+      return '--';
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      return DelayType[value];
+    } else {
+      return DelayType[value];
+    }
+  }
+}
+
+
+/** 退票规则 */
+const RefundRule = {
+  0: '有效期内可退：未使用订单末级分销商可退；过期订单供应商可退',
+  1: '游玩日期内可退，阶梯退：未使用订单末级分销商可退；过期订单供应商可退',
+  2: '不可退：分销商供应商都不可退',
+  3: '随时退：未使用订单末级分销商可退；过期订单分销商可退，供应商可退',
+  4: '不可退且是可提现',
+};
+
+@Pipe({
+  name: 'refundRule'
+})
+export class RefundRulePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === -1) {
+      value = 4;
+    } else if (value === null || value === undefined || value === '') {
+      return '--';
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      return RefundRule[value];
+    } else {
+      return RefundRule[value];
+    }
+  }
+}
+
+
+/** 可验证时间 */
+@Pipe({
+  name: 'validateTimeLimit'
+})
+export class ValidateTimeLimitPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (value === null || value === undefined || value === '') {
+      return '--';
+    }
+    if (value) {
+      return '有效期内' + value.replace('|', '至');
+    } else {
+      return value;
+    }
+  }
+}
