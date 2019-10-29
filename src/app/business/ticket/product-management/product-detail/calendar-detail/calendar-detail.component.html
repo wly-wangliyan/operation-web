@@ -19,19 +19,22 @@
                   <div *ngSwitchCase="key">
                     <div>
                       <span>库存</span>
-                      <span>{{calendarMap[key].remain}}</span>
+                      <span>{{(calendarMap[key].remain|maxNumberDealPipe:999)||'--'}}</span>
                     </div>
                     <div>
                       <span>建议售价</span>
-                      <span>{{calendarMap[key].retail_price|centPriceChange}}</span>
+                      <span><span *ngIf='calendarMap[key].retail_price'>¥</span>
+                        {{calendarMap[key].retail_price|centPriceChange}}</span>
                     </div>
                     <div>
                       <span>结算价</span>
-                      <span>{{calendarMap[key].buy_price|centPriceChange}}</span>
+                      <span><span *ngIf='calendarMap[key].buy_price'>¥</span>
+                        {{calendarMap[key].buy_price|centPriceChange}}</span>
                     </div>
                     <div *ngIf='type===1'>
                       <span>平台售价</span>
-                      <span>{{calendarMap[key].platform_price|centPriceChange}}</span>
+                      <span><span *ngIf='calendarMap[key].platform_price'>¥</span>
+                        {{calendarMap[key].platform_price|centPriceChange}}</span>
                     </div>
                   </div>
                 </li>

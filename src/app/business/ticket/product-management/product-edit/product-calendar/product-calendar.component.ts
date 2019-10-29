@@ -6,6 +6,7 @@ import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductService, SearchPriceCalendarParams, PriceCalendarEntity } from '../../product.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
+import { toUnicode } from 'punycode';
 
 @Component({
   selector: 'app-product-calendar',
@@ -16,7 +17,6 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
 export class ProductCalendarComponent implements OnInit {
 
   public accounting_date: number = undefined; 	// 	integer	结算日 范围 1-28
-  public loading = true;
   public carTypeList: Array<any> = [];
   public editAccountDateSwitch = true;
   public selectedDate: Date;
@@ -32,6 +32,7 @@ export class ProductCalendarComponent implements OnInit {
   private subscription: Subscription;
   private selectYear: number;
   private selectMonth: number;
+  private isEditPlatformPrice = false;
 
   @Input() public title: string;
   @Input() public product_id: string;
@@ -40,10 +41,6 @@ export class ProductCalendarComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private globalService: GlobalService, private productService: ProductService) {
-    this.selectedDate = new Date();
-    this.selectedDateMonth = new Date().getMonth() + 1;
-    this.SearchCalendarParams.start_date = this.getMonthStartDate(new Date().getFullYear(), new Date().getMonth());
-    this.SearchCalendarParams.end_date = this.getMonthEndDate(new Date().getFullYear(), new Date().getMonth());
   }
 
   ngOnInit() {
@@ -53,7 +50,7 @@ export class ProductCalendarComponent implements OnInit {
       switchMap(() =>
         this.productService.requestPriceCalendars(this.product_id, this.ticket_id, this.SearchCalendarParams))
     ).subscribe(res => {
-      this.priceCalendarList = res.results;
+      this.priceCalendarList = res.results.map(i => ({ ...i, platform_price: (Number(i.platform_price) / 100).toFixed(2) }));
       const calendarList = this.priceCalendarList.map((value, key) => [new Date(value.date).getDate(), value]);
       const map = new Map();
       for (const i of calendarList) {
@@ -77,11 +74,22 @@ export class ProductCalendarComponent implements OnInit {
 
   // 变更时间
   public onSelectChange(event) {
-    this.selectYear = event.getFullYear();
-    this.selectMonth = event.getMonth();
-    this.SearchCalendarParams.start_date = this.getMonthStartDate(this.selectYear, this.selectMonth);
-    this.SearchCalendarParams.end_date = this.getMonthEndDate(this.selectYear, this.selectMonth);
-    this.searchText$.next();
+    console.log('1', this.isEditPlatformPrice);
+
+    if (!this.isEditPlatformPrice) {
+      this.calendarMap = {};
+      this.calendarMapKey = [];
+      this.selectYear = event.getFullYear();
+      this.selectMonth = event.getMonth();
+      this.selectedDateMonth = event.getMonth() + 1;
+      this.SearchCalendarParams.start_date = this.getMonthStartDate(this.selectYear, this.selectMonth);
+      this.SearchCalendarParams.end_date = this.getMonthEndDate(this.selectYear, this.selectMonth);
+      this.searchText$.next();
+    }
+  }
+
+  public onFocusPlatformPrice() {
+    this.isEditPlatformPrice = true;
   }
 
   // 获得本月的开始日期
@@ -95,7 +103,6 @@ export class ProductCalendarComponent implements OnInit {
     const lastMonthEndDate = new Date(year, month, this.getMonthDays(month));
     return this.formatDate(lastMonthEndDate);
   }
-
 
   // 格式化日期：yyyy-MM-dd
   private formatDate(date) {
@@ -120,20 +127,24 @@ export class ProductCalendarComponent implements OnInit {
     return days;
   }
 
-
   /**
    * 取消按钮触发关闭模态框，释放订阅。
    */
   public close() {
-    this.loading = true;
-    this.editAccountDateSwitch = true;
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    const list = this.priceCalendarList.filter(i => !i.platform_price);
+    if (list.length !== 0) {
+      this.globalService.promptBox.open('请填写平台售价!', null, 2000, '/assets/images/warning.png');
+    } else {
+      this.editAccountDateSwitch = true;
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+      if (this.sureCallback) {
+        this.sureCallback = null;
+      }
+      $(this.promptDiv.nativeElement).modal('hide');
+      this.isEditPlatformPrice = false;
     }
-    if (this.sureCallback) {
-      this.sureCallback = null;
-    }
-    $(this.promptDiv.nativeElement).modal('hide');
   }
 
   /**
@@ -144,6 +155,7 @@ export class ProductCalendarComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(title: string = '编辑', product_id, ticket_id, sureFunc: any) {
+    this.onInitCalendar();
     this.title = title;
     this.product_id = product_id;
     this.ticket_id = ticket_id;
@@ -154,34 +166,64 @@ export class ProductCalendarComponent implements OnInit {
     });
   }
 
-  // 保存平台售价
+  // 初始化日历数据
+  private onInitCalendar() {
+    this.calendarMap = {};
+    this.calendarMapKey = [];
+    this.selectedDate = new Date();
+    this.selectedDateMonth = new Date().getMonth() + 1;
+    this.SearchCalendarParams.start_date = this.getMonthStartDate(new Date().getFullYear(), new Date().getMonth());
+    this.SearchCalendarParams.end_date = this.getMonthEndDate(new Date().getFullYear(), new Date().getMonth());
+    this.isEditPlatformPrice = false;
+  }
+
+  // 平台售价输入框失去焦点校验
   public onBlurSavePlatformPrice(value: any) {
+    this.isEditPlatformPrice = false;
     if (value.platform_price !== null && value.platform_price !== undefined && value.platform_price !== '') {
-      this.productService.requestSetPlatformPrice(this.product_id, this.ticket_id, value).subscribe(() => {
-        this.globalService.promptBox.open('平台售价保存成功！');
-        this.searchText$.next();
-      }, err => {
-        if (!this.globalService.httpErrorProcess(err)) {
-          if (err.status === 422) {
-            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-            for (const content of error.errors) {
-              // tslint:disable-next-line:max-line-length
-              const field = content.field === 'platform_price' ? '平台售价' : '';
-              if (content.code === 'missing_field') {
-                this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
-                return;
-              } else if (content.code === 'invalid') {
-                this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
-              } else {
-                this.globalService.promptBox.open('平台售价保存失败,请重试!', null, 2000, '/assets/images/warning.png');
-              }
+      if ((Number(value.platform_price) * 100) < (Number(value.buy_price) / 0.94)) {
+        this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
+          this.globalService.confirmationBox.close();
+          this.submitPlatformPrice(value);
+        }, '确认保存');
+      } else if ((Number(value.platform_price) * 100) > Number(value.third_product.market_price)) {
+        this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
+      } else {
+        this.submitPlatformPrice(value);
+      }
+    } else {
+      this.globalService.promptBox.open('请填写平台售价!', null, 2000, '/assets/images/warning.png');
+    }
+  }
+
+  // 保存平台售价
+  private submitPlatformPrice(value: any) {
+    this.productService.requestSetPlatformPrice(this.product_id, this.ticket_id, value).subscribe(() => {
+      this.globalService.promptBox.open('平台售价保存成功！');
+      this.searchText$.next();
+      if (this.sureCallback) {
+        const temp = this.sureCallback;
+        temp();
+      }
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            // tslint:disable-next-line:max-line-length
+            const field = content.field === 'platform_price' ? '平台售价' : '';
+            if (content.code === 'missing_field') {
+              this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+              return;
+            } else if (content.code === 'invalid') {
+              this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('平台售价保存失败,请重试!', null, 2000, '/assets/images/warning.png');
             }
           }
         }
-      });
-    } else {
-      return;
-    }
+      }
+    });
   }
 
   // 限制input[type='number']输入e

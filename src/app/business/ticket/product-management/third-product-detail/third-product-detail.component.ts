@@ -90,11 +90,7 @@ export class ThirdProductDetailComponent implements OnInit {
 
   // 价格日历
   public onOpenPriceCalendar(ticket_id) {
-    this.priceCalendarDetail.open(null, 2, this.product_id, ticket_id, () => {
-      timer(1000).subscribe(() => {
-        this.searchText$.next();
-      });
-    });
+    this.priceCalendarDetail.open(null, 2, this.product_id, ticket_id, null);
   }
 
   // 展开

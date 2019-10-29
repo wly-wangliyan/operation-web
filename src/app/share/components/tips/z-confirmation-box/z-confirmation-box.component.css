@@ -1,6 +1,6 @@
 /*提示模态框*/
 .z-modal {
-  background:rgba(55,60,64,0.77);
+  background: rgba(55, 60, 64, 0.77);
   z-index: 1200;
   overflow: hidden;
   position: fixed;
@@ -12,14 +12,14 @@
 }
 
 .z-fade {
-  opacity:0;
-  -webkit-transition:opacity .15s linear;
-  -o-transition:opacity .15s linear;
-  transition:opacity .15s linear;
+  opacity: 0;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
 }
 
-.z-fade.show{
-  opacity:1;
+.z-fade.show {
+  opacity: 1;
   transition-property: opacity;
 }
 
@@ -30,21 +30,21 @@
 
 .z-modal-dialog {
   width: 500px;
-  height:283px;
+  height: auto;
   margin: 10% auto;
-  border-radius: 0!important;
+  border-radius: 0 !important;
   animation-delay: 20ms;
 }
 
 .z-modal-header {
-  border-radius: 0!important;
-  height:50px;
+  border-radius: 0 !important;
+  height: 50px;
   line-height: 50px;
 }
 
 .z-modal-footer {
   padding: 0.5rem 1rem;
-  border-top:0!important;
+  border-top: 0 !important;
 }
 
 .z-modal-content {
@@ -52,41 +52,46 @@
   color: #0e0e0e !important;
   background: #fff;
   box-shadow: none;
-  border:none;
-  border-radius: 0!important;
+  border: none;
+  border-radius: 0 !important;
 }
 
 .z-modal-body {
   text-align: center;
-  font-weight:500;
-  color:rgba(55,60,64,1);
+  font-weight: 500;
+  color: rgba(55, 60, 64, 1);
 }
 
-.z-modal-footer{
+.z-modal-footer {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 34px;
 }
 
-.z-modal-footer button{
-  font-family:PingFangSC-Medium;
-  font-weight:500;
+.z-modal-footer button {
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
   font-size: 18px;
 }
 
-.z-close-btn{
-  width:179px;
-  height:50px;
-  border-radius:4px;
-  border:1px solid;
+.mes {
+  white-space: pre-line;
+}
+
+.z-close-btn {
+  width: 179px;
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid;
   cursor: pointer;
   outline: 0px;
 }
 
-.z-sure-btn{
-  width:179px;
-  height:50px;
-  border:none;
-  border-radius:4px;
+.z-sure-btn {
+  width: 179px;
+  height: 50px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
   outline: 0px;
 }
@@ -95,34 +100,39 @@
   background: #4A7FFE;
 }
 
-.z-warn-icon{
+.z-warn-icon {
   width: 22px;
   height: 22px;
-  margin:13px 5px;
+  margin: 13px 5px;
   background: url(/assets/images/warn.png);
   display: block;
   float: left;
 }
 
-@-webkit-keyframes fade-in { /*针对webkit内核*/
+@-webkit-keyframes fade-in {
+
+  /*针对webkit内核*/
   0% {
     opacity: 0;
   }
+
   7.5% {
     opacity: 0.5;
   }
+
   10% {
     opacity: 1;
   }
 }
 
 .z-form-horizontal {
-  margin-top:50px;
-  margin-bottom:64px;
+  margin-top: 50px;
+  margin-bottom: 64px;
   width: auto;
 }
 
-.z-close , .close {
+.z-close,
+.close {
   outline: none;
   color: #fff;
   opacity: 1;
@@ -130,20 +140,20 @@
   float: right;
   line-height: inherit;
   background: none;
-  font-size:24px;
-  font-family:PingFangSC-Medium;
+  font-size: 24px;
+  font-family: PingFangSC-Medium;
   margin-right: 10px;
   cursor: pointer;
 }
 
 .z-close:hover {
-  font-size:28px;
+  font-size: 28px;
 }
 
 /*可变样式*/
 .z-font {
-  font-size:18px;
-  font-family:PingFangSC-Medium;
+  font-size: 18px;
+  font-family: PingFangSC-Medium;
 }
 
 .z-color {

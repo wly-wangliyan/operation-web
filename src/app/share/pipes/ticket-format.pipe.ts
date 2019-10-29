@@ -68,6 +68,26 @@ export class CentPriceChangePipe implements PipeTransform {
   }
 }
 
+/** 数字大于某个数就显示数字+ */
+/**
+ * 转换方法
+ * @param number 数字
+ * @param maxNumber 最大值
+ * @returns any
+ */
+
+@Pipe({
+  name: 'maxNumberDealPipe'
+})
+export class MaxNumberDealPipe implements PipeTransform {
+  public transform(number: any, maxNumber = 999): string {
+    if (number && Number(number) > maxNumber) {
+      return `${maxNumber}+`;
+    }
+    return number;
+  }
+}
+
 /** 处理第三方数据为空返回‘0’的情况 */
 
 @Pipe({

@@ -116,6 +116,9 @@
   color: rgba(35, 36, 47, 1);
   padding-left: 10px;
   display: inline-block;
+  white-space: pre-line;
+  line-height: 22px;
+  margin-top: -5px;
 }
 
 .info-item {
@@ -135,7 +138,7 @@
 .info-text>textarea {
   width: 230px;
   background: rgba(247, 248, 250, 1);
-  border: 1px solid rgba(136, 136, 136, 1);
+  border: 1px solid #e8e8e8;
 }
 
 .info-ul {

@@ -189,6 +189,7 @@ export class PriceCalendarEntity extends EntityBase {
   public third_price_id: string = undefined; // 第三方价格id
   public ticket: TicketEntity = undefined; // 门票对象
   public product: TicketProductEntity = undefined; // 产品对象
+  public third_product: ThirdProductEntity = undefined; // 第三方产品对象
   public date: number = undefined; // 价格日期
   public storage: number = undefined; // 总库存 -1:表示无限
   public remain: string = undefined; // 实时剩余库存 -1:表示无限 99999999:表示无限
@@ -203,6 +204,8 @@ export class PriceCalendarEntity extends EntityBase {
       return TicketEntity;
     } else if (propertyName === 'product') {
       return TicketProductEntity;
+    } else if (propertyName === 'third_product') {
+      return ThirdProductEntity;
     }
     return null;
   }
@@ -467,9 +470,10 @@ export class ProductService {
  * @returns Observable<HttpResponse<any>>
  */
   public requestSetPlatformPrice(product_id: string, ticket_id: string, value: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(`${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars
-    /${value.price_calendar_id}/platform_price`, {
-      platform_price: value.platform_price,
+    console.log('32', value);
+
+    return this.httpService.patch(`${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
+      platform_price: Number(value.platform_price) * 100,
     }
     );
   }

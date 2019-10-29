@@ -107,8 +107,8 @@
                 <button *ngIf="!data.isEditTicketInsutruction" nz-button nzType="primary"
                   (click)="onEditTicketInsutruction(data)">编辑</button>
                 <div *ngIf="data.isEditTicketInsutruction">
-                  <button nz-button nzType="primary" style="margin-right:10px"
-                    (click)="onSaveTicketInsutruction(data)">保存</button>
+                  <button nz-button nzType="primary" style="margin-right:10px" (click)="onSaveTicketInsutruction(data)"
+                    [disabled]='!(data.preset_time&&data.preset_time!==0)||!(data.fee_contain&&data.fee_contain!==0)||!(data.use_notice&&data.use_notice!==0)||!(data.rc_notice&&data.rc_notice!==0)'>保存</button>
                   <button nz-button nzType="default" (click)="onCancelTicketInsutruction(data,i)">取消</button>
                 </div>
               </div>
@@ -133,28 +133,29 @@
               </ul>
               <ul *ngIf="data.isEditTicketInsutruction" class='info-ul'>
                 <li class='info-item'>
-                  <span class='des-title info-title'>预定时间</span>
+                  <span class='des-title info-title'>
+                    <span style="color: red;">*</span>预定时间</span>
                   <div class='info-text'>
                     <textarea class="buy_remark" [(ngModel)]="data.preset_time" placeholder="200字以内..." maxlength="200"
                       name="order_time"></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
-                  <span class='des-title info-title'>费用包含</span>
+                  <span class='des-title info-title'><span style="color: red;">*</span>费用包含</span>
                   <div class='info-text'>
                     <textarea class="price" [(ngModel)]="data.fee_contain" placeholder="200字以内..." maxlength="200"
                       name="price"></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
-                  <span class='des-title info-title'>使用须知</span>
+                  <span class='des-title info-title'><span style="color: red;">*</span>使用须知</span>
                   <div class='info-text'>
                     <textarea class="buy_remark" [(ngModel)]="data.use_notice" placeholder="200字以内..." maxlength="200"
                       name="remark"></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
-                  <span class='des-title info-title'>退改须知</span>
+                  <span class='des-title info-title'><span style="color: red;">*</span>退改须知</span>
                   <div class='info-text'>
                     <textarea class="buy_remark" [(ngModel)]="data.rc_notice" placeholder="200字以内..." maxlength="200"
                       name="notice"></textarea>
@@ -198,7 +199,8 @@
               <ul class='m_20'>
                 <li class='price-item'>
                   <span class='price-title'>库存</span>
-                  <span class='price-content'>{{data.price_calendar&&data.price_calendar.storage||'--'}}</span>
+                  <span
+                    class='price-content'>{{(data.price_calendar&&data.price_calendar.remain|maxNumberDealPipe:999)||'--'}}</span>
                 </li>
                 <li class='price-item'>
                   <span class='price-title'>市场价</span>

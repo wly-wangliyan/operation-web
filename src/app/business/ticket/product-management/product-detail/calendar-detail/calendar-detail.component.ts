@@ -95,11 +95,20 @@ export class CalendarDetailComponent implements OnInit {
 
   // 变更时间
   public onSelectChange(event) {
+    this.calendarMap = {};
+    this.calendarMapKey = [];
     this.selectYear = event.getFullYear();
     this.selectMonth = event.getMonth();
+    this.selectedDateMonth = event.getMonth() + 1;
     this.SearchCalendarParams.start_date = this.getMonthStartDate(this.selectYear, this.selectMonth);
     this.SearchCalendarParams.end_date = this.getMonthEndDate(this.selectYear, this.selectMonth);
-    this.searchText$.next();
+    if (this.type === 1) {
+      this.searchText$.next();
+    } else if (this.type === 2) {
+      this.searchThirdText$.next();
+    } else {
+      return;
+    }
   }
 
   // 获得本月的开始日期

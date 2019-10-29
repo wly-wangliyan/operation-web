@@ -51,6 +51,10 @@
   padding-top: 20px !important;
 }
 
+.text {
+  margin-top: -10px;
+}
+
 .text>p {
   width: 260px;
   display: inline-block;
@@ -202,6 +206,9 @@
   color: rgba(35, 36, 47, 1);
   padding-left: 10px;
   display: inline-block;
+  white-space: pre-line;
+  line-height: 22px;
+  margin-top: -5px;
 }
 
 .info-item {
@@ -285,8 +292,8 @@ input[type=file]:focus {
 }
 
 .des-item {
+  line-height: 12px;
   margin-bottom: 5px;
-  line-height: 22px;
 }
 
 .des-title {
@@ -316,6 +323,8 @@ input[type=file]:focus {
   display: inline-block;
   vertical-align: top;
   max-width: 350px;
+  line-height: 22px;
+  margin-top: -4px;
 }
 
 .price-data {

@@ -31,7 +31,7 @@ import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
 import {
   TicketFormatPipe, ThirdSaleStatusPipe, OrderStatusPipe, OrderUseStatusPipe,
-  CentPriceChangePipe, NullDataFilterPipe, PayTypePipe, DelayTypePipe, RefundRulePipe, ValidateTimeLimitPipe
+  CentPriceChangePipe, NullDataFilterPipe, PayTypePipe, DelayTypePipe, RefundRulePipe, ValidateTimeLimitPipe, MaxNumberDealPipe
 } from './pipes/ticket-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 
@@ -86,6 +86,7 @@ import { HtmlPipe } from './pipes/html.pipe';
     DelayTypePipe,
     RefundRulePipe,
     ValidateTimeLimitPipe,
+    MaxNumberDealPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -138,6 +139,7 @@ import { HtmlPipe } from './pipes/html.pipe';
     DelayTypePipe,
     RefundRulePipe,
     ValidateTimeLimitPipe,
+    MaxNumberDealPipe,
 
     // 指令
     IgnoreSpaceDirective,

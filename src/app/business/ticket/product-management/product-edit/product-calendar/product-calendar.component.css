@@ -263,10 +263,17 @@ div>span:last-child {
   border-radius: 1px;
   display: inline-block;
   float: right;
+  border-color: #bfbfbf;
+  padding-left: 2px;
 }
 
 .calendar-content {
   float: right;
+}
+
+.plat {
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 :host ::ng-deep .ant-select-selection__rendered {
