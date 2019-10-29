@@ -80,9 +80,10 @@
               <ul class='m_20'>
                 <li class='des-item'>
                   <span class='des-title'>产品说明</span>
-                  <span class='des-content'>{{data.notes||'--'}}</span>
+                  <span class='des-content' *ngIf='!data.isShowDescriptions'>{{(data.notes|zMaxLength:56)||'--'}}</span>
+                  <span class='des-content' *ngIf='data.isShowDescriptions'>{{data.notes||'--'}}</span>
                 </li>
-                <li class='des-item'>
+                <li class='des-item' *ngIf='!data.notes||(data.notes&&data.notes.length<56)||data.isShowDescriptions'>
                   <span class='des-title'>有效期</span>
                   <span class='des-content'>{{data.delay_type|delayType}}</span>
                 </li>
@@ -98,14 +99,6 @@
                   <span class='des-title'>退票规则</span>
                   <span class='des-content'>{{data.refund_rule|refundRule}}</span>
                 </li>
-                <!-- <li class='des-item' *ngIf='data.isShowDescriptions'>
-                  <span class='des-title'>退票手续费</span>
-                  <span class='des-content'>基础扣费0元</span>
-                </li>
-                <li class='des-item' *ngIf='data.isShowDescriptions'>
-                  <span class='des-title'>改期规则</span>
-                  <span class='des-content'>不允许改期</span>
-                </li> -->
                 <li class='des-item' *ngIf='data.isShowDescriptions'>
                   <span class='des-title'>取票信息</span>
                   <span class='des-content'>{{data.getaddr||'--'}}</span>
