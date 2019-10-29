@@ -2,7 +2,10 @@
   <app-crumb [level1Name]="'财务管理'" [level2Name]="'支付设置'"></app-crumb>
 </div>
 <div class="content-flow">
-  <div class="pay-content">
+  <div *ngIf="loading" style='text-align: center;margin-top: 80px;padding-bottom: 120px;'>
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div class="pay-content" *ngIf="!loading">
     <div class='pay-title'>
       支付设置
     </div>

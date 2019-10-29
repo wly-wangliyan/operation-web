@@ -21,34 +21,26 @@ export class PaySettingComponent implements OnInit {
 
   public radioValue: string;
 
+  public loading = true;
+
   public isEditPaySetting = false;
 
   private searchText$ = new Subject<any>();
 
   ngOnInit() {
-    this.paySettingList.push(new PaySettingEntity());
-    this.paySettingList.push(new PaySettingEntity());
-    this.paySettingList[0].pay_setting_id = '111';
-    this.paySettingList[0].pay_type = 1;
-    this.paySettingList[0].balance = 500000;
-    this.paySettingList[0].status = 1;
-    this.paySettingList[1].pay_setting_id = '222';
-    this.paySettingList[1].pay_type = 2;
-    this.paySettingList[1].balance = 120000;
-    this.paySettingList[1].status = 2;
-
-    this.radioValue = this.paySettingList.filter(i => i.status === 1)[0].pay_setting_id;
-    // // 获取支付配置列表
-    // this.searchText$.pipe(
-    //   debounceTime(500),
-    //   switchMap(() =>
-    //     this.financeService.requestPaySettingListData())
-    // ).subscribe(res => {
-    //   this.paySettingList = res.results;
-    // }, err => {
-    //   this.globalService.httpErrorProcess(err);
-    // });
-    // this.searchText$.next();
+    // 获取支付配置列表
+    this.searchText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.financeService.requestPaySettingListData())
+    ).subscribe(res => {
+      this.paySettingList = res.results;
+      this.radioValue = this.paySettingList.filter(i => i.status === 1)[0].pay_setting_id;
+      this.loading = false;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchText$.next();
 
   }
 
@@ -60,6 +52,7 @@ export class PaySettingComponent implements OnInit {
   // 保存
   public onSavePaySetting(value: string) {
     this.financeService.requestPaySettingStatus(value).subscribe(() => {
+      this.isEditPaySetting = false;
       this.searchText$.next();
       this.globalService.promptBox.open('保存成功');
     }, err => {
@@ -70,7 +63,7 @@ export class PaySettingComponent implements OnInit {
   // 取消
   public onCancelPaySetting() {
     this.isEditPaySetting = false;
-    this.searchText$.next();
+    this.radioValue = this.paySettingList.filter(i => i.status === 1)[0].pay_setting_id;
   }
 
 }
