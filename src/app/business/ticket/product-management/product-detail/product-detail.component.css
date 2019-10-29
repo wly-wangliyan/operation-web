@@ -178,6 +178,9 @@
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(35, 36, 47, 1);
+  width: 110px;
+  white-space: pre-line;
+  display: inline-block;
 }
 
 .ticket-btn {
@@ -209,6 +212,7 @@
   white-space: pre-line;
   line-height: 22px;
   margin-top: -5px;
+  max-width: 230px;
 }
 
 .info-item {
@@ -347,4 +351,56 @@ input[type=file]:focus {
   color: rgba(232, 32, 56, 1);
   padding-left: 10px;
   display: inline-block;
+}
+
+.name_td {
+  min-width: 200px;
+}
+
+@media screen and (max-width: 1526px) {
+  .ticket-info {
+    width: 415px;
+  }
+
+  .name_td {
+    min-width: 185px;
+  }
+
+  .top-img {
+    margin-right: 5px;
+  }
+
+  .des_td {
+    width: 400px;
+  }
+
+  .price_td {
+    min-width: 170px;
+  }
+
+  .price-title {
+    min-width: 48px;
+  }
+
+  .des-content {
+    max-width: 200px;
+  }
+
+  .opera {
+    min-width: 50px;
+  }
+
+  .m_20 {
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 1355px) {
+  .ticket-info {
+    width: 315px;
+  }
+
+  .info {
+    width: 150px;
+  }
 }

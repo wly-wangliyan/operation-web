@@ -94,12 +94,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of productTicketTable.data; let i=index">
-            <td>
+            <td class="name_td">
               <div style="margin-top: 20px;">
                 <div class='top-img'>
                   <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
                 </div>
-                <span class='ticket-title' [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
+                <span class='ticket-title' [title]='data.ticket_name'>{{data.ticket_name|zMaxLength:15}}</span>
               </div>
             </td>
             <td nzAlign="left" class='ticket-info'>
@@ -195,7 +195,7 @@
                 </li>
               </ul>
             </td>
-            <td nzAlign="left">
+            <td nzAlign="left" class='price_td'>
               <ul class='m_20'>
                 <li class='price-item'>
                   <span class='price-title'>库存</span>

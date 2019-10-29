@@ -76,17 +76,6 @@
                 <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
               </div>
             </td>
-            <!-- <td class='insutructions'>
-                    <div class='text' *ngIf='!data.isShowInsutructions'>
-                      <p>{{data.notes|nullDataFilter|zMaxLength:18}}</p>
-                      <span *ngIf='data.notes.length>18||(data.getaddr&&data.getaddr!=="0")'
-                        (click)='onShowInsutructions(i)'>展开</span>
-                    </div>
-                    <div class='text' *ngIf='data.isShowInsutructions'>
-                      <p>{{data.notes}}<br>{{data.getaddr}}</p>
-                      <span (click)='onHideInsutructions(i)'>收起</span>
-                    </div>
-                  </td> -->
             <td nzAlign="left">
               <ul class='m_20'>
                 <li class='des-item'>
@@ -98,7 +87,8 @@
                   <span class='des-content'>{{data.delay_type|delayType}}</span>
                 </li>
                 <li class='text' *ngIf='!data.isShowDescriptions'>
-                  <span (click)='onShowDescriptions(i)'>展开</span>
+                  <span *ngIf='data.validate_time_limit||data.refund_rule||data.getaddr'
+                    (click)='onShowDescriptions(i)'>展开</span>
                 </li>
                 <li class='des-item' *ngIf='data.isShowDescriptions'>
                   <span class='des-title'>可验证时间</span>
