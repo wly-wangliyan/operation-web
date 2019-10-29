@@ -229,7 +229,7 @@ const RefundRule = {
 export class RefundRulePipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
-    if (value === -1) {
+    if (value === -1 || value === '-1') {
       value = 4;
     } else if (value === null || value === undefined || value === '') {
       return '--';

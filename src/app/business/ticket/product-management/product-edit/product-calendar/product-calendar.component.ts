@@ -186,7 +186,7 @@ export class ProductCalendarComponent implements OnInit {
           this.globalService.confirmationBox.close();
           this.submitPlatformPrice(value);
         }, '确认保存');
-      } else if ((Number(value.platform_price) * 100) > Number(value.third_product.market_price)) {
+      } else if ((Number(value.platform_price) * 100) > Number(value.ticket.market_price)) {
         this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
       } else {
         this.submitPlatformPrice(value);
@@ -199,7 +199,7 @@ export class ProductCalendarComponent implements OnInit {
   // 保存平台售价
   private submitPlatformPrice(value: any) {
     this.productService.requestSetPlatformPrice(this.product_id, this.ticket_id, value).subscribe(() => {
-      this.globalService.promptBox.open('平台售价保存成功！');
+      //  this.globalService.promptBox.open('平台售价保存成功！');
       this.searchText$.next();
       if (this.sureCallback) {
         const temp = this.sureCallback;
