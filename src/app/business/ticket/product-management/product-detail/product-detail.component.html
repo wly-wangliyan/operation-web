@@ -98,7 +98,7 @@
                   <span class='info' *ngIf='data.isShowInsutructions'>{{data.fee_contain||'--'}}</span>
                 </li>
                 <li class='text' *ngIf='!data.isShowInsutructions'>
-                  <span *ngIf='data.use_notice||data.rc_notice' (click)='onShowInsutructions(i)'>展开</span>
+                  <span (click)='onShowInsutructions(i)'>展开</span>
                 </li>
                 <li class='des-item' *ngIf='data.isShowInsutructions'>
                   <span class='des-title'>使用须知</span>
@@ -125,8 +125,7 @@
                   <span class='des-content'>{{data.delay_type|delayType}}</span>
                 </li>
                 <li class='text' *ngIf='!data.isShowDescriptions'>
-                  <span *ngIf='data.validate_time_limit||data.refund_rule||data.getaddr'
-                    (click)='onShowDescriptions(i)'>展开</span>
+                  <span (click)='onShowDescriptions(i)'>展开</span>
                 </li>
                 <li class='des-item' *ngIf='data.isShowDescriptions'>
                   <span class='des-title'>可验证时间</span>
