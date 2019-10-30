@@ -471,8 +471,6 @@ export class ProductService {
  * @returns Observable<HttpResponse<any>>
  */
   public requestSetPlatformPrice(product_id: string, ticket_id: string, value: any): Observable<HttpResponse<any>> {
-    console.log('32', value);
-
     return this.httpService.patch(`${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
       platform_price: Number(value.platform_price) * 100,
     }

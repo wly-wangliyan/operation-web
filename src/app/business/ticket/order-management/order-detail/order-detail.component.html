@@ -36,7 +36,7 @@
           </td>
           <td>结算总价：</td>
           <td>
-            {{(orderDetail.buy_price||orderDetail.buy_price===0) ? ('￥ ' + (orderDetail.buy_price | centPriceChange)) : '--'}}
+            {{(orderDetail.buy_price||orderDetail.buy_price===0) ? ('￥ ' + ((orderDetail.buy_num*orderDetail.buy_price) | centPriceChange)) : '--'}}
           </td>
           <td></td>
           <td></td>

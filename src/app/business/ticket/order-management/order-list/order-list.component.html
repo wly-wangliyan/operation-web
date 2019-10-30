@@ -118,7 +118,9 @@
               {{(order.coupon_used_amount||order.coupon_used_amount===0) ? ('￥ ' + (order.coupon_used_amount | centPriceChange)) : '--'}}
             </td>
             <td>{{(order.real_price||order.real_price===0) ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
-            <td>{{(order.buy_price||order.buy_price===0) ? ('￥ ' + (order.buy_price | centPriceChange)) : '--'}}</td>
+            <td>
+              {{(order.buy_price||order.buy_price===0) ? ('￥ ' + ((order.buy_num*order.buy_price) | centPriceChange)) : '--'}}
+            </td>
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>
               {{order.pay_time && (order.status ===2 || order.status ===4) ?(order.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
