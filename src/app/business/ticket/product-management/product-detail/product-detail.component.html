@@ -88,13 +88,13 @@
               <ul class='m_20'>
                 <li class='des-item'>
                   <span class='des-title'>预定时间</span>
-                  <span class='info' *ngIf='!data.isShowInsutructions'>{{(data.preset_time|zMaxLength:36)||'--'}}</span>
+                  <span class='info' *ngIf='!data.isShowInsutructions'>{{(data.preset_time|zMaxLength:43)||'--'}}</span>
                   <span class='info' *ngIf='data.isShowInsutructions'>{{data.preset_time||'--'}}</span>
                 </li>
                 <li class='des-item'
-                  *ngIf='!data.preset_time||(data.preset_time&&data.preset_time.length<36)||data.isShowInsutructions'>
+                  *ngIf='!data.preset_time||(data.preset_time&&data.preset_time.length<43)||data.isShowInsutructions'>
                   <span class='des-title'>费用包含</span>
-                  <span class='info' *ngIf='!data.isShowInsutructions'>{{(data.fee_contain|zMaxLength:18)||'--'}}</span>
+                  <span class='info' *ngIf='!data.isShowInsutructions'>{{(data.fee_contain|zMaxLength:28)||'--'}}</span>
                   <span class='info' *ngIf='data.isShowInsutructions'>{{data.fee_contain||'--'}}</span>
                 </li>
                 <li class='text' *ngIf='!data.isShowInsutructions'>

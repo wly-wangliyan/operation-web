@@ -68,7 +68,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of thirdProductTicketTable.data; let i=index">
-            <td>
+            <td class="name_td">
               <div style="margin-top: 20px;">
                 <div class='top-img'>
                   <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
@@ -76,14 +76,14 @@
                 <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
               </div>
             </td>
-            <td nzAlign="left">
+            <td nzAlign="left" class="des_td">
               <ul class='m_20'>
                 <li class='des-item'>
                   <span class='des-title'>产品说明</span>
-                  <span class='des-content' *ngIf='!data.isShowDescriptions'>{{(data.notes|zMaxLength:56)||'--'}}</span>
+                  <span class='des-content' *ngIf='!data.isShowDescriptions'>{{(data.notes|zMaxLength:80)||'--'}}</span>
                   <span class='des-content' *ngIf='data.isShowDescriptions'>{{data.notes||'--'}}</span>
                 </li>
-                <li class='des-item' *ngIf='!data.notes||(data.notes&&data.notes.length<56)||data.isShowDescriptions'>
+                <li class='des-item' *ngIf='!data.notes||(data.notes&&data.notes.length<80)||data.isShowDescriptions'>
                   <span class='des-title'>有效期</span>
                   <span class='des-content'>{{data.delay_type|delayType}}</span>
                 </li>

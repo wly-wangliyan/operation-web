@@ -109,11 +109,11 @@
 }
 
 .ticket-info {
-  width: 385px;
+  width: 470px;
 }
 
 .des_td {
-  max-width: 500px;
+  max-width: 350px;
 }
 
 .info {
@@ -126,7 +126,7 @@
   white-space: pre-line;
   line-height: 22px;
   margin-top: -5px;
-  max-width: 230px;
+  max-width: 300px;
 }
 
 .info-item {
@@ -144,7 +144,7 @@
 }
 
 .info-text>textarea {
-  width: 230px;
+  width: 260px;
   background: rgba(247, 248, 250, 1);
   border: 1px solid #e8e8e8;
   padding-left: 3px;
@@ -260,7 +260,7 @@ input[type=file]:focus {
   padding-left: 10px;
   display: inline-block;
   vertical-align: top;
-  max-width: 350px;
+  max-width: 300px;
   margin-top: -5px;
 }
 
@@ -290,9 +290,17 @@ input[type=file]:focus {
   display: inline-block;
 }
 
-@media screen and (max-width: 1526px) {
+@media screen and (max-width: 1625px) {
   .ticket-info {
-    width: 415px;
+    width: 380px;
+  }
+
+  .info {
+    max-width: 230px;
+  }
+
+  .info-text>textarea {
+    width: 230px;
   }
 
   .name_td {
@@ -316,7 +324,7 @@ input[type=file]:focus {
   }
 
   .des-content {
-    max-width: 200px;
+    max-width: 170px;
   }
 
   .opera {
@@ -334,10 +342,10 @@ input[type=file]:focus {
   }
 
   .ticket-info {
-    width: 315px;
+    width: 344px;
   }
 
   .info {
-    width: 150px;
+    max-width: 150px;
   }
 }

@@ -322,7 +322,7 @@ input[type=file]:focus {
   padding-left: 10px;
   display: inline-block;
   vertical-align: top;
-  max-width: 350px;
+  max-width: 500px;
   line-height: 22px;
   margin-top: -5px;
 }
@@ -340,6 +340,14 @@ input[type=file]:focus {
   display: inline-block;
 }
 
+.name_td {
+  width: 260px;
+}
+
+.des_td {
+  width: 720px;
+}
+
 .price-content {
   font-size: 12px;
   font-family: PingFangSC-Semibold, PingFang SC;
@@ -347,4 +355,14 @@ input[type=file]:focus {
   color: rgba(232, 32, 56, 1);
   padding-left: 10px;
   display: inline-block;
+}
+
+@media screen and (max-width: 1500px) {
+  .des_td {
+    width: 650px;
+  }
+
+  .des-content {
+    max-width: 380px;
+  }
 }

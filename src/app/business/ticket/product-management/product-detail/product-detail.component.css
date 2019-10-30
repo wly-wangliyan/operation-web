@@ -199,7 +199,7 @@
 }
 
 .ticket-info {
-  width: 415px;
+  width: 490px;
 }
 
 .info {
@@ -212,7 +212,7 @@
   white-space: pre-line;
   line-height: 22px;
   margin-top: -5px;
-  max-width: 230px;
+  max-width: 370px;
 }
 
 .info-item {
@@ -326,7 +326,7 @@ input[type=file]:focus {
   padding-left: 10px;
   display: inline-block;
   vertical-align: top;
-  max-width: 350px;
+  max-width: 320px;
   line-height: 22px;
   margin-top: -4px;
 }
@@ -354,16 +354,20 @@ input[type=file]:focus {
 }
 
 .name_td {
-  min-width: 200px;
+  min-width: 230px;
 }
 
-@media screen and (max-width: 1526px) {
+@media screen and (max-width: 1612px) {
   .ticket-info {
-    width: 415px;
+    width: 400px;
+  }
+
+  .info {
+    width: 300px;
   }
 
   .name_td {
-    min-width: 185px;
+    min-width: 200px;
   }
 
   .top-img {
@@ -383,7 +387,7 @@ input[type=file]:focus {
   }
 
   .des-content {
-    max-width: 200px;
+    max-width: 280px;
   }
 
   .opera {
@@ -395,7 +399,7 @@ input[type=file]:focus {
   }
 }
 
-@media screen and (max-width: 1355px) {
+@media screen and (max-width: 1400px) {
   .ticket-info {
     width: 315px;
   }
