@@ -40,10 +40,6 @@ export class CalendarDetailComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private globalService: GlobalService, private productService: ProductService) {
-    this.selectedDate = new Date();
-    this.selectedDateMonth = new Date().getMonth() + 1;
-    this.SearchCalendarParams.start_date = this.getMonthStartDate(new Date().getFullYear(), new Date().getMonth());
-    this.SearchCalendarParams.end_date = this.getMonthEndDate(new Date().getFullYear(), new Date().getMonth());
   }
 
   ngOnInit() {
@@ -176,6 +172,7 @@ export class CalendarDetailComponent implements OnInit {
     this.ticket_id = ticket_id;
     this.type = type;
     this.sureCallback = sureFunc;
+    this.onInitCalendar();
     timer(0).subscribe(() => {
       if (type === 1) {
         this.searchText$.next();
@@ -187,6 +184,17 @@ export class CalendarDetailComponent implements OnInit {
       $(this.promptDiv.nativeElement).modal('show');
     });
   }
+
+  // 初始化日历数据
+  private onInitCalendar() {
+    this.calendarMap = {};
+    this.calendarMapKey = [];
+    this.selectedDate = new Date();
+    this.selectedDateMonth = new Date().getMonth() + 1;
+    this.SearchCalendarParams.start_date = this.getMonthStartDate(new Date().getFullYear(), new Date().getMonth());
+    this.SearchCalendarParams.end_date = this.getMonthEndDate(new Date().getFullYear(), new Date().getMonth());
+  }
+
 
   // 限制input[type='number']输入e
   public inputNumberLimit(event: any): boolean {

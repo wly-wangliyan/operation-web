@@ -74,8 +74,6 @@ export class ProductCalendarComponent implements OnInit {
 
   // 变更时间
   public onSelectChange(event) {
-    console.log('1', this.isEditPlatformPrice);
-
     if (!this.isEditPlatformPrice) {
       this.calendarMap = {};
       this.calendarMapKey = [];
