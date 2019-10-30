@@ -178,8 +178,11 @@ export class ProductCalendarComponent implements OnInit {
   // 平台售价输入框失去焦点校验
   public onBlurSavePlatformPrice(value: any) {
     this.isEditPlatformPrice = false;
+    const reg = /^\d+(\.\d+)?$/;
     if (value.platform_price !== null && value.platform_price !== undefined && value.platform_price !== '') {
-      if ((Number(value.platform_price) * 100) < (Number(value.buy_price) / 0.94)) {
+      if (!reg.test(value.platform_price)) {
+        this.globalService.promptBox.open('请输入正确的平台售价！', null, 2000, '/assets/images/warning.png');
+      } else if ((Number(value.platform_price) * 100) < (Number(value.buy_price) / 0.94)) {
         this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
           this.globalService.confirmationBox.close();
           this.submitPlatformPrice(value);
@@ -223,12 +226,4 @@ export class ProductCalendarComponent implements OnInit {
       }
     });
   }
-
-  // 限制input[type='number']输入e
-  public inputNumberLimit(event: any): boolean {
-    const reg = /[\d]/;
-    const keyCode = String.fromCharCode(event.keyCode);
-    return (keyCode && reg.test(keyCode));
-  }
-
 }
