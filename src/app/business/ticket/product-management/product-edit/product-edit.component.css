@@ -290,6 +290,10 @@ input[type=file]:focus {
   display: inline-block;
 }
 
+.price_ml {
+  margin-left: 50px;
+}
+
 @media screen and (max-width: 1625px) {
   .ticket-info {
     width: 380px;
