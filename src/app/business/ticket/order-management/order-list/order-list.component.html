@@ -109,7 +109,7 @@
               </td>
             </ng-container>
             <td>{{order.buy_num || 0}} 张</td>
-            <td>{{(order.right_price||order.right_price===0) ? ('￥ ' + (order.right_price | centPriceChange)) : '--'}}
+            <td>{{(order.total_price||order.total_price===0) ? ('￥ ' + (order.total_price | centPriceChange)) : '--'}}
             </td>
             <td>
               {{(order.discount_price||order.discount_price===0) ? ('￥ ' + (order.discount_price | centPriceChange)) : '--'}}

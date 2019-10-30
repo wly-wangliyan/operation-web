@@ -18,7 +18,7 @@
         <tr>
           <td>应收：</td>
           <td>
-            {{(orderDetail.right_price||orderDetail.right_price===0) ? ('￥ ' + (orderDetail.right_price | centPriceChange)) : '--'}}
+            {{(orderDetail.total_price||orderDetail.total_price===0) ? ('￥ ' + (orderDetail.total_price | centPriceChange)) : '--'}}
           </td>
           <td>平台立减：</td>
           <td>
