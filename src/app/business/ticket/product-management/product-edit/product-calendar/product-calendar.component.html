@@ -30,8 +30,8 @@
                     </div>
                     <div class="plat">
                       <span>平台售价</span>
-                      <input type='text' [(ngModel)]="calendarMap[key].platform_price" name='platform_price'
-                        class='price-input' (focus)='onFocusPlatformPrice()'
+                      <input type='text' maxlength='15' [(ngModel)]="calendarMap[key].platform_price"
+                        name='platform_price' class='price-input' (focus)='onFocusPlatformPrice()'
                         (blur)='onBlurSavePlatformPrice(calendarMap[key])'>
                     </div>
                   </div>
