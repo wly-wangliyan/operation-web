@@ -33,6 +33,7 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
   public disableVehicleType = [];
   public brand_ids = [];
   public firm_ids = [];
+  public loading = true; // 用于标记数据是否全部查询完成
   private requestProductSubscription: Subscription;
   private requestDetailSubscription: Subscription;
   private requestMerchantSubscription: Subscription;
@@ -41,7 +42,6 @@ export class OperationConfigurationComponent implements OnInit, OnDestroy {
   private linkUrl: string;
   private upkeep_merchant_id: string;
   private upkeep_merchant_product_id_copy: string;
-  private loading = true; // 用于标记数据是否全部查询完成
 
   @ViewChild(BusinessEditComponent, { static: true }) public businessEditComponent: BusinessEditComponent;
   @ViewChild(SelectBrandFirmTypeComponent, { static: true }) public selectBrandFirmTypeComponent: SelectBrandFirmTypeComponent;
