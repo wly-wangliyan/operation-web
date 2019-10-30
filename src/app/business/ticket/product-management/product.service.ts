@@ -32,6 +32,7 @@ export class ThirdProductEntity extends EntityBase {
   public open_time: number = undefined; // 第三方开放时间
   public market_price: number = undefined; // 第三方市场价
   public retail_price: number = undefined; // 第三方零售价
+  public platform_price: number = undefined; // 平台售价
   public buy_price: number = undefined; // 第三方结算价
   public merchant: number = undefined; // 1：甜程网
   public add_status: number = undefined; // 第三方产品添加状态
