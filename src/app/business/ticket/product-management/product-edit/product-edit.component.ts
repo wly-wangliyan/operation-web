@@ -179,7 +179,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productService.requestSetInstructions(this.product_id, item).subscribe(() => {
       this.globalService.promptBox.open('购票须知保存成功！');
       item.editBasePriceSwitch = true;
-      this.searchText$.next();
+      this.onUpdateData();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
