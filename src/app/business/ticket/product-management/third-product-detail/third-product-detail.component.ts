@@ -47,7 +47,7 @@ export class ThirdProductDetailComponent implements OnInit {
       this.thirdProductData = res;
       this.thirdProductInfoList = [
         {
-          third_product_id: this.thirdProductData.third_product_id,
+          tp_id: this.thirdProductData.tp_id,
           third_product_name: this.thirdProductData.third_product_name,
           third_product_image: this.thirdProductData.third_product_image,
           third_address: this.thirdProductData.address,
