@@ -10,7 +10,7 @@
         <nz-spin nzSimple></nz-spin>
       </div> -->
       <div class='calendar form-body'>
-        <nz-calendar [(ngModel)]="selectedDate" [(nzMode)]="mode" name='calendar'
+        <nz-calendar [ngModel]="selectedDate" [(nzMode)]="mode" name='calendar'
           (nzSelectChange)="onSelectChange($event)">
           <ul *nzDateCell="let date" class="events">
             <ng-container [ngSwitch]="date.getDate()">

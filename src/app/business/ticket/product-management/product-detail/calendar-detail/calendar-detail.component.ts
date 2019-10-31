@@ -96,6 +96,9 @@ export class CalendarDetailComponent implements OnInit {
     this.selectYear = event.getFullYear();
     this.selectMonth = event.getMonth();
     this.selectedDateMonth = event.getMonth() + 1;
+    if (this.selectMonth === new Date().getMonth()) {
+      this.selectedDate = new Date();
+    }
     this.SearchCalendarParams.start_date = this.getMonthStartDate(this.selectYear, this.selectMonth);
     this.SearchCalendarParams.end_date = this.getMonthEndDate(this.selectYear, this.selectMonth);
     if (this.type === 1) {

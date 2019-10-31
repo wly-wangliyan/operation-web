@@ -79,6 +79,9 @@ export class ProductCalendarComponent implements OnInit {
       this.calendarMapKey = [];
       this.selectYear = event.getFullYear();
       this.selectMonth = event.getMonth();
+      if (this.selectMonth === new Date().getMonth()) {
+        this.selectedDate = new Date();
+      }
       this.selectedDateMonth = event.getMonth() + 1;
       this.SearchCalendarParams.start_date = this.getMonthStartDate(this.selectYear, this.selectMonth);
       this.SearchCalendarParams.end_date = this.getMonthEndDate(this.selectYear, this.selectMonth);
