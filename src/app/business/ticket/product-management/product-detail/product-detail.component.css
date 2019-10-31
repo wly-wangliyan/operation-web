@@ -279,7 +279,9 @@
   width: 37px;
   display: inline-block;
   margin-right: 20px;
-  margin-left: -30px;
+  margin-left: -10px;
+  vertical-align: top;
+  margin-top: 2px;
 }
 
 .pro-img {
@@ -361,9 +363,19 @@ input[type=file]:focus {
   margin-left: 40px;
 }
 
+.ticket-name {
+  width: 150px;
+  display: inline-block;
+  text-align: left;
+}
+
 @media screen and (max-width: 1612px) {
   .ticket-info {
     width: 400px;
+  }
+
+  .ticket-name {
+    width: 120px;
   }
 
   .info {
@@ -375,7 +387,7 @@ input[type=file]:focus {
   }
 
   .top-img {
-    margin-right: 5px;
+    margin: 2px 5px 0;
   }
 
   .des_td {

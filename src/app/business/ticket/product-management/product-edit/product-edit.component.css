@@ -91,6 +91,7 @@
   width: 110px;
   white-space: pre-line;
   display: inline-block;
+  text-align: left;
 }
 
 .ticket-btn {
@@ -197,8 +198,10 @@
 .top-img {
   width: 37px;
   display: inline-block;
-  margin-right: 10px;
-  margin-left: -20px;
+  margin-right: 20px;
+  margin-left: -10px;
+  vertical-align: top;
+  margin-top: 2px;
 }
 
 .pro-img {
@@ -312,7 +315,7 @@ input[type=file]:focus {
   }
 
   .top-img {
-    margin-right: 5px;
+    margin: 2px 5px 0;
   }
 
   .des_td {

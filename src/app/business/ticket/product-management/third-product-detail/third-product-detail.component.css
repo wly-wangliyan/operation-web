@@ -91,7 +91,9 @@
   width: 37px;
   display: inline-block;
   margin-right: 20px;
-  margin-left: -30px;
+  margin-left: -10px;
+  vertical-align: top;
+  margin-top: 2px;
 }
 
 .temp-content {
@@ -355,6 +357,12 @@ input[type=file]:focus {
   color: rgba(232, 32, 56, 1);
   padding-left: 10px;
   display: inline-block;
+}
+
+.ticket-name {
+  width: 150px;
+  display: inline-block;
+  text-align: left;
 }
 
 @media screen and (max-width: 1500px) {

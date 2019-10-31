@@ -73,7 +73,7 @@
                 <div class='top-img'>
                   <img *ngIf='data.is_top===1' src="/assets/images/top_icon.png">
                 </div>
-                <span [title]='data.ticket_name'>{{data.ticket_name |zMaxLength:15}}</span>
+                <span class="ticket-name" [title]='data.ticket_name'>{{data.ticket_name}}</span>
               </div>
             </td>
             <td nzAlign="left" class="des_td">
