@@ -1,7 +1,7 @@
 /*提示模态框*/
 .z-modal {
   background: rgba(55, 60, 64, 0.77);
-  z-index: 100;
+  z-index: 300;
   overflow: hidden;
   position: fixed;
   top: 0px;
