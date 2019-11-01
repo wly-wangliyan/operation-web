@@ -15,7 +15,7 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="projectList" [nzShowPagination]="false" [nzNoResult]="noResultText" #projectTable>
+      <nz-table [nzData]="projectList" [nzFrontPagination]='false' [nzNoResult]="noResultText" #projectTable>
         <thead>
           <tr>
             <th>序号</th>
@@ -29,30 +29,34 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let category of projectCategories">
-            <tr *ngFor="let data of mapOfCategory[category]; let i=index">
-              <td *ngIf="category===1">{{i + 1}}</td>
-              <td *ngIf="category===2">{{rowspan_category_1 + i + 1}}</td>
-              <td *ngIf="category===3">{{rowspan_category_1 + rowspan_category_2 + i + 1}}</td>
-              <td [attr.rowspan]="mapOfCategory[category].length" *ngIf="i === 0">
-                {{data.upkeep_item_category | projectCategory}}
-              </td>
-              <td [title]="data.upkeep_item_name">
-                {{data.upkeep_item_name ? (data.upkeep_item_name | zMaxLength:20) : '--'}}</td>
-              <td>{{data.upkeep_item_num ? data.upkeep_item_num : '--'}}</td>
-              <td>{{data.upkeep_item_type | projectType}}</td>
-              <td *ngIf="data.upkeep_item_relation" [title]="data.upkeep_item_relation.upkeep_item_name">
-                {{data.upkeep_item_relation.upkeep_item_name| zMaxLength:20}}</td>
-              <td *ngIf="!data.upkeep_item_relation">无</td>
-              <td *ngIf="data.upkeep_item_content" [title]="data.upkeep_item_content">
-                {{data.upkeep_item_content|zMaxLength:20}}</td>
-              <td *ngIf="!data.upkeep_item_content">--</td>
-              <td class="operation">
-                <a [title]="'编辑'" (click)="onShowModal(data)" data-toggle="modal" data-target="#editProjectModal">编辑</a>
-                <!-- <a [title]="'删除'" (click)="onDeleteProgect(data)">删除</a> -->
-              </td>
-            </tr>
-          </ng-container>
+          <tr *ngFor="let data of projectTable.data; let i=index">
+            <td>{{i + 1}}</td>
+
+            <td [attr.rowspan]=rowspan_1 *ngIf="rowspan_1&&i === 0">
+              {{data.upkeep_item_category | projectCategory}}</td>
+            <td [attr.rowspan]=rowspan_2 *ngIf="rowspan_2&&i === rowspan_1">
+              {{data.upkeep_item_category | projectCategory}}</td>
+            <td [attr.rowspan]=rowspan_3 *ngIf="rowspan_3&&i === (rowspan_1+rowspan_2)">
+              {{data.upkeep_item_category | projectCategory}}</td>
+
+            <td [title]="data.upkeep_item_name ? data.upkeep_item_name : ''">
+              {{data.upkeep_item_name ? (data.upkeep_item_name | zMaxLength:20) : '--'}}</td>
+
+            <td>{{data.upkeep_item_num ? data.upkeep_item_num : '--'}}</td>
+
+            <td>{{data.upkeep_item_type | projectType}}</td>
+
+            <td *ngIf="data.upkeep_item_relation" [title]="data.upkeep_item_relation.upkeep_item_name">
+              {{data.upkeep_item_relation.upkeep_item_name| zMaxLength:20}}</td>
+            <td *ngIf="!data.upkeep_item_relation">无</td>
+
+            <td [title]="data.upkeep_item_content ? data.upkeep_item_content : ''">
+              {{data.upkeep_item_content ? (data.upkeep_item_content|zMaxLength:20): '--'}}</td>
+
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onShowModal(data)" data-toggle="modal" data-target="#editProjectModal">编辑</a>
+            </td>
+          </tr>
         </tbody>
       </nz-table>
     </div>

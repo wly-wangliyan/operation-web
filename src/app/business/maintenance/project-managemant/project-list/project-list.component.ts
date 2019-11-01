@@ -21,8 +21,6 @@ export class ProjectListComponent implements OnInit {
 
   public projectList: Array<ProjectEntity> = []; // 保养项目列表
 
-  public mapOfCategory: { [key: number]: Array<ProjectEntity> } = {}; // 大类对应项目列表
-
   public toRelationList: Array<ProjectEntity> = []; // 可关联项目列表
 
   public noResultText = '数据加载中...';
@@ -35,7 +33,7 @@ export class ProjectListComponent implements OnInit {
 
   public project_type = ''; // 项目类型
 
-  public project_id = ''; // 项目id
+  private project_id = ''; // 项目id
 
   public relation_id = ''; // 配套项目id
 
@@ -45,11 +43,11 @@ export class ProjectListComponent implements OnInit {
 
   private relationParams: RelationParams = new RelationParams();
 
-  public rowspan_category_1: number; // 保养项目合并行数量
+  public rowspan_1: number; // 保养项目合并行数量
 
-  public rowspan_category_2: number; // 清洗养护项目合并行数量
+  public rowspan_2: number; // 清洗养护项目合并行数量
 
-  public rowspan_category_3: number; // 维修项目合并行数量
+  public rowspan_3: number; // 维修项目合并行数量
 
   private importSpotSubscription: Subscription; // 导入描述对象
 
@@ -67,7 +65,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 初始化获取项目列表
-  private generateProjectList() {
+  private generateProjectList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestProjectList();
@@ -76,19 +74,18 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 请求项目列表
-  private requestProjectList() {
+  private requestProjectList(): void {
     this.projectService.requestProjectListData().subscribe(res => {
       this.projectList = res;
-      this.projectCategories.forEach(category => {
-        this.mapOfCategory[category] = this.projectList.filter(project => project.upkeep_item_category === category);
-      });
 
+      // 合并单元格
       const category_1 = this.projectList.filter(value => value.upkeep_item_category === 1);
-      this.rowspan_category_1 = category_1.length;
       const category_2 = this.projectList.filter(value => value.upkeep_item_category === 2);
-      this.rowspan_category_2 = category_2.length;
       const category_3 = this.projectList.filter(value => value.upkeep_item_category === 3);
-      this.rowspan_category_3 = category_3.length;
+      this.projectList = category_1.concat(category_2, category_3);
+      this.rowspan_1 = category_1.length;
+      this.rowspan_2 = category_2.length;
+      this.rowspan_3 = category_3.length;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -96,7 +93,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 解订阅
-  public onCloseUnsubscribe() {
+  public onCloseUnsubscribe(): void {
     this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
   }
 
@@ -104,21 +101,20 @@ export class ProjectListComponent implements OnInit {
    * 导入
    * 导入成功后需要刷新列表
    */
-  public onImportProject() {
+  public onImportProject(): void {
     $('#importProjectPromptDiv').modal('show');
     this.importViewModel.initImportData();
-    console.log('导入');
   }
 
   // 取消导入
-  public onCancelData() {
+  public onCancelData(): void {
     this.onCloseUnsubscribe();
     this.importViewModel.initImportData();
     $('#importProjectPromptDiv').modal('hide');
   }
 
   /* 导入数据 */
-  public onSubmitImportProject() {
+  public onSubmitImportProject(): void {
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
@@ -168,7 +164,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   /** 添加、编辑 */
-  public onShowModal(data?: ProjectEntity) {
+  public onShowModal(data?: ProjectEntity): void {
     this.onClearErrMsg();
     if (data) {
       this.isCreateProject = false;
@@ -193,20 +189,19 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  public onClearErrMsg() {
+  public onClearErrMsg(): void {
     this.projectErrMsg = '';
   }
 
   /** 删除 */
-  public onDeleteProgect() {
+  public onDeleteProgect(): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      console.log('调用删除接口');
     });
   }
 
   // 变更项目类别后，获取同大类下可关联项目列表
-  public onChangeCategory(event: any) {
+  public onChangeCategory(event: any): void {
     this.toRelationList = [];
     this.relation_id = '';
     this.projectParams.upkeep_item_relation = null;
@@ -221,7 +216,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 获取可用配套项目
-  private requestRelationProjects(category_id: any) {
+  private requestRelationProjects(category_id: any): void {
     if (category_id) {
       this.relationParams.upkeep_item_category = category_id;
       this.relationParams.upkeep_item_id = this.project_id;
@@ -240,7 +235,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 变更项目类型
-  public onChangeType(event: any) {
+  public onChangeType(event: any): void {
     this.onClearErrMsg();
     const type_id = event.target.value;
     if (type_id) {
@@ -251,7 +246,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 变更配套项目处理
-  public onChangeRelation(event: any) {
+  public onChangeRelation(event: any): void {
     if (event.target.value) {
       this.projectParams.upkeep_item_relation = event.target.value;
     } else {
@@ -259,16 +254,8 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  // 键盘按下事件
-  public onKeydownEvent(event: any) {
-    if (event.keyCode === 13) {
-      this.onEditFormSubmit();
-      return false;
-    }
-  }
-
   // 确定事件
-  public onEditFormSubmit() {
+  public onEditFormSubmit(): void {
     if (this.generateAndCheckParamsValid()) {
       if (this.isCreateProject) {
         this.requestAddProject();
@@ -279,7 +266,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 添加
-  private requestAddProject() {
+  private requestAddProject(): void {
     this.projectService.requestAddProjectData(this.projectParams).subscribe(res => {
       $('#editProjectModal').modal('hide');
       this.globalService.promptBox.open('保存成功！');
@@ -290,7 +277,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 编辑
-  private requestUpdateProject() {
+  private requestUpdateProject(): void {
     this.projectService.requestUpdateProjectData(this.project_id, this.projectParams).subscribe(res => {
       $('#editProjectModal').modal('hide');
       this.globalService.promptBox.open('保存成功！');
@@ -331,7 +318,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 接口错误信息处理
-  private errorProcess(err: any) {
+  private errorProcess(err: any): void {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
