@@ -52,7 +52,7 @@ export class OrderListComponent implements OnInit {
   }
 
   constructor(private globalService: GlobalService, private orderService: OrderManagementService,
-    private vehicleTypeService: VehicleTypeManagementService) { }
+              private vehicleTypeService: VehicleTypeManagementService) { }
 
   ngOnInit() {
     // 订单管理列表
@@ -165,9 +165,9 @@ export class OrderListComponent implements OnInit {
     this.searchParams.upkeep_merchant_name = this.searchParams.upkeep_merchant_name.trim();
     this.searchParams.upkeep_order_id = this.searchParams.upkeep_order_id.trim();
     if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('查询失败', '支付开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
     } else if (this.getTimeValid() === 'reserve_time') {
-      this.globalService.promptBox.open('查询失败', '预定开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('预定开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
     } else {
       this.pageIndex = 1;
       this.searchText$.next();
@@ -177,12 +177,14 @@ export class OrderListComponent implements OnInit {
   // 导出订单管理列表
   public onExportOrderList() {
     if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('查询失败', '支付开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
     } else if (this.getTimeValid() === 'reserve_time') {
-      this.globalService.promptBox.open('查询失败', '预定开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('预定开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
     } else {
       if (this.searchUrl) {
         window.open(this.searchUrl);
+      } else {
+        return;
       }
     }
   }
@@ -204,7 +206,7 @@ export class OrderListComponent implements OnInit {
   }
 
   // 获取支付时间时间戳
-  public getPaySectionTime(start, end): string {
+  public getPaySectionTime(start: any, end: any): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
       new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
     const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
@@ -213,7 +215,7 @@ export class OrderListComponent implements OnInit {
   }
 
   // 获取预定时间时间戳
-  public getSectionTime(start, end): string {
+  public getSectionTime(start: any, end: any): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
       new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
     const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),

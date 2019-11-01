@@ -46,6 +46,7 @@ export class OrderDetailComponent implements OnInit {
     ).subscribe(res => {
       this.upkeepOrderData = res;
       const orderDetailList = this.upkeepOrderData.order_detail;
+      // 合并单元格
       this.itemRowArr1 = orderDetailList && orderDetailList.filter(i => i.item_category === 1);
       this.itemRowArr2 = orderDetailList && orderDetailList.filter(i => i.item_category === 2);
       this.itemRowArr3 = orderDetailList && orderDetailList.filter(i => i.item_category === 3);

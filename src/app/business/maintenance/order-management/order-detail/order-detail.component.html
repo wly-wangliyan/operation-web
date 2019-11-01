@@ -37,7 +37,6 @@
           <nz-descriptions-item nzTitle="行驶公里数：">{{upkeepOrderData.kilometers?(upkeepOrderData.kilometers+'km'):'--'}}
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="车架号：">{{upkeepOrderData.frame_number||'--'}}</nz-descriptions-item>
-
           <nz-descriptions-item nzTitle="配件/服务合计实收：">
             {{(upkeepOrderData.accessory_amount_discounted | zCompleteNumber)||0}} 元
           </nz-descriptions-item>
@@ -125,5 +124,4 @@
       </div>
     </div>
   </div>
-
 </div>
