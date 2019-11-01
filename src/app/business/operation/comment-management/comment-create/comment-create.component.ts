@@ -62,7 +62,6 @@ export class CommentCreateComponent implements OnInit {
   @ViewChild('avatarImg', { static: false }) public avatarImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('commentImg', { static: false }) public commentImgSelectComponent: ZPhotoSelectComponent;
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -182,6 +181,7 @@ export class CommentCreateComponent implements OnInit {
     this.is_save = true;
   }
 
+  // 添加评论
   private requestAddComment() {
     this.commentService.requestAddCommentData(this.commentParams).subscribe(res => {
       this.globalService.promptBox.open('保存成功！', () => {

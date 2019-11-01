@@ -27,9 +27,9 @@ export class ErrPositionItem {
   corner: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, jump_link?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(title) || isUndefined(jump_link)
-        || isUndefined(corner)) {
+      || isUndefined(corner)) {
       return;
     }
     this.icon = icon;
@@ -62,10 +62,10 @@ export class FirstPageIconEditComponent implements OnInit {
   @Input() public sureName: string;
 
   @ViewChild('pagePromptDiv', { static: true }) public pagePromptDiv: ElementRef;
-  @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private firstPageIconService: FirstPageIconService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -119,37 +119,37 @@ export class FirstPageIconEditComponent implements OnInit {
   private rquestPageIconDetail() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription =
-        this.firstPageIconService.requestPageIconDetail(this.menu_id, this.app.application_id).subscribe(res => {
-          this.currentPage = res;
-          this.currentPage.system = this.app.system;
-          this.cover_url = this.currentPage.icon ? this.currentPage.icon.split(',') : [];
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      this.firstPageIconService.requestPageIconDetail(this.menu_id, this.app.application_id).subscribe(res => {
+        this.currentPage = res;
+        this.currentPage.system = this.app.system;
+        this.cover_url = this.currentPage.icon ? this.currentPage.icon.split(',') : [];
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     this.continueRequestSubscription = this.firstPageIconService.requestVersionList(this.app.application_id)
-        .subscribe(res => {
-          this.versionList = res;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      .subscribe(res => {
+        this.versionList = res;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 获取版本列表
   private rquestVersionList() {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
     this.continueRequestSubscription = this.firstPageIconService.requestVersionList(this.app.application_id)
-        .subscribe(res => {
-          this.versionList = res;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      .subscribe(res => {
+        this.versionList = res;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // form提交
   public onEditFormSubmit() {
     this.clear();
     if (this.verification()) {
-      this.coverImgSelectComponent.upload().subscribe( () => {
+      this.coverImgSelectComponent.upload().subscribe(() => {
         const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
         this.currentPage.icon = imageUrl.join(',');
         if (this.isCreatePage) {
@@ -161,7 +161,6 @@ export class FirstPageIconEditComponent implements OnInit {
             });
           }, err => {
             this.errorProcess(err);
-
           });
         } else {
           // 编辑项目

@@ -12,9 +12,9 @@ export class CommentDetailComponent implements OnInit {
 
   public currentComment = new CommentEntity(); // 评论详情
 
-  private comment_id: string; // 评论id
-
   public imageUrls = []; // 放大图片集合
+
+  private comment_id: string; // 评论id
 
   constructor(
     private globalService: GlobalService,

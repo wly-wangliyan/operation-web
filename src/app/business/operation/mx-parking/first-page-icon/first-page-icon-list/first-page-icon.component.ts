@@ -26,7 +26,7 @@ export class FirstPageIconComponent implements OnInit {
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
-  @ViewChild(FirstPageIconEditComponent, { static: true }) public firstPageIconEditComponent: FirstPageIconEditComponent;
+  @ViewChild('firstPageIconEdit', { static: true }) public firstPageIconEdit: FirstPageIconEditComponent;
   @ViewChild('basicTable', { static: true }) public basicTable: ElementRef;
 
   private get pageCount(): number {
@@ -43,13 +43,13 @@ export class FirstPageIconComponent implements OnInit {
 
   ngOnInit() {
     this.searchAppText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestAppList()))
-        .subscribe(res => {
-          this.appList = res;
-          this.application_id = this.appList.length > 0 ? this.appList[0].application_id : null;
-          this.requestFirstPageIconList();
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      .subscribe(res => {
+        this.appList = res;
+        this.application_id = this.appList.length > 0 ? this.appList[0].application_id : null;
+        this.requestFirstPageIconList();
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     this.searchAppText$.next();
   }
 
@@ -67,18 +67,18 @@ export class FirstPageIconComponent implements OnInit {
   }
 
   // 显示添加编辑项目modal
-  public onShowModal(data) {
+  public onShowModal(data: any) {
     const app = this.appList.filter(v => v.application_id === this.application_id);
     const menu_id = data ? data.menu_id : null;
-    this.firstPageIconEditComponent.open(menu_id, app[0], () => {
-       this.firstPageIconEditComponent.clear();
-       this.pageIndex = 1;
-       timer(0).subscribe(() => {
-         this.searchText$.next();
-       });
-     }, '保存', () => {
-       this.firstPageIconEditComponent.clear();
-     });
+    this.firstPageIconEdit.open(menu_id, app[0], () => {
+      this.firstPageIconEdit.clear();
+      this.pageIndex = 1;
+      timer(0).subscribe(() => {
+        this.searchText$.next();
+      });
+    }, '保存', () => {
+      this.firstPageIconEdit.clear();
+    });
   }
 
   // 翻页方法
@@ -103,7 +103,7 @@ export class FirstPageIconComponent implements OnInit {
       this.globalService.promptBox.open('每个系统最大可同时显示10个icon!', null, 2000, '/assets/images/warning.png');
       return;
     }
-    const param = {is_display: dispaly};
+    const param = { is_display: dispaly };
     this.firstPageIconService.requestDisplayMenu(this.application_id, data.menu_id, param).subscribe((e) => {
       const msg = dispaly ? '隐藏成功！' : '显示成功！';
       this.globalService.promptBox.open(msg);
@@ -126,25 +126,25 @@ export class FirstPageIconComponent implements OnInit {
   }
 
   //  切换应用
-  public onCheckStatusClicked(application_id) {
+  public onCheckStatusClicked(application_id: string) {
     this.application_id = application_id;
     this.searchText$.next();
   }
 
   // 列表排序
-  public drop(event: CdkDragDrop<string[]>, data): void {
+  public drop(event: CdkDragDrop<string[]>, data: any): void {
     if (event.previousIndex === event.currentIndex) {
       return;
     }
     let param = {};
     if (event.previousIndex > event.currentIndex) {
       const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
-      param = {move_num: this.iconList[index].sort_num};
+      param = { move_num: this.iconList[index].sort_num };
       if (event.currentIndex === 0 && this.iconList[index].sort_num === 1) {
-        param = {move_num: 0};
+        param = { move_num: 0 };
       }
     } else {
-      param = {move_num: this.iconList[event.currentIndex].sort_num};
+      param = { move_num: this.iconList[event.currentIndex].sort_num };
     }
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.firstPageIconService.requestUpdateSort(this.iconList[event.previousIndex].menu_id, param).subscribe((e) => {

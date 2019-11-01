@@ -1,61 +1,57 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'"></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg">
-            <a (click)="onShowModal(null)">新建</a>
-        </li>
-    </ul>
+  <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg">
+      <a (click)="onShowModal(null)">新建</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
-    <div class="tab-bar">
-        <ul *ngFor="let item of appList">
-            <li [class.active]="application_id===item.application_id" [class.width]="appList.length < 6"
-                (click)="onCheckStatusClicked(item.application_id)">{{item.application_name|zMaxLength:14}}</li>
-        </ul>
+  <div class="tab-bar">
+    <ul *ngFor="let item of appList">
+      <li [class.active]="application_id===item.application_id" [class.width]="appList.length < 6"
+        (click)="onCheckStatusClicked(item.application_id)">{{item.application_name|zMaxLength:14}}</li>
+    </ul>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="iconList" [nzShowPagination]="false" [nzNoResult]="noResultText"
+        [nzPageSize]="iconList.length" (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex"
+        #basicTable>
+        <thead>
+          <tr>
+            <th>显示顺序</th>
+            <th>图片</th>
+            <th>标题</th>
+            <th>操作系统</th>
+            <th>对应版本号</th>
+            <th>落地页</th>
+            <th>描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event, basicTable.data)">
+          <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <img [src]="data.icon" style="height: 20px;width: 20px">
+            </td>
+            <td [title]="data.title">{{data.title|zMaxLength:20}}</td>
+            <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
+            <td>{{data.version}}</td>
+            <td [title]="data.jump_link?data.jump_link:'--'">
+              {{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.jump_link|zMaxLength:25}}</td>
+            <td [title]="data.menu_describe?data.menu_describe:'--'">{{data.menu_describe|zMaxLength:15}}</td>
+            <td class="operation">
+              <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
+              <a *ngIf="data.is_display" [title]="'显示'" (click)="onHideBtnClick(data, false)">显示</a>
+              <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
+              <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
     </div>
-    <div class="table-container">
-        <div class="zmy-table">
-            <nz-table [nzData]="iconList"
-                      [nzShowPagination]="false"
-                      [nzNoResult]="noResultText"
-                      [nzPageSize]="iconList.length"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)"
-                      [(nzPageIndex)]="pageIndex"
-                      #basicTable>
-                <thead>
-                <tr>
-                    <th>显示顺序</th>
-                    <th>图片</th>
-                    <th>标题</th>
-                    <th>操作系统</th>
-                    <th>对应版本号</th>
-                    <th>落地页</th>
-                    <th>描述</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody cdkDropList (cdkDropListDropped)="drop($event, basicTable.data)">
-                <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
-                    <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td>
-                        <img [src]="data.icon" style="height: 20px;width: 20px">
-                    </td>
-                    <td [title]="data.title">{{data.title|zMaxLength:20}}</td>
-                    <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
-                    <td>{{data.version}}</td>
-                    <td [title]="data.jump_link?data.jump_link:'--'">{{data.belong_to==1?'原生':data.belong_to==2?'H5':'--'}}：{{data.jump_link|zMaxLength:25}}</td>
-                    <td [title]="data.menu_describe?data.menu_describe:'--'">{{data.menu_describe|zMaxLength:15}}</td>
-                    <td class="operation">
-                        <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
-                        <a *ngIf="data.is_display" [title]="'显示'" (click)="onHideBtnClick(data, false)">显示</a>
-                        <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
-                        <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
-                    </td>
-                </tr>
-                </tbody>
-            </nz-table>
-        </div>
-    </div>
+  </div>
 </div>
-<app-first-page-icon-edit></app-first-page-icon-edit>
-
+<app-first-page-icon-edit #firstPageIconEdit></app-first-page-icon-edit>

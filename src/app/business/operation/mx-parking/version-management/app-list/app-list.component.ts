@@ -7,8 +7,6 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { AppEntity, FirstPageIconService } from '../../first-page-icon/first-page-icon.service';
 import { VersionManagementService } from '../version-management.service';
 
-const PageSize = 15;
-
 @Component({
   selector: 'app-version-management-app',
   templateUrl: './app-list.component.html',
@@ -21,8 +19,6 @@ export class AppListComponent implements OnInit {
   public noResultText = '数据加载中...';
 
   private searchText$ = new Subject<any>();
-  private continueRequestSubscription: Subscription;
-  private linkUrl: string;
 
   @ViewChild(AppAddComponent, { static: true }) public appComponent: AppAddComponent;
 
@@ -34,12 +30,12 @@ export class AppListComponent implements OnInit {
 
   ngOnInit() {
     this.searchText$.pipe(debounceTime(500), switchMap(() => this.firstPageIconService.requestAppList()))
-        .subscribe(res => {
-          this.appList = res;
-          this.noResultText = '暂无数据';
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      .subscribe(res => {
+        this.appList = res;
+        this.noResultText = '暂无数据';
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     this.searchText$.next();
   }
 
@@ -60,9 +56,10 @@ export class AppListComponent implements OnInit {
     });
   }
 
+  // 版本管理
   public onVersionBtnClick(data) {
     this.router.navigate(['/main/operation/parking/version-management/version-list'],
-        { queryParams: { application_name: data.application_name, application_id: data.application_id} });
+      { queryParams: { application_name: data.application_name, application_id: data.application_id } });
   }
 
   // 删除某一项目

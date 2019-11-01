@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { CommentEntity, CommentService, SearchCommentParams, WorkEntity } from '../comment-management.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { Router } from '@angular/router';
@@ -24,16 +24,13 @@ export class CommentListComponent implements OnInit {
   public start_pay_time = null; // 支付时间
   public end_pay_time = null;
   public imageUrls = [];
+  public settingList: Array<WorkEntity> = []; // 评论配置列表
+  public work_id = ''; // 当前业务线id
+  public work_name = ''; // 当前业务线名称
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-
-  public settingList: Array<WorkEntity> = []; // 评论配置列表
-
-  public work_id = ''; // 当前业务线id
-
-  public work_name = ''; // 当前业务线名称
 
   @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
   @ViewChild('basicTable', { static: true }) public basicTable: ElementRef;
@@ -92,7 +89,7 @@ export class CommentListComponent implements OnInit {
   }
 
   // 查看详情
-  public onShowDetailClick(data) {
+  public onShowDetailClick(data: any) {
     this.router.navigate(['/main/operation/comment/comment-detail'],
       { queryParams: { comment_id: data.comment_id } });
   }
@@ -131,7 +128,7 @@ export class CommentListComponent implements OnInit {
   }
 
   //  切换状态
-  public onCheckStatusClicked(status) {
+  public onCheckStatusClicked(status: any) {
     this.searchParams = new SearchCommentParams();
     this.start_pay_time = null;
     this.end_pay_time = null;
@@ -143,7 +140,7 @@ export class CommentListComponent implements OnInit {
   // 查询按钮
   public onSearchBtnClick() {
     if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('评论开始时间不能大于结束时间!');
+      this.globalService.promptBox.open('评论开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
       return;
     }
     this.searchText$.next();
@@ -163,7 +160,7 @@ export class CommentListComponent implements OnInit {
   }
 
   // 获取预定时间时间戳
-  public getSectionTime(start, end): string {
+  public getSectionTime(start: any, end: any): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
       new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
     const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),

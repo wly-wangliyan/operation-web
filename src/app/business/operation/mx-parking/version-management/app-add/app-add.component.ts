@@ -53,7 +53,7 @@ export class AppAddComponent implements OnInit {
   @Input() public sureName: string;
 
   @ViewChild('projectPromptDiv', { static: true }) public projectPromptDiv: ElementRef;
-  @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private versionManagementService: VersionManagementService,
               private globalService: GlobalService) {
@@ -114,6 +114,7 @@ export class AppAddComponent implements OnInit {
     }
   }
 
+  // 格式校验
   private verification() {
     let cisCheck = true;
     if (!ValidateHelper.CheckIsBundleID(this.currentApp.bundle_id)) {

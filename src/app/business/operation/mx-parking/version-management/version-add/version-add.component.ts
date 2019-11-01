@@ -25,10 +25,10 @@ export class VersionAddComponent implements OnInit {
   @Input() public sureName: string;
 
   @ViewChild('projectPromptDiv', { static: true }) public projectPromptDiv: ElementRef;
-  @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private versionManagementService: VersionManagementService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -82,11 +82,11 @@ export class VersionAddComponent implements OnInit {
         });
       }, err => {
         this.errorProcess(err);
-
       });
     }
   }
 
+  // 格式校验
   private verification() {
     let cisCheck = true;
     if (!ValidateHelper.CheckIsVersion(this.currentVersion.version)) {

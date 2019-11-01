@@ -1,13 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import {HttpService, LinkResponse} from '../../../../core/http.service';
-import {environment} from '../../../../../environments/environment';
-import {Observable} from 'rxjs/index';
-import {map} from 'rxjs/internal/operators';
-import {EntityBase} from '../../../../../utils/z-entity';
-import {HttpResponse} from '@angular/common/http';
+import { HttpService, LinkResponse } from '../../../../core/http.service';
+import { environment } from '../../../../../environments/environment';
+import { Observable } from 'rxjs/index';
+import { map } from 'rxjs/internal/operators';
+import { EntityBase } from '../../../../../utils/z-entity';
+import { HttpResponse } from '@angular/common/http';
 
 export class FirstPageIconEntity extends EntityBase {
-  public menu_id: string = undefined ; 	// 	string 	相机主键
+  public menu_id: string = undefined; 	// 	string 	相机主键
   public title: string = undefined; 	// string	标题
   public application: string = undefined; 	// 	string	应用id
   public system: number = undefined; 	// 	int	系统(1,'IOS'),(2,'Android')
@@ -27,23 +27,23 @@ export class FirstPageIconEntity extends EntityBase {
 }
 
 export class AppEntity extends EntityBase {
-  public application_id: string = undefined ; 	// 	string 应用id
-  public application_name: string = undefined ; 	// 	string 应用id
-  public system: number = undefined ; 	// 	int 系统    (1,'IOS'),(2,'Android')
-  public version: string = undefined ; 	// 	string 最新版本号
-  public bundle_id: string = undefined ; 	// 	string bundle_id
+  public application_id: string = undefined; 	// 	string 应用id
+  public application_name: string = undefined; 	// 	string 应用id
+  public system: number = undefined; 	// 	int 系统    (1,'IOS'),(2,'Android')
+  public version: string = undefined; 	// 	string 最新版本号
+  public bundle_id: string = undefined; 	// 	string bundle_id
 }
 
 export class VersionEntity extends EntityBase {
-  public version_id: string = undefined ; 	// 	string 版本id
-  public version: string = undefined ; 	// 	string 版本
-  public is_display: string = undefined ; 	// 	bool  是否下线
-  public created_time: number = undefined ; 	// 	string 创建时间
+  public version_id: string = undefined; 	// 	string 版本id
+  public version: string = undefined; 	// 	string 版本
+  public is_display: string = undefined; 	// 	bool  是否下线
+  public created_time: number = undefined; 	// 	string 创建时间
 }
 
 export class SearchFirstPageIconParams extends EntityBase {
   page_size = 45; // integer	F	每页条数 默认20
-  page_num = 1 ; // integer	F	页码 默认1
+  page_num = 1; // integer	F	页码 默认1
 }
 
 export class FirstPageIconLinkResponse extends LinkResponse {
@@ -78,7 +78,7 @@ export class FirstPageIconService {
   /**
    * 通过linkUrl继续请求获取APP首页图标配置列表
    * @param string url linkUrl
-   * @returns Observable<CameraLinkResponse>
+   * @returns Observable<FirstPageIconLinkResponse>
    */
   public continueFirstPageIconList(url: string): Observable<FirstPageIconLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new FirstPageIconLinkResponse(res)));
@@ -90,17 +90,18 @@ export class FirstPageIconService {
    */
   public requestAppList(): Observable<Array<AppEntity>> {
     return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications`)
-        .pipe(map(res => {
-          const tempList: Array<AppEntity> = [];
-          res.body.forEach(data => {
-            tempList.push(AppEntity.Create(data));
-          });
-          return tempList;
-        }));
+      .pipe(map(res => {
+        const tempList: Array<AppEntity> = [];
+        res.body.forEach(data => {
+          tempList.push(AppEntity.Create(data));
+        });
+        return tempList;
+      }));
   }
 
   /**
    * 请求获取版本列表
+   * @param application_id 应用id
    * @returns Observable<Array<VersionEntity>>
    */
   public requestVersionList(application_id: string): Observable<Array<VersionEntity>> {
@@ -108,18 +109,19 @@ export class FirstPageIconService {
       status: 1
     };
     return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications/${application_id}/versions`, param)
-        .pipe(map(res => {
-          const tempList: Array<VersionEntity> = [];
-          res.body.forEach(data => {
-            tempList.push(VersionEntity.Create(data));
-          });
-          return tempList;
-        }));
+      .pipe(map(res => {
+        const tempList: Array<VersionEntity> = [];
+        res.body.forEach(data => {
+          tempList.push(VersionEntity.Create(data));
+        });
+        return tempList;
+      }));
   }
 
   /**
    * 删除APP首页图标配置
-   * @param string menu_id 参数
+   * @param application_id 应用id
+   * @param menu_id 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestDeleteFirstPageIcon(menu_id: string, application_id: string): Observable<HttpResponse<any>> {
@@ -128,17 +130,20 @@ export class FirstPageIconService {
 
   /**
    * 隐藏、开启
+   * @param application_id 应用id
    * @param menu_id 参数
+   * @param params 参数列表
    * @returns Observable<HttpResponse<any>>
    */
   public requestDisplayMenu(application_id: string, menu_id: string, params: any): Observable<HttpResponse<any>> {
     return this.httpService.patch(environment.OPERATION_SERVE +
-        `/admin/applications/${application_id}/menus/${menu_id}/is_display`, params);
+      `/admin/applications/${application_id}/menus/${menu_id}/is_display`, params);
   }
 
   /**
    * 更新序列
    * @param menu_id 参数
+   * @param params 参数列表
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateSort(menu_id: string, params: any): Observable<HttpResponse<any>> {
@@ -148,11 +153,12 @@ export class FirstPageIconService {
   /**
    * 详情
    * @param string menu_id 编号
-   * @returns Observable<CameraVM>
+   * @param application_id 应用id
+   * @returns Observable<FirstPageIconEntity>
    */
   public requestPageIconDetail(menu_id: string, application_id: string): Observable<FirstPageIconEntity> {
     return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications/${application_id}/menus/${menu_id}`
-    ).pipe(map(res =>  FirstPageIconEntity.Create(res.body)));
+    ).pipe(map(res => FirstPageIconEntity.Create(res.body)));
   }
 
   /**

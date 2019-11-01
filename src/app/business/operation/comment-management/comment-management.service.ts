@@ -93,8 +93,8 @@ export class CommentService {
   constructor(private httpService: HttpService) { }
   /**
    * 请求获取评论列表
-   * @param application_id 应用编号
-   * @returns Observable<FirstPageIconLinkResponse>
+   * @param params SearchCommentParams 查询参数
+   * @returns Observable<CommentLinkResponse>
    */
   public requestCommentList(params: SearchCommentParams): Observable<CommentLinkResponse> {
     return this.httpService.get(environment.COMMENT_SERVE + `/comments`,
@@ -104,7 +104,7 @@ export class CommentService {
   /**
    * 通过linkUrl继续请求获取评论列表
    * @param string url linkUrl
-   * @returns Observable<CameraLinkResponse>
+   * @returns Observable<CommentLinkResponse>
    */
   public continueCommentList(url: string): Observable<CommentLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new CommentLinkResponse(res)));
@@ -112,7 +112,8 @@ export class CommentService {
 
   /**
    * 修改评论状态
-   * @param comment_id 参数
+   * @param comment_id string 参数
+   * @param examine_status number 状态
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateStatus(comment_id: string, examine_status: number): Observable<HttpResponse<any>> {
@@ -123,7 +124,8 @@ export class CommentService {
 
   /**
    * 修改评论置顶状态
-   * @param comment_id 参数
+   * @param comment_id string 参数
+   * @param top number 状态
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateTop(comment_id: string, top: number): Observable<HttpResponse<any>> {
@@ -143,7 +145,7 @@ export class CommentService {
 
   /**
    * 新增评论
-   * @param addParams 参数
+   * @param addParams AddCommentParams 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestAddCommentData(addParams: AddCommentParams): Observable<HttpResponse<any>> {
@@ -153,7 +155,7 @@ export class CommentService {
 
   /**
    * 新增配置
-   * @param addParams 参数
+   * @param addParams WorkEntity 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestAddSettingData(addParams: WorkEntity): Observable<HttpResponse<any>> {
@@ -164,8 +166,8 @@ export class CommentService {
 
   /**
    * 编辑配置
-   * @param work_id 业务线id
-   * @param updateParams 参数
+   * @param work_id string 业务线id
+   * @param updateParams WorkEntity 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateSettingData(work_id: string, updateParams: WorkEntity): Observable<HttpResponse<any>> {

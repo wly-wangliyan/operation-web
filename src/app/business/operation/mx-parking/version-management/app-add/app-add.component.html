@@ -1,74 +1,74 @@
 <!--新建应用-->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">新建</span>
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true" (click)="onClose()">&times;
-                </button>
-            </div>
-            <form *ngIf="currentApp" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-                <div class="row" style="height: 30px">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>平台</span>
-                    </label>
-                    <div class="control-input" style="width: 348px" required>
-                        <input type="radio" name="system" [checked]="currentApp.system === 2" (change)="currentApp.system = 2"
-                               value='2' id="inputMale"/><label for="inputMale" style="margin-right: 39px">Android</label>
-                        <input type="radio" name="system" [checked]="currentApp.system === 1" (change)="currentApp.system = 1"
-                               value="1" id="inputFemale"/><label for="inputFemale">IOS</label>
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.system?.isError">{{errPositionItem?.system?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>应用名称</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" placeholder="请输入1-20个字的应用名称" [(ngModel)]="currentApp.application_name"
-                               name="application_name" maxlength="20" autocomplete="off" required>
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.application_name?.isError">{{errPositionItem?.application_name?.errMes}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>Bundle ID</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" placeholder="字母加'.'组成，开始和结尾不能为'.'" [(ngModel)]="currentApp.bundle_id" name="bundle_id"
-                               autocomplete="off" required (change)="errPositionItem.bundle_id.isError=false">
-                    </div>
-                </div>
-                <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.bundle_id?.isError">{{errPositionItem?.bundle_id?.errMes}}</span>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || !currentApp.system"
-                            (appZDebounceClick)="onEditFormSubmit()">
-                        {{sureName}}
-                    </button>
-                </div>
-            </form>
+  aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">新建</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <form *ngIf="currentApp" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+        <div class="row" style="height: 30px">
+          <label class=" control-label">
+            <b>*</b>
+            <span>平台</span>
+          </label>
+          <div class="control-input" style="width: 348px" required>
+            <input type="radio" name="system" [checked]="currentApp.system === 2" (change)="currentApp.system = 2"
+              value='2' id="inputMale" /><label for="inputMale" style="margin-right: 39px">Android</label>
+            <input type="radio" name="system" [checked]="currentApp.system === 1" (change)="currentApp.system = 1"
+              value="1" id="inputFemale" /><label for="inputFemale">IOS</label>
+          </div>
         </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.system?.isError">{{errPositionItem?.system?.errMes}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>应用名称</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请输入1-20个字的应用名称" [(ngModel)]="currentApp.application_name"
+              name="application_name" maxlength="20" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span
+              *ngIf="errPositionItem?.application_name?.isError">{{errPositionItem?.application_name?.errMes}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class=" control-label">
+            <b>*</b>
+            <span>Bundle ID</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="字母加'.'组成，开始和结尾不能为'.'" [(ngModel)]="currentApp.bundle_id"
+              name="bundle_id" autocomplete="off" required (change)="errPositionItem.bundle_id.isError=false">
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.bundle_id?.isError">{{errPositionItem?.bundle_id?.errMes}}</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || !currentApp.system"
+            (appZDebounceClick)="onEditFormSubmit()">
+            {{sureName}}
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

@@ -16,8 +16,6 @@ export class CommentSettingComponent implements OnInit {
 
   public noResultText = '数据加载中...';
 
-  private searchText$ = new Subject<any>();
-
   public settingParams: WorkEntity = new WorkEntity(); // 新建/编辑 配置参数
 
   public isCreateSetting = true; // 标记是否是新建配置
@@ -25,6 +23,8 @@ export class CommentSettingComponent implements OnInit {
   public settingErrMsg = '';
 
   private work_id: string; // 配置id
+
+  private searchText$ = new Subject<any>();
 
   constructor(
     private globalService: GlobalService,
@@ -126,5 +126,4 @@ export class CommentSettingComponent implements OnInit {
       }
     }
   }
-
 }
