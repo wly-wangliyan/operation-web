@@ -57,6 +57,10 @@
   margin-top: -3px;
 }
 
+:host ::ng-deep .ant-table-bordered .ant-table-body>table {
+  border: 1px solid #e8e8e8 !important;
+}
+
 :host ::ng-deep .ant-table {
   border: none;
   border-bottom: 1px solid #e8e8e8;

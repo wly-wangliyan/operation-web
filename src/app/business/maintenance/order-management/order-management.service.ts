@@ -135,8 +135,6 @@ export class OrderManagementService {
   constructor(private httpService: HttpService) { }
 
   /**订单管理列表
-   * @param upkeep_company_id string 公司ID
-   * @param upkeep_merchant_id string 商户ID
    * @param searchParams SearchOrderParams 查询参数
    * @returns Observable<OrderLinkResponse>
    */
@@ -157,7 +155,7 @@ export class OrderManagementService {
 
   /**
    * 订单管理详情
-   * @param upkeep_order_id string 保险报价记录id
+   * @param upkeep_order_id string 保养订单id
    * @returns Observable<UpkeepOrderEntity>
    */
   public requestOrderDetail(upkeep_order_id: string): Observable<UpkeepOrderEntity> {
