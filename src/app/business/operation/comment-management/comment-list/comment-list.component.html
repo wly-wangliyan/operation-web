@@ -80,15 +80,16 @@
             <td [title]="data.object_name?data.object_name:''">{{data.object_name|zMaxLength:20}}</td>
             <td>{{data.category?(data.category===1?'用户发起':'系统创建'):'--'}}</td>
             <td [title]="data.comment_content?data.comment_content:''">
-              <img *ngIf="data.is_top===1" src="/assets/images/icon_top_big.png" style="margin-top: -2px;width: 32px;">
-              <img *ngIf="data.is_top===2" src="" style="width: 32px;">
+              <img *ngIf="data.is_top===1" src="/assets/images/icon_top_big.png" class='top-img'
+                style="margin-top: -2px;">
+              <img *ngIf="data.is_top===2" class='top-img' src="">
               {{data.comment_content?(data.comment_content|zMaxLength:30):'--'}}</td>
             <td *ngIf="data.image_urls">
-              <img *ngFor="let item of data.image_urls.split(',');let i=index" [src]="item"
-                style="height: 30px;width: 30px;margin-right: 5px" (click)="onOpenZoomPictureModal(data, i)">
+              <img class='image-url pic' *ngFor="let item of data.image_urls.split(',');let i=index" [src]="item"
+                (click)="onOpenZoomPictureModal(data, i)">
             </td>
             <td *ngIf="!data.image_urls">
-              <img src="/assets/images/image_space.png" style="height: 30px;width: 30px">
+              <img src="/assets/images/image_space.png" class="image-url">
             </td>
             <td>{{data.created_time?(data.created_time * 1000 | date: "yyyy-MM-dd HH:mm"):'--'}}</td>
             <td>{{data.status===1?'待审核':data.status===2?'已审核':data.status===3?'被驳回':'--'}}</td>

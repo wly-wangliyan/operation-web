@@ -1,93 +1,98 @@
 .tab-bar {
-    padding: 14px 32px 14px 15px;
-    height: 62px;
-    overflow: hidden;
-    display: flex;
+  padding: 14px 32px 14px 15px;
+  height: 62px;
+  overflow: hidden;
+  display: flex;
 }
 
-.tab-bar > ul {
-    width: auto;
-    height: 62px;
-    overflow: hidden;
-    border-radius:4px;
+.tab-bar>ul {
+  width: auto;
+  height: 62px;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
-.tab-bar > ul > li {
-    float: left;
-    font-size: 14px;
-    min-width: 190px;
-    height:60px;
-    margin: 2px 2px 0 0;
-    text-align: center;
-    line-height: 50px;
-    cursor: pointer;
-    outline: none;
-    box-shadow:2px 0px 2px 0px rgba(137,146,170,0.33);
-    border-radius:4px 4px 0px 0px;
+.tab-bar>ul>li {
+  float: left;
+  font-size: 14px;
+  min-width: 190px;
+  height: 60px;
+  margin: 2px 2px 0 0;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 2px 0px 2px 0px rgba(137, 146, 170, 0.33);
+  border-radius: 4px 4px 0px 0px;
 }
 
-.tab-bar > ul > li.active {
-    color: #fff;
-    background: rgba(62,113,247,1);
+.tab-bar>ul>li.active {
+  color: #fff;
+  background: rgba(62, 113, 247, 1);
 }
 
 .content-main {
-    width:calc(100% - 40px);
-    min-height:calc(100% - 150px);
-    background:rgba(255,255,255,1);
-    border:1px solid rgba(136,136,136,.3);
-    margin-left: 14px;
+  width: calc(100% - 40px);
+  min-height: calc(100% - 150px);
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(136, 136, 136, .3);
+  margin-left: 14px;
 }
 
 .form-horizontal {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 
 .user-info img {
-    width: 54px;
-    height: 54px;
-    float: left;
+  width: 54px;
+  height: 54px;
+  float: left;
 }
 
 .user-info label {
-    font-size:17px;
-    font-family:PingFangSC-Medium,PingFangSC;
-    font-weight:500;
-    color:rgba(35,36,47,1);
-    line-height:14px;
-    margin: 7px 0 10px 20px;
+  font-size: 17px;
+  font-family: PingFangSC-Medium, PingFangSC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+  line-height: 14px;
+  margin: 7px 0 10px 20px;
 }
 
 .user-info span {
-    font-size:14px;
-    font-family:PingFangSC-Regular,PingFangSC;
-    font-weight:400;
-    color:rgba(136,136,136,1);
-    line-height:14px;
-    margin: 0 20px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFangSC;
+  font-weight: 400;
+  color: rgba(136, 136, 136, 1);
+  line-height: 14px;
+  margin: 0 20px;
 }
 
 .line {
-    width:calc(100% - 15px);
-    margin-top: 26px;
-    border:1px solid rgba(136,136,136,.3);
+  width: calc(100% - 15px);
+  margin-top: 26px;
+  border: 1px solid rgba(136, 136, 136, .3);
 }
 
 .operation-btn {
-    text-align: center;
-    margin: 30px 0;
+  text-align: center;
+  margin: 30px 0;
 }
 
 .operation-btn button {
-    width: 140px;
-    height: 50px;
-    color: #fff;
-    margin-left: 10px;
-    border: none;
+  width: 140px;
+  height: 50px;
+  color: #fff;
+  margin-left: 10px;
+  border: none;
 }
 
 .img-space {
-    width: 250px;
-    height: 150px;
-    margin: 30px 20px 0 0;
+  width: 250px;
+  height: 150px;
+  margin: 30px 20px 0 0;
+}
+
+.top-img {
+  width: 32px;
+  margin: -2px 10px 0 -42px;
 }

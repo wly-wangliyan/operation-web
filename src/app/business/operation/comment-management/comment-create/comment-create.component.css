@@ -5,3 +5,12 @@
 .row-message .err-message {
   margin-top: -15px !important;
 }
+
+.row-mes {
+  height: 20px !important;
+}
+
+.work-name {
+  font-size: 14px;
+  text-indent: 14px;
+}

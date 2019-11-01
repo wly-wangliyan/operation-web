@@ -34,7 +34,7 @@
           <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>
-              <img [src]="data.icon" style="height: 20px;width: 20px">
+              <img [src]="data.icon" width='20px' height='20px'>
             </td>
             <td [title]="data.title">{{data.title|zMaxLength:20}}</td>
             <td>{{data.system==1?'IOS':data.system==2?'Android':'--'}}</td>
