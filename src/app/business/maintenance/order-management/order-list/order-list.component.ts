@@ -44,7 +44,6 @@ export class OrderListComponent implements OnInit {
   private endReserveValue: Date | null = null;
   private searchUrl: string;
 
-
   private get pageCount(): number {
     if (this.orderList.length % PageSize === 0) {
       return this.orderList.length / PageSize;
@@ -53,7 +52,7 @@ export class OrderListComponent implements OnInit {
   }
 
   constructor(private globalService: GlobalService, private orderService: OrderManagementService,
-              private vehicleTypeService: VehicleTypeManagementService) { }
+    private vehicleTypeService: VehicleTypeManagementService) { }
 
   ngOnInit() {
     // 订单管理列表
@@ -65,12 +64,12 @@ export class OrderListComponent implements OnInit {
       this.orderList = res.results.map(i => ({ ...i, item_categorys: i.upkeep_item_categorys ? i.upkeep_item_categorys.split(',') : [] }));
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
-      // tslint:disable-next-line:max-line-length
-      this.searchUrl = `${environment.OPERATION_SERVE}/upkeep_orders/export?pay_status=${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}&upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}&upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}&reserve_time=${this.searchParams.reserve_time}`;
+      this.exportSearchUrl();
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
+
     // 获取车辆品牌列表
     this.searchBrandText$.pipe(
       debounceTime(500),
@@ -82,6 +81,17 @@ export class OrderListComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchBrandText$.next();
+  }
+
+  // 导出url
+  private exportSearchUrl() {
+    this.searchUrl = `${environment.OPERATION_SERVE}/upkeep_orders/export?pay_status=
+    ${this.searchParams.pay_status}&vehicle_brand_name=${this.searchParams.vehicle_brand_name}
+    &upkeep_item_category=${this.searchParams.upkeep_item_category}&payer_phone=
+    ${this.searchParams.payer_phone}&payer_name=${this.searchParams.payer_name}
+    &upkeep_merchant_name=${this.searchParams.upkeep_merchant_name}&upkeep_order_id=
+    ${this.searchParams.upkeep_order_id}&pay_time=${this.searchParams.pay_time}
+    &reserve_time=${this.searchParams.reserve_time}`;
   }
 
   // 支付开始时间校验
