@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WriteServiceImportViewModel } from '../../product.model';
 import { ProductService } from '../../product.service';
 
@@ -18,7 +18,6 @@ export class ProductEditor3Component implements OnInit {
     setTimeout(() => {
       CKEDITOR.replace('editor3');
     }, 0);
-
   }
 
   // 取消上传图片

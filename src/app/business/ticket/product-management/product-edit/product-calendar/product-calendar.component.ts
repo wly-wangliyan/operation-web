@@ -189,7 +189,9 @@ export class ProductCalendarComponent implements OnInit {
         this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
           this.globalService.confirmationBox.close();
           this.submitPlatformPrice(value);
-        }, '确认保存');
+        }, '确认保存', () => {
+          this.searchText$.next();
+        });
       } else if ((Number(value.platform_price) * 100) > Number(value.ticket.market_price)) {
         this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
       } else {

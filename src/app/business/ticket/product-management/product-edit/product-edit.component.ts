@@ -210,7 +210,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productTicketList[i].rc_notice = this.rc_notice;
   }
 
-
   // 价格日历
   public onOpenPriceCalendar(ticket_id) {
     this.productPriceCalendar.open(null, this.product_id, ticket_id, () => {
