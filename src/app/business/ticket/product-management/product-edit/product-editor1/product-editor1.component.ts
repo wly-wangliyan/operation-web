@@ -17,6 +17,11 @@ export class ProductEditor1Component implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       CKEDITOR.replace('editor1');
+      CKEDITOR.on('instanceCreated', event => {
+        event.editor.on('change', () => {
+           alert('change');
+        });
+      });
     }, 0);
   }
 
