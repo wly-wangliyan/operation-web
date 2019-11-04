@@ -11,12 +11,18 @@ export class ProductEditor3Component implements OnInit {
   public importViewModel: WriteServiceImportViewModel = new WriteServiceImportViewModel();
   public uploadImg: string;
   public flag = 0;
+  public isEditor3Change = false;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
     setTimeout(() => {
       CKEDITOR.replace('editor3');
+      CKEDITOR.on('instanceReady', event => {
+        event.editor.on('change', () => {
+          this.isEditor3Change = true;
+        });
+      });
     }, 0);
   }
 

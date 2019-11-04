@@ -9,6 +9,9 @@ import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-sele
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
 import { ProductCalendarComponent } from '../product-edit/product-calendar/product-calendar.component';
+import { ProductEditor1Component } from './product-editor1/product-editor1.component';
+import { ProductEditor2Component } from './product-editor2/product-editor2.component';
+import { ProductEditor3Component } from './product-editor3/product-editor3.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -77,6 +80,10 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
+  @ViewChild('productInfoForm', { static: true }) public productInfoForm: any;
+  @ViewChild('editor1', { static: true }) public productEditor1: ProductEditor1Component;
+  @ViewChild('editor2', { static: true }) public productEditor2: ProductEditor2Component;
+  @ViewChild('editor3', { static: true }) public productEditor3: ProductEditor3Component;
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -148,21 +155,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public canDeactivate(): boolean {
     const pro_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
     const pro_image_str = pro_image.join(',');
-    if (this.tempContent1.includes('<p>')) {
-      return this.productData.product_name === this.product_name &&
-        this.productData.product_subtitle === this.product_subtitle &&
-        CKEDITOR.instances.editor1.getData().trim() === this.tempContent1.trim()
-        && CKEDITOR.instances.editor2.getData().trim() === this.tempContent2.trim() &&
-        CKEDITOR.instances.editor3.getData().trim() === this.tempContent3.trim() &&
-        !this.isReImportant && pro_image_str === this.imgUrls.join(',');
-    } else {
-      return this.productData.product_name === this.product_name &&
-        this.productData.product_subtitle === this.product_subtitle &&
-        CKEDITOR.instances.editor1.getData().replace(/<p>/g, '').trim() === this.tempContent1.trim()
-        && CKEDITOR.instances.editor2.getData().replace(/<p>/g, '').trim() === this.tempContent2.trim() &&
-        CKEDITOR.instances.editor3.getData().replace(/<p>/g, '').trim() === this.tempContent3.trim() &&
-        !this.isReImportant && pro_image_str === this.imgUrls.join(',');
-    }
+    // true：不提示 false：提示
+    return !this.productInfoForm.dirty && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
+      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(','));
   }
 
   // 编辑购票须知

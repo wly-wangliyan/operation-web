@@ -10,16 +10,19 @@ import { ProductService } from '../../product.service';
 export class ProductEditor2Component implements OnInit {
   public importViewModel: WriteServiceImportViewModel = new WriteServiceImportViewModel();
   public uploadImg: string;
-  public tempContent1: string; // 交通指南富文本框内容
-  public tempContent2: string; // 预定须知富文本框内容
-  public tempContent3: string; // 景区介绍富文本框内容
   public flag = 0;
+  public isEditor2Change = false;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
     setTimeout(() => {
       CKEDITOR.replace('editor2');
+      CKEDITOR.on('instanceReady', event => {
+        event.editor.on('change', () => {
+          this.isEditor2Change = true;
+        });
+      });
     }, 0);
   }
 
