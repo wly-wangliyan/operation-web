@@ -40,17 +40,15 @@ export class ErrPositionItem {
 })
 export class ProductCreateComponent implements OnInit {
 
-  public isCreateProduct = true;
+  public isCreateProduct = true; // 标记新建
 
-  public title = '新建产品';
+  public title = '新建产品'; // 路由标题
 
-  public product_id: string;
+  private product_id: string; // 产品id
 
   public productRecord: ProductEntity = new ProductEntity(); // 产品 新建/编辑参数
 
   private projectCategory = ProjectCategory;
-
-  public productParams = []; // 产品 新建/编辑参数
 
   public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
 
@@ -70,7 +68,7 @@ export class ProductCreateComponent implements OnInit {
 
   public selected_brand_firm_info: string; // 所属厂商信息
 
-  public errPositionItem: ErrPositionItem = new ErrPositionItem();
+  public errPositionItem: ErrPositionItem = new ErrPositionItem(); // 添加图片错误信息
 
   @ViewChild('productImg', { static: false }) public productImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild(ProjectDialogComponent, { static: true }) public projectDialogComponent: ProjectDialogComponent;
@@ -97,7 +95,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 获取产品详情
-  private getProductDetail() {
+  private getProductDetail(): void {
     this.productLibraryService.requestProductDetailData(this.product_id).subscribe(data => {
       this.productRecord = data;
       if (this.productRecord) {
@@ -109,7 +107,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 初始化编辑表单
-  private initForm() {
+  private initForm(): void {
     this.selectedCategory = this.productRecord.upkeep_item.upkeep_item_category;
     this.selectedProjectid = this.productRecord.upkeep_item.upkeep_item_id;
     this.selected_project_info = this.productRecord.upkeep_item ?
@@ -119,7 +117,7 @@ export class ProductCreateComponent implements OnInit {
     this.productRecord.upkeep_accessory_type = this.productRecord.upkeep_item.upkeep_item_type;
     this.cover_url = this.productRecord.image_url ? this.productRecord.image_url.split(',') : [];
     if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
-      // 原厂配件
+      // 原厂配件需要初始化厂商信息
       if (this.productRecord.is_original) {
         this.selectedBrandId = this.productRecord.vehicle_brand.vehicle_brand_id;
         this.selectedFirmId = this.productRecord.vehicle_firm.vehicle_firm_id;
@@ -132,18 +130,18 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 清除错误信息
-  public onClearErrMsg() {
+  public onClearErrMsg(): void {
     this.productErrMsg = '';
   }
 
   // 打开所属项目选择组件
-  public onOpenProjectModal() {
+  public onOpenProjectModal(): void {
     this.onClearErrMsg();
     this.projectDialogComponent.open();
   }
 
   // 选择所属项目回调函数
-  public onSelectedProject(event: any) {
+  public onSelectedProject(event: any): void {
     if (event) {
       this.selectedProjectid = event.project.upkeep_item_id;
       this.productRecord = new ProductEntity();
@@ -157,24 +155,26 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 变更是否原厂
-  public onChangeOriginal(event: any) {
+  public onChangeOriginal(event: any): void {
     this.productRecord.is_original = event.target.value === 'false' ? false : true;
     if (!this.productRecord.is_original) {
       this.selectedBrandId = null;
       this.selectedFirmId = null;
       this.selected_brand_firm_info = null;
       this.productRecord.is_brand_special = false;
+    } else {
+      this.productRecord.brand_instruction = null;
     }
   }
 
   // 打开所属厂商选择组件
-  public onOpenBrandFirmModal() {
+  public onOpenBrandFirmModal(): void {
     this.onClearErrMsg();
     this.selectBrandFirmComponent.open();
   }
 
   // 选择所属厂商回调函数
-  public onSelectedBrandFirm(event: any) {
+  public onSelectedBrandFirm(event: any): void {
     if (event && event.firm) {
       const firm = event.firm[0];
       const brand = firm.vehicle_brand;
@@ -186,7 +186,7 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
-  public onSelectedPicture(event: any) {
+  public onSelectedPicture(event: any): void {
     this.onClearErrMsg();
     this.errPositionItem.icon.isError = false;
     if (event === 'type_error') {
@@ -206,7 +206,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 格式化金额
-  public onAmountChange(event: any) {
+  public onAmountChange(event: any): void {
     if (this.productRecord.original_amount) {
       if (isNaN(parseFloat(String(this.productRecord.original_amount)))) {
         this.productRecord.original_amount = null;
@@ -227,14 +227,14 @@ export class ProductCreateComponent implements OnInit {
   }
 
   /** 所需数量keyup事件 */
-  public onNumberKeyUp() {
+  public onNumberKeyUp(): void {
     if (this.productRecord.number) {
       this.productRecord.number = Number(this.productRecord.number);
     }
   }
 
   // 键盘按下事件
-  public onKeydownEvent(event: any) {
+  public onKeydownEvent(event: any): any {
     if (event.keyCode === 13) {
       this.onEditFormSubmit();
       return false;
@@ -242,7 +242,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 点击保存按钮
-  public onEditFormSubmit() {
+  public onEditFormSubmit(): void {
     this.onClearErrMsg();
     this.productImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.productImgSelectComponent.imageList.map(i => i.sourceUrl);
@@ -260,7 +260,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 添加
-  private requestAddProduct() {
+  private requestAddProduct(): void {
     this.productLibraryService.requestAddProductData(this.productRecord).subscribe(res => {
       this.globalService.promptBox.open('保存成功', () => {
         this.router.navigate(['../list'], { relativeTo: this.route });
@@ -271,7 +271,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 编辑
-  private requestUpdateProduct() {
+  private requestUpdateProduct(): void {
     this.productLibraryService.requestUpdateProductData(this.productRecord, this.product_id).subscribe(res => {
       this.globalService.promptBox.open('保存成功', () => {
         this.router.navigate(['../../list'], { relativeTo: this.route });
@@ -326,7 +326,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 上传图片错误信息处理
-  private upLoadErrMsg(err: any) {
+  private upLoadErrMsg(err: any): void {
     if (err.status === 422) {
       this.globalService.promptBox.open('参数错误，可能文件格式错误！', null, 2000, null, false);
     } else if (err.status === 413) {
@@ -336,7 +336,7 @@ export class ProductCreateComponent implements OnInit {
     }
   }
   // 接口错误信息处理
-  private errorProcess(err: any) {
+  private errorProcess(err: any): any {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
@@ -353,11 +353,11 @@ export class ProductCreateComponent implements OnInit {
   }
 
   // 取消编辑
-  public onCancelClick() {
+  public onCancelClick(): void {
     if (this.isCreateProduct) {
       this.router.navigate(['../list'], { relativeTo: this.route });
     } else {
-      this.router.navigate(['../../list'], { relativeTo: this.route });
+      window.history.back();
     }
   }
 }

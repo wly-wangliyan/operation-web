@@ -11,13 +11,13 @@ import { ProjectCategory } from '../../../../share/pipes/project-type.pipe';
 })
 export class ProductDetailComponent implements OnInit {
 
-  public titles = ['查看详情', '查看服务', '查看配件_原厂件', '查看配件_非原厂件']; // 页面标题集合
+  private titles = ['查看详情', '查看服务', '查看配件_原厂件', '查看配件_非原厂件']; // 页面标题集合
 
   public title = this.titles[0]; // 页面标题
 
   public no_img_url = '../../../../../assets/images/image_space_big.png'; // 默认图片
 
-  public product_id: string; // 产品id
+  private product_id: string; // 产品id
 
   public projectTypes = [1, 2]; // 项目类型 1:配件 2:服务
 
@@ -49,27 +49,27 @@ export class ProductDetailComponent implements OnInit {
   }
 
   // 获取产品详情
-  private getProductDetail() {
+  private getProductDetail(): void {
     this.productLibraryService.requestProductDetailData(this.product_id).subscribe(data => {
       this.productRecord = data;
       if (this.productRecord) {
         this.initForm();
-        if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
-          if (this.productRecord.is_original) {
-            this.title = this.titles[2];
-          } else {
-            this.title = this.titles[3];
-          }
-        } else {
-          this.title = this.titles[1];
-        }
       }
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
   }
 
-  private initForm() {
+  private initForm(): void {
+    if (this.productRecord.upkeep_accessory_type === this.projectTypes[0]) {
+      if (this.productRecord.is_original) {
+        this.title = this.titles[2];
+      } else {
+        this.title = this.titles[3];
+      }
+    } else {
+      this.title = this.titles[1];
+    }
     this.brand_firm_info = this.productRecord.vehicle_brand ? (this.productRecord.vehicle_brand.vehicle_brand_name + '·'
       + this.productRecord.vehicle_firm.vehicle_firm_name) : '--';
     this.productRecord.upkeep_item_id = this.productRecord.upkeep_item.upkeep_item_id;
@@ -78,8 +78,8 @@ export class ProductDetailComponent implements OnInit {
       + this.productRecord.upkeep_item.upkeep_item_name) : '--';
   }
 
-  // 删除产品
-  public onDeleteClick() {
+  // 删除产品 -- 暂停使用
+  public onDeleteClick(): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
       this.productLibraryService.requestDeleteProductData(this.product_id).subscribe(res => {

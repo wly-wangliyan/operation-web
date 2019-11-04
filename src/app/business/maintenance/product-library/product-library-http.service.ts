@@ -60,20 +60,21 @@ export class ProductEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
-    delete json['upkeep_item'];
-    delete json['vehicle_brand'];
-    delete json['vehicle_firm'];
-    delete json['created_time'];
-    delete json['updated_time'];
-    delete json['upkeep_merchants'];
-    if (json['upkeep_accessory_type'] === 2) {
-      delete json['is_original'];
-      delete json['vehicle_brand_id'];
-      delete json['vehicle_firm_id'];
-      delete json['is_brand_special'];
-      delete json['serial_number'];
-      delete json['specification'];
-      delete json['number'];
+    delete json.upkeep_item;
+    delete json.vehicle_brand;
+    delete json.vehicle_firm;
+    delete json.created_time;
+    delete json.updated_time;
+    delete json.upkeep_merchants;
+    delete json.upkeep_merchant_objects;
+    if (json.upkeep_accessory_type === 2) {
+      delete json.is_original;
+      delete json.vehicle_brand_id;
+      delete json.vehicle_firm_id;
+      delete json.is_brand_special;
+      delete json.serial_number;
+      delete json.specification;
+      delete json.number;
     }
     return json;
   }
@@ -93,24 +94,6 @@ export class SearchParams extends EntityBase {
   public cur_vehicle_firm_id: string = undefined; // 当前汽车厂商
   public page_num = 1; // 页码 默认:1
   public page_size = 45; // 每页条数 默认:15
-}
-
-// 产品
-export class AddProductParams extends EntityBase {
-  public upkeep_item_id: string = undefined; // 所属项目ID
-  public upkeep_accessory_type: ProjectEntity = undefined; // 项目类型 1:配件 2:服务
-  public upkeep_accessory_name: string = undefined; // 产品名称
-  public is_original: boolean = undefined; // 是否原厂
-  public vehicle_brand_id: VehicleBrandEntity = undefined; // 所属品牌ID
-  public vehicle_firm_id: VehicleFirmEntity = undefined; // 所属厂商ID
-  public is_brand_special: boolean = undefined; // 品牌专用
-  public brand_instruction: string = undefined; // 品牌说明 注:原产为否填写
-  public serial_number: string = undefined; // 零件编号
-  public specification: string = undefined; // 规格
-  public image_url: string = undefined; // 图片
-  public original_amount: number = undefined; // 原价 单位:元
-  public sale_amount: number = undefined; // 销售单价 单位:元
-  public number: number = undefined; // 所需数量 单位:件
 }
 
 export class ProductLinkResponse extends LinkResponse {

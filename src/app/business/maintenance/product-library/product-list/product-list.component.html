@@ -19,7 +19,7 @@
       <div class="form-group">
         <span>所属类别：</span>
         <select class="form-control" [(ngModel)]="project_category" (change)="onChangeCategory($event)"
-          name="project_category">
+          name="upkeep_item_category">
           <option value="">全部</option>
           <option *ngFor="let projectCategory of projectCategories" [value]="projectCategory">
             {{projectCategory | projectCategory}}
@@ -40,7 +40,7 @@
       <div class="form-group">
         <span>项目类型：</span>
         <select class="form-control" style="width: 100px;" [(ngModel)]="project_type" (change)="onChangeType($event)"
-          name="project_type">
+          name="upkeep_accessory_type">
           <option value="">全部</option>
           <option *ngFor="let projectType of projectTypes" [value]="projectType">{{projectType | projectType}}
           </option>
@@ -96,41 +96,58 @@
         <tbody>
           <tr *ngFor="let product of productTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
+
             <td [title]="product.upkeep_accessory_name">
               <a
                 [routerLink]="['../detail',product.upkeep_accessory_id]">{{product.upkeep_accessory_name | zMaxLength:10}}</a>
             </td>
-            <td>{{product.upkeep_item ? (product.upkeep_item.upkeep_item_category | projectCategory) : '--'}}</td>
-            <td *ngIf="product.upkeep_item" [title]="product.upkeep_item.upkeep_item_name">
-              {{product.upkeep_item.upkeep_item_name | zMaxLength:10}}</td>
-            <td *ngIf="!product.upkeep_item">--</td>
+
+            <ng-container *ngIf="product.upkeep_item">
+              <td>
+                {{product.upkeep_item.upkeep_item_category?(product.upkeep_item.upkeep_item_category|projectCategory):'--'}}
+              </td>
+
+              <td [title]="product.upkeep_item.upkeep_item_name">
+                {{product.upkeep_item.upkeep_item_name | zMaxLength:10}}</td>
+            </ng-container>
+            <ng-container *ngIf="!product.upkeep_item">
+              <td>--</td>
+              <td>--</td>
+            </ng-container>
+
             <td>{{product.upkeep_accessory_type | projectType}}</td>
+
+            <!-- 配件 -->
             <ng-container *ngIf="product.upkeep_accessory_type===projectTypes[0]">
               <td>{{product.serial_number ? product.serial_number : '--'}}</td>
+
               <td>{{product.is_original ? '是' : '否'}}</td>
+
+              <!-- 品牌开始 -->
               <td *ngIf="product.vehicle_brand && product.vehicle_firm">
-                {{product.vehicle_brand.vehicle_brand_name + '·' + product.vehicle_firm.vehicle_firm_name}}
-              </td>
+                {{product.vehicle_brand.vehicle_brand_name + '·' + product.vehicle_firm.vehicle_firm_name}}</td>
               <td *ngIf="product.vehicle_brand && !product.vehicle_firm">
-                {{product.vehicle_brand.vehicle_brand_name}}
-              </td>
+                {{product.vehicle_brand.vehicle_brand_name}}</td>
               <td *ngIf="!product.vehicle_brand && product.vehicle_firm">
-                {{product.vehicle_firm.vehicle_firm_name}}
-              </td>
+                {{product.vehicle_firm.vehicle_firm_name}}</td>
               <td *ngIf="!product.vehicle_brand && !product.vehicle_firm">--</td>
+              <!-- 品牌结束 -->
             </ng-container>
+
+            <!-- 服务 -->
             <ng-container *ngIf="product.upkeep_accessory_type===projectTypes[1]">
               <td>--</td>
               <td>--</td>
               <td>--</td>
             </ng-container>
+
             <td>{{(product.original_amount | zCompleteNumber)||0}} 元</td>
+
             <td>{{(product.sale_amount | zCompleteNumber)||0}} 元</td>
+
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',product.upkeep_accessory_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',product.upkeep_accessory_id]">编辑</a>
-              <!-- <a [title]="'删除'" *ngIf="!product.upkeep_merchants || product.upkeep_merchants.length===0"
-                (click)="onDeleteProgect(product)">删除</a> -->
             </td>
           </tr>
         </tbody>

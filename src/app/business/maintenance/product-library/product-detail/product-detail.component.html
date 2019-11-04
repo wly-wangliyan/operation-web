@@ -4,9 +4,6 @@
     <li class="big-bg big-white-btn" [routerLink]="['../../edit',productRecord.upkeep_accessory_id]">
       <a>编辑</a>
     </li>
-    <!-- <li class="big-bg">
-      <a (click)="onDeleteClick()">删除</a>
-    </li> -->
   </ul>
 </div>
 <div class="content-flow">
@@ -69,7 +66,7 @@
             </td>
             <td>所需数量：</td>
             <td>
-              {{productRecord.number >=0 ? productRecord.number : '--' }}
+              {{productRecord.number >=0 ? productRecord.number+ ' 件' : '--' }}
             </td>
           </tr>
 

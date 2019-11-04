@@ -3,7 +3,6 @@ import { GlobalService } from '../../../../core/global.service';
 import { ProductLibraryHttpService, ProductEntity, SearchParams } from '../product-library-http.service';
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FileImportViewModel } from '../../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../../share/components/progress-modal/progress-modal.component';
 import { ProjectEntity, ProjectManagemantHttpService } from '../../project-managemant/project-managemant-http.service';
@@ -19,17 +18,17 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
 
-  public projectList: Array<ProjectEntity> = []; // 保养项目列表
+  private projectList: Array<ProjectEntity> = []; // 保养项目列表
 
   public currentProjectList: Array<ProjectEntity> = []; // 选中类别下保养项目列表
 
-  public project_category = ''; // 类别
+  public project_category = ''; // 条件筛选>所属类别
 
-  public project_id = ''; // 项目id
+  public project_id = ''; // 条件筛选>项目id
 
-  public project_type = ''; // 项目类型
+  public project_type = ''; // 条件筛选>项目类型
 
-  public is_original = ''; // 是否原厂
+  public is_original = ''; // 条件筛选>是否原厂
 
   private requestSubscription: Subscription; // 获取数据
 
@@ -47,7 +46,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   private continueRequestSubscription: Subscription; // 分页获取数据
 
-  private linkUrl: string;
+  private linkUrl: string; // 分页url
 
   private importSpotSubscription: Subscription; // 导入描述对象
 
@@ -56,6 +55,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
 
+  // 计算列表分页总数
   private get pageCount(): number {
     if (this.productList.length % PageSize === 0) {
       return this.productList.length / PageSize;
@@ -64,8 +64,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private globalService: GlobalService,
     private projectService: ProjectManagemantHttpService,
     private productLibraryService: ProductLibraryHttpService
@@ -77,12 +75,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.searchText$ && this.searchText$.unsubscribe();
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 初始化获取产品列表
-  private generateProductList() {
+  private generateProductList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestProductList();
@@ -91,7 +90,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 请求产品列表
-  private requestProductList() {
+  private requestProductList(): void {
     this.productLibraryService.requestProductListData(this.searchParams).subscribe(res => {
       this.productList = res.results;
       this.linkUrl = res.linkUrl;
@@ -103,7 +102,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 获取所有配件/服务
-  private requestProjectList() {
+  private requestProjectList(): void {
     this.projectList = [];
     this.requestSubscription = this.projectService.requestProjectListData().subscribe(res => {
       this.projectList = res;
@@ -112,17 +111,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
-  // 变更项目类别
-  public onChangeCategory(event: any) {
+  // 变更项目类别并更新该类别下项目列表
+  public onChangeCategory(event: any): void {
     const category = event.target.value;
     this.project_id = '';
     this.searchParams.upkeep_item_id = null;
     if (category) {
       if (this.projectList) {
         this.currentProjectList = this.projectList.filter(value => value.upkeep_item_category === Number(category));
+      } else {
+        this.currentProjectList = [];
       }
-      const category_id = event.target.value;
-      this.searchParams.upkeep_item_category = Number(category_id);
+      this.searchParams.upkeep_item_category = Number(category);
     } else {
       this.currentProjectList = [];
       this.searchParams.upkeep_item_category = null;
@@ -130,7 +130,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 变更项目名称
-  public onChangeProjectId(event: any) {
+  public onChangeProjectId(event: any): void {
     if (!event.target.value) {
       this.searchParams.upkeep_item_id = null;
     } else {
@@ -139,7 +139,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 变更项目类型
-  public onChangeType(event: any) {
+  public onChangeType(event: any): void {
     const type_id = event.target.value;
     if (type_id) {
       this.searchParams.upkeep_accessory_type = Number(type_id);
@@ -149,7 +149,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 变更是否原厂
-  public onChangeOriginal(event: any) {
+  public onChangeOriginal(event: any): void {
     if (event.target.value) {
       // this.searchParams.is_original = event.target.value === 'false' ? false : true;
       this.searchParams.is_original = event.target.value;
@@ -159,7 +159,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 品牌、厂商、车系回调
-  public onChangeSearchParams(event: any) {
+  public onChangeSearchParams(event: any): void {
     if (event) {
       this.searchParams.vehicle_brand_id = event.brand;
       this.searchParams.vehicle_firm_id = event.firm;
@@ -167,12 +167,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 搜索
-  public onSearchBtnClick() {
+  public onSearchBtnClick(): void {
     this.searchText$.next();
   }
 
-  /** 删除产品 */
-  public onDeleteProgect(data: ProductEntity) {
+  /** 删除产品(有在售商家时不可删除)--暂停 */
+  public onDeleteProgect(data: ProductEntity): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
       this.productLibraryService.requestDeleteProductData(data.upkeep_accessory_id).subscribe(res => {
@@ -185,7 +185,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 翻页
-  public onNZPageIndexChange(pageIndex: number) {
+  public onNZPageIndexChange(pageIndex: number): void {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
@@ -201,12 +201,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // 重置当前页码
-  private initPageIndex() {
+  private initPageIndex(): void {
     this.pageIndex = 1;
   }
 
   // 解订阅
-  public onCloseUnsubscribe() {
+  public onCloseUnsubscribe(): void {
     this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
   }
 
@@ -214,21 +214,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * 导入
    * 导入成功后需要刷新列表
    */
-  public onImportProduct() {
+  public onImportProduct(): void {
     $('#importProductPromptDiv').modal('show');
     this.importViewModel.initImportData();
-    console.log('导入');
   }
 
   // 取消导入
-  public onCancelData() {
+  public onCancelData(): void {
     this.onCloseUnsubscribe();
     this.importViewModel.initImportData();
     $('#importProductPromptDiv').modal('hide');
   }
 
   /* 导入数据 */
-  public onSubmitImportProduct() {
+  public onSubmitImportProduct(): any {
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
