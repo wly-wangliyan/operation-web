@@ -78,6 +78,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   private use_notice: string;
   private rc_notice: string;
   private isChangeTicketInsutruction = false;
+  private isSubmitProductInfo = false;
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
@@ -157,9 +158,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     const pro_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
     const pro_image_str = pro_image.join(',');
     // true：不提示 false：提示
-    return !this.productInfoForm.dirty && !this.isChangeTicketInsutruction
+    return this.isSubmitProductInfo || (!this.productInfoForm.dirty && !this.isChangeTicketInsutruction
       && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
-      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(','));
+      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(',')));
   }
 
   // 编辑购票须知
@@ -320,6 +321,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
           this.searchText$.next();
           this.globalService.promptBox.open('保存成功');
+          this.isSubmitProductInfo = true;
           timer(2000).subscribe(() => this.router.navigateByUrl('/main/ticket/product-management'));
         }, err => {
           if (!this.globalService.httpErrorProcess(err)) {
