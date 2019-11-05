@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { MaintenanceManualHttpService, SearchParams } from '../maintenance-manual-http.service';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -13,7 +13,7 @@ const PageSize = 15;
   templateUrl: './manual-list.component.html',
   styleUrls: ['./manual-list.component.css']
 })
-export class ManualListComponent implements OnInit {
+export class ManualListComponent implements OnInit, OnDestroy {
 
   public manualList: Array<VehicleTypeEntity> = []; // 保养手册列表
 
@@ -50,17 +50,23 @@ export class ManualListComponent implements OnInit {
     this.generateProjectList();
   }
 
+  public ngOnDestroy() {
+    this.searchText$ && this.searchText$.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
+  }
+
   // 初始化获取手册列表
-  private generateProjectList() {
+  private generateProjectList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestProjectList();
+      this.requestManualList();
     });
     this.searchText$.next();
   }
 
   // 请求手册列表
-  private requestProjectList() {
+  private requestManualList(): void {
     this.manualService.requestManualListData(this.searchParams).subscribe(res => {
       this.manualList = res.results;
       this.linkUrl = res.linkUrl;
@@ -72,7 +78,7 @@ export class ManualListComponent implements OnInit {
   }
 
   // 品牌、厂商、车系回调
-  public onChangeSearchParams(event: any) {
+  public onChangeSearchParams(event: any): void {
     if (event) {
       this.searchParams.vehicle_brand = event.brand;
       this.searchParams.vehicle_firm = event.firm;
@@ -81,12 +87,12 @@ export class ManualListComponent implements OnInit {
   }
 
   // 条件筛选
-  public onSearchBtnClick() {
+  public onSearchBtnClick(): void {
     this.searchText$.next();
   }
 
-  /** 删除 */
-  public onDeleteProgect(data: VehicleTypeEntity) {
+  /** 删除--暂停使用 */
+  public onDeleteProgect(data: VehicleTypeEntity): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
       this.manualService.requestDeleteManualByVehicle(data.vehicle_type_id).subscribe(res => {
@@ -98,7 +104,8 @@ export class ManualListComponent implements OnInit {
     });
   }
 
-  public onNZPageIndexChange(pageIndex: number) {
+  // 分页
+  public onNZPageIndexChange(pageIndex: number): void {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
@@ -113,7 +120,7 @@ export class ManualListComponent implements OnInit {
   }
 
   // 解订阅
-  public onCloseUnsubscribe() {
+  public onCloseUnsubscribe(): void {
     this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
   }
 
@@ -121,20 +128,20 @@ export class ManualListComponent implements OnInit {
    * 导入
    * 导入成功后需要刷新类表
    */
-  public onImportProject() {
+  public onImportProject(): void {
     $('#importManualPromptDiv').modal('show');
     this.importViewModel.initImportData();
   }
 
   // 取消导入
-  public onCancelData() {
+  public onCancelData(): void {
     this.onCloseUnsubscribe();
     this.importViewModel.initImportData();
     $('#importManualPromptDiv').modal('hide');
   }
 
   /* 导入数据 */
-  public onSubmitImportBerth() {
+  public onSubmitImportBerth(): any {
     if (this.importViewModel.address) {
       const length = this.importViewModel.address.length;
       const index = this.importViewModel.address.lastIndexOf('.');
@@ -177,13 +184,8 @@ export class ManualListComponent implements OnInit {
     }
   }
 
-  public onDownloadMould() {
-    console.log('下载模板');
-  }
-
   // 重置当前页码
-  private initPageIndex() {
+  private initPageIndex(): void {
     this.pageIndex = 1;
   }
-
 }
