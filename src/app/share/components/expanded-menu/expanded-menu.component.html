@@ -22,7 +22,7 @@
         <ul *ngIf="menuItem.children.length>0">
           <li class="menu-item" nz-menu-item *ngFor="let subMenuItem of menuItem.children"
             [nzSelected]="subMenuItem.isSelect" (click)="onMenuItemClick(subMenuItem,menuItem.title)">
-            <span class="subMenuItem">
+            <span class="subMenu" [class.subMenuItem]="subMenuItem.isSelect"> 
               {{subMenuItem.title}}
             </span>
           </li>

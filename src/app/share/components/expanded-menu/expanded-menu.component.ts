@@ -72,17 +72,18 @@ export class ExpandedMenuComponent implements OnInit {
   }
 
   public onMenuItemClick(menuItem: SideMenuItem, parentTitle: string = '') {
-    // if (!this.authService.isMuchCertificationSuccess) {
-    //   return;
-    // }
     this.routeLinkList.forEach(item => {
       if (item.title !== parentTitle) {
         item.reset();
       }
     });
-    menuItem.isSelect = true;
     timer(0).subscribe(() => {
       this.router.navigateByUrl(menuItem.path);
+      if (menuItem.path === location.pathname) {
+        menuItem.isSelect = true;
+      } else {
+        this.refreshMenu(location.pathname);
+      }
     });
   }
 

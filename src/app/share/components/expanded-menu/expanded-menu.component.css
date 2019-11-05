@@ -67,6 +67,17 @@
   background-size: contain;
 }
 
+.subMenu {
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+}
+
 .subMenuItem {
   display: inline-block;
   width: 100px;

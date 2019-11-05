@@ -136,29 +136,29 @@
                   <span class='des-title info-title'>
                     <span style="color: red;">*</span>预定时间</span>
                   <div class='info-text'>
-                    <textarea [(ngModel)]="data.preset_time" placeholder="200字以内..." maxlength="200"
-                      name="order_time"></textarea>
+                    <textarea [(ngModel)]="data.preset_time" placeholder="200字以内..." maxlength="200" name="order_time"
+                      (change)='onTicketInsutructionChange()'></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
                   <span class='des-title info-title'><span style="color: red;">*</span>费用包含</span>
                   <div class='info-text'>
                     <textarea class="price" [(ngModel)]="data.fee_contain" placeholder="200字以内..." maxlength="200"
-                      name="price"></textarea>
+                      name="price" (change)='onTicketInsutructionChange()'></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
                   <span class='des-title info-title'><span style="color: red;">*</span>使用须知</span>
                   <div class='info-text'>
-                    <textarea [(ngModel)]="data.use_notice" placeholder="200字以内..." maxlength="200"
-                      name="remark"></textarea>
+                    <textarea [(ngModel)]="data.use_notice" placeholder="200字以内..." maxlength="200" name="remark"
+                      (change)='onTicketInsutructionChange()'></textarea>
                   </div>
                 </li>
                 <li class='info-item'>
                   <span class='des-title info-title'><span style="color: red;">*</span>退改须知</span>
                   <div class='info-text'>
-                    <textarea [(ngModel)]="data.rc_notice" placeholder="200字以内..." maxlength="200"
-                      name="notice"></textarea>
+                    <textarea [(ngModel)]="data.rc_notice" placeholder="200字以内..." maxlength="200" name="notice"
+                      (change)='onTicketInsutructionChange()'></textarea>
                   </div>
                 </li>
               </ul>

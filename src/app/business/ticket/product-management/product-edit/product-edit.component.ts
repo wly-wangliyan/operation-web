@@ -77,6 +77,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   private fee_contain: string;
   private use_notice: string;
   private rc_notice: string;
+  private isChangeTicketInsutruction = false;
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
@@ -156,7 +157,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     const pro_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
     const pro_image_str = pro_image.join(',');
     // true：不提示 false：提示
-    return !this.productInfoForm.dirty && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
+    return !this.productInfoForm.dirty && !this.isChangeTicketInsutruction
+      && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
       && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(','));
   }
 
@@ -169,19 +171,25 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.rc_notice = item.rc_notice;
   }
 
+  // 购票须知被编辑
+  public onTicketInsutructionChange() {
+    this.isChangeTicketInsutruction = true;
+  }
+
   // 保存购票须知
   public onSaveTicketInsutruction(item: any) {
     this.productService.requestSetInstructions(this.product_id, item).subscribe(() => {
       this.globalService.promptBox.open('购票须知保存成功！');
       item.editBasePriceSwitch = true;
+      this.isChangeTicketInsutruction = false;
       this.onUpdateData();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
           const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
           for (const content of error.errors) {
-            // tslint:disable-next-line:max-line-length
-            const field = content.field === 'preset_time' ? '预定时间' : content.field === 'fee_contain' ? '费用包含' : content.field === 'use_notice' ? '使用须知' : content.field === 'rc_notice' ? '退改须知' : '';
+            const field = content.field === 'preset_time' ? '预定时间' : content.field === 'fee_contain' ?
+              '费用包含' : content.field === 'use_notice' ? '使用须知' : content.field === 'rc_notice' ? '退改须知' : '';
             if (content.code === 'missing_field') {
               this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
               return;
