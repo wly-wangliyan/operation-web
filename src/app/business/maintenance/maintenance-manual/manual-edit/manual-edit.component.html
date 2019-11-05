@@ -31,13 +31,16 @@
       <label>{{vehicleTypeInfo.vehicle_structure ? vehicleTypeInfo.vehicle_structure :'--'}}</label>
     </div>
   </div>
+  <!-- loading -->
   <div class="content-middle" *ngIf="loading">
     <div class="spin-loading">
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
   </div>
   <div class="content-middle" *ngIf="isShowSetting">
+    <!-- 按大类循环 -->
     <ng-container *ngFor="let category of projectCategories">
+      <!-- 大类下有数据时才显示 -->
       <div class="category-item" *ngIf="mapOfShow[category]">
         <i class="category-icon{{category}}"></i>
         <table class="table">
@@ -56,28 +59,34 @@
           </thead>
           <tbody>
             <ng-container *ngFor="let project of mapOfProject[category]">
+              <!-- 编辑时显示所有项目，查看时显示开启的项目 -->
               <tr *ngIf="isEdit ||(!isEdit && mapOfSetting[project.upkeep_item_id] &&
                   mapOfSetting[project.upkeep_item_id].switch)">
-                <td [title]="project.upkeep_item_name">
+
+                <td [title]="project.upkeep_item_name ? project.upkeep_item_name : ''">
                   {{project.upkeep_item_name | zMaxLength:10}}</td>
+
+                <!-- 编辑时才显示操作列 -->
                 <td *ngIf="isEdit && mapOfSetting[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-switch-on]="mapOfSetting[project.upkeep_item_id].switch"
                     [class.btn-switch-off]="!mapOfSetting[project.upkeep_item_id].switch"
-                    (click)=onChangeBtnSwitch(mapOfSetting[project.upkeep_item_id].switch,project.upkeep_item_id)></button>
-                </td>
+                    (appZDebounceClick)=onChangeBtnSwitch(mapOfSetting[project.upkeep_item_id].switch,project.upkeep_item_id)>
+                  </button></td>
+
+                <!-- 编辑且开关开启时 描述为input -->
                 <td
                   *ngIf="isEdit && mapOfSetting[project.upkeep_item_id] && mapOfSetting[project.upkeep_item_id].switch">
                   <input name="description_{{project.upkeep_item_id}}"
-                    [(ngModel)]="mapOfSetting[project.upkeep_item_id].description" maxlength="20" />
-                </td>
+                    [(ngModel)]="mapOfSetting[project.upkeep_item_id].description" maxlength="20" /></td>
                 <td
                   *ngIf="!isEdit && mapOfSetting[project.upkeep_item_id] || isEdit && !mapOfSetting[project.upkeep_item_id].switch">
                   {{mapOfSetting[project.upkeep_item_id].description ? mapOfSetting[project.upkeep_item_id].description : '--'}}
                 </td>
+                <!-- 推荐值，开关开启时才可编辑（保养项目为换，其他大类下为荐） -->
                 <td *ngFor="let handbook of mapOfHandbook[project.upkeep_item_id]">
                   <button class="row-btn" [class.btn-recommend-on]="handbook.recommend_value===2"
                     [disabled]="!isEdit || !mapOfSetting[project.upkeep_item_id].switch"
-                    (click)=onChangeBtnRecommend(handbook,mapOfSetting[project.upkeep_item_id].uh_item_id)>{{category===1?'换':'荐'}}</button>
+                    (appZDebounceClick)=onChangeBtnRecommend(handbook,mapOfSetting[project.upkeep_item_id].uh_item_id)>{{category===1?'换':'荐'}}</button>
                 </td>
               </tr>
             </ng-container>
@@ -85,11 +94,5 @@
         </table>
       </div>
     </ng-container>
-    <!-- <div class="content-footer" *ngIf="isEdit && isShowSetting">
-      <button name="sure_btn" class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
-        保存
-      </button>
-      <button name="close_btn" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
-    </div> -->
   </div>
 </div>

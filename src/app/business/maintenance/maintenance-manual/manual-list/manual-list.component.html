@@ -1,17 +1,10 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养手册'" [level2Name]=""></app-crumb>
-  <!-- <ul class="header-right">
-    <li class="big-bg big-white-btn">
-      <a (click)="onImportProject()">导入</a>
-    </li>
-    <li class="big-bg">
-      <a (click)="onDownloadMould()">下载模板</a>
-    </li>
-  </ul> -->
 </div>
 <div class="content-flow">
   <div class="search-container">
     <form class="search-form">
+      <!-- 品牌、厂商、车系及联选择组件 -->
       <app-search-vehicle-type-group (selectBrandFirmSeries)="onChangeSearchParams($event)">
       </app-search-vehicle-type-group>
       <div class="form-group">
@@ -51,9 +44,13 @@
         <tbody>
           <tr *ngFor="let manual of manualTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
+
             <td>{{manual.vehicle_brand? manual.vehicle_brand.vehicle_brand_name : '--'}}</td>
+
             <td>{{manual.vehicle_firm? manual.vehicle_firm.vehicle_firm_name : '--'}}</td>
+
             <td>{{manual.vehicle_series? manual.vehicle_series.vehicle_series_name : '--'}}</td>
+
             <td *ngIf="manual.vehicle_year_model || manual.vehicle_type_name">
               <a [routerLink]="['../detail',manual.vehicle_type_id]">
                 {{manual.vehicle_year_model ? manual.vehicle_year_model+'款' : ''}}
@@ -61,16 +58,19 @@
               </a>
             </td>
             <td *ngIf="!manual.vehicle_year_model && !manual.vehicle_type_name">--</td>
+
             <td [title]="manual.vehicle_engine?manual.vehicle_engine:''">
               {{manual.vehicle_engine?(manual.vehicle_engine|zMaxLength:10):'--'}}</td>
+
             <td [title]="manual.vehicle_gearbox?manual.vehicle_gearbox:''">
               {{manual.vehicle_gearbox?(manual.vehicle_gearbox|zMaxLength:10):'--'}}</td>
+
             <td [title]="manual.vehicle_structure?manual.vehicle_structure:''">
               {{manual.vehicle_structure?(manual.vehicle_structure|zMaxLength:10):'--'}}</td>
+
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail',manual.vehicle_type_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../edit',manual.vehicle_type_id]">编辑</a>
-              <!-- <a [title]="'删除'" (click)="onDeleteProgect(manual)">删除</a> -->
             </td>
           </tr>
         </tbody>
