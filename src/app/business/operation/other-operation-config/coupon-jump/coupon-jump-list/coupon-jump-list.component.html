@@ -1,1 +1,57 @@
-<p>coupon-jump-list works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'其他运营配置'" [level2Name]="'优惠券跳转页'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg">
+            <a>添加</a>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>名称：</span>
+                <input class="form-control" placeholder="请输入优惠券名称"/>
+            </div>
+            <div class="form-group">
+                <span>优惠券模板ID：</span>
+                <input class="form-control" placeholder="请输入优惠券模板ID"/>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table [nzData]="couponJumpList" [nzShowPagination]="true" [nzNoResult]="noResultText"
+                      [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)"
+                      #couponJumpTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>优惠券模板ID</th>
+                    <th>优惠券名称</th>
+                    <th>是否可分享</th>
+                    <th>去使用页</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of couponJumpTable.data; let i=index">
+                    <td>{{i + ( pageIndex - 1) * 15 + 1}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="operation">
+                        <a [title]="'编辑'">编辑</a>
+                        <a [title]="'删除'">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

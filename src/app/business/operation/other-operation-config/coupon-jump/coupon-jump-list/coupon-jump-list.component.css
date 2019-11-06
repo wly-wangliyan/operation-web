@@ -1,0 +1,9 @@
+.search-container {
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    padding: 0;
+}
+
+.operation a:hover {
+    color: rgba(62, 113, 247, 1);
+}
