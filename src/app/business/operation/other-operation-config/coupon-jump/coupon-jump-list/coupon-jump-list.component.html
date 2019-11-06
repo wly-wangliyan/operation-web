@@ -69,7 +69,7 @@
                 </button>
                 <span class="modal-title">{{currentCouponJump.coupon_url_record_id ? '添加': '编辑'}}</span>
             </div>
-            <form class="form-horizontal" (keydown)="onAddOrEditCouponUrlRecordSubmit()" #couponUrlRecordForm="ngForm"
+            <form class="form-horizontal" (keydown)="onKeydownEvent($event)" #couponUrlRecordForm="ngForm"
                   autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
@@ -109,13 +109,13 @@
                             <input class="form-control" style="border-left: none!important;"
                                    [(ngModel)]="currentCouponJump.coupon_url" name="coupon_url"
                                    placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1" maxlength="100"
-                                   (change)="couponUrlErrMsg=''" required>
+                                   (input)="couponUrlErrMsg=''" required>
                         </div>
                     </div>
                     <div class="row row-message">
                         <label class="control-label"></label>
                         <div class="control-input err-message">
-                            <span *ngIf="couponUrlErrMsg">{{couponUrlErrMsg}}</span>
+                            <span *ngIf="couponUrlErrMsg && (couponUrlErrMsg !== '')">{{couponUrlErrMsg}}</span>
                         </div>
                     </div>
                     <div class="row">
