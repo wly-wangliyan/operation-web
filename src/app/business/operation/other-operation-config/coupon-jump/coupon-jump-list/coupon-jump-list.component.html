@@ -1,7 +1,7 @@
 <div class="content-header">
     <app-crumb [level1Name]="'其他运营配置'" [level2Name]="'优惠券跳转页'"></app-crumb>
     <ul class="header-right">
-        <li class="big-bg">
+        <li class="big-bg" (click)="onAddOrEditCouponUrlRecordModal()">
             <a>添加</a>
         </li>
     </ul>
@@ -48,12 +48,107 @@
                     <td>{{data.can_be_shared ? '可分享' : '不可分享'}}</td>
                     <td>{{data.coupon_url}}</td>
                     <td class="operation">
-                        <a [title]="'编辑'">编辑</a>
+                        <a [title]="'编辑'" (click)="onAddOrEditCouponUrlRecordModal(data)">编辑</a>
                         <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
                     </td>
                 </tr>
                 </tbody>
             </nz-table>
+        </div>
+    </div>
+</div>
+
+<!-- 添加/编辑优惠券使用跳转url记录模态框 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #couponUrlRecordPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+                <span class="modal-title">{{currentCouponJump.coupon_url_record_id ? '添加': '编辑'}}</span>
+            </div>
+            <form class="form-horizontal" (keydown)="onAddOrEditCouponUrlRecordSubmit()" #couponUrlRecordForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>优惠券名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentCouponJump.coupon_name" name="name"
+                                   placeholder="请输入1-20字优惠券名称" appIgnoreSpace minlength="1" maxlength="20" required>
+                        </div>
+                    </div>
+                    <div class="row row-message"></div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>优惠券模板ID：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentCouponJump.coupon_template_id"
+                                   name="coupon_template_id" placeholder="请输入优惠券模板ID" appIgnoreSpace minlength="1"
+                                   maxlength="100" required>
+                        </div>
+                    </div>
+                    <div class="row row-message"></div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>去使用页：</span>
+                        </label>
+                        <div class=" control-input">
+                            <select class="form-control" [(ngModel)]="currentCouponJump.url_type" name="url_type"
+                                    required>
+                                <option [value]=1>H5</option>
+                                <option [value]=2>小程序原生页</option>
+                            </select>
+                            <input class="form-control" style="border-left: none!important;"
+                                   [(ngModel)]="currentCouponJump.coupon_url" name="coupon_url"
+                                   placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1" maxlength="100"
+                                   (change)="couponUrlErrMsg=''" required>
+                        </div>
+                    </div>
+                    <div class="row row-message">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="couponUrlErrMsg">{{couponUrlErrMsg}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>是否可分享：</span>
+                        </label>
+                        <div class="control-input">
+                            <span class="share-span"
+                                  [class.share-selected]="currentCouponUrlCanBeShared==='false'"
+                                  (click)="onChangeShareClick(false)">
+                                不可分享
+                            </span>
+                            <span class="share-span"
+                                  [class.share-selected]="currentCouponUrlCanBeShared==='true'"
+                                  (click)="onChangeShareClick(true)">
+                                可分享
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row row-message"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!couponUrlRecordForm.form.valid || !currentCouponUrlCanBeShared"
+                            (appZDebounceClick)="onAddOrEditCouponUrlRecordSubmit()">
+                        保存
+                    </button>
+                    <button class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

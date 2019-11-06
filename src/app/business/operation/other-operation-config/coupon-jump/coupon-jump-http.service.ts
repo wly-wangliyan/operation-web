@@ -21,14 +21,14 @@ export class SearchCouponUrlRecordParams extends EntityBase {
  * 优惠券使用跳转url配置记录实体类
  */
 export class CouponUrlRecordEntity extends EntityBase {
-    public coupon_url_record_id: string; // 优惠券url配置记录
-    public coupon_template_id: string; // 优惠券模板id
-    public coupon_name: string; // 优惠券名称
-    public url_type: number; // url类型,1:H5,2:小程序原生页
-    public coupon_url: string;
-    public can_be_shared: boolean; // 页面是否可以被分享
-    public updated_time: number; // 更新时间
-    public created_time: number; // 创建时间
+    public coupon_url_record_id: string = undefined; // 优惠券url配置记录
+    public coupon_template_id: string = undefined; // 优惠券模板id
+    public coupon_name: string = undefined; // 优惠券名称
+    public url_type = 1; // url类型,1:H5,2:小程序原生页
+    public coupon_url: string = undefined; // 跳转url
+    public can_be_shared: boolean = undefined; // 页面是否可以被分享
+    public updated_time: number = undefined; // 更新时间
+    public created_time: number = undefined; // 创建时间
 
     constructor(source?: CouponUrlRecordEntity) {
         super();
@@ -36,6 +36,7 @@ export class CouponUrlRecordEntity extends EntityBase {
             this.coupon_template_id = source.coupon_template_id;
             this.coupon_name = source.coupon_name;
             this.url_type = source.url_type;
+            this.coupon_url = source.coupon_url;
             this.can_be_shared = source.can_be_shared;
         }
     }
@@ -85,12 +86,12 @@ export class CouponJumpHttpService {
     /**
      * 编辑优惠券使用跳转url记录
      * @param {string} coupon_url_record_id
-     * @param {CouponUrlRecordEntity} createParams
+     * @param {CouponUrlRecordEntity} editParams
      * @returns {Observable<HttpResponse<any>>}
      */
-    public requestEditCouponUrlRecordData(coupon_url_record_id: string, createParams: CouponUrlRecordEntity): Observable<HttpResponse<any>> {
+    public requestEditCouponUrlRecordData(coupon_url_record_id: string, editParams: CouponUrlRecordEntity): Observable<HttpResponse<any>> {
         const url = this.domain + `/coupon_url_records/${coupon_url_record_id}`;
-        const body = createParams.json();
+        const body = editParams.json();
         return this.httpService.post(url, body);
     }
 

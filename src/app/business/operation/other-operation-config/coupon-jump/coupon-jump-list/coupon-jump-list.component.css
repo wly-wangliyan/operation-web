@@ -7,3 +7,118 @@
 .operation a:hover {
     color: rgba(62, 113, 247, 1);
 }
+
+/* 添加/编辑优惠券使用跳转url记录模态框 */
+.modal-dialog {
+    width: 600px !important;
+    min-height: 600px !important;
+    height: 661px !important;
+    max-width: 600px !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: 50px !important;
+}
+
+.modal-content {
+    top: 50px !important;
+}
+
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: 44px;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+}
+
+.row b {
+    margin-right: 10px !important;
+}
+
+.row-message {
+    height: 28px !important;
+}
+
+.control-label {
+    margin-bottom: 0 !important;
+    width: 130px !important;
+    padding-right: 10px;
+    padding-left: 0 !important;
+}
+
+.control-label b {
+    float: left;
+}
+
+.control-label span {
+    float: left;
+}
+
+.control-input {
+    display: flex !important;
+    align-items: center !important;
+    width: 428px !important;
+}
+
+.control-input label {
+    margin-bottom: 0 !important;
+}
+
+.control-input .form-control {
+    height: 34px !important;
+    font-size: 14px !important;
+    margin-right: 0 !important;
+    background: rgba(246, 246, 246, 1);
+    border-radius: 1px;
+}
+
+.control-input select:first-child {
+    width: 112px !important;
+    margin: 0 !important;
+    padding: 4px !important;
+    background: #fff !important;
+}
+
+.err-message {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(232, 32, 56, 1);
+    font-family: STHeitiSC-Medium;
+}
+
+.form-horizontal {
+    margin-top: 16px !important;
+}
+
+.modal-footer button {
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.close:hover {
+    font-size: 28px;
+}
+
+.share-span {
+    color: #888888;
+    font-size: 13px;
+    letter-spacing: 0.15px;
+    padding: 8px 18px;
+    display: inline-block;
+    background: #F7F8FA;
+}
+
+.share-span:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.share-span:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+.share-selected {
+    color: #FFFFFF;
+    background: #3E71F7;
+}
