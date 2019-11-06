@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs/index';
+import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { GlobalService } from '../../../../../core/global.service';
-import { CouponJumpHttpService, SearchCouponParams } from '../coupon-jump-http.service';
+import { CouponJumpHttpService, CouponUrlRecordEntity, SearchCouponUrlRecordParams } from '../coupon-jump-http.service';
 
 const PageSize = 15;
 
@@ -11,15 +11,17 @@ const PageSize = 15;
     templateUrl: './coupon-jump-list.component.html',
     styleUrls: ['./coupon-jump-list.component.css']
 })
-export class CouponJumpListComponent implements OnInit {
+export class CouponJumpListComponent implements OnInit, OnDestroy {
 
     public noResultText = '数据加载中...';
 
     public pageIndex = 1;
 
-    public searchParams: SearchCouponParams = new SearchCouponParams();
+    public searchParams: SearchCouponUrlRecordParams = new SearchCouponUrlRecordParams();
 
-    public couponJumpList: Array<any> = [];
+    public couponJumpList: Array<CouponUrlRecordEntity> = [];
+
+    public currentCouponJump: CouponUrlRecordEntity = new CouponUrlRecordEntity();
 
     private searchText$ = new Subject<any>();
 
@@ -35,25 +37,48 @@ export class CouponJumpListComponent implements OnInit {
     }
 
     constructor(private globalService: GlobalService,
-                private activatedRoute: ActivatedRoute,
                 private couponJumpHttpService: CouponJumpHttpService) {
     }
 
     public ngOnInit() {
+        this.searchText$.pipe(
+            debounceTime(500),
+            switchMap(() => this.couponJumpHttpService.requestCouponUrlRecordListData(this.searchParams)))
+            .subscribe(res => {
+                this.pageIndex = 1;
+                this.couponJumpList = res.results;
+                this.linkUrl = res.linkUrl;
+                this.noResultText = '暂无数据';
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
+        this.searchText$.next();
+    }
+
+    public ngOnDestroy() {
+        this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+    }
+
+    // 查询按钮
+    public onSearchBtnClick() {
+        this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+        this.pageIndex = 1;
+        this.searchText$.next();
     }
 
     // 翻页方法
     public onNZPageIndexChange(pageIndex: number) {
-        // this.pageIndex = pageIndex;
-        // if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
-        //     // 当存在linkUrl并且快到最后一页了请求数据
-        //     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-        //     this.continueRequestSubscription = this.versionManagementService.continueVersionList(this.linkUrl).subscribe(res => {
-        //         this.versionList = this.versionList.concat(res.results);
-        //         this.linkUrl = res.linkUrl;
-        //     }, err => {
-        //         this.globalService.httpErrorProcess(err);
-        //     });
-        // }
+        this.pageIndex = pageIndex;
+        if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+            // 当存在linkUrl并且快到最后一页了请求数据
+            this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+            this.continueRequestSubscription = this.couponJumpHttpService.requestContinueCouponUrlRecordListData(this.linkUrl)
+                .subscribe(res => {
+                    this.couponJumpList = this.couponJumpList.concat(res.results);
+                    this.linkUrl = res.linkUrl;
+                }, err => {
+                    this.globalService.httpErrorProcess(err);
+                });
+        }
     }
 }
