@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {ShareModule} from '../../share/share.module';
+import { NgModule } from '@angular/core';
+import { ShareModule } from '../../share/share.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
@@ -20,9 +20,9 @@ const uploadToken: UploadConfig = {
         HttpClientModule,
         OperationRoutingModule
     ],
-  declarations: [
-      OperationComponent,
-  ],
+    declarations: [
+        OperationComponent,
+    ],
     providers: [{
         provide: UPLOAD_TOKEN,
         useValue: uploadToken
