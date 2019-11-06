@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 import { GlobalService } from '../../../../../core/global.service';
+import { isNullOrUndefined } from 'util';
 import { ValidateHelper } from '../../../../../../utils/validate-helper';
 import { CouponJumpHttpService, CouponUrlRecordEntity, SearchCouponUrlRecordParams } from '../coupon-jump-http.service';
-import { HttpErrorEntity } from "../../../../../core/http.service";
-import { isNullOrUndefined } from "util";
 
 const PageSize = 15;
 
@@ -29,6 +29,8 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
     public currentCouponUrlCanBeShared: string;
 
     public couponUrlErrMsg: string;
+
+    public canBeShareErrMsg: string;
 
     private searchText$ = new Subject<any>();
 
@@ -98,6 +100,7 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
     public onAddOrEditCouponUrlRecordModal(data?: CouponUrlRecordEntity) {
         this.currentCouponUrlCanBeShared = '';
         this.couponUrlErrMsg = '';
+        this.canBeShareErrMsg = '';
         this.submitRequestSubscription = null;
         this.currentCouponJump = new CouponUrlRecordEntity();
         if (data) {
@@ -123,6 +126,7 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
 
     // 修改是否可分享参数
     public onChangeShareClick(isShare: boolean) {
+        this.canBeShareErrMsg = '';
         this.currentCouponUrlCanBeShared = isShare ? 'true' : 'false';
         this.currentCouponJump.can_be_shared = isShare;
     }
@@ -134,6 +138,8 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
         }
         if (!ValidateHelper.checkUrl(this.currentCouponJump.coupon_url)) {
             this.couponUrlErrMsg = '链接格式错误，请重新输入！';
+        } else if (isNullOrUndefined(this.currentCouponJump.can_be_shared)) {
+            this.canBeShareErrMsg = '页面是否可分享未选择!';
         } else {
             if (this.currentCouponJump.coupon_url_record_id) {
                 this.requestEditCouponUrlRecord();

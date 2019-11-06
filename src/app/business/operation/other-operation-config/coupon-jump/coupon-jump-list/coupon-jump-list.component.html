@@ -136,7 +136,12 @@
                             </span>
                         </div>
                     </div>
-                    <div class="row row-message"></div>
+                    <div class="row row-message">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="canBeShareErrMsg && (canBeShareErrMsg !== '')">{{canBeShareErrMsg}}</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="sure-btn" nz-button nzType="primary"

@@ -92,7 +92,7 @@ export class CouponJumpHttpService {
     public requestEditCouponUrlRecordData(coupon_url_record_id: string, editParams: CouponUrlRecordEntity): Observable<HttpResponse<any>> {
         const url = this.domain + `/coupon_url_records/${coupon_url_record_id}`;
         const body = editParams.json();
-        return this.httpService.post(url, body);
+        return this.httpService.put(url, body);
     }
 
     /**
