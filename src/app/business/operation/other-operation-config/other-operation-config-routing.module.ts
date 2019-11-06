@@ -9,13 +9,13 @@ const routes: Routes = [{
     path: '', component: OtherOperationConfigComponent,
     canActivateChild: [AuthGuardService, RouteMonitorService],
     children: [
-        {path: '', redirectTo: 'other-operation-config', pathMatch: 'full'},
+        {path: '', redirectTo: 'coupon-jump', pathMatch: 'full'},
         {
-            path: 'other-operation-config',
+            path: 'coupon-jump',
             loadChildren: () => import('./coupon-jump/coupon-jump.module').then(m => m.CouponJumpModule),
             canLoad: [AuthGuardService]
         },
-        {path: '**', redirectTo: 'other-operation-config', pathMatch: 'full'}
+        {path: '**', redirectTo: 'coupon-jump', pathMatch: 'full'}
     ]
 }];
 
