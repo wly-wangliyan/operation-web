@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {RouteMonitorService} from '../../core/route-monitor.service';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { RouteMonitorService } from '../../core/route-monitor.service';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { OperationComponent } from './operation.component';
 
@@ -8,7 +8,7 @@ const routes: Routes = [{
   path: '', component: OperationComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
-    {path: '', redirectTo: 'parking', pathMatch: 'full'},
+    { path: '', redirectTo: 'parking', pathMatch: 'full' },
     {
       path: 'parking',
       loadChildren: () => import('./mx-parking/mx-parking.module').then(m => m.MxParkingModule),
@@ -19,7 +19,12 @@ const routes: Routes = [{
       loadChildren: () => import('./comment-management/comment-management.module').then(m => m.CommentManagementModule),
       canLoad: [AuthGuardService]
     },
-    {path: '**', redirectTo: 'parking', pathMatch: 'full'}
+    {
+      path: 'mini-program',
+      loadChildren: () => import('./mini-program/mini-program.module').then(m => m.MiniProgramModule),
+      canLoad: [AuthGuardService]
+    },
+    { path: '**', redirectTo: 'parking', pathMatch: 'full' }
   ]
 }];
 

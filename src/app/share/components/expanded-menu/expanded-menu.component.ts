@@ -96,6 +96,7 @@ export class ExpandedMenuComponent implements OnInit {
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
     menusItem.push(this.generateCommentMenu());
+    menusItem.push(this.generateMiniProgramMenu());
     return menusItem;
   }
 
@@ -155,6 +156,14 @@ export class ExpandedMenuComponent implements OnInit {
     const subFinanceMenu2 = new SideMenuItem('评论配置', '/main/operation/comment/comment-setting', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  private generateMiniProgramMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('小程序', null);
+    systemMenu.icon = '/assets/images/menu_comment.png';
+    const subFinanceMenu1 = new SideMenuItem('展位管理', '/main/operation/mini-program/banner-management', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
     return systemMenu;
   }
 
