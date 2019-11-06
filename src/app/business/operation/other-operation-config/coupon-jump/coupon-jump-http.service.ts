@@ -25,6 +25,7 @@ export class CouponUrlRecordEntity extends EntityBase {
     public coupon_template_id: string; // 优惠券模板id
     public coupon_name: string; // 优惠券名称
     public url_type: number; // url类型,1:H5,2:小程序原生页
+    public coupon_url: string;
     public can_be_shared: boolean; // 页面是否可以被分享
     public updated_time: number; // 更新时间
     public created_time: number; // 创建时间

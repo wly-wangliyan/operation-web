@@ -81,4 +81,16 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
                 });
         }
     }
+
+    // 删除某一优惠券使用跳转url记录
+    public onDeleteBtnClick(data: CouponUrlRecordEntity) {
+        this.globalService.confirmationBox.open('警告', '删除后将不可恢复，确认删除吗？', () => {
+            this.globalService.confirmationBox.close();
+            this.couponJumpHttpService.requestDeleteCouponUrlRecordData(data.coupon_url_record_id).subscribe(() => {
+                this.couponJumpList = this.couponJumpList.filter(icon => icon.coupon_url_record_id !== data.coupon_url_record_id);
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
+        });
+    }
 }
