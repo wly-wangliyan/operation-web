@@ -1,0 +1,80 @@
+.modal {
+  z-index: 1000;
+}
+
+.row-message {
+  margin-top: -6px !important;
+  height: 14px !important;
+}
+
+.row-message .err-message {
+  margin-top: -12px !important;
+}
+
+.cover-hint {
+  margin-left: 138px;
+}
+
+.form-control {
+  background: #f8f9fb ;
+}
+
+select {
+  width: 130px !important;
+  background: #fff !important;
+}
+
+.content-container .two-word-btn {
+  width: 90px;
+  height: 34px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 1px;
+  border-left: none;
+}
+
+.content-container .two-word-btn:hover {
+  border: 1px solid #d9d9d9;
+  border-left: none;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.online-btn,
+.offline-btn {
+  font-size: 13px;
+  width: 90px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  color: #888 !important;
+  border: 0;
+  background: #F7F8FA;
+  outline: none;
+}
+
+.online-btn {
+  border-radius: 2px;
+}
+
+.online-disabled {
+  cursor: default;
+}
+
+.offline-btn:first-child {
+  border-right: 1px solid rgba(136, 136, 136, 0.3);
+  border-radius: 2px 0 0 2px;
+}
+
+.offline-btn:last-child {
+  border-radius: 0 2px 2px 0;
+}
+
+.offline-btn:hover {
+  color: #fff !important;
+  background: #315AC5;
+}
+
+.active-btn {
+  color: #fff !important;
+  background: #3E71F7;
+}
+

@@ -2,7 +2,7 @@
   <div *ngFor="let image of imageList; let index = index" (click)="zoomPicture(index)"
     [ngClass]="{'not-cursor': hasDeletePicture}"
     [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px', 'line-height': transformLineHeight + 'px'}">
-    <img [src]="image.showUrl">
+    <img [src]="image.showUrl" [ngStyle]="{width: imageShowWidth + 'px'}">
     <span class="delete-icon" *ngIf="hasDeletePicture" (click)="deletePicture(index)"></span>
     <div class="progress-bg" [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px'}" #progressBgList>
       <p class="progress-wrap">

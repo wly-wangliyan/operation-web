@@ -19,8 +19,11 @@ import { isTemplateRef } from 'ng-zorro-antd';
 export class ExpandedMenuComponent implements OnInit {
 
   public menuItems: Array<SideMenuItem> = [];
+
   public routeLinkList: Array<SideMenuItem> = [];
+
   public menu_icon = true;
+
   private routePathSubscription: Subscription;
 
   constructor(
@@ -29,6 +32,7 @@ export class ExpandedMenuComponent implements OnInit {
     private globalService: GlobalService,
     public authService: AuthService,
     public platformLocation: PlatformLocation) {
+
     platformLocation.onPopState(() => {
       const path = location.pathname;
       if (path.includes('/notice-center')) {
@@ -48,7 +52,7 @@ export class ExpandedMenuComponent implements OnInit {
     this.getMenuItems();
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.routeMonitorService.routePathChanged.subscribe(path => {
       this.getMenuItems();
       this.refreshMenu(path);
@@ -88,7 +92,6 @@ export class ExpandedMenuComponent implements OnInit {
   }
 
 
-
   // 运营菜单
   public generateMenus(): Array<SideMenuItem> {
     this.menu_icon = true;
@@ -96,6 +99,8 @@ export class ExpandedMenuComponent implements OnInit {
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
     menusItem.push(this.generateCommentMenu());
+    menusItem.push(this.generateMiniProgramMenu());
+    menusItem.push(this.generateOtherOperationConfigMenu());
     return menusItem;
   }
 
@@ -154,6 +159,26 @@ export class ExpandedMenuComponent implements OnInit {
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('评论配置', '/main/operation/comment/comment-setting', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 小程序
+  private generateMiniProgramMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('小程序', null);
+    systemMenu.icon = '/assets/images/menu_mini_program.png';
+    const subFinanceMenu1 = new SideMenuItem('展位管理', '/main/operation/mini-program/banner-management', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 其他运营配置
+  private generateOtherOperationConfigMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('其他运营配置', null);
+    systemMenu.icon = '/assets/images/menu_other_config.png';
+    const subFinanceMenu1 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
