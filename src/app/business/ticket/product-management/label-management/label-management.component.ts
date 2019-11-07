@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { timer } from 'rxjs';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GlobalService } from '../../../../core/global.service';
-import { AuthService, UserEntity } from '../../../../core/auth.service';
-import { Subscription, timer } from 'rxjs/index';
-import { differenceInCalendarDays } from 'date-fns';
+import { ProductService, SearchLabelParams, LabelEntity } from '../product.service';
+import { LabelEditComponent } from './label-edit/label-edit.component';
 
 @Component({
   selector: 'app-label-management',
@@ -11,134 +11,92 @@ import { differenceInCalendarDays } from 'date-fns';
   styleUrls: ['./label-management.component.css']
 })
 export class LabelManagementComponent implements OnInit {
-  public usersList: Array<UserEntity> = [];
+  public labelList: Array<LabelEntity> = [];
+  public searchParams: SearchLabelParams = new SearchLabelParams();
   public noResultText = '数据加载中...';
   public tabs: Array<any> = [];
-  public start_Time = null;
-  public end_Time = null;
-  public labelList: Array<any> = [];
-  public isAllDisplayDataChecked = false;
-  public isIndeterminate = false;
-  public mapOfCheckedId: { [key: string]: boolean } = {};
-  public checkedList: Array<any> = [];
-  public pageSizeOptions = [15, 30, 50, 100, 200, 500];
 
-  private continueRequestSubscription: Subscription;
-  private linkUrl: string;
-  private startValue: Date | null = null;
-  private endValue: Date | null = null;
-  private tab = 2;
+  @ViewChild('labelEdit', { static: true }) public labelEdit: LabelEditComponent;
 
-  constructor(private authService: AuthService, private globalService: GlobalService) { }
+  constructor(private globalService: GlobalService, private productService: ProductService, ) { }
 
   ngOnInit() {
     this.tabs = [
       { key: 1, value: '全部' },
       { key: 2, value: '已推荐' },
     ];
-    this.labelList = [
-      { name: 132132, id: 3243534546 },
-      { name: 5435, id: 3243534546 },
-    ];
-    this.onTabChange(2);
-  }
-
-  // 初始化检索参数
-  public initSearchParams() {
-    this.start_Time = null;
-    this.end_Time = null;
-    this.mapOfCheckedId = {};
-    this.isAllDisplayDataChecked = false;
-    this.isIndeterminate = false;
-    this.checkedList = [];
+    this.onTabChange(1);
   }
 
   // 切换tab加载页面
   public onTabChange(key: number) {
-    this.tab = key;
-    // this.quotationService.requestQuotationList(key, this.searchParams).subscribe(res => {
-    //   // this.quotationList = res.results;
-    //   this.quotationList = res.results.map(i => ({
-    //     ...i,
-    //     insurance_company_name: i.latest_insurance_action ?
-    //       i.latest_insurance_action.insurance_company_name && i.latest_insurance_action.insurance_company_name.split(',') : []
-    //   }));
-    //   this.linkUrl = res.linkUrl;
-    //   this.noResultText = '暂无数据';
-    // }, err => {
-    //   this.globalService.httpErrorProcess(err);
-    // });
+    this.searchParams.is_commended = key === 1 ? false : true;
+    this.productService.requestLabelListData(this.searchParams).subscribe(res => {
+      this.labelList = res.results;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
-  // 开始时间校验
-  public disabledStartDate = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.endValue) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
+  // 新建/编辑标签
+  public onEditLabel(tag_id: string, name: string) {
+    this.labelEdit.open(tag_id, name, () => {
+      timer(1000).subscribe(() => {
+        this.onTabChange(1);
+      });
+    });
   }
 
-  // 结束时间校验
-  public disabledEndDate = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
-      return true;
-    } else if (!endValue || !this.startValue) {
-      return false;
-    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
+  // 推荐标签
+  public onRecommendeLabel(tag_id: string, is_recommended: boolean) {
+    const text = is_recommended ? '推荐' : '取消推荐';
+    this.productService.requestRecommendeLabelData(tag_id, is_recommended).subscribe(() => {
+      this.globalService.promptBox.open(`${text}成功`, () => {
+        this.onTabChange(1);
+      });
+    }, err => {
+      this.globalService.promptBox.open(`${text}失败，请重试!`, null, 2000, '/assets/images/warning.png');
+    });
   }
 
-  public onStartChange(date: Date): void {
-    this.startValue = date;
-  }
-
-  public onEndChange(date: Date): void {
-    this.endValue = date;
+  // 删除标签
+  public onDelLabel(tag_id: string) {
+    this.globalService.confirmationBox.open('提示', '此操作不可恢复，确定要删除吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.productService.requestDeleteLabelData(tag_id).subscribe(() => {
+        this.globalService.promptBox.open('删除成功', () => {
+          this.onTabChange(1);
+        });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    });
   }
 
   // 列表排序
-  public drop(event: CdkDragDrop<string[]>, data: any): void {
-    moveItemInArray(this.labelList, event.previousIndex, event.currentIndex);
-    // if (event.previousIndex === event.currentIndex) {
-    //   return;
-    // }
-    // let param = {};
-    // if (event.previousIndex > event.currentIndex) {
-    //   const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
-    //   param = { move_num: this.labelList[index].sort_num };
-    //   if (event.currentIndex === 0 && this.labelList[index].sort_num === 1) {
-    //     param = { move_num: 0 };
-    //   }
-    // } else {
-    //   param = { move_num: this.labelList[event.currentIndex].sort_num };
-    // }
-    // moveItemInArray(data, event.previousIndex, event.currentIndex);
-    // this.firstPageIconService.requestUpdateSort(this.labelList[event.previousIndex].menu_id, param).subscribe((e) => {
-    //   this.searchText$.next();
-    //   this.globalService.promptBox.open('排序成功');
-    // }, err => {
-    //   this.globalService.httpErrorProcess(err);
-    //   this.searchText$.next();
-    // });
+  public onDropLabelList(event: CdkDragDrop<string[]>, data: any): void {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    let param = {};
+    if (event.previousIndex > event.currentIndex) {
+      const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
+      param = { order_num: this.labelList[index].order_num };
+      if (event.currentIndex === 0 && this.labelList[index].order_num === 1) {
+        param = { order_num: 0 };
+      }
+    } else {
+      param = { order_num: this.labelList[event.currentIndex].order_num };
+    }
+    moveItemInArray(data, event.previousIndex, event.currentIndex);
+    this.productService.requestLabelSort(this.labelList[event.previousIndex].tag_id, param).subscribe((e) => {
+      this.onTabChange(2);
+      this.globalService.promptBox.open('排序成功');
+    }, err => {
+      this.globalService.promptBox.open('排序失败，请重试!', null, 2000, '/assets/images/warning.png');
+      this.onTabChange(2);
+    });
   }
-
-  // 获取下单时间时间戳
-  public getSectionTime(): string {
-    // 创建时间
-    const startTime = this.start_Time ? (new Date(this.start_Time).setHours(
-      new Date(this.start_Time).getHours(), new Date(this.start_Time).getMinutes(), 0, 0) / 1000).toString() : 0;
-    const endTime = this.end_Time ? (new Date(this.end_Time).setHours(new Date(this.end_Time).getHours(),
-      new Date(this.end_Time).getMinutes(), 59, 0) / 1000).toString() : 253402185600;
-    return `${startTime},${endTime}`;
-  }
-
 
 }

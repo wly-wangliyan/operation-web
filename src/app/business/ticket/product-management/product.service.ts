@@ -212,6 +212,28 @@ export class PriceCalendarEntity extends EntityBase {
   }
 }
 
+// 标签实体
+export class LabelEntity extends EntityBase {
+  public tag_id: string = undefined; // 标签id
+  public name: string = undefined; // 标签名称
+  public order_num: number = undefined; // 标签序号
+  public is_recommended: boolean = undefined; // 是否推荐
+  public is_used: boolean = undefined; // 是否使用
+  public is_deleted: boolean = undefined; // 是否删除
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 创建时间
+}
+
+export class LabelLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<LabelEntity> {
+    const tempList: Array<LabelEntity> = [];
+    results.forEach(res => {
+      tempList.push(LabelEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
 export class TicketLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<TicketEntity> {
     const tempList: Array<TicketEntity> = [];
@@ -252,6 +274,12 @@ export class SearchParams extends EntityBase {
   public section: string = undefined; // 上架时间section'xxx,xxx'
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
+}
+
+// 标签列表条件筛选
+export class SearchLabelParams extends EntityBase {
+  public name: string = undefined; // 标签名称
+  public is_commended = false; // 是否推荐
 }
 
 @Injectable({
@@ -448,10 +476,10 @@ export class ProductService {
   }
 
   /**
- * 更新门票列表
- * @param string product_id 产品id
- * @returns Observable<TicketLinkResponse>
- */
+   * 更新门票列表
+   * @param string product_id 产品id
+   * @returns Observable<TicketLinkResponse>
+   */
   public requesTicketsList(product_id: string): Observable<TicketLinkResponse> {
     const httpUrl = `${this.domain}/products/${product_id}/tickets`;
     return this.httpService.get(httpUrl).pipe(map(res => new TicketLinkResponse(res)));
@@ -464,20 +492,22 @@ export class ProductService {
    * @param searchPriceCalendarParams SearchPriceCalendarParams
    * @returns Observable<PriceCalendarLinkResponse>
    */
-  public requestPriceCalendars(product_id: string, ticket_id: string, searchPriceCalendarParams: SearchPriceCalendarParams): Observable<PriceCalendarLinkResponse> {
+  public requestPriceCalendars(product_id: string, ticket_id: string, searchPriceCalendarParams:
+    SearchPriceCalendarParams): Observable<PriceCalendarLinkResponse> {
     const httpUrl = `${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars`;
     return this.httpService.get(httpUrl, searchPriceCalendarParams)
       .pipe(map(res => new PriceCalendarLinkResponse(res)));
   }
 
   /**
- * 编辑价格日历的平台售价
- * @param string product_id 产品id
- * @param string ticket_id 门票ID
- * @returns Observable<HttpResponse<any>>
- */
+   * 编辑价格日历的平台售价
+   * @param string product_id 产品id
+   * @param string ticket_id 门票ID
+   * @returns Observable<HttpResponse<any>>
+   */
   public requestSetPlatformPrice(product_id: string, ticket_id: string, value: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(`${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
+    return this.httpService.patch(`${this.domain}/products/${product_id}/
+    tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
       platform_price: Number(value.platform_price) * 100,
     }
     );
@@ -490,10 +520,75 @@ export class ProductService {
    * @param searchPriceCalendarParams SearchPriceCalendarParams
    * @returns Observable<PriceCalendarLinkResponse>
    */
-  public requestThirdPriceCalendars(third_product_id: string, ticket_id: string, searchPriceCalendarParams: SearchPriceCalendarParams): Observable<PriceCalendarLinkResponse> {
+  public requestThirdPriceCalendars(third_product_id: string, ticket_id: string,
+                                    searchPriceCalendarParams: SearchPriceCalendarParams): Observable<PriceCalendarLinkResponse> {
     const httpUrl = `${this.domain}/third_products/${third_product_id}/tickets/${ticket_id}/price_calendars`;
     return this.httpService.get(httpUrl, searchPriceCalendarParams)
       .pipe(map(res => new PriceCalendarLinkResponse(res)));
   }
+
+  /**
+   * 获取标签列表
+   * @param searchParams SearchLabelParams 条件检索参数
+   * @returns Observable<LabelLinkResponse>
+   */
+  public requestLabelListData(searchParams: SearchLabelParams): Observable<LabelLinkResponse> {
+    const httpUrl = `${this.domain}/tags`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new LabelLinkResponse(res)));
+  }
+
+  /**
+   * 是否推荐标签
+   * @param tag_id string 标签id
+   * @param is_recommended boolean 是否推荐
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestRecommendeLabelData(tag_id: string, is_recommended: boolean): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/tags/${tag_id}/is_recommended`;
+    return this.httpService.patch(httpUrl, { is_recommended });
+  }
+
+  /**
+   * 删除标签
+   * @param tag_id string 标签id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeleteLabelData(tag_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/tags/${tag_id}`;
+    return this.httpService.delete(httpUrl);
+  }
+
+  /**
+   * 拖拽排序
+   * @param tag_id string 标签id
+   * @param param any 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestLabelSort(tag_id: string, param: any): Observable<HttpResponse<any>> {
+    return this.httpService.patch(environment.OPERATION_SERVE + `tags/${tag_id}/order_num`, param);
+  }
+
+  /**
+   * 新建标签
+   * @param name string 产品id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestAddTagName(name: string): Observable<HttpResponse<any>> {
+    return this.httpService.post(`${this.domain}/tags`, { name }
+    );
+  }
+
+  /**
+   * 编辑标签
+   * @param tag_id string 标签id
+   * @param name string 产品id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateTagName(tag_id: string, name: string): Observable<HttpResponse<any>> {
+    return this.httpService.put(`${this.domain}tags/${tag_id}`, { name }
+    );
+  }
+
 
 }

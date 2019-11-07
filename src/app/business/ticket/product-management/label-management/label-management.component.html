@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'" [level2Name]="'标签管理'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../third-product']">
+    <li class="big-bg" (click)='onEditLabel(null,null)'>
       <a>新建</a>
     </li>
   </ul>
@@ -9,8 +9,7 @@
 <nz-back-top [nzTarget]='flow'></nz-back-top>
 <div class="content-flow" #flow>
   <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0>
-    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'
-      (nzClick)='initSearchParams()'>
+    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'>
       <div class="zmy-table">
         <nz-table [nzData]="labelList" [nzShowPagination]="false" [nzFrontPagination]='false'
           [nzNoResult]="noResultText" #labelTable>
@@ -22,15 +21,26 @@
               <th>操作</th>
             </tr>
           </thead>
-          <tbody cdkDropList (cdkDropListDropped)="drop($event,labelTable.data)">
-            <tr *ngFor="let data of labelTable.data;let i =index" cdkDrag>
-              <td>{{1}}</td>
-              <td>{{data.id}}</td>
+          <tbody *ngIf='tab.key===1'>
+            <tr *ngFor="let data of labelTable.data;let i =index">
+              <td>{{i+1}}</td>
+              <td>{{data.tag_id}}</td>
               <td>{{data.name}}</td>
               <td class="operation">
-                <a [title]="'编辑'" [routerLink]="['../quotation-detail',data.insurance_record_id]">编辑</a>
-                <a [title]="'推荐'" [routerLink]="['../quotation-detail',data.insurance_record_id]">推荐</a>
-                <a [title]="'删除'" [routerLink]="['../quotation-detail',data.insurance_record_id]">删除</a>
+                <a [title]="'编辑'" (click)='onEditLabel(data.tag_id,data.name)'>编辑</a>
+                <a [title]="'推荐'" (click)='onRecommendeLabel(data.tag_id,true)'>推荐</a>
+                <a [title]="'删除'" (click)='onDelLabel(data.tag_id)'>删除</a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody cdkDropList (cdkDropListDropped)="onDropLabelList($event,labelTable.data)" *ngIf='tab.key===2'>
+            <tr *ngFor="let data of labelTable.data;let i =index" cdkDrag>
+              <td>{{i+1}}</td>
+              <td>{{data.tag_id}}</td>
+              <td>{{data.name}}</td>
+              <td class="operation">
+                <a [title]="'编辑'" (click)='onEditLabel(data.tag_id,data.name)'>编辑</a>
+                <a [title]="'取消推荐'" (click)='onRecommendeLabel(data.tag_id,false)'>取消推荐</a>
               </td>
             </tr>
           </tbody>
@@ -39,3 +49,4 @@
     </nz-tab>
   </nz-tabset>
 </div>
+<app-label-edit #labelEdit></app-label-edit>
