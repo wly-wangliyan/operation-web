@@ -127,7 +127,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
                     this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
                 }
                 break;
-            case 4:
+            case 6:
                 if (!url.includes('mall')) {
                     this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
                     this.router.navigate(['/main']);

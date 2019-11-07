@@ -143,16 +143,11 @@ export class ExpandedMenuComponent implements OnInit {
         this.menu_icon = false;
         this.routeLinkList = [];
         const menusItem: Array<SideMenuItem> = [];
-        // menusItem.push(this.generateOrderManagementMenu());
-        // menusItem.push(this.generateProductMenu());
-        // menusItem.push(this.generateMaintenanceManualMenu());
-        // menusItem.push(this.generateProjectMenu());
-        // menusItem.push(this.generateBusinessMenu());
-        // menusItem.push(this.generateVehicleTypeMenu());
+        menusItem.push(this.generateGoodsManagementMenu());
         return menusItem;
     }
 
-    // 美行停车
+    // 运营 》美行停车
     private generateParkingMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('美行停车', null);
         systemMenu.icon = '/assets/images/icon_menu_parking.png';
@@ -164,7 +159,7 @@ export class ExpandedMenuComponent implements OnInit {
         return systemMenu;
     }
 
-    // 评论管理
+    // 运营 》评论管理
     private generateCommentMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('评论管理', null);
         systemMenu.icon = '/assets/images/menu_comment.png';
@@ -176,7 +171,7 @@ export class ExpandedMenuComponent implements OnInit {
         return systemMenu;
     }
 
-    // 小程序
+    // 运营 》小程序
     private generateMiniProgramMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('小程序', null);
         systemMenu.icon = '/assets/images/menu_mini_program.png';
@@ -186,7 +181,7 @@ export class ExpandedMenuComponent implements OnInit {
         return systemMenu;
     }
 
-    // 其他运营配置
+    // 运营 》其他运营配置
     private generateOtherOperationConfigMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('其他运营配置', null);
         systemMenu.icon = '/assets/images/menu_other_config.png';
@@ -196,15 +191,7 @@ export class ExpandedMenuComponent implements OnInit {
         return systemMenu;
     }
 
-    // 保险公司管理
-    private generateInsuranceMenu(): SideMenuItem {
-        const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-company-list');
-        insuranceMenu.icon = '/assets/images/menu_insurance.png';
-        this.routeLinkList.push(insuranceMenu);
-        return insuranceMenu;
-    }
-
-    // 经纪公司管理
+    // 保险 》经纪公司管理
     private generateBrokerageMenu(): SideMenuItem {
         const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance');
         brokerageMenu.icon = '/assets/images/menu_business.png';
@@ -212,7 +199,15 @@ export class ExpandedMenuComponent implements OnInit {
         return brokerageMenu;
     }
 
-    // 订单管理
+    // 保险 》保险公司管理
+    private generateInsuranceMenu(): SideMenuItem {
+        const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-company-list');
+        insuranceMenu.icon = '/assets/images/menu_insurance.png';
+        this.routeLinkList.push(insuranceMenu);
+        return insuranceMenu;
+    }
+
+    // 保养 》订单管理
     private generateOrderManagementMenu(): SideMenuItem {
         const brokerageMenu = new SideMenuItem('订单管理', '/main/maintenance/order-management');
         brokerageMenu.icon = '/assets/images/menu_order.png';
@@ -286,6 +281,14 @@ export class ExpandedMenuComponent implements OnInit {
         brokerageMenu.icon = '/assets/images/menu_pay.png';
         const subFinanceMenu1 = new SideMenuItem('支付设置', '/main/ticket/finance-management', brokerageMenu);
         brokerageMenu.children.push(subFinanceMenu1);
+        this.routeLinkList.push(brokerageMenu);
+        return brokerageMenu;
+    }
+
+    // 商城 》产品列表
+    private generateGoodsManagementMenu(): SideMenuItem {
+        const brokerageMenu = new SideMenuItem('产品列表', '/main/mall/goods-management');
+        brokerageMenu.icon = '/assets/images/menu_part.png';
         this.routeLinkList.push(brokerageMenu);
         return brokerageMenu;
     }
