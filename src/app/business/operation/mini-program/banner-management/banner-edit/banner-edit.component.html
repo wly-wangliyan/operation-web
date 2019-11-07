@@ -52,10 +52,10 @@
             <span>落地页</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="bannerParams.belong_to" name="belong_to" required>
-              <option value=''>请选择</option>
-              <option value=2>H5</option>
-              <option value=1>小程序原生页</option>
+            <select class="form-control" [(ngModel)]="bannerParams.belong_to" name="belong_to"
+              (change)="onChangeBelongTo()" required>
+              <option [value]=2>H5</option>
+              <option [value]=1>小程序原生页</option>
             </select>
             <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
               maxlength="100" autocomplete="off" required appIgnoreSpace
