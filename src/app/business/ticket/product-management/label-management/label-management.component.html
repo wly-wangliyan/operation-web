@@ -1,0 +1,41 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'标签管理'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" [routerLink]="['../third-product']">
+      <a>新建</a>
+    </li>
+  </ul>
+</div>
+<nz-back-top [nzTarget]='flow'></nz-back-top>
+<div class="content-flow" #flow>
+  <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0>
+    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'
+      (nzClick)='initSearchParams()'>
+      <div class="zmy-table">
+        <nz-table [nzData]="labelList" [nzShowPagination]="false" [nzFrontPagination]='false'
+          [nzNoResult]="noResultText" #labelTable>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>ID</th>
+              <th>标签名称</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="drop($event,labelTable.data)">
+            <tr *ngFor="let data of labelTable.data;let i =index" cdkDrag>
+              <td>{{1}}</td>
+              <td>{{data.id}}</td>
+              <td>{{data.name}}</td>
+              <td class="operation">
+                <a [title]="'编辑'" [routerLink]="['../quotation-detail',data.insurance_record_id]">编辑</a>
+                <a [title]="'推荐'" [routerLink]="['../quotation-detail',data.insurance_record_id]">推荐</a>
+                <a [title]="'删除'" [routerLink]="['../quotation-detail',data.insurance_record_id]">删除</a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </nz-tab>
+  </nz-tabset>
+</div>

@@ -1,0 +1,71 @@
+:host ::ng-deep .ant-form-item-label {
+  width: 100px;
+}
+
+:host ::ng-deep .ant-form-item-label>label {
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+}
+
+.check-padding {
+  padding-left: 27px !important;
+  min-width: 53px;
+}
+
+.span-width {
+  width: 40px;
+  display: inline-block;
+}
+
+.action {
+  text-align: left;
+  width: 400px;
+  min-width: 400px;
+  padding-left: 50px !important;
+}
+
+.status {
+  margin-left: 10px;
+  margin-right: 25px;
+}
+
+.search-container {
+  border-top: none;
+}
+
+.search_select {
+  width: 240px;
+  height: 34px;
+  background: rgba(255, 255, 255, 1);
+}
+
+.sign {
+  margin-bottom: 28px;
+  margin-left: 3px;
+}
+
+
+.car_num {
+  text-align: left;
+  min-width: 120px;
+  width: 140px;
+  padding-left: 30px !important;
+}
+
+.insurance-tag {
+  font-size: 14px;
+  font-family: STHeitiSC;
+  font-weight: 500;
+  color: #4A7FFE;
+  float: left;
+}
+
+::ng-deep .cdk-drag-preview {
+  display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0;
+}
