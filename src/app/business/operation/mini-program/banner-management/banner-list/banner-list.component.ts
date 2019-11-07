@@ -116,6 +116,8 @@ export class BannerListComponent implements OnInit, OnDestroy {
           for (const content of error.errors) {
             if (content.resource === 'offline_status' && content.code === 'offline') {
               this.globalService.promptBox.open('当前时间已超出下线时间，无法开启!', null, 2000, null, false);
+            } else if (content.resource === 'online_status' && content.code === 'limit') {
+              this.globalService.promptBox.open('最大可同时显示5个Banner图，无法开启!', null, 2000, null, false);
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
             }

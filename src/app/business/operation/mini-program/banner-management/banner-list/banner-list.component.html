@@ -2,8 +2,8 @@
   <app-crumb [level1Name]="'小程序'" [level2Name]="'展位管理'"></app-crumb>
   <ul class="header-right">
     <li>
-      <button name="sure_btn" type="button" class="header-btn" [disabled]="bannerList && bannerList.length>4" nz-button
-        nzType="primary" (appZDebounceClick)="onShowModal()">
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        (appZDebounceClick)="onShowModal()">
         新建
       </button>
     </li>
@@ -57,8 +57,8 @@
             <td>{{i + 1}}</td>
 
             <td>
-              <img *ngIf='!data.image' src="/assets/images/space_banner.png">
-              <img *ngIf='data.image' style="width: 270px;" [src]="data.image">
+              <img *ngIf='!data.image' style="width: 270px;margin: auto 50px;" src="/assets/images/space_banner.png">
+              <img *ngIf='data.image' style="width: 270px;margin: auto 30px;" [src]="data.image">
             </td>
 
             <td>{{data.title}}</td>
