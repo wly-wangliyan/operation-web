@@ -168,7 +168,7 @@ export class BannerEditComponent implements OnInit {
     //   cisCheck = false;
     // }
 
-    if (!ValidateHelper.checkUrl(this.bannerParams.jump_link)) {
+    if (this.bannerParams.belong_to === 2 && !ValidateHelper.checkUrl(this.bannerParams.jump_link)) {
       this.errPositionItem.jump_link.isError = true;
       this.errPositionItem.jump_link.errMes = '链接格式错误，请重新输入！';
       cisCheck = false;
@@ -248,5 +248,11 @@ export class BannerEditComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  // 切换落地页
+  public onChangeBelongTo(): void {
+    this.bannerParams.jump_link = null;
+    this.errPositionItem.jump_link.isError = false;
   }
 }
