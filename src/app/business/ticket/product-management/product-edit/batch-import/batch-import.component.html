@@ -1,0 +1,68 @@
+<!-- 批量导入模态框 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">批量录入</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+          (click)="onCloseBatchImport()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #productInfoForm="ngForm">
+        <nz-form-item nzFlex>
+          <nz-form-label nzRequired [nzNoColon]='true'>录入方式</nz-form-label>
+          <nz-form-control class="form_control">
+            <select class="form-control" [(ngModel)]="searchParams.type" name='type'
+              (change)='onEntryModeChange($event)'>
+              <option value="1">全部统一价</option>
+              <option value="2">按日期设置</option>
+              <option value="3">按建议售价</option>
+            </select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex *ngIf='searchParams.type===1'>
+          <nz-form-label nzRequired [nzNoColon]='true'>统一售价</nz-form-label>
+          <nz-form-control class="form_control">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input class='price-input' type="text" nz-input />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              元
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex *ngIf='searchParams.type===2'>
+          <nz-form-control style="margin-left: 80px;">
+            <div *ngFor="let item of datePriceList;let i=index;">
+              <nz-date-picker [(ngModel)]="item.startTime" [nzShowToday]=false name='start_time-{{item.time}}'
+                nzFormat="yyyy-MM-dd">
+              </nz-date-picker>
+              <span class='line'>-</span>
+              <nz-date-picker [(ngModel)]="item.endTime" [nzShowToday]=false name='end_time-{{item.time}}'
+                nzFormat="yyyy-MM-dd">
+              </nz-date-picker>
+              <input class='plat-input' type='text' maxlength='15' nz-input [(ngModel)]="item.price"
+                name='price-{{item.time}}'>
+              <button nz-button nzType="primary" class='add-btn'
+                *ngIf="datePriceList.length<10&&i===datePriceList.length-1" (click)="onDatePriceAddBtn()">添加</button>
+              <button nz-button nzType="danger" class='del-btn' *ngIf="datePriceList.length>1"
+                (click)="onDatePriceDelBtn(i)">删除</button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex *ngIf='searchParams.type===3'>
+          <nz-form-control>
+            <div>价格默认显示建议零售价</div>
+          </nz-form-control>
+        </nz-form-item>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseBatchImport()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)='onSaveBatchImport()'>
+            填充
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
