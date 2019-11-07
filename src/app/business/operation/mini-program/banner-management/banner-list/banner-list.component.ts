@@ -127,8 +127,11 @@ export class BannerListComponent implements OnInit, OnDestroy {
     });
   }
 
-  // 列表排序
+  // 列表排序(停用的不发送请求，位置没有发生变化的不发送请求)
   public drop(event: CdkDragDrop<string[]>, data: any): void {
+    if (data[event.previousIndex].is_use === false) {
+      return;
+    }
     if (event.previousIndex === event.currentIndex) {
       return;
     }

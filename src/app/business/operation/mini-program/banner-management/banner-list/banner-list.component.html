@@ -2,7 +2,7 @@
   <app-crumb [level1Name]="'小程序'" [level2Name]="'展位管理'"></app-crumb>
   <ul class="header-right">
     <li>
-      <button name="sure_btn" class="header-btn" [disabled]="bannerList && bannerList.length>4" nz-button
+      <button name="sure_btn" type="button" class="header-btn" [disabled]="bannerList && bannerList.length>4" nz-button
         nzType="primary" (appZDebounceClick)="onShowModal()">
         新建
       </button>
