@@ -61,6 +61,17 @@
             {{orderDetail.pay_time && (orderDetail.status === 2 || orderDetail.status === 4)?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
           </td>
         </tr>
+        <tr>
+          <td>短信发送:</td>
+          <td>
+            已发送1次
+            <button nz-button nzType="primary">重发</button>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       </table>
     </div>
 
