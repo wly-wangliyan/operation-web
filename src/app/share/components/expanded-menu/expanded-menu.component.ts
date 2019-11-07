@@ -44,6 +44,8 @@ export class ExpandedMenuComponent implements OnInit {
                 this.globalService.menu_index = 4;
             } else if (path.includes('/ticket')) {
                 this.globalService.menu_index = 5;
+            } else if (path.includes('/mall')) {
+                this.globalService.menu_index = 6;
             } else if (path.includes('/home')) {
                 this.globalService.menu_index = this.globalService.menu_last_index;
             }
@@ -71,6 +73,8 @@ export class ExpandedMenuComponent implements OnInit {
             this.menuItems = this.generateMenus_maintenance();
         } else if (this.globalService.menu_index === 5) {
             this.menuItems = this.generateMenus_ticket();
+        } else if (this.globalService.menu_index === 6) {
+            this.menuItems = this.generateMenus_mall();
         }
     }
 

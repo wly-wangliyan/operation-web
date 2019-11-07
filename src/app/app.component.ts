@@ -41,7 +41,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             return new Date(globalService.timeStamp * 1000);
         };
         const url = this.router.routerState.snapshot.url;
-        this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/notice-center') ? null : 1;
+        this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/mall') ? 6 : url.includes('/notice-center') ? null : 1;
         this.globalService.menu_index = this.menu;
         this.intervalService.startTimer(); // 1.6启动定时
     }
@@ -128,7 +128,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
                 }
                 break;
             case 6:
-                if (!url.includes('mall')) {
+                if (!url.includes('/mall')) {
                     this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
                     this.router.navigate(['/main']);
                 } else if (url.includes('home')) {
