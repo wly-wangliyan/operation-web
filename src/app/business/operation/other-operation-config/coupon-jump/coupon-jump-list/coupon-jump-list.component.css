@@ -112,13 +112,14 @@
 
 .share-span:first-child {
     border-radius: 2px 0 0 2px;
+    border-right: 0.5px solid rgba(136, 136, 136, .3);
 }
 
 .share-span:last-child {
     border-radius: 0 2px 2px 0;
 }
 
-.share-selected {
+.share-span:hover, .share-selected {
     color: #FFFFFF;
     background: #3E71F7;
 }
