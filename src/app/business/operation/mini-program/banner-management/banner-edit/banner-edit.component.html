@@ -53,7 +53,7 @@
           </label>
           <div class="control-input">
             <select class="form-control" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-              (change)="onChangeBelongTo()" required>
+              (change)="onChangeBelongTo($event)" required>
               <option [value]=2>H5</option>
               <option [value]=1>小程序原生页</option>
             </select>

@@ -251,8 +251,11 @@ export class BannerEditComponent implements OnInit {
   }
 
   // 切换落地页
-  public onChangeBelongTo(): void {
-    this.bannerParams.jump_link = null;
-    this.errPositionItem.jump_link.isError = false;
+  public onChangeBelongTo(event: any): void {
+    if (event.target.value) {
+      this.bannerParams.jump_link = null;
+      this.errPositionItem.jump_link.isError = false;
+      this.bannerParams.belong_to = Number(event.target.value);
+    }
   }
 }
