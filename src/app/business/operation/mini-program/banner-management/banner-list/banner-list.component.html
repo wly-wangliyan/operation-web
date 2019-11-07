@@ -1,1 +1,87 @@
-<p>banner-list works!</p>
+<div class="content-header">
+  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位管理'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" class="header-btn" [disabled]="bannerList && bannerList.length>4" nz-button
+        nzType="primary" (appZDebounceClick)="onShowModal()">
+        新建
+      </button>
+    </li>
+  </ul>
+</div>
+
+<div class="content-flow">
+  <div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'">
+      <label nz-radio-button>首页Banner</label>
+    </nz-radio-group>
+  </div>
+  <div class="search-container">
+    <form class="search-form" autocomplete="off">
+
+      <div class="form-group">
+        <span>标题：</span>
+        <input class="form-control" placeholder="请输入标题" maxlength="20" name="title" [(ngModel)]="searchParams.title" />
+      </div>
+
+      <div class="form-group">
+        <span>上线时间：</span>
+        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+          name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        <span class='line'>-</span>
+        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+          name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="bannerList" [nzFrontPagination]='false' [nzNoResult]="noResultText" #bannerTable>
+        <thead>
+          <tr>
+            <th>显示顺序</th>
+            <th>图片</th>
+            <th>标题</th>
+            <th>上线时间</th>
+            <th>下线时间</th>
+            <th>启停</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event, bannerTable.data)">
+          <tr *ngFor="let data of bannerTable.data; let i=index" cdkDrag>
+            <td>{{i + 1}}</td>
+
+            <td>
+              <img *ngIf='!data.image' src="/assets/images/space_banner.png">
+              <img *ngIf='data.image' style="width: 90px;" [src]="data.image">
+            </td>
+
+            <td>{{data.title}}</td>
+
+            <td>{{data.online_time ?(data.online_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+            <td *ngIf="data.offline_status===1">永不下线</td>
+            <td *ngIf="data.offline_status!==1">
+              {{data.offline_time ?(data.offline_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>
+              <nz-switch [ngModel]="data.is_use" nzCheckedChildren="On" style="height: 10px" nzUnCheckedChildren="Off"
+                (ngModelChange)="onSwitchChange(data.banner_id,$event)"></nz-switch>
+            </td>
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
+              <a [title]="'明细'" [routerLink]="['../banner-detail',data.banner_id]">明细</a>
+              <a [title]="'删除'" *ngIf="!data.is_use" (appZDebounceClick)="onDeleteClick(data.banner_id)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+
+<app-banner-edit #bannerEdit></app-banner-edit>
