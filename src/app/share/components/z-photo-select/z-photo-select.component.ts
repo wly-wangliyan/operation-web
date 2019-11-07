@@ -47,6 +47,8 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public imageAddHeight = null;
 
+  @Input() public imageShowWidth = null; // 剪裁后的图片显示的宽度
+
   @Input() public minCropBoxWidth = 150; // 剪裁框的最小宽度
 
   @Input() public minCropBoxHeight = 150; // 最大值400

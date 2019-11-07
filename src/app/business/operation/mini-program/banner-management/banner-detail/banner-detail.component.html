@@ -1,0 +1,37 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位管理'" [level2RelativePath]="'../'" [level3Name]="'明细'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <!-- 查看明细 -->
+
+  <div class="content-container">
+    <div class="img-item">
+      <img src="{{bannerRecord.image?bannerRecord.image:no_img_url}}" />
+    </div>
+    <div class="table-item">
+      <table class="detail-table">
+        <tr>
+          <td>标题：</td>
+          <td>{{bannerRecord.title ? bannerRecord.title : '--'}}</td>
+
+          <td>状态：</td>
+          <td>{{bannerRecord.is_use===1 ? '展示中' : '已停用'}}</td>
+        </tr>
+        <tr>
+          <td>落地页：</td>
+          <td colspan="5">{{bannerRecord.jump_link ? bannerRecord.jump_link : '--'}}</td>
+        </tr>
+        <tr>
+          <td>上线时间：</td>
+          <td>{{bannerRecord.online_time ? (bannerRecord.online_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+
+          <td>下线时间：</td>
+          <td *ngIf="offline_status===1">永不下线</td>
+          <td *ngIf="offline_status!==1">
+            {{bannerRecord.offline_time ? (bannerRecord.offline_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
