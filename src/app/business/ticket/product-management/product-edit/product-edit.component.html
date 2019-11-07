@@ -69,6 +69,13 @@
                 autocomplete="off" name="subheading" maxlength='80' />
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>分类标签</nz-form-label>
+            <nz-form-control class="ml_-10">
+              <input class="subheading" [(ngModel)]="productData.product_subtitle" placeholder=" 输入0-80字副标题" nz-input
+                autocomplete="off" name="subheading" maxlength='80' />
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </form>
     </div>
@@ -221,6 +228,12 @@
 
             <td>
               <div class='opera m_20'>
+                <div>
+                  <nz-switch [ngModel]="data.status===1?true:false" nzSize="small"
+                    (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true
+                    (click)="onSwitchClick(data.product.product_id,data.ticket_id,data.status)">
+                  </nz-switch>
+                </div>
                 <div>
                   <a (click)='onOpenPriceCalendar(data.ticket_id)'>价格日历</a>
                 </div>

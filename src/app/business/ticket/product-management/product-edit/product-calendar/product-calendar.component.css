@@ -85,7 +85,7 @@
   line-height: 36px;
 }
 
-:host ::ng-deep .ant-input {
+::ng-deep .ant-input {
   width: 304px;
   height: 48px;
   border: 1px solid rgba(204, 204, 204, 1);
@@ -123,18 +123,21 @@
   color: #099E5B;
 }
 
-.z-close-icon {
-  margin-right: 20px;
+.z-icon {
   display: block;
   float: right;
   cursor: pointer;
   width: 72px;
   height: 24px;
-  margin-left: 20px;
   border-radius: 0px;
   font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
+}
+
+.z-close-icon {
+  margin-left: 10px;
+  margin-right: 20px;
 }
 
 @-webkit-keyframes fade-in {

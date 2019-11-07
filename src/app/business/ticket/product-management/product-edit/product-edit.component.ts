@@ -259,6 +259,60 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     });
   }
 
+  // 上架开关状态改变
+  public onSwitchChange(status: number, event: boolean) {
+    timer(2000).subscribe(() => {
+      return status = event === true ? 1 : 2;
+    });
+  }
+
+  // 上架开关点击调用接口
+  public onSwitchClick(product_id, ticket_id, status) {
+    // const status = event ? 1 : 2; // 检车线状态(默认:1) 1:销售中 2:已下架
+    if (status === 1) { // 下架传2
+      this.globalService.confirmationBox.open('提示', '下架后，将不支持在线购买', () => {
+        this.productService.requestIsTopProduct(product_id, ticket_id, status).subscribe(res => {
+          this.globalService.promptBox.open('下架成功');
+          this.searchText$.next();
+        }, err => {
+          if (!this.globalService.httpErrorProcess(err)) {
+            if (err.status === 422) {
+              this.globalService.promptBox.open('下架失败，请重试', null, 2000, '/assets/images/warning.png');
+            }
+          }
+          this.searchText$.next();
+        });
+      }, '确定', () => { this.searchText$.next(); });
+    } else {// 上架传1
+      this.productService.requestIsTopProduct(product_id, ticket_id, status).subscribe(res => {
+        this.globalService.promptBox.open('上架成功');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+            for (const content of error.errors) {
+
+              if (content.code === 'operation_config_not_setting') {
+                this.globalService.promptBox.open('运营信息未填写完善无法上架!', null, 2000, '/assets/images/warning.png');
+              } else if (content.code === 'charge_standard_not_setting') {
+                this.globalService.promptBox.open('计费规则未填写无法上架!', null, 2000, '/assets/images/warning.png');
+              } else if (content.code === 'balance_config_not_setting') {
+                this.globalService.promptBox.open('结算设置未填写无法上架!', null, 2000, '/assets/images/warning.png');
+              } else if (content.code === 'account_config_not_setting') {
+                this.globalService.promptBox.open('支付配置未开启无法上架!', null, 2000, '/assets/images/warning.png');
+              } else {
+                this.globalService.promptBox.open('上架失败，请重试', null, 2000, '/assets/images/warning.png');
+
+              }
+            }
+          }
+        }
+        this.searchText$.next();
+      });
+    }
+  }
+
   // 置顶
   public onIsTopProduct(product_id, ticket_id, is_top) {
     const text = is_top === 1 ? '置顶' : '取消置顶';

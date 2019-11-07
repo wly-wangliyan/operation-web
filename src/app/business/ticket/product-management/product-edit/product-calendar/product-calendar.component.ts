@@ -7,6 +7,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductService, SearchPriceCalendarParams, PriceCalendarEntity } from '../../product.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { toUnicode } from 'punycode';
+import { BatchImportComponent } from '../../product-edit/batch-import/batch-import.component';
 
 @Component({
   selector: 'app-product-calendar',
@@ -16,9 +17,6 @@ import { toUnicode } from 'punycode';
 
 export class ProductCalendarComponent implements OnInit {
 
-  public accounting_date: number = undefined; 	// 	integer	结算日 范围 1-28
-  public carTypeList: Array<any> = [];
-  public editAccountDateSwitch = true;
   public selectedDate: Date;
   public selectedDateMonth: number;
   public mode = 'month';
@@ -39,6 +37,7 @@ export class ProductCalendarComponent implements OnInit {
   @Input() public ticket_id: string;
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
+  @ViewChild('batchImport', { static: true }) public batchImport: BatchImportComponent;
 
   constructor(private globalService: GlobalService, private productService: ProductService) {
   }
@@ -70,6 +69,16 @@ export class ProductCalendarComponent implements OnInit {
       obj[k] = v;
     }
     return obj;
+  }
+
+
+  // 批量导入
+  public onOpenBatchImport(ticket_id) {
+    this.batchImport.open(null, this.product_id, ticket_id, () => {
+      timer(1000).subscribe(() => {
+        this.searchText$.next();
+      });
+    });
   }
 
   // 变更时间
@@ -131,12 +140,11 @@ export class ProductCalendarComponent implements OnInit {
   /**
    * 取消按钮触发关闭模态框，释放订阅。
    */
-  public close() {
+  public onCloseCalendar() {
     const list = this.priceCalendarList.filter(i => !i.platform_price);
     if (list.length !== 0) {
       this.globalService.promptBox.open('请填写平台售价!', null, 2000, '/assets/images/warning.png');
     } else {
-      this.editAccountDateSwitch = true;
       if (this.subscription) {
         this.subscription.unsubscribe();
       }
