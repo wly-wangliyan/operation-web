@@ -144,9 +144,7 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
         if (this.submitRequestSubscription) {
             return;
         }
-        if ((this.currentCouponJump.url_type === 1) && !ValidateHelper.checkUrl(this.currentCouponJump.coupon_url)) {
-            this.couponUrlErrMsg = '链接格式错误，请重新输入！';
-        } else if (isNullOrUndefined(this.currentCouponJump.can_be_shared)) {
+        if (isNullOrUndefined(this.currentCouponJump.can_be_shared)) {
             this.canBeShareErrMsg = '页面是否可分享未选择!';
         } else {
             if (this.currentCouponJump.coupon_url_record_id) {
