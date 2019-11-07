@@ -1,0 +1,20 @@
+<div class="video-select-wrap">
+    <div *ngFor="let videoItem of videoList; let videoIndex = index" [ngClass]="{'not-cursor': hasDeleteVideo}"
+         [ngStyle]="{width: videoWidth + 'px', height: videoHeight + 'px', 'line-height': transformLineHeight + 'px'}">
+        <video [src]="videoItem.showUrl" [ngStyle]="{width: videoShowWidth + 'px'}" [controls]="isControls"
+               [autoplay]="isAutoPlay"></video>
+        <span class="delete-icon" *ngIf="hasDeleteVideo" (click)="deleteVideo(videoIndex)"></span>
+        <div class="progress-bg" [ngStyle]="{width: videoWidth + 'px', height: videoHeight + 'px'}"
+             #videoProgressBgList>
+            <p class="progress-wrap">
+                <span class="progress-bar progress-bar-info progress-bar-striped" #videoProgressBarList></span>
+            </p>
+        </div>
+    </div>
+    <div class="select-wrap" *ngIf="videoList.length<maxLength && hasAddVideo"
+         [ngStyle]="{width: videoAddHeight + 'px', height: videoAddHeight + 'px'}">
+        <input type="file" name="file" [id]="file_id" (change)="selectVideo($event, importVideoFileInput)"
+               #importVideoFileInput>
+        <label [for]="file_id"></label>
+    </div>
+</div>
