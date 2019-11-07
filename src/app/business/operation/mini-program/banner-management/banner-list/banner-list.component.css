@@ -41,3 +41,11 @@
 .form-group .line {
   margin: 0 8px;
 }
+
+::ng-deep .cdk-drag-preview {
+  display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0;
+}
