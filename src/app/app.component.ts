@@ -98,24 +98,27 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     switch (index) {
       case 1:
         if (!url.includes('operation/')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus();
-          this.router.navigate(['/main/home']);
+          this.router.navigate(['/main/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus());
+          });
         } else if (url.includes('home')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus();
         }
         break;
       case 3:
         if (!url.includes('insurance')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
-          this.router.navigate(['/main']);
+          this.router.navigate(['/main']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_insurance());
+          });
         } else if (url.includes('home')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
         }
         break;
       case 4:
         if (!url.includes('maintenance')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
-          this.router.navigate(['/main']);
+          this.router.navigate(['/main']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_maintenance());
+          });
         } else if (url.includes('home')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
         }
@@ -136,7 +139,32 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.menu = null;
     this.globalService.menu_index = this.menu;
     this.getMenuList(this.menu);
-    this.router.navigateByUrl('/main/notice-center/list');
+    this.router.navigateByUrl('/main/notice-center/list').then(() => {
+      const path = location.pathname;
+      if (path.includes('/ticket')) {
+        this.menu = 5;
+        this.globalService.menu_index = 5;
+        this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+        this.menuComponent.refreshMenu(path);
+      } else {
+        this.router.navigateByUrl('/main/notice-center/list');
+        this.menuComponent.refreshMenu(path);
+      }
+    });
+  }
+
+  // 依据路由是否跳转进行菜单渲染
+  private onMenuPrevent(func: any) {
+    const path = location.pathname;
+    if (path.includes('/ticket')) {
+      this.menu = 5;
+      this.globalService.menu_index = 5;
+      this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+      this.menuComponent.refreshMenu(path);
+    } else if (path.includes('home')) {
+      this.menuComponent.menuItems = func;
+      this.menuComponent.refreshMenu(path);
+    }
   }
 
   // 通知中心未读数量
