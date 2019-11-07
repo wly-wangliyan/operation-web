@@ -124,6 +124,14 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
         }
     }
 
+    // 修改url类型参数
+    public onChangeUrlType(event: any) {
+        if (event.target.value) {
+            this.couponUrlErrMsg = '';
+            this.currentCouponJump.url_type = Number(event.target.value);
+        }
+    }
+
     // 修改是否可分享参数
     public onChangeShareClick(isShare: boolean) {
         this.canBeShareErrMsg = '';
@@ -136,7 +144,7 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
         if (this.submitRequestSubscription) {
             return;
         }
-        if (!ValidateHelper.checkUrl(this.currentCouponJump.coupon_url)) {
+        if ((this.currentCouponJump.url_type === 1) && !ValidateHelper.checkUrl(this.currentCouponJump.coupon_url)) {
             this.couponUrlErrMsg = '链接格式错误，请重新输入！';
         } else if (isNullOrUndefined(this.currentCouponJump.can_be_shared)) {
             this.canBeShareErrMsg = '页面是否可分享未选择!';
