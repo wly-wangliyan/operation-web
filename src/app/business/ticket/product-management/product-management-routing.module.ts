@@ -10,26 +10,27 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { ExternalPreventService } from '../../../core/external-prevent.service';
 import { ThirdProductListComponent } from './third-product-list/third-product-list.component';
 import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
+import { LabelManagementComponent } from './label-management/label-management.component';
 
 const routes: Routes = [{
-    path: '', component: ProductManagementComponent,
-    canActivateChild: [AuthGuardService, RouteMonitorService],
-    children: [
-        {path: '', redirectTo: 'list', pathMatch: 'full'},
-        {path: 'list', component: ProductListComponent},
-        {path: 'create', component: ProductCreateComponent},
-        {path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService]},
-        {path: 'detail/:product_id', component: ProductDetailComponent},
-        {path: 'third-detail/:product_id/:add_status/:type', component: ThirdProductDetailComponent},
-        {path: 'third-product', component: ThirdProductListComponent},
-        {path: '**', redirectTo: 'list', pathMatch: 'full'}
-    ]
+  path: '', component: ProductManagementComponent,
+  canActivateChild: [AuthGuardService, RouteMonitorService],
+  children: [
+    { path: '', redirectTo: 'list', pathMatch: 'full' },
+    { path: 'list', component: ProductListComponent },
+    { path: 'create', component: ProductCreateComponent },
+    { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService] },
+    { path: 'detail/:product_id', component: ProductDetailComponent },
+    { path: 'third-detail/:product_id/:add_status/:type', component: ThirdProductDetailComponent },
+    { path: 'third-product', component: ThirdProductListComponent },
+    { path: 'label-list', component: LabelManagementComponent },
+    { path: '**', redirectTo: 'list', pathMatch: 'full' }
+  ]
 }];
 
-// , canDeactivate: [ExternalPreventService]
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class ProductManagementRoutingModule {
 }

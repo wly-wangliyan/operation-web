@@ -16,6 +16,9 @@ import { ProductEditor3Component } from './product-edit/product-editor3/product-
 import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
 import { ProductCalendarComponent } from './product-edit/product-calendar/product-calendar.component';
 import { CalendarDetailComponent } from './product-detail/calendar-detail/calendar-detail.component';
+import { BatchImportComponent } from './product-edit/batch-import/batch-import.component';
+import { LabelManagementComponent } from './label-management/label-management.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const uploadToken: UploadConfig = {
   reportProcess: true,
@@ -36,9 +39,12 @@ const uploadToken: UploadConfig = {
     ProductEditor3Component,
     ThirdProductDetailComponent,
     ProductCalendarComponent,
-    CalendarDetailComponent],
+    CalendarDetailComponent,
+    BatchImportComponent,
+    LabelManagementComponent],
   imports: [
     ShareModule,
+    DragDropModule,
     CommonModule,
     ProductManagementRoutingModule
   ],

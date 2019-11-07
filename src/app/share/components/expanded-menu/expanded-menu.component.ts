@@ -228,6 +228,8 @@ export class ExpandedMenuComponent implements OnInit {
     brokerageMenu.icon = '/assets/images/menu_part.png';
     const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('标签管理', '/main/ticket/product-management/label-list', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
@@ -254,7 +256,7 @@ export class ExpandedMenuComponent implements OnInit {
 
 
 
-  private refreshMenu(path: string) {
+  public refreshMenu(path: string) {
     // 尝试父匹配
     let index = this.routeLinkList.findIndex(element => {
       return element.path === path;

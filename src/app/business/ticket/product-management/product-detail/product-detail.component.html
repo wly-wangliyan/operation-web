@@ -17,6 +17,8 @@
             <th>地址</th>
             <th>状态</th>
             <th>产品ID</th>
+            <!-- 销量 -->
+            <th>销量</th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +30,8 @@
             <td>{{data.product_name}}</td>
             <td>{{data.address}}</td>
             <td>{{data.status| thirdSaleStatus}}</td>
+            <td>{{data.product_id}}</td>
+            <!-- 销量 -->
             <td>{{data.product_id}}</td>
           </tr>
         </tbody>
@@ -47,6 +51,13 @@
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>副标题</nz-form-label>
+            <nz-form-control class="ml_-10">
+              <div class='subtitle'>{{productData.product_subtitle||'--'}}</div>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- 分类标签 -->
+          <nz-form-item nzFlex>
+            <nz-form-label class="ml_10" [nzNoColon]='true'>分类标签</nz-form-label>
             <nz-form-control class="ml_-10">
               <div class='subtitle'>{{productData.product_subtitle||'--'}}</div>
             </nz-form-control>

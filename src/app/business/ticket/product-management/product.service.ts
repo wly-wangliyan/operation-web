@@ -232,6 +232,12 @@ export class PriceCalendarLinkResponse extends LinkResponse {
   }
 }
 
+// 批量导入字段
+export class SearchBatchImportParams extends EntityBase {
+  public type: number = undefined; // 录入方式
+  public price: string = undefined; // 查询价格结束日期
+}
+
 // 价格日历条件筛选
 export class SearchPriceCalendarParams extends EntityBase {
   public start_date: string = undefined; // 查询价格开始日期

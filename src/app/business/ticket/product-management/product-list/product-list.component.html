@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品管理'"></app-crumb>
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'产品列表'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg" [routerLink]="['../third-product']">
       <a>新建</a>
@@ -24,6 +24,16 @@
         <span>产品名称：</span>
         <input class="form-control" [(ngModel)]="searchParams.product_name" placeholder="请输入产品名称" autocomplete="off"
           name="product_name" maxlength="20" appIgnoreSpace />
+      </div>
+      <div class="form-group">
+        <span>所属时间：</span>
+        <select class="form-control" style="width: 100px;" name="status" [(ngModel)]="sale_status"
+          (change)="onChangeSearchStatus($event)">
+          <option value="">全部</option>
+          <option *ngFor="let status of saleStatus" [value]="status">
+            {{status | saleStatus}}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <span>上架时间：</span>
