@@ -102,7 +102,7 @@
                         </label>
                         <div class=" control-input">
                             <select class="form-control" [(ngModel)]="currentCouponJump.url_type" name="url_type"
-                                    required>
+                                    (change)="onChangeUrlType($event)" required>
                                 <option [value]=1>H5</option>
                                 <option [value]=2>小程序原生页</option>
                             </select>
