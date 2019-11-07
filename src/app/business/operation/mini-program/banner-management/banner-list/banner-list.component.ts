@@ -106,9 +106,8 @@ export class BannerListComponent implements OnInit, OnDestroy {
       errMsg = '关闭失败，请重试!';
     }
     this.bannerService.requestChangeUseStatus(banner_id, swith).subscribe(() => {
-      this.globalService.promptBox.open(sucessMsg, () => {
-        this.searchText$.next();
-      });
+      this.globalService.promptBox.open(sucessMsg);
+      this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
@@ -120,9 +119,9 @@ export class BannerListComponent implements OnInit, OnDestroy {
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
             }
+            this.searchText$.next();
           }
         }
-        this.searchText$.next();
       }
     });
   }
@@ -147,14 +146,12 @@ export class BannerListComponent implements OnInit, OnDestroy {
     }
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.bannerService.requestUpdateSort(this.bannerList[event.previousIndex].banner_id, move_num).subscribe((e) => {
-      this.globalService.promptBox.open('排序成功', () => {
-        this.searchText$.next();
-      });
+      this.globalService.promptBox.open('排序成功');
+      this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
-        this.globalService.promptBox.open('排序失败，请重试！', () => {
-          this.searchText$.next();
-        }, 2000, null, false);
+        this.globalService.promptBox.open('排序失败，请重试！', null, 2000, null, false);
+        this.searchText$.next();
       }
     });
   }
@@ -177,14 +174,12 @@ export class BannerListComponent implements OnInit, OnDestroy {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       this.bannerService.requestDeleteBannerData(banner_id).subscribe(() => {
-        this.globalService.promptBox.open('删除成功', () => {
-          this.searchText$.next();
-        });
+        this.globalService.promptBox.open('删除成功');
+        this.searchText$.next();
       }, err => {
         if (!this.globalService.httpErrorProcess(err)) {
-          this.globalService.promptBox.open('删除失败，请重试！', () => {
-            this.searchText$.next();
-          }, 2000, null, false);
+          this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
+          this.searchText$.next();
         }
       });
     });
