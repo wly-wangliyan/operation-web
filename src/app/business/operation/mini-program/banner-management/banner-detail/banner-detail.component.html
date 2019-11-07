@@ -16,7 +16,7 @@
           <td>{{bannerRecord.title ? bannerRecord.title : '--'}}</td>
 
           <td>状态：</td>
-          <td>{{bannerRecord.is_use===1 ? '展示中' : '已停用'}}</td>
+          <td>{{bannerRecord.is_use ? '展示中' : '已停用'}}</td>
         </tr>
         <tr>
           <td>落地页：</td>
@@ -27,8 +27,8 @@
           <td>{{bannerRecord.online_time ? (bannerRecord.online_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
 
           <td>下线时间：</td>
-          <td *ngIf="offline_status===1">永不下线</td>
-          <td *ngIf="offline_status!==1">
+          <td *ngIf="bannerRecord.offline_status===1">永不下线</td>
+          <td *ngIf="bannerRecord.offline_status!==1">
             {{bannerRecord.offline_time ? (bannerRecord.offline_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
         </tr>
       </table>
