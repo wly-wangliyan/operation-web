@@ -233,7 +233,7 @@ export class CouponJumpListComponent implements OnInit, OnDestroy {
                         this.globalService.promptBox.open('页面是否可分享未选择！', null, 2000, null, false);
                     } else if (content.field === 'can_be_shared' && content.code === 'invalid') {
                         this.globalService.promptBox.open('页面是否可分享错误或无效！', null, 2000, null, false);
-                    } else if (content.field === 'coupon_template_id' && content.code === 'already_exist') {
+                    } else if (content.resource === 'coupon_template_id' && content.code === 'already_exist') {
                         this.globalService.promptBox.open('优惠券模板id已存在！', null, 2000, null, false);
                     }
                 }
