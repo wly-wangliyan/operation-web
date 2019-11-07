@@ -151,7 +151,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
       if (!this.globalService.httpErrorProcess(err)) {
         this.globalService.promptBox.open('排序失败，请重试！', () => {
           this.searchText$.next();
-        });
+        }, 2000, null, false);
       }
     });
   }
@@ -181,7 +181,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
         if (!this.globalService.httpErrorProcess(err)) {
           this.globalService.promptBox.open('删除失败，请重试！', () => {
             this.searchText$.next();
-          });
+          }, 2000, null, false);
         }
       });
     });
@@ -198,7 +198,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
 
     if (sTimestamp && eTimeStamp) {
       if (sTimestamp > eTimeStamp) {
-        this.globalService.promptBox.open('上线开始时间不能大于结束时间！');
+        this.globalService.promptBox.open('上线开始时间不能大于结束时间！', null, 2000, null, false);
         return false;
       }
     }

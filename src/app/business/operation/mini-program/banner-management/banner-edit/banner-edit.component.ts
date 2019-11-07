@@ -147,7 +147,7 @@ export class BannerEditComponent implements OnInit {
           // 编辑banner
           this.bannerService.requestUpdateBannerData(this.banner_id, this.bannerParams).subscribe(() => {
             this.onClose();
-            this.globalService.promptBox.open('保存成功！', () => {
+            this.globalService.promptBox.open('修改成功！', () => {
               this.sureCallbackInfo();
             });
           }, err => {
