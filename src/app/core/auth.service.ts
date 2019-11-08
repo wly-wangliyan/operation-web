@@ -8,11 +8,33 @@ import { EntityBase } from '../../utils/z-entity';
 import { ZPromptBoxComponent } from '../share/components/tips/z-prompt-box/z-prompt-box.component';
 import { LocalStorageProvider } from '../share/localstorage-provider';
 
+export class UserPermissionGroupEntity extends EntityBase {
+  public permission_group_id: string = undefined; // string	T	权限组id
+  public english_name: string = undefined; // string	T	权限组名称(英文)
+  public chinese_name: string = undefined; // string	T	权限组名称(中文)
+  public sort_num: number = undefined; // int T 权限排序
+  public created_time: string = undefined; // double	T	创建时间
+  public updated_time: string = undefined; // double	T	更新时间
+}
+
 export class UserEntity extends EntityBase {
   public username: string = undefined; // string	用户账号主键
   public realname: string = undefined;	// string	用户姓名
   public password: string = undefined;	// string	密码
   public company_id: string = undefined;	// string	企业id
+  public permission_groups: Array<UserPermissionGroupEntity> = undefined; // Array	权限组
+  public department: string = undefined; // String	部门
+  public remarks: string = undefined; // String	备注
+  public updated_time: number = undefined; // Float	更新时间
+  public created_time: number = undefined; // Float	创建时间
+  public is_superuser: boolean = undefined; // 是否为管理员
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'permission_groups') {
+      return UserPermissionGroupEntity;
+    }
+    return null;
+  }
 }
 
 @Injectable({

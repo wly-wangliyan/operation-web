@@ -29,7 +29,12 @@ const routes: Routes = [{
     {
       path: 'notice-center',
       loadChildren: () => import('../notice-center/notice-center.module').then(m => m.NoticeCenterModule)
-    }
+    },
+    {
+      path: 'management-setting',
+      loadChildren: () => import('../management-setting/management-setting.module').then(m => m.ManagementSettingModule)
+    },
+    { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];
 
