@@ -6,12 +6,12 @@
   <!-- 查看明细 -->
 
   <div class="content-container">
-    <div class="img-item">
-      <img src="{{bannerRecord.image?bannerRecord.image:no_img_url}}" />
-    </div>
     <div class="table-item">
       <table class="detail-table">
         <tr>
+          <td rowspan="3" class="td-img">
+            <img style="width: 270px;margin: auto;" src="{{bannerRecord.image?bannerRecord.image:no_img_url}}" />
+          </td>
           <td>标题：</td>
           <td>{{bannerRecord.title ? bannerRecord.title : '--'}}</td>
 
@@ -20,7 +20,9 @@
         </tr>
         <tr>
           <td>落地页：</td>
-          <td colspan="5">{{bannerRecord.jump_link ? bannerRecord.jump_link : '--'}}</td>
+          <td colspan="5">
+            {{bannerRecord.belong_to===2 ? 'H5： ': '小程序原生页： '}}
+            {{bannerRecord.jump_link ? bannerRecord.jump_link : '--'}}</td>
         </tr>
         <tr>
           <td>上线时间：</td>

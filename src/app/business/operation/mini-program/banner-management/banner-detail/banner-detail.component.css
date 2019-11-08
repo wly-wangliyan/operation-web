@@ -8,26 +8,9 @@
   font-size: 13px;
 }
 
-.img-item {
-  border: 1px solid #d4d4d4;
-  border-right: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 301px;
-  height: 151px;
-}
-
-.img-item img {
-  height: 70px;
-  width: 270px;
-}
-
 .table-item {
-  width: calc(100% - 200px);
+  width: 100%;
   min-width: 800px;
-  padding-right: 10px;
 }
 
 .table-item table {
@@ -43,27 +26,37 @@
 }
 
 .table-item table tr>td {
+  height: 50px;
+  box-sizing:border-box;
   padding: 4px 8px;
+  color: #23242f;
+  font-size: 12px;
   vertical-align: middle;
   border-left: 1px solid #d4d4d4;
   border-right: 1px solid #d4d4d4;
   border-top: 1px solid #d4d4d4;
   cursor: default;
-}
-
-.table-item table tr>td:nth-child(odd) {
-  text-align: right;
-}
-
-.table-item table tr>td:nth-child(even) {
   text-align: left;
+  padding-left: 30px;
 }
 
+.table-item table tr:first-child>td:nth-child(even),
 .table-item table tr>td:nth-child(odd) {
   min-width: 118px;
   background: #F7F8FA;
 }
 
+.table-item table tr:first-child>td:nth-child(odd) {
+  background: #fff;
+}
+
 .detail-table {
   width: 100%;
+}
+
+.td-img {
+  padding: 0 !important;
+  width: 300px;
+  background: #fff !important;
+  text-align: center !important;
 }

@@ -57,6 +57,8 @@ export class BannerEditComponent implements OnInit {
   private requestSubscription: Subscription;
   private banner_id: string;
 
+  private is_save = false; // 防止连续出发保存事件
+
   @Input() public data: any;
   @Input() public sureName = '保存';
   @ViewChild('bannerPromptDiv', { static: false }) public bannerPromptDiv: ElementRef;
@@ -92,6 +94,7 @@ export class BannerEditComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
+    this.is_save = false;
     this.offline_time = '';
     if (this.isCreateBanner) {
       this.bannerParams = new BannerParams();
@@ -128,11 +131,17 @@ export class BannerEditComponent implements OnInit {
 
   // form提交
   public onEditFormSubmit(): void {
+    if (this.is_save) {
+      return;
+    }
     this.clear();
-    if (this.verification()) {
-      this.coverImgSelectComponent.upload().subscribe(() => {
-        const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-        this.bannerParams.image = imageUrl.join(',');
+    this.is_save = true;
+    // const params = this.bannerParams.clone();
+    this.coverImgSelectComponent.upload().subscribe(() => {
+      const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+      this.bannerParams.image = imageUrl.join(',');
+      if (this.verification()) {
+        // params.image = this.bannerParams.image;
         if (this.isCreateBanner) {
           // 添加banner
           this.bannerService.requestAddBannerData(this.bannerParams).subscribe(() => {
@@ -141,6 +150,7 @@ export class BannerEditComponent implements OnInit {
               this.sureCallbackInfo();
             });
           }, err => {
+            this.is_save = false;
             this.errorProcess(err);
           });
         } else {
@@ -151,26 +161,32 @@ export class BannerEditComponent implements OnInit {
               this.sureCallbackInfo();
             });
           }, err => {
+            this.is_save = false;
             this.errorProcess(err);
           });
         }
-      });
-    }
+      } else {
+        this.is_save = false;
+      }
+    }, err => {
+      this.is_save = false;
+      this.upLoadErrMsg(err);
+    });
   }
 
   // 表单提交校验
   private verification(): boolean {
     let cisCheck = true;
 
-    // if (!this.bannerParams.image) {
-    //   this.errPositionItem.icon.isError = true;
-    //   this.errPositionItem.icon.errMes = '请上传图片！';
-    //   cisCheck = false;
-    // }
+    if (!this.bannerParams.image) {
+      this.errPositionItem.icon.isError = true;
+      this.errPositionItem.icon.errMes = '请重新上传图片！';
+      cisCheck = false;
+    }
 
-    if (this.bannerParams.belong_to === 2 && !ValidateHelper.checkUrl(this.bannerParams.jump_link)) {
+    if (!this.bannerParams.jump_link) {
       this.errPositionItem.jump_link.isError = true;
-      this.errPositionItem.jump_link.errMes = '链接格式错误，请重新输入！';
+      this.errPositionItem.jump_link.errMes = '请输入跳转URL！';
       cisCheck = false;
     }
 
@@ -229,6 +245,22 @@ export class BannerEditComponent implements OnInit {
     }
   }
 
+  // 上传图片错误信息处理
+  private upLoadErrMsg(err: any) {
+    if (!this.globalService.httpErrorProcess(err)) {
+      if (err.status === 422) {
+        this.errPositionItem.icon.isError = true;
+        this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
+      } else if (err.status === 413) {
+        this.errPositionItem.icon.isError = true;
+        this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
+      } else {
+        this.errPositionItem.icon.isError = true;
+        this.errPositionItem.icon.errMes = '上传失败，请重试！';
+      }
+    }
+  }
+
   // 选择图片时校验图片格式
   public onSelectedPicture(event: any): any {
     this.errPositionItem.icon.isError = false;
@@ -251,8 +283,11 @@ export class BannerEditComponent implements OnInit {
   }
 
   // 切换落地页
-  public onChangeBelongTo(): void {
-    this.bannerParams.jump_link = null;
-    this.errPositionItem.jump_link.isError = false;
+  public onChangeBelongTo(event: any): void {
+    if (event.target.value) {
+      this.bannerParams.jump_link = null;
+      this.errPositionItem.jump_link.isError = false;
+      this.bannerParams.belong_to = Number(event.target.value);
+    }
   }
 }

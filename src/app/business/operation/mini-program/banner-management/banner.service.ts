@@ -9,7 +9,7 @@ import { HttpResponse } from '@angular/common/http';
 export class BannerEntity extends EntityBase {
   public banner_id: string = undefined; // id
   public title: string = undefined; // 标题
-  public belong_to = 2; // 跳转类型 1:原生 2: h5
+  public belong_to: number = undefined; // 跳转类型 1:原生 2: h5
   public jump_link: string = undefined; // 跳转路径
   public banner_describe: string = undefined; // 描述
   public is_use: boolean = undefined; // 启停状态 true启用，false停用
@@ -33,7 +33,7 @@ export class SearchParams extends EntityBase {
 // 添加、编辑 banner
 export class BannerParams extends EntityBase {
   public title: string = undefined; // 标题
-  public belong_to: any = ''; // 跳转类型 1:原生 2: h5
+  public belong_to = 2; // 跳转类型 1:原生 2: h5
   public jump_link: string = undefined; // 跳转路径
   public banner_describe: string = undefined; // 描述
   public offline_status: number = undefined; // 下线类型 1:永不下线 2: 定时下线

@@ -44,9 +44,9 @@
                 <tr *ngFor="let data of couponJumpTable.data; let i=index">
                     <td>{{i + ( pageIndex - 1) * 15 + 1}}</td>
                     <td>{{data.coupon_template_id}}</td>
-                    <td>{{data.coupon_name}}</td>
+                    <td [title]="data.coupon_name">{{data.coupon_name | zMaxLength: 15}}</td>
                     <td>{{data.can_be_shared ? '可分享' : '不可分享'}}</td>
-                    <td>{{data.coupon_url}}</td>
+                    <td [title]="data.coupon_url">{{data.coupon_url | zMaxLength: 20}}</td>
                     <td class="operation">
                         <a [title]="'编辑'" (click)="onAddOrEditCouponUrlRecordModal(data)">编辑</a>
                         <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
@@ -108,8 +108,8 @@
                             </select>
                             <input class="form-control" style="border-left: none!important;"
                                    [(ngModel)]="currentCouponJump.coupon_url" name="coupon_url"
-                                   placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1" maxlength="100"
-                                   (input)="couponUrlErrMsg=''" required>
+                                   (input)="couponUrlErrMsg=''" placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1"
+                                   maxlength="2000" required>
                         </div>
                     </div>
                     <div class="row row-message">
