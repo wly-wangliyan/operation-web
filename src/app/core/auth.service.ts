@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment';
 import { EntityBase } from '../../utils/z-entity';
 import { ZPromptBoxComponent } from '../share/components/tips/z-prompt-box/z-prompt-box.component';
 import { LocalStorageProvider } from '../share/localstorage-provider';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export class UserPermissionGroupEntity extends EntityBase {
   public permission_group_id: string = undefined; // string	T	权限组id
@@ -20,11 +22,10 @@ export class UserPermissionGroupEntity extends EntityBase {
 export class UserEntity extends EntityBase {
   public username: string = undefined; // string	用户账号主键
   public realname: string = undefined;	// string	用户姓名
-  public password: string = undefined;	// string	密码
+  public telephone: string = undefined; // Array	联系方式
   public company_id: string = undefined;	// string	企业id
   public permission_groups: Array<UserPermissionGroupEntity> = undefined; // Array	权限组
-  public department: string = undefined; // String	部门
-  public remarks: string = undefined; // String	备注
+  public remark: string = undefined; // String	备注
   public updated_time: number = undefined; // Float	更新时间
   public created_time: number = undefined; // Float	创建时间
   public is_superuser: boolean = undefined; // 是否为管理员
@@ -133,10 +134,57 @@ export class AuthService {
     });
   }
 
+  /**
+   * 刷新授权信息(修改用户权限时调用)
+   */
+  public refreshAuthorize() {
+    this.httpService.get(environment.OPERATION_SERVE + '/user').subscribe(data => {
+      this._user = UserEntity.Create(data.body);
+    });
+  }
+
+  /**
+   * 检查权限是否授权
+   * @param permissions 权限英文名集合
+   * @returns boolean 是否有权限
+   */
+  public checkPermissions(permissions: Array<string>): boolean {
+    if (this.user) {
+      if (this.user.is_superuser) {
+        return true;
+      }
+      for (const permission of this.user.permission_groups) {
+        if (permissions.indexOf(permission.english_name) >= 0) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * 请求权限组列表
+   * @returns Array<UserPermissionGroupEntity> 权限组列表
+   */
+  public requestPermissionGroups(): Observable<Array<UserPermissionGroupEntity>> {
+    return this.httpService.get(environment.OPERATION_SERVE + '/admin/permission_groups').pipe(map(data => {
+      const json = data.body;
+      const tempGroups = [];
+      json.forEach(jsonObj => {
+        tempGroups.push(UserPermissionGroupEntity.Create(jsonObj));
+      });
+      return tempGroups;
+    }));
+  }
 }
 
 
-// gly    管理员
-// kty    勘探员
-// zgssy    中杆实施员
-// xjssy    相机实施员
+/*
+chinese_name: "管理设置", english_name: "management", sort_num:1
+chinese_name: "运营", english_name: "operation", sort_num:2
+chinese_name: "保险", english_name: "insurance", sort_num:3
+chinese_name: "保养", english_name: "upkeep", sort_num:4
+chinese_name: "票务", english_name: "ticket", sort_num:5
+chinese_name: "商城", english_name: "mall", sort_num:6
+* */

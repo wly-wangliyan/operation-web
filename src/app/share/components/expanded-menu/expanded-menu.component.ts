@@ -295,7 +295,7 @@ export class ExpandedMenuComponent implements OnInit {
   // 管理设置》用户管理
   public generateEmployeesMenu() {
     const systemMenu = new SideMenuItem('用户管理', '/main/management-setting/employees');
-    systemMenu.icon = '/assets/images/menu_part.png';
+    systemMenu.icon = '/assets/images/menu_user.png';
     const subFinanceMenu1 = new SideMenuItem('用户列表', '/main/management-setting/employees', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EntityBase } from '../../../../utils/z-entity';
 import { HttpService, LinkResponse } from '../../../core/http.service';
 import { Observable } from 'rxjs';
-import { UserEntity } from '../../../core/auth.service';
+import { UserEntity, UserPermissionGroupEntity } from '../../../core/auth.service';
 import { environment } from '../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
@@ -17,14 +17,35 @@ export class UserEditParams extends EntityBase {
   public username: string = undefined; // String	F	用户名
   public realname: string = undefined; // String F	姓名
   public telephone: string = undefined; // String	F	联系电话
-  public permission_group_ids: Array<string> = undefined; // Array	权限组
-  public department: string = undefined; // String	部门
+  public permission_group_ids: string = undefined; // 权限组id 用逗号分隔
   public remark: string = undefined; // String	备注
+
+  constructor(user?: UserEntity) {
+    super();
+    if (user) {
+      this.username = user.username;
+      this.realname = user.realname;
+      this.telephone = user.telephone;
+      this.remark = user.remark;
+      // permission_groups数据在外部处理
+    }
+  }
 
   public toEditJson(): any {
     const json = this.json();
     delete json.username;
     return json;
+  }
+}
+
+export class PermissionItem {
+
+  public source: UserPermissionGroupEntity;
+
+  public isChecked = false;
+
+  constructor(source: UserPermissionGroupEntity) {
+    this.source = source;
   }
 }
 
@@ -109,6 +130,9 @@ export class EmployeeHttpService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestResetPassword(username: string): Observable<HttpResponse<any>> {
-    return this.httpService.put(`${this.domain}/users/${username}/password/reset`);
+    const body = {
+      username
+    };
+    return this.httpService.put(`${this.domain}/user/password/reset`, body);
   }
 }

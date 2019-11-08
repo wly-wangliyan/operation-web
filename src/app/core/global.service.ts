@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService, UserPermissionGroupEntity } from './auth.service';
 import { HttpService } from './http.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Http500TipComponent } from '../share/components/tips/http500-tip/http500-tip.component';
@@ -9,6 +9,8 @@ import { ZConfirmationBoxComponent } from '../share/components/tips/z-confirmati
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { isUndefined } from 'util';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class GlobalService {
 
   // 特殊存储，全局化资源配置
   public static Instance: GlobalService;
+  private _permissionGroups: Array<UserPermissionGroupEntity>;
 
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
@@ -62,5 +65,23 @@ export class GlobalService {
   public requestUnreadCount(): Observable<HttpResponse<any>> {
     const httpUrl = `${environment.TICKET_SERVER}/messages/unread_num`;
     return this.httpService.get(httpUrl);
+  }
+
+  /**
+   * 获取权限组列表
+   * @returns any
+   */
+  public get permissionGroups(): Observable<Array<UserPermissionGroupEntity>> {
+    if (isUndefined(this._permissionGroups)) {
+      return this.authService.requestPermissionGroups().pipe(map(permissionGroups => {
+        this._permissionGroups = permissionGroups;
+        return permissionGroups;
+      }));
+    } else {
+      return Observable.create(observer => {
+        observer.next(this._permissionGroups);
+        observer.complete();
+      });
+    }
   }
 }

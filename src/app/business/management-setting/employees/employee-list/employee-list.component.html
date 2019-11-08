@@ -1,1 +1,170 @@
-<p>employee-list works!</p>
+<div class="header">
+  <app-crumb [level1Name]="'用户管理'" [level2Name]="'用户列表'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg">
+      <a (click)="onShowModal()" data-toggle="modal" data-target="#editEmployeeModal">新建</a>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+  <div class="search-container">
+    <form class="search-form" autocomplete="off">
+      <div class="form-group">
+        <span>姓名：</span>
+        <input class="form-control" [(ngModel)]="searchParams.realname" name="realname" placeholder="请输入姓名"
+          maxlength="10" appIgnoreSpace />
+      </div>
+      <div class="form-group">
+        <span>手机号：</span>
+        <input class="form-control" [(ngModel)]="searchParams.telephone" name="telephone" placeholder="请输入手机号"
+          maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--ng 表格 -->
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table #userTable [nzData]="dataList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        [nzLoading]="isLoading" [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)"
+        nzBordered>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>用户名</th>
+            <th>手机号</th>
+            <th>权限</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of userTable.data;let i=index">
+            <td>{{(i+(pageIndex-1)*15+1)}}</td>
+
+            <td>{{data.realname?data.realname:'--'}}</td>
+
+            <td>{{data.username?data.username:'--'}}</td>
+
+            <td>{{data.telephone?data.telephone:'--'}}</td>
+
+            <td>
+              <ng-container *ngIf="data.permission_groups && data.permission_groups.length>0">
+                <ng-container *ngFor="let permission of data.permission_groups;let index=index">
+                  <span>{{permission.chinese_name}}</span>
+                  <span *ngIf="data.permission_groups.length-1>index">, </span>
+                </ng-container>
+              </ng-container>
+              <span *ngIf="!data.permission_groups || data.permission_groups.length===0">--</span>
+            </td>
+
+            <td [title]="data.remark?data.remark:''">{{data.remark?(data.remark|zMaxLength:20):'--'}}</td>
+
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onShowModal(data)" data-toggle="modal" data-target="#editEmployeeModal">编辑</a>
+              <a [title]="'重置密码'" (click)="onResetPasswordBtnClick(data)">重置密码</a>
+              <a [title]="'删除'" (click)="onDeleteItemClick(data)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+
+
+<!-- 新增/编辑用户 -->
+<div class="modal fade" id="editEmployeeModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #employeePromptDiv>
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">{{isCreateEmployee ? '新建' : '编辑'}}</span>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <form *ngIf="userParams" autocomplete="off" class="form-horizontal" #employeeEditForm="ngForm">
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>姓名</span>
+          </label>
+          <div class="control-input">
+            <input name="realname" class="form-control" placeholder="请输入1-10个字姓名" [(ngModel)]="userParams.realname"
+              (focus)="employeeErrMsg=''" minlength="1" maxlength="10" appIgnoreSpace required>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>用户名</span>
+          </label>
+          <div class="control-input">
+            <input name="username" *ngIf="isCreateEmployee" class="form-control" placeholder="输入字母、数字或下划线，6-20位"
+              (focus)="employeeErrMsg=''" [(ngModel)]="userParams.username" minlength="6" maxlength="20" appIgnoreSpace
+              required>
+            <label *ngIf="!isCreateEmployee">{{userParams.username}}</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>手机号</span>
+          </label>
+          <div class="control-input">
+            <input name="telephone" class="form-control" placeholder="请输入手机号" [(ngModel)]="userParams.telephone"
+              (focus)="employeeErrMsg=''" minlength="11" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
+              appIgnoreSpace required>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>权限组</span>
+          </label>
+          <div class="control-input">
+            <ul>
+              <li *ngFor="let permission of permissionList; let i=index">
+                <input type="checkbox" class="checkbox" [(ngModel)]="permission.isChecked" name="{{i}}"
+                  (change)="employeeErrMsg=''" id="permission_{{i}}">
+                <label for="permission_{{i}}">{{permission.source.chinese_name}}</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>备注</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="4" placeholder="输入描述，100字以内" [(ngModel)]="userParams.remark"
+              (focus)="onClearErrMsg()" name="remark" maxlength="100">
+            </textarea>
+          </div>
+        </div>
+        <div class="row row-message" style="margin-top:-20px">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span>{{employeeErrMsg}}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+            [disabled]="!employeeEditForm.form.valid||!permissionChecked"
+            (appZDebounceClick)="onEditFormSubmit()">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
