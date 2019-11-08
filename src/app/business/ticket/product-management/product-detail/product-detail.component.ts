@@ -51,6 +51,7 @@ export class ProductDetailComponent implements OnInit {
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
+          sale_num: this.productData.sale_num,
         }
       ];
       this.productTicketList = this.productData.tickets.map(i => ({

@@ -4,7 +4,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
 import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, TicketProductEntity } from '../product.service';
+import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
@@ -12,6 +12,7 @@ import { ProductCalendarComponent } from '../product-edit/product-calendar/produ
 import { ProductEditor1Component } from './product-editor1/product-editor1.component';
 import { ProductEditor2Component } from './product-editor2/product-editor2.component';
 import { ProductEditor3Component } from './product-editor3/product-editor3.component';
+import { ChooseLabelComponent } from './choose-label/choose-label.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -51,6 +52,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
               private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
+  public labelList: Array<LabelEntity> = [];
+  public searchParams: SearchLabelParams = new SearchLabelParams();
   public productInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
@@ -67,7 +70,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public noticeErrors = '';
   public productIntroduceErrors = '';
   public isEditTicketInsutruction = false;
-
+  public checkLabelNamesList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
   private product_name = '';
@@ -79,15 +82,23 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   private rc_notice: string;
   private isChangeTicketInsutruction = false;
   private isSubmitProductInfo = false;
+  private tags: Array<any> = [];
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
+  @ViewChild('chooseLabel', { static: true }) public chooseLabel: ChooseLabelComponent;
   @ViewChild('productInfoForm', { static: true }) public productInfoForm: any;
   @ViewChild('editor1', { static: true }) public productEditor1: ProductEditor1Component;
   @ViewChild('editor2', { static: true }) public productEditor2: ProductEditor2Component;
   @ViewChild('editor3', { static: true }) public productEditor3: ProductEditor3Component;
 
   ngOnInit() {
+    this.tags = [
+      '5859f65a010611eaaf7f0242ac120005',
+      '4d2db56c013011ea84960242ac120005',
+      '8e809468013911eabfc70242ac120005'
+    ];
+
     this.routerInfo.params.subscribe((params: Params) => {
       this.product_id = params.product_id;
     });
@@ -120,11 +131,40 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
       this.getEditorData();
+      this.getTagsName();
       this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
+  }
+
+  // 获取标签名称
+  private getTagsName() {
+    this.productService.requestLabelListData(this.searchParams).subscribe(res => {
+      this.labelList = res.results;
+      const checkLabelList = this.labelList.map((i, index) => {
+        const isCheckLabel = this.tags.includes(i.tag_id);
+        return (
+          {
+            ...i,
+            time: new Date().getTime() + index,
+            checked: isCheckLabel
+          });
+      });
+      this.checkLabelNamesList = checkLabelList.filter(i => i.checked);
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 选择标签
+  public onChooseLabel() {
+    this.chooseLabel.open(this.tags, () => {
+      timer(1000).subscribe(() => {
+        this.searchText$.next();
+      });
+    });
   }
 
   // 更新数据
@@ -260,57 +300,22 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   }
 
   // 上架开关状态改变
-  public onSwitchChange(status: number, event: boolean) {
+  public onSwitchChange(is_saled: boolean, event: boolean) {
     timer(2000).subscribe(() => {
-      return status = event === true ? 1 : 2;
+      return is_saled = event;
     });
   }
 
-  // 上架开关点击调用接口
-  public onSwitchClick(product_id, ticket_id, status) {
-    // const status = event ? 1 : 2; // 检车线状态(默认:1) 1:销售中 2:已下架
-    if (status === 1) { // 下架传2
-      this.globalService.confirmationBox.open('提示', '下架后，将不支持在线购买', () => {
-        this.productService.requestIsTopProduct(product_id, ticket_id, status).subscribe(res => {
-          this.globalService.promptBox.open('下架成功');
-          this.searchText$.next();
-        }, err => {
-          if (!this.globalService.httpErrorProcess(err)) {
-            if (err.status === 422) {
-              this.globalService.promptBox.open('下架失败，请重试', null, 2000, '/assets/images/warning.png');
-            }
-          }
-          this.searchText$.next();
-        });
-      }, '确定', () => { this.searchText$.next(); });
-    } else {// 上架传1
-      this.productService.requestIsTopProduct(product_id, ticket_id, status).subscribe(res => {
-        this.globalService.promptBox.open('上架成功');
-        this.searchText$.next();
-      }, err => {
-        if (!this.globalService.httpErrorProcess(err)) {
-          if (err.status === 422) {
-            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-            for (const content of error.errors) {
-
-              if (content.code === 'operation_config_not_setting') {
-                this.globalService.promptBox.open('运营信息未填写完善无法上架!', null, 2000, '/assets/images/warning.png');
-              } else if (content.code === 'charge_standard_not_setting') {
-                this.globalService.promptBox.open('计费规则未填写无法上架!', null, 2000, '/assets/images/warning.png');
-              } else if (content.code === 'balance_config_not_setting') {
-                this.globalService.promptBox.open('结算设置未填写无法上架!', null, 2000, '/assets/images/warning.png');
-              } else if (content.code === 'account_config_not_setting') {
-                this.globalService.promptBox.open('支付配置未开启无法上架!', null, 2000, '/assets/images/warning.png');
-              } else {
-                this.globalService.promptBox.open('上架失败，请重试', null, 2000, '/assets/images/warning.png');
-
-              }
-            }
-          }
-        }
-        this.searchText$.next();
-      });
-    }
+  // 是否售卖开关点击调用接口
+  public onSwitchClick(product_id, ticket_id, is_saled) {
+    const text = is_saled ? '下架' : '上架';
+    this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
+      this.globalService.promptBox.open(`${text}成功`);
+      this.searchText$.next();
+    }, err => {
+      this.globalService.promptBox.open(`${text}失败，请重试`, null, 2000, '/assets/images/warning.png');
+      this.searchText$.next();
+    });
   }
 
   // 置顶

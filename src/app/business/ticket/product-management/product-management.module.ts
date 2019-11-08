@@ -20,6 +20,7 @@ import { BatchImportComponent } from './product-edit/batch-import/batch-import.c
 import { LabelManagementComponent } from './label-management/label-management.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LabelEditComponent } from './label-management/label-edit/label-edit.component';
+import { ChooseLabelComponent } from './product-edit/choose-label/choose-label.component';
 
 const uploadToken: UploadConfig = {
   reportProcess: true,
@@ -43,7 +44,8 @@ const uploadToken: UploadConfig = {
     CalendarDetailComponent,
     BatchImportComponent,
     LabelManagementComponent,
-    LabelEditComponent],
+    LabelEditComponent,
+    ChooseLabelComponent],
   imports: [
     ShareModule,
     DragDropModule,

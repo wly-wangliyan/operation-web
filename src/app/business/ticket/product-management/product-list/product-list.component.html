@@ -26,16 +26,6 @@
           name="product_name" maxlength="20" appIgnoreSpace />
       </div>
       <div class="form-group">
-        <span>所属时间：</span>
-        <select class="form-control" style="width: 100px;" name="status" [(ngModel)]="sale_status"
-          (change)="onChangeSearchStatus($event)">
-          <option value="">全部</option>
-          <option *ngFor="let status of saleStatus" [value]="status">
-            {{status | saleStatus}}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
         <span>上架时间：</span>
         <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
           name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>

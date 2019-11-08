@@ -29,6 +29,8 @@
             <th>地址</th>
             <th>状态</th>
             <th>产品ID</th>
+            <!-- 销量 -->
+            <th>销量</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +43,8 @@
             <td>{{data.address}}</td>
             <td>{{data.status| thirdSaleStatus}}</td>
             <td>{{data.product_id}}</td>
+            <!-- 销量 -->
+            <td>{{data.sale_num||'--'}}</td>
           </tr>
         </tbody>
       </nz-table>
@@ -71,9 +75,17 @@
           </nz-form-item>
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>分类标签</nz-form-label>
-            <nz-form-control class="ml_-10">
-              <input class="subheading" [(ngModel)]="productData.product_subtitle" placeholder=" 输入0-80字副标题" nz-input
-                autocomplete="off" name="subheading" maxlength='80' />
+            <nz-form-control>
+              <ul class="tags">
+                <li>
+                  <div class="tag" *ngFor="let data of checkLabelNamesList; let i=index">{{data.name}}
+                    <img src="/assets/images/tag_del.png">
+                  </div>
+                  <div class='add-tag' (click)='onChooseLabel()'>
+                    选择标签 <img style="margin-top: -2px;" src="/assets/images/add_tag.png">
+                  </div>
+                </li>
+              </ul>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -229,9 +241,9 @@
             <td>
               <div class='opera m_20'>
                 <div>
-                  <nz-switch [ngModel]="data.status===1?true:false" nzSize="small"
-                    (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true
-                    (click)="onSwitchClick(data.product.product_id,data.ticket_id,data.status)">
+                  <nz-switch [ngModel]="data.is_saled" nzSize="small"
+                    (ngModelChange)="onSwitchChange(data.is_saled, $event)" [nzControl]=true
+                    (click)="onSwitchClick(data.product.product_id,data.ticket_id,data.is_saled)">
                   </nz-switch>
                 </div>
                 <div>
@@ -328,3 +340,4 @@
   </div>
 </div>
 <app-product-calendar #productPriceCalendar></app-product-calendar>
+<app-choose-label #chooseLabel></app-choose-label>

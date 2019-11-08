@@ -169,6 +169,8 @@ export class TicketEntity extends EntityBase {
   public validate_time_limit: string = undefined; // 验证时间
   public is_top: number = undefined; // 是否置顶 1:置顶 2:不置顶
   public top_time: number = undefined; // 置顶时间
+  public is_remained: number = undefined; // 库存是否剩余 1:有 2：无
+  public is_saled: boolean = undefined; // 门票是否售卖
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
@@ -407,6 +409,20 @@ export class ProductService {
     ).pipe(map(res => {
       return ThirdProductEntity.Create(res.body);
     }));
+  }
+
+  /**
+   * 门票是否售卖
+   * @param product_id 产品id
+   * @param is_saled 是否售卖
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestIsSaleTicket(product_id: string, ticket_id: string, is_saled: boolean): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/products/${product_id}/tickets/${ticket_id}/is_saled`;
+    const body = {
+      is_saled
+    };
+    return this.httpService.patch(httpUrl, body);
   }
 
   /**
