@@ -32,8 +32,8 @@
   z-index: 110;
   display: block;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   cursor: pointer;
   background: url('../../../../assets/images/delete_picture.png') no-repeat center;
   background-size: contain;

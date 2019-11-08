@@ -18,6 +18,7 @@ import { ZDebounceClickDirective } from './directives/z-debounce-click.directive
 import { ProgressModalComponent } from './components/progress-modal/progress-modal.component';
 import { ZPhotoSelectComponent } from './components/z-photo-select/z-photo-select.component';
 import { ZVideoSelectComponent } from './components/z-video-select/z-video-select.component';
+import { ZPreviewVideoPhotoComponent } from './components/z-preview-video-photo/z-preview-video-photo.component';
 import { ZConfirmationBoxComponent } from './components/tips/z-confirmation-box/z-confirmation-box.component';
 import { ZPromptBoxComponent } from './components/tips/z-prompt-box/z-prompt-box.component';
 import { PromptBoxComponent } from './components/tips/prompt-box/prompt-box.component';
@@ -63,6 +64,7 @@ import { HtmlPipe } from './pipes/html.pipe';
         ProgressModalComponent,
         ZPhotoSelectComponent,
         ZVideoSelectComponent,
+        ZPreviewVideoPhotoComponent,
         ZConfirmationBoxComponent,
         ZPromptBoxComponent,
         PromptBoxComponent,
@@ -117,6 +119,7 @@ import { HtmlPipe } from './pipes/html.pipe';
         ProgressModalComponent,
         ZPhotoSelectComponent,
         ZVideoSelectComponent,
+        ZPreviewVideoPhotoComponent,
         ZConfirmationBoxComponent,
         ZPromptBoxComponent,
         PromptBoxComponent,
