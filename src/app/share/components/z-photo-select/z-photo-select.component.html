@@ -1,74 +1,74 @@
 <div class="photo-select-wrap" *ngIf="isShowMinImg">
-  <div *ngFor="let image of imageList; let index = index" (click)="zoomPicture(index)"
-    [ngClass]="{'not-cursor': hasDeletePicture}"
-    [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px', 'line-height': transformLineHeight + 'px'}">
-    <img [src]="image.showUrl" [ngStyle]="{width: imageShowWidth + 'px'}">
-    <span class="delete-icon" *ngIf="hasDeletePicture" (click)="deletePicture(index)"></span>
-    <div class="progress-bg" [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px'}" #progressBgList>
-      <p class="progress-wrap">
-        <span class="progress-bar progress-bar-info progress-bar-striped" #progressBarList></span>
-      </p>
+    <div *ngFor="let image of imageList; let index = index" (click)="zoomPicture(index)"
+         [ngClass]="{'not-cursor': hasDeletePicture}"
+         [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px', 'line-height': transformLineHeight + 'px'}">
+        <img [src]="image.showUrl" [ngStyle]="{width: imageShowWidth + 'px'}">
+        <span class="delete-icon" *ngIf="hasDeletePicture" (click)="deletePicture(index)"></span>
+        <div class="progress-bg" [ngStyle]="{width: imageWidth + 'px', height: imageHeight + 'px'}" #progressBgList>
+            <p class="progress-wrap">
+                <span class="progress-bar progress-bar-info progress-bar-striped" #progressBarList></span>
+            </p>
+        </div>
     </div>
-  </div>
-  <div class="select-wrap" *ngIf="imageList.length<maxLength && hasAddPicture"
-    [ngStyle]="{width: imageAddHeight + 'px', height: imageAddHeight + 'px'}">
-    <input type="file" name="file" [id]="file_id" #importFileInput (change)="selectPicture($event, importFileInput)">
-    <label [for]="file_id"></label>
-  </div>
+    <div class="select-wrap" *ngIf="imageList.length<maxLength && hasAddPicture"
+         [ngStyle]="{width: imageAddHeight + 'px', height: imageAddHeight + 'px'}">
+        <input type="file" name="file" [id]="file_id" #importFileInput
+               (change)="selectPicture($event, importFileInput)">
+        <label [for]="file_id"></label>
+    </div>
 </div>
 
 <!-- 裁剪图片 -->
 <div class="modal fade image-modal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true" #cutCoverUrlModal>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">图像裁剪</h4>
-      </div>
-      <div class="modal-body cut-modal-body">
-        <div class="img-container" #imgContainer>
-          <img [src]="cutCoverImgUrl" #cutCoverImg>
+     aria-labelledby="myModalLabel" aria-hidden="true" #cutCoverUrlModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">图像裁剪</h4>
+            </div>
+            <div class="modal-body cut-modal-body">
+                <div class="img-container" #imgContainer>
+                    <img [src]="cutCoverImgUrl" #cutCoverImg>
+                </div>
+                <div class="preview">
+                    <p>图片预览:</p>
+                    <div class="small-img"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-inverse" (click)="cancelCutWriteCoverUrl()">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" (click)="confirmCutWriteCoverUrl()">
+                    确定
+                </button>
+            </div>
         </div>
-        <div class="preview">
-          <p>图片预览:</p>
-          <div class="small-img"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-inverse" (click)="cancelCutWriteCoverUrl()">
-          取消
-        </button>
-        <button type="button" class="btn btn-primary" (click)="confirmCutWriteCoverUrl()">
-          确定
-        </button>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- 图片查看模态框 -->
 <div class="modal fade image-modal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true" #imageModal>
-  <div class="modal-dialog" [class.dialog-left]="zoomWidth < 600">
-    <div class="modal-content" [ngStyle]="{'line-height': transformZoomLineHeight + 'px'}">
-      <div class="close-img" (click)="closeShowZoomPicture()"></div>
-      <div class="modal-body img-list" *ngIf="(imageList.length>0)&&(!hasDeletePicture)">
-        <div class="lside-img-arrow" (click)="selectedShowImage(true)"
-          [class.invisible]="currentImgNum==1 || imageList.length<=1"></div>
-        <ul>
-          <li *ngFor="let source_url of imageList;let index=index"
-            [ngStyle]="{'z-index': currentImgNum==(index+1) ? '1' : '0'}">
-            <div *ngIf="currentImgNum==(index+1)">
-              <img [src]="source_url.showUrl">
-              <a *ngIf="imageList.length>1"><span class="current-page">{{currentImgNum}}</span>/{{imageList.length}}</a>
+     aria-labelledby="myModalLabel" aria-hidden="true" #imageModal>
+    <div class="modal-dialog" [class.dialog-left]="zoomWidth < 600">
+        <div class="modal-content" [ngStyle]="{'line-height': transformZoomLineHeight + 'px'}">
+            <div class="close-img" (click)="closeShowZoomPicture()"></div>
+            <div class="modal-body img-list" *ngIf="(imageList.length>0)&&(!hasDeletePicture)">
+                <div class="lside-img-arrow" (click)="selectedShowImage(true)"
+                     [class.invisible]="currentImgNum==1 || imageList.length<=1"></div>
+                <ul>
+                    <li *ngFor="let source_url of imageList;let index=index"
+                        [ngStyle]="{'z-index': currentImgNum==(index+1) ? '1' : '0'}">
+                        <div *ngIf="currentImgNum==(index+1)">
+                            <img [src]="source_url.showUrl">
+                            <a *ngIf="imageList.length>1"><span class="current-page">{{currentImgNum}}</span>/{{imageList.length}}</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="rside-img-arrow" (click)="selectedShowImage(false)"
+                     [class.invisible]="currentImgNum==imageList.length"></div>
             </div>
-          </li>
-        </ul>
-        <div class="rside-img-arrow" (click)="selectedShowImage(false)"
-          [class.invisible]="currentImgNum==imageList.length"></div>
-      </div>
+        </div>
+        <!-- <div class="close-img" [ngStyle]="{'margin-left': (zoomWidth - 30) + 'px'}" (click)="closeShowZoomPicture()"></!-->
     </div>
-    <!-- <div class="close-img" [ngStyle]="{'margin-left': (zoomWidth - 30) + 'px'}" (click)="closeShowZoomPicture()"></!-->
-    -->
-  </div>
 </div>
