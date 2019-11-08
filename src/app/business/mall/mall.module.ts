@@ -7,9 +7,11 @@ import { MallRoutingModule } from './mall-routing.module';
 import { MallComponent } from './mall.component';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({

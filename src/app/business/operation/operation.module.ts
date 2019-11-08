@@ -8,9 +8,11 @@ import { OperationComponent } from './operation.component';
 import { OperationRoutingModule } from './operation-routing.module';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({

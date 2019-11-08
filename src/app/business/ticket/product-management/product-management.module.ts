@@ -18,34 +18,37 @@ import { ProductCalendarComponent } from './product-edit/product-calendar/produc
 import { CalendarDetailComponent } from './product-detail/calendar-detail/calendar-detail.component';
 
 const uploadToken: UploadConfig = {
-  reportProcess: true,
-  url: `${environment.STORAGE_DOMAIN}/storages/images`,
-  source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({
-  declarations: [
-    ProductManagementComponent,
-    ProductListComponent,
-    ProductCreateComponent,
-    ProductEditComponent,
-    ProductDetailComponent,
-    ThirdProductListComponent,
-    ProductEditor2Component,
-    ProductEditor1Component,
-    ProductEditor3Component,
-    ThirdProductDetailComponent,
-    ProductCalendarComponent,
-    CalendarDetailComponent],
-  imports: [
-    ShareModule,
-    CommonModule,
-    ProductManagementRoutingModule
-  ],
-  providers: [{
-    provide: UPLOAD_TOKEN,
-    useValue: uploadToken
-  },
-    UploadService]
+    declarations: [
+        ProductManagementComponent,
+        ProductListComponent,
+        ProductCreateComponent,
+        ProductEditComponent,
+        ProductDetailComponent,
+        ThirdProductListComponent,
+        ProductEditor2Component,
+        ProductEditor1Component,
+        ProductEditor3Component,
+        ThirdProductDetailComponent,
+        ProductCalendarComponent,
+        CalendarDetailComponent],
+    imports: [
+        ShareModule,
+        CommonModule,
+        ProductManagementRoutingModule
+    ],
+    providers: [{
+        provide: UPLOAD_TOKEN,
+        useValue: uploadToken
+    },
+        UploadService]
 })
-export class ProductManagementModule { }
+export class ProductManagementModule {
+}

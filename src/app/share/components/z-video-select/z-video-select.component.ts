@@ -13,7 +13,8 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { isNullOrUndefined } from 'util';
 import { UploadService } from '../../../core/upload.service';
-import { Observable } from "rxjs/index";
+import { Observable, timer } from "rxjs/index";
+import { HttpEventType, HttpResponse } from "@angular/common/http";
 
 @Component({
     selector: 'app-z-video-select',
@@ -122,74 +123,74 @@ export class ZVideoSelectComponent implements OnInit {
     }
 
     // 上传视频
-    // public uploadVideo(): Observable<any> {
-    //     if (isNullOrUndefined(this.uploadService)) {
-    //         throw new Error('UploadService is not provided');
-    //     }
-    //     return Observable.create(observer => {
-    //         let count = 0;
-    //         const totalCount = this.imageList.length;
-    //         let recordErrors = null;
-    //         // 同步结果返回
-    //         const completeProcess = (hasImg: boolean = true) => {
-    //             if (hasImg) {
-    //                 count++;
-    //             }
-    //             if (count !== totalCount) {
-    //                 return;
-    //             }
-    //             // 添加延迟优化显示效果
-    //             timer(1000).subscribe(() => {
-    //                 if (recordErrors) {
-    //                     observer.error(recordErrors);
-    //                 } else {
-    //                     observer.next();
-    //                 }
-    //                 observer.complete();
-    //             });
-    //         };
-    //         if (this.imageList.length > 0) {
-    //             const processBgArray = this.progressBgList.toArray();
-    //             const processBarArray = this.progressBarList.toArray();
-    //             this.imageList.forEach((imageEntity, index) => {
-    //                 if (imageEntity.sourceFile) {
-    //                     const curProcessBg = processBgArray[index];
-    //                     const curProcessBar = processBarArray[index];
-    //                     this.uploadService.requestUpload(imageEntity.sourceFile).subscribe(event => {
-    //                         /**
-    //                          * 上传图片时根据上传进度显示进度条
-    //                          */
-    //                         if (event.type === HttpEventType.UploadProgress) {
-    //                             // 处理进度状态
-    //                             const percentDone = Math.round(100 * event.loaded / event.total);
-    //                             this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'block');
-    //                             this.renderer2.setStyle(curProcessBar.nativeElement, 'width', percentDone + '%');
-    //                             if (percentDone === 100) {
-    //                                 // 添加延迟优化显示效果
-    //                                 timer(1000).subscribe(() => {
-    //                                     this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'none');
-    //                                 });
-    //                             }
-    //                         } else if (event instanceof HttpResponse) {
-    //                             // 结果返回，处理结果
-    //                             imageEntity.sourceUrl = event.body.source_url;
-    //                             imageEntity.sourceFile = null;
-    //                             console.log(event.body.source_url);
-    //                             completeProcess();
-    //                         }
-    //                     }, err => {
-    //                         recordErrors = err;
-    //                         completeProcess();
-    //                     });
-    //                 } else {
-    //                     completeProcess();
-    //                 }
-    //             });
-    //         } else {
-    //             completeProcess(false);
-    //         }
-    //     });
-    // }
+    public uploadVideo(): Observable<any> {
+        if (isNullOrUndefined(this.uploadService)) {
+            throw new Error('UploadService is not provided');
+        }
+        return Observable.create(observer => {
+            let count = 0;
+            const totalCount = this.videoList.length;
+            let recordErrors = null;
+            // 同步结果返回
+            const completeProcess = (hasVideo: boolean = true) => {
+                if (hasVideo) {
+                    count++;
+                }
+                if (count !== totalCount) {
+                    return;
+                }
+                // 添加延迟优化显示效果
+                timer(1000).subscribe(() => {
+                    if (recordErrors) {
+                        observer.error(recordErrors);
+                    } else {
+                        observer.next();
+                    }
+                    observer.complete();
+                });
+            };
+            if (this.videoList.length > 0) {
+                const videoProcessBgArray = this.videoProgressBgList.toArray();
+                const videoProcessBarArray = this.videoProgressBarList.toArray();
+                this.videoList.forEach((videoEntity, index) => {
+                    if (videoEntity.sourceFile) {
+                        const curProcessBg = videoProcessBgArray[index];
+                        const curProcessBar = videoProcessBarArray[index];
+                        this.uploadService.requestUpload(videoEntity.sourceFile, 'video').subscribe(event => {
+                            /**
+                             * 上传图片时根据上传进度显示进度条
+                             */
+                            if (event.type === HttpEventType.UploadProgress) {
+                                // 处理进度状态
+                                const percentDone = Math.round(100 * event.loaded / event.total);
+                                this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'block');
+                                this.renderer2.setStyle(curProcessBar.nativeElement, 'width', percentDone + '%');
+                                if (percentDone === 100) {
+                                    // 添加延迟优化显示效果
+                                    timer(1000).subscribe(() => {
+                                        this.renderer2.setStyle(curProcessBg.nativeElement, 'display', 'none');
+                                    });
+                                }
+                            } else if (event instanceof HttpResponse) {
+                                // 结果返回，处理结果
+                                videoEntity.sourceUrl = event.body.source_url;
+                                videoEntity.sourceFile = null;
+                                console.log(event.body.source_url);
+                                completeProcess();
+                            }
+                        }, err => {
+                            recordErrors = err;
+                            completeProcess();
+                        });
+                    } else {
+                        completeProcess();
+                    }
+                });
+            } else {
+                completeProcess(false);
+            }
+        });
+    }
 
     // 检查选择视频是否是有效视频
     private validateVideo(videoList: Array<any>) {

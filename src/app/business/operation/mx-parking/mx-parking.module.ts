@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {ShareModule} from '../../../share/share.module';
-import {MxParkingRoutingModule} from './mx-parking-routing.module';
+import { NgModule } from '@angular/core';
+import { ShareModule } from '../../../share/share.module';
+import { MxParkingRoutingModule } from './mx-parking-routing.module';
 import { MxParkingComponent } from './mx-parking.component';
 import { FirstPageIconComponent } from './first-page-icon/first-page-icon-list/first-page-icon.component';
 import { AppListComponent } from './version-management/app-list/app-list.component';
@@ -15,9 +15,11 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../../core/upload.
 import { environment } from '../../../../environments/environment';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({
@@ -28,10 +30,10 @@ const uploadToken: UploadConfig = {
         DragDropModule,
         HttpClientModule,
     ],
-  declarations: [
-    MxParkingComponent, FirstPageIconComponent, AppListComponent, FirstPageIconEditComponent,
-      VersionListComponent, AppAddComponent, VersionAddComponent
-  ],
+    declarations: [
+        MxParkingComponent, FirstPageIconComponent, AppListComponent, FirstPageIconEditComponent,
+        VersionListComponent, AppAddComponent, VersionAddComponent
+    ],
     providers: [{
         provide: UPLOAD_TOKEN,
         useValue: uploadToken

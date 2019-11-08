@@ -14,9 +14,11 @@ import { BrokerageCompanyEditComponent } from './brokerage-company-management/br
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({

@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {ShareModule} from '../../../share/share.module';
-import {CommentManagementRoutingModule} from './comment-management-routing.module';
+import { NgModule } from '@angular/core';
+import { ShareModule } from '../../../share/share.module';
+import { CommentManagementRoutingModule } from './comment-management-routing.module';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,9 +13,11 @@ import { CommentSettingComponent } from './comment-setting/comment-setting.compo
 import { CommentCreateComponent } from './comment-create/comment-create.component';
 
 const uploadToken: UploadConfig = {
-    reportProcess: true,
-    url: `${environment.STORAGE_DOMAIN}/storages/images`,
-    source: 'park'
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
 };
 
 @NgModule({
@@ -26,13 +28,13 @@ const uploadToken: UploadConfig = {
         DragDropModule,
         HttpClientModule,
     ],
-  declarations: [
-      CommentManagementComponent,
-      CommentListComponent,
-      CommentDetailComponent,
-      CommentSettingComponent,
-      CommentCreateComponent
-  ],
+    declarations: [
+        CommentManagementComponent,
+        CommentListComponent,
+        CommentDetailComponent,
+        CommentSettingComponent,
+        CommentCreateComponent
+    ],
     providers: [{
         provide: UPLOAD_TOKEN,
         useValue: uploadToken
