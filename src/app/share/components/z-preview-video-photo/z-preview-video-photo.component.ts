@@ -13,7 +13,11 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
 
     public previewVideoAndPhotoList: Array<ZPreviewVideoAndPhotoEntity> = [];
 
-    public currentPreviewVideoAndPhoto: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
+    public currentPreviewVideo: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
+
+    public currentPreviewPhoto: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
+
+    public isHidePreviewVideo = true;
 
     @Input()
     public set videoAndPhotoUrls(videoAndPhotoUrls: Array<string>) {
@@ -36,7 +40,13 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
             if (videoAndPhotoUrlIndex === videoAndPhotoUrls.length - 1) {
                 this.isShowPreviewComponent = true;
                 this.previewVideoAndPhotoList = tempPreviewVideoList.concat(tempPreviewPhotoList);
-                this.currentPreviewVideoAndPhoto = this.previewVideoAndPhotoList[0];
+                if (this.previewVideoAndPhotoList[0].isVideo) {
+                    this.isHidePreviewVideo = false;
+                    this.currentPreviewVideo = this.previewVideoAndPhotoList[0];
+                } else {
+                    this.isHidePreviewVideo = true;
+                    this.currentPreviewPhoto = this.previewVideoAndPhotoList[0];
+                }
             }
         });
     }
@@ -62,12 +72,19 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
     }
 
     // 鼠标进入预览当前缩略图
-    public onMouseEnterPreview(previewIndex: number) {
-        this.currentPreviewVideoAndPhoto = new ZPreviewVideoAndPhotoEntity();
+    public onMouseEnterPreview(previewVideoAndPhoto: ZPreviewVideoAndPhotoEntity) {
+        if (previewVideoAndPhoto.isVideo) {
+            this.isHidePreviewVideo = false;
+            this.currentPreviewVideo = (this.currentPreviewVideo.sourceUrl === previewVideoAndPhoto.sourceUrl) ?
+                this.currentPreviewVideo : previewVideoAndPhoto;
+        } else {
+            this.isHidePreviewVideo = true;
+            this.currentPreviewPhoto = new ZPreviewVideoAndPhotoEntity();
 
-        timer().subscribe(() => {
-            this.currentPreviewVideoAndPhoto = this.previewVideoAndPhotoList[previewIndex];
-        });
+            timer().subscribe(() => {
+                this.currentPreviewPhoto = previewVideoAndPhoto;
+            });
+        }
     }
 }
 

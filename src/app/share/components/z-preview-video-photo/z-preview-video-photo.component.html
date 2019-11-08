@@ -1,19 +1,16 @@
 <div class="preview-container" [ngStyle]="{width: previewContainerWidth + 'px'}"
      *ngIf="isShowPreviewComponent && (previewVideoAndPhotoList.length > 0)">
     <div class="preview-content" [ngStyle]="{width: previewWidth + 'px', height: previewHeight + 'px'}">
-        <ng-container *ngIf="currentPreviewVideoAndPhoto.isVideo">
-            <video [src]="currentPreviewVideoAndPhoto.sourceUrl" [controls]="isControls"
-                   [autoplay]="isAutoPlay"></video>
+        <div [class.hide]="isHidePreviewVideo">
+            <video [src]="currentPreviewVideo.sourceUrl" [controls]="isControls" [autoplay]="isAutoPlay"></video>
             <div class="icon-control"></div>
-        </ng-container>
-        <ng-container *ngIf="!currentPreviewVideoAndPhoto.isVideo">
-            <img [src]="currentPreviewVideoAndPhoto.sourceUrl">
-        </ng-container>
+        </div>
+        <img [class.hide]="!isHidePreviewVideo" [src]="currentPreviewPhoto.sourceUrl">
     </div>
     <ul class="thumb-nail-container">
         <li [ngStyle]="{width: thumbNailWidth + 'px', height: thumbNailHeight + 'px'}"
             *ngFor="let previewVideoAndPhoto of previewVideoAndPhotoList; let previewIndex = index"
-            (mouseenter)="onMouseEnterPreview(previewIndex)">
+            (mouseenter)="onMouseEnterPreview(previewVideoAndPhoto)">
             <ng-container *ngIf="previewVideoAndPhoto.isVideo">
                 <video [src]="previewVideoAndPhoto.sourceUrl"></video>
                 <div class="icon-control"></div>
