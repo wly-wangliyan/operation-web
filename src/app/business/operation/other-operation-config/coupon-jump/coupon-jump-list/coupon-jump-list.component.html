@@ -108,8 +108,8 @@
                             </select>
                             <input class="form-control" style="border-left: none!important;"
                                    [(ngModel)]="currentCouponJump.coupon_url" name="coupon_url"
-                                   placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1" maxlength="100"
-                                   (input)="couponUrlErrMsg=''" required>
+                                   (input)="couponUrlErrMsg=''" placeholder="输入此优惠券去使用链接" appIgnoreSpace minlength="1"
+                                   maxlength="2000" required>
                         </div>
                     </div>
                     <div class="row row-message">
