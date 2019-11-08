@@ -36,11 +36,11 @@
           <nz-form-control style="margin-left: 93px;">
             <div *ngFor="let item of datePriceList;let i=index;" class="price-control">
               <nz-date-picker [(ngModel)]="item.startTime" [nzShowToday]=false name='start_time-{{item.time}}'
-                nzFormat="yyyy-MM-dd">
+                [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartTimeChange($event)" nzFormat="yyyy-MM-dd">
               </nz-date-picker>
               <span class='line'>-</span>
               <nz-date-picker [(ngModel)]="item.endTime" [nzShowToday]=false name='end_time-{{item.time}}'
-                nzFormat="yyyy-MM-dd">
+                [nzDisabledDate]="disabledEndDate" (ngModelChange)="onEndTimeChange($event)" nzFormat="yyyy-MM-dd">
               </nz-date-picker>
               <input class='plat-input' type='text' maxlength='15' nz-input [(ngModel)]="item.price"
                 name='price-{{item.time}}'>

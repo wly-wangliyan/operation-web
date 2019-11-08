@@ -3,6 +3,7 @@ import { Subscription, Subject, timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
 import { ProductService, BatchImportParams } from '../../product.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
+import { differenceInCalendarDays } from 'date-fns';
 
 @Component({
   selector: 'app-batch-import',
@@ -19,6 +20,8 @@ export class BatchImportComponent implements OnInit {
   private sureCallback: any;
   private searchText$ = new Subject<any>();
   private subscription: Subscription;
+  private startValue: Date | null = null;
+  private endValue: Date | null = null;
 
   @Input() public title: string;
   @Input() public product_id: string;
@@ -55,6 +58,7 @@ export class BatchImportComponent implements OnInit {
    */
   public open(title: string = '编辑', product_id, ticket_id, sureFunc: any) {
     this.batchImportParams.type = 1;
+    this.platform_price = '';
     this.title = title;
     this.product_id = product_id;
     this.ticket_id = ticket_id;
@@ -65,10 +69,46 @@ export class BatchImportComponent implements OnInit {
     });
   }
 
+  // 开始时间校验
+  public disabledStartDate = (startValue: Date): boolean => {
+    if (differenceInCalendarDays(startValue, new Date()) < 0) {
+      return true;
+    } else if (!startValue || !this.endValue) {
+      return false;
+    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endValue).setHours(0, 0, 0, 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // 结束时间校验
+  public disabledEndDate = (endValue: Date): boolean => {
+    if (differenceInCalendarDays(endValue, new Date()) < 0) {
+      return true;
+    } else if (!endValue || !this.startValue) {
+      return false;
+    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startValue).setHours(0, 0, 0, 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public onStartTimeChange(date: Date): void {
+    this.startValue = date;
+  }
+
+  public onEndTimeChange(date: Date): void {
+    this.endValue = date;
+  }
+
   // 录入方式改变
   public onEntryModeChange(event: any) {
     this.batchImportParams.type = Number(event.target.value);
-    if (this.batchImportParams.type === 2) {
+    if (this.batchImportParams.type === 1) {
+      this.platform_price = '';
+    } else if (this.batchImportParams.type === 2) {
       this.datePriceList = [
         {
           startTime: null,
@@ -77,6 +117,8 @@ export class BatchImportComponent implements OnInit {
           time: new Date().getTime()
         }
       ];
+      this.startValue = null;
+      this.endValue = null;
     }
   }
 
@@ -103,8 +145,15 @@ export class BatchImportComponent implements OnInit {
         price: '',
         time: new Date().getTime()
       };
+      this.startValue = null;
+      this.endValue = null;
       this.datePriceList.push(datePriceObj);
     }
+  }
+
+  // 删除时间
+  public onDatePriceDelBtn(i: number) {
+    this.datePriceList.splice(i, 1);
   }
 
   // 保存数据
@@ -187,6 +236,7 @@ export class BatchImportComponent implements OnInit {
         const temp = this.sureCallback;
         temp();
       }
+      this.onCloseBatchImport();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {

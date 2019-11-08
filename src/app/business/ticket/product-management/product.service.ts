@@ -618,7 +618,7 @@ export class ProductService {
    */
   public requestSetBatchImport(product_id: string, ticket_id: string, batchImportParams: BatchImportParams): Observable<HttpResponse<any>> {
     return this.httpService.patch(
-      `${this.domain}products/${product_id}/tickets/${ticket_id}/price_calendars`, batchImportParams
+      `${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/platform_price`, batchImportParams
     );
   }
 
