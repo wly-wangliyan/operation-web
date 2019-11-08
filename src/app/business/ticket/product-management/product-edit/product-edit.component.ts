@@ -32,7 +32,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,7 +49,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-              private routerInfo: ActivatedRoute, private router: Router) { }
+    private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public labelList: Array<LabelEntity> = [];
@@ -82,7 +82,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   private rc_notice: string;
   private isChangeTicketInsutruction = false;
   private isSubmitProductInfo = false;
-  private tags: Array<any> = [];
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
@@ -93,12 +92,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   @ViewChild('editor3', { static: true }) public productEditor3: ProductEditor3Component;
 
   ngOnInit() {
-    this.tags = [
-      '5859f65a010611eaaf7f0242ac120005',
-      '4d2db56c013011ea84960242ac120005',
-      '8e809468013911eabfc70242ac120005'
-    ];
-
     this.routerInfo.params.subscribe((params: Params) => {
       this.product_id = params.product_id;
     });
@@ -144,7 +137,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productService.requestLabelListData(this.searchParams).subscribe(res => {
       this.labelList = res.results;
       const checkLabelList = this.labelList.map((i, index) => {
-        const isCheckLabel = this.tags.includes(i.tag_id);
+        const isCheckLabel = this.productData.tag_ids.includes(i.tag_id);
         return (
           {
             ...i,
@@ -158,14 +151,21 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     });
   }
 
+
+  // 删除标签
+  public onDelTag(i: number) {
+    this.checkLabelNamesList.splice(i, 1);
+  }
+
   // 选择标签
   public onChooseLabel() {
-    this.chooseLabel.open(this.tags, () => {
+    this.chooseLabel.open(this.checkLabelNamesList.map(i => i.tag_id), () => {
       timer(1000).subscribe(() => {
-        this.searchText$.next();
+        this.checkLabelNamesList = this.chooseLabel.checkedLabelList;
       });
     });
   }
+
 
   // 更新数据
   public onUpdateData() {
@@ -374,6 +374,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.productIntroduceErrors = '请填写景区介绍！';
     } else {
       this.clear();
+      this.productData.tag_ids = this.checkLabelNamesList.map(i => i.tag_id);
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
         this.productData.image_urls = this.product_image_url.join(',');

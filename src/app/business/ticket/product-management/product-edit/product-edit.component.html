@@ -79,7 +79,7 @@
               <ul class="tags">
                 <li>
                   <div class="tag" *ngFor="let data of checkLabelNamesList; let i=index">{{data.name}}
-                    <img src="/assets/images/tag_del.png">
+                    <img src="/assets/images/tag_del.png" (click)='onDelTag(i)'>
                   </div>
                   <div class='add-tag' (click)='onChooseLabel()'>
                     选择标签 <img style="margin-top: -2px;" src="/assets/images/add_tag.png">

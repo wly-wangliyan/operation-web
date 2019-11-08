@@ -16,6 +16,7 @@ export class ChooseLabelComponent implements OnInit {
   public searchParams: SearchLabelParams = new SearchLabelParams();
   public noResultText = '数据加载中...';
   public checkLabelList: Array<any> = [];
+  public checkedLabelList: Array<any> = [];
 
   private sureCallback: any;
   private subscription: Subscription;
@@ -61,6 +62,7 @@ export class ChooseLabelComponent implements OnInit {
    * 取消按钮触发关闭模态框，释放订阅。
    */
   public onCloseLabel() {
+    this.searchText$.next();
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -89,7 +91,18 @@ export class ChooseLabelComponent implements OnInit {
 
   // 保存选择的标签
   public onSaveTagsId() {
-
+    this.checkedLabelList = this.checkLabelList.filter(i => i.checked);
+    if (this.sureCallback) {
+      const temp = this.sureCallback;
+      temp();
+    }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.sureCallback) {
+      this.sureCallback = null;
+    }
+    $(this.promptDiv.nativeElement).modal('hide');
   }
 
 }

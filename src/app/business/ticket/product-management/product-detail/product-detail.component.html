@@ -58,8 +58,12 @@
           <!-- 分类标签 -->
           <nz-form-item nzFlex>
             <nz-form-label class="ml_10" [nzNoColon]='true'>分类标签</nz-form-label>
-            <nz-form-control class="ml_-10">
-              <div class='subtitle'>{{productData.product_subtitle||'--'}}</div>
+            <nz-form-control>
+              <ul class="tags">
+                <li>
+                  <div class="tag" *ngFor="let data of checkLabelNamesList; let i=index">{{data.name}}</div>
+                </li>
+              </ul>
             </nz-form-control>
           </nz-form-item>
         </div>

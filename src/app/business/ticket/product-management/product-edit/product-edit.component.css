@@ -343,6 +343,10 @@ input[type=file]:focus {
   }
 }
 
+:host ::ng-deep .ant-input {
+  height: 34px;
+}
+
 .tags {
   margin-top: -10px;
   margin-left: -10px;
@@ -376,7 +380,7 @@ input[type=file]:focus {
   height: 34px;
   background: rgba(247, 248, 250, 1);
   border-radius: 1px;
-  border: 1px solid rgba(136, 136, 136, 1);
+  border: 1px solid rgba(204, 204, 204, 1);
   font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;

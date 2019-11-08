@@ -84,6 +84,7 @@ export class TicketProductEntity extends EntityBase {
   public shelve_time: number = undefined; // 上架时间
   public status: number = undefined; // 销售状态 1:销售中 2:已下架
   public tickets: Array<TicketEntity> = []; // 门票实体
+  public tag_ids: Array<any> = []; // 标签Id
   public merchant: number = undefined; // 1：甜程网
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
@@ -256,12 +257,6 @@ export class PriceCalendarLinkResponse extends LinkResponse {
   }
 }
 
-// 批量导入字段
-export class SearchBatchImportParams extends EntityBase {
-  public type: number = undefined; // 录入方式
-  public price: string = undefined; // 查询价格结束日期
-}
-
 // 价格日历条件筛选
 export class SearchPriceCalendarParams extends EntityBase {
   public start_date: string = undefined; // 查询价格开始日期
@@ -276,6 +271,13 @@ export class SearchParams extends EntityBase {
   public section: string = undefined; // 上架时间section'xxx,xxx'
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
+}
+
+// 批量导入参数
+export class BatchImportParams extends EntityBase {
+  public type: number = undefined; // T	录入方式 1：全部统一价 2：按日期设置 3：按建议售价
+  public platform_price: number = undefined; // F	平台价 type = 1时，传入 单位：分
+  public date_settings: any = undefined; // F	按日期设置 type = 2时
 }
 
 // 标签列表条件筛选
@@ -465,6 +467,7 @@ export class ProductService {
     return this.httpService.put(`${this.domain}/products/${product_id}`, {
       product_name: productData.product_name,
       product_subtitle: productData.product_subtitle,
+      tag_ids: productData.tag_ids,
       image_urls: productData.image_urls,
       telephone: productData.telephone,
       traffic_guide: productData.traffic_guide,
@@ -522,8 +525,8 @@ export class ProductService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestSetPlatformPrice(product_id: string, ticket_id: string, value: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(`${this.domain}/products/${product_id}/
-    tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
+    return this.httpService.patch(
+      `${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
       platform_price: Number(value.platform_price) * 100,
     }
     );
@@ -606,5 +609,17 @@ export class ProductService {
     );
   }
 
+  /**
+   * 编辑价格日历的平台售价
+   * @param product_id string 产品id
+   * @param ticket_id string 门票ID
+   * @param batchImportParams BatchImportParams 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestSetBatchImport(product_id: string, ticket_id: string, batchImportParams: BatchImportParams): Observable<HttpResponse<any>> {
+    return this.httpService.patch(
+      `${this.domain}products/${product_id}/tickets/${ticket_id}/price_calendars`, batchImportParams
+    );
+  }
 
 }

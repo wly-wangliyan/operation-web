@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Subject, timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { ProductService, SearchPriceCalendarParams, PriceCalendarEntity, SearchBatchImportParams } from '../../product.service';
+import { ProductService, BatchImportParams } from '../../product.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
@@ -13,13 +12,10 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
 
 export class BatchImportComponent implements OnInit {
 
-  public searchParams: SearchBatchImportParams = new SearchBatchImportParams();
-  public calendarMap = {};
-  public calendarMapKey = [];
+  public batchImportParams: BatchImportParams = new BatchImportParams();
   public datePriceList: Array<any> = [];
+  public platform_price: string;
 
-  private SearchCalendarParams: SearchPriceCalendarParams = new SearchPriceCalendarParams();
-  private priceCalendarList: Array<PriceCalendarEntity> = [];
   private sureCallback: any;
   private searchText$ = new Subject<any>();
   private subscription: Subscription;
@@ -35,46 +31,53 @@ export class BatchImportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.datePriceList = [
-      {
-        startTime: null,
-        endTime: null,
-        price: '',
-        time: new Date().getTime()
-      }
-    ];
-    // 价格日历
-    this.searchText$.pipe(
-      debounceTime(500),
-      switchMap(() =>
-        this.productService.requestPriceCalendars(this.product_id, this.ticket_id, this.SearchCalendarParams))
-    ).subscribe(res => {
-      this.priceCalendarList = res.results.map(i => ({ ...i, platform_price: (Number(i.platform_price) / 100).toFixed(2) }));
-      const calendarList = this.priceCalendarList.map((value, key) => [new Date(value.date).getDate(), value]);
-      const map = new Map();
-      for (const i of calendarList) {
-        map.set(i[0], i[1]);
-      }
-      this.calendarMap = this.mapChangeObj(map);
-      this.calendarMapKey = Object.keys(this.calendarMap);
-    }, err => {
-      this.globalService.httpErrorProcess(err);
+  }
+
+  /**
+   * 取消按钮触发关闭模态框，释放订阅。
+   */
+  public onCloseBatchImport() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.sureCallback) {
+      this.sureCallback = null;
+    }
+    $(this.promptDiv.nativeElement).modal('hide');
+  }
+
+  /**
+   * 打开确认框
+   * @param message 消息体
+   * @param sureName 确认按钮文本(默认为确定)
+   * @param sureFunc 确认回调
+   * @param closeFunc 取消回调
+   */
+  public open(title: string = '编辑', product_id, ticket_id, sureFunc: any) {
+    this.batchImportParams.type = 1;
+    this.title = title;
+    this.product_id = product_id;
+    this.ticket_id = ticket_id;
+    this.sureCallback = sureFunc;
+    timer(0).subscribe(() => {
+      this.searchText$.next();
+      $(this.promptDiv.nativeElement).modal('show');
     });
   }
 
-  // map转换为对象
-  private mapChangeObj = (map) => {
-    const obj = {};
-    for (const [k, v] of map) {
-      obj[k] = v;
-    }
-    return obj;
-  }
-
-
   // 录入方式改变
   public onEntryModeChange(event: any) {
-    this.searchParams.type = Number(event.target.value);
+    this.batchImportParams.type = Number(event.target.value);
+    if (this.batchImportParams.type === 2) {
+      this.datePriceList = [
+        {
+          startTime: null,
+          endTime: null,
+          price: '',
+          time: new Date().getTime()
+        }
+      ];
+    }
   }
 
   // 按日期录入方式添加时间
@@ -106,6 +109,35 @@ export class BatchImportComponent implements OnInit {
 
   // 保存数据
   public onSaveBatchImport() {
+    if (this.batchImportParams.type === 1) {// 录入方式：全部统一价
+      this.batchImportParams.platform_price = Number(this.platform_price) * 100;
+      this.batchImportParams.date_settings = null;
+      const reg = /^\d+(\.\d+)?$/;
+      if (!this.platform_price) {
+        this.globalService.promptBox.open('请输入统一售价！', null, 2000, '/assets/images/warning.png');
+      } else if (!reg.test(this.platform_price)) {
+        this.globalService.promptBox.open('请输入正确的售价！', null, 2000, '/assets/images/warning.png');
+      } else {
+        this.requestBatchImport();
+      }
+    } else if (this.batchImportParams.type === 2) {// 录入方式：按日期设置
+      const dateSettingsList = this.datePriceList.map(i => ({
+        start_date: this.formatDate(i.startTime),
+        end_date: this.formatDate(i.endTime),
+        platform_price: Number(i.price) * 100,
+      }));
+      this.batchImportParams.date_settings = JSON.stringify(dateSettingsList);
+      this.batchImportParams.platform_price = null;
+      this.validDataPrompt();
+    } else {// 录入方式：按建议收件
+      this.batchImportParams.platform_price = null;
+      this.batchImportParams.date_settings = null;
+      this.requestBatchImport();
+    }
+  }
+
+  // 按日期设置录入方式时数据校验
+  private validDataPrompt() {
     const reg = /^\d+(\.\d+)?$/;
     const timeList = this.datePriceList.filter(v => !v.startTime || !v.endTime);
     const newDatePriceList = this.datePriceList.map(i => ({
@@ -118,11 +150,11 @@ export class BatchImportComponent implements OnInit {
     const priceList = this.datePriceList.filter(v => !(v.price || v.price === 0));
     const priceRegList = this.datePriceList.filter(v => v.price && !reg.test(v.price));
     if (timeList.length !== 0) {
-      this.globalService.promptBox.open('请输入时间段后再添加！', null, 2000, '/assets/images/warning.png');
+      this.globalService.promptBox.open('请输入时间段后再保存！', null, 2000, '/assets/images/warning.png');
     } else if (timeValidList.length !== 0) {
       this.globalService.promptBox.open('结束日期必须大于等于起始日期！', null, 2000, '/assets/images/warning.png');
     } else if (priceList.length !== 0) {
-      this.globalService.promptBox.open('请输入价格后再添加！', null, 2000, '/assets/images/warning.png');
+      this.globalService.promptBox.open('请输入价格后再保存！', null, 2000, '/assets/images/warning.png');
     } else if (priceRegList.length !== 0) {
       this.globalService.promptBox.open('请输入正确的价格！', null, 2000, '/assets/images/warning.png');
     } else {
@@ -141,55 +173,62 @@ export class BatchImportComponent implements OnInit {
         }
       }
       if (validSwitch) {// 校验成功之后调用接口
-        console.log('保存数据');
+        this.requestBatchImport();
       }
-
     }
   }
 
-  // 按日期录入方式删除时间
-  public onDatePriceDelBtn(i: number) {
-    this.datePriceList.splice(i, 1);
+  // 调用保存数据接口
+  private requestBatchImport() {
+    this.productService.requestSetBatchImport(this.product_id, this.ticket_id, this.batchImportParams).subscribe(() => {
+      this.globalService.promptBox.open('批量导入成功！');
+      this.searchText$.next();
+      if (this.sureCallback) {
+        const temp = this.sureCallback;
+        temp();
+      }
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            // tslint:disable-next-line:max-line-length
+            const field = content.field === 'type' ? '录入方式' : 'type' ? '统一售价' : 'date_settings' ? '按日期录入' : '';
+            if (content.code === 'missing_field') {
+              this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+              return;
+            } else if (content.code === 'invalid') {
+              this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('批量导入失败,请重试!', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // 格式化日期：yyyy-MM-dd
+  private formatDate(date) {
+    const myYear = date.getFullYear();
+    let mymonth = date.getMonth() + 1;
+    let myweekday = date.getDate();
+
+    if (mymonth < 10) {
+      mymonth = '0' + mymonth;
+    }
+    if (myweekday < 10) {
+      myweekday = '0' + myweekday;
+    }
+    return (myYear + '-' + mymonth + '-' + myweekday);
   }
 
   // 获取时间戳
-  public getSectionTime(start: any, end: any): string {
+  private getSectionTime(start: any, end: any): string {
     const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
       new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
     const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
       new Date(end).getMinutes(), 59, 0) / 1000).toString() : 0;
     return `${startTime},${endTime}`;
-  }
-
-  /**
-   * 取消按钮触发关闭模态框，释放订阅。
-   */
-  public onCloseBatchImport() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    if (this.sureCallback) {
-      this.sureCallback = null;
-    }
-    $(this.promptDiv.nativeElement).modal('hide');
-  }
-
-  /**
-   * 打开确认框
-   * @param message 消息体
-   * @param sureName 确认按钮文本(默认为确定)
-   * @param sureFunc 确认回调
-   * @param closeFunc 取消回调
-   */
-  public open(title: string = '编辑', product_id, ticket_id, sureFunc: any) {
-    this.searchParams.type = 1;
-    this.title = title;
-    this.product_id = product_id;
-    this.ticket_id = ticket_id;
-    this.sureCallback = sureFunc;
-    timer(0).subscribe(() => {
-      this.searchText$.next();
-      $(this.promptDiv.nativeElement).modal('show');
-    });
   }
 }
