@@ -32,7 +32,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,7 +49,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-    private routerInfo: ActivatedRoute, private router: Router) { }
+              private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public labelList: Array<LabelEntity> = [];
@@ -66,10 +66,12 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public loading = true;
   public product_id: string;
   public productNameErrors = '';
+  public tagNameErrors = '';
   public trafficGuideErrors = '';
   public noticeErrors = '';
   public productIntroduceErrors = '';
   public isEditTicketInsutruction = false;
+  public initCheckLabelNamesList: Array<any> = [];
   public checkLabelNamesList: Array<any> = [];
   public isSaleTicketSwitch = true;
 
@@ -147,6 +149,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
             checked: isCheckLabel
           });
       });
+      this.initCheckLabelNamesList = checkLabelList.filter(i => i.checked);
       this.checkLabelNamesList = checkLabelList.filter(i => i.checked);
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -202,7 +205,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     // true：不提示 false：提示
     return this.isSubmitProductInfo || (!this.productInfoForm.dirty && !this.isChangeTicketInsutruction
       && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
-      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(',')));
+      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(',')))
+      && this.checkLabelNamesList.filter(i => i.tag_id).join(',') ===
+      this.initCheckLabelNamesList.filter(i => i.tag_id).join(',');
   }
 
   // 编辑购票须知
@@ -311,7 +316,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   // 是否售卖开关点击调用接口
   public onSwitchClick(product_id, ticket_id, is_saled) {
     if (is_saled && this.productTicketList.filter(i => i.is_saled).length === 1) {
-      this.globalService.promptBox.open(`只有一个门票，不允许下架！`, null, 2000, '/assets/images/warning.png');
+      this.globalService.promptBox.open(`产品下至少有一个门票，不允许下架！`, null, 2000, '/assets/images/warning.png');
     } else {
       const text = is_saled ? '下架' : '上架';
       this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
@@ -363,9 +368,13 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productData.traffic_guide = CKEDITOR.instances.editor1.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.notice = CKEDITOR.instances.editor2.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.product_introduce = CKEDITOR.instances.editor3.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+    this.productData.tag_ids = this.checkLabelNamesList.map(i => i.tag_id);
     if (!this.productData.product_name) {
       this.clear();
       this.productNameErrors = '请输入产品名称！';
+    } else if (this.productData.tag_ids.length === 0) {
+      this.clear();
+      this.tagNameErrors = '请选择标签！';
     } else if (this.coverImgSelectComponent.imageList.length === 0) {
       this.clear();
       this.errPositionItem.icon.isError = true;
@@ -381,7 +390,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.productIntroduceErrors = '请填写景区介绍！';
     } else {
       this.clear();
-      this.productData.tag_ids = this.checkLabelNamesList.map(i => i.tag_id);
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
         this.productData.image_urls = this.product_image_url.join(',');
