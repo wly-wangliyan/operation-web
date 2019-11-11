@@ -82,6 +82,7 @@
     top: 50%;
     margin-top: -15px;
     cursor: pointer;
+    z-index: 100;
 }
 
 .preview-previous {
