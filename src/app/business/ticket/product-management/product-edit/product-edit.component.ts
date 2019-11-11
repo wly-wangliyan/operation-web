@@ -32,7 +32,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,7 +49,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-              private routerInfo: ActivatedRoute, private router: Router) { }
+    private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public labelList: Array<LabelEntity> = [];
@@ -260,7 +260,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public onOpenPriceCalendar(ticket_id) {
     this.productPriceCalendar.open(null, this.product_id, ticket_id, () => {
       timer(1000).subscribe(() => {
-        this.searchText$.next();
+        this.onUpdateData();
       });
     });
   }
@@ -316,10 +316,10 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       const text = is_saled ? '下架' : '上架';
       this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
         this.globalService.promptBox.open(`${text}成功`);
-        this.searchText$.next();
+        this.onUpdateData();
       }, err => {
         this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
-        this.searchText$.next();
+        this.onUpdateData();
       });
     }
 
@@ -329,7 +329,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public onIsTopProduct(product_id, ticket_id, is_top) {
     const text = is_top === 1 ? '置顶' : '取消置顶';
     this.productService.requestIsTopProduct(product_id, ticket_id, is_top).subscribe(res => {
-      this.searchText$.next();
+      this.onUpdateData();
       this.globalService.promptBox.open(`${text}成功！`);
     }, err => {
       this.globalService.promptBox.open(`${text}失败，请重试!`, null, 2000, '/assets/images/warning.png');
