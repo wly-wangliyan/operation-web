@@ -17,13 +17,17 @@
 }
 
 .thumb-nail-container li {
-    margin: 15px;
+    margin: 8px;
     margin-left: 0;
     float: left;
     font-size: 0;
     text-align: center;
     cursor: pointer;
     border: none;
+}
+
+.thumb-nail-container li:last-child {
+    margin-right: 0;
 }
 
 .thumb-nail-container li.selected-thumb-nail {

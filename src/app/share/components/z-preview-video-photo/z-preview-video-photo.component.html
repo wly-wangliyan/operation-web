@@ -2,7 +2,7 @@
      *ngIf="isShowPreviewComponent && (previewVideoAndPhotoList.length > 0)">
     <div class="preview-content" [ngStyle]="{width: previewWidth + 'px', height: previewHeight + 'px'}">
         <!-- 上一张 -->
-        <div class="preview-arrow preview-previous" (click)="selectedPreviewPreviousOrNext(currentPreviewIndex - 1)"
+        <div class="preview-arrow preview-previous" (click)="onPreviewThumbNail(currentPreviewIndex - 1)"
              [class.hide]="(currentPreviewIndex===0) || (previewVideoAndPhotoList.length < 1)"></div>
         <!-- 缩略视频/图预览 -->
         <div [class.hide]="isHidePreviewVideo">
@@ -14,13 +14,13 @@
         </div>
         <img [class.hide]="!isHidePreviewVideo" [src]="currentPreviewPhoto.sourceUrl">
         <!-- 下一张 -->
-        <div class="preview-arrow preview-next" (click)="selectedPreviewPreviousOrNext(currentPreviewIndex + 1)"
+        <div class="preview-arrow preview-next" (click)="onPreviewThumbNail(currentPreviewIndex + 1)"
              [class.hide]="currentPreviewIndex === (previewVideoAndPhotoList.length - 1)"></div>
     </div>
     <ul class="thumb-nail-container">
         <li *ngFor="let previewVideoAndPhoto of previewVideoAndPhotoList; let previewIndex = index"
             [ngStyle]="{width: thumbNailWidth + 'px', height: thumbNailHeight + 'px'}"
-            (mouseenter)="onPreviewCurrentThumbNail(previewIndex)" (click)="onPreviewCurrentThumbNail(previewIndex)">
+            (mouseenter)="onPreviewThumbNail(previewIndex)" (click)="onPreviewThumbNail(previewIndex)">
             <ng-container *ngIf="previewVideoAndPhoto.isVideo">
                 <video [src]="previewVideoAndPhoto.sourceUrl"></video>
                 <div class="icon-control thumb-icon-control">
