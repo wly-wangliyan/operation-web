@@ -118,12 +118,9 @@
   margin-left: -5px;
 }
 
-.notice-btn {
-  margin-right: 10px;
-}
-
 .logout-btn,
-.notice-btn {
+.notice-btn,
+.password-btn {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -134,7 +131,8 @@
 }
 
 .logout-btn i,
-.notice-btn i {
+.notice-btn i,
+.password-btn i {
   width: 22px;
   height: 22px;
   display: inline-block;
@@ -159,7 +157,8 @@
   background: rgba(0, 0, 0, 0.33);
 }
 
-.notice-btn {
+.notice-btn,
+.password-btn {
   color: #fff;
   margin-right: 30px;
 }
@@ -172,7 +171,24 @@
   background: url('../assets/images/main-notice.png') no-repeat center;
 }
 
+.password-btn i {
+  background: url('../assets/images/main_password.png') no-repeat center;
+  margin-right: 15px;
+}
+
+.logout-btn i {
+  margin-right: 15px;
+}
+
 :host ::ng-deep .ant-badge-count,
 .ant-badge-dot {
   box-shadow: none;
+}
+
+.modal-dialog {
+  margin-top: 10% !important;
+}
+
+.modal-content-common form .row .control-label {
+  width: 115px;
 }

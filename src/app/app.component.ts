@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { GlobalService } from './core/global.service';
+import { GlobalService, ChangePasswordParams } from './core/global.service';
 import { AuthService } from './core/auth.service';
 import { DateFormatHelper } from '../utils/date-format-helper';
 import { RouteMonitorService } from './core/route-monitor.service';
@@ -11,6 +11,8 @@ import { ZPromptBoxComponent } from './share/components/tips/z-prompt-box/z-prom
 import { ExpandedMenuComponent } from './share/components/expanded-menu/expanded-menu.component';
 import { Router } from '@angular/router';
 import { IntervalService } from './business/notice-center/interval.service';
+import { HttpErrorEntity } from './core/http.service';
+import { ValidateHelper } from '../utils/validate-helper';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   public user: string;
   public menu: number;
+
+  public passwordPassword: ChangePasswordParams = new ChangePasswordParams();
+
+  public repeat_password: string;
+
+  private is_sava = false; // 标记是否在保存中
 
   @ViewChild(ZPromptBoxComponent, { static: false }) private promptBox: ZPromptBoxComponent;
   @ViewChild(ZConfirmationBoxComponent, { static: false }) private confirmationBox: ZConfirmationBoxComponent;
@@ -47,7 +55,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.intervalService.startTimer(); // 1.6启动定时
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.globalService.promptBox = this.promptBox;
     this.globalService.confirmationBox = this.confirmationBox;
     this.globalService.http403Tip = this.global403Tip;
@@ -66,7 +74,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.routePathSubscription && this.routePathSubscription.unsubscribe();
     this.intervalService.stopTimer();
   }
@@ -182,6 +190,58 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  public onModifyPwdDivClick() {
+    this.passwordPassword = new ChangePasswordParams();
+    this.repeat_password = '';
+    this.is_sava = false;
+    $('#modifyPasswordModal').modal();
+  }
+
+  /** 提交修改密码请求 */
+  public onModifyPwdFormSubmit(): any {
+    if (this.is_sava) {
+      return;
+    }
+    if (!ValidateHelper.Length(this.passwordPassword.old_password, 6, 20)) {
+      this.globalService.promptBox.open('旧密码输入有误，请重新输入!', null, 2000, null, false);
+      return;
+    } else if (!ValidateHelper.Length(this.passwordPassword.new_password, 6, 20)) {
+      this.globalService.promptBox.open('新密码输入有误，请重新输入!', null, 2000, null, false);
+      return;
+    } else if (this.passwordPassword.new_password !== this.repeat_password) {
+      this.globalService.promptBox.open('两次输入密码不一致，请重新输入！', null, 2000, null, false);
+      return;
+    } else if (this.passwordPassword.old_password === this.passwordPassword.new_password) {
+      this.globalService.promptBox.open('新旧密码不可相同！', null, 2000, null, false);
+    } else {
+      this.is_sava = true;
+      this.globalService.requestModifyPassword(this.passwordPassword).subscribe(() => {
+        this.globalService.promptBox.open('密码修改成功,请重新登录！', () => {
+          $('#modifyPasswordModal').modal('hide');
+          this.is_sava = false;
+          this.authService.kickOut();
+        });
+      }, err => {
+        this.is_sava = false;
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+            for (const content of error.errors) {
+              if (content.field === 'old_password' && content.code === 'invalid') {
+                this.globalService.promptBox.open('旧密码输入有误，请重新输入!', null, 2000, null, false);
+              } else if (content.field === 'new_password' && content.code === 'invalid') {
+                this.globalService.promptBox.open('新密码输入有误，请重新输入!', null, 2000, null, false);
+              } else {
+                this.globalService.promptBox.open('参数错误或无效！', null, 2000, null, false);
+              }
+            }
+          }
+        }
+      });
+    }
   }
 }
 

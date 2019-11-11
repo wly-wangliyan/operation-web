@@ -11,6 +11,12 @@ import { HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { isUndefined } from 'util';
 import { map } from 'rxjs/operators';
+import { EntityBase } from '../../utils/z-entity';
+
+export class ChangePasswordParams extends EntityBase {
+  public old_password: string = undefined;	 // T	原始密码
+  public new_password: string = undefined;	// T	新密码
+}
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +89,15 @@ export class GlobalService {
         observer.complete();
       });
     }
+  }
+
+  /**
+   * 请求修改密码
+   * @param oldPwd 旧密码
+   * @param newPwd 新密码
+   */
+  public requestModifyPassword(passwordParams: ChangePasswordParams): Observable<HttpResponse<any>> {
+    const body = passwordParams.json();
+    return this.httpService.patch(environment.OPERATION_SERVE + '/user/password', body);
   }
 }
