@@ -25,7 +25,7 @@ export class CommodityParams extends EntityBase {
     public commodity_name: string = undefined; // 商品名称
     public subtitle: string = undefined; // 副标题
     public commodity_images: Array<string> = []; // 商品图片列表 ['[http://sdas','http://sdas](http://sdas','http://sdas)']
-    public commodity_video: Array<string> = []; // 商品视频
+    public commodity_videos: Array<string> = []; // 商品视频
     public commodity_description: string = undefined; // 商品描述
 }
 
@@ -59,7 +59,7 @@ export class CommodityEntity extends EntityBase {
     public commodity_name: string = undefined; // 商品名称
     public subtitle: string = undefined; // 副标题
     public commodity_images: Array<string> = []; // 商品图片列表
-    public commodity_video: Array<string> = []; // 商品视频
+    public commodity_videos: Array<string> = []; // 商品视频
     public commodity_description: string = undefined; // 商品描述
     public shelf_time: number = undefined; // 商品上架时间
     public removal_time: number = undefined; // 商品下架时间

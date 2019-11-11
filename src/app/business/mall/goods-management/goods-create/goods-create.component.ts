@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { GoodsManagementHttpService } from '../goods-management-http.service';
 
@@ -10,11 +10,11 @@ import { GoodsManagementHttpService } from '../goods-management-http.service';
 })
 export class GoodsCreateComponent implements OnInit {
 
-    constructor(private routerInfo: ActivatedRoute,
+    constructor(private route: ActivatedRoute,
                 private router: Router,
                 private globalService: GlobalService,
                 private goodsManagementHttpService: GoodsManagementHttpService) {
-        this.routerInfo.params.subscribe((params: Params) => {
+        this.route.paramMap.subscribe(map => {
         });
     }
 
