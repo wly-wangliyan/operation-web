@@ -72,8 +72,8 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nzFlex>
-            <nz-form-label class="ml_10" [nzNoColon]='true'>分类标签</nz-form-label>
-            <nz-form-control>
+            <nz-form-label nzRequired [nzNoColon]='true'>分类标签</nz-form-label>
+            <nz-form-control class="ml_10">
               <ul class="tags">
                 <li>
                   <div class="tag" *ngFor="let data of checkLabelNamesList; let i=index">{{data.name}}
@@ -84,6 +84,9 @@
                   </div>
                 </li>
               </ul>
+              <div *ngIf="tagNameErrors" class="text-danger">
+                <span class="input-error">{{tagNameErrors}}</span>
+              </div>
             </nz-form-control>
           </nz-form-item>
         </div>
