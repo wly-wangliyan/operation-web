@@ -92,17 +92,21 @@ export class ChooseLabelComponent implements OnInit {
   // 保存选择的标签
   public onSaveTagsId() {
     this.checkedLabelList = this.checkLabelList.filter(i => i.checked);
-    if (this.sureCallback) {
-      const temp = this.sureCallback;
-      temp();
+    if (this.checkedLabelList.length > 3) {
+      this.globalService.promptBox.open(`最多可添加3个标签!`, null, 2000, '/assets/images/warning.png');
+    } else {
+      if (this.sureCallback) {
+        const temp = this.sureCallback;
+        temp();
+      }
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+      if (this.sureCallback) {
+        this.sureCallback = null;
+      }
+      $(this.promptDiv.nativeElement).modal('hide');
     }
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    if (this.sureCallback) {
-      this.sureCallback = null;
-    }
-    $(this.promptDiv.nativeElement).modal('hide');
   }
 
 }
