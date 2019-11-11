@@ -9,6 +9,7 @@ import { HttpResponse } from '@angular/common/http';
 
 export class UserSearchParams extends EntityBase {
   public realname: string = undefined; // String F	姓名
+  public telephone: string = undefined; // String	F	联系电话
   public page_num = 1; // int	F	页码
   public page_size = 45; // int	F	每页条数
 }

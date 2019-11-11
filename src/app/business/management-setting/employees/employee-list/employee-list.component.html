@@ -30,8 +30,7 @@
   <div class="table-container">
     <div class="zmy-table">
       <nz-table #userTable [nzData]="dataList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        [nzLoading]="isLoading" [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)"
-        nzBordered>
+        [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)" nzBordered>
         <thead>
           <tr>
             <th>序号</th>
@@ -148,7 +147,7 @@
           </label>
           <div class="control-input">
             <textarea class="form-control" rows="4" placeholder="输入描述，100字以内" [(ngModel)]="userParams.remark"
-              (focus)="onClearErrMsg()" name="remark" maxlength="100">
+              name="remark" maxlength="100">
             </textarea>
           </div>
         </div>
