@@ -71,7 +71,7 @@ export class LabelEditComponent implements OnInit {
           } else if (content.code === 'already_existed') {
             this.globalService.promptBox.open('该标签名称已存在，请重新输入!', null, 2000, '/assets/images/warning.png');
           } else {
-            this.globalService.promptBox.open('平台售价保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open('标签名称保存失败,请重试!', null, 2000, '/assets/images/warning.png');
           }
         }
       }
