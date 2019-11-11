@@ -5,6 +5,7 @@ import { map } from 'rxjs/internal/operators';
 import { HttpService, LinkResponse } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
 import { EntityBase } from '../../../../utils/z-entity';
+import { FileUpdate } from '../../../../utils/file-update';
 
 /**** 实体类 ****/
 /**
@@ -121,6 +122,8 @@ export class GoodsManagementHttpService {
 
     private domain = environment.MALL_DOMAIN;
 
+    private image_domain: string = environment.STORAGE_DOMAIN;
+
     constructor(private httpService: HttpService) {
     }
 
@@ -209,6 +212,23 @@ export class GoodsManagementHttpService {
         const url = this.domain + `/admin/commodities/${commodity_id}/specification`;
         const body = modifyParams.json();
         return this.httpService.post(url, body);
+    }
+
+    /**
+     * 上传图片
+     * @param file
+     * @returns {Observable<any>}
+     */
+    public requestUploadPicture(file: any): Observable<any> {
+        const url = this.image_domain + `/storages/images`;
+        return Observable.create(observer => {
+            FileUpdate(file, url, (sourceUrl) => {
+                observer.next({sourceUrl});
+                observer.complete();
+            }, (err) => {
+                observer.error(err);
+            });
+        });
     }
 }
 

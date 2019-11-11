@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
+import { GoodsEditorComponent } from './goods-editor/goods-editor.component';
 import { GoodsManagementHttpService } from '../goods-management-http.service';
 
 @Component({
@@ -9,6 +10,8 @@ import { GoodsManagementHttpService } from '../goods-management-http.service';
     styleUrls: ['./goods-create.component.css']
 })
 export class GoodsCreateComponent implements OnInit {
+
+    @ViewChild('goodsEditor', {static: true}) public goodsEditor: GoodsEditorComponent;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
