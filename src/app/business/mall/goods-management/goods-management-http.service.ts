@@ -25,7 +25,7 @@ export class CommodityParams extends EntityBase {
     public commodity_name: string = undefined; // 商品名称
     public subtitle: string = undefined; // 副标题
     public commodity_images: Array<string> = []; // 商品图片列表 ['[http://sdas','http://sdas](http://sdas','http://sdas)']
-    public commodity_video: string = undefined; // 商品视频
+    public commodity_video: Array<string> = []; // 商品视频
     public commodity_description: string = undefined; // 商品描述
 }
 
@@ -40,26 +40,15 @@ export class CommodityOperationParams extends EntityBase {
  * 规格操作参数
  */
 export class SpecificationParams extends EntityBase {
-    public specification_objs: Array<SpecificationObjEntity> = []; // 规格对象列表 创建/更新
+    public specification_objs: Array<SpecificationEntity> = []; // 规格对象列表 创建/更新
     public delete_specification_ids: string = undefined; // 规格ids 'wq32','2qwe' 删除
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'specification_objs') {
-            return SpecificationObjEntity;
+            return SpecificationEntity;
         }
         return null;
     }
-}
-
-/**
- * 规格对象实体
- */
-export class SpecificationObjEntity extends EntityBase {
-    public specification_id: string = undefined; // 规格id 没有传null
-    public specification_nam: string = undefined; // 规格名称
-    public unit_original_price: number = undefined; // 单位分 原价
-    public unit_sell_price: number = undefined; // 单位分 售价
-    public stock: number = undefined; // 库存
 }
 
 /**
@@ -70,14 +59,26 @@ export class CommodityEntity extends EntityBase {
     public commodity_name: string = undefined; // 商品名称
     public subtitle: string = undefined; // 副标题
     public commodity_images: Array<string> = []; // 商品图片列表
-    public commodity_video: string = undefined; // 商品视频
+    public commodity_video: Array<string> = []; // 商品视频
     public commodity_description: string = undefined; // 商品描述
     public shelf_time: number = undefined; // 商品上架时间
     public removal_time: number = undefined; // 商品下架时间
     public sales_status: number = undefined; // 1销售中,2已下架
     public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
+    public specifications: Array<SpecificationEntity> = []; // 规格对象列表
     public created_time: number = undefined; // 创建时间
     public updated_time: number = undefined; // 更新时间
+    // 用于页面展示
+    public unit_sell_price_section: string = undefined; // 售价区间
+    public unit_original_price_section: string = undefined; // 原价区间
+    public sold_amount_sum = 0; // 销量，已售数量之和
+
+    public getPropertyClass(propertyName: string): typeof EntityBase {
+        if (propertyName === 'specification') {
+            return SpecificationEntity;
+        }
+        return null;
+    }
 }
 
 /**
@@ -100,6 +101,16 @@ export class SpecificationEntity extends EntityBase {
             return CommodityEntity;
         }
         return null;
+    }
+
+    public toEditJson(): any {
+        const json = this.json();
+        delete json.commodity;
+        delete json.sold_amount;
+        delete json.is_deleted;
+        delete json.created_time;
+        delete json.updated_time;
+        return json;
     }
 }
 
@@ -177,7 +188,7 @@ export class GoodsManagementHttpService {
     }
 
     /**
-     * 商品上架下架接口
+     * 商品上架/下架
      * @param {string} commodity_id
      * @param {CommodityOperationParams} operationParams
      * @returns {Observable<HttpResponse<any>>}
@@ -209,6 +220,40 @@ export class CommodityLinkResponse extends LinkResponse {
     public generateEntityData(results: Array<any>): Array<CommodityEntity> {
         const tempList: Array<CommodityEntity> = [];
         results.forEach(res => {
+            // 格式化数组最小值
+            const formatListMInNum = (sourceList: Array<number>): number => {
+                if (sourceList.length === 0) {
+                    return 0;
+                }
+                return Math.min.apply(null, sourceList);
+            };
+            // 格式化数组最大值
+            const formatListMaxNum = (sourceList: Array<number>): number => {
+                if (sourceList.length === 0) {
+                    return 0;
+                }
+                return Math.max.apply(null, sourceList);
+            };
+            let unitSellPriceList = [];
+            let unitOriginalPriceList = [];
+            res.sold_amount_sum = 0;
+            res.specifications.forEach(specificationItem => {
+                unitSellPriceList.push(specificationItem.unit_sell_price);
+                unitOriginalPriceList.push(specificationItem.unit_original_price);
+                res.sold_amount_sum += specificationItem.sold_amount;
+            });
+            if (formatListMInNum(unitSellPriceList) === formatListMaxNum(unitSellPriceList)) {
+                res.unit_sell_price_section = formatListMInNum(unitSellPriceList);
+            } else {
+                res.unit_sell_price_section = formatListMInNum(unitSellPriceList) + '-' + formatListMaxNum(unitSellPriceList);
+            }
+            if (formatListMInNum(unitOriginalPriceList) === formatListMaxNum(unitOriginalPriceList)) {
+                res.unit_original_price_section = formatListMInNum(unitOriginalPriceList);
+            } else {
+                res.unit_original_price_section = formatListMInNum(unitOriginalPriceList) + '-' + formatListMaxNum(unitOriginalPriceList);
+            }
+            res.unit_sell_price_section += '元';
+            res.unit_original_price_section += '元';
             tempList.push(CommodityEntity.Create(res));
         });
         return tempList;

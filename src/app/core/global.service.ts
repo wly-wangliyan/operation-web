@@ -11,56 +11,69 @@ import { HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class GlobalService {
 
-  // 特殊存储，全局化资源配置
-  public static Instance: GlobalService;
+    // 特殊存储，全局化资源配置
+    public static Instance: GlobalService;
 
-  constructor(private authService: AuthService, private httpService: HttpService) {
-  }
-
-  public promptBox: ZPromptBoxComponent = undefined;
-  public confirmationBox: ZConfirmationBoxComponent = undefined;
-  public http500Tip: Http500TipComponent = undefined;
-  public http403Tip: Http403TipComponent = undefined;
-  public menu_index = undefined;
-  public menu_last_index = undefined;
-  public notice_Count = 0;
-  private permissionErrorMessage = '授权失败，请重新登录';
-
-  /**
-   * 获取当前服务器时间戳(秒）
-   * @returns number
-   */
-  public get timeStamp(): number {
-    return this.httpService.timeStamp;
-  }
-
-  /**
-   * 网络错误处理函数
-   * @param err 错误信息
-   * @returns boolean 是否处理了错误信息，未处理则返回false
-   */
-  public httpErrorProcess(err: HttpErrorResponse): boolean {
-    if (err.status === 403) {
-      this.promptBox.open(this.permissionErrorMessage, () => {
-        this.authService.kickOut();
-      });
-      return true;
-    } else if (err.status === 500) {
-      this.http500Tip.http500Flag = true;
-      return true;
-    } else {
-      console.error(err);
-      return false;
+    constructor(private authService: AuthService, private httpService: HttpService) {
     }
-  }
 
-  // 获取通知中心未读数量
-  public requestUnreadCount(): Observable<HttpResponse<any>> {
-    const httpUrl = `${environment.TICKET_SERVER}/messages/unread_num`;
-    return this.httpService.get(httpUrl);
-  }
+    public promptBox: ZPromptBoxComponent = undefined;
+    public confirmationBox: ZConfirmationBoxComponent = undefined;
+    public http500Tip: Http500TipComponent = undefined;
+    public http403Tip: Http403TipComponent = undefined;
+    public menu_index = undefined;
+    public menu_last_index = undefined;
+    public notice_Count = 0;
+    private permissionErrorMessage = '授权失败，请重新登录';
+
+    /**
+     * 获取当前服务器时间戳(秒）
+     * @returns number
+     */
+    public get timeStamp(): number {
+        return this.httpService.timeStamp;
+    }
+
+    /**
+     * 网络错误处理函数
+     * @param err 错误信息
+     * @returns boolean 是否处理了错误信息，未处理则返回false
+     */
+    public httpErrorProcess(err: HttpErrorResponse): boolean {
+        if (err.status === 403) {
+            this.promptBox.open(this.permissionErrorMessage, () => {
+                this.authService.kickOut();
+            });
+            return true;
+        } else if (err.status === 500) {
+            this.http500Tip.http500Flag = true;
+            return true;
+        } else {
+            console.error(err);
+            return false;
+        }
+    }
+
+    // 获取通知中心未读数量
+    public requestUnreadCount(): Observable<HttpResponse<any>> {
+        const httpUrl = `${environment.TICKET_SERVER}/messages/unread_num`;
+        return this.httpService.get(httpUrl);
+    }
+
+    /**
+     * 字符串限制标签
+     * @param limitMsg
+     * @param {number} limitLength
+     * @returns {string}
+     */
+    public limitStrLengthTitle(limitMsg: any, limitLength: number = 10): string {
+        if (limitMsg && limitMsg.length > limitLength) {
+            return limitMsg;
+        }
+        return '';
+    }
 }
