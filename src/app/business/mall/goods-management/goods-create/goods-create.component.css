@@ -4,3 +4,98 @@
     padding: 30px;
     background: #fff;
 }
+
+.control-row {
+    align-items: flex-start !important;
+}
+
+.special-control-label {
+    padding-left: 16px !important;
+}
+
+.row-message {
+    height: 20px !important;
+}
+
+.img-row-message {
+    margin-top: -6px;
+}
+
+.img-row-message .control-input {
+    color: rgba(232, 32, 56, 1);
+}
+
+.table-container {
+    width: 900px;
+    margin: 0 0 20px 0;
+    border: 1px solid #D1D1D1;
+    background: #F7F8FA;
+    border-radius: 1px;
+    overflow: hidden;
+}
+
+.table {
+    margin: 0 20px 10px 20px;
+}
+
+.table th, .table td {
+    border: none;
+}
+
+.table th {
+    color: #23242F;
+    font-size: 12px;
+    letter-spacing: 0.37px;
+    text-align: center;
+}
+
+.table tbody tr {
+    border-top: 2px solid #DBDCDE;
+}
+
+.table tbody tr:first-child {
+    border-top: none;
+}
+
+.table td .td-content {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 0.14px;
+}
+
+.table td .td-content input {
+    width: 140px;
+    height: 30px;
+    color: #23242F;
+    padding: 0 5px;
+}
+
+.table td .special-td-content input {
+    padding-right: 40px;
+}
+
+.table td .td-content .one-word-lable {
+    height: 30px;
+    color: #888888;
+    text-align: left;
+    border-left: none;
+}
+
+.table td .stock-content input {
+    width: 80px;
+}
+
+.table td .sold-amount-container {
+    color: #888888;
+}
+
+.operation-container {
+    justify-content: space-evenly;
+    color: #E82038;
+}
+
+.operation-container a:last-child {
+    color: #3E71F7;
+}
