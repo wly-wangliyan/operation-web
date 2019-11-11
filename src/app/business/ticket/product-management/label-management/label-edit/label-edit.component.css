@@ -2,6 +2,10 @@
   margin-top: 20px;
 }
 
-.label-input {
+.form-control {
   width: 300px;
+}
+
+:host ::ng-deep .ant-input {
+  height: 34px;
 }

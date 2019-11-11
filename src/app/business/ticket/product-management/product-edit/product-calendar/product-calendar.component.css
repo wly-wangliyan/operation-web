@@ -85,7 +85,7 @@
   line-height: 36px;
 }
 
-::ng-deep .ant-input {
+:host ::ng-deep .ant-input {
   width: 304px;
   height: 48px;
   border: 1px solid rgba(204, 204, 204, 1);

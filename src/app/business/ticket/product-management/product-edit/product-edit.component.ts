@@ -32,7 +32,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,7 +49,7 @@ export class ErrPositionItem {
 export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-    private routerInfo: ActivatedRoute, private router: Router) { }
+              private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
   public labelList: Array<LabelEntity> = [];
@@ -71,6 +71,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public productIntroduceErrors = '';
   public isEditTicketInsutruction = false;
   public checkLabelNamesList: Array<any> = [];
+  public isSaleTicketSwitch = true;
 
   private searchText$ = new Subject<any>();
   private product_name = '';
@@ -113,6 +114,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
+          sale_num: this.productData.sale_num,
         }
       ];
       this.productData.product_name = this.productData.product_name.substring(0, 20);
@@ -308,14 +310,19 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   // 是否售卖开关点击调用接口
   public onSwitchClick(product_id, ticket_id, is_saled) {
-    const text = is_saled ? '下架' : '上架';
-    this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
-      this.globalService.promptBox.open(`${text}成功`);
-      this.searchText$.next();
-    }, err => {
-      this.globalService.promptBox.open(`${text}失败，请重试`, null, 2000, '/assets/images/warning.png');
-      this.searchText$.next();
-    });
+    if (is_saled && this.productTicketList.filter(i => i.is_saled).length === 1) {
+      this.globalService.promptBox.open(`只有一个门票，不允许下架！`, null, 2000, '/assets/images/warning.png');
+    } else {
+      const text = is_saled ? '下架' : '上架';
+      this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
+        this.globalService.promptBox.open(`${text}成功`);
+        this.searchText$.next();
+      }, err => {
+        this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
+        this.searchText$.next();
+      });
+    }
+
   }
 
   // 置顶

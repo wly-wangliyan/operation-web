@@ -9,10 +9,10 @@
         </button>
       </div>
       <form nz-form class="content-layout" #labelForm="ngForm">
-        <nz-form-item nzFlex>
+        <nz-form-item nzFlex style="margin-left: 20px;">
           <nz-form-label nzRequired [nzNoColon]='true'>标签名称</nz-form-label>
           <nz-form-control class="form_control">
-            <input type="text" nz-input class="label-input" [(ngModel)]="name" placeholder="输入1-10字名称" maxlength='10'
+            <input type="text" nz-input class="form-control" [(ngModel)]="name" placeholder="输入1-10字名称" maxlength='10'
               name='label-name' (keydown)="onKeydownEvent($event)" required />
           </nz-form-control>
         </nz-form-item>

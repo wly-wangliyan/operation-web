@@ -88,6 +88,7 @@ export class LabelEditComponent implements OnInit {
     if (this.sureCallback) {
       this.sureCallback = null;
     }
+    this.name = '';
     $(this.promptDiv.nativeElement).modal('hide');
   }
 

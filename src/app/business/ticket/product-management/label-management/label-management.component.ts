@@ -30,7 +30,7 @@ export class LabelManagementComponent implements OnInit {
 
   // 切换tab加载页面
   public onTabChange(key: number) {
-    this.searchParams.is_commended = key === 1 ? false : true;
+    this.searchParams.is_recommended = key === 1 ? false : true;
     this.productService.requestLabelListData(this.searchParams).subscribe(res => {
       this.labelList = res.results;
       this.noResultText = '暂无数据';

@@ -35,11 +35,11 @@
   cursor: pointer;
 }
 
-::ng-deep .price-control .ant-calendar-picker {
+:host ::ng-deep .ant-calendar-picker {
   width: 150px !important;
 }
 
-::ng-deep .price-control .ant-input {
+:host ::ng-deep .ant-input {
   width: 150px;
   height: 34px;
 }

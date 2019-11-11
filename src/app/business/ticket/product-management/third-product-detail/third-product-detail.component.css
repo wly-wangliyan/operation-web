@@ -80,6 +80,10 @@
   width: 315px;
 }
 
+.opera img {
+  margin-right: 5px;
+}
+
 .opera>a {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFangSC;
@@ -367,7 +371,7 @@ input[type=file]:focus {
 
 @media screen and (max-width: 1500px) {
   .des_td {
-    width: 650px;
+    width: 600px;
   }
 
   .des-content {

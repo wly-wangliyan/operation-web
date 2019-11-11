@@ -29,7 +29,6 @@
             <th>地址</th>
             <th>状态</th>
             <th>产品ID</th>
-            <!-- 销量 -->
             <th>销量</th>
           </tr>
         </thead>
@@ -43,7 +42,6 @@
             <td>{{data.address}}</td>
             <td>{{data.status| thirdSaleStatus}}</td>
             <td>{{data.product_id}}</td>
-            <!-- 销量 -->
             <td>{{data.sale_num||'--'}}</td>
           </tr>
         </tbody>
@@ -241,17 +239,20 @@
             <td>
               <div class='opera m_20'>
                 <div>
-                  <nz-switch [ngModel]="data.is_saled" nzSize="small"
-                    (ngModelChange)="onSwitchChange(data.is_saled, $event)" [nzControl]=true
-                    (click)="onSwitchClick(data.product.product_id,data.ticket_id,data.is_saled)">
-                  </nz-switch>
+
+                  <a (click)='onOpenPriceCalendar(data.ticket_id)'><img src="/assets/images/date.png">价格日历</a>
                 </div>
                 <div>
-                  <a (click)='onOpenPriceCalendar(data.ticket_id)'>价格日历</a>
+
+                  <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'> <img
+                      src="/assets/images/top.png">置顶</a>
+                  <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'> <img
+                      src="/assets/images/top.png">取消置顶</a>
                 </div>
                 <div>
-                  <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
-                  <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>
+                  <a (click)='onSwitchClick(data.product.product_id,data.ticket_id,data.is_saled)'>
+                    <img src="/assets/images/sale.png" *ngIf='data.is_saled'>
+                    <img src="/assets/images/not_sale.png" *ngIf='!data.is_saled'>{{data.is_saled?'关闭':'开启'}}售卖</a>
                 </div>
               </div>
             </td>

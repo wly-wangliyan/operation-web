@@ -31,7 +31,7 @@ export class ChooseLabelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchParams.is_commended = false;
+    this.searchParams.is_recommended = false;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.productService.requestLabelListData(this.searchParams).subscribe(res => {
         this.labelList = res.results;

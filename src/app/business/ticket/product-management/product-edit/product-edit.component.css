@@ -183,6 +183,18 @@
   width: 315px;
 }
 
+.opera {
+  width: 78px;
+  text-align: left;
+}
+
+.opera img {
+  margin-right: 5px;
+}
+
+.opera>div {
+  margin-bottom: 5px;
+}
 
 .opera>div>a {
   font-size: 12px;

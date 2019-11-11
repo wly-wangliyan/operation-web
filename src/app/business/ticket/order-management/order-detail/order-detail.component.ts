@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderManagementService, TicketOrderEntity, TicketInfo, VisitorInfo } from '../order-management.service';
+import { OrderManagementService, TicketOrderEntity, VisitorInfo } from '../order-management.service';
 import { GlobalService } from '../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketEntity } from '../../product-management/product.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -13,8 +12,6 @@ export class OrderDetailComponent implements OnInit {
 
   public orderDetail: TicketOrderEntity = new TicketOrderEntity(); // 订单信息
 
-  public ticketInfo: TicketEntity = new TicketEntity(); // 票务信息
-
   public visitorList: Array<VisitorInfo> = []; // 游客信息
 
   private order_id: string; // 订单id
@@ -24,7 +21,7 @@ export class OrderDetailComponent implements OnInit {
     'UU-UU': '悠悠',
     'UU-WX': '微信',
     'WX-WX': '微信',
-    'other': '其他'
+    other: '其他'
   };
 
   constructor(
@@ -49,10 +46,19 @@ export class OrderDetailComponent implements OnInit {
   private getOrderDetail() {
     this.orderService.requestOrderDetailData(this.order_id).subscribe(res => {
       this.orderDetail = res;
-      this.ticketInfo = res.ticket ? res.ticket : new TicketEntity();
-      this.visitorList = res.visitor_info ? res.visitor_info : [];
+      this.visitorList = res.tourists ? res.tourists : [];
     }, err => {
       this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 重新发送短信
+  public onResendMessage() {
+    this.orderService.requestResendMessage(this.order_id).subscribe(res => {
+      this.globalService.promptBox.open('短信重发成功！');
+      this.getOrderDetail();
+    }, err => {
+      this.globalService.promptBox.open('短信重发失败，请稍后再试！');
     });
   }
 

@@ -79,6 +79,10 @@
   width: 315px;
 }
 
+.opera img {
+  margin-right: 5px;
+}
+
 .opera>a {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFangSC;
@@ -436,9 +440,13 @@ input[type=file]:focus {
   position: relative;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1700px) {
   .ticket-info {
-    width: 315px;
+    width: 350px;
+  }
+
+  .des_td {
+    width: 400px;
   }
 
   .info {

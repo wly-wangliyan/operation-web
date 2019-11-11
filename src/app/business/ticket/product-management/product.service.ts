@@ -283,7 +283,7 @@ export class BatchImportParams extends EntityBase {
 // 标签列表条件筛选
 export class SearchLabelParams extends EntityBase {
   public name: string = undefined; // 标签名称
-  public is_commended = false; // 是否推荐
+  public is_recommended = false; // 是否推荐
 }
 
 @Injectable({
@@ -585,7 +585,7 @@ export class ProductService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestLabelSort(tag_id: string, param: any): Observable<HttpResponse<any>> {
-    return this.httpService.patch(environment.OPERATION_SERVE + `tags/${tag_id}/order_num`, param);
+    return this.httpService.patch(`${this.domain}/tags/${tag_id}/order_num`, param);
   }
 
   /**
@@ -605,7 +605,7 @@ export class ProductService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateTagName(tag_id: string, name: string): Observable<HttpResponse<any>> {
-    return this.httpService.put(`${this.domain}tags/${tag_id}`, { name }
+    return this.httpService.put(`${this.domain}/tags/${tag_id}`, { name }
     );
   }
 

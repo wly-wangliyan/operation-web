@@ -21,14 +21,14 @@
   overflow: auto;
 }
 
-::ng-deep .ant-table {
+:host ::ng-deep .ant-table {
   border: 1px solid #e2e2e2;
+}
+
+:host ::ng-deep .ant-input {
+  height: 34px;
 }
 
 .modal-footer {
   padding: 15px 90px 40px !important;
-}
-
-.modal-footer button {
-  width: 120px;
 }
