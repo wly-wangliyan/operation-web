@@ -181,7 +181,18 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         isEditTicketInsutruction: false,
       }));
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'unshelved') {
+              this.globalService.promptBox.open(`该产品已下架!`, null, 2000, '/assets/images/warning.png');
+            } else {
+              return;
+            }
+          }
+        }
+      }
     });
   }
 
