@@ -24,6 +24,8 @@
       $ ('#uploadModal2').modal ();
     } else if (editorName === 'editor3') {
       $ ('#uploadModal3').modal ();
+    } else if (editorName === 'descriptionEditor') {
+      $('#descriptionUploadModal').modal();
     } else {
       $ ('#uploadModal').modal ();
     }

@@ -4,6 +4,93 @@
 </div>
 <div class="content-flow">
   <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
 
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动类型</span>
+        </label>
+        <div class="control-input">
+          <select name="activity_promotion_type" class="form-control" [(ngModel)]="configParams.promotion_type"
+            (change)="onChangeType($event)" required>
+            <option value="">请选择</option>
+            <option value=1>消费赠券</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动名称</span>
+        </label>
+        <div class="control-input">
+          <input name="promotion_name" class="form-control" [(ngModel)]="configParams.promotion_name"
+            placeholder="输入1-20个字活动名称" minlength="1" maxlength="20" appIgnoreSpace required>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>图片</span>
+        </label>
+        <div>
+          <app-z-photo-select #activityImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+            [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="activityImg"
+            [imageWidth]="375" [imageHeight]="200" [imageUrls]="activity_url" #coverImg [aspectRatio]="1.875/1"
+            [minCropBoxWidth]="375" [minCropBoxHeight]="200" [resizable]="true" [imageShowWidth]="375">
+          </app-z-photo-select>
+          <div class="row row-message row-mes">
+            <span class="err-message">{{activityImgErrMag}}</span>
+          </div>
+          <p class="cover-hint">注：尺寸 750*400px，格式PNG或JPG，大小2M以内</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动开始时间</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+            name='config_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动结束时间</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+            name='config_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动描述</span>
+        </label>
+        <app-description-editor #descriptionEditor></app-description-editor>
+      </div>
+
+      <div class="row row-message" style="margin: 3px 0 15px 0;">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{configErrMsg}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!editConfigForm.form.valid || !start_time || !end_time" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+      </div>
+    </form>
   </div>
 </div>

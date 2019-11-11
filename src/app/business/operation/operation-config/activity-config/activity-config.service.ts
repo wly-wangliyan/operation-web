@@ -5,6 +5,7 @@ import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { FileUpdate } from '../../../../../utils/file-update';
 
 // 领赠设置实体
 export class RewardEntity extends EntityBase {
@@ -165,5 +166,22 @@ export class ActivityConfigService {
       status
     };
     return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 上传图片
+   * @param file 文件
+   * @returns any
+   */
+  public requestUploadPicture(file: any): Observable<any> {
+    const url = environment.STORAGE_DOMAIN + `/storages/images`;
+    return Observable.create(observer => {
+      FileUpdate(file, url, (sourceUrl) => {
+        observer.next({ sourceUrl });
+        observer.complete();
+      }, (err) => {
+        observer.error(err);
+      });
+    });
   }
 }

@@ -8,6 +8,7 @@ import { ValidateHelper } from '../../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { RewardEntity, PromotionEntity, ActivityConfigService } from '../activity-config.service';
 import { GlobalService } from '../../../../../core/global.service';
+import { DescriptionEditorComponent } from '../component/description-editor/description-editor.component';
 
 @Component({
   selector: 'app-config-edit',
@@ -36,9 +37,12 @@ export class ConfigEditComponent implements OnInit {
 
   public activityImgErrMag = '';
 
-  public title = '添加配置';
+  public title = '添加活动';
+
+  public tempContent = ''; // 活动描述富文本框内容
 
   @ViewChild('activityImg', { static: false }) public activityImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('descriptionEditor', { static: true }) public descriptionEditor: DescriptionEditorComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,12 +56,15 @@ export class ConfigEditComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.is_save = false;
     if (this.promotion_id) {
       this.isCreateConfig = false;
-      this.title = '编辑配置';
+      this.title = '编辑活动';
       // this.rquestConfigDetail();
     } else {
       this.isCreateConfig = true;
+      this.configParams = new PromotionEntity();
+      this.configParams.promotion_type = 1;
     }
   }
 
@@ -70,6 +77,13 @@ export class ConfigEditComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  // 富文本数据处理
+  public getEditorData() {
+    CKEDITOR.instances.descriptionEditor.destroy(true);
+    this.tempContent = this.configParams.description.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+    CKEDITOR.replace('descriptionEditor').setData(this.tempContent);
   }
 
   // 修改活动类型
@@ -113,6 +127,7 @@ export class ConfigEditComponent implements OnInit {
         this.router.navigate(['../config-list'], { relativeTo: this.route });
       });
     }, err => {
+      this.is_save = false;
       this.errorProcess(err);
     });
   }
@@ -124,6 +139,7 @@ export class ConfigEditComponent implements OnInit {
         this.router.navigate(['../../config-list'], { relativeTo: this.route });
       });
     }, err => {
+      this.is_save = false;
       this.errorProcess(err);
     });
   }
@@ -134,8 +150,12 @@ export class ConfigEditComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'title') {
-            this.configErrMsg = '标题错误或无效！';
+          if (content.code === 'description' && content.field === 'invalid') {
+            this.configErrMsg = '活动描述错误或无效！';
+            return;
+          }
+          if (content.code === 'description' && content.field === 'missing_field') {
+            this.configErrMsg = '请填写活动描述！';
             return;
           }
         }
@@ -167,13 +187,21 @@ export class ConfigEditComponent implements OnInit {
         this.configErrMsg = '活动开始时间应大于等于当前时间！';
         return false;
       }
-      if (sTimestamp - eTimestamp <= 0) {
+      if (sTimestamp - eTimestamp >= 0) {
         this.configErrMsg = '活动开始时间应小于结束时间！';
         return false;
       }
       this.configParams.start_time = sTimestamp;
       this.configParams.end_time = eTimestamp;
     }
+
+    if (!CKEDITOR.instances.descriptionEditor.getData()) {
+      this.configErrMsg = '请填写活动描述！';
+      return false;
+    } else {
+      this.configParams.description = CKEDITOR.instances.descriptionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+    }
+    console.log(this.configParams);
     return true;
   }
 
