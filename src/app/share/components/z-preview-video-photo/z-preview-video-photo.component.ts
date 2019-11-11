@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { timer } from 'rxjs/index';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -11,6 +10,8 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
 
     public isShowPreviewComponent = false;
 
+    public currentPreviewIndex = 0;
+
     public previewVideoAndPhotoList: Array<ZPreviewVideoAndPhotoEntity> = [];
 
     public currentPreviewVideo: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
@@ -18,6 +19,13 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
     public currentPreviewPhoto: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
 
     public isHidePreviewVideo = true;
+
+    public get isHidePlayIcon(): boolean {
+        if (this.isAutoPlay || ($('#preview-video') && !$('#preview-video').hasClass('pause'))) {
+            return false;
+        }
+        return true;
+    };
 
     @Input()
     public set videoAndPhotoUrls(videoAndPhotoUrls: Array<string>) {
@@ -71,20 +79,43 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
     public ngOnInit() {
     }
 
-    // 鼠标进入预览当前缩略图
-    public onMouseEnterPreview(previewVideoAndPhoto: ZPreviewVideoAndPhotoEntity) {
-        if (previewVideoAndPhoto.isVideo) {
+    // 预览当前缩略图
+    public onPreviewCurrentThumbNail(previewIndex: number) {
+        $('.thumb-nail-container').children().removeClass('selected-thumb-nail');
+        $('.thumb-nail-container').children().eq(previewIndex).addClass('selected-thumb-nail');
+        const currentSelectPreviewVideoAndPhoto = this.previewVideoAndPhotoList[previewIndex];
+        if (currentSelectPreviewVideoAndPhoto.isVideo) {
             this.isHidePreviewVideo = false;
-            this.currentPreviewVideo = (this.currentPreviewVideo.sourceUrl === previewVideoAndPhoto.sourceUrl) ?
-                this.currentPreviewVideo : previewVideoAndPhoto;
+            this.currentPreviewVideo = (this.currentPreviewVideo.sourceUrl === currentSelectPreviewVideoAndPhoto.sourceUrl) ?
+                this.currentPreviewVideo : currentSelectPreviewVideoAndPhoto;
         } else {
             this.isHidePreviewVideo = true;
-            this.currentPreviewPhoto = new ZPreviewVideoAndPhotoEntity();
-
-            timer().subscribe(() => {
-                this.currentPreviewPhoto = previewVideoAndPhoto;
-            });
+            this.currentPreviewPhoto = (this.currentPreviewPhoto.sourceUrl === currentSelectPreviewVideoAndPhoto.sourceUrl) ?
+                this.currentPreviewPhoto : currentSelectPreviewVideoAndPhoto;
         }
+        this.selectedPreviewPreviousOrNext(previewIndex);
+    }
+
+    // 点击播放/暂停视频播放
+    public onPlayPreviewVideo() {
+        $('#preview-video').trigger('play');
+        if ($('#preview-video').hasClass('pause')) {
+            $('#preview-video').removeClass('pause');
+            $('#preview-video').addClass('play');
+        } else {
+            $('#preview-video').removeClass('play');
+            $('#preview-video').addClass('pause');
+        }
+    }
+
+    // 选择预览上一张/下一张缩略图
+    public selectedPreviewPreviousOrNext(previewIndex: number) {
+        if ((previewIndex < this.currentPreviewIndex) && (this.currentPreviewIndex > 0)) {
+            this.currentPreviewIndex--;
+        } else if ((previewIndex > this.currentPreviewIndex) && (this.currentPreviewIndex < this.previewVideoAndPhotoList.length)) {
+            this.currentPreviewIndex++;
+        }
+        this.onPreviewCurrentThumbNail(this.currentPreviewIndex);
     }
 }
 
