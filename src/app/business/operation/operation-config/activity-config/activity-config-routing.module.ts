@@ -4,6 +4,7 @@ import { AuthGuardService } from '../../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { ActivityConfigComponent } from './activity-config.component';
 import { ConfigListComponent } from './config-list/config-list.component';
+import { ConfigEditComponent } from './config-edit/config-edit.component';
 
 
 const routes: Routes = [{
@@ -12,6 +13,8 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'config-list', pathMatch: 'full' },
     { path: 'config-list', component: ConfigListComponent },
+    { path: 'config-add', component: ConfigEditComponent },
+    { path: 'config-edit/:promotion_id', component: ConfigEditComponent },
     { path: '**', redirectTo: 'config-list', pathMatch: 'full' }
   ]
 }];
