@@ -66,9 +66,9 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
 
     @Input() public previewHeight = '400';
 
-    @Input() public thumbNailWidth = '50';
+    @Input() public thumbNailWidth = '60';
 
-    @Input() public thumbNailHeight = '50';
+    @Input() public thumbNailHeight = '60';
 
     @Input() public isControls = false; // 是否显示控件
 

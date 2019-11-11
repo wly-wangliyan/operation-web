@@ -17,13 +17,14 @@
 }
 
 .thumb-nail-container li {
-    margin: 8px;
-    margin-left: 0;
+    margin: 10px 10px 0 0;
     float: left;
     font-size: 0;
     text-align: center;
     cursor: pointer;
     border: none;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .thumb-nail-container li:last-child {
@@ -31,7 +32,7 @@
 }
 
 .thumb-nail-container li.selected-thumb-nail {
-    border: 1px solid #ff0000;
+    border: 1px solid #3E71F7;
 }
 
 .preview-content video, .preview-content img, .thumb-nail-container li video, .thumb-nail-container li img {
@@ -71,9 +72,9 @@
 }
 
 .thumb-icon-control i {
-    width: 35px;
-    height: 29px;
-    margin-top: -14.5px;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
     margin-left: -50px;
     background: url('../../../../assets/images/preview/icon_thumb_video.png') no-repeat center;
     background-size: contain;
