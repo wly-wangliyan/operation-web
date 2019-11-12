@@ -13,7 +13,7 @@
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>录入方式</nz-form-label>
           <nz-form-control class="form_control">
-            <select class="form-control" [(ngModel)]="batchImportParams.type" name='type'
+            <select class="form-control select-control" [(ngModel)]="batchImportParams.type" name='type'
               (change)='onEntryModeChange($event)'>
               <option value="1">全部统一价</option>
               <option value="2">按日期设置</option>

@@ -15,6 +15,7 @@ export class BatchImportComponent implements OnInit {
 
   public batchImportParams: BatchImportParams = new BatchImportParams();
   public datePriceList: Array<any> = [];
+  public dateSettingsList: Array<any> = [];
   public platform_price: string;
 
   private sureCallback: any;
@@ -26,6 +27,7 @@ export class BatchImportComponent implements OnInit {
   @Input() public title: string;
   @Input() public product_id: string;
   @Input() public ticket_id: string;
+  @Input() public priceCalendarList: Array<any> = [];
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
@@ -56,12 +58,13 @@ export class BatchImportComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(title: string = '编辑', product_id, ticket_id, sureFunc: any) {
+  public open(title: string = '编辑', product_id: string, ticket_id: string, priceCalendarList: any, sureFunc: any) {
     this.batchImportParams.type = 1;
     this.platform_price = '';
     this.title = title;
     this.product_id = product_id;
     this.ticket_id = ticket_id;
+    this.priceCalendarList = priceCalendarList;
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {
       this.searchText$.next();
@@ -97,10 +100,13 @@ export class BatchImportComponent implements OnInit {
 
   public onStartTimeChange(date: Date): void {
     this.startValue = date;
+    this.endValue = null;
   }
 
   public onEndTimeChange(date: Date): void {
     this.endValue = date;
+    this.startValue = null;
+
   }
 
   // 录入方式改变
@@ -162,20 +168,32 @@ export class BatchImportComponent implements OnInit {
       this.batchImportParams.platform_price = Number(this.platform_price) * 100;
       this.batchImportParams.date_settings = null;
       const reg = /^\d+(\.\d+)?$/;
+      const buyPriceList = this.priceCalendarList.map(i => i.buy_price);
+      const minBuyPrice = Math.min(...buyPriceList);
+      const market_price = this.priceCalendarList[0].ticket.market_price;
       if (!this.platform_price) {
         this.globalService.promptBox.open('请输入统一售价！', null, 2000, '/assets/images/warning.png');
       } else if (!reg.test(this.platform_price)) {
         this.globalService.promptBox.open('请输入正确的售价！', null, 2000, '/assets/images/warning.png');
+      } else if ((Number(this.platform_price) * 100) < (Number(minBuyPrice) / 0.94)) {
+        this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
+          this.globalService.confirmationBox.close();
+          this.requestBatchImport();
+        }, '确认保存', () => {
+          this.platform_price = '';
+        });
+      } else if ((Number(this.platform_price) * 100) > Number(market_price)) {
+        this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
       } else {
         this.requestBatchImport();
       }
     } else if (this.batchImportParams.type === 2) {// 录入方式：按日期设置
-      const dateSettingsList = this.datePriceList.map(i => ({
+      this.dateSettingsList = this.datePriceList.map(i => ({
         start_date: this.formatDate(i.startTime),
         end_date: this.formatDate(i.endTime),
         platform_price: Number(i.price) * 100,
       }));
-      this.batchImportParams.date_settings = JSON.stringify(dateSettingsList);
+      this.batchImportParams.date_settings = JSON.stringify(this.dateSettingsList);
       this.batchImportParams.platform_price = null;
       this.validDataPrompt();
     } else {// 录入方式：按建议收件
@@ -222,7 +240,48 @@ export class BatchImportComponent implements OnInit {
         }
       }
       if (validSwitch) {// 校验成功之后调用接口
-        this.requestBatchImport();
+        let validPriceSwitch = true;
+        for (const value of this.priceCalendarList) {
+          for (const item of this.dateSettingsList) {
+            if (value.date >= item.start_date &&
+              value.date <= item.end_date) {
+              if (Number(item.platform_price) > Number(value.ticket.market_price)) {
+                this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
+                validPriceSwitch = false;
+                break;
+              }
+            }
+          }
+          if (!validPriceSwitch) {
+            break;
+          }
+        }
+
+        if (validPriceSwitch) {
+          let validBuyPriceSwitch = true;
+          for (const value of this.priceCalendarList) {
+            for (const item of this.dateSettingsList) {
+              if (value.date >= item.start_date &&
+                value.date <= item.end_date) {
+                const newList = [];
+                if (Number(item.platform_price) < (Number(Math.min(...newList)) / 0.94)) {
+                  this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
+                    this.globalService.confirmationBox.close();
+                    this.requestBatchImport();
+                  }, '确认保存');
+                  validBuyPriceSwitch = false;
+                  break;
+                }
+              }
+            }
+            if (!validBuyPriceSwitch) {
+              break;
+            }
+          }
+          if (validBuyPriceSwitch) {
+            this.requestBatchImport();
+          }
+        }
       }
     }
   }

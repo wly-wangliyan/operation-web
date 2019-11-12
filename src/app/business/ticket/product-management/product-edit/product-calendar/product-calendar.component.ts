@@ -74,7 +74,7 @@ export class ProductCalendarComponent implements OnInit {
 
   // 批量导入
   public onOpenBatchImport() {
-    this.batchImport.open(null, this.product_id, this.ticket_id, () => {
+    this.batchImport.open(null, this.product_id, this.ticket_id, this.priceCalendarList, () => {
       timer(1000).subscribe(() => {
         this.searchText$.next();
       });
