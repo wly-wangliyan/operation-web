@@ -1,0 +1,17 @@
+.img-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.img-box {
+    width: 90px;
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.img-box img {
+    width: 90px;
+}

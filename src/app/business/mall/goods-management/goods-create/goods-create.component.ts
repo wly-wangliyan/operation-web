@@ -442,19 +442,20 @@ export class GoodsCreateComponent implements OnInit {
         this.onSubmitSubscription = null;
         if (!this.globalService.httpErrorProcess(err)) {
             if (err.status === 422) {
-                this.globalService.promptBox.open('参数错误，可能文件格式错误！');
+                this.globalService.promptBox.open('参数错误，可能文件格式错误！', null, 2000, null, false);
             } else if (err.status === 413) {
-                this.globalService.promptBox.open('上传资源文件太大，服务器无法保存！');
+                this.globalService.promptBox.open('上传资源文件太大，服务器无法保存！', null, 2000, null, false);
             } else if (err.status === 500) {
-                this.globalService.promptBox.open('服务器出问题了，请刷新后再次尝试！');
+                this.globalService.promptBox.open('服务器出问题了，请刷新后再次尝试！', null, 2000, null, false);
             } else if (err.status === 404) {
-                this.globalService.promptBox.open('请求地址错误！');
+                this.globalService.promptBox.open('请求地址错误！', null, 2000, null, false);
             }
         }
     }
 
     // 处理成功处理
     private processSuccess() {
+        this.onSubmitSubscription = null;
         const msg = this.commodity_id ? '编辑成功！' : '新建成功！';
         this.globalService.promptBox.open(msg, () => {
             this.router.navigate([this.listRelativePath], {relativeTo: this.route});

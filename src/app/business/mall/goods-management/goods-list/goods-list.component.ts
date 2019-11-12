@@ -2,9 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
 import { differenceInCalendarDays } from 'date-fns';
+import { HttpErrorEntity } from '../../../../core/http.service';
 import { GlobalService } from '../../../../core/global.service';
 import {
-    CommodityEntity, CommodityOperationParams, CommoditySearchParams,
+    CommodityEntity,
+    CommodityOperationParams,
+    CommoditySearchParams,
     GoodsManagementHttpService
 } from '../goods-management-http.service';
 
@@ -148,7 +151,20 @@ export class GoodsListComponent implements OnInit, OnDestroy {
             });
         }, err => {
             if (!this.globalService.httpErrorProcess(err)) {
-                this.globalService.promptBox.open(failMsg);
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                    for (const content of error.errors) {
+                        if (content.field === 'operation' && content.code === 'missing_field') {
+                            failMsg = data.sales_status === this.saleStatus[0] ? '下架参数缺失！' : '上架参数缺失！';
+                        } else if (content.field === 'operation' && content.code === 'invalid') {
+                            failMsg = data.sales_status === this.saleStatus[0] ? '下架参数错误或无效！' : '上架参数错误或无效！';
+                        } else if (content.resource === 'operation' && content.code === 'not_allow') {
+                            failMsg = '不允许上架！';
+                        }
+                    }
+                }
+                this.globalService.promptBox.open(failMsg, null, 2000, null, false);
             }
         });
     }
@@ -162,7 +178,11 @@ export class GoodsListComponent implements OnInit, OnDestroy {
                     this.searchText$.next();
                 });
             }, err => {
-                this.globalService.httpErrorProcess(err);
+                if (!this.globalService.httpErrorProcess(err)) {
+                    if (err.status === 404) {
+                        this.globalService.promptBox.open('请求地址错误！', null, 2000, null, false);
+                    }
+                }
             });
         });
     }
@@ -175,7 +195,7 @@ export class GoodsListComponent implements OnInit, OnDestroy {
             new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
 
         if (sTimestamp > eTimeStamp) {
-            this.globalService.promptBox.open('上架开始时间不能大于结束时间！');
+            this.globalService.promptBox.open('上架开始时间不能大于结束时间！', null, 2000, null, false);
             return false;
         }
 
