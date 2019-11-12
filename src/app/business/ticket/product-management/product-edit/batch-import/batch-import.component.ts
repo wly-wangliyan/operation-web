@@ -100,13 +100,18 @@ export class BatchImportComponent implements OnInit {
 
   public onStartTimeChange(date: Date): void {
     this.startValue = date;
-    this.endValue = null;
   }
 
   public onEndTimeChange(date: Date): void {
     this.endValue = date;
-    this.startValue = null;
+  }
 
+  public onStartTimeOpen(date: Date, i: number): void {
+    this.endValue = this.datePriceList[i].endTime;
+  }
+
+  public onEndTimeOpen(date: Date, i: number): void {
+    this.startValue = this.datePriceList[i].startTime;
   }
 
   // 录入方式改变
