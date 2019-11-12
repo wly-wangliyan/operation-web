@@ -53,12 +53,13 @@
     overflow: hidden;
 }
 
-.table-container .row-message {
-    padding: 0 0.75rem;
+.table, .table-container .row-message {
+    width: calc(100% - 40px);
+    margin: 0 auto;
 }
 
-.table {
-    margin: 0 20px;
+.table-container .row-message {
+    padding: 0 0.75rem;
 }
 
 .table th, .table td {
@@ -82,7 +83,6 @@
 
 .table td .td-content {
     height: 30px;
-    line-height: 30px;
     display: flex;
     align-items: center;
     font-size: 12px;

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs/index';
 import { isNullOrUndefined } from 'util';
+import { ValidateHelper } from '../../../../../utils/validate-helper';
+import { KeyboardHelper } from '../../../../../utils/keyboard-helper';
 import { GlobalService } from '../../../../core/global.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { ZVideoSelectComponent } from '../../../../share/components/z-video-select/z-video-select.component';
@@ -51,6 +53,11 @@ export class GoodsCreateComponent implements OnInit {
             if (!commoditySpecificationItem.is_delete) {
                 formatCommoditySpecificationList.push(commoditySpecificationItem);
             }
+        });
+        formatCommoditySpecificationList.forEach((formatItem, index) => {
+            KeyboardHelper.bindElement('unit_original_price_' + index);
+            KeyboardHelper.bindElement('unit_sell_price_' + index);
+            KeyboardHelper.bindElement('stock_' + index);
         });
         return formatCommoditySpecificationList;
     }
@@ -132,10 +139,6 @@ export class GoodsCreateComponent implements OnInit {
         }
     }
 
-    // 清除错误信息
-    public onClearErrMsg() {
-    }
-
     // 选择图片
     public onSelectedPicture(event: any) {
         this.imgErrMsgItem.isError = false;
@@ -160,13 +163,40 @@ export class GoodsCreateComponent implements OnInit {
         }
     }
 
+
+    /**
+     * 商品规格数据转换
+     * 如01转为1
+     * 1.0转为1
+     * @param {number} specificationIndex
+     * @param event
+     * @param {number} reverseType 转换类型 1：原价；2：售价；3：库存
+     */
+    public reverseSpecificationParams(specificationIndex: number, event: any, reverseType: number) {
+        const reverseCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex].specification_params;
+        if (event.target.value) {
+            switch (reverseType) {
+                case 1:
+                    reverseCommoditySpecificationItem.unit_original_price = parseFloat(event.target.value);
+                    break;
+                case 2:
+                    reverseCommoditySpecificationItem.unit_sell_price = parseFloat(event.target.value);
+                    break;
+                case 3:
+                    reverseCommoditySpecificationItem.stock = parseFloat(event.target.value);
+                    break;
+            }
+        }
+    }
+
     // 点击添加商品规格
-    public onAddCommoditySpecification(specificationIndex: number) {
+    public onAddCommoditySpecification() {
         if (!this.CheckLastCommoditySpecificationValid) {
             return;
         }
-        console.log(this.FormatCommoditySpecificationList);
-        this.commoditySpecificationList.push(new SpecificationParamsItem());
+        if (this.checkCommodityParamsValid(false)) {
+            this.commoditySpecificationList.push(new SpecificationParamsItem());
+        }
     }
 
     // 点击移除商品规格
@@ -180,6 +210,30 @@ export class GoodsCreateComponent implements OnInit {
         });
     }
 
+    // 初始化错误消息
+    public initErrMsg(initErrMsgType?: string) {
+        if (initErrMsgType) {
+            switch (initErrMsgType) {
+                case 'commodity_name':
+                    this.commodityNameErrMsgItem = new ErrMessageItem();
+                    break;
+                case 'subtitle':
+                    this.subtitleErrMsgItem = new ErrMessageItem();
+                    break;
+                case 'specification':
+                    this.specificationErrMsgItem = new ErrMessageItem();
+                    break;
+            }
+        } else {
+            this.commodityNameErrMsgItem = new ErrMessageItem();
+            this.subtitleErrMsgItem = new ErrMessageItem();
+            this.imgErrMsgItem = new ErrMessageItem();
+            this.videoErrMsgItem = new ErrMessageItem();
+            this.specificationErrMsgItem = new ErrMessageItem();
+            this.editorErrMsgItem = new ErrMessageItem();
+        }
+    }
+
     // 点击提交添加/编辑商品数据
     public onAddOrEditCommoditySubmit() {
 
@@ -188,6 +242,76 @@ export class GoodsCreateComponent implements OnInit {
     // 点击取消添加/编辑
     public onCancelClick() {
 
+    }
+
+    // 校验产品参数是否有效
+    private checkCommodityParamsValid(isCheckCommodity: boolean = true): boolean {
+        const stockReg = /^((0|[1-9]\d{0,3})|10000)$/; // 库存可输入0-10000数字
+        this.initErrMsg();
+
+        if (isCheckCommodity) {
+            if (this.commodityInfo.commodity_name) {
+                if (!ValidateHelper.Length(this.commodityInfo.commodity_name, 1, 20)) {
+                    this.commodityNameErrMsgItem.isError = true;
+                    this.commodityNameErrMsgItem.errMes = '产品名称格式错误，请输入1-20个字标题！';
+                    return false;
+                }
+            }
+            if (this.commodityInfo.subtitle) {
+                if (!ValidateHelper.Length(this.commodityInfo.subtitle, 0, 80)) {
+                    this.subtitleErrMsgItem.isError = true;
+                    this.subtitleErrMsgItem.errMes = '副标题格式错误，请输入0-80个字副标题！';
+                    return false;
+                }
+            }
+            if (!this.CheckImgValid) {
+                this.imgErrMsgItem.isError = true;
+                this.imgErrMsgItem.errMes = '请选择产品图片！';
+                return false;
+            }
+            if (!this.CheckEditorValid) {
+                this.editorErrMsgItem.isError = true;
+                this.editorErrMsgItem.errMes = '请填写产品描述！';
+                return false;
+            }
+        }
+        if (!this.CheckCommoditySpecificationValid) {
+            this.specificationErrMsgItem.isError = true;
+            this.specificationErrMsgItem.errMes = '请填写产品规格！';
+            return false;
+        }
+        const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[this.FormatCommoditySpecificationList.length - 1].specification_params;
+        if (!ValidateHelper.Length(lastCommoditySpecificationItem.specification_name, 1, 10)) {
+            this.specificationErrMsgItem.isError = true;
+            this.specificationErrMsgItem.errMes = '规格名称格式错误，请输入1-10字规格名称！';
+            return false;
+        }
+        for (let specificationIndex = 0; specificationIndex < this.FormatCommoditySpecificationList.length - 1; specificationIndex++) {
+            const specificationParams = this.FormatCommoditySpecificationList[specificationIndex].specification_params;
+            if (lastCommoditySpecificationItem.specification_name === specificationParams.specification_name) {
+                this.specificationErrMsgItem.isError = true;
+                this.specificationErrMsgItem.errMes = '规格名称不能相同，请重新输入！';
+                return false;
+            }
+        }
+        if ((lastCommoditySpecificationItem.unit_original_price < 0.01) ||
+            (lastCommoditySpecificationItem.unit_original_price > 999999.99)) {
+            this.specificationErrMsgItem.isError = true;
+            this.specificationErrMsgItem.errMes = '原价可输入0.01-999999.99！';
+            return false;
+        }
+        if ((lastCommoditySpecificationItem.unit_sell_price < 0.01) ||
+            (lastCommoditySpecificationItem.unit_sell_price > 999999.99)) {
+            this.specificationErrMsgItem.isError = true;
+            this.specificationErrMsgItem.errMes = '售价可输入0.01-999999.99！';
+            return false;
+        }
+        if (!stockReg.test(lastCommoditySpecificationItem.stock.toString())) {
+            this.specificationErrMsgItem.isError = true;
+            this.specificationErrMsgItem.errMes = '库存可输入0-10000！';
+            return false;
+        }
+        return true;
     }
 }
 
