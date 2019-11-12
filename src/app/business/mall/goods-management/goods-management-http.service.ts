@@ -20,17 +20,6 @@ export class CommoditySearchParams extends EntityBase {
 }
 
 /**
- * 商品操作参数
- */
-export class CommodityParams extends EntityBase {
-    public commodity_name: string = undefined; // 商品名称
-    public subtitle: string = undefined; // 副标题
-    public commodity_images: Array<string> = []; // 商品图片列表 ['[http://sdas','http://sdas](http://sdas','http://sdas)']
-    public commodity_videos: Array<string> = []; // 商品视频
-    public commodity_description: string = undefined; // 商品描述
-}
-
-/**
  * 商品上架/下架参数
  */
 export class CommodityOperationParams extends EntityBase {
@@ -79,6 +68,22 @@ export class CommodityEntity extends EntityBase {
             return SpecificationEntity;
         }
         return null;
+    }
+
+    public toEditJson(): any {
+        const json = this.json();
+        delete json.commodity_id;
+        delete json.shelf_time;
+        delete json.removal_time;
+        delete json.sales_status;
+        delete json.is_deleted;
+        delete json.specifications;
+        delete json.created_time;
+        delete json.updated_time;
+        delete json.unit_sell_price_section;
+        delete json.unit_original_price_section;
+        delete json.sold_amount_sum;
+        return json;
     }
 }
 
@@ -149,24 +154,24 @@ export class GoodsManagementHttpService {
 
     /**
      * 创建商品
-     * @param {CommodityParams} createParams
-     * @returns {Observable<HttpResponse<any>>}
+     * @param {CommodityEntity} createParams
+     * @returns {Observable<CommodityEntity>}
      */
-    public requestCreateCommodityData(createParams: CommodityParams): Observable<HttpResponse<any>> {
+    public requestCreateCommodityData(createParams: CommodityEntity): Observable<CommodityEntity> {
         const url = this.domain + `/admin/commodities`;
-        const body = createParams.json();
-        return this.httpService.post(url, body);
+        const body = createParams.toEditJson();
+        return this.httpService.post(url, body).pipe(map(res => CommodityEntity.Create(res.body)));
     }
 
     /**
      * 修改商品
      * @param {string} commodity_id
-     * @param {CommodityParams} editParams
+     * @param {CommodityEntity} editParams
      * @returns {Observable<HttpResponse<any>>}
      */
-    public requestEditCommodityData(commodity_id: string, editParams: CommodityParams): Observable<HttpResponse<any>> {
+    public requestEditCommodityData(commodity_id: string, editParams: CommodityEntity): Observable<HttpResponse<any>> {
         const url = this.domain + `/admin/commodities/${commodity_id}`;
-        const body = editParams.json();
+        const body = editParams.toEditJson();
         return this.httpService.put(url, body);
     }
 

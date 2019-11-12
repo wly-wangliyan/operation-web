@@ -5,10 +5,16 @@ import { isNullOrUndefined } from 'util';
 import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { KeyboardHelper } from '../../../../../utils/keyboard-helper';
 import { GlobalService } from '../../../../core/global.service';
+import { HttpErrorEntity } from '../../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { ZVideoSelectComponent } from '../../../../share/components/z-video-select/z-video-select.component';
 import { GoodsEditorComponent } from './goods-editor/goods-editor.component';
-import { CommodityEntity, GoodsManagementHttpService, SpecificationEntity } from '../goods-management-http.service';
+import {
+    CommodityEntity,
+    GoodsManagementHttpService,
+    SpecificationEntity,
+    SpecificationParams
+} from '../goods-management-http.service';
 
 @Component({
     selector: 'app-goods-create',
@@ -34,6 +40,8 @@ export class GoodsCreateComponent implements OnInit {
     public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
 
     private commodity_id: string;
+
+    private onSubmitSubscription: any;
 
     @ViewChild('goodsImg', {static: false}) public goodsImgSelectComponent: ZPhotoSelectComponent;
 
@@ -236,12 +244,83 @@ export class GoodsCreateComponent implements OnInit {
 
     // 点击提交添加/编辑商品数据
     public onAddOrEditCommoditySubmit() {
+        if (this.onSubmitSubscription || !this.checkCommodityParamsValid()) {
+            return;
+        }
+        this.onSubmitSubscription = this.goodsImgSelectComponent.upload().subscribe(() => {
+            const videoList = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
+            const createOrEditCommodity = () => {
+                this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
+                this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
 
+                if (this.commodity_id) {
+
+                } else {
+                    this.requestCreateCommodity();
+                }
+            };
+            if (videoList.length > 0) {
+                this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
+                    this.commodityInfo.commodity_videos = videoList;
+                    createOrEditCommodity();
+                }, err => {
+                    this.upLoadErrMsg(err);
+                });
+            } else {
+                createOrEditCommodity();
+            }
+        }, err => {
+            this.upLoadErrMsg(err);
+        });
     }
 
     // 点击取消添加/编辑
     public onCancelClick() {
+        const navigateUrl = this.commodity_id ? '../../list' : '../list';
+        this.router.navigate([navigateUrl], {relativeTo: this.route});
+    }
 
+    // 创建商品
+    private requestCreateCommodity() {
+        this.goodsManagementHttpService.requestCreateCommodityData(this.commodityInfo).subscribe(data => {
+            this.requestModifyCommoditySpecification(data.commodity_id);
+        }, err => {
+            this.processError(err);
+        });
+    }
+
+    // 创建/修改规格
+    private requestModifyCommoditySpecification(commodity_id: string) {
+        const delete_specification_ids = [];
+        const specificationParams = new SpecificationParams();
+        specificationParams.specification_objs = [];
+        specificationParams.delete_specification_ids = '';
+        this.commoditySpecificationList.forEach(commoditySpecificationItem => {
+            if (!commoditySpecificationItem.is_delete) {
+                specificationParams.specification_objs.push(commoditySpecificationItem.specification_params);
+            } else if (!commoditySpecificationItem.is_create) {
+                delete_specification_ids.push(commoditySpecificationItem.specification_params.specification_id);
+            }
+        });
+
+        this.goodsManagementHttpService.requestModifyCommoditySpecificationData(commodity_id, specificationParams).subscribe(() => {
+            this.processSuccess();
+        }, err => {
+            this.onSubmitSubscription = null;
+            if (!this.globalService.httpErrorProcess(err)) {
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                    for (const content of error.errors) {
+                        if (content.field === 'specification_objs' && content.code === 'invalid') {
+                            this.globalService.promptBox.open('产品规格对象列表错误或无效！', null, 2000, null, false);
+                        } else if (content.field === 'delete_specification_ids' && content.code === 'invalid') {
+                            this.globalService.promptBox.open('删除产品规格参数错误或无效！', null, 2000, null, false);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     // 校验产品参数是否有效
@@ -312,6 +391,69 @@ export class GoodsCreateComponent implements OnInit {
             return false;
         }
         return true;
+    }
+
+    // 上传图片/视频错误信息处理
+    private upLoadErrMsg(err: any) {
+        this.onSubmitSubscription = null;
+        if (!this.globalService.httpErrorProcess(err)) {
+            if (err.status === 422) {
+                this.globalService.promptBox.open('参数错误，可能文件格式错误！');
+            } else if (err.status === 413) {
+                this.globalService.promptBox.open('上传资源文件太大，服务器无法保存！');
+            } else if (err.status === 500) {
+                this.globalService.promptBox.open('服务器出问题了，请刷新后再次尝试！');
+            } else if (err.status === 404) {
+                this.globalService.promptBox.open('请求地址错误！');
+            }
+        }
+    }
+
+    // 处理成功处理
+    private processSuccess() {
+        let msg = '新建成功！';
+        let navigateUrl = '../../list';
+        if (this.commodity_id) {
+            msg = '编辑成功！';
+            navigateUrl = '../../list';
+        }
+        this.globalService.promptBox.open(msg, () => {
+            this.router.navigate([navigateUrl], {relativeTo: this.route});
+        });
+    }
+
+    // 处理错误消息
+    private processError(err: any) {
+        this.onSubmitSubscription = null;
+        if (!this.globalService.httpErrorProcess(err)) {
+            if (err.status === 422) {
+                const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                for (const content of error.errors) {
+                    if (content.field === 'commodity_name' && content.code === 'missing_field') {
+                        this.globalService.promptBox.open('产品名称未填写！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_name' && content.code === 'invalid') {
+                        this.globalService.promptBox.open('产品名称错误或无效！', null, 2000, null, false);
+                    } else if (content.field === 'subtitle' && content.code === 'missing_field') {
+                        this.globalService.promptBox.open('副标题未填写！', null, 2000, null, false);
+                    } else if (content.field === 'subtitle' && content.code === 'invalid') {
+                        this.globalService.promptBox.open('副标题错误或无效！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_images' && content.code === 'missing_field') {
+                        this.globalService.promptBox.open('产品图片未选择！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_images' && content.code === 'invalid') {
+                        this.globalService.promptBox.open('产品图片错误或无效！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_videos' && content.code === 'missing_field') {
+                        this.globalService.promptBox.open('视频未选择！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_videos' && content.code === 'invalid') {
+                        this.globalService.promptBox.open('视频错误或无效！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_description' && content.code === 'missing_field') {
+                        this.globalService.promptBox.open('产品描述未填写！', null, 2000, null, false);
+                    } else if (content.field === 'commodity_description' && content.code === 'invalid') {
+                        this.globalService.promptBox.open('产品描述错误或无效！', null, 2000, null, false);
+                    }
+                }
+            }
+        }
     }
 }
 

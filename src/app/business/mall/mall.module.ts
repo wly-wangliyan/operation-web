@@ -12,6 +12,11 @@ const uploadToken: UploadConfig = {
         url: `${environment.STORAGE_DOMAIN}/storages/images`,
         source: 'park',
     },
+    video_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/mallvideos`,
+        source: 'park',
+    },
 };
 
 @NgModule({
