@@ -497,11 +497,12 @@ export class ProductService {
   /**
    * 更新门票列表
    * @param string product_id 产品id
+   * @param number flag 区分更新数据与获取门票列表
    * @returns Observable<TicketLinkResponse>
    */
-  public requesTicketsList(product_id: string): Observable<TicketLinkResponse> {
+  public requesTicketsList(product_id: string, flag: number): Observable<TicketLinkResponse> {
     const httpUrl = `${this.domain}/products/${product_id}/tickets`;
-    return this.httpService.get(httpUrl).pipe(map(res => new TicketLinkResponse(res)));
+    return this.httpService.get(httpUrl, { flag }).pipe(map(res => new TicketLinkResponse(res)));
   }
 
   /**

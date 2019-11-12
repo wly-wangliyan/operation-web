@@ -167,14 +167,15 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.chooseLabel.open(this.checkLabelNamesList.map(i => i.tag_id), () => {
       timer(1000).subscribe(() => {
         this.checkLabelNamesList = this.chooseLabel.checkedLabelList;
+        this.tagNameErrors = '';
       });
     });
   }
 
 
   // 更新数据
-  public onUpdateData() {
-    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+  public onUpdateData(flag: number) {
+    this.productService.requesTicketsList(this.product_id, flag).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
         isShowInsutructions: false,
@@ -241,7 +242,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.globalService.promptBox.open('购票须知保存成功！');
       item.editBasePriceSwitch = true;
       this.isChangeTicketInsutruction = false;
-      this.onUpdateData();
+      this.onUpdateData(2);
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
@@ -276,7 +277,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public onOpenPriceCalendar(ticket_id) {
     this.productPriceCalendar.open(null, this.product_id, ticket_id, () => {
       timer(1000).subscribe(() => {
-        this.onUpdateData();
+        this.onUpdateData(2);
       });
     });
   }
@@ -332,10 +333,10 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       const text = is_saled ? '下架' : '上架';
       this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
         this.globalService.promptBox.open(`${text}成功`);
-        this.onUpdateData();
+        this.onUpdateData(2);
       }, err => {
         this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
-        this.onUpdateData();
+        this.onUpdateData(2);
       });
     }
 
@@ -345,7 +346,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public onIsTopProduct(product_id, ticket_id, is_top) {
     const text = is_top === 1 ? '置顶' : '取消置顶';
     this.productService.requestIsTopProduct(product_id, ticket_id, is_top).subscribe(res => {
-      this.onUpdateData();
+      this.onUpdateData(2);
       this.globalService.promptBox.open(`${text}成功！`);
     }, err => {
       this.globalService.promptBox.open(`${text}失败，请重试!`, null, 2000, '/assets/images/warning.png');
@@ -359,7 +360,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productNameErrors = '';
     this.trafficGuideErrors = '';
     this.noticeErrors = '';
-    this.productIntroduceErrors = '';
+    this.tagNameErrors = '';
   }
 
   // 选择图片时校验图片格式

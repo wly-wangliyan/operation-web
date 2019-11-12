@@ -92,7 +92,9 @@ export class ChooseLabelComponent implements OnInit {
   // 保存选择的标签
   public onSaveTagsId() {
     this.checkedLabelList = this.checkLabelList.filter(i => i.checked);
-    if (this.checkedLabelList.length > 3) {
+    if (this.checkedLabelList.length === 0) {
+      this.globalService.promptBox.open(`请选择标签!`, null, 2000, '/assets/images/warning.png');
+    } else if (this.checkedLabelList.length > 3) {
       this.globalService.promptBox.open(`最多可添加3个标签!`, null, 2000, '/assets/images/warning.png');
     } else {
       if (this.sureCallback) {

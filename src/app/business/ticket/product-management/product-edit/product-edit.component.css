@@ -360,8 +360,9 @@ input[type=file]:focus {
 }
 
 .tags {
-  margin-top: -10px;
+  margin-bottom: 0;
   margin-left: -10px;
+  height: 34px;
 }
 
 .tag {

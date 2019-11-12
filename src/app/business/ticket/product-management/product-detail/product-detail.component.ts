@@ -100,8 +100,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   // 更新数据
-  public onUpdateData() {
-    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+  public onUpdateData(flag: number) {
+    this.productService.requesTicketsList(this.product_id, flag).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
         isShowInsutructions: false,
