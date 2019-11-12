@@ -45,7 +45,7 @@
                         <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                             [maxLength]="6" [isCutCoverImg]="true" [imageWidth]="100"
                                             [imageHeight]="100" [imageUrls]="commodityInfo.commodity_images"
-                                            [minCropBoxWidth]="800" [minCropBoxHeight]="800"
+                                            [minCropBoxWidth]="400" [minCropBoxHeight]="400"
                                             (selectedImgChange)="onSelectedPicture($event)" file_id="goodsImg"
                                             #goodsImg></app-z-photo-select>
                         <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</p>
