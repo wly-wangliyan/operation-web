@@ -14,7 +14,7 @@ const uploadToken: UploadConfig = {
     },
     video_config: {
         reportProcess: true,
-        url: `${environment.STORAGE_DOMAIN}/storages/mallvideos`,
+        url: `${environment.STORAGE_DOMAIN}/storages/mall/videos`,
         source: 'park',
     },
 };

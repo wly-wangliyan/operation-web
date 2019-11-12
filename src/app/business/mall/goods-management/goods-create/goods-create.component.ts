@@ -23,6 +23,10 @@ import {
 })
 export class GoodsCreateComponent implements OnInit {
 
+    public levelTwoName = '新建产品';
+
+    public listRelativePath = '../list';
+
     public commodityInfo: CommodityEntity = new CommodityEntity();
 
     public commoditySpecificationList: Array<SpecificationParamsItem> = []; // 视频规格数据列表
@@ -76,12 +80,14 @@ export class GoodsCreateComponent implements OnInit {
      * @constructor
      */
     public get CheckLastCommoditySpecificationValid(): boolean {
-        const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[this.FormatCommoditySpecificationList.length - 1].specification_params;
-        if (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
-            isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
-            isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
-            isNullOrUndefined(lastCommoditySpecificationItem.stock)) {
-            return false;
+        if (this.FormatCommoditySpecificationList.length > 0) {
+            const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[this.FormatCommoditySpecificationList.length - 1].specification_params;
+            if (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.stock)) {
+                return false;
+            }
         }
         return true;
     }
@@ -107,13 +113,15 @@ export class GoodsCreateComponent implements OnInit {
      * @constructor
      */
     public get CheckCommoditySpecificationValid(): boolean {
-        const formatCommoditySpecificationLen = this.FormatCommoditySpecificationList.length - 1;
-        const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[formatCommoditySpecificationLen].specification_params;
-        if ((formatCommoditySpecificationLen === 0) && (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
-                isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
-                isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
-                isNullOrUndefined(lastCommoditySpecificationItem.stock))) {
-            return false;
+        if (this.FormatCommoditySpecificationList.length > 0) {
+            const formatCommoditySpecificationLen = this.FormatCommoditySpecificationList.length - 1;
+            const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[formatCommoditySpecificationLen].specification_params;
+            if ((formatCommoditySpecificationLen === 0) && (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
+                    isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
+                    isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
+                    isNullOrUndefined(lastCommoditySpecificationItem.stock))) {
+                return false;
+            }
         }
         return true;
     }
@@ -141,7 +149,12 @@ export class GoodsCreateComponent implements OnInit {
 
     public ngOnInit() {
         if (this.commodity_id) {
+            this.levelTwoName = '编辑产品';
+            this.listRelativePath = '../../list';
 
+            timer(150).subscribe(() => {
+                this.requestCommodityById();
+            });
         } else {
             this.commoditySpecificationList.push(new SpecificationParamsItem());
         }
@@ -203,7 +216,9 @@ export class GoodsCreateComponent implements OnInit {
             return;
         }
         if (this.checkCommodityParamsValid(false)) {
-            this.commoditySpecificationList.push(new SpecificationParamsItem());
+            timer(0).subscribe(() => {
+                this.commoditySpecificationList.push(new SpecificationParamsItem());
+            });
         }
     }
 
@@ -248,20 +263,19 @@ export class GoodsCreateComponent implements OnInit {
             return;
         }
         this.onSubmitSubscription = this.goodsImgSelectComponent.upload().subscribe(() => {
-            const videoList = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
             const createOrEditCommodity = () => {
                 this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
 
                 if (this.commodity_id) {
-
+                    this.requestEditCommodity();
                 } else {
                     this.requestCreateCommodity();
                 }
             };
-            if (videoList.length > 0) {
+            if (this.goodsVideoSelectComponent.videoList.length > 0) {
                 this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
-                    this.commodityInfo.commodity_videos = videoList;
+                    this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
                     createOrEditCommodity();
                 }, err => {
                     this.upLoadErrMsg(err);
@@ -276,14 +290,39 @@ export class GoodsCreateComponent implements OnInit {
 
     // 点击取消添加/编辑
     public onCancelClick() {
-        const navigateUrl = this.commodity_id ? '../../list' : '../list';
-        this.router.navigate([navigateUrl], {relativeTo: this.route});
+        this.router.navigate([this.listRelativePath], {relativeTo: this.route});
+    }
+
+    // 获取商品详情
+    private requestCommodityById() {
+        this.goodsManagementHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
+            this.commodityInfo = data;
+            this.commodityInfo.specifications.forEach(specificationItem => {
+                const tempSpecificationItem = new SpecificationParamsItem();
+                tempSpecificationItem.specification_params = new SpecificationEntity(specificationItem);
+                tempSpecificationItem.is_create = false;
+                this.commoditySpecificationList.push(tempSpecificationItem);
+            });
+            CKEDITOR.instances.goodsEditor.destroy(true);
+            CKEDITOR.replace('goodsEditor').setData(this.commodityInfo.commodity_description);
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
     // 创建商品
     private requestCreateCommodity() {
         this.goodsManagementHttpService.requestCreateCommodityData(this.commodityInfo).subscribe(data => {
             this.requestModifyCommoditySpecification(data.commodity_id);
+        }, err => {
+            this.processError(err);
+        });
+    }
+
+    // 修改商品
+    private requestEditCommodity() {
+        this.goodsManagementHttpService.requestEditCommodityData(this.commodity_id, this.commodityInfo).subscribe(() => {
+            this.requestModifyCommoditySpecification(this.commodity_id);
         }, err => {
             this.processError(err);
         });
@@ -316,6 +355,11 @@ export class GoodsCreateComponent implements OnInit {
                             this.globalService.promptBox.open('产品规格对象列表错误或无效！', null, 2000, null, false);
                         } else if (content.field === 'delete_specification_ids' && content.code === 'invalid') {
                             this.globalService.promptBox.open('删除产品规格参数错误或无效！', null, 2000, null, false);
+                        } else if (content.resource === 'specifications' && content.code === 'errors') {
+                            this.globalService.promptBox.open('产品规格保存失败，请重新编辑保存！', () => {
+                                const navigateUrl = this.commodity_id ? `../../edit/${commodity_id}` : `../edit/${commodity_id}`;
+                                this.router.navigate([navigateUrl], {relativeTo: this.route});
+                            }, 2000, null, false);
                         }
                     }
                 }
@@ -411,14 +455,9 @@ export class GoodsCreateComponent implements OnInit {
 
     // 处理成功处理
     private processSuccess() {
-        let msg = '新建成功！';
-        let navigateUrl = '../../list';
-        if (this.commodity_id) {
-            msg = '编辑成功！';
-            navigateUrl = '../../list';
-        }
+        const msg = this.commodity_id ? '编辑成功！' : '新建成功！';
         this.globalService.promptBox.open(msg, () => {
-            this.router.navigate([navigateUrl], {relativeTo: this.route});
+            this.router.navigate([this.listRelativePath], {relativeTo: this.route});
         });
     }
 

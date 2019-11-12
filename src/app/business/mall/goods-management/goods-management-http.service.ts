@@ -109,6 +109,22 @@ export class SpecificationEntity extends EntityBase {
         return null;
     }
 
+    constructor(source?: SpecificationEntity) {
+        super();
+        if (source) {
+            this.specification_id = source.specification_id;
+            this.commodity = source.commodity;
+            this.specification_name = source.specification_name;
+            this.unit_original_price = source.unit_original_price;
+            this.unit_sell_price = source.unit_sell_price;
+            this.stock = source.stock;
+            this.sold_amount = source.sold_amount;
+            this.specification_id = source.specification_id;
+            this.specification_id = source.specification_id;
+            this.specification_id = source.specification_id;
+        }
+    }
+
     public toEditJson(): any {
         const json = this.json();
         delete json.commodity;
@@ -182,7 +198,11 @@ export class GoodsManagementHttpService {
      */
     public requestCommodityByIdData(commodity_id: string): Observable<CommodityEntity> {
         const url = this.domain + `/admin/commodities/${commodity_id}`;
-        return this.httpService.get(url).pipe(map(res => CommodityEntity.Create(res.body)));
+        return this.httpService.get(url).pipe(map(res => {
+            const tempCommodity = CommodityEntity.Create(res.body);
+            tempCommodity.specifications = res.body.specifications;
+            return tempCommodity;
+        }));
     }
 
     /**
