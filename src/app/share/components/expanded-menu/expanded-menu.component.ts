@@ -148,6 +148,7 @@ export class ExpandedMenuComponent implements OnInit {
         this.routeLinkList = [];
         const menusItem: Array<SideMenuItem> = [];
         menusItem.push(this.generateGoodsManagementMenu());
+        menusItem.push(this.generateGoodsOrderMenu());
         return menusItem;
     }
 
@@ -295,6 +296,14 @@ export class ExpandedMenuComponent implements OnInit {
         brokerageMenu.icon = '/assets/images/menu_part.png';
         this.routeLinkList.push(brokerageMenu);
         return brokerageMenu;
+    }
+
+    // 商城 》产品订单
+    private generateGoodsOrderMenu(): SideMenuItem {
+        const orderMenu = new SideMenuItem('产品订单', '/main/mall/goods-order');
+        orderMenu.icon = '/assets/images/menu_order.png';
+        this.routeLinkList.push(orderMenu);
+        return orderMenu;
     }
 
 

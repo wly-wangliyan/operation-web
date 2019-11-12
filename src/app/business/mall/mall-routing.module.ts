@@ -14,6 +14,11 @@ const routes: Routes = [{
             loadChildren: () => import('./goods-management/goods-management.module').then(m => m.GoodsManagementModule),
             canLoad: [AuthGuardService]
         },
+        {
+            path: 'goods-order',
+            loadChildren: () => import('./goods-order-management/goods-order-management.module').then(m => m.GoodsOrderManagementModule),
+            canLoad: [AuthGuardService]
+        },
         {path: '**', redirectTo: 'goods-management', pathMatch: 'full'}
     ]
 }];

@@ -1,0 +1,59 @@
+<!--编辑物流信息-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">物流设置</span>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form *ngIf="currentOrder" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>物流公司</span>
+                    </label>
+                    <div class=" control-input">
+                        <input class="form-control" placeholder="请输入1-10字物流公司名称" [(ngModel)]="currentOrder.delivery_company"
+                               name="delivery_company" maxlength="10" appIgnoreSpace required>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>物流单号</span>
+                    </label>
+                    <div class=" control-input">
+                        <input class="form-control" placeholder="请输入物流单号" [(ngModel)]="currentOrder.delivery_order" maxlength="50"
+                               name="delivery_order" (keypress)="inputEnglishNumLimit($event)" appIgnoreSpace required>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>邮费</span>
+                    </label>
+                    <div class=" control-input">
+                        <input class="form-control" placeholder="请输入邮费金额" [(ngModel)]="postage" name="postage" (input)="errMes=''"
+                               (change)="onAmountChange($event)" (keypress)="inputNumberLimit($event)" maxlength="7" appIgnoreSpace required>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errMes">{{errMes}}</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

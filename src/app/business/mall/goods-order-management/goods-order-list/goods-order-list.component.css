@@ -1,0 +1,32 @@
+.search-container {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+    padding: 0;
+}
+
+.search-form .form-group {
+    margin-right: 20px !important;
+}
+
+.form-group select {
+    width: 150px;
+}
+
+.form-group .line {
+    margin: 0 8px;
+}
+
+.search-btn-group {
+    margin-top: -1px !important;
+}
+
+.img-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.img-item img {
+    margin-right: 5px;
+}
