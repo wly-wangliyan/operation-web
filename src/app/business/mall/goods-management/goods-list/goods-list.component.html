@@ -77,8 +77,8 @@
                             </a>
                         </div>
                     </td>
-                    <td>{{commodity.unit_original_price_section}}</td>
-                    <td>{{commodity.unit_sell_price_section}}</td>
+                    <td>{{commodity.unit_original_price_section ? commodity.unit_original_price_section : '--'}}</td>
+                    <td>{{commodity.unit_sell_price_section ? commodity.unit_sell_price_section : '--'}}</td>
                     <td>{{commodity.sold_amount_sum}}</td>
                     <td>
                         <ng-container *ngIf="(commodity.sales_status ===saleStatus[0]) && commodity.shelf_time">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs/index';
 import { isNullOrUndefined } from 'util';
@@ -21,7 +21,7 @@ import {
     templateUrl: './goods-create.component.html',
     styleUrls: ['./goods-create.component.css']
 })
-export class GoodsCreateComponent implements OnInit {
+export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     public levelTwoName = '新建产品';
 
@@ -158,6 +158,10 @@ export class GoodsCreateComponent implements OnInit {
         } else {
             this.commoditySpecificationList.push(new SpecificationParamsItem());
         }
+    }
+
+    public ngOnDestroy() {
+        this.onSubmitSubscription = null;
     }
 
     // 选择图片

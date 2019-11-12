@@ -171,11 +171,11 @@ export class GoodsListComponent implements OnInit, OnDestroy {
 
     // 删除商品
     public onDeleteCommodityClick(data: CommodityEntity) {
-        this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+        this.globalService.confirmationBox.open('删除', '删除后将不可恢复，确认删除吗？', () => {
             this.globalService.confirmationBox.close();
             this.goodsManagementHttpService.requestDeleteCommodityData(data.commodity_id).subscribe(() => {
                 this.globalService.promptBox.open('删除成功', () => {
-                    this.searchText$.next();
+                    this.commodityList = this.commodityList.filter(commodity => commodity.commodity_id !== data.commodity_id);
                 });
             }, err => {
                 if (!this.globalService.httpErrorProcess(err)) {

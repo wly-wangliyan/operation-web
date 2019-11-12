@@ -269,14 +269,14 @@ export class CommodityLinkResponse extends LinkResponse {
                 if (sourceList.length === 0) {
                     return 0;
                 }
-                return Math.min.apply(null, sourceList);
+                return Math.min.apply(null, sourceList) / 100;
             };
             // 格式化数组最大值
             const formatListMaxNum = (sourceList: Array<number>): number => {
                 if (sourceList.length === 0) {
                     return 0;
                 }
-                return Math.max.apply(null, sourceList);
+                return Math.max.apply(null, sourceList) / 100;
             };
             let unitSellPriceList = [];
             let unitOriginalPriceList = [];

@@ -1,3 +1,9 @@
+.search-container {
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    padding: 0;
+}
+
 .img-item {
     display: flex;
     align-items: center;
