@@ -174,7 +174,13 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.globalService.permissionGroups.subscribe(groups => {
       this.permissionList = [];
       groups.forEach(group => {
-        this.permissionList.push(new PermissionItem(group));
+        const permissionItem = new PermissionItem(group);
+        if (group.english_name === 'management') {
+          if (!this.authService.user || !this.authService.user.is_superuser) {
+            permissionItem.isDisabled = true;
+          }
+        }
+        this.permissionList.push(permissionItem);
       });
       if (!this.isCreateEmployee) {
         this.getEmployeeInfo();

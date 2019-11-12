@@ -126,14 +126,14 @@
 
         <div class="row">
           <label class="control-label">
-            <b>&nbsp;&nbsp;</b>
+            <b>*</b>
             <span>权限组</span>
           </label>
           <div class="control-input">
             <ul>
               <li *ngFor="let permission of permissionList; let i=index">
-                <input type="checkbox" class="checkbox" [(ngModel)]="permission.isChecked" name="{{i}}"
-                  (change)="employeeErrMsg=''" id="permission_{{i}}">
+                <input type="checkbox" class="checkbox" [(ngModel)]="permission.isChecked"
+                  [disabled]="permission.isDisabled" name="{{i}}" (change)="employeeErrMsg=''" id="permission_{{i}}">
                 <label for="permission_{{i}}">{{permission.source.chinese_name}}</label>
               </li>
             </ul>

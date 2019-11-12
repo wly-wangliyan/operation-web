@@ -50,7 +50,20 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       return new Date(globalService.timeStamp * 1000);
     };
     const url = this.router.routerState.snapshot.url;
-    this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/management-setting') ? 7 : url.includes('/notice-center') ? null : 1;
+    if ((url.includes('/operation') || url.includes('/home')) && this.authService.checkPermissions(['operation'])) {
+      this.menu = 1;
+    } else if ((url.includes('/insurance') || url.includes('/home')) && this.authService.checkPermissions(['insurance'])) {
+      this.menu = 3;
+    } else if ((url.includes('/maintenance') || url.includes('/home')) && this.authService.checkPermissions(['maintenance'])) {
+      this.menu = 4;
+    } else if ((url.includes('/ticket') || url.includes('/home')) && this.authService.checkPermissions(['ticket'])) {
+      this.menu = 5;
+    } else if ((url.includes('/management-setting') || url.includes('/home')) && this.authService.checkPermissions(['management'])) {
+      this.menu = 7;
+    } else if (url.includes('/notice-center')) {
+      this.menu = null;
+    }
+    // this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/management-setting') ? 7 : url.includes('/notice-center') ? null : 1;
     this.globalService.menu_index = this.menu;
     this.intervalService.startTimer(); // 1.6启动定时
   }

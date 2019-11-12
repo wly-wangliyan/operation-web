@@ -45,6 +45,8 @@ export class PermissionItem {
 
   public isChecked = false;
 
+  public isDisabled = false;
+
   constructor(source: UserPermissionGroupEntity) {
     this.source = source;
   }

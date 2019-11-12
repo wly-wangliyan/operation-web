@@ -78,17 +78,17 @@ export class GlobalService {
    * @returns any
    */
   public get permissionGroups(): Observable<Array<UserPermissionGroupEntity>> {
-    if (isUndefined(this._permissionGroups)) {
-      return this.authService.requestPermissionGroups().pipe(map(permissionGroups => {
-        this._permissionGroups = permissionGroups;
-        return permissionGroups;
-      }));
-    } else {
-      return Observable.create(observer => {
-        observer.next(this._permissionGroups);
-        observer.complete();
-      });
-    }
+    // if (isUndefined(this._permissionGroups)) {
+    return this.authService.requestPermissionGroups().pipe(map(permissionGroups => {
+      this._permissionGroups = permissionGroups;
+      return permissionGroups;
+    }));
+    // } else {
+    //   return Observable.create(observer => {
+    //     observer.next(this._permissionGroups);
+    //     observer.complete();
+    //   });
+    // }
   }
 
   /**
