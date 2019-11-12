@@ -177,7 +177,7 @@ export class OrderManagementService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestResendMessage(order_id: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/orderstourists/${order_id}/send_short_message`;
+    const httpUrl = `${this.domain}/orders/${order_id}/send_short_message`;
     return this.httpService.post(httpUrl);
   }
 }

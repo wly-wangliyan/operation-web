@@ -76,7 +76,7 @@ export class ThirdProductDetailComponent implements OnInit {
   }
 
   // 更新数据
-  public onUpdateData(flag: number) {
+  public onUpdateData() {
     this.productService.requesThirdTicketsList(this.product_id).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
