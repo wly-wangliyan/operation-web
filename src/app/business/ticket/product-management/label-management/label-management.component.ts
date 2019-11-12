@@ -89,8 +89,6 @@ export class LabelManagementComponent implements OnInit {
     let param = {};
     if (event.previousIndex > event.currentIndex) {
       const index = event.currentIndex > 0 ? event.currentIndex : 0;
-      console.log('432', index);
-
       param = { order_num: this.labelList[index].order_num };
       if (event.currentIndex === 0 && this.labelList[index].order_num === 1) {
         param = { order_num: 0 };
