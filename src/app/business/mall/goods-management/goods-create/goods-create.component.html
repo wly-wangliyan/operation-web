@@ -136,7 +136,8 @@
                                 </td>
                                 <td>
                                     <div class="td-content operation-container">
-                                        <a [title]="'移除'" *ngIf="FormatCommoditySpecificationList.length > 1"
+                                        <a class="remove-a" [title]="'移除'"
+                                           *ngIf="FormatCommoditySpecificationList.length > 1"
                                            (click)="onDeleteCommoditySpecification(specificationIndex)">
                                             移除
                                         </a>
@@ -174,7 +175,8 @@
                 </div>
                 <div class="row">
                     <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-                            (appZDebounceClick)="onAddOrEditCommoditySubmit()" [disabled]="!commodityForm.form.valid">
+                            (appZDebounceClick)="onAddOrEditCommoditySubmit()"
+                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid">
                         保存
                     </button>
                     <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">

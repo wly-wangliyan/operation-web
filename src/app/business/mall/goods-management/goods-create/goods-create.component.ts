@@ -56,7 +56,7 @@ export class GoodsCreateComponent implements OnInit {
     }
 
     /**
-     * 校验视频规格数据列表最后一条是否有效
+     * 校验商品规格数据列表最后一条是否有效
      * @returns {boolean}
      * @constructor
      */
@@ -66,6 +66,50 @@ export class GoodsCreateComponent implements OnInit {
             isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
             isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
             isNullOrUndefined(lastCommoditySpecificationItem.stock)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 校验是否选择了图片
+     * @returns {boolean}
+     * @constructor
+     */
+    public get CheckImgValid(): boolean {
+        if (this.goodsImgSelectComponent) {
+            const images = this.goodsImgSelectComponent.imageList.map(item => item.sourceUrl);
+            if (images.length > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 校验是否填写商品规格数据
+     * @returns {boolean}
+     * @constructor
+     */
+    public get CheckCommoditySpecificationValid(): boolean {
+        const formatCommoditySpecificationLen = this.FormatCommoditySpecificationList.length - 1;
+        const lastCommoditySpecificationItem = this.FormatCommoditySpecificationList[formatCommoditySpecificationLen].specification_params;
+        if ((formatCommoditySpecificationLen === 0) && (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
+                isNullOrUndefined(lastCommoditySpecificationItem.stock))) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 校验是否填写编辑器内容
+     * @returns {boolean}
+     * @constructor
+     */
+    public get CheckEditorValid(): boolean {
+        if (!CKEDITOR.instances.goodsEditor.getData()) {
             return false;
         }
         return true;

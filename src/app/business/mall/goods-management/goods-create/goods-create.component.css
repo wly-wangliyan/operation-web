@@ -117,11 +117,11 @@
 
 .operation-container {
     justify-content: space-evenly;
-    color: #E82038;
+    color: #3E71F7;
 }
 
-.operation-container a:last-child {
-    color: #3E71F7;
+.operation-container a.remove-a {
+    color: #E82038;
 }
 
 .operation-container a.disabled {
