@@ -194,9 +194,9 @@ export class BatchImportComponent implements OnInit {
       }
     } else if (this.batchImportParams.type === 2) {// 录入方式：按日期设置
       this.dateSettingsList = this.datePriceList.map(i => ({
-        start_date: this.formatDate(i.startTime),
-        end_date: this.formatDate(i.endTime),
-        platform_price: Number(i.price) * 100,
+        start_date: i.startTime ? this.formatDate(i.startTime) : null,
+        end_date: i.startTime ? this.formatDate(i.endTime) : null,
+        platform_price: i.price ? Number(i.price) * 100 : '',
       }));
       this.batchImportParams.date_settings = JSON.stringify(this.dateSettingsList);
       this.batchImportParams.platform_price = null;

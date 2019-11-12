@@ -12,7 +12,7 @@
     <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'>
       <div class="zmy-table">
         <nz-table [nzData]="labelList" [nzShowPagination]="false" [nzFrontPagination]='false'
-          [nzNoResult]="noResultText" #labelTable>
+          [nzNoResult]="noResultText" #labelTable *ngIf='tab.key===0'>
           <thead>
             <tr>
               <th>序号</th>
@@ -21,7 +21,7 @@
               <th>操作</th>
             </tr>
           </thead>
-          <tbody *ngIf='tab.key===0'>
+          <tbody>
             <tr *ngFor="let data of labelTable.data;let i =index">
               <td>{{i+1}}</td>
               <td>{{data.tag_id}}</td>
@@ -33,8 +33,19 @@
               </td>
             </tr>
           </tbody>
-          <tbody cdkDropList (cdkDropListDropped)="onDropLabelList($event,labelTable.data)" *ngIf='tab.key===1'>
-            <tr *ngFor="let data of labelTable.data;let i =index" cdkDrag>
+        </nz-table>
+        <nz-table [nzData]="labelList" [nzShowPagination]="false" [nzFrontPagination]='false'
+          [nzNoResult]="noResultText" #labelCheckedTable *ngIf='tab.key===1'>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>ID</th>
+              <th>标签名称</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="onDropLabelList($event,labelCheckedTable.data)">
+            <tr *ngFor="let data of labelCheckedTable.data;let i =index" cdkDrag>
               <td>{{i+1}}</td>
               <td>{{data.tag_id}}</td>
               <td>{{data.name}}</td>
@@ -44,7 +55,9 @@
               </td>
             </tr>
           </tbody>
+
         </nz-table>
+
       </div>
     </nz-tab>
   </nz-tabset>

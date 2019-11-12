@@ -81,6 +81,8 @@ export class LabelManagementComponent implements OnInit {
 
   // 列表排序
   public onDropLabelList(event: CdkDragDrop<string[]>, data: any): void {
+    // moveItemInArray(data, event.previousIndex, event.currentIndex);
+
     if (event.previousIndex === event.currentIndex) {
       return;
     }
