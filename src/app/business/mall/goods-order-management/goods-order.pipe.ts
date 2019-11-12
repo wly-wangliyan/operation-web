@@ -1,10 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { from } from 'rxjs';
-import { distinct } from 'rxjs/operators';
 
 /** 发货状态 */
 const DeliveryStatus = {
-  1: '待发货',
+  1: '未发货',
   2: '已发货',
   3: '已收货'
 };

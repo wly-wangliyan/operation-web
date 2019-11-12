@@ -13,15 +13,13 @@ import { GoodsOrderEntity, GoodsOrderManagementHttpService, ModifyOrderParams } 
 export class GoodsOrderDeliveryComponent implements OnInit {
 
   public currentOrder: ModifyOrderParams = new ModifyOrderParams();
-  public errMes = '';
+  public errMes = ''; // 错误信息
   public postage = 0;
+  public sureName: string;
 
   private order_id: string; // 订单id
   private sureCallback: any;
   private closeCallback: any;
-
-  @Input() public data: any;
-  @Input() public sureName: string;
 
   @ViewChild('projectPromptDiv', { static: true }) public projectPromptDiv: ElementRef;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;

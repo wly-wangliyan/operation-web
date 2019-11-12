@@ -3,7 +3,7 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
-import { GoodsOrderEntity, GoodsOrderManagementHttpService, SearchParams } from '../goods-order-management-http.service';
+import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity, SearchParams } from '../goods-order-management-http.service';
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
 
 const PageSize = 15;
@@ -51,21 +51,16 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       private orderHttpService: GoodsOrderManagementHttpService) { }
 
   public ngOnInit() {
-    this.generateOrderList();
-  }
-
-  public ngOnDestroy() {
-    this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-  }
-
-  // 初始化获取订单列表
-  private generateOrderList() {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestOrderList();
     });
     this.searchText$.next();
+  }
+
+  public ngOnDestroy() {
+    this.requestSubscription && this.requestSubscription.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
   // 请求订单列表

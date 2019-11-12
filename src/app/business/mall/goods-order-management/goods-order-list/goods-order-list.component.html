@@ -90,20 +90,18 @@
                     <td>{{i+(pageIndex-1)*15+1}}</td>
                     <td [title]="order.order_id">{{order.order_id | zMaxLength:10}}</td>
                     <ng-container *ngIf="order.detail&&order.detail.length>0">
-                        <td>
-                            <div class="img-item" *ngFor="let commodity of order.detail">
-                                <img *ngIf="!commodity.commodity_images" src="/assets/images/image_space_3_2.png" />
-                                <img *ngIf="commodity.commodity_images" src={{commodity.commodity_images}} />
-                                <div style="display: grid">
-                                    <a [title]="commodity.commodity_name"
-                                       [routerLink]="['../../goods-management/detail', commodity.commodity_id]">
-                                        {{commodity.commodity_name | zMaxLength:10}}</a>
-                                    <span [title]="commodity.specification_name">
+                        <td class="img-item" *ngFor="let commodity of order.detail">
+                            <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0" src="/assets/images/image_space_3_2.png" />
+                            <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0" src={{commodity.commodity_images[0]}} />
+                            <div style="display: grid">
+                                <a [title]="commodity.commodity_name"
+                                   [routerLink]="['../../goods-management/detail', commodity.commodity_id]">
+                                    {{commodity.commodity_name | zMaxLength:10}}</a>
+                                <span [title]="commodity.specification_name">
                                         {{commodity.specification_name | zMaxLength:10}}</span>
-                                    <span [title]="commodity.unit_sell_price">
+                                <span>
                                     {{commodity.unit_sell_price?(commodity.unit_sell_price | centPriceChange)+'元':''}}
                                 </span>
-                                </div>
                             </div>
                         </td>
                     </ng-container>
@@ -123,7 +121,7 @@
                     </td>
                     <td>{{(order.real_price||order.real_price===0) ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
                     <td>
-                        <span>{{order.contact||order.mobile ? order.contact : '--'}}</span>
+                        <span [title]="order.contact">{{order.contact||order.mobile ? (order.contact|zMaxLength:6) : '--'}}</span>
                         <br *ngIf="order.contact"/>
                         <span>{{order.mobile}}</span>
                     </td>
