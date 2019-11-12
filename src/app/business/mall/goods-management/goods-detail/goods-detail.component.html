@@ -3,52 +3,63 @@
 </div>
 
 <div class="content-flow">
-    <div class="commodity-header">
-        <div class="commodity-preview">
-            <app-z-preview-video-photo [isControls]="true"
-                                       [videoAndPhotoUrls]="videoAndImgList"></app-z-preview-video-photo>
-        </div>
-        <div class="commodity-content">
-            <div class='commodity_name wh_100'>{{commodityInfo.commodity_name}}</div>
-            <div class="commodity_subtitle">{{commodityInfo.subtitle}}</div>
-            <div>
-                <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false"
-                          [nzNoResult]="noResultInfoText" nzBordered #specificationTable>
-                    <thead>
-                    <tr>
-                        <th>规格名称</th>
-                        <th>原价</th>
-                        <th>售价</th>
-                        <th>库存</th>
-                        <th>已售</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let specificationData of specificationTable.data; let i=index">
-                        <td>{{specificationData.specification_name}}</td>
-                        <td>{{specificationData.unit_original_price}}</td>
-                        <td>{{specificationData.unit_sell_price}}</td>
-                        <td>{{specificationData.stock}}</td>
-                        <td>{{specificationData.sold_amount}}</td>
-                    </tr>
-                    </tbody>
-                </nz-table>
+    <div class='content-container'>
+        <div class="commodity-header">
+            <div class="commodity-preview">
+                <app-z-preview-video-photo [isControls]="true"
+                                           [videoAndPhotoUrls]="videoAndImgList"></app-z-preview-video-photo>
+            </div>
+            <div class="commodity-content">
+                <div class='commodity-name'>{{commodityInfo.commodity_name}}</div>
+                <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
+                <div class="commodity-table">
+                    <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false"
+                              [nzNoResult]="noResultInfoText" nzBordered #specificationTable>
+                        <thead>
+                        <tr>
+                            <th>规格名称</th>
+                            <th>原价</th>
+                            <th>售价</th>
+                            <th>库存</th>
+                            <th>已售</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let specificationData of specificationTable.data; let i=index">
+                            <td>{{specificationData.specification_name}}</td>
+                            <td>{{specificationData.unit_original_price}}</td>
+                            <td>{{specificationData.unit_sell_price}}</td>
+                            <td>{{specificationData.stock}}</td>
+                            <td>{{specificationData.sold_amount}}</td>
+                        </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+                <div class="commodity-info">
+                    上架时间：{{commodityInfo.shelf_time ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd mm:hh') : '--'}}
+                </div>
+                <div class="commodity-info">
+                    下架时间：{{commodityInfo.removal_time ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd mm:hh') : '--'}}
+                </div>
+                <div class="commodity-info">
+                    产品ID：{{commodityInfo.commodity_id}}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="commodity-footer">
-        <div class='commodity_name wh_100'>产品描述</div>
-        <form nz-form class="description-container">
-            <div class="description-content">
-                <nz-form-item nzFlex>
-                    <nz-form-label nzRequired [nzNoColon]='true'></nz-form-label>
-                    <nz-form-control>
-                        <div class='temp-content' *ngIf='commodityInfo.commodity_description'>
-                            <div class="artcontent" [innerHTML]="commodityInfo.commodity_description | htmlPipe"></div>
-                        </div>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </form>
+        <div class="commodity-footer">
+            <div class='description-name'>产品描述</div>
+            <form nz-form class="description-container">
+                <div class="description-content">
+                    <nz-form-item nzFlex>
+                        <nz-form-control>
+                            <div class='temp-content' *ngIf='commodityInfo.commodity_description'>
+                                <div class="artcontent"
+                                     [innerHTML]="commodityInfo.commodity_description | htmlPipe"></div>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
