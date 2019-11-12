@@ -58,7 +58,7 @@ export class OrderDetailComponent implements OnInit {
       this.globalService.promptBox.open('短信重发成功！');
       this.getOrderDetail();
     }, err => {
-      this.globalService.promptBox.open('短信重发失败，请稍后再试！');
+      this.globalService.promptBox.open('短信重发失败，请稍后再试！', null, 2000, '/assets/images/warning.png');
     });
   }
 
