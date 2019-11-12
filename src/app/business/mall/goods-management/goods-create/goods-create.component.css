@@ -64,6 +64,7 @@
 
 .table th, .table td {
     border: none;
+    vertical-align: middle;
 }
 
 .table th {
@@ -82,7 +83,6 @@
 }
 
 .table td .td-content {
-    height: 30px;
     display: flex;
     align-items: center;
     font-size: 12px;

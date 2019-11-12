@@ -333,7 +333,6 @@ export class GoodsCreateComponent implements OnInit {
         const delete_specification_ids = [];
         const specificationParams = new SpecificationParams();
         specificationParams.specification_objs = [];
-        specificationParams.delete_specification_ids = '';
         this.commoditySpecificationList.forEach(commoditySpecificationItem => {
             if (!commoditySpecificationItem.is_delete) {
                 specificationParams.specification_objs.push(commoditySpecificationItem.specification_params);
@@ -341,6 +340,7 @@ export class GoodsCreateComponent implements OnInit {
                 delete_specification_ids.push(commoditySpecificationItem.specification_params.specification_id);
             }
         });
+        specificationParams.delete_specification_ids = delete_specification_ids.join(',');
 
         this.goodsManagementHttpService.requestModifyCommoditySpecificationData(commodity_id, specificationParams).subscribe(() => {
             this.processSuccess();

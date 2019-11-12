@@ -39,6 +39,15 @@ export class SpecificationParams extends EntityBase {
         }
         return null;
     }
+
+    public toEditJson(): any {
+        const json = this.json();
+        json.specification_objs.forEach(specificationObj => {
+            specificationObj.unit_original_price = specificationObj.unit_original_price * 100;
+            specificationObj.unit_sell_price = specificationObj.unit_sell_price * 100;
+        });
+        return json;
+    }
 }
 
 /**
@@ -115,24 +124,14 @@ export class SpecificationEntity extends EntityBase {
             this.specification_id = source.specification_id;
             this.commodity = source.commodity;
             this.specification_name = source.specification_name;
-            this.unit_original_price = source.unit_original_price;
-            this.unit_sell_price = source.unit_sell_price;
+            this.unit_original_price = source.unit_original_price ? (source.unit_original_price / 100) : source.unit_original_price;
+            this.unit_sell_price = source.unit_sell_price ? (source.unit_sell_price / 100) : source.unit_sell_price;
             this.stock = source.stock;
             this.sold_amount = source.sold_amount;
             this.specification_id = source.specification_id;
             this.specification_id = source.specification_id;
             this.specification_id = source.specification_id;
         }
-    }
-
-    public toEditJson(): any {
-        const json = this.json();
-        delete json.commodity;
-        delete json.sold_amount;
-        delete json.is_deleted;
-        delete json.created_time;
-        delete json.updated_time;
-        return json;
     }
 }
 
@@ -235,7 +234,7 @@ export class GoodsManagementHttpService {
      */
     public requestModifyCommoditySpecificationData(commodity_id: string, modifyParams: SpecificationParams): Observable<HttpResponse<any>> {
         const url = this.domain + `/admin/commodities/${commodity_id}/specification`;
-        const body = modifyParams.json();
+        const body = modifyParams.toEditJson();
         return this.httpService.post(url, body);
     }
 
