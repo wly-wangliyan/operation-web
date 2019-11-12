@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
-import { BannerService, BannerEntity } from '../banner.service';
+import { BannerService, BannerEntity, ClickStatisticsEntity } from '../banner.service';
 import { ZPhotoSelectComponent } from 'src/app/share/components/z-photo-select/z-photo-select.component';
 
 @Component({
@@ -15,6 +15,8 @@ export class BannerDetailComponent implements OnInit {
   public no_img_url = '../../../../../assets/images/space_banner.png'; // 默认图片
 
   public bannerRecord: BannerEntity = new BannerEntity(); // 产品详情
+
+  public clickStatisticsList: Array<ClickStatisticsEntity> = []; // 点击统计列表
 
   private banner_id: string; // banner_id
 
@@ -43,6 +45,7 @@ export class BannerDetailComponent implements OnInit {
   private getBannerDetail(): void {
     this.bannerService.requestBannerDetail(this.banner_id).subscribe(data => {
       this.bannerRecord = data;
+      this.clickStatisticsList = data.click_stats ? data.click_stats : [];
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

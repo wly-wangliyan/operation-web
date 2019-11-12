@@ -6,10 +6,10 @@
   <!-- 查看明细 -->
 
   <div class="content-container">
-    <div class="table-item">
+    <div class="table-item banner-table">
       <table class="detail-table">
         <tr>
-          <td rowspan="3" class="td-img">
+          <td rowspan="4" class="td-img">
             <img style="width: 270px;margin: auto;" src="{{bannerRecord.image?bannerRecord.image:no_img_url}}" />
           </td>
           <td>标题：</td>
@@ -33,6 +33,31 @@
           <td *ngIf="bannerRecord.offline_status!==1">
             {{bannerRecord.offline_time ? (bannerRecord.offline_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
         </tr>
+        <tr>
+          <td>累计点击量</td>
+          <td>{{bannerRecord.click_num >= 0 ? bannerRecord.click_num : '--'}}</td>
+          <td>累计点击人数</td>
+          <td>{{bannerRecord.click_person >= 0 ? bannerRecord.click_person : '--'}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item click-table" *ngIf="clickStatisticsList && clickStatisticsList.length>0">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>点击量</th>
+            <th>点击人数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let click of clickStatisticsList">
+            <td>{{click.date ? (click.date* 1000 | date:"y-MM-dd") : '--'}}</td>
+            <td>{{click.click_num >= 0 ? click.click_num : '--'}}</td>
+            <td>{{click.click_person >= 0 ? click.click_person : '--'}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
