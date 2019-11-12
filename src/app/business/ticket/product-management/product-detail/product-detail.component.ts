@@ -5,6 +5,7 @@ import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
 import { CalendarDetailComponent } from '../product-detail/calendar-detail/calendar-detail.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -108,7 +109,18 @@ export class ProductDetailComponent implements OnInit {
         isEditTicketInsutruction: false,
       }));
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'unshelved') {
+              this.globalService.promptBox.open(`该产品已下架!`, null, 2000, '/assets/images/warning.png');
+            } else {
+              return;
+            }
+          }
+        }
+      }
     });
   }
 
