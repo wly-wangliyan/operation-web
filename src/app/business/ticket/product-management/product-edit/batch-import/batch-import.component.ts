@@ -174,7 +174,7 @@ export class BatchImportComponent implements OnInit {
       this.batchImportParams.date_settings = null;
       const reg = /^\d+(\.\d+)?$/;
       const buyPriceList = this.priceCalendarList.map(i => i.buy_price);
-      const minBuyPrice = Math.min(...buyPriceList);
+      const minBuyPrice = Math.max(...buyPriceList);
       const market_price = this.priceCalendarList[0].ticket.market_price;
       if (!this.platform_price) {
         this.globalService.promptBox.open('请输入统一售价！', null, 2000, '/assets/images/warning.png');
@@ -269,7 +269,7 @@ export class BatchImportComponent implements OnInit {
               if (value.date >= item.start_date &&
                 value.date <= item.end_date) {
                 const newList = [];
-                if (Number(item.platform_price) < (Number(Math.min(...newList)) / 0.94)) {
+                if (Number(item.platform_price) < (Number(Math.max(...newList)) / 0.94)) {
                   this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
                     this.globalService.confirmationBox.close();
                     this.requestBatchImport();
