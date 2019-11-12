@@ -48,6 +48,8 @@
             <th>标题</th>
             <th>上线时间</th>
             <th>下线时间</th>
+            <th>累计点击量</th>
+            <th>累计点击人数</th>
             <th>启停</th>
             <th>操作</th>
           </tr>
@@ -57,8 +59,8 @@
             <td>{{i + 1}}</td>
 
             <td>
-              <img *ngIf='!data.image' style="width: 270px;margin: auto 50px;" src="/assets/images/space_banner.png">
-              <img *ngIf='data.image' style="width: 270px;margin: auto 30px;" [src]="data.image">
+              <img *ngIf='!data.image' style="width: 270px;margin: auto 20px;" src="/assets/images/space_banner.png">
+              <img *ngIf='data.image' style="width: 270px;margin: auto 20px;" [src]="data.image">
             </td>
 
             <td>{{data.title}}</td>
@@ -68,6 +70,11 @@
             <td *ngIf="data.offline_status===1">永不下线</td>
             <td *ngIf="data.offline_status!==1">
               {{data.offline_time ?(data.offline_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+            <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
+
+            <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
+
             <td>
               <nz-switch [ngModel]="data.is_use" nzCheckedChildren="On" style="height: 10px" nzUnCheckedChildren="Off"
                 (ngModelChange)="onSwitchChange(data.banner_id,$event)"></nz-switch>
