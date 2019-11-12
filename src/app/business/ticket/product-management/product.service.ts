@@ -506,6 +506,17 @@ export class ProductService {
   }
 
   /**
+   * 更新第三方门票列表
+   * @param string third_product_id 第三方产品id
+   * @returns Observable<TicketLinkResponse>
+   */
+  public requesThirdTicketsList(third_product_id: string): Observable<TicketLinkResponse> {
+    const httpUrl = `${this.domain}/third_products/${third_product_id}/tickets`;
+    return this.httpService.get(httpUrl).pipe(map(res => new TicketLinkResponse(res)));
+  }
+
+
+  /**
    * 获取价格日历
    * @param product_id 产品ID
    * @param ticket_id 门票ID

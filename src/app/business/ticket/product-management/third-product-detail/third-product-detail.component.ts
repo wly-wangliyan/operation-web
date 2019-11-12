@@ -14,7 +14,7 @@ import { CalendarDetailComponent } from '../product-detail/calendar-detail/calen
 export class ThirdProductDetailComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
-              private router: Router) { }
+    private router: Router) { }
 
   public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
   public thirdProductInfoList: Array<any> = [];
@@ -77,7 +77,7 @@ export class ThirdProductDetailComponent implements OnInit {
 
   // 更新数据
   public onUpdateData(flag: number) {
-    this.productService.requesTicketsList(this.product_id, flag).subscribe(res => {
+    this.productService.requesThirdTicketsList(this.product_id).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
         isShowInsutructions: false,
