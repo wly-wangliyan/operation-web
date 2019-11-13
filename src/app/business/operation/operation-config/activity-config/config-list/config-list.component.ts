@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs/index';
+import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { SearchParams, PromotionEntity, ActivityConfigService } from '../activity-config.service';
+import { Router } from '@angular/router';
 
 const PageSize = 15;
 
@@ -38,6 +39,7 @@ export class ConfigListComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private router: Router,
     private globalService: GlobalService,
     private configService: ActivityConfigService) { }
 
@@ -94,10 +96,10 @@ export class ConfigListComponent implements OnInit, OnDestroy {
 
   // 修改启停状态
   public onSwitchChange(promotion_id: string, event: any) {
-    const status = event;
+    const status = event ? 1 : 2;
     let sucessMsg = '开启成功!';
     let errMsg = '开启失败,请重试!';
-    if (!status) {
+    if (!event) {
       sucessMsg = '关闭成功';
       errMsg = '关闭失败，请重试!';
     }
@@ -122,4 +124,9 @@ export class ConfigListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 点击编辑
+  public onEditClick(promotion_id: string): void {
+    this.router.navigate(['/main/operation/operation-config/activity-config/config-edit'],
+      { queryParams: { promotion_id } });
+  }
 }

@@ -13,6 +13,7 @@ export class DescriptionEditorComponent implements OnInit {
   public uploadImg: string;
   public flag = 0;
   public isEditorChange = false;
+  public isFill = false;
 
   constructor(private activityService: ActivityConfigService) {
   }
@@ -23,6 +24,7 @@ export class DescriptionEditorComponent implements OnInit {
       CKEDITOR.on('instanceReady', event => {
         event.editor.on('change', () => {
           this.isEditorChange = true;
+          this.isFill = CKEDITOR.instances.descriptionEditor.getData() ? true : false;
         });
       });
     }, 0);

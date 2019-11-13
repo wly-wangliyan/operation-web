@@ -90,7 +90,7 @@
                 nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.promotion_id,$event)"></nz-switch>
             </td>
             <td class="operation">
-              <a [title]="'编辑'" [routerLink]="['../config-edit',data.promotion_id]">编辑</a>
+              <a [title]="'编辑'" (click)="onEditClick(data.promotion_id)">编辑</a>
             </td>
           </tr>
         </tbody>

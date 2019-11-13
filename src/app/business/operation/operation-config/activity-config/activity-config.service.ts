@@ -9,6 +9,7 @@ import { FileUpdate } from '../../../../../utils/file-update';
 
 // 领赠设置实体
 export class RewardEntity extends EntityBase {
+  public reward_record_id: string = undefined; // 奖品记录id(唯一主键)
   public reward_id: string = undefined; // 奖品-优惠券模板ID
   public reward_num: number = undefined; // 奖品库存
   public reward_probability: number = undefined; // 中奖概率
@@ -22,6 +23,7 @@ export class RewardEntity extends EntityBase {
   constructor(source?: RewardEntity) {
     super();
     if (source) {
+      this.reward_record_id = source.reward_record_id;
       this.reward_id = source.reward_id;
       this.reward_num = source.reward_num;
       this.reward_probability = source.reward_probability;

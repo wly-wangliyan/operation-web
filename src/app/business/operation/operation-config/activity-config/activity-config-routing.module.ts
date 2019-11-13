@@ -14,7 +14,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'config-list', pathMatch: 'full' },
     { path: 'config-list', component: ConfigListComponent },
     { path: 'config-add', component: ConfigEditComponent },
-    { path: 'config-edit/:promotion_id', component: ConfigEditComponent },
+    { path: 'config-edit', component: ConfigEditComponent },
     { path: '**', redirectTo: 'config-list', pathMatch: 'full' }
   ]
 }];

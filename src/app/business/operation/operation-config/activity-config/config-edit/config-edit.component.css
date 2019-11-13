@@ -5,3 +5,68 @@
 .cover-hint {
   font-size: 14px;
 }
+
+.reward-container {
+  min-width: 1130px;
+  display: flex;
+  flex-direction: column;
+  background: #F7F8FA;
+  padding: 20px;
+  border: 0.2px solid rgba(136, 136, 136, 0.3);
+}
+
+.reward-item input {
+  width: 265px;
+}
+
+.reward-item select {
+  width: 100px;
+}
+
+.reward-item {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+}
+
+.button-group button {
+  margin: 0 5px;
+}
+
+.line {
+  border-bottom: 1px solid #888;
+}
+
+.reward-item div{
+  display: flex;
+  flex-direction: row;
+}
+
+.reward-item button {
+  height: 34px;
+  width: 80px;
+}
+
+.reward-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.reward-title div {
+  flex: 1;
+  text-align: center;
+}
+
+.reward-item .item-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.item-group .reward-title {
+  font-size: 12px;
+  line-height: 12px;
+  color: #23242F;
+  justify-content: center;
+  margin-bottom: 20px;
+}
