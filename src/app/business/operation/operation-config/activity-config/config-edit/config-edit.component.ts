@@ -197,7 +197,7 @@ export class ConfigEditComponent implements OnInit {
   private requestAddConfig(params: PromotionEntity): void {
     this.activityService.requestAddActivityConfigData(params).subscribe(res => {
       this.promotion_id = res.body.promotion_id;
-      this.requestEditRewars(this.editRewardList, 1);
+      this.requestEditRewars(this.configParams.rewards, 1);
     }, err => {
       this.is_save = false;
       this.errorProcess(err);
@@ -207,7 +207,7 @@ export class ConfigEditComponent implements OnInit {
   // 编辑活动
   private requestUpdateConfig(params: PromotionEntity): void {
     this.activityService.requestUpdateActivityConfigData(this.promotion_id, params).subscribe(res => {
-      this.requestEditRewars(this.editRewardList, 2);
+      this.requestEditRewars(this.configParams.rewards, 2);
     }, err => {
       this.is_save = false;
       this.errorProcess(err);
@@ -331,27 +331,28 @@ export class ConfigEditComponent implements OnInit {
             return false;
           }
 
-          total_probability += this.editRewardList[rewardIndex].reward_probability;
+          total_probability += Number(this.editRewardList[rewardIndex].reward_probability);
 
-          rewards.push(this.editRewardList[rewardIndex]);
+          rewards.push(new RewardEntity(this.editRewardList[rewardIndex]));
         }
       }
-
       if (total_probability !== 1) {
         this.rewardErrMsg = '中奖概率之和必须等于1！';
         return false;
       }
 
       this.detailRewardList.forEach(detailReward => {
+
         if (detailReward.is_deleted) {
           // 被移除的奖赠设置,再看现有数据中，是否有与原模板id一致的，有则给其赋记录id
-          rewards.forEach(editItem => {
-            if (editItem.reward_id === detailReward.reward_id) {
-              if (!editItem.reward_record_id) {
-                editItem.reward_record_id = detailReward.reward_record_id;
-              }
+          const itemIndex = rewards.findIndex(editItem => editItem.reward_id === detailReward.reward_id);
+          if (itemIndex === -1) {
+            rewards.push(new RewardEntity(detailReward));
+          } else {
+            if (!rewards[itemIndex].reward_record_id) {
+              rewards[itemIndex].reward_record_id = detailReward.reward_record_id;
             }
-          });
+          }
         }
       });
       this.configParams.rewards = rewards;
@@ -440,7 +441,7 @@ export class ConfigEditComponent implements OnInit {
     }
   }
 
-  // 格式化中间率
+  // 格式化中奖概率
   public onRateChange(event: any, index: number): void {
     if (this.editRewardList[index].reward_probability) {
       if (isNaN(parseFloat(String(this.editRewardList[index].reward_probability)))) {
