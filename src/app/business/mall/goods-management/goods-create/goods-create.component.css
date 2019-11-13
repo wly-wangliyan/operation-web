@@ -94,6 +94,7 @@
     height: 30px;
     color: #23242F;
     padding: 0 5px;
+    background: #FFFFFF !important;
 }
 
 .table td .special-td-content input {
@@ -105,6 +106,7 @@
     color: #888888;
     text-align: left;
     border-left: none;
+    background: #FFFFFF;
 }
 
 .table td .stock-content input {
