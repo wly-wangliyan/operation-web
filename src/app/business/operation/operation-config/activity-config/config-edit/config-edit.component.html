@@ -117,8 +117,8 @@
               <div class="button-group">
                 <button class="close-btn" type="button" nz-button (click)="onAddRewardClick()"
                   *ngIf="editRewardList.length===(i+1)" [disabled]="editRewardList.length>=5">添加</button>
-                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button nzType="danger" nzGhost
-                  type="button" (click)="onDeleteRewardClick(reward,i)">移除</button>
+                <button *ngIf="editRewardList.length>1 || i > 0" class="remove-btn" nz-button type="button"
+                  (click)="onDeleteRewardClick(reward,i)">移除</button>
               </div>
             </div>
           </div>

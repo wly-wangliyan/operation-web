@@ -84,3 +84,15 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
+.remove-btn {
+  color: #E82038;
+  background-color: #fff !important;
+  border-color: #E82038;
+  border: 1px solid #E82038 !important;
+  text-shadow: none;
+}
+
+.remove-btn:hover {
+  opacity: 0.8;
+}
