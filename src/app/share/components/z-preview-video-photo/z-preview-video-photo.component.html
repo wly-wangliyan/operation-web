@@ -6,7 +6,7 @@
              [class.hide]="(currentPreviewIndex===0) || (previewVideoAndPhotoList.length < 1)"></div>
         <!-- 缩略视频/图预览 -->
         <div class="preview-wrap">
-            <div [class.hide]="isHidePreviewVideo">
+            <div class="video-wrap" [class.hide]="isHidePreviewVideo">
                 <video id="preview-video" [src]="currentPreviewVideo.sourceUrl" [controls]="isControls"
                        [autoplay]="isAutoPlay" (click)="onPlayPreviewVideo()"></video>
                 <div class="icon-control" [class.hide]="isHidePlayIcon">
