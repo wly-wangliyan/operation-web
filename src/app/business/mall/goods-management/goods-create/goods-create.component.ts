@@ -420,9 +420,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 处理成功处理
     private processSuccess() {
-        this.onSubmitSubscription = null;
         const msg = this.commodity_id ? '编辑成功！' : '新建成功！';
         this.globalService.promptBox.open(msg, () => {
+            this.onSubmitSubscription = null;
             this.router.navigate([this.listRelativePath], {relativeTo: this.route});
         });
     }
