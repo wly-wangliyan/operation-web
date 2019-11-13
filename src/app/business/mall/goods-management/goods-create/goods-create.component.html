@@ -95,35 +95,33 @@
                                 <td>
                                     <div class="td-content special-td-content">
                                         <input type="text" class="form-control"
-                                               [id]="'unit_original_price_' + specificationIndex"
+                                               [id]="'unit_original_price_' + formatCommoditySpecification.idCount"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.unit_original_price"
                                                [name]="'unit_original_price_' + formatCommoditySpecification.idCount"
-                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 1)"
-                                               maxlength="9" appIgnoreSpace>
+                                               (input)="initErrMsg()" maxlength="9" appIgnoreSpace>
                                         <label class="one-word-lable">元</label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="td-content special-td-content">
                                         <input type="text" class="form-control"
-                                               [id]="'unit_sell_price_' + specificationIndex"
+                                               [id]="'unit_sell_price_' + formatCommoditySpecification.idCount"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.unit_sell_price"
                                                [name]="'unit_sell_price_' + formatCommoditySpecification.idCount"
-                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 2)"
-                                               maxlength="9" appIgnoreSpace>
+                                               (input)="initErrMsg()" maxlength="9" appIgnoreSpace>
                                         <label class="one-word-lable">元</label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="td-content stock-content">
-                                        <input type="text" class="form-control" [id]="'stock_' + specificationIndex"
+                                        <input type="text" class="form-control"
+                                               [id]="'stock_' + formatCommoditySpecification.idCount"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.stock"
                                                [name]="'stock_' + formatCommoditySpecification.idCount"
-                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 3)"
-                                               maxlength="5" appIgnoreSpace>
+                                               (input)="initErrMsg()" maxlength="5" appIgnoreSpace>
                                     </div>
                                 </td>
                                 <td>
