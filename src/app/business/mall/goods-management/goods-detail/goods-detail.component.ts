@@ -12,6 +12,8 @@ export class GoodsDetailComponent implements OnInit {
 
     public videoAndImgList = [];
 
+    public noResultInfoText = '数据加载中...';
+
     public commodityInfo: CommodityEntity = new CommodityEntity();
 
     private commodity_id: string;
@@ -36,6 +38,7 @@ export class GoodsDetailComponent implements OnInit {
     // 获取商品详情
     private requestCommodityById() {
         this.goodsManagementHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
+            this.noResultInfoText = '暂无数据';
             this.commodityInfo = data;
             this.commodityInfo.specifications.forEach(specificationsItem => {
                 specificationsItem.unit_original_price = specificationsItem.unit_original_price / 100;
