@@ -78,6 +78,7 @@ export class ConfigEditComponent implements OnInit {
       });
       this.searchText$.next();
     } else {
+      this.loading = false;
       this.isCreateConfig = true;
       this.isInstanceReady = true;
       this.configParams = new PromotionEntity();
@@ -106,6 +107,7 @@ export class ConfigEditComponent implements OnInit {
       this.getEditorData();
       this.loading = false;
     }, err => {
+      this.loading = false;
       this.globalService.httpErrorProcess(err);
     });
   }
@@ -266,7 +268,7 @@ export class ConfigEditComponent implements OnInit {
       return false;
     }
     if (!this.end_time) {
-      this.configErrMsg = '请选择活动结束时间！';
+      this.configErrMsg = '请选择活动截止时间！';
       return false;
     }
     if (this.start_time && this.end_time) {
@@ -277,11 +279,11 @@ export class ConfigEditComponent implements OnInit {
       const currentTimeStamp = new Date().getTime() / 1000;
 
       if (sTimestamp - eTimestamp >= 0) {
-        this.configErrMsg = '活动开始时间应小于结束时间！';
+        this.configErrMsg = '活动开始时间应小于截止时间！';
         return false;
       }
 
-      // 添加时，活动开始时间大于等于当前时间; 编辑时，活动结束时间应大于等于当前时间
+      // 添加时，活动开始时间大于等于当前时间; 编辑时，活动截止时间应大于等于当前时间
       if (this.isCreateConfig) {
         if (sTimestamp - currentTimeStamp < 0) {
           this.configErrMsg = '活动开始时间应大于等于当前时间！';
@@ -289,7 +291,7 @@ export class ConfigEditComponent implements OnInit {
         }
       } else {
         if (eTimestamp - currentTimeStamp < 0) {
-          this.configErrMsg = '活动结束时间应大于等于当前时间！';
+          this.configErrMsg = '活动截止时间应大于等于当前时间！';
           return false;
         }
       }
