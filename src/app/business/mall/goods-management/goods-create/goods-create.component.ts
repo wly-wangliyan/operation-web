@@ -186,7 +186,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 reverseCommoditySpecificationItem.unit_sell_price = inputValue ? parseFloat(event.target.value) : null;
                 break;
             case 3:
-                reverseCommoditySpecificationItem.stock = inputValue ? parseFloat(event.target.value) : null;
+                reverseCommoditySpecificationItem.stock = inputValue ? parseInt(event.target.value) : null;
                 break;
         }
     }
