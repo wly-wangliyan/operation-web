@@ -72,6 +72,8 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
 
     @Input() public isControls = false; // 是否显示控件
 
+    @Input() public isDisablePictureInPicture = true; // 是否禁止显示画中画控件
+
     @Input() public isAutoPlay = false; // 视频是否在就绪后马上播放
 
     constructor() {

@@ -2,7 +2,7 @@
     <div *ngFor="let videoItem of videoList; let videoIndex = index" [ngClass]="{'not-cursor': hasDeleteVideo}"
          [ngStyle]="{width: videoWidth + 'px', height: videoHeight + 'px', 'line-height': transformLineHeight + 'px'}">
         <video [src]="videoItem.showUrl" [ngStyle]="{width: videoShowWidth + 'px'}" [controls]="isControls"
-               [autoplay]="isAutoPlay"></video>
+               [autoplay]="isAutoPlay" [disablePictureInPicture]="isDisablePictureInPicture"></video>
         <span class="delete-icon" *ngIf="hasDeleteVideo" (click)="deleteVideo(videoIndex)"></span>
         <div class="progress-bg" [ngStyle]="{width: videoWidth + 'px', height: videoHeight + 'px'}"
              #videoProgressBgList>
