@@ -61,10 +61,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 formatCommoditySpecificationList.push(commoditySpecificationItem);
             }
         });
-        formatCommoditySpecificationList.forEach((formatItem, index) => {
-            KeyboardHelper.bindElement('unit_original_price_' + index);
-            KeyboardHelper.bindElement('unit_sell_price_' + index);
-            KeyboardHelper.bindElement('stock_' + index);
+        formatCommoditySpecificationList.forEach(formatItem => {
+            KeyboardHelper.bindElement('unit_original_price_' + formatItem.idCount);
+            KeyboardHelper.bindElement('unit_sell_price_' + formatItem.idCount);
+            KeyboardHelper.bindElement('stock_' + formatItem.idCount);
         });
         return formatCommoditySpecificationList;
     }
