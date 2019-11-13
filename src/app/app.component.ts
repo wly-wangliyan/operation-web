@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { GlobalService } from './core/global.service';
+import { AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { GlobalService, ChangePasswordParams } from './core/global.service';
 import { AuthService } from './core/auth.service';
 import { DateFormatHelper } from '../utils/date-format-helper';
 import { RouteMonitorService } from './core/route-monitor.service';
@@ -11,6 +11,8 @@ import { ZPromptBoxComponent } from './share/components/tips/z-prompt-box/z-prom
 import { ExpandedMenuComponent } from './share/components/expanded-menu/expanded-menu.component';
 import { Router } from '@angular/router';
 import { IntervalService } from './business/notice-center/interval.service';
+import { HttpErrorEntity } from './core/http.service';
+import { ValidateHelper } from '../utils/validate-helper';
 
 @Component({
     selector: 'app-root',
@@ -20,7 +22,14 @@ import { IntervalService } from './business/notice-center/interval.service';
 export class AppComponent implements AfterViewInit, OnDestroy {
 
     public user: string;
+
     public menu: number;
+
+    public passwordPassword: ChangePasswordParams = new ChangePasswordParams();
+
+    public repeat_password: string;
+
+    private is_sava = false; // 标记是否在保存中
 
     @ViewChild(ZPromptBoxComponent, {static: false}) private promptBox: ZPromptBoxComponent;
     @ViewChild(ZConfirmationBoxComponent, {static: false}) private confirmationBox: ZConfirmationBoxComponent;
@@ -41,12 +50,42 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             return new Date(globalService.timeStamp * 1000);
         };
         const url = this.router.routerState.snapshot.url;
-        this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/mall') ? 6 : url.includes('/notice-center') ? null : 1;
+        if ((url.includes('/operation') || url.includes('/home')) && this.authService.checkPermissions(['operation'])) {
+            this.menu = 1;
+        } else if ((url.includes('/insurance') || url.includes('/home')) && this.authService.checkPermissions(['insurance'])) {
+            this.menu = 3;
+        } else if ((url.includes('/maintenance') || url.includes('/home')) && this.authService.checkPermissions(['upkeep'])) {
+            this.menu = 4;
+        } else if ((url.includes('/ticket') || url.includes('/home')) && this.authService.checkPermissions(['ticket'])) {
+            this.menu = 5;
+        } else if ((url.includes('/mall') || url.includes('/home')) && this.authService.checkPermissions(['mall'])) {
+            this.menu = 6;
+        } else if ((url.includes('/management-setting') || url.includes('/home')) && this.authService.checkPermissions(['management'])) {
+            this.menu = 7;
+        } else if (url.includes('/notice-center') && this.authService.checkPermissions(['ticket'])) {
+            this.menu = null;
+        } else {
+            if (this.authService.checkPermissions(['operation'])) {
+                this.menu = 1;
+            } else if (this.authService.checkPermissions(['insurance'])) {
+                this.menu = 3;
+            } else if (this.authService.checkPermissions(['upkeep'])) {
+                this.menu = 4;
+            } else if (this.authService.checkPermissions(['ticket'])) {
+                this.menu = 5;
+            } else if (this.authService.checkPermissions(['mall'])) {
+                this.menu = 6;
+            } else if (this.authService.checkPermissions(['management'])) {
+                this.menu = 7;
+            }
+            this.router.navigate(['/main/home']);
+        }
+        // this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/management-setting') ? 7 : url.includes('/notice-center') ? null : 1;
         this.globalService.menu_index = this.menu;
         this.intervalService.startTimer(); // 1.6启动定时
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit() {
         this.globalService.promptBox = this.promptBox;
         this.globalService.confirmationBox = this.confirmationBox;
         this.globalService.http403Tip = this.global403Tip;
@@ -65,7 +104,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.routePathSubscription && this.routePathSubscription.unsubscribe();
         this.intervalService.stopTimer();
     }
@@ -135,6 +174,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
                     this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
                 }
                 break;
+            case 7:
+                if (!url.includes('/management-setting/')) {
+                    this.menuComponent.menuItems = this.menuComponent.generateMenus_management();
+                    this.router.navigate(['/main']);
+                } else if (url.includes('home')) {
+                    this.menuComponent.menuItems = this.menuComponent.generateMenus_management();
+                }
         }
     }
 
@@ -144,7 +190,32 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.menu = null;
         this.globalService.menu_index = this.menu;
         this.getMenuList(this.menu);
-        this.router.navigateByUrl('/main/notice-center/list');
+        this.router.navigateByUrl('/main/notice-center/list').then(() => {
+            const path = location.pathname;
+            if (path.includes('/ticket')) {
+                this.menu = 5;
+                this.globalService.menu_index = 5;
+                this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+                this.menuComponent.refreshMenu(path);
+            } else {
+                this.router.navigateByUrl('/main/notice-center/list');
+                this.menuComponent.refreshMenu(path);
+            }
+        });
+    }
+
+    // 依据路由是否跳转进行菜单渲染
+    private onMenuPrevent(func: any) {
+        const path = location.pathname;
+        if (path.includes('/ticket')) {
+            this.menu = 5;
+            this.globalService.menu_index = 5;
+            this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+            this.menuComponent.refreshMenu(path);
+        } else if (path.includes('home')) {
+            this.menuComponent.menuItems = func;
+            this.menuComponent.refreshMenu(path);
+        }
     }
 
     // 通知中心未读数量
@@ -154,6 +225,58 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         }, err => {
             this.globalService.httpErrorProcess(err);
         });
+    }
+
+    public onModifyPwdDivClick() {
+        this.passwordPassword = new ChangePasswordParams();
+        this.repeat_password = '';
+        this.is_sava = false;
+        $('#modifyPasswordModal').modal();
+    }
+
+    /** 提交修改密码请求 */
+    public onModifyPwdFormSubmit(): any {
+        if (this.is_sava) {
+            return;
+        }
+        if (!ValidateHelper.Length(this.passwordPassword.old_password, 6, 20)) {
+            this.globalService.promptBox.open('旧密码输入有误，请重新输入!', null, 2000, null, false);
+            return;
+        } else if (!ValidateHelper.Length(this.passwordPassword.new_password, 6, 20)) {
+            this.globalService.promptBox.open('新密码输入有误，请重新输入!', null, 2000, null, false);
+            return;
+        } else if (this.passwordPassword.new_password !== this.repeat_password) {
+            this.globalService.promptBox.open('两次输入密码不一致，请重新输入！', null, 2000, null, false);
+            return;
+        } else if (this.passwordPassword.old_password === this.passwordPassword.new_password) {
+            this.globalService.promptBox.open('新旧密码不可相同！', null, 2000, null, false);
+        } else {
+            this.is_sava = true;
+            this.globalService.requestModifyPassword(this.passwordPassword).subscribe(() => {
+                this.globalService.promptBox.open('密码修改成功,请重新登录！', () => {
+                    $('#modifyPasswordModal').modal('hide');
+                    this.is_sava = false;
+                    this.authService.kickOut();
+                });
+            }, err => {
+                this.is_sava = false;
+                if (!this.globalService.httpErrorProcess(err)) {
+                    if (err.status === 422) {
+                        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                        for (const content of error.errors) {
+                            if (content.field === 'old_password' && content.code === 'invalid') {
+                                this.globalService.promptBox.open('旧密码输入有误，请重新输入!', null, 2000, null, false);
+                            } else if (content.field === 'new_password' && content.code === 'invalid') {
+                                this.globalService.promptBox.open('新密码输入有误，请重新输入!', null, 2000, null, false);
+                            } else {
+                                this.globalService.promptBox.open('参数错误或无效！', null, 2000, null, false);
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
 

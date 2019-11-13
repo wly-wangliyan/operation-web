@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild, Renderer2, ElementRef} from '@angular/core';
-import {LoginHttpService, LoginParams} from './login-http.service';
-import {AuthService} from '../../core/auth.service';
-import {ValidateHelper} from '../../../utils/validate-helper';
-import {ZPromptBoxComponent} from '../../share/components/tips/z-prompt-box/z-prompt-box.component';
-import {ZConfirmationBoxComponent} from '../../share/components/tips/z-confirmation-box/z-confirmation-box.component';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
+import { LoginHttpService, LoginParams } from './login-http.service';
+import { AuthService } from '../../core/auth.service';
+import { ValidateHelper } from '../../../utils/validate-helper';
+import { ZPromptBoxComponent } from '../../share/components/tips/z-prompt-box/z-prompt-box.component';
+import { ZConfirmationBoxComponent } from '../../share/components/tips/z-confirmation-box/z-confirmation-box.component';
+import { LocalStorageProvider } from '../../share/localstorage-provider';
 
 @Component({
   selector: 'app-login',
@@ -15,16 +16,18 @@ export class LoginComponent implements OnInit {
   public errorMsg = '';
   public loginError = false;
 
-  @ViewChild('eyeIcon', {static: false}) eyeIcon: ElementRef;
-  @ViewChild('password', {static: false}) password: ElementRef;
-  @ViewChild('username', {static: false}) username: ElementRef;
-  @ViewChild('routerDiv', {static: false}) public routerDiv: ElementRef;
-  @ViewChild(ZConfirmationBoxComponent, {static: false}) public confirmationBox: ZConfirmationBoxComponent;
-  @ViewChild(ZPromptBoxComponent, {static: false}) public promptBox: ZPromptBoxComponent;
+  @ViewChild('eyeIcon', { static: false }) eyeIcon: ElementRef;
+  @ViewChild('password', { static: false }) password: ElementRef;
+  @ViewChild('username', { static: false }) username: ElementRef;
+  @ViewChild('routerDiv', { static: false }) public routerDiv: ElementRef;
+  @ViewChild(ZConfirmationBoxComponent, { static: false }) public confirmationBox: ZConfirmationBoxComponent;
+  @ViewChild(ZPromptBoxComponent, { static: false }) public promptBox: ZPromptBoxComponent;
 
-  constructor(private loginHttpService: LoginHttpService,
-              private authService: AuthService,
-              private renderer2: Renderer2) {
+  constructor(
+    private loginHttpService: LoginHttpService,
+    private authService: AuthService,
+    private renderer2: Renderer2) {
+    this.loginParams.username = LocalStorageProvider.Instance.get(LocalStorageProvider.HistoryLoginName);
   }
 
   ngOnInit() {
@@ -59,6 +62,7 @@ export class LoginComponent implements OnInit {
 
     this.errorMsg = '';
     this.loginHttpService.requestLogin(this.loginParams).subscribe(data => {
+      LocalStorageProvider.Instance.set(LocalStorageProvider.HistoryLoginName, data.username);
       this.authService.authorizeByLogin();
     }, err => {
       this.loginError = true;

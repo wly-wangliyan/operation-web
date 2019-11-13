@@ -11,6 +11,10 @@
             <li [class.herder-active]="globalService.menu_index===4" (click)="onMainMenuClick(4)">保养</li>
             <li [class.herder-active]="globalService.menu_index===5" (click)="onMainMenuClick(5)">票务</li>
             <li [class.herder-active]="globalService.menu_index===6" (click)="onMainMenuClick(6)">商城</li>
+            <li [class.herder-active]="globalService.menu_index===7" (click)="onMainMenuClick(7)"
+                [class.noPermissions]="!((authService.user && authService.user.is_superuser) ||        authService.checkPermissions(['management']))">
+                管理设置
+            </li>
         </ul>
         <div class="user">
             <!--<div class="user_photo"></div>
@@ -44,5 +48,69 @@
         <!-- 模态框 -->
         <app-z-prompt-box></app-z-prompt-box>
         <app-z-confirmation-box></app-z-confirmation-box>
+    </div>
+</div>
+
+<!-- 修改密码模态框 -->
+<div class="modal fade " id="modifyPasswordModal" data-backdrop="false" data-keyboard="true" tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">修改密码</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #modifyPasswordForm="ngForm">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>旧密码：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="old_password" type="password" placeholder="请输入旧密码"
+                                   [(ngModel)]="passwordPassword.old_password" minlength="6" maxlength="20"
+                                   autocomplete="new-password"
+                                   class="form-control" required appIgnoreSpace>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>新密码：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="new_password" type="password" placeholder="请输入6-20位新密码"
+                                   [(ngModel)]="passwordPassword.new_password" minlength="6" maxlength="20"
+                                   autocomplete="new-password"
+                                   class="form-control" required appIgnoreSpace>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>确认新密码：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="repeat_password" type="password" placeholder="再次确认新密码"
+                                   [(ngModel)]="repeat_password"
+                                   minlength="6" maxlength="20" autocomplete="new-password" class="form-control"
+                                   required appIgnoreSpace>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary"
+                                [disabled]="!modifyPasswordForm.form.valid"
+                                (appZDebounceClick)="onModifyPwdFormSubmit()">确定
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>

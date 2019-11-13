@@ -1,0 +1,11 @@
+.content-layout {
+  margin-top: 20px;
+}
+
+.form-control {
+  width: 300px;
+}
+
+:host ::ng-deep .ant-input {
+  height: 34px;
+}

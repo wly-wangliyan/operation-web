@@ -183,6 +183,18 @@
   width: 315px;
 }
 
+.opera {
+  width: 78px;
+  text-align: left;
+}
+
+.opera img {
+  margin-right: 5px;
+}
+
+.opera>div {
+  margin-bottom: 5px;
+}
 
 .opera>div>a {
   font-size: 12px;
@@ -341,6 +353,55 @@ input[type=file]:focus {
   .m_20 {
     margin: 10px;
   }
+}
+
+:host ::ng-deep .ant-input {
+  height: 34px;
+}
+
+.tags {
+  margin-bottom: 0;
+  margin-left: -10px;
+  height: 34px;
+}
+
+.tag {
+  padding: 0 30px;
+  height: 34px;
+  background: rgba(62, 113, 247, 1);
+  border-radius: 1px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  line-height: 34px;
+  float: left;
+  margin-right: 19px;
+  position: relative;
+}
+
+.tag img {
+  position: absolute;
+  right: -9px;
+  top: -9px;
+  cursor: pointer;
+}
+
+.add-tag {
+  width: 100px;
+  height: 34px;
+  background: rgba(247, 248, 250, 1);
+  border-radius: 1px;
+  border: 1px solid rgba(204, 204, 204, 1);
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(136, 136, 136, 1);
+  line-height: 34px;
+  text-align: center;
+  float: left;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1355px) {

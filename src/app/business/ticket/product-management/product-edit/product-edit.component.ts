@@ -4,7 +4,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
 import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, TicketProductEntity } from '../product.service';
+import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
@@ -12,6 +12,7 @@ import { ProductCalendarComponent } from '../product-edit/product-calendar/produ
 import { ProductEditor1Component } from './product-editor1/product-editor1.component';
 import { ProductEditor2Component } from './product-editor2/product-editor2.component';
 import { ProductEditor3Component } from './product-editor3/product-editor3.component';
+import { ChooseLabelComponent } from './choose-label/choose-label.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -51,6 +52,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
               private routerInfo: ActivatedRoute, private router: Router) { }
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public productData: TicketProductEntity = new TicketProductEntity();
+  public labelList: Array<LabelEntity> = [];
+  public searchParams: SearchLabelParams = new SearchLabelParams();
   public productInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
@@ -63,11 +66,14 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public loading = true;
   public product_id: string;
   public productNameErrors = '';
+  public tagNameErrors = '';
   public trafficGuideErrors = '';
   public noticeErrors = '';
   public productIntroduceErrors = '';
   public isEditTicketInsutruction = false;
-
+  public initCheckLabelNamesList: Array<any> = [];
+  public checkLabelNamesList: Array<any> = [];
+  public isSaleTicketSwitch = true;
 
   private searchText$ = new Subject<any>();
   private product_name = '';
@@ -82,6 +88,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
 
   @ViewChild('productImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('productPriceCalendar', { static: true }) public productPriceCalendar: ProductCalendarComponent;
+  @ViewChild('chooseLabel', { static: true }) public chooseLabel: ChooseLabelComponent;
   @ViewChild('productInfoForm', { static: true }) public productInfoForm: any;
   @ViewChild('editor1', { static: true }) public productEditor1: ProductEditor1Component;
   @ViewChild('editor2', { static: true }) public productEditor2: ProductEditor2Component;
@@ -109,6 +116,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
+          sale_num: this.productData.sale_num,
         }
       ];
       this.productData.product_name = this.productData.product_name.substring(0, 20);
@@ -120,6 +128,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
       this.getEditorData();
+      this.getTagsName();
       this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -127,16 +136,64 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.searchText$.next();
   }
 
+  // 获取标签名称
+  private getTagsName() {
+    this.productService.requestLabelListData(this.searchParams).subscribe(res => {
+      this.labelList = res.results;
+      const checkLabelList = this.labelList.map((i, index) => {
+        const isCheckLabel = this.productData.tag_ids.includes(i.tag_id);
+        return (
+          {
+            ...i,
+            time: new Date().getTime() + index,
+            checked: isCheckLabel
+          });
+      });
+      this.initCheckLabelNamesList = checkLabelList.filter(i => i.checked);
+      this.checkLabelNamesList = checkLabelList.filter(i => i.checked);
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+
+  // 删除标签
+  public onDelTag(i: number) {
+    this.checkLabelNamesList.splice(i, 1);
+  }
+
+  // 选择标签
+  public onChooseLabel() {
+    this.chooseLabel.open(this.checkLabelNamesList.map(i => i.tag_id), () => {
+      timer(1000).subscribe(() => {
+        this.checkLabelNamesList = this.chooseLabel.checkedLabelList;
+        this.tagNameErrors = '';
+      });
+    });
+  }
+
+
   // 更新数据
-  public onUpdateData() {
-    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+  public onUpdateData(flag: number) {
+    this.productService.requesTicketsList(this.product_id, flag).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
         isShowInsutructions: false,
         isEditTicketInsutruction: false,
       }));
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'unshelved') {
+              this.globalService.promptBox.open(`该产品已下架!`, null, 2000, '/assets/images/warning.png');
+            } else {
+              return;
+            }
+          }
+        }
+      }
     });
   }
 
@@ -160,7 +217,9 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     // true：不提示 false：提示
     return this.isSubmitProductInfo || (!this.productInfoForm.dirty && !this.isChangeTicketInsutruction
       && !this.productEditor1.isEditor1Change && !this.productEditor2.isEditor2Change
-      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(',')));
+      && !this.productEditor3.isEditor3Change && (!this.isReImportant && pro_image_str === this.imgUrls.join(',')))
+      && this.checkLabelNamesList.filter(i => i.tag_id).join(',') ===
+      this.initCheckLabelNamesList.filter(i => i.tag_id).join(',');
   }
 
   // 编辑购票须知
@@ -183,7 +242,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.globalService.promptBox.open('购票须知保存成功！');
       item.editBasePriceSwitch = true;
       this.isChangeTicketInsutruction = false;
-      this.onUpdateData();
+      this.onUpdateData(2);
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
@@ -218,7 +277,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   public onOpenPriceCalendar(ticket_id) {
     this.productPriceCalendar.open(null, this.product_id, ticket_id, () => {
       timer(1000).subscribe(() => {
-        this.searchText$.next();
+        this.onUpdateData(2);
       });
     });
   }
@@ -259,11 +318,35 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     });
   }
 
+  // 上架开关状态改变
+  public onSwitchChange(is_saled: boolean, event: boolean) {
+    timer(2000).subscribe(() => {
+      return is_saled = event;
+    });
+  }
+
+  // 是否售卖开关点击调用接口
+  public onSwitchClick(product_id, ticket_id, is_saled) {
+    if (is_saled && this.productTicketList.filter(i => i.is_saled).length === 1) {
+      this.globalService.promptBox.open(`产品下至少有一个门票，不允许下架！`, null, 2000, '/assets/images/warning.png');
+    } else {
+      const text = is_saled ? '下架' : '上架';
+      this.productService.requestIsSaleTicket(product_id, ticket_id, !is_saled).subscribe(res => {
+        this.globalService.promptBox.open(`${text}成功`);
+        this.onUpdateData(2);
+      }, err => {
+        this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
+        this.onUpdateData(2);
+      });
+    }
+
+  }
+
   // 置顶
   public onIsTopProduct(product_id, ticket_id, is_top) {
     const text = is_top === 1 ? '置顶' : '取消置顶';
     this.productService.requestIsTopProduct(product_id, ticket_id, is_top).subscribe(res => {
-      this.searchText$.next();
+      this.onUpdateData(2);
       this.globalService.promptBox.open(`${text}成功！`);
     }, err => {
       this.globalService.promptBox.open(`${text}失败，请重试!`, null, 2000, '/assets/images/warning.png');
@@ -277,7 +360,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productNameErrors = '';
     this.trafficGuideErrors = '';
     this.noticeErrors = '';
-    this.productIntroduceErrors = '';
+    this.tagNameErrors = '';
   }
 
   // 选择图片时校验图片格式
@@ -297,9 +380,13 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productData.traffic_guide = CKEDITOR.instances.editor1.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.notice = CKEDITOR.instances.editor2.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.product_introduce = CKEDITOR.instances.editor3.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+    this.productData.tag_ids = this.checkLabelNamesList.map(i => i.tag_id);
     if (!this.productData.product_name) {
       this.clear();
       this.productNameErrors = '请输入产品名称！';
+    } else if (this.productData.tag_ids.length === 0) {
+      this.clear();
+      this.tagNameErrors = '请选择标签！';
     } else if (this.coverImgSelectComponent.imageList.length === 0) {
       this.clear();
       this.errPositionItem.icon.isError = true;

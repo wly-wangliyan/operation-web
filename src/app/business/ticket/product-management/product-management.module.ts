@@ -16,6 +16,11 @@ import { ProductEditor3Component } from './product-edit/product-editor3/product-
 import { ThirdProductDetailComponent } from './third-product-detail/third-product-detail.component';
 import { ProductCalendarComponent } from './product-edit/product-calendar/product-calendar.component';
 import { CalendarDetailComponent } from './product-detail/calendar-detail/calendar-detail.component';
+import { BatchImportComponent } from './product-edit/batch-import/batch-import.component';
+import { LabelManagementComponent } from './label-management/label-management.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LabelEditComponent } from './label-management/label-edit/label-edit.component';
+import { ChooseLabelComponent } from './product-edit/choose-label/choose-label.component';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -38,9 +43,14 @@ const uploadToken: UploadConfig = {
         ProductEditor3Component,
         ThirdProductDetailComponent,
         ProductCalendarComponent,
-        CalendarDetailComponent],
+        CalendarDetailComponent,
+        BatchImportComponent,
+        LabelManagementComponent,
+        LabelEditComponent,
+        ChooseLabelComponent],
     imports: [
         ShareModule,
+        DragDropModule,
         CommonModule,
         ProductManagementRoutingModule
     ],

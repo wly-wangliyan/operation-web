@@ -29,6 +29,7 @@
             <th>地址</th>
             <th>状态</th>
             <th>产品ID</th>
+            <th>销量</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +42,7 @@
             <td>{{data.address}}</td>
             <td>{{data.status| thirdSaleStatus}}</td>
             <td>{{data.product_id}}</td>
+            <td>{{data.sale_num||'--'}}</td>
           </tr>
         </tbody>
       </nz-table>
@@ -69,6 +71,24 @@
                 autocomplete="off" name="subheading" maxlength='80' />
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item nzFlex>
+            <nz-form-label nzRequired [nzNoColon]='true'>分类标签</nz-form-label>
+            <nz-form-control class="ml_10">
+              <ul class="tags">
+                <li>
+                  <div class="tag" *ngFor="let data of checkLabelNamesList; let i=index">{{data.name}}
+                    <img src="/assets/images/tag_del.png" (click)='onDelTag(i)'>
+                  </div>
+                  <div class='add-tag' (click)='onChooseLabel()'>
+                    选择标签 <img style="margin-top: -2px;" src="/assets/images/add_tag.png">
+                  </div>
+                </li>
+              </ul>
+              <div *ngIf="tagNameErrors" class="text-danger" style="margin-left: -10px;">
+                <span class="input-error">{{tagNameErrors}}</span>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </form>
     </div>
@@ -78,7 +98,7 @@
   <!-- 产品门票信息 -->
   <div class='des_card'>
     <div>
-      <span class='card-title wh_140'>产品门票信息</span><a class='import-btn' (click)='onUpdateData()'>更新数据</a>
+      <span class='card-title wh_140'>产品门票信息</span><a class='import-btn' (click)='onUpdateData(1)'>更新数据</a>
     </div>
     <div class='ticket-table'>
       <nz-table #productTicketTable [nzData]="productTicketList" [nzShowPagination]="false"
@@ -222,11 +242,20 @@
             <td>
               <div class='opera m_20'>
                 <div>
-                  <a (click)='onOpenPriceCalendar(data.ticket_id)'>价格日历</a>
+
+                  <a (click)='onOpenPriceCalendar(data.ticket_id)'><img src="/assets/images/date.png">价格日历</a>
                 </div>
                 <div>
-                  <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'>置顶</a>
-                  <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'>取消置顶</a>
+
+                  <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'> <img
+                      src="/assets/images/top.png">置顶</a>
+                  <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'> <img
+                      src="/assets/images/top.png">取消置顶</a>
+                </div>
+                <div>
+                  <a (click)='onSwitchClick(data.product.product_id,data.ticket_id,data.is_saled)'>
+                    <img src="/assets/images/sale.png" *ngIf='data.is_saled'>
+                    <img src="/assets/images/not_sale.png" *ngIf='!data.is_saled'>{{data.is_saled?'关闭':'开启'}}售卖</a>
                 </div>
               </div>
             </td>
@@ -315,3 +344,4 @@
   </div>
 </div>
 <app-product-calendar #productPriceCalendar></app-product-calendar>
+<app-choose-label #chooseLabel></app-choose-label>

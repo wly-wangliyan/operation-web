@@ -39,6 +39,7 @@ export class TicketOrderEntity extends EntityBase {
   public price_calendar: PriceCalendarEntity = undefined; // 门票价格日历对象
   public ticket: TicketEntity = undefined; // 门票对象
   public product: TicketProductEntity = undefined; // 产品对象
+  public product_name: string = undefined; // 产品名称
   public buy_num: number = undefined; // 购买数量
   public right_price: number = undefined; // 应收价格
   public real_price: number = undefined; // 实收价格
@@ -89,7 +90,21 @@ export class TicketOrderEntity extends EntityBase {
   public coupon_id: string = undefined; // 优惠券id
   public coupon_upload_flag: string = undefined; // 优惠券同步状态
   public ticket_info: TicketInfo = undefined; // 票务信息
-  public visitor_info: Array<VisitorInfo> = undefined; // 游客信息
+  public tourists: Array<VisitorInfo> = undefined; // 游客信息
+  public short_message_type: number = undefined; // 短信类型 1：创建订单成功, 有凭证码 2：创建订单成功, 无凭证码 3：创建订单失败
+  public short_message_count: number = undefined; // integer	短信条数
+  public ticket_name: string = undefined; // 门票名称
+  public supplier_id: string = undefined; // 供应商id
+  public tp_id: string = undefined; // 第三方产品id
+  public third_ticket_id: string = undefined; // 第三方门票id
+  public thir_price_id: string = undefined; // 第三方价格id
+  public tourist_info_flag: number = undefined; // 身份证信息
+  public validate_time_limit: string = undefined; // 门票验证时间
+  public product_id: string = undefined; // 产品id
+  public image_urls: string = undefined; // 产品图片urls
+  public delay_type: number = undefined; // 使用有效期类型
+  public limit_ticket_start: number = undefined; // 期票开始日期
+  public limit_ticket_end: number = undefined; // 期票结束日期
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'ticket') {
@@ -100,7 +115,7 @@ export class TicketOrderEntity extends EntityBase {
       return PriceCalendarEntity;
     } else if (propertyName === 'ticket_info') {
       return TicketInfo;
-    } else if (propertyName === 'visitor_info') {
+    } else if (propertyName === 'tourists') {
       return VisitorInfo;
     }
     return null;
@@ -154,5 +169,15 @@ export class OrderManagementService {
     const httpUrl = `${this.domain}/orders/${order_id}`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => TicketOrderEntity.Create(res.body)));
+  }
+
+  /**
+   * 重新发送短信
+   * @param order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestResendMessage(order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/orders/${order_id}/send_short_message`;
+    return this.httpService.post(httpUrl);
   }
 }

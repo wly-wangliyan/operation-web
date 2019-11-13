@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService, UserPermissionGroupEntity } from './auth.service';
 import { HttpService } from './http.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Http500TipComponent } from '../share/components/tips/http500-tip/http500-tip.component';
@@ -9,6 +9,13 @@ import { ZConfirmationBoxComponent } from '../share/components/tips/z-confirmati
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
+import { EntityBase } from '../../utils/z-entity';
+
+export class ChangePasswordParams extends EntityBase {
+    public old_password: string = undefined;	 // T	原始密码
+    public new_password: string = undefined;	// T	新密码
+}
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +24,8 @@ export class GlobalService {
 
     // 特殊存储，全局化资源配置
     public static Instance: GlobalService;
+
+    private _permissionGroups: Array<UserPermissionGroupEntity>;
 
     constructor(private authService: AuthService, private httpService: HttpService) {
     }
@@ -75,5 +84,33 @@ export class GlobalService {
             return limitMsg;
         }
         return '';
+    }
+
+    /**
+     * 获取权限组列表
+     * @returns any
+     */
+    public get permissionGroups(): Observable<Array<UserPermissionGroupEntity>> {
+        // if (isUndefined(this._permissionGroups)) {
+        return this.authService.requestPermissionGroups().pipe(map(permissionGroups => {
+            this._permissionGroups = permissionGroups;
+            return permissionGroups;
+        }));
+        // } else {
+        //   return Observable.create(observer => {
+        //     observer.next(this._permissionGroups);
+        //     observer.complete();
+        //   });
+        // }
+    }
+
+    /**
+     * 请求修改密码
+     * @param oldPwd 旧密码
+     * @param newPwd 新密码
+     */
+    public requestModifyPassword(passwordParams: ChangePasswordParams): Observable<HttpResponse<any>> {
+        const body = passwordParams.json();
+        return this.httpService.patch(environment.OPERATION_SERVE + '/user/password', body);
     }
 }

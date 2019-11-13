@@ -79,6 +79,10 @@
   width: 315px;
 }
 
+.opera img {
+  margin-right: 5px;
+}
+
 .opera>a {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFangSC;
@@ -415,9 +419,34 @@ input[type=file]:focus {
   }
 }
 
-@media screen and (max-width: 1400px) {
+.tags {
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+.tag {
+  padding: 0 30px;
+  height: 34px;
+  background: rgba(62, 113, 247, 1);
+  border-radius: 1px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  line-height: 34px;
+  float: left;
+  margin-right: 19px;
+  position: relative;
+}
+
+@media screen and (max-width: 1700px) {
   .ticket-info {
-    width: 315px;
+    width: 350px;
+  }
+
+  .des_td {
+    width: 400px;
   }
 
   .info {

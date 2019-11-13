@@ -6,6 +6,14 @@ import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 
+// banner点击统计
+export class ClickStatisticsEntity extends EntityBase {
+  public date: number = undefined; // 时间
+  public click_num: string = undefined; // 点击数
+  public click_person: string = undefined; // 点击人数
+}
+
+// banner
 export class BannerEntity extends EntityBase {
   public banner_id: string = undefined; // id
   public title: string = undefined; // 标题
@@ -20,8 +28,16 @@ export class BannerEntity extends EntityBase {
   public sort_num: number = undefined; 	// 	int	用于排序
   public click_num: number = undefined; // 点击量
   public click_person: number = undefined; 	// 	点击人数
+  public click_stats: Array<ClickStatisticsEntity> = []; // 点击统计
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'click_stats') {
+      return ClickStatisticsEntity;
+    }
+    return null;
+  }
 }
 
 export class SearchParams extends EntityBase {

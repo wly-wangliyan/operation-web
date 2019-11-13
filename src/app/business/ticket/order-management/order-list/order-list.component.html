@@ -88,22 +88,21 @@
           <tr *ngFor="let order of ticketOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td [title]="order.order_id">{{order.order_id | zMaxLength:10}}</td>
-            <ng-container *ngIf="order.product">
+            <ng-container *ngIf="order.image_urls">
               <td>
                 <div class="img-item">
-                  <ng-container *ngIf="order.product.image_urls">
-                    <ng-container *ngFor="let image_url of order.product.image_urls.split(',');let i=index">
+                  <ng-container *ngIf="order.image_urls">
+                    <ng-container *ngFor="let image_url of order.image_urls.split(',');let i=index">
                       <img *ngIf="i===0" style="width: 90px;" src="{{image_url}}" />
                     </ng-container>
                   </ng-container>
-                  <img *ngIf="!order.product.image_urls" src="/assets/images/image_space_3_2.png" />
-                  <a [title]="order.product.product_name"
-                    [routerLink]="['../../product-management/detail', order.product.product_id]"
-                    style="word-break: keep-all;margin-left: 5px;">{{order.product.product_name | zMaxLength:15}}</a>
+                  <img *ngIf="!order.image_urls" src="/assets/images/image_space_3_2.png" />
+                  <a [title]="order.product_name" [routerLink]="['../../product-management/detail', order.product_id]"
+                    style="word-break: keep-all;margin-left: 5px;">{{order.product_name | zMaxLength:15}}</a>
                 </div>
               </td>
             </ng-container>
-            <ng-container *ngIf="!order.product">
+            <ng-container *ngIf="!order.image_urls">
               <td>
                 <img src="/assets/images/image_space_3_2.png" />
               </td>

@@ -46,6 +46,8 @@ export class ExpandedMenuComponent implements OnInit {
                 this.globalService.menu_index = 5;
             } else if (path.includes('/mall')) {
                 this.globalService.menu_index = 6;
+            } else if (path.includes('/management-setting/')) {
+                this.globalService.menu_index = 7;
             } else if (path.includes('/home')) {
                 this.globalService.menu_index = this.globalService.menu_last_index;
             }
@@ -75,6 +77,8 @@ export class ExpandedMenuComponent implements OnInit {
             this.menuItems = this.generateMenus_ticket();
         } else if (this.globalService.menu_index === 6) {
             this.menuItems = this.generateMenus_mall();
+        } else if (this.globalService.menu_index === 7) {
+            this.menuItems = this.generateMenus_management();
         }
     }
 
@@ -149,6 +153,15 @@ export class ExpandedMenuComponent implements OnInit {
         const menusItem: Array<SideMenuItem> = [];
         menusItem.push(this.generateGoodsManagementMenu());
         menusItem.push(this.generateGoodsOrderMenu());
+        return menusItem;
+    }
+
+    // 管理设置
+    public generateMenus_management(): Array<SideMenuItem> {
+        this.menu_icon = false;
+        this.routeLinkList = [];
+        const menusItem: Array<SideMenuItem> = [];
+        menusItem.push(this.generateEmployeesMenu());
         return menusItem;
     }
 
@@ -306,8 +319,17 @@ export class ExpandedMenuComponent implements OnInit {
         return orderMenu;
     }
 
+    // 管理设置》用户管理
+    private generateEmployeesMenu() {
+        const systemMenu = new SideMenuItem('用户管理', '/main/management-setting/employees');
+        systemMenu.icon = '/assets/images/menu_user.png';
+        const subFinanceMenu1 = new SideMenuItem('用户列表', '/main/management-setting/employees', systemMenu);
+        systemMenu.children.push(subFinanceMenu1);
+        this.routeLinkList.push(systemMenu);
+        return systemMenu;
+    }
 
-    private refreshMenu(path: string) {
+    public refreshMenu(path: string) {
         // 尝试父匹配
         let index = this.routeLinkList.findIndex(element => {
             return element.path === path;

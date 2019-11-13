@@ -1,0 +1,100 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'运营配置'" [level2Name]="'活动配置'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" [routerLink]="['../config-add']">
+      <a>新建</a>
+    </li>
+  </ul>
+</div>
+
+<div class="content-flow">
+  <div class="search-container">
+    <form class="search-form" autocomplete="off">
+
+      <div class="form-group">
+        <span>名称：</span>
+        <input name="promotion_name" class="form-control" placeholder="请输入标题" maxlength="20"
+          [(ngModel)]="searchParams.promotion_name" appIgnoreSpace />
+      </div>
+
+      <div class="form-group">
+        <span>活动类型：</span>
+        <select name="promotion_type" class="form-control" [(ngModel)]="searchParams.promotion_type">
+          <option value=''>全部</option>
+          <option value=1>消费赠券</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <span>ID：</span>
+        <input name="promotion_id" class="form-control" placeholder="请输入ID" maxlength="32"
+          [(ngModel)]="searchParams.promotion_id" appIgnoreSpace />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="configList" [nzNoResult]="noResultText" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" #configTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>图片</th>
+            <th>ID</th>
+            <th>活动名称</th>
+            <th>活动类型</th>
+            <th>有效期</th>
+            <th>创建时间</th>
+            <th>启停</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of configTable.data; let i=index">
+            <td>{{i + 1}}</td>
+
+            <td>
+              <img *ngIf='!data.image' style="width: 150px;" src="/assets/images/space_config.png">
+              <img *ngIf='data.image' style="width: 150px;" [src]="data.image">
+            </td>
+
+            <td [title]="data.promotion_id?data.promotion_id:''">
+              {{data.promotion_id?(data.promotion_id|zMaxLength:10):'--'}}</td>
+
+            <td [title]="data.promotion_name?data.promotion_name:''">
+              {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
+
+            <td>{{data.promotion_type?(data.promotion_type===1?'消费赠券':'其他'):'--'}}</td>
+
+            <td>
+              <div class="td-time">
+                <span *ngIf="data.start_time">
+                  {{data.start_time ?('起：'+(data.start_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                </span>
+                <span *ngIf="data.end_time">
+                  {{data.end_time ?('止：'+(data.end_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                </span>
+                <span *ngIf="!data.start_time && !data.end_time">--</span>
+              </div>
+            </td>
+
+            <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+            <td>
+              <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="On" style="height: 10px"
+                nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.promotion_id,$event)"></nz-switch>
+            </td>
+            <td class="operation">
+              <a [title]="'编辑'" (click)="onEditClick(data.promotion_id)">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

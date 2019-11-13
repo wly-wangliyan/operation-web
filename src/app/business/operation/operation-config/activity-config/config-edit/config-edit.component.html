@@ -1,0 +1,155 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'运营配置'" [level2Name]="'活动配置'" [level2RelativePath]="'../'" [level3Name]="title">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动类型</span>
+        </label>
+        <div class="control-input">
+          <select name="activity_promotion_type" class="form-control" [(ngModel)]="configParams.promotion_type"
+            (change)="onChangeType($event)" required>
+            <option value="">请选择</option>
+            <option value=1>消费赠券</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动名称</span>
+        </label>
+        <div class="control-input">
+          <input name="promotion_name" class="form-control" [(ngModel)]="configParams.promotion_name"
+            placeholder="输入1-20个字活动名称" minlength="1" maxlength="20" appIgnoreSpace required>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>图片</span>
+        </label>
+        <div>
+          <app-z-photo-select #activityImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+            [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="activityImg"
+            [imageWidth]="375" [imageHeight]="200" [imageUrls]="activity_url" #coverImg [aspectRatio]="1.875/1"
+            [minCropBoxWidth]="375" [minCropBoxHeight]="200" [resizable]="true" [imageShowWidth]="375">
+          </app-z-photo-select>
+          <div class="row row-message row-mes">
+            <span class="err-message">{{activityImgErrMsg}}</span>
+          </div>
+          <p class="cover-hint">注：尺寸 750*400px，格式PNG或JPG，大小2M以内</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动开始时间</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+            name='config_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动结束时间</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+            name='config_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>领赠设置</span>
+        </label>
+        <div class="reward-container">
+          <div *ngFor="let reward of editRewardList;let i=index;" class="reward-item">
+            <div>
+              <div class="item-group">
+                <div class="reward-title" *ngIf="i===0">优惠券模板ID</div>
+                <input name="reward_id_{{i}}" [(ngModel)]="reward.reward_id" placeholder="" class="form-control"
+                  (change)="onChangeRewardID($event,i)" required />
+              </div>
+              <div class="item-group">
+                <div class="reward-title" *ngIf="i===0">库存</div>
+                <input name="reward_num_{{i}}" [(ngModel)]="reward.reward_num" placeholder="" class="form-control"
+                  style="width: 100px;" oninput="value=value.replace(/[^\d]/g,'')" (keyup)="onNumberKeyUp(i)"
+                  required />
+              </div>
+              <div class="item-group">
+                <div class="reward-title" *ngIf="i===0">中奖概率</div>
+                <input name="reward_probability_{{i}}" [(ngModel)]="reward.reward_probability" placeholder=""
+                  class="form-control" maxlength="7" (change)="onAmountChange($event,i)"
+                  (keypress)="inputNumberLimit($event)" style="width: 100px;" required />
+              </div>
+              <div class="item-group">
+                <div class="reward-title" *ngIf="i===0">赠品</div>
+                <div class="related-group">
+                  <select name="related_reward_type_{{i}}" class="form-control" [(ngModel)]="reward.related_reward_type"
+                    (change)="onRelatedChange($event,i)">
+                    <option [value]=1>优惠券</option>
+                    <option [value]=2>优惠券组</option>
+                  </select>
+                  <input name="related_reward_id_{{i}}" [(ngModel)]="reward.related_reward_id" placeholder=""
+                    class="form-control" />
+                </div>
+              </div>
+            </div>
+
+            <div class="item-group" style="margin-right: 0;">
+              <div class="reward-title" style="height: 12px;" *ngIf="i===0"></div>
+              <div class="button-group">
+                <button class="close-btn" nz-button (click)="onAddRewardClick()" *ngIf="editRewardList.length===(i+1)"
+                  [disabled]="editRewardList.length>=5">添加</button>
+                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button
+                  (click)="onDeleteRewardClick(reward,i)">移除</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row-message" style="margin: 3px 0 15px 0;">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{rewardErrMsg}}</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>活动描述</span>
+        </label>
+        <app-description-editor #descriptionEditor></app-description-editor>
+      </div>
+
+      <div class="row row-message" style="margin: 3px 0 15px 0;">
+        <label class="control-label"></label>
+        <div class="control-input err-message">
+          <span>{{configErrMsg}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid || !start_time || !end_time || activityImg.imageList.length===0 ||
+          !descriptionEditor.isFill" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+      </div>
+    </form>
+  </div>
+</div>

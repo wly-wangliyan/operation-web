@@ -9,7 +9,7 @@
         <caption>订单信息</caption>
         <tr>
           <td>产品名称：</td>
-          <td>{{orderDetail.product?orderDetail.product.product_name:'--'}}</td>
+          <td>{{orderDetail.product_name||'--'}}</td>
           <td>订单状态：</td>
           <td>{{orderDetail.status | orderStatus}}</td>
           <td>使用状态：</td>
@@ -61,6 +61,17 @@
             {{orderDetail.pay_time && (orderDetail.status === 2 || orderDetail.status === 4)?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
           </td>
         </tr>
+        <tr>
+          <td>短信发送:</td>
+          <td style="line-height: 40px;">
+            已发送{{orderDetail.short_message_count}}次
+            <button class='mes-btn' nz-button nzType="primary" (click)="onResendMessage()">重发</button>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       </table>
     </div>
 
@@ -76,13 +87,12 @@
             <th>建议售价/张</th>
             <th>结算价/张</th>
             <th>平台售价/张</th>
-
             <th>供应商</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ticketInfo.ticket_name}}</td>
+            <td>{{orderDetail.ticket_name||'--'}}</td>
             <td>{{orderDetail.buy_num || 0}} 张</td>
             <td>
               {{orderDetail.order_begin_time}}

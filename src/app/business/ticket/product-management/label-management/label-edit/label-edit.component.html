@@ -1,0 +1,28 @@
+<!-- 新建/编辑标签 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">{{tag_id?'编辑':'新建'}}</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCloseLabel()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #labelForm="ngForm">
+        <nz-form-item nzFlex style="margin-left: 20px;">
+          <nz-form-label nzRequired [nzNoColon]='true'>标签名称</nz-form-label>
+          <nz-form-control class="form_control">
+            <input type="text" nz-input class="form-control" [(ngModel)]="name" placeholder="输入1-10字名称" maxlength='10'
+              name='label-name' (keydown)="onKeydownEvent($event)" required />
+          </nz-form-control>
+        </nz-form-item>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseLabel()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!labelForm.valid" (click)='onSaveTagName()'>
+            保存
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

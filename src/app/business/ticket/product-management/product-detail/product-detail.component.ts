@@ -3,8 +3,9 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { Subject, timer } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
-import { ProductService, TicketProductEntity } from '../product.service';
+import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
 import { CalendarDetailComponent } from '../product-detail/calendar-detail/calendar-detail.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,6 +19,8 @@ export class ProductDetailComponent implements OnInit {
     private router: Router) { }
 
   public productData: TicketProductEntity = new TicketProductEntity();
+  public labelList: Array<LabelEntity> = [];
+  public searchParams: SearchLabelParams = new SearchLabelParams();
   public productInfoList: Array<any> = [];
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
@@ -27,6 +30,7 @@ export class ProductDetailComponent implements OnInit {
   public tempContent1: string;
   public product_id: string;
   public isShowContent = true;
+  public checkLabelNamesList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
   @ViewChild('priceCalendarDetail', { static: true }) public priceCalendarDetail: CalendarDetailComponent;
@@ -51,6 +55,7 @@ export class ProductDetailComponent implements OnInit {
           product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           address: this.productData.address,
           status: this.productData.status,
+          sale_num: this.productData.sale_num,
         }
       ];
       this.productTicketList = this.productData.tickets.map(i => ({
@@ -58,6 +63,7 @@ export class ProductDetailComponent implements OnInit {
         isShowInsutructions: false,
         isShowDescriptions: false
       }));
+      this.getTagsName();
       this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
       this.loading = false;
@@ -75,16 +81,46 @@ export class ProductDetailComponent implements OnInit {
     this.searchText$.next();
   }
 
+  // 获取标签名称
+  private getTagsName() {
+    this.productService.requestLabelListData(this.searchParams).subscribe(res => {
+      this.labelList = res.results;
+      const checkLabelList = this.labelList.map((i, index) => {
+        const isCheckLabel = this.productData.tag_ids.includes(i.tag_id);
+        return (
+          {
+            ...i,
+            time: new Date().getTime() + index,
+            checked: isCheckLabel
+          });
+      });
+      this.checkLabelNamesList = checkLabelList.filter(i => i.checked);
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
   // 更新数据
-  public onUpdateData() {
-    this.productService.requesTicketsList(this.product_id).subscribe(res => {
+  public onUpdateData(flag: number) {
+    this.productService.requesTicketsList(this.product_id, flag).subscribe(res => {
       this.productTicketList = res.results.map(i => ({
         ...i,
         isShowInsutructions: false,
         isEditTicketInsutruction: false,
       }));
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'unshelved') {
+              this.globalService.promptBox.open(`该产品已下架!`, null, 2000, '/assets/images/warning.png');
+            } else {
+              return;
+            }
+          }
+        }
+      }
     });
   }
 
