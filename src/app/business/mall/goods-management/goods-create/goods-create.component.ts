@@ -287,7 +287,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 点击取消添加/编辑
     public onCancelClick() {
-        this.router.navigate([this.listRelativePath], {relativeTo: this.route});
+        this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
+            this.router.navigate([this.listRelativePath], {relativeTo: this.route});
+        });
     }
 
     // 获取商品详情
