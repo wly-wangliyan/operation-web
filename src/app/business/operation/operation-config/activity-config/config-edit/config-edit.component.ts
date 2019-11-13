@@ -314,6 +314,10 @@ export class ConfigEditComponent implements OnInit {
           //   return false;
           // }
 
+          if (this.editRewardList[rewardIndex].reward_probability === 0) {
+            this.rewardErrMsg = '中奖概率应大于等于0.00001';
+          }
+
           if (!this.editRewardList[rewardIndex].reward_id
             || isNullOrUndefined(this.editRewardList[rewardIndex].reward_num)
             || !this.editRewardList[rewardIndex].reward_probability) {
