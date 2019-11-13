@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
@@ -37,7 +37,7 @@ export class BrokerageCompanyEditComponent {
   @ViewChild('pagePromptDiv', { static: true }) public pagePromptDiv: ElementRef;
 
   constructor(private globalService: GlobalService,
-    private insuranceService: InsuranceService) {
+              private insuranceService: InsuranceService) {
   }
 
   // 键盘按下事件

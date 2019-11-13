@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { BrokerageEntity, InsuranceService } from '../../insurance.service';
 import { BrokerageCompanyEditComponent } from '../brokerage-company-edit/brokerage-company-edit.component';
