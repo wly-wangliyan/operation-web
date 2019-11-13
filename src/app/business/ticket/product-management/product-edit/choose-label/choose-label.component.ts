@@ -53,7 +53,6 @@ export class ChooseLabelComponent implements OnInit {
 
   // 查询按钮
   public onSearchBtnClick() {
-    this.searchParams.name = this.searchParams.name && this.searchParams.name.trim();
     this.searchText$.next();
   }
 
