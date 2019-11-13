@@ -29,4 +29,6 @@
 
 .img-item img {
     margin-right: 5px;
+    width: 90px;
+    height: 65px;
 }
