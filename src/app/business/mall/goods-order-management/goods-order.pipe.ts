@@ -56,9 +56,9 @@ export class PayStatusPipe implements PipeTransform {
 
 /** 签收方式 */
 export const confirmType = {
-  1: '待支付',
-  2: '已支付',
-  3: '已取消'
+  1: '买家操作',
+  2: '管理员操作',
+  3: '系统自动'
 };
 
 @Pipe({
