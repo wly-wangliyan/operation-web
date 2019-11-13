@@ -7,8 +7,7 @@
         <!-- 缩略视频/图预览 -->
         <div [class.hide]="isHidePreviewVideo">
             <video id="preview-video" [src]="currentPreviewVideo.sourceUrl" [controls]="isControls"
-                   [autoplay]="isAutoPlay" [disablePictureInPicture]="isDisablePictureInPicture"
-                   (click)="onPlayPreviewVideo()"></video>
+                   [autoplay]="isAutoPlay" (click)="onPlayPreviewVideo()"></video>
             <div class="icon-control" [class.hide]="isHidePlayIcon">
                 <i (click)="onPlayPreviewVideo()"></i>
             </div>
