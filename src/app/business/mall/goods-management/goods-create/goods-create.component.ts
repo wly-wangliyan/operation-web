@@ -130,7 +130,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             this.levelTwoName = '编辑产品';
             this.listRelativePath = '../../list';
 
-            timer(150).subscribe(() => {
+            timer(1000).subscribe(() => {
                 this.requestCommodityById();
             });
         } else {
