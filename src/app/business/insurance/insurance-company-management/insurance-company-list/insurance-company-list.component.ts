@@ -79,9 +79,11 @@ export class InsuranceCompanyListComponent implements OnInit {
 
     // 列表排序(停用的保险公司不发送请求，位置没有发生变化的不发送请求)
     public drop(event: CdkDragDrop<string[]>, data): void {
+        // 停用的保险公司不发送请求
         if (data[event.previousIndex].discontinue_use) {
             return;
         }
+        // 位置没有发生变化的不发送请求
         if (event.previousIndex === event.currentIndex) {
             return;
         }

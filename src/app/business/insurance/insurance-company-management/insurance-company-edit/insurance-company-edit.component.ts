@@ -139,7 +139,7 @@ export class InsuranceCompanyEditComponent implements OnInit {
       params.tag = this.tagList.join(',');
       params.details_link = this.currentInsurance.details_link;
       if (this.isCreateInsurance) {
-        // 添加项目
+        // 添加保险公司
         this.insuranceService.requestAddInsurance(params).subscribe(() => {
           this.onClose();
           this.globalService.promptBox.open('添加成功！', () => {
@@ -147,10 +147,9 @@ export class InsuranceCompanyEditComponent implements OnInit {
           });
         }, err => {
           this.errorProcess(err);
-
         });
       } else {
-        // 编辑项目
+        // 编辑保险公司
         this.insuranceService.requestModifyInsurance(params, this.insurance_id).subscribe(() => {
           this.onClose();
           this.globalService.promptBox.open('修改成功！', () => {
