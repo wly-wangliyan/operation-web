@@ -36,7 +36,23 @@ export class AuthGuardService implements CanActivate, CanLoad, CanActivateChild 
         return false;
       }
     } else {
-      if (!this.authService.isLoggedIn) {
+      // 根据是否有该模块权限来控制页面跳转
+      if (!this.authService.checkPermissions(['ticket']) && url.includes('/notice-center')) {
+        this.authService.isShowExpandMenu = true;
+        return false;
+      } else if (!this.authService.checkPermissions(['operation']) && url.includes('/operation')) {
+        return false;
+      } else if (!this.authService.checkPermissions(['insurance']) && url.includes('/insurance')) {
+        return false;
+      } else if (!this.authService.checkPermissions(['upkeep']) && url.includes('/maintenance')) {
+        return false;
+      } else if (!this.authService.checkPermissions(['ticket']) && url.includes('/ticket')) {
+        return false;
+      } else if (!this.authService.checkPermissions(['mall']) && url.includes('/mall')) {
+        return false;
+      } else if (!this.authService.checkPermissions(['management']) && url.includes('/management-setting')) {
+        return false;
+      } else if (!this.authService.isLoggedIn) {
         this.router.navigate(['login']);
         return false;
       }

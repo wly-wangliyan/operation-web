@@ -32,25 +32,25 @@ export class ExpandedMenuComponent implements OnInit {
               public authService: AuthService,
               public platformLocation: PlatformLocation) {
 
-    platformLocation.onPopState(() => {
-      const path = location.pathname;
-      if (path.includes('/notice-center')) {
-        this.globalService.menu_index = null;
-      } else if (path.includes('operation/')) {
-        this.globalService.menu_index = 1;
-      } else if (path.includes('insurance')) {
-        this.globalService.menu_index = 3;
-      } else if (path.includes('maintenance')) {
-        this.globalService.menu_index = 4;
-      } else if (path.includes('/ticket')) {
-        this.globalService.menu_index = 5;
-      } else if (path.includes('/mall')) {
-        this.globalService.menu_index = 6;
-      } else if (path.includes('/management-setting/')) {
-        this.globalService.menu_index = 7;
-      } else if (path.includes('/home')) {
-        this.globalService.menu_index = this.globalService.menu_last_index;
-      }
+    platformLocation.onPopState((param) => {
+      timer(0).subscribe(() => {
+        const path = (param as any).target.location.pathname;
+        if (path.includes('/notice-center')) {
+          this.globalService.menu_index = null;
+        } else if (path.includes('operation/')) {
+          this.globalService.menu_index = 1;
+        } else if (path.includes('insurance')) {
+          this.globalService.menu_index = 3;
+        } else if (path.includes('maintenance')) {
+          this.globalService.menu_index = 4;
+        } else if (path.includes('/ticket')) {
+          this.globalService.menu_index = 5;
+        } else if (path.includes('/mall')) {
+          this.globalService.menu_index = 6;
+        } else if (path.includes('/management-setting/')) {
+          this.globalService.menu_index = 7;
+        }
+      });
     });
     this.getMenuItems();
   }
@@ -211,7 +211,7 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 保险 》经纪公司管理
   private generateBrokerageMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance');
+    const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance/brokerage-company-list');
     brokerageMenu.icon = '/assets/images/menu_business.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
