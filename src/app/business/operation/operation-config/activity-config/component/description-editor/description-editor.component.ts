@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivityConfigService } from '../../activity-config.service';
 import { ImageImportViewModel } from '../upload-image.model';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-description-editor',
@@ -13,21 +14,20 @@ export class DescriptionEditorComponent implements OnInit {
   public uploadImg: string;
   public flag = 0;
   public isEditorChange = false;
-  public isFill = false;
+
+  @Output('changeEvent') public changeEvent = new EventEmitter();
+  @Output('instanceReady') public instanceReady = new EventEmitter();
 
   constructor(private activityService: ActivityConfigService) {
   }
 
   public ngOnInit() {
-    setTimeout(() => {
+    timer(0).subscribe(() => {
       CKEDITOR.replace('descriptionEditor');
-      CKEDITOR.on('instanceReady', event => {
-        event.editor.on('change', () => {
-          this.isEditorChange = true;
-          this.isFill = CKEDITOR.instances.descriptionEditor.getData() ? true : false;
-        });
-      });
-    }, 0);
+      // CKEDITOR.on('instanceReady', event => {
+
+      // });
+    });
   }
 
   // 取消上传图片

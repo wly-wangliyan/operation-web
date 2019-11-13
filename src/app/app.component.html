@@ -17,13 +17,14 @@
         [class.noPermissions]="!authService.checkPermissions(['ticket'])">票务</li>
       <li [class.herder-active]="globalService.menu_index===6" (click)="onMainMenuClick(6)"
         [class.noPermissions]="!authService.checkPermissions(['mall'])">商城</li>
-      <li [class.herder-active]="globalService.menu_index===7" (click)="onMainMenuClick(7)" [class.noPermissions]="!((authService.user && authService.user.is_superuser) ||
-        authService.checkPermissions(['management']))">管理设置</li>
+      <li [class.herder-active]="globalService.menu_index===7" [class.noPermissions]="!
+        authService.checkPermissions(['management'])" (click)="onMainMenuClick(7)">管理设置</li>
     </ul>
     <div class="user">
       <!--<div class="user_photo"></div>
             <div class="user_name">{{authService.user?.username}}</div>-->
-      <div class="notice-btn" (click)="onNoticeCenterClick()">
+      <div class="notice-btn" (click)="onNoticeCenterClick()"
+        [class.noPermissions]="!authService.checkPermissions(['ticket'])">
         <nz-badge [nzCount]="globalService.notice_Count">
           <a>
             <i class="main-header-notice"></i>

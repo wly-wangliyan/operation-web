@@ -36,10 +36,12 @@
                     </nz-table>
                 </div>
                 <div class="commodity-info">
-                    上架时间：{{commodityInfo.shelf_time ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd mm:hh') : '--'}}
+                    上架时间：
+                    {{(commodityInfo.sales_status === 1 && commodityInfo.shelf_time) ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
                 </div>
                 <div class="commodity-info">
-                    下架时间：{{commodityInfo.removal_time ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd mm:hh') : '--'}}
+                    下架时间：
+                    {{(commodityInfo.sales_status === 1 && commodityInfo.removal_time) ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
                 </div>
                 <div class="commodity-info">
                     产品ID：{{commodityInfo.commodity_id}}
