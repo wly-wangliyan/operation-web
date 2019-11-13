@@ -26,7 +26,8 @@ export class ExpandedMenuComponent implements OnInit {
 
   private routePathSubscription: Subscription;
 
-  constructor(public router: Router,
+  constructor(
+    public router: Router,
     public routeMonitorService: RouteMonitorService,
     private globalService: GlobalService,
     public authService: AuthService,
@@ -35,6 +36,7 @@ export class ExpandedMenuComponent implements OnInit {
     platformLocation.onPopState((param) => {
       timer(0).subscribe(() => {
         const path = (param as any).target.location.pathname;
+        this.checkPermission(path);
         if (path.includes('/notice-center')) {
           this.globalService.menu_index = null;
         } else if (path.includes('operation/')) {
@@ -57,12 +59,39 @@ export class ExpandedMenuComponent implements OnInit {
 
   public ngOnInit() {
     this.routeMonitorService.routePathChanged.subscribe(path => {
+      this.checkPermission(path);
       this.getMenuItems();
       this.refreshMenu(path);
     });
     timer(0).subscribe(() => {
       this.refreshMenu(location.pathname);
     });
+  }
+
+  private checkPermission(path: string): void {
+    // 根据是否有该模块权限来控制页面跳转
+    if (!this.authService.checkPermissions(['ticket']) && path.includes('/notice-center')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['operation']) && path.includes('/operation')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['insurance']) && path.includes('/insurance')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['upkeep']) && path.includes('/maintenance')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['ticket']) && path.includes('/ticket')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['mall']) && path.includes('/mall')) {
+      this.quietout();
+    } else if (!this.authService.checkPermissions(['management']) && path.includes('/management-setting')) {
+      this.quietout();
+    }
+  }
+
+  // 没有权限时登出
+  private quietout() {
+    this.globalService.promptBox.open('授权失败，请重新登录!', () => {
+      this.authService.logout();
+    }, 2000, null, false);
   }
 
   // 获取菜单

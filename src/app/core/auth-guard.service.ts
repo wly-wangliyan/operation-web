@@ -36,30 +36,7 @@ export class AuthGuardService implements CanActivate, CanLoad, CanActivateChild 
         return false;
       }
     } else {
-      // 根据是否有该模块权限来控制页面跳转
-      if (!this.authService.checkPermissions(['ticket']) && url.includes('/notice-center')) {
-        this.router.navigateByUrl('/main/home');
-        this.authService.isShowExpandMenu = true;
-        return false;
-      } else if (!this.authService.checkPermissions(['operation']) && url.includes('/operation')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.checkPermissions(['insurance']) && url.includes('/insurance')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.checkPermissions(['upkeep']) && url.includes('/maintenance')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.checkPermissions(['ticket']) && url.includes('/ticket')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.checkPermissions(['mall']) && url.includes('/mall')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.checkPermissions(['management']) && url.includes('/management-setting')) {
-        this.router.navigateByUrl('/main/home');
-        return false;
-      } else if (!this.authService.isLoggedIn) {
+      if (!this.authService.isLoggedIn) {
         this.router.navigate(['login']);
         return false;
       }
