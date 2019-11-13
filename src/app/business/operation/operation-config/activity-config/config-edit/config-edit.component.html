@@ -2,7 +2,10 @@
   <app-crumb [level1Name]="'运营配置'" [level2Name]="'活动配置'" [level2RelativePath]="'../'" [level3Name]="title">
   </app-crumb>
 </div>
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
   <div class="content-container">
     <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
 
@@ -80,31 +83,31 @@
             <div>
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">优惠券模板ID</div>
-                <input name="reward_id_{{i}}" [(ngModel)]="reward.reward_id" placeholder="" class="form-control"
-                  (change)="onChangeRewardID($event,i)" required />
+                <input name="reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_id" placeholder=""
+                  class="form-control" (change)="onChangeRewardID($event,i)" maxlength="32" required appIgnoreSpace />
               </div>
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">库存</div>
-                <input name="reward_num_{{i}}" [(ngModel)]="reward.reward_num" placeholder="" class="form-control"
-                  style="width: 100px;" oninput="value=value.replace(/[^\d]/g,'')" (keyup)="onNumberKeyUp(i)"
-                  required />
+                <input name="reward_num_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_num" placeholder=""
+                  class="form-control" style="width: 100px;" oninput="value=value.replace(/[^\d]/g,'')"
+                  (keyup)="onNumberKeyUp(i)" required />
               </div>
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">中奖概率</div>
-                <input name="reward_probability_{{i}}" [(ngModel)]="reward.reward_probability" placeholder=""
-                  class="form-control" maxlength="7" (change)="onAmountChange($event,i)"
+                <input name="reward_probability_{{i}}_{{reward.time}} " [(ngModel)]="reward.reward_probability"
+                  placeholder="" class="form-control" maxlength="7" (change)="onRateChange($event,i)"
                   (keypress)="inputNumberLimit($event)" style="width: 100px;" required />
               </div>
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">赠品</div>
                 <div class="related-group">
-                  <select name="related_reward_type_{{i}}" class="form-control" [(ngModel)]="reward.related_reward_type"
-                    (change)="onRelatedChange($event,i)">
+                  <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control"
+                    [(ngModel)]="reward.related_reward_type" (change)="onRelatedChange($event,i)">
                     <option [value]=1>优惠券</option>
                     <option [value]=2>优惠券组</option>
                   </select>
-                  <input name="related_reward_id_{{i}}" [(ngModel)]="reward.related_reward_id" placeholder=""
-                    class="form-control" />
+                  <input name="related_reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.related_reward_id"
+                    placeholder="" class="form-control" maxlength="32" appIgnoreSpace />
                 </div>
               </div>
             </div>
@@ -112,9 +115,9 @@
             <div class="item-group" style="margin-right: 0;">
               <div class="reward-title" style="height: 12px;" *ngIf="i===0"></div>
               <div class="button-group">
-                <button class="close-btn" nz-button (click)="onAddRewardClick()" *ngIf="editRewardList.length===(i+1)"
-                  [disabled]="editRewardList.length>=5">添加</button>
-                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button
+                <button class="close-btn" type="button" nz-button (click)="onAddRewardClick()"
+                  *ngIf="editRewardList.length===(i+1)" [disabled]="editRewardList.length>=5">添加</button>
+                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button type="button"
                   (click)="onDeleteRewardClick(reward,i)">移除</button>
               </div>
             </div>
@@ -145,7 +148,7 @@
       </div>
       <div class="row">
         <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid || !start_time || !end_time || activityImg.imageList.length===0 ||
-          !descriptionEditor.isFill" (appZDebounceClick)="onEditFormSubmit()">
+          !isAlreadyFill()" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
         <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
