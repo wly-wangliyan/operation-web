@@ -25,7 +25,7 @@
           <nz-form-label nzRequired [nzNoColon]='true'>统一售价</nz-form-label>
           <nz-form-control class="form_control">
             <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input class='price-input' type="text" maxlength='15' nz-input [(ngModel)]="platform_price"
+              <input class='price-input' type="text" maxlength='9' nz-input [(ngModel)]="platform_price"
                 name='platform_price' />
             </nz-input-group>
             <ng-template #suffixIconSearch>
@@ -45,7 +45,7 @@
                 [nzDisabledDate]="disabledEndDate" (ngModelChange)="onEndTimeChange($event)"
                 (nzOnOpenChange)='onEndTimeOpen($event,i)' nzFormat="yyyy-MM-dd">
               </nz-date-picker>
-              <input class='plat-input' type='text' maxlength='15' nz-input [(ngModel)]="item.price"
+              <input class='plat-input' type='text' maxlength='9' nz-input [(ngModel)]="item.price"
                 name='price-{{item.time}}'>
               <span class="unit">元</span>
               <img style='margin-right: 10px;' *ngIf="datePriceList.length<10&&i===datePriceList.length-1"
