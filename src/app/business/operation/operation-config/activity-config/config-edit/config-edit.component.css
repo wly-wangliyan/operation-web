@@ -26,10 +26,14 @@
 
 .reward-item input {
   width: 275px;
+  background: #fff !important;
 }
 
 .reward-item select {
-  width: 100px;
+  width: 125px;
+  padding-left: 4px !important;
+  padding-right: 14px;
+  background: #fff !important;
 }
 
 .reward-item {
@@ -69,7 +73,7 @@
 .reward-item .item-group {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .item-group .reward-title {
@@ -77,5 +81,6 @@
   line-height: 12px;
   color: #23242F;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

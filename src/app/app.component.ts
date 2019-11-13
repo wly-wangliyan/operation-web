@@ -138,49 +138,49 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       case 1:
         if (!url.includes('operation/')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus();
-          this.router.navigate(['/main/home']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus();
+          this.router.navigate(['/main/operation/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus());
+          });
         }
         break;
       case 3:
         if (!url.includes('insurance')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
-          this.router.navigate(['/main']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
+          this.router.navigate(['/main/insurance/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_insurance());
+          });
         }
         break;
       case 4:
         if (!url.includes('maintenance')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
-          this.router.navigate(['/main']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
+          this.router.navigate(['/main/maintenance/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_maintenance());
+          });
         }
         break;
       case 5:
         if (!url.includes('/ticket')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
-          this.router.navigate(['/main']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+          this.router.navigate(['/main/ticket/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_ticket());
+          });
         }
         break;
       case 6:
         if (!url.includes('/mall')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
-          this.router.navigate(['/main']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
+          this.router.navigate(['/main/mall/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_mall());
+          });
         }
         break;
       case 7:
         if (!url.includes('/management-setting/')) {
           this.menuComponent.menuItems = this.menuComponent.generateMenus_management();
-          this.router.navigate(['/main']);
-        } else if (url.includes('home')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_management();
+          this.router.navigate(['/main/management-setting/home']).then(() => {
+            this.onMenuPrevent(this.menuComponent.generateMenus_management());
+          });
         }
     }
   }
@@ -192,7 +192,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.globalService.menu_index = this.menu;
     this.getMenuList(this.menu);
     this.router.navigateByUrl('/main/notice-center/list').then(() => {
-      const path = location.pathname;
+      const path = this.router.routerState.snapshot.url;
       if (path.includes('/ticket')) {
         this.menu = 5;
         this.globalService.menu_index = 5;

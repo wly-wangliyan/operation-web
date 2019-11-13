@@ -65,7 +65,7 @@
       <div class="row">
         <label class="control-label">
           <b>*</b>
-          <span>活动结束时间</span>
+          <span>活动截止时间</span>
         </label>
         <div class="control-input">
           <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
@@ -103,8 +103,8 @@
                 <div class="related-group">
                   <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control"
                     [(ngModel)]="reward.related_reward_type" (change)="onRelatedChange($event,i)">
-                    <option [value]=1>优惠券</option>
-                    <option [value]=2>优惠券组</option>
+                    <option [value]=1>优惠券模板ID</option>
+                    <option [value]=2>优惠券组ID</option>
                   </select>
                   <input name="related_reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.related_reward_id"
                     placeholder="" class="form-control" maxlength="32" appIgnoreSpace />
@@ -117,8 +117,8 @@
               <div class="button-group">
                 <button class="close-btn" type="button" nz-button (click)="onAddRewardClick()"
                   *ngIf="editRewardList.length===(i+1)" [disabled]="editRewardList.length>=5">添加</button>
-                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button type="button"
-                  (click)="onDeleteRewardClick(reward,i)">移除</button>
+                <button *ngIf="editRewardList.length>1 || i > 0" class="close-btn" nz-button nzType="danger" nzGhost
+                  type="button" (click)="onDeleteRewardClick(reward,i)">移除</button>
               </div>
             </div>
           </div>
