@@ -388,6 +388,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
+            if (specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) {
+                this.specificationErrMsgItem.isError = true;
+                this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价应小于等于原价！`;
+                return false;
+            }
             if (!stockReg.test(specificationItemParams.stock.toString())) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格库存输入错误，请输入0-10000！`;
