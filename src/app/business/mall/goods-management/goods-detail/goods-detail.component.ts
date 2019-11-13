@@ -38,8 +38,8 @@ export class GoodsDetailComponent implements OnInit {
         this.goodsManagementHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
             this.commodityInfo = data;
             this.commodityInfo.specifications.forEach(specificationsItem => {
-                specificationsItem.unit_original_price = specificationsItem.unit_original_price * 100;
-                specificationsItem.unit_sell_price = specificationsItem.unit_sell_price * 100;
+                specificationsItem.unit_original_price = specificationsItem.unit_original_price / 100;
+                specificationsItem.unit_sell_price = specificationsItem.unit_sell_price / 100;
             });
             this.videoAndImgList = this.commodityInfo.commodity_videos.concat(this.commodityInfo.commodity_images);
         }, err => {
