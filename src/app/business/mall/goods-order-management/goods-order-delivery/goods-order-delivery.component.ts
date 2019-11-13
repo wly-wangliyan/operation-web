@@ -66,7 +66,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
         this.sureCallback = sureFunc;
         this.closeCallback = closeFunc;
         this.currentOrder = orderInfo;
-        this.postage = this.currentOrder.postage ? Number((this.currentOrder.postage / 100).toFixed(2)) : null;
+        this.postage = this.currentOrder.postage || this.currentOrder.postage === 0 ? Number((this.currentOrder.postage / 100).toFixed(2)) : null;
         openProjectModal();
         return;
     }
