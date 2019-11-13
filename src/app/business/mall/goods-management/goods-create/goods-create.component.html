@@ -15,7 +15,7 @@
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name"
                                name="commodity_name" (input)="initErrMsg('commodity_name')" placeholder="输入1-20个字标题"
                                minlength="1" maxlength="20" appIgnoreSpace required>
-                        <div class="row row-message special-row-message">
+                        <div class="row row-message">
                             <div class="control-input">
                                 <span *ngIf="commodityNameErrMsgItem?.isError">{{commodityNameErrMsgItem?.errMes}}</span>
                             </div>
@@ -29,7 +29,7 @@
                     <div class="control-input special-control-input">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
                                (input)="initErrMsg('subtitle')" placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
-                        <div class="row row-message special-row-message">
+                        <div class="row row-message">
                             <div class="control-input">
                                 <span *ngIf="subtitleErrMsgItem?.isError">{{subtitleErrMsgItem?.errMes}}</span>
                             </div>
@@ -158,7 +158,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div class="row row-message special-row-message">
+                        <div class="row row-message">
                             <div class="control-input">
                                 <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
                             </div>
@@ -172,7 +172,12 @@
                     </label>
                     <div class="control-input description-input">
                         <app-goods-editor #goodsEditor></app-goods-editor>
-                        <div class="row row-message special-row-message">
+                    </div>
+                </div>
+                <div class="row control-row">
+                    <label class="control-label"></label>
+                    <div class="control-input special-control-input" style="margin-bottom: 10px;">
+                        <div class="row row-message">
                             <div class="control-input">
                                 <span *ngIf="editorErrMsgItem?.isError">{{editorErrMsgItem?.errMes}}</span>
                             </div>

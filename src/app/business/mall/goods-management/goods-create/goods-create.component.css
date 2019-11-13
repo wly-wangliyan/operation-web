@@ -31,20 +31,17 @@
     margin-top: -6px;
 }
 
-.special-control-input .row-message, .description-input .row-message {
+.special-control-input .row-message {
     margin-top: 0;
 }
 
 .row-message .control-input {
     margin-bottom: 0;
+    color: rgba(232, 32, 56, 1);
 }
 
 .special-control-label {
     padding-left: 16px !important;
-}
-
-.special-row-message .control-input {
-    color: rgba(232, 32, 56, 1);
 }
 
 .table-container {
