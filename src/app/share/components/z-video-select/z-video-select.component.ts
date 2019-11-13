@@ -72,6 +72,8 @@ export class ZVideoSelectComponent implements OnInit {
 
     @Input() public isControls = false; // 是否显示控件
 
+    @Input() public isDisablePictureInPicture = false; // 是否禁止显示画中画控件
+
     @Input() public isAutoPlay = false; // 视频是否在就绪后马上播放
 
     @Output() public selectedVideoChange = new EventEmitter(); // 选择视频格式错误
