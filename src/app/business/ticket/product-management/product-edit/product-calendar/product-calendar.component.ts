@@ -77,6 +77,10 @@ export class ProductCalendarComponent implements OnInit {
     this.batchImport.open(null, this.product_id, this.ticket_id, this.priceCalendarList, () => {
       timer(1000).subscribe(() => {
         this.searchText$.next();
+        if (this.sureCallback) {
+          const temp = this.sureCallback;
+          temp();
+        }
       });
     });
   }
