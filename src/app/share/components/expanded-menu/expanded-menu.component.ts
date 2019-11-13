@@ -137,7 +137,7 @@ export class ExpandedMenuComponent implements OnInit {
     menusItem.push(this.generateCommentMenu());
     menusItem.push(this.generateMiniProgramMenu());
     menusItem.push(this.generateOtherOperationConfigMenu());
-    menusItem.push(this.generateOperationConfigMenu());
+    // menusItem.push(this.generateOperationConfigMenu());
     return menusItem;
   }
 
