@@ -4,6 +4,7 @@ import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GlobalService } from '../../../../core/global.service';
 import { ProductService, SearchLabelParams, LabelEntity } from '../product.service';
 import { LabelEditComponent } from './label-edit/label-edit.component';
+import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({
   selector: 'app-label-management',
@@ -102,7 +103,18 @@ export class LabelManagementComponent implements OnInit {
       this.onTabChange(this.selectedTabIndex);
       this.globalService.promptBox.open('排序成功');
     }, err => {
-      this.globalService.promptBox.open('排序失败，请重试!', null, 2000, '/assets/images/warning.png');
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'not_existed') {
+              this.globalService.promptBox.open(`该标签不存在！`, null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('排序失败，请重试!', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      }
       this.selectedTabIndex = 1;
       this.onTabChange(this.selectedTabIndex);
     });
