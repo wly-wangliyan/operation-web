@@ -477,7 +477,7 @@ export class ErrMessageItem {
  * 视频规格参数
  */
 export class SpecificationParamsItem {
-    public static IDCount = 1;
+    public static IDCount = 0;
     public idCount: number = SpecificationParamsItem.IDCount += 1;
     public specification_params: SpecificationEntity = new SpecificationEntity(); // 视频规格参数列表
     public is_create = true; // 是否新建
