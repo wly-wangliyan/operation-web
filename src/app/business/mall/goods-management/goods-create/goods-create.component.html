@@ -11,29 +11,20 @@
                         <b>*</b>
                         <span>产品名称</span>
                     </label>
-                    <div class="control-input special-control-input">
+                    <div class="control-input">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name"
-                               name="commodity_name" (input)="initErrMsg('commodity_name')" placeholder="输入1-20个字标题"
-                               minlength="1" maxlength="20" appIgnoreSpace required>
-                        <div class="row row-message">
-                            <div class="control-input">
-                                <span *ngIf="commodityNameErrMsgItem?.isError">{{commodityNameErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
+                               name="commodity_name" placeholder="输入1-20个字标题" minlength="1" maxlength="20"
+                               appIgnoreSpace required>
                     </div>
                 </div>
                 <div class="row control-row">
                     <label class="control-label special-control-label">
                         <span>副标题</span>
                     </label>
-                    <div class="control-input special-control-input">
+                    <div class="control-input">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
-                               (input)="initErrMsg('subtitle')" placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
-                        <div class="row row-message">
-                            <div class="control-input">
-                                <span *ngIf="subtitleErrMsgItem?.isError">{{subtitleErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
+                               placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
+
                     </div>
                 </div>
                 <div class="row control-row">
@@ -96,9 +87,9 @@
                                     <div class="td-content">
                                         <input type="text" class="form-control"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
-                                               [name]="'specification_name_' + specificationIndex"
-                                               (input)="initErrMsg('specification')" placeholder="输入1-10字规格名称"
-                                               minlength="1" maxlength="10" appIgnoreSpace>
+                                               [name]="'specification_name_' + formatCommoditySpecification.idCount"
+                                               (input)="initErrMsg()" placeholder="输入1-10字规格名称" minlength="1"
+                                               maxlength="10" appIgnoreSpace>
                                     </div>
                                 </td>
                                 <td>
@@ -106,8 +97,8 @@
                                         <input type="text" class="form-control"
                                                [id]="'unit_original_price_' + specificationIndex"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.unit_original_price"
-                                               [name]="'unit_original_price_' + specificationIndex"
-                                               (input)="initErrMsg('specification')"
+                                               [name]="'unit_original_price_' + formatCommoditySpecification.idCount"
+                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 1)"
                                                maxlength="9" appIgnoreSpace>
                                         <label class="one-word-lable">元</label>
@@ -118,8 +109,8 @@
                                         <input type="text" class="form-control"
                                                [id]="'unit_sell_price_' + specificationIndex"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.unit_sell_price"
-                                               [name]="'unit_sell_price_' + specificationIndex"
-                                               (input)="initErrMsg('specification')"
+                                               [name]="'unit_sell_price_' + formatCommoditySpecification.idCount"
+                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 2)"
                                                maxlength="9" appIgnoreSpace>
                                         <label class="one-word-lable">元</label>
@@ -129,8 +120,8 @@
                                     <div class="td-content stock-content">
                                         <input type="text" class="form-control" [id]="'stock_' + specificationIndex"
                                                [(ngModel)]="formatCommoditySpecification.specification_params.stock"
-                                               [name]="'stock_' + specificationIndex"
-                                               (input)="initErrMsg('specification')"
+                                               [name]="'stock_' + formatCommoditySpecification.idCount"
+                                               (input)="initErrMsg()"
                                                (blur)="reverseSpecificationParams(specificationIndex, $event, 3)"
                                                maxlength="5" appIgnoreSpace>
                                     </div>
@@ -149,7 +140,7 @@
                                         </a>
                                         <a [title]="'添加'"
                                            *ngIf="(FormatCommoditySpecificationList.length < 5) && (specificationIndex === FormatCommoditySpecificationList.length - 1)"
-                                           [class.disabled]="!CheckLastCommoditySpecificationValid"
+                                           [class.disabled]="!CheckCommoditySpecificationValid"
                                            (click)="onAddCommoditySpecification()">
                                             添加
                                         </a>
