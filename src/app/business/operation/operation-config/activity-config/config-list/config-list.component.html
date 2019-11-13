@@ -64,7 +64,11 @@
             </td>
 
             <td [title]="data.promotion_id?data.promotion_id:''">
-              {{data.promotion_id?(data.promotion_id|zMaxLength:10):'--'}}</td>
+              <span *ngIf="data.promotion_id" [appTxtCopy]="data.promotion_id">
+                {{data.promotion_id|zMaxLength:15}}
+              </span>
+              <span *ngIf="!data.promotion_id">--</span>
+            </td>
 
             <td [title]="data.promotion_name?data.promotion_name:''">
               {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
