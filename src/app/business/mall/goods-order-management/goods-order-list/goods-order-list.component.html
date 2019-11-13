@@ -93,7 +93,7 @@
                         <td class="img-item" *ngFor="let commodity of order.detail">
                             <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0" src="/assets/images/image_space_3_2.png" />
                             <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0" src={{commodity.commodity_images[0]}} />
-                            <div style="display: grid">
+                            <div style="display: grid;text-align: left">
                                 <a [title]="commodity.commodity_name"
                                    [routerLink]="['../../goods-management/detail', commodity.commodity_id]">
                                     {{commodity.commodity_name | zMaxLength:10}}</a>
