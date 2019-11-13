@@ -267,8 +267,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             return;
         }
         this.onSubmitSubscription = this.goodsImgSelectComponent.upload().subscribe(() => {
-            const createOrEditCommodity = () => {
+            this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
                 this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
+                this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
 
                 if (this.commodity_id) {
@@ -276,17 +277,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 } else {
                     this.requestCreateCommodity();
                 }
-            };
-            if (this.goodsVideoSelectComponent.videoList.length > 0) {
-                this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
-                    this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
-                    createOrEditCommodity();
-                }, err => {
-                    this.upLoadErrMsg(err);
-                });
-            } else {
-                createOrEditCommodity();
-            }
+            }, err => {
+                this.upLoadErrMsg(err);
+            });
         }, err => {
             this.upLoadErrMsg(err);
         });
@@ -294,7 +287,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 点击取消添加/编辑
     public onCancelClick() {
-        this.router.navigate([this.listRelativePath], {relativeTo: this.route});
+        this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
+            this.globalService.confirmationBox.close();
+            this.router.navigate([this.listRelativePath], {relativeTo: this.route});
+        });
     }
 
     // 获取商品详情

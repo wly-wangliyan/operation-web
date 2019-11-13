@@ -14,16 +14,15 @@ export class RewardEntity extends EntityBase {
   public reward_num: number = undefined; // 奖品库存
   public reward_probability: number = undefined; // 中奖概率
   public real_reward_probability: number = undefined; // 实际的中奖概率
-  public related_reward_id: string = undefined; // 赠品-优惠券模板ID
+  public related_reward_id = ''; // 赠品-优惠券模板ID
   public related_reward_type = 1; // 赠品类型 1:优惠券,2:优惠券组
-  public is_deleted: boolean = undefined; // 逻辑删除
-  public updated_time: number = undefined; // 更新时间
-  public created_time: number = undefined; // 创建时间
+  public is_deleted = false; // 逻辑删除
+  public time: number = undefined; // 时间戳
 
   constructor(source?: RewardEntity) {
     super();
     if (source) {
-      this.reward_record_id = source.reward_record_id;
+      this.reward_record_id = source.reward_record_id ? source.reward_record_id : '';
       this.reward_id = source.reward_id;
       this.reward_num = source.reward_num;
       this.reward_probability = source.reward_probability;
@@ -49,16 +48,15 @@ export class PromotionEntity extends EntityBase {
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
-  constructor(source?: PromotionEntity) {
-    super();
-    if (source) {
-      this.promotion_name = source.promotion_name;
-      this.promotion_type = source.promotion_type;
-      this.image = source.image;
-      this.start_time = source.start_time;
-      this.end_time = source.end_time;
-      this.description = source.description;
-    }
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.promotion_id;
+    delete json.status;
+    delete json.rewards;
+    delete json.is_deleted;
+    delete json.updated_time;
+    delete json.created_time;
+    return json;
   }
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
@@ -134,7 +132,7 @@ export class ActivityConfigService {
    */
   public requestAddActivityConfigData(bannerParams: PromotionEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/promotions`;
-    return this.httpService.post(httpUrl, bannerParams.json());
+    return this.httpService.post(httpUrl, bannerParams.toEditJson());
   }
 
   /**
@@ -144,7 +142,7 @@ export class ActivityConfigService {
    */
   public requestUpdateActivityConfigData(promotion_id: string, bannerParams: PromotionEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/promotions/${promotion_id}`;
-    return this.httpService.put(httpUrl, bannerParams.json());
+    return this.httpService.put(httpUrl, bannerParams.toEditJson());
   }
 
   /**
@@ -152,8 +150,11 @@ export class ActivityConfigService {
    * @param  bannerParams 添加参数
    */
   public requestUpdateRewardData(promotion_id: string, rewards: Array<RewardEntity>): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/promotions/${promotion_id}/status`;
-    return this.httpService.post(httpUrl, rewards);
+    const httpUrl = `${this.domain}/promotions/${promotion_id}/rewards`;
+    const body = {
+      rewards
+    };
+    return this.httpService.post(httpUrl, body);
   }
 
   /**

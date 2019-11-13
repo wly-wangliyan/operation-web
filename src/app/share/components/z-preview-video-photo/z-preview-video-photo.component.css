@@ -10,6 +10,21 @@
     position: relative;
 }
 
+.preview-wrap {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.video-wrap {
+    width: 100%;
+    height: 100%;
+}
+
 .thumb-nail-container {
     content: '';
     display: table;
@@ -61,7 +76,7 @@
     width: 92px;
     height: 92px;
     display: inline-block;
-    position: relative;
+    position: absolute;
     top: 50%;
     left: 50%;
     margin-top: -46px;
@@ -75,7 +90,7 @@
     width: 32px;
     height: 32px;
     margin-top: -16px;
-    margin-left: -50px;
+    margin-left: -16px;
     background: url('../../../../assets/images/preview/icon_thumb_video.png') no-repeat center;
     background-size: contain;
 }

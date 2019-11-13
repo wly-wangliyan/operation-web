@@ -27,10 +27,10 @@ export class ExpandedMenuComponent implements OnInit {
   private routePathSubscription: Subscription;
 
   constructor(public router: Router,
-              public routeMonitorService: RouteMonitorService,
-              private globalService: GlobalService,
-              public authService: AuthService,
-              public platformLocation: PlatformLocation) {
+    public routeMonitorService: RouteMonitorService,
+    private globalService: GlobalService,
+    public authService: AuthService,
+    public platformLocation: PlatformLocation) {
 
     platformLocation.onPopState((param) => {
       timer(0).subscribe(() => {
@@ -108,6 +108,7 @@ export class ExpandedMenuComponent implements OnInit {
     menusItem.push(this.generateCommentMenu());
     menusItem.push(this.generateMiniProgramMenu());
     menusItem.push(this.generateOtherOperationConfigMenu());
+    menusItem.push(this.generateOperationConfigMenu());
     return menusItem;
   }
 
@@ -204,6 +205,16 @@ export class ExpandedMenuComponent implements OnInit {
     const systemMenu = new SideMenuItem('其他运营配置', null);
     systemMenu.icon = '/assets/images/menu_other_config.png';
     const subFinanceMenu1 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  //
+  private generateOperationConfigMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('运营配置', null);
+    systemMenu.icon = '/assets/images/menu_config.png';
+    const subFinanceMenu1 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
