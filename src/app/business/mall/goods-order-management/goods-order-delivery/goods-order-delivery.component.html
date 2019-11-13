@@ -27,7 +27,8 @@
                     </label>
                     <div class=" control-input">
                         <input class="form-control" placeholder="请输入物流单号" [(ngModel)]="currentOrder.delivery_order" maxlength="50"
-                               name="delivery_order" (keypress)="inputEnglishNumLimit($event)" appIgnoreSpace required>
+                               name="delivery_order" appIgnoreSpace required
+                               onInput="value=value.replace(/[^a-zA-Z0-9_]/g,'')">
                     </div>
                 </div>
                 <div class="row">

@@ -141,15 +141,4 @@ export class GoodsOrderDeliveryComponent implements OnInit {
             }
         }
     }
-
-    /**
-     * 限制input只允许输入字母，数字
-     * @param string words
-     * @returns boolean
-     */
-    public inputEnglishNumLimit(event: any) {
-        const reg = /^[0-9a-zA-Z]+$/;
-        const keyCode = String.fromCharCode(event.keyCode);
-        return (keyCode && reg.test(keyCode));
-    }
 }
