@@ -26,12 +26,14 @@
 
 .reward-item input {
   width: 275px;
+  background: #fff !important;
 }
 
 .reward-item select {
   width: 125px;
   padding-left: 4px !important;
   padding-right: 14px;
+  background: #fff !important;
 }
 
 .reward-item {
