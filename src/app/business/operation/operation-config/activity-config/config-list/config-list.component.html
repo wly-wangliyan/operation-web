@@ -28,7 +28,7 @@
       <div class="form-group">
         <span>ID：</span>
         <input name="promotion_id" class="form-control" placeholder="请输入ID" maxlength="32"
-          [(ngModel)]="searchParams.promotion_id" appIgnoreSpace />
+          [(ngModel)]="searchParams.promotion_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
         <div class="search-btn-group">
           <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
           </button>

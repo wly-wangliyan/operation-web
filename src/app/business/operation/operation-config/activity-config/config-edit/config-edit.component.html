@@ -84,7 +84,8 @@
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">优惠券模板ID</div>
                 <input name="reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_id" placeholder=""
-                  class="form-control" (change)="onChangeRewardID($event,i)" maxlength="32" required appIgnoreSpace />
+                  class="form-control" (change)="onChangeRewardID($event,i)" maxlength="32"
+                  oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" required appIgnoreSpace />
               </div>
               <div class="item-group">
                 <div class="reward-title" *ngIf="i===0">库存</div>
@@ -107,7 +108,8 @@
                     <option [value]=2>优惠券组ID</option>
                   </select>
                   <input name="related_reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.related_reward_id"
-                    placeholder="" class="form-control" maxlength="32" appIgnoreSpace />
+                    placeholder="" class="form-control" maxlength="32"
+                    oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
                 </div>
               </div>
             </div>
