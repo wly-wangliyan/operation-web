@@ -373,17 +373,17 @@ export class OperationConfigurationEditComponent implements OnInit {
             this.globalService.promptBox.open('工时费原价不能小于工时费售价!', null, 2000, '/assets/images/warning.png');
             return;
         }
-        this.businessManagementService.requestUpdateUpkeepProject(this.upkeep_merchant_id, this.upkeep_merchant_product_id, this.currentProjectId, params)
-            .subscribe(() => {
-                this.globalService.promptBox.open('保存成功！', () => {
-                    const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
-                    if (index !== -1) {
-                        this.projectItemList[index].is_edit_price = false;
-                    }
-                }, 2000, '/assets/images/success.png');
-            }, err => {
-                this.errorProcess(err);
-            });
+        this.businessManagementService.requestUpdateUpkeepProject(this.upkeep_merchant_id,
+            this.upkeep_merchant_product_id, this.currentProjectId, params).subscribe(() => {
+            this.globalService.promptBox.open('保存成功！', () => {
+                const index = this.projectItemList.findIndex(v => v.source.upkeep_merchant_project_id === this.currentProjectId);
+                if (index !== -1) {
+                    this.projectItemList[index].is_edit_price = false;
+                }
+            }, 2000, '/assets/images/success.png');
+        }, err => {
+            this.errorProcess(err);
+        });
     }
 
     public saveSuccess() {
