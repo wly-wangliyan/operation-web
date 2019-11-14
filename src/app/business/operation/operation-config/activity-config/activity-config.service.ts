@@ -106,7 +106,7 @@ export class ActivityConfigService {
   }
 
   /**
-   * 通过linkUrl继续请求产品列表
+   * 通过linkUrl继续请求活动配置列表
    * @param string url linkUrl
    * @returns Observable<PromotionLinkResponse>
    */

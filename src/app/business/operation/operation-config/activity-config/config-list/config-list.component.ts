@@ -53,7 +53,7 @@ export class ConfigListComponent implements OnInit, OnDestroy {
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
   }
 
-  // 初始化获取banner列表
+  // 初始化获取活动配置列表
   private generateConfigList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
@@ -62,19 +62,22 @@ export class ConfigListComponent implements OnInit, OnDestroy {
     this.searchText$.next();
   }
 
-  // 请求banner列表
+  // 请求活动配置列表
   private requestConfigList(): void {
     this.requestSubscription = this.configService.requestActivityConfigListData(this.searchParams).subscribe(res => {
       this.configList = res.results;
       this.noResultText = '暂无数据';
+      this.linkUrl = res.linkUrl;
+      this.pageIndex = 1;
     }, err => {
+      this.pageIndex = 1;
       this.noResultText = '暂无数据';
       this.globalService.httpErrorProcess(err);
     });
   }
 
   // 翻页方法
-  public onNZPageIndexChange(pageIndex: number) {
+  public onNZPageIndexChange(pageIndex: number): void {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
@@ -95,7 +98,7 @@ export class ConfigListComponent implements OnInit, OnDestroy {
   }
 
   // 修改启停状态
-  public onSwitchChange(promotion_id: string, event: any) {
+  public onSwitchChange(promotion_id: string, event: any): void {
     const status = event ? 1 : 2;
     let sucessMsg = '开启成功!';
     let errMsg = '开启失败,请重试!';
