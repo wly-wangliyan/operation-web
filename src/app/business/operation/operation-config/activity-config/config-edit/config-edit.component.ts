@@ -341,16 +341,28 @@ export class ConfigEditComponent implements OnInit {
         return false;
       }
 
+      /***处理被移除记录(detailRewardList中存储的为活动详情中获取的领赠设置，编辑过程中不发生改变)
+       *  1、如果待保存记录中存在与被移除记录的优惠券模板ID(非赠品)一致的，且待保存记录：
+       *    1.1 无记录id(新增)，将被移除记录的记录id 赋值给待保存记录
+       *    1.2 有记录id的，回传该条被移除记录
+       *  2、不存在优惠券模板ID一致的，回传该条被移除记录
+       */
       this.detailRewardList.forEach(detailReward => {
 
         if (detailReward.is_deleted) {
-          // 被移除的奖赠设置,再看现有数据中，是否有与原模板id一致的，有则给其赋记录id
+
           const itemIndex = rewards.findIndex(editItem => editItem.reward_id === detailReward.reward_id);
+
+          // 2、
           if (itemIndex === -1) {
             rewards.push(new RewardEntity(detailReward));
           } else {
+            // 1.1
             if (!rewards[itemIndex].reward_record_id) {
               rewards[itemIndex].reward_record_id = detailReward.reward_record_id;
+            } else {
+              // 1.2
+              rewards.push(new RewardEntity(detailReward));
             }
           }
         }
