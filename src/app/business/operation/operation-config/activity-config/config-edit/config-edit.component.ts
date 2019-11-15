@@ -129,6 +129,7 @@ export class ConfigEditComponent implements OnInit {
 
   // 添加奖赠设置
   public onAddRewardClick(): void {
+    this.rewardErrMsg = '';
     const item = new RewardEntity();
     item.time = new Date().getTime();
     this.editRewardList.push(item);
@@ -136,6 +137,7 @@ export class ConfigEditComponent implements OnInit {
 
   // 移除奖赠设置
   public onDeleteRewardClick(reward: RewardEntity, index: number): void {
+    this.rewardErrMsg = '';
     const reward_record_id = reward.reward_record_id;
     if (reward_record_id) {
       if (this.detailRewardList && this.detailRewardList.length > 0) {
@@ -441,7 +443,7 @@ export class ConfigEditComponent implements OnInit {
 
   // 修改优惠券模板id
   public onChangeRewardID(event: any, index: number): void {
-
+    this.rewardErrMsg = '';
   }
 
   /** 库存keyup事件 */
@@ -453,6 +455,7 @@ export class ConfigEditComponent implements OnInit {
 
   // 格式化中奖概率
   public onRateChange(event: any, index: number): void {
+    this.rewardErrMsg = '';
     if (this.editRewardList[index].reward_probability) {
       if (isNaN(parseFloat(String(this.editRewardList[index].reward_probability)))) {
         this.editRewardList[index].reward_probability = null;
