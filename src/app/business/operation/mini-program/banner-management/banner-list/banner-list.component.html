@@ -57,7 +57,7 @@
         </thead>
         <tbody cdkDropList (cdkDropListDropped)="drop($event, bannerTable.data)">
           <tr *ngFor="let data of bannerTable.data; let i=index" cdkDrag>
-            <td>{{i + 1}}</td>
+            <td>{{i+(pageIndex-1)*15+1}}</td>
 
             <td>
               <img *ngIf='!data.image' style="width: 270px;margin: auto 20px;" src="/assets/images/space_banner.png">
