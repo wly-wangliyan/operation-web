@@ -268,7 +268,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.commoditySpecificationList.push(new SpecificationParamsItem());
             }
             CKEDITOR.instances.goodsEditor.destroy(true);
-            CKEDITOR.replace('goodsEditor').setData(this.commodityInfo.commodity_description);
+            CKEDITOR.replace('goodsEditor', {width: '900px'}).setData(this.commodityInfo.commodity_description);
         }, err => {
             this.globalService.httpErrorProcess(err);
         });

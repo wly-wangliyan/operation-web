@@ -22,7 +22,7 @@ export class GoodsEditorComponent implements OnInit {
 
     public ngOnInit() {
         setTimeout(() => {
-            CKEDITOR.replace('goodsEditor');
+            CKEDITOR.replace('goodsEditor', {width: '900px'});
             CKEDITOR.on('instanceReady', event => {
                 event.editor.on('change', () => {
                     this.isGoodsEditorChange = true;
