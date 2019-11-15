@@ -330,9 +330,7 @@ export class ConfigEditComponent implements OnInit {
             this.rewardErrMsg = '优惠券模板ID不能重复！';
             return false;
           }
-
-          total_probability += Number(this.editRewardList[rewardIndex].reward_probability);
-
+          total_probability = (total_probability * 100000 + this.editRewardList[rewardIndex].reward_probability * 100000) / 100000;
           rewards.push(new RewardEntity(this.editRewardList[rewardIndex]));
         }
       }
