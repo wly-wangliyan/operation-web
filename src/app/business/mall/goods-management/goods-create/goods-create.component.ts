@@ -205,6 +205,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         const deleteCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex];
         deleteCommoditySpecificationItem.is_delete = true;
         this.commoditySpecificationList.splice(specificationIndex, 1);
+        this.initErrMsg();
+
         if (!deleteCommoditySpecificationItem.is_create) {
             timer(0).subscribe(() => {
                 this.commoditySpecificationList.push(deleteCommoditySpecificationItem);
