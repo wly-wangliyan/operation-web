@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from '../../../../../utils/z-entity';
 import { Observable } from 'rxjs';
-import { HttpService } from '../../../../core/http.service';
+import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
@@ -44,6 +44,8 @@ export class SearchParams extends EntityBase {
   public title: string = undefined; // 标题
   public start_time: string = undefined; // 上架开始时间
   public end_time: string = undefined; // 上架结束时间
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
 }
 
 // 添加、编辑 banner
@@ -57,6 +59,16 @@ export class BannerParams extends EntityBase {
   public image: string = undefined; // 图片
 }
 
+export class BannerLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<BannerEntity> {
+    const tempList: Array<BannerEntity> = [];
+    results.forEach(res => {
+      tempList.push(BannerEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -67,15 +79,19 @@ export class BannerService {
   constructor(private httpService: HttpService) { }
 
   /** 获取Banner列表 */
-  public requestBannerListData(searchParams: SearchParams): Observable<Array<BannerEntity>> {
+  public requestBannerListData(searchParams: SearchParams): Observable<BannerLinkResponse> {
     const httpUrl = `${this.domain}/admin/banner`;
-    return this.httpService.get(httpUrl, searchParams.json()).pipe(map(res => {
-      const tempList: Array<BannerEntity> = [];
-      res.body.forEach(data => {
-        tempList.push(BannerEntity.Create(data));
-      });
-      return tempList;
-    }));
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new BannerLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求Banner列表
+   * @param string url linkUrl
+   * @returns Observable<BannerLinkResponse>
+   */
+  public continueBannerListData(url: string): Observable<BannerLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new BannerLinkResponse(res)));
   }
 
   /**

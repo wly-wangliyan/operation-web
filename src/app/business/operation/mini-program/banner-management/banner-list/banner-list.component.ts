@@ -8,6 +8,8 @@ import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { HttpErrorEntity } from 'src/app/core/http.service';
 import { BannerEditComponent } from '../banner-edit/banner-edit.component';
 
+const PageSize = 15;
+
 @Component({
   selector: 'app-banner-list',
   templateUrl: './banner-list.component.html',
@@ -28,6 +30,20 @@ export class BannerListComponent implements OnInit, OnDestroy {
   private searchText$ = new Subject<any>();
 
   private requestSubscription: Subscription; // 获取数据
+
+  public pageIndex = 1; // 页码
+
+  private linkUrl: string;
+
+  private continueRequestSubscription: Subscription;
+
+  private get pageCount(): number {
+    if (this.bannerList.length % PageSize === 0) {
+      return this.bannerList.length / PageSize;
+    }
+    return this.bannerList.length / PageSize + 1;
+  }
+
   @ViewChild('bannerEdit', { static: false }) public bannerEdit: BannerEditComponent;
 
   constructor(
@@ -55,12 +71,31 @@ export class BannerListComponent implements OnInit, OnDestroy {
   // 请求banner列表
   private requestBannerList(): void {
     this.requestSubscription = this.bannerService.requestBannerListData(this.searchParams).subscribe(res => {
-      this.bannerList = res;
+      this.bannerList = res.results;
+      this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
+      this.pageIndex = 1;
     }, err => {
       this.noResultText = '暂无数据';
+      this.pageIndex = 1;
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  // 翻页方法
+  public onNZPageIndexChange(pageIndex: number) {
+    this.pageIndex = pageIndex;
+    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+      // 当存在linkUrl并且快到最后一页了请求数据
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.bannerService.continueBannerListData(this.linkUrl)
+        .subscribe(res => {
+          this.bannerList = this.bannerList.concat(res.results);
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+    }
   }
 
   // 搜索

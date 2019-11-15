@@ -40,7 +40,8 @@
   </div>
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="bannerList" [nzFrontPagination]='false' [nzNoResult]="noResultText" #bannerTable>
+      <nz-table #bannerTable [nzData]="bannerList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
         <thead>
           <tr>
             <th>显示顺序</th>
