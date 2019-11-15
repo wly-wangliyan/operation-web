@@ -8,7 +8,6 @@ import { GlobalService } from '../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { ZVideoSelectComponent } from '../../../../share/components/z-video-select/z-video-select.component';
-import { GoodsEditorComponent } from './goods-editor/goods-editor.component';
 import {
     CommodityEntity,
     GoodsManagementHttpService,
@@ -46,8 +45,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     @ViewChild('goodsImg', {static: false}) public goodsImgSelectComponent: ZPhotoSelectComponent;
 
     @ViewChild('goodsVideo', {static: false}) public goodsVideoSelectComponent: ZVideoSelectComponent;
-
-    @ViewChild('goodsEditor', {static: true}) public goodsEditorComponent: GoodsEditorComponent;
 
     /**
      * 格式化商品规格列表数据
@@ -130,7 +127,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             this.levelTwoName = '编辑产品';
             this.listRelativePath = '../../list';
 
-            timer(1000).subscribe(() => {
+            timer(500).subscribe(() => {
                 this.requestCommodityById();
             });
         } else {
