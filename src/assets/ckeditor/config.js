@@ -75,5 +75,5 @@ CKEDITOR.editorConfig = function (config) {
   ];
   config.extraPlugins = 'addpic';
 
-  config.width = 1130; //宽度
+  config.width = 900; //宽度
 };

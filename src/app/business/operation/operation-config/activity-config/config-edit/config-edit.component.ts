@@ -116,7 +116,7 @@ export class ConfigEditComponent implements OnInit {
   public getEditorData() {
     CKEDITOR.instances.descriptionEditor.destroy(true);
     this.tempContent = this.configParams.description.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-    CKEDITOR.replace('descriptionEditor').setData(this.tempContent);
+    CKEDITOR.replace('descriptionEditor', { width: 1130 }).setData(this.tempContent);
     this.isInstanceReady = true;
   }
 

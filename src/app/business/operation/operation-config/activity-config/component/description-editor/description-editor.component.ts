@@ -23,10 +23,7 @@ export class DescriptionEditorComponent implements OnInit {
 
   public ngOnInit() {
     timer(0).subscribe(() => {
-      CKEDITOR.replace('descriptionEditor');
-      // CKEDITOR.on('instanceReady', event => {
-
-      // });
+      CKEDITOR.replace('descriptionEditor', { width: 1130 });
     });
   }
 
