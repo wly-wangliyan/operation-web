@@ -7,8 +7,6 @@ import { GoodsListComponent } from './goods-list/goods-list.component';
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
 import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
-import { GoodsEditorComponent } from './goods-create/goods-editor/goods-editor.component';
-
 
 @NgModule({
     imports: [
@@ -21,7 +19,6 @@ import { GoodsEditorComponent } from './goods-create/goods-editor/goods-editor.c
         GoodsListComponent,
         GoodsCreateComponent,
         GoodsDetailComponent,
-        GoodsEditorComponent,
     ],
     providers: [
         GoodsManagementHttpService,
