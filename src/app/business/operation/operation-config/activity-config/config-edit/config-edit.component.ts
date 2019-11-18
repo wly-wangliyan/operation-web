@@ -76,12 +76,18 @@ export class ConfigEditComponent implements OnInit {
       });
       this.searchText$.next();
     } else {
-      this.loading = false;
+      this.loading = true;
       this.isCreateConfig = true;
-      this.isInstanceReady = true;
+      this.isInstanceReady = false;
       this.configParams = new PromotionEntity();
       this.configParams.promotion_type = 1;
       this.editRewardList.push(new RewardEntity());
+      timer(500).subscribe(() => {
+        CKEDITOR.instances.descriptionEditor.destroy(true);
+        CKEDITOR.replace('descriptionEditor', { width: 1130 });
+        this.loading = false;
+        this.isInstanceReady = true;
+      });
     }
   }
 
