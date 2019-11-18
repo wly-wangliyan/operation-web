@@ -5,6 +5,7 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.ser
 import { environment } from '../../../environments/environment';
 import { MallRoutingModule } from './mall-routing.module';
 import { MallComponent } from './mall.component';
+import { MainModule } from '../main/main.module';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -24,6 +25,7 @@ const uploadToken: UploadConfig = {
         ShareModule,
         HttpClientModule,
         MallRoutingModule,
+        MainModule
     ],
     declarations: [
         MallComponent,

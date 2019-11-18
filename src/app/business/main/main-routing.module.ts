@@ -4,18 +4,13 @@ import { MainComponent } from './main.component';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { RouteMonitorService } from '../../core/route-monitor.service';
 import { HomeComponent } from './home/home.component';
+import { MenuGuardService } from '../../core/menu-guard.service';
 
 const routes: Routes = [{
-  path: '', component: MainComponent, canActivateChild: [AuthGuardService, RouteMonitorService],
+  path: '', component: MainComponent, canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
   children: [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
-    { path: 'operation/home', component: HomeComponent },
-    { path: 'insurance/home', component: HomeComponent },
-    { path: 'maintenance/home', component: HomeComponent },
-    { path: 'ticket/home', component: HomeComponent },
-    { path: 'mall/home', component: HomeComponent },
-    { path: 'management-setting/home', component: HomeComponent },
+    { path: '', redirectTo: 'operation', pathMatch: 'full' },
+    // { path: 'home', component: HomeComponent },
     {
       path: 'operation',
       loadChildren: () => import('../operation/operation.module').then(m => m.OperationModule),
@@ -44,7 +39,7 @@ const routes: Routes = [{
       path: 'management-setting',
       loadChildren: () => import('../management-setting/management-setting.module').then(m => m.ManagementSettingModule)
     },
-    { path: '**', redirectTo: 'home', pathMatch: 'full' },
+    { path: '**', redirectTo: 'operation', pathMatch: 'full' },
   ]
 }];
 

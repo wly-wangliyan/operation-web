@@ -6,6 +6,7 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.ser
 import { environment } from '../../../environments/environment';
 import { OperationComponent } from './operation.component';
 import { OperationRoutingModule } from './operation-routing.module';
+import { MainModule } from '../main/main.module';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -20,7 +21,8 @@ const uploadToken: UploadConfig = {
         ShareModule,
         DragDropModule,
         HttpClientModule,
-        OperationRoutingModule
+        OperationRoutingModule,
+        MainModule
     ],
     declarations: [
         OperationComponent,

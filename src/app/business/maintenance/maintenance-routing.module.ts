@@ -3,13 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../core/auth-guard.service';
 import { RouteMonitorService } from '../../core/route-monitor.service';
 import { MaintenanceComponent } from './maintenance.component';
-import { VehicleTypeListComponent } from './vehicle-type-management/vehicle-type-list/vehicle-type-list.component';
+import { MenuGuardService } from '../../core/menu-guard.service';
+import { HomeComponent } from '../main/home/home.component';
 
 const routes: Routes = [{
   path: '', component: MaintenanceComponent,
-  canActivateChild: [AuthGuardService, RouteMonitorService],
+  canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
   children: [
-    { path: '', redirectTo: 'order-management', pathMatch: 'full' },
+    /*{ path: '', redirectTo: 'order-management', pathMatch: 'full' },*/
+    {path: 'home', component: HomeComponent},
     {
       path: 'vehicle-type-management',
       loadChildren: () => import('./vehicle-type-management/vehicle-type-management.module').then(m => m.VehicleTypeManagementModule),
@@ -40,7 +42,7 @@ const routes: Routes = [{
       loadChildren: () => import('./product-library/product-library.module').then(m => m.ProductLibraryModule),
       canLoad: [AuthGuardService]
     },
-    { path: '**', redirectTo: 'order-management', pathMatch: 'full' }
+    { path: '**', redirectTo: 'home', pathMatch: 'full' }
   ]
 }];
 

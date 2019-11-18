@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
 import { environment } from '../../../environments/environment';
 import { MaintenanceComponent } from './maintenance.component';
+import { MainModule } from '../main/main.module';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -19,6 +20,7 @@ const uploadToken: UploadConfig = {
         ShareModule,
         MaintenanceRoutingModule,
         HttpClientModule,
+        MainModule
     ],
     declarations: [
         MaintenanceComponent,

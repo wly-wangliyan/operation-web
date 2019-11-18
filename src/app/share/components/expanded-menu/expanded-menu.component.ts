@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
 import { AuthService } from '../../../core/auth.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { Router } from '@angular/router';
-import { Subscription, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import { MenuHelper, SideMenuItem } from './menu-ui.model';
-import { GlobalService } from '../../../core/global.service';
-import { isTemplateRef } from 'ng-zorro-antd';
+import { MenuOperationService } from './menu-service/menu-operation.service';
+import { MenuInsuranceService } from './menu-service/menu-insurance.service';
+import { MenuMaintenanceService } from './menu-service/menu-maintenance.service';
+import { MenuMallService } from './menu-service/menu-mall.service';
+import { MenuManagementService } from './menu-service/menu-management.service';
+import { MenuTicketService } from './menu-service/menu-ticket.service';
 
 /* 左侧菜单栏 */
 
@@ -24,43 +27,24 @@ export class ExpandedMenuComponent implements OnInit {
 
   public menu_icon = true;
 
-  private routePathSubscription: Subscription;
-
-  constructor(
-    public router: Router,
-    public routeMonitorService: RouteMonitorService,
-    private globalService: GlobalService,
-    public authService: AuthService,
-    public platformLocation: PlatformLocation) {
-
-    platformLocation.onPopState((param) => {
-      timer(0).subscribe(() => {
-        const path = (param as any).target.location.pathname;
-        this.checkPermission(path);
-        if (path.includes('/notice-center')) {
-          this.globalService.menu_index = null;
-        } else if (path.includes('operation/')) {
-          this.globalService.menu_index = 1;
-        } else if (path.includes('insurance')) {
-          this.globalService.menu_index = 3;
-        } else if (path.includes('maintenance')) {
-          this.globalService.menu_index = 4;
-        } else if (path.includes('/ticket')) {
-          this.globalService.menu_index = 5;
-        } else if (path.includes('/mall')) {
-          this.globalService.menu_index = 6;
-        } else if (path.includes('/management-setting/')) {
-          this.globalService.menu_index = 7;
-        }
-      });
-    });
-    this.getMenuItems();
+  constructor(public router: Router,
+              public routeMonitorService: RouteMonitorService,
+              public authService: AuthService,
+              private operationMenuService: MenuOperationService,
+              private insuranceMenuService: MenuInsuranceService,
+              private maintenanceMenuService: MenuMaintenanceService,
+              private mallMenuService: MenuMallService,
+              private managementMenuService: MenuManagementService,
+              private ticketMenuService: MenuTicketService) {
+    const path = location.pathname;
+    this.getMenuItems(path);
   }
 
   public ngOnInit() {
     this.routeMonitorService.routePathChanged.subscribe(path => {
-      this.checkPermission(path);
-      this.getMenuItems();
+      if (this.checkPermission(path)) {
+        this.getMenuItems(path);
+      }
       this.refreshMenu(path);
     });
     timer(0).subscribe(() => {
@@ -68,46 +52,52 @@ export class ExpandedMenuComponent implements OnInit {
     });
   }
 
-  private checkPermission(path: string): void {
+  private checkPermission(path: string): boolean {
     // 根据是否有该模块权限来控制页面跳转
-    if (!this.authService.checkPermissions(['ticket']) && path.includes('/notice-center')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['operation']) && path.includes('/operation')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['insurance']) && path.includes('/insurance')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['upkeep']) && path.includes('/maintenance')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['ticket']) && path.includes('/ticket')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['mall']) && path.includes('/mall')) {
-      this.quietout();
-    } else if (!this.authService.checkPermissions(['management']) && path.includes('/management-setting')) {
-      this.quietout();
+    if (path.includes('/notice-center')) {
+      return this.authService.checkPermissions(['ticket']);
+    } else if (path.includes('/operation')) {
+      return this.authService.checkPermissions(['operation']);
+    } else if (path.includes('/insurance')) {
+      return this.authService.checkPermissions(['insurance']);
+    } else if (path.includes('/maintenance')) {
+      return this.authService.checkPermissions(['upkeep']);
+    } else if (path.includes('/ticket')) {
+      return this.authService.checkPermissions(['ticket']);
+    } else if (path.includes('/mall')) {
+      return this.authService.checkPermissions(['mall']);
+    } else if (path.includes('/management-setting')) {
+      return this.authService.checkPermissions(['management']);
     }
-  }
-
-  // 没有权限时登出
-  private quietout() {
-    this.globalService.promptBox.open('授权失败，请重新登录!', () => {
-      this.authService.logout();
-    }, 2000, null, false);
+    return true;
   }
 
   // 获取菜单
-  private getMenuItems() {
-    if (this.globalService.menu_index === 1) {
-      this.menuItems = this.generateMenus();
-    } else if (this.globalService.menu_index === 3) {
-      this.menuItems = this.generateMenus_insurance();
-    } else if (this.globalService.menu_index === 4) {
-      this.menuItems = this.generateMenus_maintenance();
-    } else if (this.globalService.menu_index === 5) {
-      this.menuItems = this.generateMenus_ticket();
-    } else if (this.globalService.menu_index === 6) {
-      this.menuItems = this.generateMenus_mall();
-    } else if (this.globalService.menu_index === 7) {
-      this.menuItems = this.generateMenus_management();
+  private getMenuItems(path: string) {
+    if (path.includes('/operation')) {
+      this.menuItems = this.operationMenuService.generateMenus_operation();
+      this.menu_icon = true;
+      this.routeLinkList = this.operationMenuService.routeLinkList;
+    } else if (path.includes('/insurance')) {
+      this.menuItems = this.insuranceMenuService.generateMenus_insurance();
+      this.menu_icon = false;
+      this.routeLinkList = this.insuranceMenuService.routeLinkList;
+    } else if (path.includes('/maintenance')) {
+      this.menuItems = this.maintenanceMenuService.generateMenus_maintenance();
+      this.menu_icon = false;
+      this.routeLinkList = this.maintenanceMenuService.routeLinkList;
+    } else if (path.includes('/ticket')) {
+      this.menuItems = this.ticketMenuService.generateMenus_ticket();
+      this.menu_icon = false;
+      this.routeLinkList = this.ticketMenuService.routeLinkList;
+    } else if (path.includes('/mall')) {
+      this.menuItems = this.mallMenuService.generateMenus_mall();
+      this.menu_icon = false;
+      this.routeLinkList = this.mallMenuService.routeLinkList;
+    } else if (path.includes('/management-setting/')) {
+      this.menuItems = this.managementMenuService.generateMenus_management();
+      this.menu_icon = false;
+      this.routeLinkList = this.managementMenuService.routeLinkList;
     }
   }
 
@@ -125,250 +115,6 @@ export class ExpandedMenuComponent implements OnInit {
         this.refreshMenu(location.pathname);
       }
     });
-  }
-
-
-  // 运营菜单
-  public generateMenus(): Array<SideMenuItem> {
-    this.menu_icon = true;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateParkingMenu());
-    menusItem.push(this.generateCommentMenu());
-    menusItem.push(this.generateMiniProgramMenu());
-    menusItem.push(this.generateOtherOperationConfigMenu());
-    menusItem.push(this.generateOperationConfigMenu());
-    return menusItem;
-  }
-
-  // 保险菜单
-  public generateMenus_insurance(): Array<SideMenuItem> {
-    this.menu_icon = false;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateBrokerageMenu());
-    menusItem.push(this.generateInsuranceMenu());
-    return menusItem;
-  }
-
-  // 保养菜单
-  public generateMenus_maintenance(): Array<SideMenuItem> {
-    this.menu_icon = false;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateOrderManagementMenu());
-    menusItem.push(this.generateProductMenu());
-    menusItem.push(this.generateMaintenanceManualMenu());
-    menusItem.push(this.generateProjectMenu());
-    menusItem.push(this.generateBusinessMenu());
-    menusItem.push(this.generateVehicleTypeMenu());
-    return menusItem;
-  }
-
-  // 票务菜单
-  public generateMenus_ticket(): Array<SideMenuItem> {
-    this.menu_icon = false;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateTicketProductMenu());
-    menusItem.push(this.generateTicketOrderMenu());
-    menusItem.push(this.generateTicketFinanceMenu());
-    return menusItem;
-  }
-
-  // 商城菜单
-  public generateMenus_mall(): Array<SideMenuItem> {
-    this.menu_icon = false;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateGoodsManagementMenu());
-    menusItem.push(this.generateGoodsOrderMenu());
-    return menusItem;
-  }
-
-  // 管理设置
-  public generateMenus_management(): Array<SideMenuItem> {
-    this.menu_icon = false;
-    this.routeLinkList = [];
-    const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generateEmployeesMenu());
-    return menusItem;
-  }
-
-  // 运营 》美行停车
-  private generateParkingMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('美行停车', null);
-    systemMenu.icon = '/assets/images/icon_menu_parking.png';
-    const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/operation/parking/first-page-icon', systemMenu);
-    const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/operation/parking/version-management', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    systemMenu.children.push(subFinanceMenu2);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
-  // 运营 》评论管理
-  private generateCommentMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('评论管理', null);
-    systemMenu.icon = '/assets/images/menu_comment.png';
-    const subFinanceMenu1 = new SideMenuItem('评论列表', '/main/operation/comment/', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    const subFinanceMenu2 = new SideMenuItem('评论配置', '/main/operation/comment/comment-setting', systemMenu);
-    systemMenu.children.push(subFinanceMenu2);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
-  // 运营 》小程序
-  private generateMiniProgramMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('小程序', null);
-    systemMenu.icon = '/assets/images/menu_mini_program.png';
-    const subFinanceMenu1 = new SideMenuItem('展位管理', '/main/operation/mini-program/banner-management', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
-  // 运营 》其他运营配置
-  private generateOtherOperationConfigMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('其他运营配置', null);
-    systemMenu.icon = '/assets/images/menu_other_config.png';
-    const subFinanceMenu1 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
-  //
-  private generateOperationConfigMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('运营配置', null);
-    systemMenu.icon = '/assets/images/menu_config.png';
-    const subFinanceMenu1 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
-  // 保险 》经纪公司管理
-  private generateBrokerageMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance/brokerage-company-list');
-    brokerageMenu.icon = '/assets/images/menu_business.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保险 》保险公司管理
-  private generateInsuranceMenu(): SideMenuItem {
-    const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-company-list');
-    insuranceMenu.icon = '/assets/images/menu_insurance.png';
-    this.routeLinkList.push(insuranceMenu);
-    return insuranceMenu;
-  }
-
-  // 保养 》订单管理
-  private generateOrderManagementMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('订单管理', '/main/maintenance/order-management');
-    brokerageMenu.icon = '/assets/images/menu_order.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保养 》车型管理
-  private generateVehicleTypeMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('车型管理', '/main/maintenance/vehicle-type-management');
-    brokerageMenu.icon = '/assets/images/menu_car.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保养 》保养手册
-  private generateMaintenanceManualMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('保养手册', '/main/maintenance/maintenance-manual');
-    brokerageMenu.icon = '/assets/images/menu_manual.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保养 》保养项目管理
-  private generateProjectMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('保养项目管理', '/main/maintenance/project-management');
-    brokerageMenu.icon = '/assets/images/menu_product.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保养 》商家管理
-  private generateBusinessMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('商家管理', '/main/maintenance/business-management');
-    brokerageMenu.icon = '/assets/images/menu_merchant.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 保养 》产品库
-  private generateProductMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品库', '/main/maintenance/product-library');
-    brokerageMenu.icon = '/assets/images/menu_part.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 票务 》产品管理
-  private generateTicketProductMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品管理', '/main/ticket/product-management');
-    brokerageMenu.icon = '/assets/images/menu_part.png';
-    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/ticket/product-management', brokerageMenu);
-    brokerageMenu.children.push(subFinanceMenu1);
-    const subFinanceMenu2 = new SideMenuItem('标签管理', '/main/ticket/product-management/label-list', brokerageMenu);
-    brokerageMenu.children.push(subFinanceMenu2);
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 票务 》订单管理
-  private generateTicketOrderMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('订单管理', '/main/ticket/order-management');
-    brokerageMenu.icon = '/assets/images/menu_order.png';
-    const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/ticket/order-management', brokerageMenu);
-    brokerageMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 票务 》财务管理
-  private generateTicketFinanceMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('财务管理', '/main/ticket/finance-management');
-    brokerageMenu.icon = '/assets/images/menu_pay.png';
-    const subFinanceMenu1 = new SideMenuItem('支付设置', '/main/ticket/finance-management', brokerageMenu);
-    brokerageMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 商城 》产品列表
-  private generateGoodsManagementMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品列表', '/main/mall/goods-management');
-    brokerageMenu.icon = '/assets/images/menu_part.png';
-    this.routeLinkList.push(brokerageMenu);
-    return brokerageMenu;
-  }
-
-  // 商城 》产品订单
-  private generateGoodsOrderMenu(): SideMenuItem {
-    const orderMenu = new SideMenuItem('产品订单', '/main/mall/goods-order');
-    orderMenu.icon = '/assets/images/menu_order.png';
-    this.routeLinkList.push(orderMenu);
-    return orderMenu;
-  }
-
-  // 管理设置》用户管理
-  private generateEmployeesMenu() {
-    const systemMenu = new SideMenuItem('用户管理', '/main/management-setting/employees');
-    systemMenu.icon = '/assets/images/menu_user.png';
-    const subFinanceMenu1 = new SideMenuItem('用户列表', '/main/management-setting/employees', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
   }
 
   public refreshMenu(path: string) {

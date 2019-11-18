@@ -12,6 +12,7 @@ import { InsuranceCompanyEditComponent } from './insurance-company-management/in
 import { BrokerageCompanyListComponent } from './brokerage-company-management/brokerage-company-list/brokerage-company-list.component';
 import { BrokerageCompanyEditComponent } from './brokerage-company-management/brokerage-company-edit/brokerage-company-edit.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MainModule } from '../main/main.module';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -27,6 +28,7 @@ const uploadToken: UploadConfig = {
         InsuranceRoutingModule,
         DragDropModule,
         HttpClientModule,
+        MainModule
     ],
     declarations: [
         InsuranceComponent,

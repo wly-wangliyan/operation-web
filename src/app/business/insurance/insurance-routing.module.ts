@@ -5,15 +5,18 @@ import {RouteMonitorService} from '../../core/route-monitor.service';
 import { InsuranceComponent } from './insurance.component';
 import { BrokerageCompanyListComponent } from './brokerage-company-management/brokerage-company-list/brokerage-company-list.component';
 import { InsuranceCompanyListComponent } from './insurance-company-management/insurance-company-list/insurance-company-list.component';
+import { HomeComponent } from '../main/home/home.component';
+import { MenuGuardService } from '../../core/menu-guard.service';
 
 const routes: Routes = [{
   path: '', component: InsuranceComponent,
-  canActivateChild: [AuthGuardService, RouteMonitorService],
+  canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
   children: [
-    {path: '', redirectTo: 'brokerage-company-list', pathMatch: 'full'},
+   /* {path: '', redirectTo: 'brokerage-company-list', pathMatch: 'full'},*/
+    {path: 'home', component: HomeComponent},
     {path: 'brokerage-company-list', component: BrokerageCompanyListComponent},
     {path: 'insurance-company-list', component: InsuranceCompanyListComponent},
-    {path: '**', redirectTo: 'brokerage-company-list', pathMatch: 'full'}
+    {path: '**', redirectTo: 'home', pathMatch: 'full'}
   ]
 }];
 

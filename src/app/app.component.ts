@@ -23,8 +23,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   public user: string;
 
-  public menu: number;
-
   public passwordPassword: ChangePasswordParams = new ChangePasswordParams();
 
   public repeat_password: string;
@@ -50,40 +48,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     DateFormatHelper.NowBlock = () => {
       return new Date(globalService.timeStamp * 1000);
     };
-    const url = this.router.routerState.snapshot.url;
-    if ((url.includes('/operation') || url.includes('/home')) && this.authService.checkPermissions(['operation'])) {
-      this.menu = 1;
-    } else if ((url.includes('/insurance') || url.includes('/home')) && this.authService.checkPermissions(['insurance'])) {
-      this.menu = 3;
-    } else if ((url.includes('/maintenance') || url.includes('/home')) && this.authService.checkPermissions(['upkeep'])) {
-      this.menu = 4;
-    } else if ((url.includes('/ticket') || url.includes('/home')) && this.authService.checkPermissions(['ticket'])) {
-      this.menu = 5;
-    } else if ((url.includes('/mall') || url.includes('/home')) && this.authService.checkPermissions(['mall'])) {
-      this.menu = 6;
-    } else if ((url.includes('/management-setting') || url.includes('/home')) && this.authService.checkPermissions(['management'])) {
-      this.menu = 7;
-    } else if (url.includes('/notice-center') && this.authService.checkPermissions(['ticket'])) {
-      this.menu = null;
-    } else {
-      if (this.authService.checkPermissions(['operation'])) {
-        this.menu = 1;
-      } else if (this.authService.checkPermissions(['insurance'])) {
-        this.menu = 3;
-      } else if (this.authService.checkPermissions(['upkeep'])) {
-        this.menu = 4;
-      } else if (this.authService.checkPermissions(['ticket'])) {
-        this.menu = 5;
-      } else if (this.authService.checkPermissions(['mall'])) {
-        this.menu = 6;
-      } else if (this.authService.checkPermissions(['management'])) {
-        this.menu = 7;
-      }
-      this.router.navigate(['/main/home']);
-    }
-    // this.menu = url.includes('/insurance') ? 3 : url.includes('/maintenance') ? 4 : url.includes('/ticket') ? 5 : url.includes('/management-setting') ? 7 : url.includes('/notice-center') ? null : 1;
-    this.globalService.menu_index = this.menu;
-    this.intervalService.startTimer(); // 1.6启动定时
   }
 
   public ngAfterViewInit() {
@@ -126,97 +90,23 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  public onMainMenuClick(index: any) {
-    this.menu = index;
-    this.globalService.menu_index = this.menu;
-    this.getMenuList(index);
-  }
-
-  private getMenuList(index: any) {
-    const url = this.router.routerState.snapshot.url;
-    switch (index) {
-      case 1:
-        if (!url.includes('operation/')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus();
-          this.router.navigate(['/main/operation/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus());
-          });
-        }
-        break;
-      case 3:
-        if (!url.includes('insurance')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_insurance();
-          this.router.navigate(['/main/insurance/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus_insurance());
-          });
-        }
-        break;
-      case 4:
-        if (!url.includes('maintenance')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_maintenance();
-          this.router.navigate(['/main/maintenance/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus_maintenance());
-          });
-        }
-        break;
-      case 5:
-        if (!url.includes('/ticket')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
-          this.router.navigate(['/main/ticket/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus_ticket());
-          });
-        }
-        break;
-      case 6:
-        if (!url.includes('/mall')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_mall();
-          this.router.navigate(['/main/mall/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus_mall());
-          });
-        }
-        break;
-      case 7:
-        if (!url.includes('/management-setting/')) {
-          this.menuComponent.menuItems = this.menuComponent.generateMenus_management();
-          this.router.navigate(['/main/management-setting/home']).then(() => {
-            this.onMenuPrevent(this.menuComponent.generateMenus_management());
-          });
-        }
-    }
+  public onMainMenuClick(menu: string) {
+    const menu_name = '/main' + menu;
+    this.router.navigate([menu_name]);
   }
 
   // 打开通知中心
   public onNoticeCenterClick() {
-    this.globalService.menu_last_index = this.menu;
-    this.menu = null;
-    this.globalService.menu_index = this.menu;
-    this.getMenuList(this.menu);
     this.router.navigateByUrl('/main/notice-center/list').then(() => {
       const path = this.router.routerState.snapshot.url;
       if (path.includes('/ticket')) {
-        this.menu = 5;
-        this.globalService.menu_index = 5;
-        this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
+        // this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
         this.menuComponent.refreshMenu(path);
       } else {
         this.router.navigateByUrl('/main/notice-center/list');
         this.menuComponent.refreshMenu(path);
       }
     });
-  }
-
-  // 依据路由是否跳转进行菜单渲染
-  private onMenuPrevent(func: any) {
-    const path = location.pathname;
-    if (path.includes('/ticket')) {
-      this.menu = 5;
-      this.globalService.menu_index = 5;
-      this.menuComponent.menuItems = this.menuComponent.generateMenus_ticket();
-      this.menuComponent.refreshMenu(path);
-    } else if (path.includes('home')) {
-      this.menuComponent.menuItems = func;
-      this.menuComponent.refreshMenu(path);
-    }
   }
 
   // 通知中心未读数量
@@ -277,6 +167,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           }
         }
       });
+    }
+  }
+
+  public menuActive(path: string, menu_name: string): boolean {
+    const url = this.router.routerState.snapshot.url;
+    if ((url.includes(path)) && this.authService.checkPermissions([menu_name])) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

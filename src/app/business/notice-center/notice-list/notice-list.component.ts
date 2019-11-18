@@ -70,7 +70,6 @@ export class NoticeListComponent implements OnInit, OnDestroy {
         this.requestUnreadCount();
         timer(0).subscribe(() => {
           this.router.navigateByUrl(`/main/ticket/product-management/third-detail/${third_product_id}/1/2`);
-          this.globalService.menu_index = 5;
         });
       }, err => {
         this.initPageIndex();
@@ -79,7 +78,6 @@ export class NoticeListComponent implements OnInit, OnDestroy {
     } else {// 已读数据点击直接跳转到第三方产品详情页面
       timer(0).subscribe(() => {
         this.router.navigateByUrl(`/main/ticket/product-management/third-detail/${third_product_id}/1/2`);
-        this.globalService.menu_index = 5;
       });
     }
   }
