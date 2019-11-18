@@ -8,7 +8,6 @@ import { ValidateHelper } from '../../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { RewardEntity, PromotionEntity, ActivityConfigService } from '../activity-config.service';
 import { GlobalService } from '../../../../../core/global.service';
-import { DescriptionEditorComponent } from '../component/description-editor/description-editor.component';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -55,7 +54,6 @@ export class ConfigEditComponent implements OnInit {
   private searchText$ = new Subject<any>();
 
   @ViewChild('activityImg', { static: false }) public activityImgSelectComponent: ZPhotoSelectComponent;
-  @ViewChild('descriptionEditor', { static: true }) public descriptionEditor: DescriptionEditorComponent;
 
   constructor(
     private route: ActivatedRoute,
