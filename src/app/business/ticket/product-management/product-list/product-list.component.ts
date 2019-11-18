@@ -4,7 +4,7 @@ import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
-import { ProductService, TicketProductEntity, SearchParams } from '../product.service';
+import { ProductService, TicketProductEntity, LabelEntity, SearchParams, SearchLabelParams } from '../product.service';
 
 const PageSize = 15;
 @Component({
@@ -15,6 +15,10 @@ const PageSize = 15;
 export class ProductListComponent implements OnInit, OnDestroy {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
+
+  public searchLabelParams: SearchLabelParams = new SearchLabelParams();
+
+  public labelList: Array<LabelEntity> = [];
 
   public saleStatus = [1, 2]; // 销售状态 1:销售中 2:已下架
 
@@ -74,6 +78,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.productList = res.results;
       this.linkUrl = res.linkUrl;
       this.initPageIndex();
+      this.getTagsName();
       this.noResultText = '暂无数据';
     }, err => {
       this.initPageIndex();
@@ -82,6 +87,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 获取标签数组
+  private getTagsName() {
+    this.productService.requestLabelListData(this.searchLabelParams).subscribe(res => {
+      this.labelList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 改变销售状态
   public onChangeSearchStatus(event: any) {
     const status = event.target.value;
     this.searchParams.status = null;

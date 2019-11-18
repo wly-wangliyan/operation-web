@@ -47,6 +47,7 @@ import {
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
+import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-ckeditor.component';
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
     DateClockComponent,
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,
+    ZTextCkeditorComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -108,6 +110,7 @@ import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
     IgnoreSpaceDirective,
     ZDebounceClickDirective,
     TxtCopyDirective,
+    ZTextCkeditorComponent,
   ],
   exports: [
     CommonModule,
@@ -134,6 +137,7 @@ import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
     DateClockComponent,
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,
+    ZTextCkeditorComponent,
 
     // 管道
     ZMaxLengthPipe,

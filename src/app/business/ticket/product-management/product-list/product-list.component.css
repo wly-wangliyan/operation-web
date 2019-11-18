@@ -54,3 +54,11 @@
   justify-content: flex-start;
   padding-left: 10px;
 }
+
+.tag-name {
+  margin-top: 5px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+}

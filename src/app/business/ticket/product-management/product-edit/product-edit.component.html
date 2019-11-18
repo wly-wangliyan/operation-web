@@ -312,7 +312,8 @@
           <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
-              <app-product-editor1 #editor1></app-product-editor1>
+              <app-z-text-ckeditor ckEditorId='editor1' #editor1>
+              </app-z-text-ckeditor>
               <div *ngIf="trafficGuideErrors" class="text-danger">
                 <span class="input-error">{{trafficGuideErrors}}</span>
               </div>
@@ -322,7 +323,7 @@
           <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
-              <app-product-editor2 #editor2></app-product-editor2>
+              <app-z-text-ckeditor ckEditorId='editor2' #editor2></app-z-text-ckeditor>
               <div *ngIf="noticeErrors" class="text-danger">
                 <span class="input-error">{{noticeErrors}}</span>
               </div>
@@ -332,7 +333,7 @@
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
             <nz-form-control>
-              <app-product-editor3 #editor3></app-product-editor3>
+              <app-z-text-ckeditor ckEditorId='editor3' #editor3></app-z-text-ckeditor>
               <div *ngIf="productIntroduceErrors" class="text-danger">
                 <span class="input-error">{{productIntroduceErrors}}</span>
               </div>

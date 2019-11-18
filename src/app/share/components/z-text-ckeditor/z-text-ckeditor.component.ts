@@ -1,29 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { WriteServiceImportViewModel } from '../../product.model';
-import { ProductService } from '../../product.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { WriteServiceImportViewModel } from './ckeditor.model';
+import { UploadService } from '../../../core/upload.service';
 
 @Component({
-  selector: 'app-product-editor2',
-  templateUrl: './product-editor2.component.html',
-  styleUrls: ['./product-editor2.component.css']
+  selector: 'app-z-text-ckeditor',
+  templateUrl: './z-text-ckeditor.component.html',
+  styleUrls: ['./z-text-ckeditor.component.css']
 })
-export class ProductEditor2Component implements OnInit {
+export class ZTextCkeditorComponent implements OnInit {
   public importViewModel: WriteServiceImportViewModel = new WriteServiceImportViewModel();
-  public uploadImg: string;
-  public flag = 0;
-  public isEditor2Change = false;
 
-  constructor(private productService: ProductService) { }
+  public isEditorChange = false;
 
-  ngOnInit() {
+  public uploadModalId = '';
+
+  private uploadImg: string;
+
+  private flag = 0;
+
+  @Input() public ckEditorId = 'editor';
+
+  constructor(private uploadService: UploadService) {
+  }
+
+  public ngOnInit() {
     setTimeout(() => {
-      CKEDITOR.replace('editor2');
+      CKEDITOR.replace(this.ckEditorId);
       CKEDITOR.on('instanceReady', event => {
         event.editor.on('change', () => {
-          this.isEditor2Change = true;
+          this.isEditorChange = true;
         });
       });
     }, 0);
+    this.uploadModalId = `${this.ckEditorId}UploadModal`;
   }
 
   // 取消上传图片
@@ -34,12 +43,12 @@ export class ProductEditor2Component implements OnInit {
   // 确认上传图片
   public confirmUpload() {
     if (this.importViewModel.file) {
-      this.productService.requestUploadPicture(this.importViewModel.file).subscribe(results => {
+      this.uploadService.requestUploadPicture(this.importViewModel.file).subscribe(results => {
         if (results.sourceUrl) {
           this.uploadImg = results.sourceUrl;
           this.importViewModel.uploadImg = true;
           this.importViewModel.initImportData();
-          $('#uploadModal2').modal('hide');
+          $(`#${this.uploadModalId}`).modal('hide');
           if (this.importViewModel.uploadImg) {
             let str: string;
             // 图片Width > 350 百分之百显示
@@ -60,7 +69,7 @@ export class ProductEditor2Component implements OnInit {
                 str = ` <img src=' ${this.uploadImg} '/> `;
               }
               if (this.uploadImg) {
-                CKEDITOR.instances.editor2.insertHtml(str);
+                CKEDITOR.instances[this.ckEditorId].insertHtml(str);
               }
             };
           }

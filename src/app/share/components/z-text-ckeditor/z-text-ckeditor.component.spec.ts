@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductEditor3Component } from './product-editor3.component';
+import { ZTextCkeditorComponent } from './z-text-ckeditor.component';
 
-describe('ProductEditor3Component', () => {
-  let component: ProductEditor3Component;
-  let fixture: ComponentFixture<ProductEditor3Component>;
+describe('ZTextCkeditorComponent', () => {
+  let component: ZTextCkeditorComponent;
+  let fixture: ComponentFixture<ZTextCkeditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProductEditor3Component ]
+      declarations: [ ZTextCkeditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductEditor3Component);
+    fixture = TestBed.createComponent(ZTextCkeditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

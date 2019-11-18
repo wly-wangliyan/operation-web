@@ -70,8 +70,17 @@
                   <img *ngIf="!product.image_urls" src="/assets/images/image_space_3_2.png" />
                   <i *ngIf="product.is_top===1" class="recommend">荐</i>
                 </div>
-                <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
-                  [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:15}}</a>
+                <div style="text-align: left;">
+                  <a [title]="product.product_name?product.product_name:''" style="word-break: keep-all;"
+                    [routerLink]="['../detail', product.product_id]">{{product.product_name | zMaxLength:15}}</a>
+                  <div class="tag-name">
+                    <ng-container *ngFor="let label of labelList;let idx=index">
+                      <span *ngFor="let tag of product.tag_ids;let tagIndex=index">
+                        <span *ngIf='tag===label.tag_id'>{{label.name}} </span>
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
               </div>
             </td>
             <td>甜程网</td>
