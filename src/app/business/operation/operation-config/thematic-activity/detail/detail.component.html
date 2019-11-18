@@ -1,0 +1,52 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../../'" [level3Name]="'明细'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <!-- 查看明细 -->
+
+  <div class="content-container">
+    <div class="table-item top-table">
+      <table class="detail-table">
+        <tr>
+          <td>标题：</td>
+          <td>{{thematicRecord.title ? thematicRecord.title : '--'}}</td>
+
+          <td>ID：</td>
+          <td>{{thematicRecord.thematic_id ? thematicRecord.thematic_id : '--'}}</td>
+        </tr>
+        <tr>
+          <td>累计阅读量</td>
+          <td>{{thematicRecord.read_num >= 0 ? thematicRecord.read_num : '--'}}</td>
+          <td>累计阅读人数</td>
+          <td>{{thematicRecord.read_person >= 0 ? thematicRecord.read_person : '--'}}</td>
+        </tr>
+        <tr>
+          <td>累计浏览时长：</td>
+          <td colspan="5">{{thematicRecord.read_time ? (thematicRecord.read_time|zDuration1:false) : '--'}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item" *ngIf="readStatisticsList && readStatisticsList.length>0">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>阅读量</th>
+            <th>阅读人数</th>
+            <th>浏览时长</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of readStatisticsList">
+            <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
+            <td>{{data.read_num >= 0 ? data.read_num : '--'}}</td>
+            <td>{{data.read_person >= 0 ? data.read_person : '--'}}</td>
+            <td>{{data.read_time >= 0 ? data.read_person : '--'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

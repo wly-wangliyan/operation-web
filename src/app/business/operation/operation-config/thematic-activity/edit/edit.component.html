@@ -1,0 +1,19 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../'" [level3Name]="routerTitle">
+  </app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
+      <div class="row">
+        <div class="control-input">
+          <input name="title" class="form-control" [(ngModel)]="thematicParams.title" placeholder="请在此输入标题"
+            minlength="1" maxlength="100" appIgnoreSpace required>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -14,6 +14,11 @@ const routes: Routes = [{
       loadChildren: () => import('./activity-config/activity-config.module').then(m => m.ActivityConfigModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'thematic-activity',
+      loadChildren: () => import('./thematic-activity/thematic-activity.module').then(m => m.ThematicActivityModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'activity-config', pathMatch: 'full' }
   ]
 }];

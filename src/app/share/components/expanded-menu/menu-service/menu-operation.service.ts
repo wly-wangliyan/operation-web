@@ -75,6 +75,8 @@ export class MenuOperationService {
     systemMenu.icon = '/assets/images/menu_config.png';
     const subFinanceMenu1 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('专题活动', '/main/operation/operation-config/thematic-activity', systemMenu);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
