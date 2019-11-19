@@ -1,0 +1,187 @@
+.main-layout {
+    width: 100%;
+    min-width: 1200px;
+    height: 100%;
+    min-height: 750px;
+}
+
+.main-header-layout {
+    width: 100%;
+    height: 76px;
+    background: rgba(62, 113, 247, 1);
+    overflow: hidden;
+    line-height: 76px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-left-layout {
+    width: 220px;
+    height: calc(100% - 76px);
+    min-height: 750px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    background: rgba(8, 17, 32, 1);
+    background-size: 100% 100%;
+}
+
+.main-left-layout-none {
+    width: 0;
+}
+
+.main-right-layout {
+    width: calc(100% - 220px);
+    height: calc(100% - 76px);
+    min-height: 750px;
+    float: left;
+    display: inline-block;
+    overflow: hidden;
+    background: #f3f7fd;
+    position: relative;
+}
+
+.main-right-layout-all {
+    width: 100%;
+}
+
+.content-router-outlet {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
+.logo {
+    height: 39px;
+    background-size: contain;
+    margin-left: 15px;
+    display: flex;
+}
+
+.logo div:first-child {
+    width: 186px;
+    margin-right: 10px;
+    outline: none;
+    background: url(/assets/images/app_logo.png) center no-repeat;
+}
+
+.user {
+    margin-right: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 76px;
+}
+
+.user div {
+    float: left;
+}
+
+.user_photo {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    background: url(/assets/images/head_photo.png) no-repeat center;
+    background-size: contain;
+}
+
+.user_name {
+    font-size: 16px;
+    font-family: Adobe Heiti Std R;
+    font-weight: normal;
+    color: rgba(22, 51, 91, 1);
+    margin-right: 60px;
+}
+
+.user_name span {
+    color: #FE9D66 !important
+}
+
+.line {
+    margin: 0 15px;
+}
+
+.user button {
+    width: 40px;
+    height: 20px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 16px;
+    font-family: Adobe Heiti Std R;
+    font-weight: normal;
+    color: #009AB1 !important;
+    margin-left: -5px;
+}
+
+.logout-btn, .notice-btn, .password-btn {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 17px;
+    font-family: STHeitiSC-Light;
+    color: rgba(255, 255, 255, 1);
+    line-height: 18px;
+}
+
+.logout-btn i, .notice-btn i, .password-btn i {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    background: url(/assets/images/main_logout.png) no-repeat center;
+    background-size: contain;
+}
+
+.main-herder-title {
+    color: #fff;
+    display: flex;
+    margin: 0 !important;
+}
+
+.main-herder-title li {
+    width: 130px;
+    height: 76px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.herder-active {
+    background: rgba(0, 0, 0, 0.33);
+}
+
+.notice-btn, .password-btn {
+    color: #fff;
+    margin-right: 30px;
+}
+
+.nz-badge {
+    margin-right: 20px;
+}
+
+.notice-btn i {
+    background: url(/assets/images/main-notice.png) no-repeat center;
+}
+
+.password-btn i {
+    background: url(/assets/images/main_password.png) no-repeat center;
+    margin-right: 15px;
+}
+
+.logout-btn i {
+    margin-right: 15px;
+}
+
+:host ::ng-deep .ant-badge-count, .ant-badge-dot {
+    box-shadow: none;
+}
+
+.modal-dialog {
+    margin-top: 10% !important;
+}
+
+.modal-content-common form .row .control-label {
+    width: 115px;
+}
