@@ -5,14 +5,14 @@ import { RouteMonitorService } from '../core/route-monitor.service';
 import { OperationalSystemComponent } from './operational-system.component';
 
 const routes: Routes = [
-    {path: 'login', loadChildren: './business/login/login.module#LoginModule', canActivate: [AuthGuardService]},
+    {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [AuthGuardService]},
     {
         path: '', component: OperationalSystemComponent,
         children: [
             {path: '', redirectTo: 'main', pathMatch: 'full'},
             {
                 path: 'main',
-                loadChildren: './business/main/main.module#MainModule',
+                loadChildren: './main/main.module#MainModule',
                 canActivate: [AuthGuardService, RouteMonitorService]
             },
             {path: '**', redirectTo: 'main', pathMatch: 'full'}

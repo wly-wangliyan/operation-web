@@ -14,5 +14,4 @@ export class EntryComponent {
         authService.authorizeBySecretKey(initializer.user);
         httpService.setStartTimeStamp(initializer.startTimeStamp);
     }
-
 }
