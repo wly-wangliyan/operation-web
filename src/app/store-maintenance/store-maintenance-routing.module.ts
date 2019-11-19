@@ -10,10 +10,10 @@ const routes: Routes = [{
         {path: '', redirectTo: 'brand-management', pathMatch: 'full'},
         {
             path: 'brand-management',
-            loadChildren: './brand-management/brand-management.module#MainModule',
+            loadChildren: './brand-management/brand-management.module#BrandManagementModule',
             canActivate: [AuthGuardService, RouteMonitorService]
         },
-        {path: '**', redirectTo: 'main', pathMatch: 'full'}
+        {path: '**', redirectTo: 'brand-management', pathMatch: 'full'}
     ]
 }];
 
