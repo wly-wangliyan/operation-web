@@ -4,13 +4,13 @@ import { registerLocaleData } from '@angular/common';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { EntryComponent } from './entry/entry.component';
-import { ShareModule } from './share/share.module';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import { initializer } from './initializer';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
+import { ShareModule } from '../share/share.module';
+import { initializer } from '../initializer';
+import { OperationalSystemRoutingModule } from './operational-system-routing.module';
+import { EntryComponent } from './entry/entry.component';
+import { OperationalSystemComponent } from './operational-system.component';
 import zh from '@angular/common/locales/zh';
 import * as Sentry from '@sentry/browser';
 
@@ -44,18 +44,18 @@ export class SentryErrorHandler implements ErrorHandler {
 
 @NgModule({
     declarations: [
-        AppComponent,
         EntryComponent,
+        OperationalSystemComponent,
     ],
     imports: [
         FormsModule,
         ReactiveFormsModule,
         BrowserModule,
-        AppRoutingModule,
-        ShareModule,
         NgZorroAntdModule,
         HttpClientModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        ShareModule,
+        OperationalSystemRoutingModule,
     ],
     providers: [
         {provide: NZ_I18N, useValue: zh_CN},
