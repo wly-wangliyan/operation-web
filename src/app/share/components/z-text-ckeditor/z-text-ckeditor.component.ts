@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { WriteServiceImportViewModel } from './ckeditor.model';
 import { UploadService } from '../../../core/upload.service';
 
@@ -20,15 +20,24 @@ export class ZTextCkeditorComponent implements OnInit {
 
   @Input() public ckEditorId = 'editor';
 
+  @Input() public isNeedEmit = false;
+
+  @Input() public replaceWidth = 900;
+
+  @Output() public editorChange = new EventEmitter(); // 上传完成
+
   constructor(private uploadService: UploadService) {
   }
 
   public ngOnInit() {
     setTimeout(() => {
-      CKEDITOR.replace(this.ckEditorId);
+      CKEDITOR.replace(this.ckEditorId, { width: this.replaceWidth });
       CKEDITOR.on('instanceReady', event => {
         event.editor.on('change', () => {
           this.isEditorChange = true;
+          if (this.isNeedEmit) {
+            this.editorChange.emit({ ckEditorId: this.ckEditorId });
+          }
         });
       });
     }, 0);
