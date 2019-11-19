@@ -4,6 +4,7 @@ import { ShareModule } from '../../../share/share.module';
 import { MiniProgramRoutingModule } from './mini-program-routing.module';
 import { MiniProgramComponent } from './mini-program.component';
 
+
 @NgModule({
   declarations: [MiniProgramComponent],
   imports: [
