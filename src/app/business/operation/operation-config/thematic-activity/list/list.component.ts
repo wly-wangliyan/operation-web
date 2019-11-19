@@ -93,17 +93,17 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   // 编辑
-  public onEditClick(thematic_id: string): void {
-    this.router.navigate(['../edit'], { relativeTo: this.route, queryParams: { thematic_id } });
+  public onEditClick(activity_id: string): void {
+    this.router.navigate(['../edit'], { relativeTo: this.route, queryParams: { activity_id } });
   }
 
   // 预览
-  public onViewClick(thematic_id: string): void {
+  public onViewClick(activity_id: string): void {
 
   }
 
   // 删除
-  public onDeleteClick(thematic_id: string): void {
+  public onDeleteClick(activity_id: string): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
     });

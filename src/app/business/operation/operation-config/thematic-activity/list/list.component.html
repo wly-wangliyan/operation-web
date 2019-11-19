@@ -35,27 +35,27 @@
           <tr *ngFor="let data of thematicTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
 
-            <td [title]="data.thematic_id?data.thematic_id:''">
-              <span *ngIf="data.thematic_id" [appTxtCopy]="data.thematic_id">
-                {{data.thematic_id}}
+            <td [title]="data.activity_id?data.activity_id:''">
+              <span *ngIf="data.activity_id" [appTxtCopy]="data.activity_id">
+                {{data.activity_id}}
               </span>
-              <span *ngIf="!data.thematic_id">--</span>
+              <span *ngIf="!data.activity_id">--</span>
             </td>
 
             <td [title]="data.title?data.title:''">
               {{data.title?(data.title|zMaxLength:20):'--'}}</td>
 
-            <td>{{data.read_num >=0 ? data.read_num : '--'}}</td>
+            <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
 
-            <td>{{data.read_person >=0 ? data.read_person: '--'}}</td>
+            <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
 
             <td>{{data.updated_time ?(data.updated_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
             <td class="operation">
-              <a [title]="'编辑'" (click)="onEditClick(data.thematic_id)">编辑</a>
-              <a [title]="'预览'" (click)="onViewClick(data.thematic_id)">预览</a>
-              <a [title]="'明细'" [routerLink]="['../detail',data.thematic_id]">明细</a>
-              <a [title]="'删除'" (click)="onDeleteClick(data.thematic_id)">删除</a>
+              <a [title]="'编辑'" (click)="onEditClick(data.activity_id)">编辑</a>
+              <a [title]="'预览'" (click)="onViewClick(data.activity_id)">预览</a>
+              <a [title]="'明细'" [routerLink]="['../detail',data.activity_id]">明细</a>
+              <a [title]="'删除'" (click)="onDeleteClick(data.activity_id)">删除</a>
             </td>
           </tr>
         </tbody>
