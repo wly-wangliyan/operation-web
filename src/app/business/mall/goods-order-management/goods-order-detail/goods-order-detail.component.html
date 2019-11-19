@@ -1,118 +1,130 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
-    </app-crumb>
+  <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
+  </app-crumb>
 </div>
 <div class="content-flow">
-    <div class="content-container">
-        <div class="table-item order-table">
-            <table class="detail-table">
-                <tr>
-                    <td>订单编号：</td>
-                    <td>{{orderDetail.order_id?orderDetail.order_id:'--'}}</td>
-                    <td>订单状态：</td>
-                    <td>{{orderDetail.pay_status | orderPayStatus}}</td>
-                    <td>发货状态：</td>
-                    <td>{{orderDetail.delivery_status | deliveryStatus}}</td>
-                </tr>
-                <tr>
-                    <td>应收：</td>
-                    <td>
-                        {{(orderDetail.total_amount||orderDetail.total_amount===0) ? ('￥ ' + (orderDetail.total_amount | centPriceChange)) : '--'}}
-                    </td>
-                    <td>平台立减：</td>
-                    <td>
-                        {{(orderDetail.discount_price||orderDetail.discount_price===0) ? ('￥ ' + (orderDetail.discount_price | centPriceChange)) : '--'}}
-                    </td>
-                    <td>优惠券：</td>
-                    <td>
-                        {{(orderDetail.platform_coupon_amount||orderDetail.platform_coupon_amount===0) ? ('￥ ' + (orderDetail.platform_coupon_amount | centPriceChange)) : '--'}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>实收：</td>
-                    <td>
-                        {{(orderDetail.real_price||orderDetail.real_price===0) ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}
-                    </td>
-                    <td>邮费：</td>
-                    <td>
-                        {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>联系人：</td>
-                    <td>
-                        {{orderDetail.contact?orderDetail.contact:'--'}}
-                    </td>
-                    <td>手机号：</td>
-                    <td>{{orderDetail.mobile?orderDetail.mobile:'--'}}</td>
-                    <td>收货地址：</td>
-                    <td>{{orderDetail.delivery_region||orderDetail.delivery_address ? orderDetail.delivery_region+orderDetail.delivery_address : '--'}}</td>
-                </tr>
-                <tr>
-                    <td>物流公司:</td>
-                    <td>{{orderDetail.delivery_company ? orderDetail.delivery_company : '--'}}</td>
-                    <td>物流单号：</td>
-                    <td>{{orderDetail.delivery_order?orderDetail.delivery_order:'--'}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>下单时间：</td>
-                    <td>
-                        {{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
-                    </td>
-                    <td>支付时间：</td>
-                    <td>
-                        {{orderDetail.pay_time ?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
-                    </td>
-                    <td>发货时间：</td>
-                    <td>
-                        {{orderDetail.delivery_time ?(orderDetail.delivery_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>确认收货时间：</td>
-                    <td>
-                        {{orderDetail.confirm_time ?(orderDetail.confirm_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
-                    </td>
-                    <td>确认收货方式：</td>
-                    <td>{{orderDetail.confirm_type | confirmType}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="table-item">
-            <table class="detail-table">
-                <caption>明细</caption>
-                <thead>
-                <tr>
-                    <th>商品名称</th>
-                    <th>规格</th>
-                    <th>数量</th>
-                    <th>原价</th>
-                    <th>售价</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let commodity of goodsInfo;let i=index">
-                    <td>{{commodity.commodity_name}}</td>
-                    <td>{{commodity.specification_name?commodity.specification_name:'--'}}</td>
-                    <td>
-                        {{commodity.amount||0}}
-                    </td>
-                    <td>
-                        {{(commodity.unit_original_price||commodity.unit_original_price===0) ? ((commodity.unit_original_price | centPriceChange)+' 元') : '--'}}
-                    </td>
-                    <td>
-                        {{(commodity.unit_sell_price||commodity.unit_sell_price===0) ? ((commodity.unit_sell_price | centPriceChange)+' 元') : '--'}}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="content-container">
+    <div class="table-item order-table">
+      <table class="detail-table">
+        <tr>
+          <td>订单编号：</td>
+          <td>{{orderDetail.order_id?orderDetail.order_id:'--'}}</td>
+          <td>订单状态：</td>
+          <td>{{orderDetail.pay_status | orderPayStatus}}</td>
+          <td>发货状态：</td>
+          <td style="line-height: 40px;">
+            {{orderDetail.delivery_status | deliveryStatus}}
+            <button *ngIf="orderDetail.pay_status===2&&orderDetail.delivery_status===1" class='goods-btn' nz-button
+              nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
+            <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
+              (click)="onConfiemClick(orderDetail)">确认收货</button>
+            <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;" nz-button
+              nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
+          </td>
+        </tr>
+        <tr>
+          <td>应收：</td>
+          <td>
+            {{(orderDetail.total_amount||orderDetail.total_amount===0) ? ('￥ ' + (orderDetail.total_amount | centPriceChange)) : '--'}}
+          </td>
+          <td>平台立减：</td>
+          <td>
+            {{(orderDetail.discount_price||orderDetail.discount_price===0) ? ('￥ ' + (orderDetail.discount_price | centPriceChange)) : '--'}}
+          </td>
+          <td>优惠券：</td>
+          <td>
+            {{(orderDetail.platform_coupon_amount||orderDetail.platform_coupon_amount===0) ? ('￥ ' + (orderDetail.platform_coupon_amount | centPriceChange)) : '--'}}
+          </td>
+        </tr>
+        <tr>
+          <td>实收：</td>
+          <td>
+            {{(orderDetail.real_price||orderDetail.real_price===0) ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}
+          </td>
+          <td>邮费：</td>
+          <td>
+            {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>联系人：</td>
+          <td>
+            {{orderDetail.contact?orderDetail.contact:'--'}}
+          </td>
+          <td>手机号：</td>
+          <td>{{orderDetail.mobile?orderDetail.mobile:'--'}}</td>
+          <td>收货地址：</td>
+          <td style="max-width: 300px;">
+            {{orderDetail.delivery_region||orderDetail.delivery_address ? orderDetail.delivery_region+orderDetail.delivery_address : '--'}}
+          </td>
+        </tr>
+        <tr>
+          <td>物流公司:</td>
+          <td>{{orderDetail.delivery_company ? orderDetail.delivery_company : '--'}}</td>
+          <td>物流单号：</td>
+          <td>{{orderDetail.delivery_order?orderDetail.delivery_order:'--'}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>下单时间：</td>
+          <td>
+            {{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+          </td>
+          <td>支付时间：</td>
+          <td>
+            {{orderDetail.pay_time ?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+          </td>
+          <td>发货时间：</td>
+          <td>
+            {{orderDetail.delivery_time ?(orderDetail.delivery_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+          </td>
+        </tr>
+        <tr>
+          <td>确认收货时间：</td>
+          <td>
+            {{orderDetail.confirm_time ?(orderDetail.confirm_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+          </td>
+          <td>确认收货方式：</td>
+          <td>{{orderDetail.confirm_type | confirmType}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
     </div>
+
+    <div class="table-item">
+      <table class="detail-table">
+        <caption>明细</caption>
+        <thead>
+          <tr>
+            <th>商品名称</th>
+            <th>规格</th>
+            <th>数量</th>
+            <th>原价</th>
+            <th>售价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let commodity of goodsInfo;let i=index">
+            <td>{{commodity.commodity_name}}</td>
+            <td>{{commodity.specification_name?commodity.specification_name:'--'}}</td>
+            <td>
+              {{commodity.amount||0}}
+            </td>
+            <td>
+              {{(commodity.unit_original_price||commodity.unit_original_price===0) ? ((commodity.unit_original_price | centPriceChange)+' 元') : '--'}}
+            </td>
+            <td>
+              {{(commodity.unit_sell_price||commodity.unit_sell_price===0) ? ((commodity.unit_sell_price | centPriceChange)+' 元') : '--'}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+<!--编辑物流信息-->
+<app-goods-order-delivery #orderDeliveryComponent></app-goods-order-delivery>
