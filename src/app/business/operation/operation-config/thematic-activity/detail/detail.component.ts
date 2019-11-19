@@ -14,7 +14,7 @@ export class DetailComponent implements OnInit {
 
   public readStatisticsList: Array<ReadStatisticsEntity> = []; // 阅读统计列表
 
-  private thematic_id: string; // thematic_id 专题活动id
+  private activity_id: string; // 专题活动id
 
   constructor(
     private route: ActivatedRoute,
@@ -22,13 +22,13 @@ export class DetailComponent implements OnInit {
     private globalService: GlobalService,
     private thematicService: ThematicActivityService) {
     this.route.paramMap.subscribe(map => {
-      this.thematic_id = map.get('thematic_id');
+      this.activity_id = map.get('activity_id');
     });
   }
 
   public ngOnInit() {
-    if (this.thematic_id) {
-      // this.getThematicDetail();
+    if (this.activity_id) {
+      this.getThematicDetail();
     } else {
       this.router.navigate(['../../list'], { relativeTo: this.route });
     }
@@ -36,9 +36,9 @@ export class DetailComponent implements OnInit {
 
   // 获取产品详情
   private getThematicDetail(): void {
-    this.thematicService.requestThematicDetail(this.thematic_id).subscribe(data => {
+    this.thematicService.requestThematicDetail(this.activity_id).subscribe(data => {
       this.thematicRecord = data;
-      this.readStatisticsList = data.read_stats ? data.read_stats : [];
+      this.readStatisticsList = data.click_stats ? data.click_stats : [];
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
