@@ -122,12 +122,8 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 导出url
   private exportSearchUrl() {
-    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export=
-    ${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}
-    &mobile=${this.searchParams.mobile}&contact=
-    ${this.searchParams.contact}&order_id=${this.searchParams.order_id}
-    &commodity_name=${this.searchParams.commodity_name}&order_time=
-    ${this.searchParams.order_time}&pay_time=${this.searchParams.pay_time}`;
+    // tslint:disable-next-line:max-line-length
+    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 下单开始时间的禁用部分
@@ -182,6 +178,15 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 导出订单管理列表
+  public onExportOrderList() {
+    if (this.generateAndCheckParamsValid() && this.searchUrl) {
+      window.open(this.searchUrl);
+    } else {
+      return;
+    }
+  }
+
   /* 生成并检查参数有效性 */
   public generateAndCheckParamsValid(): boolean {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),
@@ -211,40 +216,6 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       this.searchParams.pay_time = null;
     }
     return true;
-  }
-
-  // 导出订单管理列表
-  public onExportOrderList() {
-    if (this.getTimeValid() === 'order_time') {
-      this.globalService.promptBox.open('下单开始时间不能大于结束时间！', null, 2000, '/assets/images/warning.png');
-    } else if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else {
-      if (this.searchUrl) {
-        window.open(this.searchUrl);
-      } else {
-        return;
-      }
-    }
-  }
-
-  // 查询时间校验
-  private getTimeValid(): string {
-    const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),
-      new Date(this.order_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
-    const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(new Date(this.order_end_time).getHours(),
-      new Date(this.order_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-    const sPayTimestamp = this.pay_start_time ? (new Date(this.pay_start_time).setHours(new Date(this.pay_start_time).getHours(),
-      new Date(this.pay_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
-    const ePayTimeStamp = this.pay_end_time ? (new Date(this.pay_end_time).setHours(new Date(this.pay_end_time).getHours(),
-      new Date(this.pay_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-    if (sTimestamp > eTimeStamp) {
-      return 'order_time';
-    } else if (sPayTimestamp > ePayTimeStamp) {
-      return 'pay_time';
-    } else {
-      return '';
-    }
   }
 
   /*

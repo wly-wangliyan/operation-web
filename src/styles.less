@@ -33,7 +33,7 @@
 // Base background color for most components
 @component-background: #fff;
 @font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 @code-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 @heading-color: fade(#000, 85%);
 @text-color: fade(#000, 65%);
@@ -888,7 +888,7 @@ button {
   margin-right: 30px;
 }
 
-.pagination>.active>a {
+.pagination > .active > a {
   background: #1d5fa9;
   border-color: #1d5fa9;
 }
@@ -931,7 +931,7 @@ button {
   cursor: pointer;
 }
 
-.modal-contain>h5 {
+.modal-contain > h5 {
   color: #333333;
   font-size: 22px;
   font-family: SimSun;
@@ -1026,9 +1026,9 @@ button {
 }
 
 .ant-menu-item-disabled,
-.ant-menu-item-disabled>.ant-menu-submenu-title,
+.ant-menu-item-disabled > .ant-menu-submenu-title,
 .ant-menu-submenu-disabled,
-.ant-menu-submenu-disabled>.ant-menu-submenu-title {
+.ant-menu-submenu-disabled > .ant-menu-submenu-title {
   color: #fff !important;
 }
 
@@ -1129,17 +1129,17 @@ input[type=radio]:checked {
   margin-right: 20px;
 }
 
-.header-right>li,
-.header-right>li>i {
+.header-right > li,
+.header-right > li > i {
   float: left;
 }
 
-.header-right>li:focus {
+.header-right > li:focus {
   border: none;
   outline: none;
 }
 
-.header-right>li.big-bg {
+.header-right > li.big-bg {
   margin-top: 8px;
   cursor: pointer;
   width: 105px;
@@ -1154,39 +1154,40 @@ input[type=radio]:checked {
   margin-left: 10px;
 }
 
-.header-right>li.big-bg:hover,
-.header-right>li.big-bg:focus,
-.header-right>li.big-bg:active {
+.header-right > li.big-bg:hover,
+.header-right > li.big-bg:focus,
+.header-right > li.big-bg:active {
   background: #315AC5;
 }
 
-.header-right>li.big-white-btn {
+.header-right > li.big-white-btn {
   background: #fff;
   border: 1px solid #3E71F7;
   color: #3E71F7
 }
 
-.header-right>li.big-white-btn:hover {
+.header-right > li.big-white-btn:hover {
   background: #315AC5;
   color: #fff;
 }
 
-.header-right>li .header-btn {
+.header-right > li .header-btn {
   min-width: 105px;
   height: 34px;
   margin-top: 8px;
+  margin-left: 10px;
 }
 
-.header-right>li .header-btn:hover {
+.header-right > li .header-btn:hover {
   background: #315AC5;
 }
 
-.header-right>li .header-btn:disabled {
+.header-right > li .header-btn:disabled {
   background: #f5f5f5;
   color: #888;
 }
 
-.header-right>li>a:hover {
+.header-right > li > a:hover {
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -1195,8 +1196,8 @@ input[type=radio]:checked {
   text-align: center
 }
 
-.header-right>li>a,
-.header-right>li>a:hover {
+.header-right > li > a,
+.header-right > li > a:hover {
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -1205,11 +1206,11 @@ input[type=radio]:checked {
   text-align: center
 }
 
-.header-right>li:hover a {
+.header-right > li:hover a {
   color: #3247a0;
 }
 
-.header-right>li:hover .header-right-plus {
+.header-right > li:hover .header-right-plus {
   background: url(/assets/images/header_right.png) no-repeat -40px -37px;
 }
 
@@ -1255,7 +1256,7 @@ input[type=radio]:checked {
 }
 
 .ant-table table,
-.ant-table-thead>tr>th {
+.ant-table-thead > tr > th {
   text-align: center !important;
 }
 
@@ -1376,7 +1377,6 @@ textarea {
   height: 39px;
   line-height: 39px;
 }
-
 
 :root .ant-input {
   &::placeholder {

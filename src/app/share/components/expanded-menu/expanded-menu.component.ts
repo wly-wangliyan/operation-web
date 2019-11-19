@@ -56,7 +56,7 @@ export class ExpandedMenuComponent implements OnInit {
     // 根据是否有该模块权限来控制页面跳转
     if (path.includes('/notice-center')) {
       return this.authService.checkPermissions(['ticket']);
-    } else if (path.includes('/operation')) {
+    } else if (path.includes('/operation/')) {
       return this.authService.checkPermissions(['operation']);
     } else if (path.includes('/insurance')) {
       return this.authService.checkPermissions(['insurance']);
@@ -74,7 +74,7 @@ export class ExpandedMenuComponent implements OnInit {
 
   // 获取菜单
   private getMenuItems(path: string) {
-    if (path.includes('/operation')) {
+    if (path.includes('/operation/')) {
       this.menuItems = this.operationMenuService.generateMenus_operation();
       this.menu_icon = true;
       this.routeLinkList = this.operationMenuService.routeLinkList;

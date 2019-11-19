@@ -32,7 +32,7 @@
               <tbody>
                 <tr *ngFor="let data of labelTable.data; let i=index">
                   <td>{{i+1}}</td>
-                  <td nzAlign="left">
+                  <td nzAlign="left" style="width: 400px;">
                     <div class='label-recommend'>
                       <div class='recommend'><i *ngIf="data.is_recommended" class="re-content">荐</i></div>
                       {{data.name}}

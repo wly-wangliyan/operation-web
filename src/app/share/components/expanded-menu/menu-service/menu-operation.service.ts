@@ -55,6 +55,8 @@ export class MenuOperationService {
     systemMenu.icon = '/assets/images/menu_mini_program.png';
     const subFinanceMenu1 = new SideMenuItem('展位管理', '/main/operation/mini-program/banner-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('通知管理', '/main/operation/mini-program/notice-management', systemMenu);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

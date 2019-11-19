@@ -48,6 +48,7 @@ import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
 import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-ckeditor.component';
+import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
 
 @NgModule({
   imports: [
@@ -79,6 +80,7 @@ import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-cked
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,
     ZTextCkeditorComponent,
+    ZPhotoSelectUploadComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -112,6 +114,7 @@ import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-cked
     ZDebounceClickDirective,
     TxtCopyDirective,
     ZTextCkeditorComponent,
+    ZPhotoSelectUploadComponent,
   ],
   exports: [
     CommonModule,
@@ -139,6 +142,7 @@ import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-cked
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,
     ZTextCkeditorComponent,
+    ZPhotoSelectUploadComponent,
 
     // 管道
     ZMaxLengthPipe,

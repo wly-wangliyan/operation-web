@@ -4,7 +4,7 @@
             <div [routerLink]="'/main'"></div>
         </div>
         <ul class="main-herder-title">
-            <li [class.herder-active]="menuActive('/operation', 'operation')"
+            <li [class.herder-active]="menuActive('/operation/', 'operation')"
                 (click)="onMainMenuClick('/operation')"
                 [class.noPermissions]="!authService.checkPermissions(['operation'])">运营
             </li>

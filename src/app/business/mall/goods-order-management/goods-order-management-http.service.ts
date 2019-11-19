@@ -9,12 +9,12 @@ import { HttpResponse } from '@angular/common/http';
 export class SearchParams extends EntityBase {
   public pay_status = ''; // 	int	F	订单状态 1:待支付 2:已支付 3:已取消
   public delivery_status = ''; // 	int	F	发货状态 1:待发货 2:已发货 3:已签收
-  public mobile = undefined; // 	String	F	购买人手机号
-  public contact = undefined; // 	String	F	收货人
-  public order_id = undefined; // 	string	F	订单ID
-  public commodity_name = undefined; // 	string	F	商品名称
-  public order_time = undefined; // 	string	F	下单时间 12154.0,232645.0
-  public pay_time = undefined; // 	string	F	支付时间 12154.0,232645.0
+  public mobile = ''; // 	String	F	购买人手机号
+  public contact = ''; // 	String	F	收货人
+  public order_id = ''; // 	string	F	订单ID
+  public commodity_name = ''; // 	string	F	商品名称
+  public order_time = ''; // 	string	F	下单时间 12154.0,232645.0
+  public pay_time = ''; // 	string	F	支付时间 12154.0,232645.0
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -101,7 +101,7 @@ export class GoodsOrderManagementHttpService {
   public requestGoodsOrderList(searchParams: SearchParams): Observable<OrderLinkResponse> {
     const httpUrl = `${this.domain}/admin/orders`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new OrderLinkResponse(res)));
+      .pipe(map(res => new OrderLinkResponse(res)));
   }
 
   /**
@@ -121,7 +121,7 @@ export class GoodsOrderManagementHttpService {
   public requestOrderDetail(order_id: string): Observable<GoodsOrderEntity> {
     const httpUrl = `${this.domain}/admin/orders/${order_id}`;
     return this.httpService.get(httpUrl)
-        .pipe(map(res => GoodsOrderEntity.Create(res.body)));
+      .pipe(map(res => GoodsOrderEntity.Create(res.body)));
   }
 
   /**

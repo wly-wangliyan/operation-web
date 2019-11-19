@@ -1,0 +1,30 @@
+<!-- 新建/编辑通知 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">{{notice_id?'编辑':'新建'}}</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+          (click)="onCloseNoticeModal()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #noticeForm="ngForm">
+        <nz-form-item nzFlex style="margin-left: 20px;">
+          <nz-form-label nzRequired [nzNoColon]='true'>通知内容</nz-form-label>
+          <nz-form-control class="form_control">
+            <textarea class="notice-title" placeholder="最多可输入100字" maxlength="100" [(ngModel)]="title" name="title"
+              required></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseNoticeModal()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!noticeForm.valid"
+            (click)='onSaveNoticeTitle()'>
+            保存
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -71,7 +71,7 @@ export class ElementItemEntity extends EntityBase {
     const json = this.json();
     delete json.element_id;
     delete json.sort_num;
-    delete json.images_url;
+    delete json.image_url;
     delete json.errMsg;
     delete json.time;
     if (json.type === 3) {
