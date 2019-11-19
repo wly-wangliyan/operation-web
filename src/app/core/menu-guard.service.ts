@@ -29,7 +29,7 @@ export class MenuGuardService implements CanActivate, CanLoad, CanActivateChild 
 
   private checkMenu(url: string): boolean {
     // 根据当前的登录状态来控制页面跳转
-    if (url.includes('/operation') && !this.authService.checkPermissions(['operation'])) {
+    if (url.includes('/operation/') && !this.authService.checkPermissions(['operation'])) {
       this.router.navigateByUrl('/main/insurance/home');
       return false;
     } else if (url.includes('/insurance') && !this.authService.checkPermissions(['insurance'])) {
@@ -37,6 +37,9 @@ export class MenuGuardService implements CanActivate, CanLoad, CanActivateChild 
       return false;
     } else if (url.includes('/maintenance') && !this.authService.checkPermissions(['upkeep'])) {
       this.router.navigateByUrl('/main/ticket/home');
+      return false;
+    } else if (url.includes('/notice-center') && !this.authService.checkPermissions(['ticket'])) {
+      this.router.navigateByUrl('/main/mall/home');
       return false;
     } else if (url.includes('/ticket') && !this.authService.checkPermissions(['ticket'])) {
       this.router.navigateByUrl('/main/mall/home');

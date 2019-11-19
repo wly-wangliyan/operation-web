@@ -5,7 +5,7 @@
       <div [routerLink]="'/main'"></div>
     </div>
     <ul class="main-herder-title">
-      <li [class.herder-active]="menuActive('/operation', 'operation')"
+      <li [class.herder-active]="menuActive('/operation/', 'operation')"
           (click)="onMainMenuClick('/operation')"
         [class.noPermissions]="!authService.checkPermissions(['operation'])">运营</li>
       <!--      <li [class.herder-active]="menu===2" (click)="onMainMenuClick(2)">油卡</li>-->
