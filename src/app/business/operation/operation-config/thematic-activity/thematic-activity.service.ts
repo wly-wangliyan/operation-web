@@ -11,22 +11,23 @@ export class ReadStatisticsEntity extends EntityBase {
   public date: number = undefined; // 时间
   public click_num: string = undefined; // 阅读数
   public click_person: string = undefined; // 阅读人数
+  public browsing_duration: string = undefined; // 阅读人数
 }
 
 /** 专题活动记录实体类 */
 export class ThematicEntity extends EntityBase {
-  public thematic_id: string = undefined; // 活动id
+  public activity_id: string = undefined; // 活动id
   public title: string = undefined; // 标题
-  public read_num: number = undefined; // 累计阅读量
-  public read_person: number = undefined; // 累计阅读人数
-  public read_time: number = undefined; // 累计浏览时长
+  public click_num: number = undefined; // 累计阅读量
+  public click_person: number = undefined; // 累计阅读人数
+  public browsing_duration: number = undefined; // 累计浏览时长
   public is_deleted: boolean = undefined; // 逻辑删除
-  public read_stats: Array<ReadStatisticsEntity> = []; // 阅读量统计
+  public click_stats: Array<ReadStatisticsEntity> = []; // 阅读量统计
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'read_stats') {
+    if (propertyName === 'click_stats') {
       return ReadStatisticsEntity;
     }
     return null;
@@ -50,15 +51,57 @@ export class ThematicLinkResponse extends LinkResponse {
   }
 }
 
+export class ElementItemEntity extends EntityBase {
+  public type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本
+  public element_id: string = undefined; // 组件id
+  public sort_num: number = undefined; // 序号
+
+  // 图文链接
+  public image_url: Array<any> = []; // 图片Url
+  public image: string = undefined; // 图片Url
+  public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页
+  public link: number = undefined; // 链接地址
+
+  // 富文本
+  public rich: string = undefined; // 富文本
+  public errMsg: string = undefined; // 错误信息
+  public time: number = undefined; // 时间戳
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.element_id;
+    delete json.sort_num;
+    delete json.images_url;
+    delete json.errMsg;
+    delete json.time;
+    if (json.type === 3) {
+      delete json.image;
+      delete json.belong_to;
+      delete json.link;
+    } else {
+      delete json.rich;
+    }
+    delete json.type;
+    return json;
+  }
+}
+
 export class ContentEntity extends EntityBase {
-  public type: number = undefined; // 数据类型
-  public content: string = undefined; // 内容
+  public content_type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本
+  public elements: Array<ElementItemEntity> = [];
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'elements') {
+      return ElementItemEntity;
+    }
+    return null;
+  }
 }
 
 /** 专题活动新建、编辑 */
 export class ThematicParams extends EntityBase {
   public title: string = undefined; // 标题
-  public contents: Array<ContentEntity> = undefined; // 阅读量统计
+  public content: Array<ContentEntity> = []; // 内容
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'contents') {
@@ -81,7 +124,7 @@ export class ThematicActivityService {
    * @param searchParams 条件筛选参数
    */
   public requestThematicListListData(searchParams: SearchParams): Observable<ThematicLinkResponse> {
-    const httpUrl = `${this.domain}/admin/banner`;
+    const httpUrl = `${this.domain}/admin/special_activities`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new ThematicLinkResponse(res)));
   }
@@ -100,27 +143,27 @@ export class ThematicActivityService {
    * @param  thematicParams 添加参数
    */
   public requestAddThematicData(thematicParams: ThematicParams): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/thematic`;
+    const httpUrl = `${this.domain}/admin/special_activities`;
     return this.httpService.post(httpUrl, thematicParams.json());
   }
 
   /**
    * 编辑专题文章
-   * @param thematic_id Thematic ID
+   * @param activity_id 专题活动ID
    * @param thematicParams 编辑参数
    */
-  public requestUpdateThematicData(thematic_id: string, thematicParams: ThematicParams): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/thematic/${thematic_id}`;
+  public requestUpdateThematicData(activity_id: string, thematicParams: ThematicParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/special_activities/${activity_id}`;
     return this.httpService.put(httpUrl, thematicParams.json());
   }
 
   /**
    * 专题活动统计详情
-   * @param thematic_id Thematic ID
+   * @param activity_id 专题活动ID
    * @returns Observable<ThematicEntity>
    */
-  public requestThematicDetail(thematic_id: string): Observable<ThematicEntity> {
-    const httpUrl = `${this.domain}/admin/thematic/${thematic_id}`;
+  public requestThematicDetail(activity_id: string): Observable<ThematicEntity> {
+    const httpUrl = `${this.domain}/admin/special_activity/${activity_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       return ThematicEntity.Create(res.body);
     }));
@@ -128,11 +171,11 @@ export class ThematicActivityService {
 
   /**
    * 删除专题活动
-   * @param thematic_id Thematic ID
+   * @param activity_id 专题活动ID
    * @returns Observable<HttpResponse<any>>
    */
-  public requestDeleteThematicData(thematic_id: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/thematic/${thematic_id}`;
+  public requestDeleteThematicData(activity_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/special_activity/${activity_id}`;
     return this.httpService.delete(httpUrl);
   }
 }
