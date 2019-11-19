@@ -32,3 +32,25 @@
 .modal-footer {
   padding: 15px 90px 40px !important;
 }
+
+.label-recommend {
+  margin-left: 190px;
+}
+
+.recommend {
+  display: inline-block;
+  text-align: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+}
+
+.re-content {
+  width: 22px;
+  display: inline-block;
+  background-color: #3E71F7;
+  color: #fff;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 22px;
+}

@@ -32,7 +32,12 @@
               <tbody>
                 <tr *ngFor="let data of labelTable.data; let i=index">
                   <td>{{i+1}}</td>
-                  <td>{{data.name}}</td>
+                  <td nzAlign="left">
+                    <div class='label-recommend'>
+                      <div class='recommend'><i *ngIf="data.is_recommended" class="re-content">荐</i></div>
+                      {{data.name}}
+                    </div>
+                  </td>
                   <td class="operation">
                     <label nz-checkbox [(ngModel)]="data.checked"></label>
                   </td>
