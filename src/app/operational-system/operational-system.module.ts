@@ -43,10 +43,6 @@ export class SentryErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
-    declarations: [
-        EntryComponent,
-        OperationalSystemComponent,
-    ],
     imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -56,6 +52,10 @@ export class SentryErrorHandler implements ErrorHandler {
         BrowserAnimationsModule,
         ShareModule,
         OperationalSystemRoutingModule,
+    ],
+    declarations: [
+        EntryComponent,
+        OperationalSystemComponent,
     ],
     providers: [
         {provide: NZ_I18N, useValue: zh_CN},

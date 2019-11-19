@@ -4,21 +4,18 @@ import { AuthGuardService } from '../core/auth-guard.service';
 import { RouteMonitorService } from '../core/route-monitor.service';
 import { OperationalSystemComponent } from './operational-system.component';
 
-const routes: Routes = [
-    {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [AuthGuardService]},
-    {
-        path: '', component: OperationalSystemComponent,
-        children: [
-            {path: '', redirectTo: 'main', pathMatch: 'full'},
-            {
-                path: 'main',
-                loadChildren: './main/main.module#MainModule',
-                canActivate: [AuthGuardService, RouteMonitorService]
-            },
-            {path: '**', redirectTo: 'main', pathMatch: 'full'}
-        ]
-    }
-];
+const routes: Routes = [{
+    path: '', component: OperationalSystemComponent,
+    children: [
+        {path: '', redirectTo: 'main', pathMatch: 'full'},
+        {
+            path: 'main',
+            loadChildren: '../business/main/main.module#MainModule',
+            canActivate: [AuthGuardService, RouteMonitorService]
+        },
+        {path: '**', redirectTo: 'main', pathMatch: 'full'}
+    ]
+}];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
