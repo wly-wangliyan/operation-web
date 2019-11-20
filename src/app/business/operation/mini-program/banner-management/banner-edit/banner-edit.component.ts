@@ -51,6 +51,7 @@ export class BannerEditComponent implements OnInit {
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
   public offline_time: any = ''; // 下线时间
+  public aspectRatio = 3.83 / 1; // 截取图片比例
 
   private sureCallback: any;
   private closeCallback: any;
@@ -93,6 +94,7 @@ export class BannerEditComponent implements OnInit {
     this.banner_id = banner_id;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
+    this.aspectRatio = banner_type === 2 ? 1.917 / 1 : 3.83 / 1;
     this.clear();
     this.is_save = false;
     this.offline_time = '';
