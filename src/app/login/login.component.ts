@@ -12,15 +12,23 @@ import { LoginHttpService, LoginParams } from './login-http.service';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
     public loginParams = new LoginParams();
+
     public errorMsg = '';
+
     public loginError = false;
 
     @ViewChild('eyeIcon', {static: false}) eyeIcon: ElementRef;
+
     @ViewChild('password', {static: false}) password: ElementRef;
+
     @ViewChild('username', {static: false}) username: ElementRef;
+
     @ViewChild('routerDiv', {static: false}) public routerDiv: ElementRef;
+
     @ViewChild(ZConfirmationBoxComponent, {static: false}) public confirmationBox: ZConfirmationBoxComponent;
+
     @ViewChild(ZPromptBoxComponent, {static: false}) public promptBox: ZPromptBoxComponent;
 
     constructor(private loginHttpService: LoginHttpService,
@@ -29,7 +37,7 @@ export class LoginComponent implements OnInit {
         this.loginParams.username = LocalStorageProvider.Instance.get(LocalStorageProvider.HistoryLoginName);
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.authService.promptBox = this.promptBox;
     }
 

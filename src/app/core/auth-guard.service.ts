@@ -32,7 +32,7 @@ export class AuthGuardService implements CanActivate, CanLoad, CanActivateChild 
         // 根据当前的登录状态来控制页面跳转
         if (url === '/login') {
             if (this.authService.isLoggedIn) {
-                this.router.navigateByUrl(GlobalConst.HomePath);
+                location.href = location.origin + GlobalConst.HomePath;
                 return false;
             }
         } else {

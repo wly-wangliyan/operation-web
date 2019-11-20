@@ -3,6 +3,12 @@
         <div class="logo">
             <div [routerLink]="'/main'"></div>
         </div>
+        <ul class="main-herder-title">
+            <li [class.herder-active]="menuActive('/store-maintenance', 'store')"
+                [class.noPermissions]="!authService.checkPermissions(['store'])">
+                门店保养
+            </li>
+        </ul>
         <div class="user">
             <div class="logout-btn" (click)="onLoginoutClick()">
                 <i class="main-header-logout"></i>退出{{authService.isShowExpandMenu}}

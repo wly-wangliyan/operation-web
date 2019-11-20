@@ -83,7 +83,7 @@ export class AuthService {
                 for (let i = 0; i < tempRes['roles'].length; i++) {
                   if (res['body'].roles[i].role_logo === 'gly') {
                     this._isLoggedIn = true;
-                    this.router.navigateByUrl(GlobalConst.HomePath);
+                    location.href = location.origin + GlobalConst.HomePath;
                     break;
                   } else {
                     if (i === (tempRes['roles'].length - 1)) {
@@ -94,10 +94,10 @@ export class AuthService {
               }
             } else {
               this._isLoggedIn = true;
-              this.router.navigateByUrl(GlobalConst.HomePath);
+              location.href = location.origin + GlobalConst.HomePath;
             }*/
             this._isLoggedIn = true;
-            this.router.navigateByUrl(GlobalConst.HomePath);
+            location.href = location.origin + GlobalConst.HomePath;
         }, err => {
             if (err.status === 403) {
                 this.noAuthority();

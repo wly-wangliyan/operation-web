@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/index';
 import { DateFormatHelper } from '../../utils/date-format-helper';
 import { AuthService } from '../core/auth.service';
@@ -38,6 +39,7 @@ export class StoreMaintenanceComponent implements AfterViewInit, OnDestroy {
                 public globalService: GlobalService,
                 private routeMonitorService: RouteMonitorService,
                 private renderer2: Renderer2,
+                private router: Router,
                 private intervalService: IntervalService) {
         DateFormatHelper.NowBlock = () => {
             return new Date(globalService.timeStamp * 1000);
@@ -62,6 +64,14 @@ export class StoreMaintenanceComponent implements AfterViewInit, OnDestroy {
         this.intervalService.stopTimer();
     }
 
+    public displayStateChanged(): void {
+        if (this.global403Tip.http403Flag || this.global500Tip.http500Flag) {
+            this.renderer2.setStyle(this.routerDiv.nativeElement, 'display', 'none');
+        } else {
+            this.renderer2.setStyle(this.routerDiv.nativeElement, 'display', 'block');
+        }
+    }
+
     // 退出
     public onLoginoutClick() {
         this.confirmationBox.open('提示', '确认退出?', () => {
@@ -70,11 +80,12 @@ export class StoreMaintenanceComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    public displayStateChanged(): void {
-        if (this.global403Tip.http403Flag || this.global500Tip.http500Flag) {
-            this.renderer2.setStyle(this.routerDiv.nativeElement, 'display', 'none');
+    public menuActive(path: string, menu_name: string): boolean {
+        const url = this.router.routerState.snapshot.url;
+        if ((url.includes(path)) && this.authService.checkPermissions([menu_name])) {
+            return true;
         } else {
-            this.renderer2.setStyle(this.routerDiv.nativeElement, 'display', 'block');
+            return false;
         }
     }
 }

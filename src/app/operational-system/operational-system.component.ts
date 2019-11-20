@@ -95,8 +95,16 @@ export class OperationalSystemComponent implements AfterViewInit, OnDestroy {
     }
 
     public onMainMenuClick(menu: string) {
-        const menu_name = '/main' + menu;
-        this.router.navigate([menu_name]);
+        switch (menu) {
+            // 门店保养
+            case '/store-maintenance':
+                window.open(`${location.protocol}//${location.host}/store-maintenance`);
+                break;
+            default:
+                const menu_name = '/main' + menu;
+                this.router.navigate([menu_name]);
+                break;
+        }
     }
 
     // 打开通知中心
