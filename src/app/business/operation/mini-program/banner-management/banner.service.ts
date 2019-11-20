@@ -29,6 +29,7 @@ export class BannerEntity extends EntityBase {
   public click_num: number = undefined; // 点击量
   public click_person: number = undefined; 	// 	点击人数
   public click_stats: Array<ClickStatisticsEntity> = []; // 点击统计
+  public banner_type: number = undefined; // banner类型 1：首页banner 2:检车banner
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
@@ -44,6 +45,7 @@ export class SearchParams extends EntityBase {
   public title: string = undefined; // 标题
   public start_time: string = undefined; // 上架开始时间
   public end_time: string = undefined; // 上架结束时间
+  public banner_type = 1; // banner类型 1：首页banner 2:检车banner
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -57,6 +59,7 @@ export class BannerParams extends EntityBase {
   public offline_status: number = undefined; // 下线类型 1:永不下线 2: 定时下线
   public offline_time: number = undefined; // 下线时间(时间戳)
   public image: string = undefined; // 图片
+  public banner_type: number = undefined; // banner类型 1：首页banner 2:检车banner
 }
 
 export class BannerLinkResponse extends LinkResponse {

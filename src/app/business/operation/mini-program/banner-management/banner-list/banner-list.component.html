@@ -12,8 +12,9 @@
 
 <div class="content-flow">
   <div class="tab-bar-list">
-    <nz-radio-group [nzButtonStyle]="'solid'">
-      <label nz-radio-button>首页Banner</label>
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.banner_type">
+      <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">首页Banner</label>
+      <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">检车Banner</label>
     </nz-radio-group>
   </div>
   <div class="search-container">

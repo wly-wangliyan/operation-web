@@ -83,7 +83,7 @@ export class BannerEditComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(banner_id: string, sureFunc: any, closeFunc: any = null) {
+  public open(banner_id: string, banner_type: number, sureFunc: any, closeFunc: any = null) {
     const openBannerModal = () => {
       timer(0).subscribe(() => {
         $(this.bannerPromptDiv.nativeElement).modal('show');
@@ -98,6 +98,7 @@ export class BannerEditComponent implements OnInit {
     this.offline_time = '';
     if (this.isCreateBanner) {
       this.bannerParams = new BannerParams();
+      this.bannerParams.banner_type = banner_type;
       this.cover_url = [];
     } else {
       this.rquestBannerDetail();
