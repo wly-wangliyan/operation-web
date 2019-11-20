@@ -47,7 +47,7 @@ export class ZDurationPipe implements PipeTransform {
   name: 'zDuration1'
 })
 
-/** 根据时长时间戳转换时长字符串 */
+/** 根据时长时间戳转换时长(天时分秒)字符串 */
 export class ZDuration1Pipe implements PipeTransform {
 
   public transform(durationTimeStamp: number, ignoreSeconds: boolean = true): any {
@@ -74,6 +74,42 @@ export class ZDuration1Pipe implements PipeTransform {
     const seconds = Math.floor(Number(totalSeconds % 3600 % 60));
     let formatDate = days ? days + '天' : null;
     formatDate = hours ? formatDate + hours + '小时' : formatDate;
+    formatDate = minutes ? formatDate + minutes + '分' : formatDate;
+    formatDate = seconds ? formatDate + seconds + '秒' : formatDate;
+
+    return isNullOrUndefined(formatDate) ? '--' : formatDate;
+  }
+}
+
+@Pipe({
+  name: 'zDuration2'
+})
+
+/** 根据时长时间戳转换时长(时分秒)字符串 */
+export class ZDuration2Pipe implements PipeTransform {
+
+  public transform(durationTimeStamp: number, ignoreSeconds: boolean = true): any {
+    if (durationTimeStamp === null || durationTimeStamp === undefined) {
+      // 未传递时间戳则认为无效
+      return '--';
+    }
+
+    let totalSeconds = Math.floor(Number(durationTimeStamp));
+    if (totalSeconds <= 0) {
+      return '0秒';
+    }
+
+    if (ignoreSeconds) {
+      const second = totalSeconds % 3600 % 60;
+      if (second !== 0) {
+        totalSeconds = totalSeconds - second + 60; // 当秒数不为0时进位(进一分钟)
+      }
+    }
+
+    const hours = Math.floor(Number(totalSeconds / (60 * 60)));
+    const minutes = Math.floor(Number(totalSeconds % 3600 / 60));
+    const seconds = Math.floor(Number(totalSeconds % 3600 % 60));
+    let formatDate = hours ? hours + '小时' : null;
     formatDate = minutes ? formatDate + minutes + '分' : formatDate;
     formatDate = seconds ? formatDate + seconds + '秒' : formatDate;
 

@@ -12,7 +12,7 @@ import { IgnoreSpaceDirective } from './directives/ignore-space.directive';
 import { ZMaxLengthPipe } from './pipes/z-max-length.pipe';
 import { DurationFormatHMSPipe, ZFormatDurationPipe } from './pipes/z-format-duration.pipe';
 import { ZPlaceholderPipe } from './pipes/z-placeholder.pipe';
-import { ZDurationPipe, ZDuration1Pipe } from './pipes/z-duration.pipe';
+import { ZDurationPipe, ZDuration1Pipe, ZDuration2Pipe } from './pipes/z-duration.pipe';
 import { ZEmptyPipe } from './pipes/z-empty.pipe';
 import { ZDebounceClickDirective } from './directives/z-debounce-click.directive';
 import { ProgressModalComponent } from './components/progress-modal/progress-modal.component';
@@ -87,6 +87,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     ZMaxLengthPipe,
     ZDurationPipe,
     ZDuration1Pipe,
+    ZDuration2Pipe,
     ZFormatDurationPipe,
     ZPlaceholderPipe,
     DurationFormatHMSPipe,
@@ -149,6 +150,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     ZMaxLengthPipe,
     ZDurationPipe,
     ZDuration1Pipe,
+    ZDuration2Pipe,
     ZFormatDurationPipe,
     ZPlaceholderPipe,
     DurationFormatHMSPipe,

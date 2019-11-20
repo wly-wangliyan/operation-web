@@ -16,15 +16,15 @@
           <td>{{thematicRecord.activity_id ? thematicRecord.activity_id : '--'}}</td>
         </tr>
         <tr>
-          <td>累计阅读量</td>
+          <td>累计浏览量</td>
           <td>{{thematicRecord.click_num >= 0 ? thematicRecord.click_num : '--'}}</td>
-          <td>累计阅读人数</td>
+          <td>累计浏览人数</td>
           <td>{{thematicRecord.click_person >= 0 ? thematicRecord.click_person : '--'}}</td>
         </tr>
         <tr>
           <td>累计浏览时长：</td>
           <td colspan="5">
-            {{thematicRecord.browsing_duration ? (thematicRecord.browsing_duration|zDuration1:false) : '--'}}</td>
+            {{thematicRecord.browsing_duration>= 0 ? (thematicRecord.browsing_duration|zDuration2:false) : '--'}}</td>
         </tr>
       </table>
     </div>
@@ -34,8 +34,8 @@
         <thead>
           <tr>
             <th>时间</th>
-            <th>阅读量</th>
-            <th>阅读人数</th>
+            <th>浏览量</th>
+            <th>浏览人数</th>
             <th>浏览时长</th>
           </tr>
         </thead>
@@ -44,7 +44,7 @@
             <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
             <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
             <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
-            <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration1:false) : '--'}}</td>
+            <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
           </tr>
         </tbody>
       </table>
