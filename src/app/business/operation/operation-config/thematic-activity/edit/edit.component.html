@@ -113,6 +113,40 @@
           <li (click)="onAddComponent(3)"></li>
         </ul>
       </div>
+
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          (appZDebounceClick)="onPreviewClick()">预览
+        </button>
+
+      </div>
     </form>
+  </div>
+</div>
+
+<div class="preview-container" [ngClass]="{'show-preview': !isShowPreview}">
+  <div class="preview-box">
+    <div class="closetx" (click)="close()"></div>
+    <div class="pru-back">
+      <div class="pru-con">
+        <div class="title" [innerHTML]="thematicParams.title"></div>
+        <ng-container *ngFor="let item of previewList;let i=index">
+          <ng-container *ngIf="item.content_type===1">
+            <div class="picture-link">
+              <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
+              <img class="small-picture" [src]="item.elements[1].image">
+            </div>
+          </ng-container>
+          <ng-container *ngIf="item.content_type===2">
+            <div class="picture-link">
+              <img class="big-picture" [src]="item.elements[0].image">
+            </div>
+          </ng-container>
+          <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
+            <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>
