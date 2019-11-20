@@ -27,6 +27,7 @@ export class NotifyLinkResponse extends LinkResponse {
 }
 
 export class SearchParams extends EntityBase {
+  public notify_type = 1; // 通知类型 1，检车线
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }

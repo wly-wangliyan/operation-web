@@ -152,29 +152,81 @@ export class EditComponent implements OnInit, AfterViewInit {
   }
 
   // 点击保存
-  public onEditFormSubmit() {
+  public onEditFormSubmit(): void {
+    if (this.is_save) {
+      return;
+    }
     this.thematicParams.content = [];
-    if (this.generateAndCheckParamsValid()) {
-      console.log('save');
-      console.log(this.thematicParams);
+    if (this.generateAndCheckParamsValid(this.contentList)) {
+      this.is_save = true;
+      if (this.isCreate) {
+        this.requestAddThematic(this.thematicParams);
+      } else {
+        this.requestUpdateThematic(this.thematicParams);
+      }
+    } else {
+      this.thematicParams.content = [];
     }
   }
 
-  private generateAndCheckParamsValid(): boolean {
+  // 添加专题活动
+  private requestAddThematic(params: ThematicParams): void {
+    this.thematicService.requestAddThematicData(params).subscribe(res => {
+      this.globalService.promptBox.open('保存成功！', () => {
+        this.onCancelClick();
+      });
+    }, err => {
+      this.is_save = false;
+      this.errorProcess(err);
+    });
+  }
+
+  // 编辑专题活动
+  private requestUpdateThematic(params: ThematicParams): void {
+    this.thematicService.requestUpdateThematicData(this.activity_id, params).subscribe(res => {
+      this.globalService.promptBox.open('修改成功！', () => {
+        this.onCancelClick();
+      });
+    }, err => {
+      this.is_save = false;
+      this.errorProcess(err);
+    });
+  }
+
+  // 接口错误状态
+  private errorProcess(err: any): any {
+    if (!this.globalService.httpErrorProcess(err)) {
+      if (err.status === 422) {
+        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+        for (const content of error.errors) {
+          if (content.code === 'invalid' && content.field === 'title') {
+            this.titleErrMsg = '标题错误，请重新输入！';
+            return;
+          }
+          if (content.code === 'invalid' && content.field === 'content') {
+            this.globalService.promptBox.open('参数错误或无效！', null, 2000, null, false);
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  private generateAndCheckParamsValid(params: Array<ContentEntity>): boolean {
     if (!this.thematicParams.title) {
       this.titleErrMsg = '请输入标题！';
       return false;
     }
 
-    if (!this.contentList || this.contentList.length === 0) {
+    if (!params || params.length === 0) {
       this.globalService.promptBox.open('请至少添加一种模板！', null, 2000, null, false);
       return false;
     }
 
-    for (const contentIndex in this.contentList) {
-      if (this.contentList.hasOwnProperty(contentIndex)) {
-        const content_type = this.contentList[contentIndex].content_type;
-        const elements = this.contentList[contentIndex].elements;
+    for (const contentIndex in params) {
+      if (params.hasOwnProperty(contentIndex)) {
+        const content_type = params[contentIndex].content_type;
+        const elements = params[contentIndex].elements;
         if (content_type === 3) {
           const tmpRichContent = CKEDITOR.instances[`${elements[0].element_id}`].getData();
           if (!tmpRichContent) {
@@ -184,7 +236,7 @@ export class EditComponent implements OnInit, AfterViewInit {
           } else {
             elements[0].rich = tmpRichContent.replace('/\r\n/g', '').replace(/\n/g, '');
             elements[0].errMsg = '';
-            const tmpData = this.contentList[contentIndex].clone();
+            const tmpData = params[contentIndex].clone();
             tmpData.elements[0] = elements[0].toEditJson();
             this.thematicParams.content.push(tmpData);
           }
@@ -204,7 +256,8 @@ export class EditComponent implements OnInit, AfterViewInit {
               }
             }
           }
-          const tmpData = this.contentList[contentIndex].clone();
+
+          const tmpData = params[contentIndex].clone();
           tmpData.elements[0] = elements[0].toEditJson();
           if (content_type === 1) {
             tmpData.elements[1] = elements[1].toEditJson();
@@ -216,8 +269,12 @@ export class EditComponent implements OnInit, AfterViewInit {
     return true;
   }
 
-  public onDeleteClick(index: number) {
-    this.contentList.splice(index, 1);
+  // 删除节点
+  public onDeleteClick(index: number): void {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+      this.globalService.confirmationBox.close();
+      this.contentList.splice(index, 1);
+    });
   }
 
   // 变更图片结果
@@ -275,7 +332,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     }
   }
   // 点击取消
-  public onCancelClick() {
+  public onCancelClick(): void {
     window.history.back();
   }
 }
