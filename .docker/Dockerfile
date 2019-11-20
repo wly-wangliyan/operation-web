@@ -13,7 +13,9 @@ RUN echo 'http://mirrors.aliyun.com/alpine/v3.4/main' > /etc/apk/repositories \
 ARG version
 ADD . /app
 RUN cp src/environments/environment.`echo $version | tr '[A-Z]' '[a-z]'`.ts src/environments/environment.prod.ts \
-    && npm run build
+    && npm run login-build \
+    && npm run operational-system-build \
+    && npm run store-maintenance-build
 
 ### final image
 FROM nginx:alpine
