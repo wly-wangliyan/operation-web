@@ -7,13 +7,13 @@ import { StoreMaintenanceComponent } from './store-maintenance.component';
 const routes: Routes = [{
     path: '', component: StoreMaintenanceComponent,
     children: [
-        {path: '', redirectTo: 'brand-management', pathMatch: 'full'},
+        {path: '', redirectTo: 'store-maintenance', pathMatch: 'full'},
         {
-            path: 'brand-management',
-            loadChildren: './brand-management/brand-management.module#BrandManagementModule',
+            path: 'store-maintenance',
+            loadChildren: './store-maintenance-main/store-maintenance-main.module#StoreMaintenanceMainModule',
             canActivate: [AuthGuardService, RouteMonitorService]
         },
-        {path: '**', redirectTo: 'brand-management', pathMatch: 'full'}
+        {path: '**', redirectTo: 'store-maintenance', pathMatch: 'full'}
     ]
 }];
 
