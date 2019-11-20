@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
 import { GlobalService } from '../../../../../core/global.service';
-import { SearchParams, ThematicEntity, ThematicActivityService } from '../thematic-activity.service';
+import { SearchParams, ThematicEntity, ThematicActivityService, ContentEntity, ElementItemEntity } from '../thematic-activity.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 const PageSize = 15;
@@ -23,6 +23,16 @@ export class ListComponent implements OnInit, OnDestroy {
   public pageIndex = 1; // 页码
 
   public searchText$ = new Subject<any>();
+
+  public preview_title = '';
+
+  public isShowPreview = false; // 标记是否打开预览
+
+  public previewList: Array<ContentEntity> = []; // 预览内容数组
+
+  private space_one = '/assets/images/preview/icon_preview_space_one.png'; // 占位图
+
+  private space_two = '/assets/images/preview/icon_preview_space_two.png'; // 占位图
 
   private linkUrl: string; // 分页url
 
@@ -100,6 +110,43 @@ export class ListComponent implements OnInit, OnDestroy {
   // 预览
   public onViewClick(activity_id: string): void {
 
+  }
+
+  /** 预览 */
+  public onPreviewClick(thematicContent: ThematicEntity): void {
+    this.previewList = [];
+    this.preview_title = thematicContent.title;
+    const content = thematicContent.content;
+    content.forEach(contentItem => {
+      const previewItem = new ContentEntity();
+      previewItem.content_type = contentItem.content_type;
+      previewItem.elements.push(new ElementItemEntity());
+      if (contentItem.content_type === 3) {
+        previewItem.elements[0].rich = contentItem.elements[0].rich;
+      } else {
+        contentItem.elements.forEach((elementItem, index) => {
+          if (index === 1) {
+            previewItem.elements.push(new ElementItemEntity());
+          }
+          if (elementItem.image) {
+            previewItem.elements[index].image = elementItem.image;
+          } else {
+            if (contentItem.content_type === 1) {
+              previewItem.elements[index].image = this.space_two;
+            } else {
+              previewItem.elements[index].image = this.space_one;
+            }
+          }
+        });
+      }
+      this.previewList.push(previewItem);
+    });
+    this.isShowPreview = true;
+  }
+
+  // 关闭预览
+  public onClosePreview() {
+    this.isShowPreview = false;
   }
 
   // 删除

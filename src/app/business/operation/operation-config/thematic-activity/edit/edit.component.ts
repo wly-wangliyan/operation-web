@@ -35,9 +35,9 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   public isShowPreview = false; // 标记是否打开预览
 
-  public space_one = '/assets/images/preview/icon_preview_space_one.png';
+  private space_one = '/assets/images/preview/icon_preview_space_one.png';
 
-  public space_two = '/assets/images/preview/icon_preview_space_two.png';
+  private space_two = '/assets/images/preview/icon_preview_space_two.png';
 
   private requestSubscription: Subscription;
 
@@ -234,7 +234,7 @@ export class EditComponent implements OnInit, AfterViewInit {
   }
 
   // 关闭预览
-  public close() {
+  public onClosePreview() {
     this.isShowPreview = false;
   }
 
