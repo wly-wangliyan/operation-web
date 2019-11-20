@@ -5,7 +5,6 @@ import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../../core/global.service';
 import { NotifyEntity, SearchParams, NoticeService } from '../notice.service';
 import { NoticeEditComponent } from './notice-edit/notice-edit.component';
-import { HttpErrorEntity } from '../../../../../core/http.service';
 
 const PageSize = 15;
 
@@ -23,8 +22,6 @@ export class NoticeListComponent implements OnInit {
 
   private searchText$ = new Subject<any>();
 
-  private requestSubscription: Subscription; // 获取数据
-
   public pageIndex = 1; // 页码
 
   private linkUrl: string;
@@ -38,7 +35,6 @@ export class NoticeListComponent implements OnInit {
     return this.noticeList.length / PageSize + 1;
   }
 
-
   @ViewChild('noticeEdit', { static: true }) public noticeEdit: NoticeEditComponent;
 
   constructor(private globalService: GlobalService, private noticeService: NoticeService) { }
@@ -49,7 +45,7 @@ export class NoticeListComponent implements OnInit {
     ];
     this.selectedTabIndex = 0;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestSubscription = this.noticeService.requestNotifyList(this.searchParams).subscribe(res => {
+      this.noticeService.requestNotifyList(this.searchParams).subscribe(res => {
         this.noticeList = res.results;
         this.linkUrl = res.linkUrl;
         this.noResultText = '暂无数据';
@@ -128,6 +124,4 @@ export class NoticeListComponent implements OnInit {
         });
     }
   }
-
-
 }
