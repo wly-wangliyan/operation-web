@@ -47,9 +47,6 @@ export class NoticeListComponent implements OnInit {
     this.tabs = [
       { key: 0, value: '检车通知' },
     ];
-    const notice = new NotifyEntity();
-    notice.title = '32323';
-    this.noticeList.push(notice);
     this.selectedTabIndex = 0;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestSubscription = this.noticeService.requestNotifyList(this.searchParams).subscribe(res => {
@@ -63,7 +60,7 @@ export class NoticeListComponent implements OnInit {
         this.globalService.httpErrorProcess(err);
       });
     });
-    //  this.searchText$.next();
+    this.searchText$.next();
   }
 
   // 新建/编辑标签
@@ -88,8 +85,8 @@ export class NoticeListComponent implements OnInit {
 
   // 上架开关点击调用接口
   public onSwitchClick(notice_id: string, status: boolean) {
-    const text = status ? '上架' : '下架';
-    this.noticeService.requestNoticeStatus(notice_id, status).subscribe(res => {
+    const text = !status ? '上架' : '下架';
+    this.noticeService.requestNoticeStatus(notice_id, !status).subscribe(res => {
       this.globalService.promptBox.open(`${text}成功!`);
       this.searchText$.next();
     }, err => {
