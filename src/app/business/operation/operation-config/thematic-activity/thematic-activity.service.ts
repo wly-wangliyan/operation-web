@@ -144,7 +144,11 @@ export class ThematicActivityService {
    */
   public requestAddThematicData(thematicParams: ThematicParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/special_activities`;
-    return this.httpService.post(httpUrl, thematicParams.json());
+    const body = {
+      title: thematicParams.title,
+      content: JSON.stringify(thematicParams.content),
+    };
+    return this.httpService.post(httpUrl, body);
   }
 
   /**
@@ -163,7 +167,7 @@ export class ThematicActivityService {
    * @returns Observable<ThematicEntity>
    */
   public requestThematicDetail(activity_id: string): Observable<ThematicEntity> {
-    const httpUrl = `${this.domain}/admin/special_activity/${activity_id}`;
+    const httpUrl = `${this.domain}/admin/special_activities/${activity_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       return ThematicEntity.Create(res.body);
     }));
@@ -175,7 +179,7 @@ export class ThematicActivityService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestDeleteThematicData(activity_id: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/special_activity/${activity_id}`;
+    const httpUrl = `${this.domain}/admin/special_activities/${activity_id}`;
     return this.httpService.delete(httpUrl);
   }
 }

@@ -10,10 +10,21 @@
   line-height: 20px;
   height: 100px;
   cursor: pointer;
-  border-radius:0px 15px 15px 0px;
-  padding: 30px 7px 0 0 !important;
+  border-radius: 0px 15px 15px 0px;
   text-align: center;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-btn .btn-line {
+  content: '';
+  background: #EBEEF3;
+  width: 1px;
+  height: 76px;
+  margin-right: 2px;
 }
 
 .activity-title {
@@ -74,3 +85,28 @@
   font-size: 13px !important;
   margin-bottom: 0;
 }
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-group>li {
+  width: 106px;
+  height: 36px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  background-size: cover !important;
+}
+
+.btn-group>li:nth-child(1) {
+  background: url('/assets/images/add_two_link.png') no-repeat center;
+  }
+
+.btn-group>li:nth-child(2) {
+  background: url('/assets/images/add_one_link.png') no-repeat center;
+  }
+
+.btn-group>li:nth-child(3) {
+  background: url('/assets/images/add_rich.png') no-repeat center;
+ }
