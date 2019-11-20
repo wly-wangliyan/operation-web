@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../../../'" [level2Name]="'查看产品'"></app-crumb>
+  <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../../'" [level2Name]="'查看产品'"></app-crumb>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
   <nz-spin nzSimple></nz-spin>
@@ -17,7 +17,6 @@
             <th>地址</th>
             <th>状态</th>
             <th>产品ID</th>
-            <!-- 销量 -->
             <th>销量</th>
           </tr>
         </thead>
@@ -31,7 +30,6 @@
             <td>{{data.address}}</td>
             <td>{{data.status| thirdSaleStatus}}</td>
             <td>{{data.product_id}}</td>
-            <!-- 销量 -->
             <td>{{data.sale_num||'--'}}</td>
           </tr>
         </tbody>
@@ -71,8 +69,6 @@
       </form>
     </div>
   </div>
-
-
   <!-- 产品门票信息 -->
   <div class='des_card'>
     <div>

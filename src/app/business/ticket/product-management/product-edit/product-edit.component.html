@@ -9,7 +9,7 @@
       <a [routerLink]="['../']">返回</a>
     </li>
     <li class="big-bg">
-      <a (click)='onSaveFormData()'>保存</a>
+      <a (click)='onSaveValidFormData()'>保存</a>
     </li>
   </ul>
 </div>
@@ -93,7 +93,6 @@
       </form>
     </div>
   </div>
-
 
   <!-- 产品门票信息 -->
   <div class='des_card'>
@@ -238,15 +237,12 @@
                 </li>
               </ul>
             </td>
-
             <td>
               <div class='opera m_20'>
                 <div>
-
                   <a (click)='onOpenPriceCalendar(data.ticket_id)'><img src="/assets/images/date.png">价格日历</a>
                 </div>
                 <div>
-
                   <a *ngIf='data.is_top===2' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,1)'> <img
                       src="/assets/images/top.png">置顶</a>
                   <a *ngIf='data.is_top===1' (click)='onIsTopProduct(data.product.product_id,data.ticket_id,2)'> <img
@@ -312,14 +308,12 @@
           <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>交通指南</nz-form-label>
             <nz-form-control>
-              <app-z-text-ckeditor ckEditorId='editor1' #editor1>
-              </app-z-text-ckeditor>
+              <app-z-text-ckeditor ckEditorId='editor1' #editor1></app-z-text-ckeditor>
               <div *ngIf="trafficGuideErrors" class="text-danger">
                 <span class="input-error">{{trafficGuideErrors}}</span>
               </div>
             </nz-form-control>
           </nz-form-item>
-
           <nz-form-item nzFlex style="margin-bottom: 10px;">
             <nz-form-label nzRequired [nzNoColon]='true'>预订须知</nz-form-label>
             <nz-form-control>
@@ -329,7 +323,6 @@
               </div>
             </nz-form-control>
           </nz-form-item>
-
           <nz-form-item nzFlex>
             <nz-form-label nzRequired [nzNoColon]='true'>景区介绍</nz-form-label>
             <nz-form-control>

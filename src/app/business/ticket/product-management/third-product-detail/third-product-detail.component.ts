@@ -13,8 +13,8 @@ import { CalendarDetailComponent } from '../product-detail/calendar-detail/calen
 })
 export class ThirdProductDetailComponent implements OnInit {
 
-  constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(private globalService: GlobalService, private productService: ProductService,
+              private route: ActivatedRoute, private router: Router) { }
 
   public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
   public thirdProductInfoList: Array<any> = [];
@@ -29,6 +29,7 @@ export class ThirdProductDetailComponent implements OnInit {
   public type: string;
 
   private searchText$ = new Subject<any>();
+
   @ViewChild('priceCalendarDetail', { static: true }) public priceCalendarDetail: CalendarDetailComponent;
 
   ngOnInit() {
@@ -45,6 +46,7 @@ export class ThirdProductDetailComponent implements OnInit {
         this.productService.requestThirdProductsDetail(this.product_id))
     ).subscribe(res => {
       this.thirdProductData = res;
+      // 产品信息列表
       this.thirdProductInfoList = [
         {
           tp_id: this.thirdProductData.tp_id,
@@ -54,14 +56,16 @@ export class ThirdProductDetailComponent implements OnInit {
           sale_status: this.thirdProductData.sale_status,
         }
       ];
+      this.noResultInfoText = '暂无数据';
+      // 产品门票列表
       this.productTicketList = this.thirdProductData.tickets.map(i => ({
         ...i,
         isShowInsutructions: false,
         isShowDescriptions: false
       }));
-      this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
-      this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
+      // 票务详情
+      this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -128,5 +132,4 @@ export class ThirdProductDetailComponent implements OnInit {
       });
     });
   }
-
 }

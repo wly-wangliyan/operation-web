@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs/index';
+import { Subject } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { HttpErrorEntity } from '../../../../core/http.service';
 import { GlobalService } from '../../../../core/global.service';
 import {
   PaySettingEntity,
@@ -41,7 +40,6 @@ export class PaySettingComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
-
   }
 
   // 编辑

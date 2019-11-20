@@ -129,7 +129,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.noResultTicketText = '暂无数据';
       // 票务详情
       this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
-      this.getEditorData();
+      this.getEditorData(this.productData.traffic_guide, this.productData.notice, this.productData.product_introduce);
       this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
@@ -196,19 +196,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         }
       }
     });
-  }
-
-  // 富文本数据处理
-  public getEditorData() {
-    CKEDITOR.instances.editor1.destroy(true);
-    CKEDITOR.instances.editor2.destroy(true);
-    CKEDITOR.instances.editor3.destroy(true);
-    this.tempContent1 = this.productData.traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-    this.tempContent2 = this.productData.notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-    this.tempContent3 = this.productData.product_introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-    CKEDITOR.replace('editor1').setData(this.tempContent1);
-    CKEDITOR.replace('editor2').setData(this.tempContent2);
-    CKEDITOR.replace('editor3').setData(this.tempContent3);
   }
 
   // 允许跳转
@@ -301,22 +288,25 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       // 产品图片
       this.imgUrls = this.productData.third_product.third_product_image
         ? this.productData.third_product.third_product_image.split(',') : [];
-      CKEDITOR.instances.editor1.destroy(true);
-      CKEDITOR.instances.editor2.destroy(true);
-      CKEDITOR.instances.editor3.destroy(true);
-      const tempContent1 = this.productData.third_product.traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-      const tempContent2 = this.productData.third_product.notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-      const tempContent3 = this.productData.third_product.introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-      const editor1 = CKEDITOR.replace('editor1'); // 交通指南
-      editor1.setData(tempContent1);
-      const editor2 = CKEDITOR.replace('editor2'); // 预订须知
-      editor2.setData(tempContent2);
-      const editor3 = CKEDITOR.replace('editor3'); // 景区介绍
-      editor3.setData(tempContent3);
+      const third_product = this.productData.third_product;
+      this.getEditorData(third_product.traffic_guide, third_product.notice, third_product.introduce);
       this.isReImportant = true;
     }, '确定', () => {
       this.isReImportant = false;
     });
+  }
+
+  // 富文本数据处理
+  public getEditorData(traffic_guide: string, notice: string, introduce: string) {
+    CKEDITOR.instances.editor1.destroy(true);
+    CKEDITOR.instances.editor2.destroy(true);
+    CKEDITOR.instances.editor3.destroy(true);
+    const tempContent1 = traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+    const tempContent2 = notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+    const tempContent3 = introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+    CKEDITOR.replace('editor1').setData(tempContent1);
+    CKEDITOR.replace('editor2').setData(tempContent2);
+    CKEDITOR.replace('editor3').setData(tempContent3);
   }
 
   // 上架开关状态改变
@@ -326,7 +316,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     });
   }
 
-  // 是否售卖开关点击调用接口
+  // 点击是否售卖开关调用接口
   public onSwitchClick(product_id, ticket_id, is_saled) {
     if (is_saled && this.productTicketList.filter(i => i.is_saled).length === 1) {
       this.globalService.promptBox.open(`产品下至少有一个门票，不允许下架！`, null, 2000, '/assets/images/warning.png');
@@ -340,7 +330,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         this.onUpdateData(2);
       });
     }
-
   }
 
   // 置顶
@@ -361,6 +350,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     this.productNameErrors = '';
     this.trafficGuideErrors = '';
     this.noticeErrors = '';
+    this.productIntroduceErrors = '';
     this.tagNameErrors = '';
   }
 
@@ -377,7 +367,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
   }
 
   // 保存基础数据调用接口
-  public onSaveFormData() {
+  public onSaveValidFormData() {
     this.productData.traffic_guide = CKEDITOR.instances.editor1.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.notice = CKEDITOR.instances.editor2.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     this.productData.product_introduce = CKEDITOR.instances.editor3.getData().replace('/\r\n/g', '').replace(/\n/g, '');
@@ -406,32 +396,38 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
       this.coverImgSelectComponent.upload().subscribe(() => {
         this.product_image_url = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
         this.productData.image_urls = this.product_image_url.join(',');
-        this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
-          this.searchText$.next();
-          this.globalService.promptBox.open('保存成功');
-          this.isSubmitProductInfo = true;
-          timer(2000).subscribe(() => this.router.navigateByUrl('/main/ticket/product-management'));
-        }, err => {
-          if (!this.globalService.httpErrorProcess(err)) {
-            if (err.status === 422) {
-              const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-              for (const content of error.errors) {
-                const field = content.field === 'product_name' ? '产品名称' : content.field === 'product_subtitle' ? '副标题' :
-                  content.field === 'image_urls' ? '产品图片' : content.field === 'traffic_guide' ? '交通指南' :
-                    content.field === 'notice' ? '预订须知' : content.field === 'product_introduce' ? '景区介绍' : '';
-                if (content.code === 'missing_field') {
-                  this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
-                  return;
-                } else if (content.code === 'invalid') {
-                  this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
-                } else {
-                  this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
-                }
-              }
-            }
-          }
-        });
+        this.onSavaProductData();
       });
     }
+  }
+
+  // 保存产品编辑页面数据
+  private onSavaProductData() {
+    this.productService.requestSetProductData(this.product_id, this.productData).subscribe(() => {
+      this.searchText$.next();
+      this.globalService.promptBox.open('保存成功');
+      this.isSubmitProductInfo = true;
+      timer(2000).subscribe(() => this.router.navigateByUrl('/main/ticket/product-management'));
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            const field = content.field === 'product_name' ? '产品名称' : content.field === 'product_subtitle' ? '副标题' :
+              content.field === 'tag_ids' ? '分类标签' : content.field === 'image_urls' ? '产品图片' :
+                content.field === 'traffic_guide' ? '交通指南' : content.field === 'notice' ? '预订须知' :
+                  content.field === 'product_introduce' ? '景区介绍' : '';
+            if (content.code === 'missing_field') {
+              this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+              return;
+            } else if (content.code === 'invalid') {
+              this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      }
+    });
   }
 }
