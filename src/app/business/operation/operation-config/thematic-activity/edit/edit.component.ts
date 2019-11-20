@@ -82,34 +82,74 @@ export class EditComponent implements OnInit, AfterViewInit {
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.requestSubscription = this.thematicService.requestThematicDetail(this.activity_id).subscribe(res => {
       this.thematicDetail = res;
-      this.loading = false;
+      this.thematicParams.title = res.title;
+      this.sort = 0;
+      this.contentList = [];
+
+      this.thematicDetail.content.forEach(contentItem => {
+        this.fillContent(contentItem);
+      });
+      this.fillCkEditor();
     }, err => {
       this.loading = false;
       this.globalService.httpErrorProcess(err);
     });
   }
 
+  // 填充模块数据
+  private fillContent(item: ContentEntity): void {
+    this.sort++;
+    const contentItem = new ContentEntity();
+    contentItem.content_type = item.content_type;
+    contentItem.elements.push(new ElementItemEntity(item.elements[0]));
+    contentItem.elements[0].type = item.content_type;
+    contentItem.elements[0].time = new Date().getTime();
+    contentItem.elements[0].sort_num = this.sort;
+    contentItem.elements[0].element_id = `activityItem${this.sort}`;
+    if (item.content_type === 1) {
+      this.sort++;
+      contentItem.elements.push(new ElementItemEntity(item.elements[1]));
+      contentItem.elements[1].type = item.content_type;
+      contentItem.elements[1].time = new Date().getTime() + 2;
+      contentItem.elements[1].sort_num = this.sort;
+      contentItem.elements[1].element_id = `activityItem${this.sort}`;
+      contentItem.elements[1].image_url = item.elements[1].image.split(',');
+    } else if (item.content_type === 2) {
+      contentItem.elements[0].image_url = item.elements[0].image.split(',');
+    } else if (item.content_type === 3) {
+      const tempContent = item.elements[0].rich.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+      contentItem.elements[0].rich = tempContent;
+    }
 
-
-  // 生成双图文链接
-  public onAddTwoPictureUrl() {
-    this.generateContentItem(1);
+    this.contentList.push(contentItem);
   }
 
-  // 生成单图文链接
-  public onAddOnePictureUrl() {
-    this.generateContentItem(2);
-  }
-
-  // 生成富文本
-  public onAddCkEditor() {
-    this.generateContentItem(3);
-    timer(100).subscribe(() => {
-      // CKEDITOR.instances[`activityEditor${this.sort}`].destroy(true);
-      // CKEDITOR.replace(`activityEditor${this.sort}`, { width: 1130 });
+  // 填充富文本编辑器内容
+  private fillCkEditor() {
+    timer(1000).subscribe(() => {
+      this.contentList.forEach(contentItem => {
+        if (contentItem.content_type === 3) {
+          const tempContent = contentItem.elements[0].rich;
+          CKEDITOR.instances[`${contentItem.elements[0].element_id}`].setData(tempContent);
+        }
+      });
+      this.loading = false;
     });
   }
 
+  /**
+   * 生成组件
+   * @param type 1:双图文链接 2:单图文链接 3:富文本编辑器
+   */
+  public onAddComponent(type: number): void {
+    if (this.contentList && this.contentList.length === 20) {
+      this.globalService.promptBox.open('最多可添加20个模块！', null, 2000, null, false);
+      return;
+    }
+    this.generateContentItem(type);
+  }
+
+  // 生成模块数据
   private generateContentItem(type: number) {
     this.sort++;
     const contentItem = new ContentEntity();
@@ -124,7 +164,7 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.sort++;
       contentItem.elements.push(new ElementItemEntity());
       contentItem.elements[1].type = type;
-      contentItem.elements[1].time = new Date().getTime() + 5;
+      contentItem.elements[1].time = new Date().getTime() + 2;
       contentItem.elements[1].sort_num = this.sort;
       contentItem.elements[1].element_id = `activityItem${this.sort}`;
       contentItem.elements[1].belong_to = 2;
@@ -219,7 +259,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     }
 
     if (!params || params.length === 0) {
-      this.globalService.promptBox.open('请至少添加一种模板！', null, 2000, null, false);
+      this.globalService.promptBox.open('请至少添加一个模块！', null, 2000, null, false);
       return false;
     }
 
@@ -231,7 +271,7 @@ export class EditComponent implements OnInit, AfterViewInit {
           const tmpRichContent = CKEDITOR.instances[`${elements[0].element_id}`].getData();
           if (!tmpRichContent) {
             elements[0].rich = null;
-            elements[0].errMsg = '内容不能为空!';
+            elements[0].errMsg = '模块内容不能为空!';
             return false;
           } else {
             elements[0].rich = tmpRichContent.replace('/\r\n/g', '').replace(/\n/g, '');
