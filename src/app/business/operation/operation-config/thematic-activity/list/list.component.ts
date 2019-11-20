@@ -106,6 +106,15 @@ export class ListComponent implements OnInit, OnDestroy {
   public onDeleteClick(activity_id: string): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
+      this.thematicService.requestDeleteThematicData(activity_id).subscribe(() => {
+        this.globalService.promptBox.open('删除成功！');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
+          this.searchText$.next();
+        }
+      });
     });
   }
 }
