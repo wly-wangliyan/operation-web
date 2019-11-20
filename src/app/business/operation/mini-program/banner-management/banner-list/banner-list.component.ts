@@ -165,6 +165,10 @@ export class BannerListComponent implements OnInit, OnDestroy {
 
   // 列表排序(停用的不发送请求，位置没有发生变化的不发送请求)
   public drop(event: CdkDragDrop<string[]>, data: any): void {
+    debugger;
+    if (!data[event.previousIndex].is_use) {
+      return;
+    }
     if (data[event.previousIndex].is_use === false) {
       return;
     }
@@ -196,7 +200,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
   // 显示添加编辑Bannermodal
   public onShowModal(data?: BannerEntity) {
     const banner_id = data ? data.banner_id : null;
-    this.bannerEdit.open(banner_id, () => {
+    this.bannerEdit.open(banner_id, this.searchParams.banner_type, () => {
       this.bannerEdit.clear();
       timer(0).subscribe(() => {
         this.searchText$.next();
@@ -238,5 +242,14 @@ export class BannerListComponent implements OnInit, OnDestroy {
       }
     }
     return true;
+  }
+
+  // tab页切换
+  public onTabChange(banner_type: number) {
+    this.searchParams = new SearchParams();
+    this.start_time = null;
+    this.end_time = null;
+    this.searchParams.banner_type = banner_type;
+    this.searchText$.next();
   }
 }

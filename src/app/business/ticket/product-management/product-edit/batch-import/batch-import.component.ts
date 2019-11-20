@@ -201,7 +201,7 @@ export class BatchImportComponent implements OnInit {
       this.batchImportParams.date_settings = JSON.stringify(this.dateSettingsList);
       this.batchImportParams.platform_price = null;
       this.validDataPrompt();
-    } else {// 录入方式：按建议收件
+    } else {// 录入方式：按建议售价
       this.batchImportParams.platform_price = null;
       this.batchImportParams.date_settings = null;
       this.requestBatchImport();

@@ -18,8 +18,8 @@
           <div class="control-input">
             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
               [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-              [imageWidth]="360" [imageHeight]="94" [imageUrls]="cover_url" #coverImg [aspectRatio]="3.83/1"
-              [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true" [imageShowWidth]="360">
+              [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg [aspectRatio]="aspectRatio"
+              [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true" [imageShowWidth]="94*aspectRatio">
             </app-z-photo-select>
           </div>
         </div>
@@ -29,7 +29,8 @@
             <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
           </div>
         </div>
-        <p class="cover-hint">注：尺寸1080*282px，格式PNG或JPG，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===1" class="cover-hint">注：尺寸1080*282px，格式PNG或JPG，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===2" class="cover-hint">注：尺寸690*360px，格式PNG或JPG，大小2M以内</p>
         <div class="row">
           <label class="control-label">
             <b>*</b>

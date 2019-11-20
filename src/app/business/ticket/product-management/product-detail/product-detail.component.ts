@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
-import { Subject, timer } from 'rxjs/index';
+import { Subject } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
 import { CalendarDetailComponent } from '../product-detail/calendar-detail/calendar-detail.component';
@@ -14,9 +14,7 @@ import { HttpErrorEntity } from '../../../../core/http.service';
 })
 export class ProductDetailComponent implements OnInit {
 
-  constructor(
-    private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(private globalService: GlobalService, private productService: ProductService, private route: ActivatedRoute) { }
 
   public productData: TicketProductEntity = new TicketProductEntity();
   public labelList: Array<LabelEntity> = [];
@@ -33,6 +31,7 @@ export class ProductDetailComponent implements OnInit {
   public checkLabelNamesList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
+
   @ViewChild('priceCalendarDetail', { static: true }) public priceCalendarDetail: CalendarDetailComponent;
 
   ngOnInit() {
@@ -47,7 +46,7 @@ export class ProductDetailComponent implements OnInit {
         this.productService.requestProductsDetail(this.product_id))
     ).subscribe(res => {
       this.productData = res;
-      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
+      // 产品信息列表
       this.productInfoList = [
         {
           product_id: this.productData.product_id,
@@ -58,14 +57,18 @@ export class ProductDetailComponent implements OnInit {
           sale_num: this.productData.sale_num,
         }
       ];
+      this.noResultInfoText = '暂无数据';
+      // 产品运营信息
+      this.getTagsName();
+      // 产品门票列表
       this.productTicketList = this.productData.tickets.map(i => ({
         ...i,
         isShowInsutructions: false,
         isShowDescriptions: false
       }));
-      this.getTagsName();
-      this.noResultInfoText = '暂无数据';
       this.noResultTicketText = '暂无数据';
+      // 票务详情
+      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
       this.loading = false;
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {

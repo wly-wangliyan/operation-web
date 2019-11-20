@@ -105,14 +105,12 @@
           <span>删除</span>
         </div>
       </div>
-
-
-
-      <div class="row" *ngIf="!contentList || contentList.length<10">
+      <!-- 最多可添加20个模块 -->
+      <div class="row">
         <ul class="btn-group">
-          <li (click)="onAddTwoPictureUrl()"></li>
-          <li (click)="onAddOnePictureUrl()"></li>
-          <li (click)="onAddCkEditor()"></li>
+          <li (click)="onAddComponent(1)"></li>
+          <li (click)="onAddComponent(2)"></li>
+          <li (click)="onAddComponent(3)"></li>
         </ul>
       </div>
     </form>

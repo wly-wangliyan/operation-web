@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Subject, timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductService, SearchPriceCalendarParams, PriceCalendarEntity } from '../../product.service';
-import { Type } from '@angular/compiler';
 
 @Component({
   selector: 'app-calendar-detail',
@@ -11,7 +10,6 @@ import { Type } from '@angular/compiler';
   styleUrls: ['./calendar-detail.component.css']
 })
 export class CalendarDetailComponent implements OnInit {
-
 
   public accounting_date: number = undefined; 	// 	integer	结算日 范围 1-28
   public loading = true;
@@ -122,13 +120,11 @@ export class CalendarDetailComponent implements OnInit {
     return this.formatDate(lastMonthEndDate);
   }
 
-
   // 格式化日期：yyyy-MM-dd
   private formatDate(date) {
     const myYear = date.getFullYear();
     let mymonth = date.getMonth() + 1;
     let myweekday = date.getDate();
-
     if (mymonth < 10) {
       mymonth = '0' + mymonth;
     }
@@ -146,10 +142,9 @@ export class CalendarDetailComponent implements OnInit {
     return days;
   }
 
-
   /**
    * 取消按钮触发关闭模态框，释放订阅。
-   * */
+   */
   public close() {
     this.loading = true;
     this.editAccountDateSwitch = true;
@@ -164,12 +159,15 @@ export class CalendarDetailComponent implements OnInit {
 
   /**
    * 打开确认框
-   * @param message 消息体
+   * @param title 标题
+   * @param type 类型(1:产品详情页面 2：第三方产品详情页面)
+   * @param product_id 产品ID
+   * @param ticket_id 票务ID
    * @param sureName 确认按钮文本(默认为确定)
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(title: string = '编辑', type: number, product_id, ticket_id, sureFunc: any) {
+  public open(title: string = '编辑', type: number, product_id: string, ticket_id: string, sureFunc: any) {
     this.title = title;
     this.product_id = product_id;
     this.ticket_id = ticket_id;
@@ -197,7 +195,6 @@ export class CalendarDetailComponent implements OnInit {
     this.SearchCalendarParams.start_date = this.getMonthStartDate(new Date().getFullYear(), new Date().getMonth());
     this.SearchCalendarParams.end_date = this.getMonthEndDate(new Date().getFullYear(), new Date().getMonth());
   }
-
 
   // 限制input[type='number']输入e
   public inputNumberLimit(event: any): boolean {

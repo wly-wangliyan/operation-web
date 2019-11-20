@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Subject, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../../core/global.service';
-import { HttpErrorEntity } from '../../../../../core/http.service';
 import { ProductService, SearchLabelParams, LabelEntity } from '../../product.service';
 
 @Component({
@@ -27,7 +26,6 @@ export class ChooseLabelComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private globalService: GlobalService, private productService: ProductService) {
-
   }
 
   ngOnInit() {
@@ -56,7 +54,6 @@ export class ChooseLabelComponent implements OnInit {
     this.searchText$.next();
   }
 
-
   /**
    * 取消按钮触发关闭模态框，释放订阅。
    */
@@ -73,11 +70,8 @@ export class ChooseLabelComponent implements OnInit {
 
   /**
    * 打开确认框
-   * @param tag_id 标签id
-   * @param name 标签名称
-   * @param sureName 确认按钮文本(默认为确定)
+   * @param tagsList 标签数组
    * @param sureFunc 确认回调
-   * @param closeFunc 取消回调
    */
   public open(tagsList: Array<any>, sureFunc: any) {
     this.tagsList = tagsList;
