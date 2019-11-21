@@ -27,6 +27,7 @@ export class ProductDetailComponent implements OnInit {
   public loading = true;
   public tempContent1: string;
   public product_id: string;
+  public status: string;
   public isShowContent = true;
   public checkLabelNamesList: Array<any> = [];
 
@@ -37,6 +38,7 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.product_id = params.product_id;
+      this.status = params.status;
     });
 
     // 产品详情

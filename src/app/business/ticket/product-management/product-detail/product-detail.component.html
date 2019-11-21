@@ -1,6 +1,6 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'" [level1RelativePath]="'../../'" [level2Name]="'查看产品'"></app-crumb>
-  <ul class="header-right">
+  <ul class="header-right" *ngIf='status!=="1"'>
     <li class="big-bg">
       <a [routerLink]="['/main/ticket/product-management/edit/',product_id]">编辑</a>
     </li>

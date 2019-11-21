@@ -20,7 +20,7 @@ const routes: Routes = [{
     { path: 'list', component: ProductListComponent },
     { path: 'create', component: ProductCreateComponent },
     { path: 'edit/:product_id', component: ProductEditComponent, canDeactivate: [ExternalPreventService] },
-    { path: 'detail/:product_id', component: ProductDetailComponent },
+    { path: 'detail/:product_id/:status', component: ProductDetailComponent },
     { path: 'third-detail/:product_id/:add_status/:type', component: ThirdProductDetailComponent },
     { path: 'third-product', component: ThirdProductListComponent },
     { path: 'label-list', component: LabelManagementComponent },
