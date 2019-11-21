@@ -47,7 +47,7 @@
             <span *ngIf="errPositionItem?.title?.isError">{{errPositionItem?.title?.errMes}}</span>
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="bannerParams.banner_type===1" class="row">
           <label class=" control-label">
             <b>*</b>
             <span>落地页</span>
@@ -61,6 +61,23 @@
             <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
               maxlength="2000" autocomplete="off" required appIgnoreSpace
               (change)="errPositionItem.jump_link.isError=false" style="border-left: none!important;">
+          </div>
+        </div>
+        <div *ngIf="bannerParams.banner_type===2" class="row">
+          <label class=" control-label">
+            <b>&nbsp;</b>
+            <span>落地页</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="bannerParams.belong_to" name="belong_to"
+                    (change)="onChangeBelongTo($event)">
+              <option [value]=0>请选择</option>
+              <option [value]=2>H5</option>
+              <option [value]=1>小程序原生页</option>
+            </select>
+            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
+                   maxlength="2000" autocomplete="off" appIgnoreSpace
+                   (change)="errPositionItem.jump_link.isError=false" style="border-left: none!important;">
           </div>
         </div>
         <div class="row row-message">
