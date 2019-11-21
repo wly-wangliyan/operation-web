@@ -105,7 +105,7 @@
             </td>
             <td>{{product.status | saleStatus}}</td>
             <td class="operation">
-              <a [title]="'查看'" [routerLink]="['../detail', product.product_id,product.status]">查看</a>
+              <a [title]="'查看'" [routerLink]="['../detail', product.product_id]">查看</a>
               <a [title]="'编辑'" (click)='onEditProduct(product.status,product.product_id)'>编辑</a>
               <a [title]="'下架'" *ngIf="product.status===saleStatus[0]" (click)="onChangeSaleStatus(product)">下架</a>
               <a [title]="'上架'" *ngIf="product.status===saleStatus[1]" (click)="onChangeSaleStatus(product)">上架</a>
