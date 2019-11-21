@@ -82,7 +82,7 @@ export class NoticeListComponent implements OnInit {
 
   // 开启开关点击调用接口
   public onSwitchClick(notice_id: string, status: boolean) {
-    const text = !status ? '开启' : '开启';
+    const text = !status ? '开启' : '关闭';
     this.noticeService.requestNoticeStatus(notice_id, !status).subscribe(res => {
       this.globalService.promptBox.open(`${text}成功!`);
       this.searchText$.next();
