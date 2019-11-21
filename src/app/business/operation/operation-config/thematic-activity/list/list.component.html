@@ -1,92 +1,87 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'"></app-crumb>
-  <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../add']">
-      <a>新建</a>
-    </li>
-  </ul>
+    <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg" [routerLink]="['../add']">
+            <a>新建</a>
+        </li>
+    </ul>
 </div>
 
 <div class="content-flow">
-  <div class="search-container">
-    <form class="search-form">
-      <div class="form-group">
-        <input class="form-control" [(ngModel)]="searchParams.title" placeholder="请输入标题" autocomplete="off" name="title"
-          maxlength="20" appIgnoreSpace (keyup)="searchText$.next()" />
-      </div>
-    </form>
-  </div>
-  <div class="table-container">
-    <div class="zmy-table">
-      <nz-table #thematicTable [nzData]="thematicList" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>ID</th>
-            <th>标题</th>
-            <th>累计浏览量</th>
-            <th>累计浏览人数</th>
-            <th>更新时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of thematicTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
-
-            <td [title]="data.activity_id?data.activity_id:''">
-              <span *ngIf="data.activity_id" [appTxtCopy]="data.activity_id">
-                {{data.activity_id}}
-              </span>
-              <span *ngIf="!data.activity_id">--</span>
-            </td>
-
-            <td [title]="data.title?data.title:''">
-              {{data.title?(data.title|zMaxLength:20):'--'}}</td>
-
-            <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
-
-            <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
-
-            <td>{{data.updated_time ?(data.updated_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-
-            <td class="operation">
-              <a [title]="'编辑'" (click)="onEditClick(data.activity_id)">编辑</a>
-              <a [title]="'预览'" (click)="onPreviewClick(data)">预览</a>
-              <a [title]="'明细'" [routerLink]="['../detail',data.activity_id]">明细</a>
-              <a [title]="'删除'" (click)="onDeleteClick(data.activity_id)">删除</a>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
+    <div class="search-container">
+        <form class="search-form">
+            <div class="form-group">
+                <input class="form-control" [(ngModel)]="searchParams.title" placeholder="请输入标题" autocomplete="off"
+                       name="title" maxlength="20" appIgnoreSpace (keyup)="searchText$.next()"/>
+            </div>
+        </form>
     </div>
-  </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #thematicTable [nzData]="thematicList" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+                      [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>累计浏览量</th>
+                    <th>累计浏览人数</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of thematicTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="data.activity_id?data.activity_id:''">
+                        <span *ngIf="data.activity_id" [appTxtCopy]="data.activity_id">
+                            {{data.activity_id}}
+                        </span>
+                        <span *ngIf="!data.activity_id">--</span>
+                    </td>
+                    <td [title]="data.title?data.title:''">
+                        {{data.title?(data.title|zMaxLength:20):'--'}}
+                    </td>
+                    <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
+                    <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
+                    <td>{{data.updated_time ?(data.updated_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td class="operation">
+                        <a [title]="'编辑'" (click)="onEditClick(data.activity_id)">编辑</a>
+                        <a [title]="'预览'" (click)="onPreviewClick(data)">预览</a>
+                        <a [title]="'明细'" [routerLink]="['../detail',data.activity_id]">明细</a>
+                        <a [title]="'删除'" (click)="onDeleteClick(data.activity_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
 </div>
 
 <div class="preview-phone-container" [ngClass]="{'show-preview': !isShowPreview}">
-  <div class="preview-box">
-    <div class="closetx" (click)="onClosePreview()"></div>
-    <div class="pru-back">
-      <div class="pru-con">
-        <div class="title" [innerHTML]="preview_title"></div>
-        <ng-container *ngFor="let item of previewList;let i=index">
-          <ng-container *ngIf="item.content_type===1">
-            <div class="picture-link">
-              <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
-              <img class="small-picture" [src]="item.elements[1].image">
+    <div class="preview-box">
+        <div class="closetx" (click)="onClosePreview()"></div>
+        <div class="pru-back">
+            <div class="pru-con">
+                <div class="title" [innerHTML]="preview_title"></div>
+                <ng-container *ngFor="let item of previewList;let i=index">
+                    <ng-container *ngIf="item.content_type===1">
+                        <div class="picture-link">
+                            <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
+                            <img class="small-picture" [src]="item.elements[1].image">
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="item.content_type===2">
+                        <div class="picture-link">
+                            <img class="big-picture" [src]="item.elements[0].image">
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
+                        <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
+                    </ng-container>
+                </ng-container>
             </div>
-          </ng-container>
-          <ng-container *ngIf="item.content_type===2">
-            <div class="picture-link">
-              <img class="big-picture" [src]="item.elements[0].image">
-            </div>
-          </ng-container>
-          <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
-            <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
-          </ng-container>
-        </ng-container>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
