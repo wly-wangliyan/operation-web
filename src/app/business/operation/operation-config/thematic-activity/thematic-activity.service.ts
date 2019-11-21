@@ -127,6 +127,17 @@ export class ThematicParams extends EntityBase {
   }
 }
 
+// 专题活动点击统计实体
+export class ClickDataResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<ReadStatisticsEntity> {
+    const tempList: Array<ReadStatisticsEntity> = [];
+    results.forEach(res => {
+      tempList.push(ReadStatisticsEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -201,5 +212,23 @@ export class ThematicActivityService {
   public requestDeleteThematicData(activity_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/special_activities/${activity_id}`;
     return this.httpService.delete(httpUrl);
+  }
+
+  /** 获取专题活动点击统计列表
+   * @param activity_id 专题活动ID
+   * @returns Observable<ClickDataResponse>
+   */
+  public requestClickListData(activity_id: string): Observable<ClickDataResponse> {
+    const httpUrl = `${this.domain}/admin/special_activities/${activity_id}/click_data`;
+    return this.httpService.get(httpUrl).pipe(map(res => new ClickDataResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求专题活动点击统计列表
+   * @param string url linkUrl
+   * @returns Observable<ClickDataResponse>
+   */
+  public continueClickListData(url: string): Observable<ClickDataResponse> {
+    return this.httpService.get(url).pipe(map(res => new ClickDataResponse(res)));
   }
 }

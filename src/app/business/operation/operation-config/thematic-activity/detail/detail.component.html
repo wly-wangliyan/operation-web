@@ -29,25 +29,28 @@
       </table>
     </div>
 
-    <div class="table-item" *ngIf="readStatisticsList && readStatisticsList.length>0">
-      <table class="detail-table">
-        <thead>
-          <tr>
-            <th>时间</th>
-            <th>浏览量</th>
-            <th>浏览人数</th>
-            <th>浏览时长</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of readStatisticsList">
-            <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
-            <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
-            <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
-            <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="table-item">
+      <div class="zmy-table detail-table">
+        <nz-table #statisticsTable [nzData]="readStatisticsList" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+          [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)">
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>浏览量</th>
+              <th>浏览人数</th>
+              <th>浏览时长</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of statisticsTable.data; let i=index">
+              <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
+              <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
+              <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
+              <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
     </div>
   </div>
 </div>

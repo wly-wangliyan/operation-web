@@ -105,6 +105,8 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         this.productService.requestProductsDetail(this.product_id))
     ).subscribe(res => {
       this.productData = res;
+      // 票务详情
+      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
       // 产品信息列表
       this.productInfoList = [
         {
@@ -127,8 +129,6 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
         isEditTicketInsutruction: false,
       }));
       this.noResultTicketText = '暂无数据';
-      // 票务详情
-      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
       this.getEditorData(this.productData.traffic_guide, this.productData.notice, this.productData.product_introduce);
       this.loading = false;
     }, err => {

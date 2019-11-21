@@ -46,6 +46,8 @@ export class ProductDetailComponent implements OnInit {
         this.productService.requestProductsDetail(this.product_id))
     ).subscribe(res => {
       this.productData = res;
+      // 票务详情
+      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
       // 产品信息列表
       this.productInfoList = [
         {
@@ -67,8 +69,6 @@ export class ProductDetailComponent implements OnInit {
         isShowDescriptions: false
       }));
       this.noResultTicketText = '暂无数据';
-      // 票务详情
-      this.imgUrls = this.productData.image_urls ? this.productData.image_urls.split(',') : [];
       this.loading = false;
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
