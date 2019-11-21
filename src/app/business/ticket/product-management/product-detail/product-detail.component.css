@@ -7,10 +7,8 @@
   text-align: left;
 }
 
-.header-right>li.big-white-btn:hover {
-  background: #fff;
-  border: 1px solid #3E71F7;
-  color: #3E71F7;
+.header-right>li.big-bg>a {
+  color: #fff;
 }
 
 .ml_10 {
