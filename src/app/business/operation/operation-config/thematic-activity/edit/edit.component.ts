@@ -23,9 +23,21 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   public contentList: Array<ContentEntity> = []; // 内容数组
 
+  public previewList: Array<ContentEntity> = []; // 预览内容数组
+
   public routerTitle = '新建专题活动'; // 路由标题
 
   public loading = true;
+
+  public replaceWidth = 730; // 富文本宽度
+
+  public titleErrMsg = ''; // 标题错误提示
+
+  public isShowPreview = false; // 标记是否打开预览
+
+  private space_one = '/assets/images/preview/icon_preview_space_one.png';
+
+  private space_two = '/assets/images/preview/icon_preview_space_two.png';
 
   private requestSubscription: Subscription;
 
@@ -37,11 +49,9 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   private isCreate = true; // 标记是否新建
 
-  public replaceWidth = 730; // 富文本宽度
-
-  public titleErrMsg = ''; // 标题错误提示
-
   private sort = 0;
+
+  private isSuccessUploadImg = true; // 标记图片是否在上传
 
   @ViewChild('editActivityForm', { static: false }) public editForm: ViewContainerRef;
 
@@ -107,6 +117,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     contentItem.elements[0].sort_num = this.sort;
     contentItem.elements[0].element_id = `activityItem${this.sort}`;
     if (item.content_type === 1) {
+      contentItem.elements[0].image_url = item.elements[0].image.split(',');
       this.sort++;
       contentItem.elements.push(new ElementItemEntity(item.elements[1]));
       contentItem.elements[1].type = item.content_type;
@@ -191,9 +202,49 @@ export class EditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /** 预览 */
+  public onPreviewClick() {
+    this.previewList = [];
+    this.contentList.forEach(contentItem => {
+      const previewItem = new ContentEntity();
+      previewItem.content_type = contentItem.content_type;
+      previewItem.elements.push(new ElementItemEntity());
+      if (contentItem.content_type === 3) {
+        const tmpContent = CKEDITOR.instances[`${contentItem.elements[0].element_id}`].getData();
+        previewItem.elements[0].rich = tmpContent.replace('/\r\n/g', '').replace(/\n/g, '');
+      } else {
+        contentItem.elements.forEach((elementItem, index) => {
+          if (index === 1) {
+            previewItem.elements.push(new ElementItemEntity());
+          }
+          if (elementItem.image) {
+            previewItem.elements[index].image = elementItem.image;
+          } else {
+            if (contentItem.content_type === 1) {
+              previewItem.elements[index].image = this.space_two;
+            } else {
+              previewItem.elements[index].image = this.space_one;
+            }
+          }
+        });
+      }
+      this.previewList.push(previewItem);
+    });
+    this.isShowPreview = true;
+  }
+
+  // 关闭预览
+  public onClosePreview() {
+    this.isShowPreview = false;
+  }
+
   // 点击保存
   public onEditFormSubmit(): void {
     if (this.is_save) {
+      return;
+    }
+    if (!this.isSuccessUploadImg) {
+      this.globalService.promptBox.open('图片正在保存中，请稍后保存！', null, 2000, null, false);
       return;
     }
     this.thematicParams.content = [];
@@ -329,6 +380,7 @@ export class EditComponent implements OnInit, AfterViewInit {
                 element.image = null;
               } else {
                 element.image = event.imageList.map(i => i.sourceUrl);
+                this.isSuccessUploadImg = false;
               }
             }
           });
@@ -355,6 +407,7 @@ export class EditComponent implements OnInit, AfterViewInit {
         }
       });
     }
+    this.isSuccessUploadImg = true;
   }
 
   // 富文本编辑器数据变更,清空错误信息
