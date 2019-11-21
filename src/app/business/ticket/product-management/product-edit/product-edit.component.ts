@@ -301,6 +301,7 @@ export class ProductEditComponent implements OnInit, CanDeactivateComponent {
     CKEDITOR.instances.editor1.destroy(true);
     CKEDITOR.instances.editor2.destroy(true);
     CKEDITOR.instances.editor3.destroy(true);
+    // 兼容第三方数据的回车符号,均替换为<br>
     const tempContent1 = traffic_guide.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
     const tempContent2 = notice.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
     const tempContent3 = introduce.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
