@@ -61,8 +61,10 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
 
             <td>
-              <img *ngIf='!data.image' style="width: 270px;margin: auto 20px;" src="/assets/images/space_banner.png">
-              <img *ngIf='data.image' style="width: 270px;margin: auto 20px;" [src]="data.image">
+              <img *ngIf='!data.image&&data.banner_type===1' style="width: 270px;margin: auto 20px;" src="/assets/images/space_banner.png">
+              <img *ngIf='data.image&&data.banner_type===1' style="width: 270px;margin: auto 20px;" [src]="data.image">
+              <img *ngIf='!data.image&&data.banner_type===2' style="width: 130px;margin: auto 20px;" src="/assets/images/space_banner.png">
+              <img *ngIf='data.image&&data.banner_type===2' style="width: 130px;margin: auto 20px;" [src]="data.image">
             </td>
 
             <td>{{data.title}}</td>
