@@ -1,6 +1,7 @@
 .content-flow {
-  margin-left: 25px;
-  font-size: 14px;
+  /* margin-left: 25px; */
+  font-size: 12px;
+  background: #fff !important;
 }
 
 .content-container {
@@ -54,7 +55,8 @@
   word-break: break-all;
 }
 
-.table-item table>thead tr>th {
+.table-item table>thead tr>th,
+.zmy-table ::ng-deep .ant-table-thead>tr>th {
   background-color: #f7f8fa;
 }
 
@@ -84,4 +86,40 @@
 
 .top-table table tr:first-child >td:nth-child(2){
   max-width: 400px;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr {
+  height: 40px;
+}
+
+.zmy-table ::ng-deep .ant-table-thead>tr>th,
+.zmy-table ::ng-deep .ant-table-tbody>tr>td {
+  font-size: 12px;
+  color: #23242F;
+  font-weight: 400;
+  padding: 10px 20px !important;
+  border-right: 1px solid #d4d4d4 !important;
+  border-bottom: 1px solid #d4d4d4 !important;
+}
+
+.zmy-table ::ng-deep .ant-table-thead>tr>th:last-child,
+.zmy-table ::ng-deep .ant-table-tbody>tr>td:last-child {
+  border-right: 0 !important;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr:last-child>td {
+  border-bottom: 0 !important;
+}
+
+.zmy-table ::ng-deep .ant-table-tbody>tr:nth-child(even) {
+  background: none;
+}
+
+.zmy-table ::ng-deep .ant-table {
+  border: 1px solid #d4d4d4;
+}
+
+.zmy-table ::ng-deep .ant-table-placeholder {
+  border-top: 1px solid #d4d4d4;
+  border-bottom: 0;
 }

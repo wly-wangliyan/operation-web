@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../../../core/global.service';
 import { NotifyEntity, SearchParams, NoticeService } from '../notice.service';
 import { NoticeEditComponent } from './notice-edit/notice-edit.component';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 const PageSize = 15;
 
@@ -72,23 +73,31 @@ export class NoticeListComponent implements OnInit {
     }
   }
 
-  // 上架开关状态改变
+  // 开启开关状态改变
   public onSwitchChange(event: boolean) {
     timer(2000).subscribe(() => {
       return event;
     });
   }
 
-  // 上架开关点击调用接口
+  // 开启开关点击调用接口
   public onSwitchClick(notice_id: string, status: boolean) {
-    const text = !status ? '上架' : '下架';
+    const text = !status ? '开启' : '关闭';
     this.noticeService.requestNoticeStatus(notice_id, !status).subscribe(res => {
       this.globalService.promptBox.open(`${text}成功!`);
       this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
-          this.globalService.promptBox.open(`${text}失败，请重试`, null, 2000, '/assets/images/warning.png');
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.code === 'limit') {
+              this.globalService.promptBox.open('最多启用10个通知！', null, 2000, '/assets/images/warning.png');
+              return;
+            } else {
+              this.globalService.promptBox.open(`${text}失败，请重试`, null, 2000, '/assets/images/warning.png');
+            }
+          }
         }
       }
       this.searchText$.next();
@@ -125,3 +134,4 @@ export class NoticeListComponent implements OnInit {
     }
   }
 }
+
