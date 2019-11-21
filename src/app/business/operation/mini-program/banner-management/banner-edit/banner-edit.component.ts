@@ -94,6 +94,7 @@ export class BannerEditComponent implements OnInit {
     this.banner_id = banner_id;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
+    // 首页banner与检车banner设置不同图片剪裁比例
     this.aspectRatio = banner_type === 2 ? 1.917 / 1 : 3.83 / 1;
     this.clear();
     this.is_save = false;
@@ -101,6 +102,8 @@ export class BannerEditComponent implements OnInit {
     if (this.isCreateBanner) {
       this.bannerParams = new BannerParams();
       this.bannerParams.banner_type = banner_type;
+      // 首页banner与检车banner设置不同落地页类型默认值
+      this.bannerParams.belong_to = banner_type === 2 ? 0 : this.bannerParams.belong_to;
       this.cover_url = [];
     } else {
       this.rquestBannerDetail();
@@ -114,6 +117,7 @@ export class BannerEditComponent implements OnInit {
     this.requestSubscription = this.bannerService.requestBannerDetail(this.banner_id).subscribe(res => {
       this.bannerParams = res;
       this.cover_url = this.bannerParams.image ? this.bannerParams.image.split(',') : [];
+      this.bannerParams.belong_to = !res.belong_to ? 0 : res.belong_to;
       if (res.offline_status === 2) {
         this.offline_time = res.offline_time ? new Date(res.offline_time * 1000) : '';
       }
@@ -143,6 +147,7 @@ export class BannerEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.bannerParams.image = imageUrl.join(',');
+      this.bannerParams.belong_to = this.bannerParams.belong_to === 0 ? null : this.bannerParams.belong_to;
       if (this.verification()) {
         // params.image = this.bannerParams.image;
         if (this.isCreateBanner) {
@@ -187,7 +192,7 @@ export class BannerEditComponent implements OnInit {
       cisCheck = false;
     }
 
-    if (!this.bannerParams.jump_link) {
+    if (!this.bannerParams.jump_link && this.bannerParams.belong_to) {
       this.errPositionItem.jump_link.isError = true;
       this.errPositionItem.jump_link.errMes = '请输入跳转URL！';
       cisCheck = false;
