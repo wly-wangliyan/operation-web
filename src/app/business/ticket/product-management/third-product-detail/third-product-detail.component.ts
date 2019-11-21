@@ -46,12 +46,14 @@ export class ThirdProductDetailComponent implements OnInit {
         this.productService.requestThirdProductsDetail(this.product_id))
     ).subscribe(res => {
       this.thirdProductData = res;
+      // 票务详情
+      this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       // 产品信息列表
       this.thirdProductInfoList = [
         {
           tp_id: this.thirdProductData.tp_id,
           third_product_name: this.thirdProductData.third_product_name,
-          third_product_image: this.thirdProductData.third_product_image,
+          third_product_image: this.imgUrls.length !== 0 ? this.imgUrls[0] : '',
           third_address: this.thirdProductData.address,
           sale_status: this.thirdProductData.sale_status,
         }
@@ -64,8 +66,6 @@ export class ThirdProductDetailComponent implements OnInit {
         isShowDescriptions: false
       }));
       this.noResultTicketText = '暂无数据';
-      // 票务详情
-      this.imgUrls = this.thirdProductData.third_product_image ? this.thirdProductData.third_product_image.split(',') : [];
       this.loading = false;
     }, err => {
       this.globalService.httpErrorProcess(err);
