@@ -235,6 +235,8 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   // 关闭预览
   public onClosePreview() {
+    // 重置滚动条位置
+    $('.pru-con').scrollTop(0);
     this.isShowPreview = false;
   }
 
