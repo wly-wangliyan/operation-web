@@ -9,6 +9,7 @@ import {
 } from '../thematic-activity.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
+import { ZPhonePreviewComponent } from '../components/z-phone-preview/z-phone-preview.component';
 
 @Component({
   selector: 'app-edit',
@@ -33,8 +34,6 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   public titleErrMsg = ''; // 标题错误提示
 
-  public isShowPreview = false; // 标记是否打开预览
-
   private space_one = '/assets/images/preview/icon_preview_space_one.png';
 
   private space_two = '/assets/images/preview/icon_preview_space_two.png';
@@ -54,6 +53,7 @@ export class EditComponent implements OnInit, AfterViewInit {
   private isSuccessUploadImg = true; // 标记图片是否在上传
 
   @ViewChild('editActivityForm', { static: false }) public editForm: ViewContainerRef;
+  @ViewChild('previewModal', { static: true }) public previewModal: ZPhonePreviewComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -230,14 +230,7 @@ export class EditComponent implements OnInit, AfterViewInit {
       }
       this.previewList.push(previewItem);
     });
-    this.isShowPreview = true;
-  }
-
-  // 关闭预览
-  public onClosePreview() {
-    // 重置滚动条位置
-    $('.pru-con').scrollTop(0);
-    this.isShowPreview = false;
+    this.previewModal.open();
   }
 
   // 点击保存

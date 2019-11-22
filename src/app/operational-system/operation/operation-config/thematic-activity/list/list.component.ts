@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
@@ -10,6 +10,7 @@ import {
   ContentEntity,
   ElementItemEntity
 } from '../thematic-activity.service';
+import { ZPhonePreviewComponent } from '../components/z-phone-preview/z-phone-preview.component';
 
 const PageSize = 15;
 
@@ -32,8 +33,6 @@ export class ListComponent implements OnInit, OnDestroy {
 
   public preview_title = '';
 
-  public isShowPreview = false; // 标记是否打开预览
-
   public previewList: Array<ContentEntity> = []; // 预览内容数组
 
   private space_one = '/assets/images/preview/icon_preview_space_one.png'; // 占位图
@@ -52,6 +51,8 @@ export class ListComponent implements OnInit, OnDestroy {
     }
     return this.thematicList.length / PageSize + 1;
   }
+
+  @ViewChild('previewModal', { static: true }) public previewModal: ZPhonePreviewComponent;
 
   constructor(
     private router: Router,
@@ -143,14 +144,7 @@ export class ListComponent implements OnInit, OnDestroy {
       }
       this.previewList.push(previewItem);
     });
-    this.isShowPreview = true;
-  }
-
-  // 关闭预览
-  public onClosePreview() {
-    // 重置滚动条位置
-    $('.pru-con').scrollTop(0);
-    this.isShowPreview = false;
+    this.previewModal.open();
   }
 
   // 删除
