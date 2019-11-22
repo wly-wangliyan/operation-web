@@ -5,7 +5,7 @@ import {RouteMonitorService} from '../../core/route-monitor.service';
 import { InsuranceComponent } from './insurance.component';
 import { BrokerageCompanyListComponent } from './brokerage-company-management/brokerage-company-list/brokerage-company-list.component';
 import { InsuranceCompanyListComponent } from './insurance-company-management/insurance-company-list/insurance-company-list.component';
-import { HomeComponent } from '../main/home/home.component';
+import { HomeComponent } from '../../operational-system/main/home/home.component';
 import { MenuGuardService } from '../../core/menu-guard.service';
 
 const routes: Routes = [{

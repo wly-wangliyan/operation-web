@@ -4,7 +4,7 @@ import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProductService, SearchPriceCalendarParams, PriceCalendarEntity } from '../../product.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
-import { BatchImportComponent } from '../../product-edit/batch-import/batch-import.component';
+import { BatchImportComponent } from '../batch-import/batch-import.component';
 
 @Component({
   selector: 'app-product-calendar',

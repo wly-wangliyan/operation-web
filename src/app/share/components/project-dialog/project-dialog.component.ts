@@ -4,7 +4,7 @@ import { GlobalService } from '../../../core/global.service';
 import {
   ProjectManagemantHttpService,
   ProjectEntity
-} from '../../../business/maintenance/project-managemant/project-managemant-http.service';
+} from '../../../operational-system/maintenance/project-managemant/project-managemant-http.service';
 
 @Component({
   selector: 'app-project-dialog',

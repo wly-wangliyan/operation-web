@@ -8,7 +8,7 @@ import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } f
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CanDeactivateComponent } from '../../../../share/interfaces/can-deactivate-component';
-import { ProductCalendarComponent } from '../product-edit/product-calendar/product-calendar.component';
+import { ProductCalendarComponent } from './product-calendar/product-calendar.component';
 import { ZTextCkeditorComponent } from '../../../../share/components/z-text-ckeditor/z-text-ckeditor.component';
 import { ChooseLabelComponent } from './choose-label/choose-label.component';
 

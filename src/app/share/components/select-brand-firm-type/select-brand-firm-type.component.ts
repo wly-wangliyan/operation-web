@@ -5,7 +5,7 @@ import {
   VehicleTypeManagementService,
   VehicleBrandEntity,
   VehicleFirmEntity, VehicleTypeEntity, VehicleSeriesEntity
-} from '../../../business/maintenance/vehicle-type-management/vehicle-type-management.service';
+} from '../../../operational-system/maintenance/vehicle-type-management/vehicle-type-management.service';
 
 class VehicleFirmItem {
   public checked = false;

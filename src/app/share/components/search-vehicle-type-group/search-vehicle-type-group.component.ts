@@ -6,7 +6,7 @@ import {
   VehicleFirmEntity,
   VehicleSeriesEntity,
   VehicleTypeManagementService
-} from '../../../business/maintenance/vehicle-type-management/vehicle-type-management.service';
+} from '../../../operational-system/maintenance/vehicle-type-management/vehicle-type-management.service';
 
 @Component({
   selector: 'app-search-vehicle-type-group',

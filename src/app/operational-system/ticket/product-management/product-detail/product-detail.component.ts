@@ -4,7 +4,7 @@ import { GlobalService } from '../../../../core/global.service';
 import { Subject } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/internal/operators';
 import { ProductService, TicketProductEntity, SearchLabelParams, LabelEntity } from '../product.service';
-import { CalendarDetailComponent } from '../product-detail/calendar-detail/calendar-detail.component';
+import { CalendarDetailComponent } from './calendar-detail/calendar-detail.component';
 import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({

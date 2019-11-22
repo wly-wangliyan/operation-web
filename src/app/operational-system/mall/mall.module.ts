@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { ShareModule } from '../../share/share.module';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
 import { environment } from '../../../environments/environment';
-import { OperationComponent } from './operation.component';
-import { OperationRoutingModule } from './operation-routing.module';
-import { MainModule } from '../main/main.module';
+import { MallRoutingModule } from './mall-routing.module';
+import { MallComponent } from './mall.component';
+import { MainModule } from '../../operational-system/main/main.module';
 
 const uploadToken: UploadConfig = {
     img_config: {
@@ -14,24 +13,27 @@ const uploadToken: UploadConfig = {
         url: `${environment.STORAGE_DOMAIN}/storages/images`,
         source: 'park',
     },
+    video_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/mall/videos`,
+        source: 'park',
+    },
 };
 
 @NgModule({
     imports: [
         ShareModule,
-        DragDropModule,
         HttpClientModule,
-        OperationRoutingModule,
+        MallRoutingModule,
         MainModule
     ],
     declarations: [
-        OperationComponent,
+        MallComponent,
     ],
-    providers: [{
-        provide: UPLOAD_TOKEN,
-        useValue: uploadToken
-    },
-        UploadService]
+    providers: [
+        {provide: UPLOAD_TOKEN, useValue: uploadToken},
+        UploadService
+    ]
 })
-export class OperationModule {
+export class MallModule {
 }

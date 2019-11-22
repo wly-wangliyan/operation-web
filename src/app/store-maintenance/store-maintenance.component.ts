@@ -10,7 +10,7 @@ import { ZConfirmationBoxComponent } from '../share/components/tips/z-confirmati
 import { Http403TipComponent } from '../share/components/tips/http403-tip/http403-tip.component';
 import { Http500TipComponent } from '../share/components/tips/http500-tip/http500-tip.component';
 import { ExpandedMenuComponent } from '../share/components/expanded-menu/expanded-menu.component';
-import { IntervalService } from '../business/notice-center/interval.service';
+import { IntervalService } from '../operational-system/notice-center/interval.service';
 
 @Component({
     selector: 'app-store-maintenance',

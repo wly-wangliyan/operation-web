@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../../core/route-monitor.service';
-import { NoticeManagementComponent } from '../notice-management/notice-management.component';
-import { NoticeListComponent } from '../notice-management/notice-list/notice-list.component';
+import { NoticeManagementComponent } from './notice-management.component';
+import { NoticeListComponent } from './notice-list/notice-list.component';
 
 const routes: Routes = [{
   path: '', component: NoticeManagementComponent,

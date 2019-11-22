@@ -10,7 +10,7 @@ const routes: Routes = [{
         {path: '', redirectTo: 'main', pathMatch: 'full'},
         {
             path: 'main',
-            loadChildren: '../business/main/main.module#MainModule',
+            loadChildren: './main/main.module#MainModule',
             canActivate: [AuthGuardService, RouteMonitorService]
         },
         {path: '**', redirectTo: 'main', pathMatch: 'full'}
