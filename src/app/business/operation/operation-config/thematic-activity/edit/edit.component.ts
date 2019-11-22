@@ -121,7 +121,7 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.sort++;
       contentItem.elements.push(new ElementItemEntity(item.elements[1]));
       contentItem.elements[1].type = item.content_type;
-      contentItem.elements[1].time = new Date().getTime() + 2;
+      contentItem.elements[1].time = new Date().getTime() + 1;
       contentItem.elements[1].sort_num = this.sort;
       contentItem.elements[1].element_id = `activityItem${this.sort}`;
       contentItem.elements[1].image_url = item.elements[1].image.split(',');

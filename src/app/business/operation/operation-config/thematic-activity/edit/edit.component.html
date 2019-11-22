@@ -1,158 +1,147 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../'" [level3Name]="routerTitle">
-    </app-crumb>
-    <ul class="header-right">
-        <ng-container *ngIf="!loading">
-            <li class="big-bg big-white-btn">
-                <a (click)="onCancelClick()">取消</a>
-            </li>
-            <li>
-                <button name="sure_btn" class="header-btn" nz-button nzType="primary"
-                        [disabled]="!contentList||contentList.length===0" (appZDebounceClick)="onEditFormSubmit()">
-                    保存
-                </button>
-            </li>
-        </ng-container>
-    </ul>
+  <app-crumb [level1Name]="'运营配置'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../'" [level3Name]="routerTitle">
+  </app-crumb>
+  <ul class="header-right">
+    <ng-container *ngIf="!loading">
+      <li class="big-bg big-white-btn">
+        <a (click)="onCancelClick()">取消</a>
+      </li>
+      <li>
+        <button name="sure_btn" class="header-btn" nz-button nzType="primary"
+          [disabled]="!contentList||contentList.length===0" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+      </li>
+    </ng-container>
+  </ul>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
-    <nz-spin nzSimple></nz-spin>
+  <nz-spin nzSimple></nz-spin>
 </div>
 <div class="content-flow" [hidden]="loading">
-    <div class="content-container">
-        <form id="editActivityForm" autocomplete="off" class="form-horizontal" #editActivityForm="ngForm">
-            <div class="row">
-                <input name="title" class="form-control activity-title" [(ngModel)]="thematicParams.title"
-                       placeholder="请在此输入标题" minlength="1" maxlength="100" (change)="titleErrMsg=''" appIgnoreSpace
-                       required>
-            </div>
-            <div class="row row-message" style="margin: -16px 0 5px 0 !important;">
-                <div class="control-input err-message">
-                    <span>{{titleErrMsg}}</span>
+  <div class="content-container">
+    <form id="editActivityForm" autocomplete="off" class="form-horizontal" #editActivityForm="ngForm">
+      <div class="row">
+        <input name="title" class="form-control activity-title" [(ngModel)]="thematicParams.title" placeholder="请在此输入标题"
+          minlength="1" maxlength="100" (change)="titleErrMsg=''" appIgnoreSpace required>
+      </div>
+      <div class="row row-message" style="margin: -16px 0 5px 0 !important;">
+        <div class="control-input err-message">
+          <span>{{titleErrMsg}}</span>
+        </div>
+      </div>
+      <div class="row " *ngFor="let content of contentList;let i=index">
+        <ng-container *ngIf="content.content_type===1">
+          <div class="link-group-container two-link-group">
+            <ng-container *ngFor="let element of content.elements;let j=index">
+              <div class="link-group">
+                <div class="link-picture">
+                  <app-z-photo-select-upload #{{element.element_id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                    [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="element.element_id" [imageWidth]="340"
+                    [imageHeight]="220" [imageUrls]="element.image_url" [aspectRatio]="1.55/1" [minCropBoxWidth]="340"
+                    [minCropBoxHeight]="220" [resizable]="true" [imageShowWidth]="340" [imageAddWidth]="340"
+                    (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                  </app-z-photo-select-upload>
                 </div>
-            </div>
-            <div class="row " *ngFor="let content of contentList;let i=index">
-                <ng-container *ngIf="content.content_type===1">
-                    <div class="link-group-container two-link-group">
-                        <ng-container *ngFor="let element of content.elements;let j=index">
-                            <div class="link-group">
-                                <div class="link-picture">
-                                    <app-z-photo-select-upload #{{element.element_id}} [hasAddPicture]="true"
-                                                               [hasDeletePicture]="true" [limitImgSize]="2"
-                                                               [isCutCoverImg]="true" [file_id]="element.element_id"
-                                                               [imageWidth]="340" [imageHeight]="220"
-                                                               [imageUrls]="element.image_url" [aspectRatio]="1.55/1"
-                                                               [minCropBoxWidth]="340" [minCropBoxHeight]="220"
-                                                               [resizable]="true" [imageShowWidth]="340"
-                                                               [imageAddWidth]="340"
-                                                               (selectedImgChange)="onSelectedPicture($event)"
-                                                               (uploadFinish)="onUploadFinish($event)"></app-z-photo-select-upload>
-                                </div>
-                                <div class="link">
-                                    <select name="belong_to_{{element.sort}}_{{element.time}}" class="form-control"
-                                            [(ngModel)]="element.belong_to" (change)="onChangeBelongTo($event,i,j)">
-                                        <option [value]=2>H5</option>
-                                        <option [value]=1>小程序原生页</option>
-                                    </select>
-                                    <input name="link_{{element.sort}}_{{element.time}}" placeholder="输入跳转URL"
-                                           [(ngModel)]="element.link" class="form-control" (change)="element.errMsg=''"
-                                           maxlength="2000" appIgnoreSpace/>
-                                </div>
-                                <p class="cover-hint">注：尺寸 340*220px，格式PNG或JPG，大小2M以内</p>
-                                <p class="err-message">{{element.errMsg}}</p>
-                            </div>
-                        </ng-container>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="content.content_type===2">
-                    <div class="link-group-container">
-                        <div class="link-group">
-                            <div class="link-picture">
-                                <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
-                                                           [hasDeletePicture]="true" [limitImgSize]="2"
-                                                           [isCutCoverImg]="true"
-                                                           [file_id]="content.elements[0].element_id" [imageWidth]="690"
-                                                           [imageHeight]="220"
-                                                           [imageUrls]="content.elements[0].image_url"
-                                                           [aspectRatio]="3.136/1" [minCropBoxWidth]="345"
-                                                           [minCropBoxHeight]="110" [resizable]="true"
-                                                           [imageShowWidth]="690" [imageAddWidth]="690"
-                                                           (selectedImgChange)="onSelectedPicture($event)"
-                                                           (uploadFinish)="onUploadFinish($event)"></app-z-photo-select-upload>
-                            </div>
-                            <div class="link">
-                                <select name="belong_to_{{content.elements[0].sort}}_{{content.elements[0].time}}"
-                                        class="form-control" [(ngModel)]="content.elements[0].belong_to"
-                                        (change)="onChangeBelongTo($event,i)">
-                                    <option [value]=2>H5</option>
-                                    <option [value]=1>小程序原生页</option>
-                                </select>
-                                <input name="link_{{content.elements[0].sort}}_{{content.elements[0].time}}"
-                                       placeholder="输入跳转URL" [(ngModel)]="content.elements[0].link"
-                                       (change)="content.elements[0].errMsg=''" class="form-control" maxlength="2000"
-                                       appIgnoreSpace/>
-                            </div>
-                            <p class="cover-hint">注：尺寸 690*220px，格式PNG或JPG，大小2M以内</p>
-                            <p class="err-message">{{content.elements[0].errMsg}}</p>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="content.content_type===3">
-                    <div>
-                        <app-z-text-ckeditor [ckEditorId]='content.elements[0].element_id'
-                                             #{{content.elements[0].element_id}} [isNeedEmit]='true'
-                                             (editorChange)="onEditChange($event)" [replaceWidth]='replaceWidth'>
-                        </app-z-text-ckeditor>
-                        <p class="err-message">{{content.elements[0].errMsg}}</p>
-                    </div>
-                </ng-container>
-                <div class="delete-btn" (click)="onDeleteClick(i)">
-                    <span class="btn-line"></span>
-                    <span class="btn-line"></span>
-                    <span>删除</span>
+                <div class="link">
+                  <select name="belong_to_{{element.sort_num}}_{{element.time}}" class="form-control"
+                    [(ngModel)]="element.belong_to" (change)="onChangeBelongTo($event,i,j)">
+                    <option [value]=2>H5</option>
+                    <option [value]=1>小程序原生页</option>
+                  </select>
+                  <input name="link_{{element.sort_num}}_{{element.time}}" placeholder="输入跳转URL"
+                    [(ngModel)]="element.link" class="form-control" (change)="element.errMsg=''" maxlength="2000"
+                    appIgnoreSpace />
                 </div>
+                <p class="cover-hint">注：尺寸 340*220px，格式PNG或JPG，大小2M以内</p>
+                <p class="err-message">{{element.errMsg}}</p>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="content.content_type===2">
+          <div class="link-group-container">
+            <div class="link-group">
+              <div class="link-picture">
+                <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
+                  [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="true"
+                  [file_id]="content.elements[0].element_id" [imageWidth]="690" [imageHeight]="220"
+                  [imageUrls]="content.elements[0].image_url" [aspectRatio]="3.136/1" [minCropBoxWidth]="345"
+                  [minCropBoxHeight]="110" [resizable]="true" [imageShowWidth]="690" [imageAddWidth]="690"
+                  (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                </app-z-photo-select-upload>
+              </div>
+              <div class="link">
+                <select name="belong_to_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
+                  class="form-control" [(ngModel)]="content.elements[0].belong_to"
+                  (change)="onChangeBelongTo($event,i)">
+                  <option [value]=2>H5</option>
+                  <option [value]=1>小程序原生页</option>
+                </select>
+                <input name="link_{{content.elements[0].sort_num}}_{{content.elements[0].time}}" placeholder="输入跳转URL"
+                  [(ngModel)]="content.elements[0].link" (change)="content.elements[0].errMsg=''" class="form-control"
+                  maxlength="2000" appIgnoreSpace />
+              </div>
+              <p class="cover-hint">注：尺寸 690*220px，格式PNG或JPG，大小2M以内</p>
+              <p class="err-message">{{content.elements[0].errMsg}}</p>
             </div>
-            <!-- 最多可添加20个模块 -->
-            <div class="row">
-                <ul class="btn-group">
-                    <li (click)="onAddComponent(1)"></li>
-                    <li (click)="onAddComponent(2)"></li>
-                    <li (click)="onAddComponent(3)"></li>
-                </ul>
-            </div>
-            <div class="row">
-                <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-                        (appZDebounceClick)="onPreviewClick()">
-                    预览
-                </button>
-            </div>
-        </form>
-    </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="content.content_type===3">
+          <div>
+            <app-z-text-ckeditor [ckEditorId]='content.elements[0].element_id' #{{content.elements[0].element_id}}
+              [isNeedEmit]='true' (editorChange)="onEditChange($event)" [replaceWidth]='replaceWidth'>
+            </app-z-text-ckeditor>
+            <p class="err-message">{{content.elements[0].errMsg}}</p>
+          </div>
+        </ng-container>
+        <div class="delete-btn" (click)="onDeleteClick(i)">
+          <span class="btn-line"></span>
+          <span class="btn-line"></span>
+          <span>删除</span>
+        </div>
+      </div>
+      <!-- 最多可添加20个模块 -->
+      <div class="row">
+        <ul class="btn-group">
+          <li (click)="onAddComponent(1)"></li>
+          <li (click)="onAddComponent(2)"></li>
+          <li (click)="onAddComponent(3)"></li>
+        </ul>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          (appZDebounceClick)="onPreviewClick()">
+          预览
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <div class="preview-phone-container" [ngClass]="{'show-preview': !isShowPreview}">
-    <div class="preview-box">
-        <div class="closetx" (click)="onClosePreview()"></div>
-        <div class="pru-back">
-            <div class="pru-con">
-                <div class="title" [innerHTML]="thematicParams.title"></div>
-                <ng-container *ngFor="let item of previewList;let i=index">
-                    <ng-container *ngIf="item.content_type===1">
-                        <div class="picture-link">
-                            <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
-                            <img class="small-picture" [src]="item.elements[1].image">
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="item.content_type===2">
-                        <div class="picture-link">
-                            <img class="big-picture" [src]="item.elements[0].image">
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
-                        <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
-                    </ng-container>
-                </ng-container>
+  <div class="preview-box">
+    <div class="closetx" (click)="onClosePreview()"></div>
+    <div class="pru-back">
+      <div class="pru-con">
+        <div class="title" [innerHTML]="thematicParams.title"></div>
+        <ng-container *ngFor="let item of previewList;let i=index">
+          <ng-container *ngIf="item.content_type===1">
+            <div class="picture-link">
+              <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
+              <img class="small-picture" [src]="item.elements[1].image">
             </div>
-        </div>
+          </ng-container>
+          <ng-container *ngIf="item.content_type===2">
+            <div class="picture-link">
+              <img class="big-picture" [src]="item.elements[0].image">
+            </div>
+          </ng-container>
+          <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
+            <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
+          </ng-container>
+        </ng-container>
+      </div>
     </div>
+  </div>
 </div>
