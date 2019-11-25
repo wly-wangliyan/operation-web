@@ -1,0 +1,127 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'订单管理'" [level1RelativePath]="'../'" [level2Name]="'订单详情'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!loading">
+    <div class='des_card'>
+      <div class='info_title'>
+        <div class='owner_info'>
+          <img src="/assets/images/owner.png">
+          车主信息
+        </div>
+        <div class='order_info'>
+          <img src="/assets/images/order.png">
+          订单信息
+        </div>
+      </div>
+      <div style='float: left;'>
+        <nz-descriptions nzBordered>
+          <nz-descriptions-item nzTitle="车牌号：">{{upkeepOrderData.car_id||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="订单状态：">
+            <span style='color:#f91e1e;'>{{upkeepOrderData.pay_status|payStatus}}</span>
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="购买人：">{{upkeepOrderData.payer_name||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="手机号：">{{upkeepOrderData.payer_phone||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="车型：" nzSpan="2">
+            <span
+              [title]="upkeepOrderData.vehicle_firm_name+' '+upkeepOrderData.vehicle_series_name+' '+upkeepOrderData.vehicle_year_model+' '+upkeepOrderData.vehicle_type_name">
+              {{(upkeepOrderData.vehicle_firm_name+' '+upkeepOrderData.vehicle_series_name+' '+upkeepOrderData.vehicle_year_model+' '+upkeepOrderData.vehicle_type_name)|zMaxLength:50}}
+            </span>
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="购车时间：">
+            {{upkeepOrderData.car_pay_time?(upkeepOrderData.car_pay_time* 1000 | date:"y-MM"):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="行驶公里数：">{{upkeepOrderData.kilometers?(upkeepOrderData.kilometers+'km'):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="车架号：">{{upkeepOrderData.frame_number||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="配件/服务合计实收：">
+            {{(upkeepOrderData.accessory_amount_discounted | zCompleteNumber)||0}} 元
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="工时费合计实收：">
+            {{(upkeepOrderData.work_amount_discounted | zCompleteNumber)||0}} 元
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="时段加价：">
+            {{(upkeepOrderData.operation_time_amount | zCompleteNumber)||0}} 元
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="合计实收：">
+            {{(upkeepOrderData.total_real_amount | zCompleteNumber)||0}} 元
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+          <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+          <nz-descriptions-item nzTitle="所属门店：">
+            {{ upkeepOrderData.upkeep_merchant_name||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="订单编号：">{{upkeepOrderData.upkeep_order_id||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="预订时间：">
+            {{upkeepOrderData.reserve_time?(upkeepOrderData.reserve_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="下单时间：">
+            {{upkeepOrderData.created_time?(upkeepOrderData.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="支付时间：">
+            {{upkeepOrderData.pay_time?(upkeepOrderData.pay_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="完成时间：">
+            {{upkeepOrderData.order_complete_time?(upkeepOrderData.order_complete_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="核销码：">{{upkeepOrderData.write_off_code||'--'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="操作人：">{{upkeepOrderData.order_complete_operator||'--'}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle=""></nz-descriptions-item>
+        </nz-descriptions>
+      </div>
+    </div>
+    <div style='clear: both;'></div>
+    <div class='detail_info'>明细</div>
+    <div class="table-container">
+      <div class="zmy-table">
+        <nz-table #rowSelectionTable nzBordered [nzData]="orderDetailList" [nzShowPagination]="false"
+          [nzFrontPagination]='false' [nzNoResult]="noResultText">
+          <thead>
+            <tr>
+              <th class='pro_width'>项目类别</th>
+              <th>配件/服务名称</th>
+              <th>名称</th>
+              <th>数量</th>
+              <th>规格</th>
+              <th>零件编号</th>
+              <th>配件/服务实收</th>
+              <th>工时费实收</th>
+              <th>合计实收</th>
+            </tr>
+          </thead>
+          <tbody class='tbody'>
+            <tr *ngFor="let data of rowSelectionTable.data; let i=index">
+              <td [attr.rowspan]=itemRowSpan1 *ngIf="itemRowSpan1!==0&&i === 0" class='pro_type'>
+                <img src="/assets/images/upkeep.png">{{data.item_category|projectCategory}}
+              </td>
+              <td [attr.rowspan]=itemRowSpan2 *ngIf="itemRowSpan2!==0&&i === itemRowSpan1" class='pro_type'>
+                <img src="/assets/images/wash.png">{{data.item_category|projectCategory}}</td>
+              <td [attr.rowspan]=itemRowSpan3 *ngIf="itemRowSpan3!==0&&i === (itemRowSpan1+itemRowSpan2)"
+                class='pro_type'>
+                <img src="/assets/images/fix.png">{{data.item_category|projectCategory}}</td>
+              <td>
+                <span class='image' *ngIf='data.image_url'><img [src]=data.image_url></span>
+                <ul class='name-ul'>
+                  <li class='item-name'>{{data.item_name}}</li>
+                  <li *ngIf='data.is_original'>原厂件</li>
+                  <li *ngIf='!data.is_original'><span
+                      [title]='data.brand_instruction||""'>{{(data.brand_instruction|zMaxLength:8)||'--'}}</span></li>
+                </ul>
+              </td>
+              <td>{{data.upkeep_accessory_name||'--'}}</td>
+              <td>{{data.number||'--'}}</td>
+              <td>{{data.specification||'--'}}</td>
+              <td>{{data.serial_number||'--'}}</td>
+              <td>{{(data.sale_amount | zCompleteNumber)||0}} 元</td>
+              <td>{{(data.work_sale_amount | zCompleteNumber)||0}} 元</td>
+              <td>{{(data.real_pay_amount | zCompleteNumber)||0}} 元</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</div>

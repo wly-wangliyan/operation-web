@@ -7,22 +7,34 @@ import { StoreMaintenanceMainComponent } from './store-maintenance-main.componen
 import { HomeComponent } from '../../operational-system/main/home/home.component';
 
 const routes: Routes = [{
-    path: '', component: StoreMaintenanceMainComponent,
-    canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
-    children: [
-        /*{path: '', redirectTo: 'brand-management', pathMatch: 'full'},*/
-        {path: 'home', component: HomeComponent},
-        {
-            path: 'brand-management',
-            loadChildren: () => import('../brand-management/brand-management.module').then(m => m.BrandManagementModule),
-        },
-        {path: '**', redirectTo: 'home', pathMatch: 'full'},
-    ]
+  path: '', component: StoreMaintenanceMainComponent,
+  canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
+  children: [
+    /*{path: '', redirectTo: 'brand-management', pathMatch: 'full'},*/
+    { path: 'home', component: HomeComponent },
+    {
+      path: 'accessory-library',
+      loadChildren: () => import('../accessory-library/accessory-library.module').then(m => m.AccessoryLibraryModule),
+    },
+    {
+      path: 'brand-management',
+      loadChildren: () => import('../brand-management/brand-management.module').then(m => m.BrandManagementModule),
+    },
+    {
+      path: 'order-management',
+      loadChildren: () => import('../order-management/order-management.module').then(m => m.OrderManagementModule),
+    },
+    {
+      path: 'work-fees-management',
+      loadChildren: () => import('../work-fees-management/work-fees-management.module').then(m => m.WorkFeesManagementModule),
+    },
+    { path: '**', redirectTo: 'home', pathMatch: 'full' },
+  ]
 }];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class StoreMaintenanceMainRoutingModule {
 }
