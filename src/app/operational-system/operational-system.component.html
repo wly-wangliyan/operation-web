@@ -1,144 +1,138 @@
 <div class="main-layout">
-    <div class="main-header-layout">
-        <div class="logo">
-            <div [routerLink]="'/main'"></div>
-        </div>
-        <ul class="main-herder-title">
-            <li [class.herder-active]="menuActive('/operation/', 'operation')"
-                (click)="onMainMenuClick('/operation')"
-                [class.noPermissions]="!authService.checkPermissions(['operation'])">
-                运营
-            </li>
-            <!--      <li [class.herder-active]="menu===2" (click)="onMainMenuClick(2)">油卡</li>-->
-            <li [class.herder-active]="menuActive('/insurance', 'insurance')"
-                (click)="onMainMenuClick('/insurance')"
-                [class.noPermissions]="!authService.checkPermissions(['insurance'])">
-                保险
-            </li>
-            <li [class.herder-active]="menuActive('/maintenance', 'upkeep')"
-                (click)="onMainMenuClick('/maintenance')"
-                [class.noPermissions]="!authService.checkPermissions(['upkeep'])">
-                4S店保养
-            </li>
-            <li [class.herder-active]="menuActive('/ticket', 'ticket')"
-                (click)="onMainMenuClick('/ticket')"
-                [class.noPermissions]="!authService.checkPermissions(['ticket'])">
-                票务
-            </li>
-            <li [class.herder-active]="menuActive('/mall', 'mall')"
-                (click)="onMainMenuClick('/mall')"
-                [class.noPermissions]="!authService.checkPermissions(['mall'])">
-                商城
-            </li>
-            <li [class.herder-active]="menuActive('/management-setting', 'management')"
-                (click)="onMainMenuClick('/management-setting')"
-                [class.noPermissions]="!((authService.user && authService.user.is_superuser) || authService.checkPermissions(['management']))">
-                管理设置
-            </li>
-            <li [class.herder-active]="menuActive('/store-maintenance', 'store')"
-                (click)="onMainMenuClick('/store-maintenance')"
-                [class.noPermissions]="!authService.checkPermissions(['store'])">
-                门店保养
-            </li>
-        </ul>
-        <div class="user">
-            <!--<div class="user_photo"></div>
+  <div class="main-header-layout">
+    <div class="logo">
+      <div [routerLink]="'/main'"></div>
+    </div>
+    <ul class="main-herder-title">
+      <li [class.herder-active]="menuActive('/operation/', 'operation')" (click)="onMainMenuClick('/operation')"
+        [class.noPermissions]="!authService.checkPermissions(['operation'])">
+        运营
+      </li>
+      <!--      <li [class.herder-active]="menu===2" (click)="onMainMenuClick(2)">油卡</li>-->
+      <li [class.herder-active]="menuActive('/insurance', 'insurance')" (click)="onMainMenuClick('/insurance')"
+        [class.noPermissions]="!authService.checkPermissions(['insurance'])">
+        保险
+      </li>
+      <li [class.herder-active]="menuActive('/maintenance', 'upkeep')" (click)="onMainMenuClick('/maintenance')"
+        [class.noPermissions]="!authService.checkPermissions(['upkeep'])">
+        4S店保养
+      </li>
+      <li [class.herder-active]="menuActive('/ticket', 'ticket')" (click)="onMainMenuClick('/ticket')"
+        [class.noPermissions]="!authService.checkPermissions(['ticket'])">
+        票务
+      </li>
+      <li [class.herder-active]="menuActive('/mall', 'mall')" (click)="onMainMenuClick('/mall')"
+        [class.noPermissions]="!authService.checkPermissions(['mall'])">
+        商城
+      </li>
+      <li [class.herder-active]="menuActive('/management-setting', 'management')"
+        (click)="onMainMenuClick('/management-setting')"
+        [class.noPermissions]="!((authService.user && authService.user.is_superuser) || authService.checkPermissions(['management']))">
+        管理设置
+      </li>
+      <li [class.herder-active]="menuActive('/store-maintenance', 'store')"
+        (click)="onMainMenuClick('/store-maintenance')"
+        [class.noPermissions]="!authService.checkPermissions(['store'])">
+        门店保养
+      </li>
+      <li [class.herder-active]="menuActive('/exemption', 'exemption')" (click)="onMainMenuClick('/exemption')"
+        [class.noPermissions]="!authService.checkPermissions(['exemption'])">
+        免检换贴
+      </li>
+    </ul>
+    <div class="user">
+      <!--<div class="user_photo"></div>
                   <div class="user_name">{{authService.user?.username}}</div>-->
-            <div class="notice-btn" (click)="onNoticeCenterClick()"
-                 [class.noPermissions]="!authService.checkPermissions(['ticket'])">
-                <nz-badge [nzCount]="globalService.notice_Count">
-                    <a>
-                        <i class="main-header-notice"></i>
-                    </a>
-                </nz-badge>
-            </div>
-            <div class="password-btn" (click)="onModifyPwdDivClick()">
-                <i></i>修改密码
-            </div>
-            <div class="logout-btn" (click)="onLoginoutClick()">
-                <i class="main-header-logout"></i>退出
-            </div>
-        </div>
+      <div class="notice-btn" (click)="onNoticeCenterClick()"
+        [class.noPermissions]="!authService.checkPermissions(['ticket'])">
+        <nz-badge [nzCount]="globalService.notice_Count">
+          <a>
+            <i class="main-header-notice"></i>
+          </a>
+        </nz-badge>
+      </div>
+      <div class="password-btn" (click)="onModifyPwdDivClick()">
+        <i></i>修改密码
+      </div>
+      <div class="logout-btn" (click)="onLoginoutClick()">
+        <i class="main-header-logout"></i>退出
+      </div>
     </div>
-    <div class="main-left-layout" [class.main-left-layout-none]="!authService.isShowExpandMenu">
-        <app-expanded-menu></app-expanded-menu>
+  </div>
+  <div class="main-left-layout" [class.main-left-layout-none]="!authService.isShowExpandMenu">
+    <app-expanded-menu></app-expanded-menu>
+  </div>
+  <div class="main-right-layout" [class.main-right-layout-all]="!authService.isShowExpandMenu">
+    <div class="content-router-outlet" #routerDiv>
+      <router-outlet></router-outlet>
+      <router-outlet name="popup"></router-outlet>
     </div>
-    <div class="main-right-layout" [class.main-right-layout-all]="!authService.isShowExpandMenu">
-        <div class="content-router-outlet" #routerDiv>
-            <router-outlet></router-outlet>
-            <router-outlet name="popup"></router-outlet>
-        </div>
-        <!--无权限403-->
-        <app-http403-tip (displayStateChanged)="displayStateChanged()"></app-http403-tip>
+    <!--无权限403-->
+    <app-http403-tip (displayStateChanged)="displayStateChanged()"></app-http403-tip>
 
-        <!--服务器500-->
-        <app-http500-tip (displayStateChanged)="displayStateChanged()"></app-http500-tip>
+    <!--服务器500-->
+    <app-http500-tip (displayStateChanged)="displayStateChanged()"></app-http500-tip>
 
-        <!-- 模态框 -->
-        <app-z-prompt-box></app-z-prompt-box>
-        <app-z-confirmation-box></app-z-confirmation-box>
-    </div>
+    <!-- 模态框 -->
+    <app-z-prompt-box></app-z-prompt-box>
+    <app-z-confirmation-box></app-z-confirmation-box>
+  </div>
 </div>
 
 <!-- 修改密码模态框 -->
 <div class="modal fade " id="modifyPasswordModal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-common">
-        <div class="modal-content modal-content-common">
-            <div class="modal-header">
-                <span class="modal-title">修改密码</span>
-                <button type="button" class="close" data-dismiss="modal">×</button>
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">修改密码</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #modifyPasswordForm="ngForm">
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>旧密码：</span>
+            </label>
+            <div class="control-input">
+              <input name="old_password" type="password" placeholder="请输入旧密码"
+                [(ngModel)]="passwordPassword.old_password" minlength="6" maxlength="20" autocomplete="new-password"
+                class="form-control" required appIgnoreSpace>
             </div>
-            <div class="modal-body">
-                <form autocomplete="off" class="form-horizontal" #modifyPasswordForm="ngForm">
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>旧密码：</span>
-                        </label>
-                        <div class="control-input">
-                            <input name="old_password" type="password" placeholder="请输入旧密码"
-                                   [(ngModel)]="passwordPassword.old_password" minlength="6" maxlength="20"
-                                   autocomplete="new-password"
-                                   class="form-control" required appIgnoreSpace>
-                        </div>
-                    </div>
+          </div>
 
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>新密码：</span>
-                        </label>
-                        <div class="control-input">
-                            <input name="new_password" type="password" placeholder="请输入6-20位新密码"
-                                   [(ngModel)]="passwordPassword.new_password" minlength="6" maxlength="20"
-                                   autocomplete="new-password"
-                                   class="form-control" required appIgnoreSpace>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>确认新密码：</span>
-                        </label>
-                        <div class="control-input">
-                            <input name="repeat_password" type="password" placeholder="再次确认新密码"
-                                   [(ngModel)]="repeat_password"
-                                   minlength="6" maxlength="20" autocomplete="new-password" class="form-control"
-                                   required appIgnoreSpace>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-                        <button class="sure-btn" type="button" nz-button nzType="primary"
-                                [disabled]="!modifyPasswordForm.form.valid"
-                                (appZDebounceClick)="onModifyPwdFormSubmit()">确定
-                        </button>
-                    </div>
-                </form>
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>新密码：</span>
+            </label>
+            <div class="control-input">
+              <input name="new_password" type="password" placeholder="请输入6-20位新密码"
+                [(ngModel)]="passwordPassword.new_password" minlength="6" maxlength="20" autocomplete="new-password"
+                class="form-control" required appIgnoreSpace>
             </div>
-        </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>确认新密码：</span>
+            </label>
+            <div class="control-input">
+              <input name="repeat_password" type="password" placeholder="再次确认新密码" [(ngModel)]="repeat_password"
+                minlength="6" maxlength="20" autocomplete="new-password" class="form-control" required appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary"
+              [disabled]="!modifyPasswordForm.form.valid" (appZDebounceClick)="onModifyPwdFormSubmit()">确定
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
