@@ -64,9 +64,12 @@ export class VehicleTypeListComponent implements OnInit {
   private requestVehicleFirmsList(vehicle_brand_id: string) {
     if (!this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id)) {
       this.vehicleFirmList = this.vehicleDataService.vehicleFirmList;
+      console.log('1', this.vehicleFirmList);
+
     } else {
       this.vehicleDataService.requestVehicleFirmsList(vehicle_brand_id).subscribe(() => {
         this.vehicleFirmList = this.vehicleDataService.vehicleFirmList;
+        console.log('1', this.vehicleFirmList);
       });
     }
   }

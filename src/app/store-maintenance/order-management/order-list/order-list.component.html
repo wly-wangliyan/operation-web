@@ -26,18 +26,6 @@
           </div>
           <div>
             <nz-form-item nzFlex>
-              <nz-form-label>汽车品牌</nz-form-label>
-              <nz-form-control class="form_control">
-                <select class="form-control" name="vehicle_brand_name" [(ngModel)]="searchParams.vehicle_brand_name">
-                  <option value="">全部</option>
-                  <option *ngFor="let item of vehicleBrandList" [value]="item.vehicle_brand_name">
-                    {{item.vehicle_brand_name}}</option>
-                </select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div>
-            <nz-form-item nzFlex>
               <nz-form-label>项目类别</nz-form-label>
               <nz-form-control class="form_control">
                 <select class="form-control" name="upkeep_item_category"
