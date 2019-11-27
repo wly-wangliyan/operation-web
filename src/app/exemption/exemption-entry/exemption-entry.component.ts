@@ -10,7 +10,6 @@ import { HttpService } from '../../core/http.service';
 })
 export class ExemptionEntryComponent {
   constructor(private authService: AuthService, private httpService: HttpService) {
-    console.log('0000');
     authService.authorizeBySecretKey(initializer.user);
     httpService.setStartTimeStamp(initializer.startTimeStamp);
   }
