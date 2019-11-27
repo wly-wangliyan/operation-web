@@ -119,3 +119,14 @@
   float: right;
   margin-top: 6px;
 }
+
+.remark_td {
+  min-width: 240px;
+  line-height: 40px;
+}
+
+.remark_info {
+  width: 45%;
+  display: inline-block;
+  line-height: 22px;
+}

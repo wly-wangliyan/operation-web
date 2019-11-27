@@ -8,6 +8,8 @@ import { GoodsOrderListComponent } from './goods-order-list/goods-order-list.com
 import { GoodsOrderDetailComponent } from './goods-order-detail/goods-order-detail.component';
 import { ConfirmTypePipe, DeliveryStatusPipe, PayStatusPipe } from './goods-order.pipe';
 import { GoodsOrderDeliveryComponent } from './goods-order-delivery/goods-order-delivery.component';
+import { GoodsOrderRefundComponent } from './goods-order-refund/goods-order-refund.component';
+import { GoodsOrderRemarkComponent } from './goods-order-remark/goods-order-remark.component';
 
 @NgModule({
     imports: [
@@ -22,7 +24,9 @@ import { GoodsOrderDeliveryComponent } from './goods-order-delivery/goods-order-
         DeliveryStatusPipe,
         PayStatusPipe,
         ConfirmTypePipe,
-        GoodsOrderDeliveryComponent
+        GoodsOrderDeliveryComponent,
+        GoodsOrderRefundComponent,
+        GoodsOrderRemarkComponent
     ],
     providers: [
         GoodsOrderManagementHttpService,

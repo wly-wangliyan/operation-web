@@ -1,6 +1,11 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
   </app-crumb>
+  <ul class="header-right">
+    <li class="big-bg">
+      <a (click)="onEditRefundClick(orderDetail)">退款</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="content-container">
@@ -49,6 +54,20 @@
           <td></td>
         </tr>
         <tr>
+          <td>退款金额：</td>
+          <td>
+            {{(orderDetail.real_price||orderDetail.real_price===0) ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}
+          </td>
+          <td>退款方式：</td>
+          <td>
+            {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
+          </td>
+          <td>退款交易单号：</td>
+          <td>
+            {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
+          </td>
+        </tr>
+        <tr>
           <td>联系人：</td>
           <td>
             {{orderDetail.contact?orderDetail.contact:'--'}}
@@ -92,6 +111,26 @@
           <td></td>
           <td></td>
         </tr>
+        <tr>
+          <td>订单备注：</td>
+          <td class="remark_td">
+            <span class="remark_info">
+              {{orderDetail.delivery_region||orderDetail.delivery_address ? orderDetail.delivery_region+orderDetail.delivery_address : '--'}}
+            </span>
+            <button class='goods-btn' nz-button nzType="primary"
+              (click)="onUpdateRemarkClick('订单备注',orderDetail)">订单备注</button>
+          </td>
+          <td>退款备注：</td>
+          <td class="remark_td">
+            <span class="remark_info">
+              {{orderDetail.delivery_region||orderDetail.delivery_address ? ((orderDetail.delivery_region+orderDetail.delivery_address)| zMaxLength:30): '--'}}
+            </span>
+            <button class='goods-btn' nz-button nzType="primary"
+              (click)="onUpdateRemarkClick('退款备注',orderDetail)">退款备注</button>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
       </table>
     </div>
 
@@ -128,3 +167,7 @@
 </div>
 <!--编辑物流信息-->
 <app-goods-order-delivery #orderDeliveryComponent></app-goods-order-delivery>
+<!--退款-->
+<app-goods-order-refund #orderRefund></app-goods-order-refund>
+<!-- 修改备注信息 -->
+<app-goods-order-remark #orderRemark></app-goods-order-remark>

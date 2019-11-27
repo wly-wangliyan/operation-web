@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity } from '../goods-order-management-http.service';
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
+import { GoodsOrderRefundComponent } from '../goods-order-refund/goods-order-refund.component';
+import { GoodsOrderRemarkComponent } from '../goods-order-remark/goods-order-remark.component';
 
 @Component({
   selector: 'app-goods-order-detail',
@@ -19,6 +21,8 @@ export class GoodsOrderDetailComponent implements OnInit {
   private order_id: string; // 订单id
 
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
+  @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;
+  @ViewChild('orderRemark', { static: true }) public orderRemark: GoodsOrderRemarkComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,6 +72,30 @@ export class GoodsOrderDetailComponent implements OnInit {
   * */
   public onEditDeliveryClick(data: GoodsOrderEntity) {
     this.orderDeliveryComponent.open(data, () => {
+      timer(0).subscribe(() => {
+        this.getOrderDetail();
+      });
+    }, '保存');
+  }
+
+  /*
+  * 退款
+  * @param data GoodsOrderEntity 商品信息
+  * */
+  public onEditRefundClick(data: GoodsOrderEntity) {
+    this.orderRefund.open(data, () => {
+      timer(0).subscribe(() => {
+        this.getOrderDetail();
+      });
+    }, '确认退款');
+  }
+
+  /*
+  * 修改备注信息
+  * @param data GoodsOrderEntity 商品信息
+  * */
+  public onUpdateRemarkClick(title: string, data: GoodsOrderEntity) {
+    this.orderRemark.open(title, data, () => {
       timer(0).subscribe(() => {
         this.getOrderDetail();
       });

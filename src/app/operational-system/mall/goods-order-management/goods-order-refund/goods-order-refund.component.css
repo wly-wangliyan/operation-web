@@ -1,0 +1,81 @@
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  height: 34px;
+  align-items: center !important;
+  margin-bottom: 10px;
+  display: inherit;
+}
+
+.row b {
+  margin-right: 10px !important;
+}
+
+.row-message {
+  height: 28px !important;
+}
+
+.control-label {
+  padding-left: 0px !important;
+  margin-bottom: 0 !important;
+  width: 120px !important;
+  padding-right: 10px;
+  position: absolute;
+  left: 22px;
+  display: inherit;
+  margin-left: -22px;
+}
+
+.form-control {
+  height: 34px;
+  width: 415px;
+  border-radius: 1px;
+  margin-left: 123px;
+}
+
+textarea {
+  height: 125px !important;
+}
+
+.control-input input,
+label {
+  font-size: 14px;
+  font-family: STHeitiSC-Light;
+  font-weight: 300;
+}
+
+.close:hover {
+  font-size: 28px;
+}
+
+.modal-content {
+  width: 600px;
+  left: -50px;
+}
+
+.modal-footer {
+  margin-top: 110px;
+}
+
+.err-message {
+  margin-left: 123px;
+  color: rgba(232, 32, 56, 1);
+}
+
+.prompt-text {
+  margin-left: 123px;
+  color: #888;
+}
+
+.unit {
+  position: absolute;
+  left: 503px;
+  top: 81px;
+  display: inline-block;
+  width: 34px;
+  border-left: 1px solid rgba(136, 136, 136, 0.3);
+  height: 32px;
+  text-align: center;
+  background: #fbfbfb;
+  line-height: 32px;
+}

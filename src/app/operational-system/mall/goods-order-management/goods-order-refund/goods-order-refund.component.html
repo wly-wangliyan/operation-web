@@ -1,0 +1,49 @@
+<!--退款信息-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">退款</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <form *ngIf="currentOrder" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>退款金额</span>
+          </label>
+          <div class=" control-input">
+            <input type='number' class="form-control" placeholder="输入退款金额" [(ngModel)]="refund_price"
+              name="delivery_company" onInput="if(this.value.length>10){this.value=this.value.substr(0,10)}"
+              (keypress)="inputNumberLimit($event)" appIgnoreSpace required>
+            <span class="unit">元</span>
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input" [ngClass]='isShowErrMes?"err-message":"prompt-text"'>
+            <span>退款金额不可大于{{realPrice|centPriceChange}}元</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <span>备注</span>
+          </label>
+          <div class=" control-input">
+            <textarea class='form-control' placeholder="100字以内..." [(ngModel)]="remark" name="remark"
+              maxlength="100"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+            (appZDebounceClick)="onEditFormSubmit()">
+            {{sureName}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

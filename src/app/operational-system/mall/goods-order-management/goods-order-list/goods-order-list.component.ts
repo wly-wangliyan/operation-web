@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity, SearchParams } from '../goods-order-management-http.service';
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
+import { GoodsOrderRefundComponent } from '../goods-order-refund/goods-order-refund.component';
 import { environment } from '../../../../../environments/environment';
 
 const PageSize = 15;
@@ -46,6 +47,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   private searchUrl: string;
 
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
+  @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;
 
   public order_start_time: any = ''; // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
@@ -229,6 +231,19 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
         this.searchText$.next();
       });
     }, '保存');
+  }
+
+  /*
+  * 退款
+  * @param data GoodsOrderEntity 商品信息
+  * */
+  public onEditRefundClick(data: GoodsOrderEntity) {
+    this.orderRefund.open(data, () => {
+      this.initPageIndex();
+      timer(0).subscribe(() => {
+        this.searchText$.next();
+      });
+    }, '确认退款');
   }
 
   /*
