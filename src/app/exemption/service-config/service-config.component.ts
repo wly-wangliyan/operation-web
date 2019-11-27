@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ServiceConfigService, ConfigEntity } from './service-config.service';
 import { GlobalService } from '../../core/global.service';
 import { Subscription, Subject } from 'rxjs';
@@ -9,7 +9,7 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './service-config.component.html',
   styleUrls: ['./service-config.component.css']
 })
-export class ServiceConfigComponent implements OnInit {
+export class ServiceConfigComponent implements OnInit, OnDestroy {
 
   public loading = true;
 
@@ -19,7 +19,9 @@ export class ServiceConfigComponent implements OnInit {
 
   public configErrMsg = ''; // 错误信息
 
-  private config_id = 'c0299b0b5fcc94d9051960f567c579a1'; // 配置id
+  private tmpConfigRecord: ConfigEntity; // 用于缓存编辑前的数据
+
+  private exemption_id = 'c0299b0b5fcc94d9051960f567c579a1'; // 配置id
 
   private requestSubscription: Subscription;
 
@@ -39,15 +41,28 @@ export class ServiceConfigComponent implements OnInit {
     this.searchText$.next();
   }
 
+  public ngOnDestroy() {
+    this.requestSubscription && this.requestSubscription.unsubscribe();
+    this.searchText$ && this.searchText$.unsubscribe();
+    CKEDITOR.instances.serviceConfigEditor.destroy(true);
+  }
+
   // 获取服务配置详情
   private rquestConfigDetail(): void {
+    if (this.tmpConfigRecord) {
+      this.configParams = new ConfigEntity(this.tmpConfigRecord);
+      this.getEditorData();
+      return;
+    }
     this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.requestSubscription = this.serviceConfigService.requestServiceConfigDetail(this.config_id).subscribe(res => {
+    this.requestSubscription = this.serviceConfigService.requestServiceConfigDetail(this.exemption_id).subscribe(res => {
       this.configParams = res;
+      this.tmpConfigRecord = new ConfigEntity(res);
       this.getEditorData();
       this.loading = false;
     }, err => {
       this.loading = false;
+      this.tmpConfigRecord = null;
       this.getEditorData();
       this.globalService.httpErrorProcess(err);
     });
@@ -55,7 +70,7 @@ export class ServiceConfigComponent implements OnInit {
 
   // 富文本数据处理
   public getEditorData() {
-    const tempContent = this.configParams.remark.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+    const tempContent = this.configParams.content.replace('/\r\n/g', '').replace(/\n/g, '');
     CKEDITOR.instances.serviceConfigEditor.setData(tempContent);
     CKEDITOR.instances.serviceConfigEditor.setReadOnly(true);
     this.isInstanceReady = true;
@@ -116,7 +131,20 @@ export class ServiceConfigComponent implements OnInit {
       return;
     }
     if (this.generateAndCheckParamsValid()) {
-
+      this.is_save = true;
+      this.serviceConfigService.requestUpdateServiceConfigDetail(this.exemption_id, this.configParams).subscribe(() => {
+        this.globalService.promptBox.open('保存成功!');
+        this.is_save = false;
+        this.isEdit = false;
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('保存失败，请重试！', null, 2000, null, false);
+          this.is_save = false;
+        }
+      });
+    } else {
+      this.is_save = false;
     }
   }
 
@@ -149,8 +177,10 @@ export class ServiceConfigComponent implements OnInit {
     }
 
     if (!tempContent) {
-      this.configErrMsg = '请填写！';
+      this.configErrMsg = '请填写图文详情！';
       return false;
+    } else {
+      this.configParams.content = tempContent.replace('/\r\n/g', '').replace(/\n/g, '');
     }
     return true;
   }

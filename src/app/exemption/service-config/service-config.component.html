@@ -31,7 +31,7 @@
             <div class="control-input small-group">
               <input name="total_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
                 [(ngModel)]="configParams.total_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="5" appIgnoreSpace required />
+                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
@@ -41,7 +41,7 @@
             <div class="control-input small-group">
               <input name="sale_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
                 [(ngModel)]="configParams.sale_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="5" appIgnoreSpace required />
+                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
@@ -51,7 +51,7 @@
             <div class="control-input small-group">
               <input name="real_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
                 [(ngModel)]="configParams.real_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="5" appIgnoreSpace required />
+                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
