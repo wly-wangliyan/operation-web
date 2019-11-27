@@ -16,6 +16,10 @@ const routes: Routes = [{
     {
       path: 'service-config', component: ServiceConfigComponent
     },
+    {
+      path: 'order-management',
+      loadChildren: () => import('../order-management/order-management.module').then(m => m.OrderManagementModule),
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];

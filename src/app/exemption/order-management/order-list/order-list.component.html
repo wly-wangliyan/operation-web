@@ -1,0 +1,123 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'订单管理'"></app-crumb>
+</div>
+<div class="content-flow">
+
+  <div class="table-container">
+    <div class="search-container">
+      <form class="search-form" autocomplete="off">
+        <div class="form-group">
+          <span>订单状态：</span>
+          <select name="status" class="form-control" style="width: 130px;" [(ngModel)]="order_status"
+            (change)="onChangeOrderStatus($event)">
+            <option value="">全部</option>
+            <option value="1">未支付</option>
+            <option value="2">已支付</option>
+            <option value="3">已退款</option>
+            <option value="4">已完成</option>
+            <option value="5">已取消</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <span>办理流程：</span>
+          <select name="process_flow" class="form-control" style="width: 130px;" [(ngModel)]="processing_flow"
+            (change)="onChangeProcessStatus($event)">
+            <option value="">全部</option>
+            <option value="1">待办理</option>
+            <option value="2">已提交办理</option>
+            <option value="3">制贴完成</option>
+            <option value="4">已发货</option>
+            <option value="5">已驳回</option>
+            <option value="6">已驳回并退款</option>
+            <option value="7">已确认收货</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <span>手机号：</span>
+          <input name="telephone" class="form-control" placeholder="请输入手机号" [(ngModel)]="searchParams.phone"
+            maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace>
+        </div>
+        <div class="form-group">
+          <span>购买人：</span>
+          <input name="name" class="form-control" [(ngModel)]="searchParams.name" placeholder="请输入购买人"
+            autocomplete="off" maxlength="20" appIgnoreSpace />
+        </div>
+        <div class="form-group">
+          <span>订单编号：</span>
+          <input name="order_num" class="form-control" placeholder="请输入订单编号" maxlength="32"
+            [(ngModel)]="searchParams.order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
+        </div>
+        <div class="form-group">
+          <span>下单时间：</span>
+          <nz-date-picker [(ngModel)]="order_start_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderStartTime"
+            name='order_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <span class='line'>-</span>
+          <nz-date-picker [(ngModel)]="order_end_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderEndTime"
+            name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+        <div class="form-group">
+          <span>支付时间：</span>
+          <nz-date-picker [(ngModel)]="pay_start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartPayTime"
+            name='pay_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <span class='line'>-</span>
+          <nz-date-picker [(ngModel)]="pay_end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayTime"
+            name='pay_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="zmy-table">
+      <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #ticketOrderTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>订单编号</th>
+            <th>车牌号</th>
+            <th>购买人</th>
+            <th>收货地址</th>
+            <th>上传资料</th>
+            <th>合计实收</th>
+            <th>下单&支付时间</th>
+            <th>订单状态</th>
+            <th>办理流程</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of ticketOrderTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td [title]="order.order_id">{{order.order_id | zMaxLength:10}}</td>
+            <td>{{order.car_id}}</td>
+            <td>{{order.name}}</td>
+            <td>{{order.address}}</td>
+            <td>这里是上传资料</td>
+            <td>
+              {{(order.real_amount||order.real_amount===0) ? ('￥ ' + (order.real_amount | centPriceChange)) : '--'}}
+            </td>
+            <td>
+              <div class="td-time">
+                <span *ngIf="order.created_time">
+                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                </span>
+                <span *ngIf="order.pay_time">
+                  {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                </span>
+                <span *ngIf="!order.created_time && !order.pay_time">--</span>
+              </div>
+            </td>
+            <td>{{order.status | orderStatus}}</td>
+            <td>{{order.processing_flow | orderUseStatus}}</td>
+            <td class="operation">
+              <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
