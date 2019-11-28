@@ -1,0 +1,226 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'" [level2RelativePath]="'../../'" [level3Name]="'订单详情'">
+  </app-crumb>
+  <ul class="header-right" [hidden]="loading" *ngIf="orderRecord.status ===2 ||  orderRecord.status ===4">
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===1">
+      <a (click)="onChangeProcessStatus(2)">已提交办理</a>
+    </li>
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===2">
+      <a (click)="onChangeProcessStatus(3)">制贴完成</a>
+    </li>
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===3">
+      <a (click)="onChangeProcessStatus(4)">发货</a>
+    </li>
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===4">
+      <a (click)="onChangeProcessStatus(7)">确认收货</a>
+    </li>
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===1 || orderRecord.processing_flow===2">
+      <a (click)="onChangeProcessStatus(5)">驳回</a>
+    </li>
+    <li class="big-bg">
+      <a (click)="onChangeProcessStatus(6)">退款</a>
+    </li>
+  </ul>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+  <div class="content-container">
+    <div class="table-item order-table">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="2" class="row-title">车主信息</td>
+
+          <td>车牌号：</td>
+          <td>{{orderRecord.car_id ? orderRecord.car_id : '--'}}</td>
+
+          <td>订单状态：</td>
+          <td style="color: #E82038;">{{orderRecord.status | exemptionOrderStatus}}</td>
+
+          <td>办理流程：</td>
+          <td style="color: #E82038;">
+            <span>{{orderRecord.processing_flow | exemptionFormat}}</span>
+            <ng-container *ngIf="orderRecord.processing_flow===5">
+              <span *ngIf="orderRecord.reject_type!==5">
+                {{orderRecord.reject_type | rejectType}}</span>
+              <span *ngIf="orderRecord.reject_type===5">
+                {{orderRecord.reject_notice}}</span>
+            </ng-container>
+          </td>
+        </tr>
+        <tr>
+          <td>购买人：</td>
+          <td>{{orderRecord.name ? orderRecord.name : '--'}}</td>
+
+          <td>手机号：</td>
+          <td>{{orderRecord.phone ? orderRecord.phone : '--'}}</td>
+
+          <td>收货地址：</td>
+          <td>{{orderRecord.address ? orderRecord.address : '--'}}</td>
+        </tr>
+        <tr>
+          <td rowspan="5" class="row-title">订单信息</td>
+
+          <td>应付：</td>
+          <td>
+            {{(orderRecord.total_amount||orderRecord.total_amount===0) ? ('￥ ' + (orderRecord.total_amount | centPriceChange)) : '--'}}
+          </td>
+
+          <td>平台立减：</td>
+          <td>
+            {{(orderRecord.discounts_amount||orderRecord.discounts_amount===0) ? ('￥ ' + (orderRecord.discounts_amount | centPriceChange)) : '--'}}
+          </td>
+
+          <td>实付：</td>
+          <td>
+            {{(orderRecord.real_amount||orderRecord.real_amount===0) ? ('￥ ' + (orderRecord.real_amount | centPriceChange)) : '--'}}
+          </td>
+        </tr>
+        <tr>
+          <td>物流公司：</td>
+          <td>{{orderRecord.logistics_company ? orderRecord.logistics_company : '--'}}</td>
+
+          <td>物流单号：</td>
+          <td>{{orderRecord.logistics_order_id ? orderRecord.logistics_order_id : '--'}}</td>
+
+          <td>邮费：</td>
+          <td>
+            {{(orderRecord.logistics_fee||orderRecord.logistics_fee===0) ? ('￥ ' + (orderRecord.logistics_fee | centPriceChange)) : '--'}}
+          </td>
+        </tr>
+        <tr>
+          <td>订单编号：</td>
+          <td>{{orderRecord.order_id ? orderRecord.order_id : '--'}}</td>
+
+          <td>支付交易单号：</td>
+          <td>{{orderRecord.payment_order_id ? orderRecord.payment_order_id : '--'}}</td>
+
+          <td>下单时间：</td>
+          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+        </tr>
+        <tr>
+          <td>支付时间：</td>
+          <td>{{orderRecord.pay_time ? (orderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td>发货时间：</td>
+          <td>{{orderRecord.send_time ? (orderRecord.send_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td>完成时间：</td>
+          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+        </tr>
+        <tr>
+          <td>订单备注：</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditOrderRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="onEditClick(1)">编辑</button>
+                <ng-container *ngIf="isEditOrderRemark">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!orderRecord.order_remarks" (click)="onSaveClick(1)">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancleClick(1)">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span *ngIf="!isEditOrderRemark">{{orderRecord.order_remarks || '--'}}</span>
+                <textarea *ngIf="isEditOrderRemark" name="order_remarks" class="form-control" placeholder="100字以内..."
+                  [(ngModel)]="orderRecord.order_remarks" maxlength="100"></textarea>
+              </div>
+            </div>
+          </td>
+
+          <td>驳回备注：</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditRejectRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="onEditClick(5)">编辑</button>
+                <ng-container *ngIf="isEditRejectRemark">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!orderRecord.reject_remarks" (click)="onSaveClick(5)">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancleClick(5)">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span *ngIf="!isEditRejectRemark">{{orderRecord.reject_remarks || '--'}}</span>
+                <textarea *ngIf="isEditRejectRemark" name="reject_remarks" class="form-control" placeholder="100字以内..."
+                  [(ngModel)]="orderRecord.reject_remarks" maxlength="100"></textarea>
+              </div>
+            </div>
+          </td>
+
+          <td>退款备注：</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditRefundRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="onEditClick(6)">编辑</button>
+                <ng-container *ngIf="isEditRefundRemark">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!orderRecord.refund_remarks" (click)="onSaveClick(6)">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancleClick(6)">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span *ngIf="!isEditRefundRemark">{{orderRecord.refund_remarks || '--'}}</span>
+                <textarea *ngIf="isEditRefundRemark" name="refund_remarks" class="form-control" placeholder="100字以内..."
+                  [(ngModel)]="orderRecord.refund_remarks" maxlength="100"></textarea>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-title">退款信息</td>
+
+          <td>退款金额：</td>
+          <td>
+            {{(orderRecord.refund_fee||orderRecord.refund_fee===0) ? ('￥ ' + (orderRecord.refund_fee | centPriceChange)) : '--'}}
+          </td>
+
+          <td>退款方式：</td>
+          <td>{{orderRecord.refund_type ===1 ? '微信' : '--'}}</td>
+
+          <td>退款交易单号：</td>
+          <td>{{orderRecord.refund_order_id ? orderRecord.refund_order_id : '--'}}</td>
+        </tr>
+        <tr>
+          <td class="row-title">办理资料</td>
+          <td colspan="5" style="border-right: 0px">
+            <div class="material-container">
+              <div class="material-item" *ngIf="orderRecord.driving_license_front">
+                <img [src]="orderRecord.driving_license_front"
+                  (click)="onOpenZoomPictureModal(orderRecord.driving_license_front)" />
+                <span>行驶证正本</span></div>
+              <div class="material-item" *ngIf="orderRecord.driving_license_side">
+                <img [src]="orderRecord.driving_license_side"
+                  (click)="onOpenZoomPictureModal(orderRecord.driving_license_side)" />
+                <span>行驶证副本</span></div>
+              <div class="material-item" *ngIf="orderRecord.insurance_policy">
+                <img [src]="orderRecord.insurance_policy"
+                  (click)="onOpenZoomPictureModal(orderRecord.insurance_policy)" />
+                <span>交强险保单</span></div>
+              <div class="material-item" *ngIf="orderRecord.payment_certificate">
+                <img [src]="orderRecord.payment_certificate"
+                  (click)="onOpenZoomPictureModal(orderRecord.payment_certificate)" />
+                <span>车船税纳税凭证</span></div>
+            </div>
+
+          </td>
+          <td style="border-left: 0px">
+            <div class="download-btn">
+              <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+                style="width: 90px;height:27px" (click)="onDownloadClick()">打包下载</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 图片放大 -->
+<app-z-photo-select [imageUrls]="imageUrls"></app-z-photo-select>

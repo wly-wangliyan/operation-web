@@ -66,6 +66,8 @@ export class EditParams extends EntityBase {
   // 退款参数
   public refund_fee: number = undefined; // 退款金额（不能大于实付金额） 单位：分
   public refund_remarks: string = undefined; // 退款备注
+
+  public order_remarks: string = undefined; // 订单备注
 }
 
 export class ExemptionOrderLinkResponse extends LinkResponse {
@@ -128,12 +130,12 @@ export class OrderManagementService {
   }
 
   /**
-   * 修改免检订单状态
+   * 修改免检订单办理流程状态
    * @param order_id 订单ID
-   * @param processing_flow 办理流程 2,3,4,7
+   * @param processing_flow 办理流程 2,3,7
    * @returns Observable<HttpResponse<any>>
    */
-  public requestChangeOrderStatus(processing_flow: number, order_id: string): Observable<HttpResponse<any>> {
+  public requestChangeProcessFlowStatus(processing_flow: number, order_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/exemption/orders/${order_id}`;
     const body = { processing_flow };
     return this.httpService.patch(httpUrl, body);
