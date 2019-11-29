@@ -17,6 +17,7 @@ import {
 export class OrderDetailComponent implements OnInit {
   public upkeepOrderData = new UpkeepOrderEntity();
   public orderDetailList: Array<OrderDetailEntity> = [];
+  public orderDetailList1: Array<OrderDetailEntity> = [];
   public noResultText = '数据加载中...';
   public loading = true;
   public itemRowSpan1: number;
@@ -51,6 +52,7 @@ export class OrderDetailComponent implements OnInit {
       this.itemRowArr2 = orderDetailList && orderDetailList.filter(i => i.item_category === 2);
       this.itemRowArr3 = orderDetailList && orderDetailList.filter(i => i.item_category === 3);
       this.orderDetailList = this.itemRowArr1 && this.itemRowArr1.concat(this.itemRowArr2, this.itemRowArr3);
+      this.orderDetailList1 = this.itemRowArr1 && this.itemRowArr1.concat(this.itemRowArr2, this.itemRowArr3);
       this.itemRowSpan1 = this.itemRowArr1.length;
       this.itemRowSpan2 = this.itemRowArr2.length;
       this.itemRowSpan3 = this.itemRowArr3.length;
@@ -60,5 +62,19 @@ export class OrderDetailComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
+  }
+
+  /** 完成服务 */
+  public onCompleteService(data: UpkeepOrderEntity) {
+    this.globalService.confirmationBox.open('提示', `此操作不可逆，请确认是否已完成保养服务，<br>且车主已知晓并同意完成服务？`, () => {
+      this.globalService.confirmationBox.close();
+      // this.productService.requestDeleteProductData(data.product_id).subscribe(() => {
+      //   this.globalService.promptBox.open('删除成功', () => {
+      //     this.searchText$.next();
+      //   });
+      // },err => {
+      //   this.globalService.httpErrorProcess(err);
+      // });
+    });
   }
 }

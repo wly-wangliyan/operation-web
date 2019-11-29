@@ -45,6 +45,7 @@ import {
   ValidateTimeLimitPipe,
   MaxNumberDealPipe
 } from './pipes/ticket-format.pipe';
+import { StoreProjectTypePipe } from './pipes/store-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
@@ -111,6 +112,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     ValidateTimeLimitPipe,
     MaxNumberDealPipe,
     ProjectTypePipe,
+    StoreProjectTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -174,6 +176,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     RefundRulePipe,
     ValidateTimeLimitPipe,
     MaxNumberDealPipe,
+    StoreProjectTypePipe,
 
     // 指令
     IgnoreSpaceDirective,

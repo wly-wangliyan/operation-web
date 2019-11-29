@@ -156,19 +156,18 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-  // 导出订单管理列表
-  public onExportOrderList() {
-    if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else if (this.getTimeValid() === 'reserve_time') {
-      this.globalService.promptBox.open('预定开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else {
-      if (this.searchUrl) {
-        window.open(this.searchUrl);
-      } else {
-        return;
-      }
-    }
+  /** 完成服务 */
+  public onCompleteService(data: UpkeepOrderEntity) {
+    this.globalService.confirmationBox.open('提示', `此操作不可逆，请确认是否已完成保养服务，<br>且车主已知晓并同意完成服务？`, () => {
+      this.globalService.confirmationBox.close();
+      // this.productService.requestDeleteProductData(data.product_id).subscribe(() => {
+      //   this.globalService.promptBox.open('删除成功', () => {
+      //     this.searchText$.next();
+      //   });
+      // },err => {
+      //   this.globalService.httpErrorProcess(err);
+      // });
+    });
   }
 
   // 查询时间校验

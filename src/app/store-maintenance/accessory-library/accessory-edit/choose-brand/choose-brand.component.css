@@ -7,17 +7,9 @@
   border-bottom: 1px solid #D8D8D8;
 }
 
-.content-left {
-  width: 150px;
-  border-right: 1px solid #D8D8D8;
-}
-
-.content-right {
-  width: 270px;
-}
-
 .content-list {
-  height: 250px;
+  height: 220px;
+  border-bottom: 1px solid #D8D8D8;
 }
 
 .content-list>ul {
@@ -31,8 +23,8 @@
   text-indent: 30px;
   color: #23242F;
   font-size: 13px;
-  height: 28px;
-  line-height: 28px;
+  height: 40px;
+  line-height: 40px;
   padding-right: 20px;
   overflow: hidden;
   cursor: pointer;
@@ -107,4 +99,18 @@ ul::-webkit-scrollbar-track:hover {
 ul::-webkit-scrollbar-track {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+}
+
+.modal-footer {
+  padding: 15px 20px !important;
+}
+
+button {
+  width: 100px;
+  height: 46px;
+}
+
+
+.sure-btn {
+  margin-left: 150px;
 }

@@ -7,8 +7,6 @@ import {
 } from 'src/app/store-maintenance/order-management/order-management.service';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { differenceInCalendarDays } from 'date-fns';
-import { environment } from '../../../../environments/environment';
 import { SelectMultiBrandFirmComponent } from '../../../share/components/select-multi-brand-firm/select-multi-brand-firm.component';
 
 const PageSize = 15;
@@ -31,14 +29,8 @@ export class AccessoryListComponent implements OnInit {
   public workerList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
-  private searchBrandText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-  private startPayValue: Date | null = null; // 支付时间
-  private endPayValue: Date | null = null;
-  private startReserveValue: Date | null = null; // 预定时间
-  private endReserveValue: Date | null = null;
-  private searchUrl: string;
 
   private get pageCount(): number {
     if (this.orderList.length % PageSize === 0) {
@@ -67,139 +59,31 @@ export class AccessoryListComponent implements OnInit {
     this.searchText$.next();
   }
 
-  // 打开所属厂商选择组件
+  // 推荐设置打开所属厂商选择组件
   public onOpenBrandFirmModal(): void {
     this.selectMultiBrandFirmComponent.open();
   }
 
-  // 支付开始时间校验
-  public disabledStartPayDate = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.endPayValue) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endPayValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // 支付结束时间校验
-  public disabledEndPayDate = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
-      return true;
-    } else if (!endValue || !this.startPayValue) {
-      return false;
-    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startPayValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public onStartPayChange(date: Date): void {
-    this.startPayValue = date;
-  }
-
-  public onEndPayChange(date: Date): void {
-    this.endPayValue = date;
-  }
-
-  // 预定开始时间校验
-  public disabledStartReserveDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endReserveValue) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.endReserveValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // 预定结束时间校验
-  public disabledEndReserveDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startReserveValue) {
-      return false;
-    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.startReserveValue).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public onStartReserveChange(date: Date): void {
-    this.startReserveValue = date;
-  }
-
-  public onEndReserveChange(date: Date): void {
-    this.endReserveValue = date;
-  }
-
   // 查询按钮
   public onSearchBtnClick() {
-    this.searchParams.payer_phone = this.searchParams.payer_phone.trim();
-    this.searchParams.payer_name = this.searchParams.payer_name.trim();
-    this.searchParams.upkeep_merchant_name = this.searchParams.upkeep_merchant_name.trim();
-    this.searchParams.upkeep_order_id = this.searchParams.upkeep_order_id.trim();
-    if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else if (this.getTimeValid() === 'reserve_time') {
-      this.globalService.promptBox.open('预定开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else {
-      this.pageIndex = 1;
-      this.searchText$.next();
-    }
+    this.pageIndex = 1;
+    this.searchText$.next();
   }
 
-  // 导出订单管理列表
-  public onExportOrderList() {
-    if (this.getTimeValid() === 'pay_time') {
-      this.globalService.promptBox.open('支付开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else if (this.getTimeValid() === 'reserve_time') {
-      this.globalService.promptBox.open('预定开始时间不能大于结束时间!', null, 2000, '/assets/images/warning.png');
-    } else {
-      if (this.searchUrl) {
-        window.open(this.searchUrl);
-      } else {
-        return;
-      }
-    }
+  /** 删除配件 */
+  public onDeleteAccessory(data: UpkeepOrderEntity) {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+      this.globalService.confirmationBox.close();
+      // this.productService.requestDeleteProductData(data.product_id).subscribe(() => {
+      //   this.globalService.promptBox.open('删除成功', () => {
+      //     this.searchText$.next();
+      //   });
+      // },err => {
+      //   this.globalService.httpErrorProcess(err);
+      // });
+    });
   }
 
-  // 查询时间校验
-  private getTimeValid(): string {
-    this.searchParams.pay_time = (this.start_pay_time || this.end_pay_time)
-      ? this.getPaySectionTime(this.start_pay_time, this.end_pay_time) : '';
-    this.searchParams.reserve_time = this.getSectionTime(this.start_reserve_time, this.end_reserve_time);
-    const pay_time = this.searchParams.pay_time;
-    const reserve_time = this.searchParams.reserve_time;
-    if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
-      return 'pay_time';
-    } else if (reserve_time.split(',')[0] !== '0' && reserve_time.split(',')[0] > reserve_time.split(',')[1]) {
-      return 'reserve_time';
-    } else {
-      return '';
-    }
-  }
-
-  // 获取支付时间时间戳
-  public getPaySectionTime(start: any, end: any): string {
-    const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
-      new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
-    const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
-      new Date(end).getMinutes(), 59, 0) / 1000).toString() : 0;
-    return `${startTime},${endTime}`;
-  }
-
-  // 获取预定时间时间戳
-  public getSectionTime(start: any, end: any): string {
-    const startTime = start ? (new Date(start).setHours(new Date(start).getHours(),
-      new Date(start).getMinutes(), 0, 0) / 1000).toString() : 0;
-    const endTime = end ? (new Date(end).setHours(new Date(end).getHours(),
-      new Date(end).getMinutes(), 59, 0) / 1000).toString() : 253402185600;
-    return `${startTime},${endTime}`;
-  }
 
   // 分页
   public onNZPageIndexChange(pageIndex: number) {

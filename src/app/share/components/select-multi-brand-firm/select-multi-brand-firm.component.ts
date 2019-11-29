@@ -36,6 +36,8 @@ export class SelectMultiBrandFirmComponent implements OnInit {
 
   public mapOfBrand: { [key: string]: Array<VehicleBrandEntity> } = {}; // 字母对应品牌
 
+  public defaultSelectedKeys = ['8e568e2adb5511e9a5290242ac150003', '8e6ee9f2db5511e9a5290242ac150003'];
+
   private requestBrandSubscription: Subscription; // 获取品牌数据
 
   private requestFirmSubscription: Subscription; // 获取厂商数据

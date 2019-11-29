@@ -1,0 +1,123 @@
+.des_card {
+  height: auto;
+  padding: 20px 50px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+:host ::ng-deep .ant-form-item {
+  margin-bottom: 12px;
+}
+
+:host ::ng-deep .ant-form-item-label {
+  min-width: 90px;
+}
+
+.sure-btn {
+  margin: 0 31px 0 88px;
+}
+
+.fee-name {
+  width: 310px;
+}
+
+.pro-input {
+  width: 453px;
+}
+
+.pro-name {
+  width: 453px;
+
+}
+
+.params {
+  width: 120px;
+}
+
+.price-input {
+  width: 100%;
+}
+
+.choose {
+  position: absolute;
+  left: 380px;
+  top: -7px;
+  display: inline-block;
+  width: 72px;
+  border-left: 1px solid #EEEFF5;
+  height: 30px;
+  text-align: center;
+  background: #fff;
+  line-height: 30px;
+}
+
+.unit {
+  position: absolute;
+  left: 105px;
+  top: -7px;
+  display: inline-block;
+  width: 34px;
+  border-left: 1px solid rgba(136, 136, 136, 0.3);
+  height: 30px;
+  text-align: center;
+  background: #fbfbfb;
+  line-height: 30px;
+}
+
+.params-box {
+  width: 900px;
+  padding-top: 12px;
+  background: rgba(247, 248, 250, 1);
+  border: 1px solid #e0dfdf;
+}
+
+.table-form {
+  width: 900px;
+}
+
+:host ::ng-deep .table-form .ant-table {
+  border: 1px solid #e0dfdf;
+  padding: 0 20px 10px;
+  background: rgba(247, 248, 250, 1);
+}
+
+:host ::ng-deep .table-form .ant-table-thead>tr>th {
+  width: 80px;
+  background: rgba(247, 248, 250, 1);
+  font-size: 12px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(35, 36, 47, 1);
+  border-bottom: none;
+}
+
+:host ::ng-deep .table-form .ant-table-tbody>tr>td {
+  background: rgba(247, 248, 250, 1);
+  border-bottom: 1px solid rgba(136, 136, 136, 1);
+
+}
+
+:host ::ng-deep .table-form .ant-table-tbody>tr:last-child>td {
+  border-bottom: none;
+}
+
+.volume {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(136, 136, 136, 1);
+}
+
+.del-btn {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(232, 32, 56, 1) !important;
+}
+
+.operation .add-btn {
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(62, 113, 247, 1) !important;
+}

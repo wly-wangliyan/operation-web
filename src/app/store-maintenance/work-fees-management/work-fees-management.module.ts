@@ -6,6 +6,8 @@ import { WorkFeesManagementRoutingModule } from './work-fees-management-routing.
 import { WorkFeesManagementComponent } from './work-fees-management.component';
 import { WorkFeesListComponent } from './work-fees-list/work-fees-list.component';
 import { WorkFeesManagementService } from './work-fees-management.service';
+import { WorkFeesEditComponent } from './work-fees-edit/work-fees-edit.component';
+import { ChooseProjectComponent } from './work-fees-edit/choose-project/choose-project.component';
 
 @NgModule({
   imports: [
@@ -16,6 +18,8 @@ import { WorkFeesManagementService } from './work-fees-management.service';
   declarations: [
     WorkFeesManagementComponent,
     WorkFeesListComponent,
+    WorkFeesEditComponent,
+    ChooseProjectComponent
   ],
   providers: [
     WorkFeesManagementService,

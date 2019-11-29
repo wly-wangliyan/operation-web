@@ -1,6 +1,6 @@
 .des_card {
   min-width: 1300px;
-  height: 381px;
+  height: 463px;
   padding: 30px;
   background: #fff;
 }
@@ -28,8 +28,8 @@
 }
 
 .info_title .order_info {
-  height: 200px;
-  line-height: 200px;
+  height: 280px;
+  line-height: 280px;
   border-top: 1px solid #e5e6eb;
 }
 
@@ -115,6 +115,22 @@
 
 :host ::ng-deep .ant-table {
   border-bottom: none !important;
+}
+
+.fir-title {
+  text-align: left !important;
+  text-indent: 10px;
+}
+
+:host ::ng-deep .ant-table-thead>tr>th {
+  color: rgba(35, 36, 47, 1);
+}
+
+.sec-title {
+  text-align: left !important;
+  background: #f0f0f1;
+  text-indent: 10px;
+  color: rgba(35, 36, 47, 1);
 }
 
 @media screen and (max-width: 1444px) {

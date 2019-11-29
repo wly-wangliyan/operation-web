@@ -48,11 +48,18 @@ input[type=file] {
   z-index: -1;
 }
 
-input[type=file] + label {
+input[type=file]+label {
   width: 100%;
   height: 100%;
-  background: url('../../../../assets/images/add_picture.png') no-repeat center;
   background-size: contain;
+}
+
+.default-pic {
+  background: url('../../../../assets/images/add_picture.png') no-repeat center;
+}
+
+.add-pic {
+  background: url('../../../../assets/images/addPic.png') no-repeat center;
 }
 
 .select-wrap {
@@ -115,7 +122,7 @@ input[type=file] + label {
 .dialog-left {
   position: absolute;
   top: 50%;
-  left: 40%!important;
+  left: 40% !important;
   pointer-events: unset;
 }
 
@@ -145,7 +152,8 @@ input[type=file] + label {
   margin: 0;
 }
 
-.lside-img-arrow, .rside-img-arrow {
+.lside-img-arrow,
+.rside-img-arrow {
   width: 42px;
   height: 72px;
   position: absolute;
@@ -175,13 +183,13 @@ input[type=file] + label {
   overflow: hidden;
 }
 
-.img-list ul > li {
+.img-list ul>li {
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-.img-list ul > li > div {
+.img-list ul>li>div {
   width: 100%;
   height: 100%;
   text-align: center;
@@ -191,13 +199,13 @@ input[type=file] + label {
   justify-content: center;
 }
 
-.img-list ul > li > div > img {
+.img-list ul>li>div>img {
   max-width: 100%;
   max-height: 100%;
   user-select: none;
 }
 
-.img-list ul > li > div > a {
+.img-list ul>li>div>a {
   width: 64px;
   height: 32px;
   line-height: 32px;
@@ -229,7 +237,7 @@ input[type=file] + label {
 }
 
 /* 进度条 */
-.photo-select-wrap > div > div.progress-bg {
+.photo-select-wrap>div>div.progress-bg {
   margin: 0;
   background: rgba(0, 0, 0, .5);
   position: absolute;

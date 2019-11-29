@@ -5,6 +5,7 @@ import { BrandManagementRoutingModule } from './brand-management-routing.module'
 import { BrandManagementComponent } from './brand-management.component';
 import { BrandListComponent } from './brand-list/brand-list.component';
 import { BrandManagementHttpService } from './brand-management-http.service';
+import { BrandEditComponent } from './brand-list/brand-edit/brand-edit.component';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { BrandManagementHttpService } from './brand-management-http.service';
     declarations: [
         BrandManagementComponent,
         BrandListComponent,
+        BrandEditComponent,
     ],
     providers: [
         BrandManagementHttpService,
