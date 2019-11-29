@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'订单管理'"></app-crumb>
+  <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
 </div>
 <div class="content-flow">
 
@@ -110,8 +110,8 @@
                 <span *ngIf="!order.created_time && !order.pay_time">--</span>
               </div>
             </td>
-            <td>{{order.status | orderStatus}}</td>
-            <td>{{order.processing_flow | orderUseStatus}}</td>
+            <td>{{order.status | exemptionOrderStatus}}</td>
+            <td>{{order.processing_flow | exemptionFormat}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
             </td>

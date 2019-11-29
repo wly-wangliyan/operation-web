@@ -24,7 +24,7 @@ export class MenuExemptionService {
   // 服务配置
   private generateServiceConfigMenu() {
     const systemMenu = new SideMenuItem('服务配置', '/exemption/service-config');
-    systemMenu.icon = '/assets/images/menu_config.png';
+    systemMenu.icon = '/assets/images/menu/menu_other.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
@@ -32,7 +32,7 @@ export class MenuExemptionService {
   // 订单管理
   private generateOrderMenu() {
     const systemMenu = new SideMenuItem('订单管理', '/exemption/order-management');
-    systemMenu.icon = '/assets/images/menu_order.png';
+    systemMenu.icon = '/assets/images/menu/menu_order.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
