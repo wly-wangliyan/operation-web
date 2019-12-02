@@ -57,7 +57,7 @@ export class GoodsOrderEntity extends EntityBase {
   public pay_type = ''; // 	string	支付方式 微信 WX_XCX_SL
   public delivery_company = ''; // 	String	物流公司
   public delivery_order = ''; // 	String	物流单号
-  public total_refund_fee = undefined; // 	integer	退款总金额
+  public refund_total_fee = undefined; // 	integer	退款总金额
   public is_refundable = undefined; // boolean 是否可以退款 true 可以退款 false 不可以退款
   public refund_way = undefined; // number 1:原路返回
   public refund_order_id = undefined; // String 退款交易单号
