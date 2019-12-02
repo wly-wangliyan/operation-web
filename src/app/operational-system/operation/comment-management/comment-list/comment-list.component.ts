@@ -152,7 +152,9 @@ export class CommentListComponent implements OnInit {
     this.searchParams.section = (this.start_pay_time || this.end_pay_time)
       ? this.getSectionTime(this.start_pay_time, this.end_pay_time) : '';
     const pay_time = this.searchParams.section;
-    if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
+    const pay_start_time = pay_time.split(',')[0];
+    const pay_end_time = pay_time.split(',')[1];
+    if ((pay_start_time !== '0' && pay_end_time !== '0') && pay_start_time > pay_end_time) {
       return 'pay_time';
     } else {
       return '';
