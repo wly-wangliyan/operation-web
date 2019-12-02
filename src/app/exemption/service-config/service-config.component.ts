@@ -49,7 +49,7 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
   private rquestConfigDetail(): void {
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.requestSubscription = this.serviceConfigService.requestServiceConfigDetail(this.exemption_id).subscribe(res => {
-      this.configParams = res;
+      this.configParams = new ConfigEntity(res);
       this.getEditorData();
       this.loading = false;
     }, err => {
@@ -85,47 +85,15 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
 
   /**
    * 格式化金额
-   * @param event any
-   * @param type 1:原价 2:结算价 3:售价 4:邮费
    */
-  public onAmountChange(event: any, type: number): void {
-    // 原价
-    if (type === 1 && this.configParams.total_amount) {
-      if (isNaN(parseFloat(String(this.configParams.total_amount)))) {
-        this.configParams.total_amount = null;
+  public onAmountChange(event: any): void {
+    const target_value = event.target.value;
+    if (target_value) {
+      if (isNaN(parseFloat(String(target_value)))) {
+        event.target.value = null;
       } else {
-        const total_amount = parseFloat(String(this.configParams.total_amount)).toFixed(2);
-        this.configParams.total_amount = parseFloat(total_amount);
-      }
-    }
-
-    // 结算价
-    if (type === 2 && this.configParams.sale_amount) {
-      if (isNaN(parseFloat(String(this.configParams.sale_amount)))) {
-        this.configParams.sale_amount = null;
-      } else {
-        const sale_amount = parseFloat(String(this.configParams.sale_amount)).toFixed(2);
-        this.configParams.sale_amount = parseFloat(sale_amount);
-      }
-    }
-
-    // 售价
-    if (type === 3 && this.configParams.real_amount) {
-      if (isNaN(parseFloat(String(this.configParams.real_amount)))) {
-        this.configParams.real_amount = null;
-      } else {
-        const real_amount = parseFloat(String(this.configParams.real_amount)).toFixed(2);
-        this.configParams.real_amount = parseFloat(real_amount);
-      }
-    }
-
-    // 邮费
-    if (type === 4 && this.configParams.logistics_fee) {
-      if (isNaN(parseFloat(String(this.configParams.logistics_fee)))) {
-        this.configParams.logistics_fee = null;
-      } else {
-        const logistics_fee = parseFloat(String(this.configParams.logistics_fee)).toFixed(2);
-        this.configParams.logistics_fee = parseFloat(logistics_fee);
+        const tmpValue = parseFloat(String(target_value)).toFixed(2);
+        event.target.value = parseFloat(tmpValue);
       }
     }
   }

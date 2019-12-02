@@ -21,10 +21,10 @@ export class ConfigEntity extends EntityBase {
     super();
     if (source) {
       this.is_use = source.is_use;
-      this.total_amount = source.total_amount;
-      this.real_amount = source.real_amount;
-      this.sale_amount = source.real_amount;
-      this.logistics_fee = source.logistics_fee;
+      this.total_amount = source.total_amount ? (source.total_amount / 100) : source.total_amount;
+      this.real_amount = source.real_amount ? (source.real_amount / 100) : source.real_amount;
+      this.sale_amount = source.sale_amount ? (source.sale_amount / 100) : source.sale_amount;
+      this.logistics_fee = source.logistics_fee ? (source.logistics_fee / 100) : source.logistics_fee;
       this.sold = source.sold >= 0 ? source.sold : 0;
       this.content = source.content;
     }
@@ -32,6 +32,10 @@ export class ConfigEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
+    json.total_amount = json.total_amount * 100;
+    json.real_amount = json.real_amount * 100;
+    json.sale_amount = json.sale_amount * 100;
+    json.logistics_fee = json.logistics_fee * 100;
     delete json.sold;
     delete json.created_time;
     delete json.updated_time;
