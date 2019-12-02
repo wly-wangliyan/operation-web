@@ -57,6 +57,12 @@ export class GoodsOrderEntity extends EntityBase {
   public pay_type = ''; // 	string	支付方式 微信 WX_XCX_SL
   public delivery_company = ''; // 	String	物流公司
   public delivery_order = ''; // 	String	物流单号
+  public total_refund_fee = undefined; // 	integer	退款总金额
+  public is_refundable = undefined; // boolean 是否可以退款 true 可以退款 false 不可以退款
+  public refund_way = undefined; // number 1:原路返回
+  public refund_order_id = undefined; // String 退款交易单号
+  public order_remark = undefined; // String 订单备注
+  public refund_remark = undefined; // String 退款备注
   public order_time = undefined; // 	float	下单时间
   public pay_time = undefined; // 	float	支付时间
   public pay_expire_time = undefined; // 	float	支付到期时间
@@ -72,6 +78,10 @@ export class GoodsOrderEntity extends EntityBase {
     }
     return null;
   }
+}
+
+export class RefundOrderEntity extends EntityBase {
+  public refund_order_id = ''; // 	string	退款订单ID
 }
 
 export class OrderLinkResponse extends LinkResponse {
@@ -145,4 +155,46 @@ export class GoodsOrderManagementHttpService {
     const httpUrl = `${this.domain}/admin/orders/${order_id}/delivery`;
     return this.httpService.patch(httpUrl);
   }
+
+  /**
+   * 创建退款订单
+   * @param order_id 订单id
+   * @param refund_fee 退款金额
+   * @param refund_remark 备注
+   * @returns Observable<RefundOrderEntity>
+   */
+  public requestCreateRefundOrder(order_id: string, refund_fee: string, refund_remark: string): Observable<RefundOrderEntity> {
+    const httpUrl = `${this.domain}/admin/refund_orders`;
+    return this.httpService.post(httpUrl, {
+      order_id,
+      refund_fee: Number(refund_fee) * 100,
+      refund_remark,
+    }).pipe(map(res => RefundOrderEntity.Create(res.body)));
+  }
+
+  /**
+   * 退款订单退款
+   * @param refund_order_id 退款订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestRefundOrder(refund_order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/refund_orders/${refund_order_id}/pay/refund`;
+    return this.httpService.post(httpUrl);
+  }
+
+  /**
+   * 修改备注信息
+   * @param order_id 订单id
+   * @param order_desc 订单备注
+   * @param refund_desc 退款备注
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestModifyOrderDesc(order_id: string, order_desc: string, refund_desc: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/orders/${order_id}/remark`;
+    return this.httpService.patch(httpUrl, {
+      order_desc,
+      refund_desc
+    });
+  }
+
 }
