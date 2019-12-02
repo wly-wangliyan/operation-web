@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
-import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import {
   GoodsOrderEntity,
   GoodsOrderManagementHttpService,
@@ -66,6 +65,7 @@ export class GoodsOrderRemarkComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.currentOrder = JSON.parse(JSON.stringify(orderInfo));
+    this.remark = this.title === '订单备注' ? this.currentOrder.order_remark : this.currentOrder.refund_remark;
     openProjectModal();
     return;
   }
@@ -77,8 +77,10 @@ export class GoodsOrderRemarkComponent implements OnInit {
 
   // form提交
   public onEditFormSubmit() {
-    // 修改邮费信息
-    this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
+    const order_desc = this.title === '订单备注' ? this.remark : this.currentOrder.order_remark;
+    const refund_desc = this.title === '退款备注' ? this.remark : this.currentOrder.refund_remark;
+    // 修改备注信息
+    this.orderHttpService.requestModifyOrderDesc(this.order_id, order_desc, refund_desc).subscribe(() => {
       this.onClose();
       this.globalService.promptBox.open('保存成功！', () => {
         this.sureCallbackInfo();
@@ -104,12 +106,15 @@ export class GoodsOrderRemarkComponent implements OnInit {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-
         for (const content of error.errors) {
-          if (content.field === 'version' && content.code === 'invalid') {
+          const field = content.field === 'refund_remark' ? '订单备注' : content.field === 'refund_desc' ? '退款备注' : '';
+          if (content.code === 'missing_field') {
+            this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
-          } else if (content.field === 'version' && content.code === 'version exists') {
-            return;
+          } else if (content.code === 'invalid') {
+            this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+          } else {
+            this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
           }
         }
       }

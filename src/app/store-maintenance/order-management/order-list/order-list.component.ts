@@ -177,9 +177,13 @@ export class OrderListComponent implements OnInit {
     this.searchParams.reserve_time = this.getSectionTime(this.start_reserve_time, this.end_reserve_time);
     const pay_time = this.searchParams.pay_time;
     const reserve_time = this.searchParams.reserve_time;
-    if ((pay_time.split(',')[0] !== '0' && pay_time.split(',')[1] !== '0') && pay_time.split(',')[0] > pay_time.split(',')[1]) {
+    const pay_start_time = pay_time.split(',')[0];
+    const pay_end_time = pay_time.split(',')[1];
+    const reserve_start_time = reserve_time.split(',')[0];
+    const reserve_end_time = reserve_time.split(',')[1];
+    if ((pay_start_time !== '0' && pay_end_time !== '0') && pay_start_time > pay_end_time) {
       return 'pay_time';
-    } else if (reserve_time.split(',')[0] !== '0' && reserve_time.split(',')[0] > reserve_time.split(',')[1]) {
+    } else if (reserve_start_time !== '0' && reserve_start_time > reserve_end_time) {
       return 'reserve_time';
     } else {
       return '';

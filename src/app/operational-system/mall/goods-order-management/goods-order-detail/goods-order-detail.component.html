@@ -56,15 +56,15 @@
         <tr>
           <td>退款金额：</td>
           <td>
-            {{(orderDetail.real_price||orderDetail.real_price===0) ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}
+            {{(orderDetail.total_refund_fee||orderDetail.total_refund_fee===0) ? ('￥ ' + (orderDetail.total_refund_fee | centPriceChange)) : '--'}}
           </td>
           <td>退款方式：</td>
           <td>
-            {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
+            {{orderDetail.refund_way===1 ? '原路退回' : '--'}}
           </td>
           <td>退款交易单号：</td>
           <td>
-            {{(orderDetail.postage||orderDetail.postage===0) ? ('￥ ' + (orderDetail.postage | centPriceChange)) : '--'}}
+            {{orderDetail.refund_order_id || '--'}}
           </td>
         </tr>
         <tr>
@@ -114,16 +114,16 @@
         <tr>
           <td>订单备注：</td>
           <td class="remark_td">
-            <span class="remark_info">
-              {{orderDetail.delivery_region||orderDetail.delivery_address ? orderDetail.delivery_region+orderDetail.delivery_address : '--'}}
+            <span class="remark_info" [title]='orderDetail.order_remark'>
+              {{(orderDetail.order_remark| zMaxLength:30) || '--'}}
             </span>
             <button class='goods-btn' nz-button nzType="primary"
               (click)="onUpdateRemarkClick('订单备注',orderDetail)">订单备注</button>
           </td>
           <td>退款备注：</td>
           <td class="remark_td">
-            <span class="remark_info">
-              {{orderDetail.delivery_region||orderDetail.delivery_address ? ((orderDetail.delivery_region+orderDetail.delivery_address)| zMaxLength:30): '--'}}
+            <span class="remark_info" [title]='orderDetail.refund_remark'>
+              {{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}
             </span>
             <button class='goods-btn' nz-button nzType="primary"
               (click)="onUpdateRemarkClick('退款备注',orderDetail)">退款备注</button>

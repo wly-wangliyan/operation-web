@@ -122,6 +122,7 @@
 
 .remark_td {
   min-width: 240px;
+  max-width: 300px;
   line-height: 40px;
 }
 

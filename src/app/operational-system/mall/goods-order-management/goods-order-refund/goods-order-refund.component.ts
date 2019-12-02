@@ -87,19 +87,27 @@ export class GoodsOrderRefundComponent implements OnInit {
       this.isShowErrMes = false;
       this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认退款？', () => {
         this.globalService.confirmationBox.close();
-        // 修改邮费信息
-        this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
-          this.onClose();
-          this.globalService.promptBox.open('保存成功！', () => {
-            this.sureCallbackInfo();
-            this.currentOrder = new GoodsOrderEntity();
-          });
+        // 创建退款订单
+        this.orderHttpService.requestCreateRefundOrder(this.order_id, this.refund_price, this.remark).subscribe(res => {
+          this.requestRefundOrder(res.refund_order_id);
         }, err => {
           this.errorProcess(err);
         });
       });
 
     }
+  }
+
+  private requestRefundOrder(refund_order_id) {
+    this.orderHttpService.requestRefundOrder(refund_order_id).subscribe(() => {
+      this.onClose();
+      this.globalService.promptBox.open('保存成功！', () => {
+        this.sureCallbackInfo();
+        this.currentOrder = new GoodsOrderEntity();
+      });
+    }, err => {
+      this.globalService.promptBox.open('退款失败,请重试!', null, 2000, '/assets/images/warning.png');
+    });
   }
 
   // 确定按钮回调
@@ -117,12 +125,18 @@ export class GoodsOrderRefundComponent implements OnInit {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-
         for (const content of error.errors) {
-          if (content.field === 'version' && content.code === 'invalid') {
+          const field = content.field === 'order_id' ? '订单id' : content.field === 'refund_fee' ? '退款金额' :
+            content.field === 'refund_fee' ? '备注' : '';
+          if (content.code === 'missing_field') {
+            this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
-          } else if (content.field === 'version' && content.code === 'version exists') {
-            return;
+          } else if (content.code === 'invalid') {
+            this.globalService.promptBox.open(`${field}输入错误`, null, 2000, '/assets/images/warning.png');
+          } else if (content.resource === 'order' && content.code === 'not_allow') {
+            this.globalService.promptBox.open(`该订单不允许退款！`, null, 2000, '/assets/images/warning.png');
+          } else {
+            this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
           }
         }
       }
