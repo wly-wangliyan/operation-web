@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
   </app-crumb>
-  <ul class="header-right">
+  <ul class="header-right" *ngIf='orderDetail.is_refundable'>
     <li class="big-bg">
       <a (click)="onEditRefundClick(orderDetail)">退款</a>
     </li>
