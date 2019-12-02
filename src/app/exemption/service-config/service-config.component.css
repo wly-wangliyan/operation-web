@@ -93,8 +93,8 @@
 }
 
 .small-group {
-  width: 240px !important;
-  padding: 0 20px;
+  width: 195px !important;
+  padding: 0 10px;
 }
 
 .form-control:not(:disabled) {

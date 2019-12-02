@@ -19,8 +19,6 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
 
   public configErrMsg = ''; // 错误信息
 
-  private tmpConfigRecord: ConfigEntity; // 用于缓存编辑前的数据
-
   private exemption_id = 'c0299b0b5fcc94d9051960f567c579a1'; // 配置id
 
   private requestSubscription: Subscription;
@@ -49,20 +47,13 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
 
   // 获取服务配置详情
   private rquestConfigDetail(): void {
-    if (this.tmpConfigRecord) {
-      this.configParams = new ConfigEntity(this.tmpConfigRecord);
-      this.getEditorData();
-      return;
-    }
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.requestSubscription = this.serviceConfigService.requestServiceConfigDetail(this.exemption_id).subscribe(res => {
       this.configParams = res;
-      this.tmpConfigRecord = new ConfigEntity(res);
       this.getEditorData();
       this.loading = false;
     }, err => {
       this.loading = false;
-      this.tmpConfigRecord = null;
       this.getEditorData();
       this.globalService.httpErrorProcess(err);
     });
@@ -92,10 +83,14 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
     return (keyCode && reg.test(keyCode));
   }
 
-  // 格式化金额
-  public onAmountChange(event: any): void {
+  /**
+   * 格式化金额
+   * @param event any
+   * @param type 1:原价 2:结算价 3:售价 4:邮费
+   */
+  public onAmountChange(event: any, type: number): void {
     // 原价
-    if (this.configParams.total_amount) {
+    if (type === 1 && this.configParams.total_amount) {
       if (isNaN(parseFloat(String(this.configParams.total_amount)))) {
         this.configParams.total_amount = null;
       } else {
@@ -105,7 +100,7 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
     }
 
     // 结算价
-    if (this.configParams.sale_amount) {
+    if (type === 2 && this.configParams.sale_amount) {
       if (isNaN(parseFloat(String(this.configParams.sale_amount)))) {
         this.configParams.sale_amount = null;
       } else {
@@ -115,12 +110,22 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
     }
 
     // 售价
-    if (this.configParams.real_amount) {
+    if (type === 3 && this.configParams.real_amount) {
       if (isNaN(parseFloat(String(this.configParams.real_amount)))) {
         this.configParams.real_amount = null;
       } else {
         const real_amount = parseFloat(String(this.configParams.real_amount)).toFixed(2);
         this.configParams.real_amount = parseFloat(real_amount);
+      }
+    }
+
+    // 邮费
+    if (type === 4 && this.configParams.logistics_fee) {
+      if (isNaN(parseFloat(String(this.configParams.logistics_fee)))) {
+        this.configParams.logistics_fee = null;
+      } else {
+        const logistics_fee = parseFloat(String(this.configParams.logistics_fee)).toFixed(2);
+        this.configParams.logistics_fee = parseFloat(logistics_fee);
       }
     }
   }
@@ -173,6 +178,11 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
 
     if (Number(this.configParams.real_amount) < Number(this.configParams.sale_amount)) {
       this.configErrMsg = '结算价应小于等于售价！';
+      return false;
+    }
+
+    if (!this.configParams.logistics_fee || Number(this.configParams.logistics_fee) === 0) {
+      this.configErrMsg = '邮费应大于0！';
       return false;
     }
 

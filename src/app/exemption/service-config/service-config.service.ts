@@ -8,9 +8,10 @@ import { HttpResponse } from '@angular/common/http';
 
 export class ConfigEntity extends EntityBase {
   public is_use = false; // 服务状态
-  public total_amount: number = undefined; // 原价 单位:元
-  public real_amount: number = undefined; // 售价 单位:元
-  public sale_amount: number = undefined; // 结算价
+  public total_amount: number = undefined; // 原价 单位:分
+  public real_amount: number = undefined; // 售价 单位:分
+  public sale_amount: number = undefined; // 结算价 单位:分
+  public logistics_fee: number = undefined; // 邮费 单位:分
   public sold = 0; // 已售
   public content = ''; // 图文详情
   public created_time: number = undefined;
@@ -23,6 +24,7 @@ export class ConfigEntity extends EntityBase {
       this.total_amount = source.total_amount;
       this.real_amount = source.real_amount;
       this.sale_amount = source.real_amount;
+      this.logistics_fee = source.logistics_fee;
       this.sold = source.sold >= 0 ? source.sold : 0;
       this.content = source.content;
     }
