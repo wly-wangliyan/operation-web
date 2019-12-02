@@ -248,7 +248,7 @@ export class OrderDetailComponent implements OnInit {
 
   // 确认发货
   public onSendGoodsClick(): void {
-    if (Number(this.logistics_fee === 0)) {
+    if (Number(this.logistics_fee) === 0) {
       this.globalService.promptBox.open('邮费应大于0！', null, 2000, null, false);
       return;
     }
@@ -274,7 +274,7 @@ export class OrderDetailComponent implements OnInit {
 
   // 确认退款
   public onRefundClick(): void {
-    if (Number(this.refund_fee === 0)) {
+    if (Number(this.refund_fee) === 0) {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
