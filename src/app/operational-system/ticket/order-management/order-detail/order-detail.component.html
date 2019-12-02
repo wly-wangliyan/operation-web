@@ -18,25 +18,25 @@
         <tr>
           <td>应收：</td>
           <td>
-            {{(orderDetail.total_price||orderDetail.total_price===0) ? ('￥ ' + (orderDetail.total_price | centPriceChange)) : '--'}}
+            {{orderDetail.total_price | centPriceChange:'￥'}}
           </td>
           <td>平台立减：</td>
           <td>
-            {{(orderDetail.discount_price||orderDetail.discount_price===0) ? ('￥ ' + (orderDetail.discount_price | centPriceChange)) : '--'}}
+            {{orderDetail.discount_price | centPriceChange:'￥'}}
           </td>
           <td>优惠券：</td>
           <td>
-            {{(orderDetail.coupon_used_amount||orderDetail.coupon_used_amount===0) ? ('￥ ' + (orderDetail.coupon_used_amount | centPriceChange)) : '--'}}
+            {{orderDetail.coupon_used_amount | centPriceChange:'￥'}}
           </td>
         </tr>
         <tr>
           <td>实收：</td>
           <td>
-            {{(orderDetail.real_price||orderDetail.real_price===0) ? ('￥ ' + (orderDetail.real_price | centPriceChange)) : '--'}}
+            {{orderDetail.real_price | centPriceChange:'￥'}}
           </td>
           <td>结算总价：</td>
           <td>
-            {{(orderDetail.buy_price||orderDetail.buy_price===0) ? ('￥ ' + ((orderDetail.buy_num*orderDetail.buy_price) | centPriceChange)) : '--'}}
+            {{(orderDetail.buy_num*orderDetail.buy_price) | centPriceChange:'￥'}}
           </td>
           <td></td>
           <td></td>
@@ -101,16 +101,16 @@
               <span *ngIf="!orderDetail.order_begin_time && !orderDetail.order_end_time">--</span>
             </td>
             <td>
-              {{(orderDetail.market_price||orderDetail.market_price===0) ? ((orderDetail.market_price | centPriceChange)+' 元') : '--'}}
+              {{orderDetail.market_price | centPriceChange:'元'}}
             </td>
             <td>
-              {{(orderDetail.retail_price||orderDetail.retail_price===0) ? ((orderDetail.retail_price | centPriceChange)+' 元') : '--'}}
+              {{orderDetail.retail_price | centPriceChange:'元'}}
             </td>
             <td>
-              {{(orderDetail.buy_price||orderDetail.buy_price===0) ? ((orderDetail.buy_price | centPriceChange)+' 元') : '--'}}
+              {{orderDetail.buy_price | centPriceChange:'元'}}
             </td>
             <td>
-              {{(orderDetail.platform_price||orderDetail.platform_price===0) ? ((orderDetail.platform_price | centPriceChange)+' 元') : '--'}}
+              {{orderDetail.platform_price | centPriceChange:'元'}}
             </td>
 
             <td>甜程网</td>

@@ -107,9 +107,7 @@
                     {{commodity.commodity_name | zMaxLength:10}}</a>
                   <span [title]="commodity.specification_name">
                     {{commodity.specification_name | zMaxLength:10}}</span>
-                  <span>
-                    {{commodity.unit_sell_price?(commodity.unit_sell_price | centPriceChange)+'元':''}}
-                  </span>
+                  <span>{{commodity.unit_sell_price | centPriceChange:'元'}}</span>
                 </div>
               </td>
             </ng-container>
@@ -120,15 +118,15 @@
             </ng-container>
             <td>{{order.detail&&order.detail[0].amount?order.detail[0].amount:0}}</td>
             <td>
-              {{(order.total_amount||order.total_amount===0) ? ('￥ ' + (order.total_amount | centPriceChange)) : '--'}}
+              {{order.total_amount | centPriceChange:'￥'}}
             </td>
             <td>
-              {{(order.discount_price	||order.discount_price===0) ? ('￥ ' + (order.discount_price | centPriceChange)) : '--'}}
+              {{order.discount_price | centPriceChange:'￥'}}
             </td>
             <td>
-              {{(order.platform_coupon_amount||order.platform_coupon_amount===0) ? ('￥ ' + (order.platform_coupon_amount | centPriceChange)) : '--'}}
+              {{order.platform_coupon_amount | centPriceChange:'￥'}}
             </td>
-            <td>{{(order.real_price||order.real_price===0) ? ('￥ ' + (order.real_price | centPriceChange)) : '--'}}</td>
+            <td>{{order.real_price | centPriceChange:'￥'}}</td>
             <td>
               <span [title]="order.contact">{{order.contact||order.mobile ? (order.contact|zMaxLength:6) : '--'}}</span>
               <br *ngIf="order.contact" />
