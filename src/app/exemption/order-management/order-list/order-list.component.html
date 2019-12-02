@@ -16,6 +16,7 @@
             <option value="3">已退款</option>
             <option value="4">已完成</option>
             <option value="5">已取消</option>
+            <option value="6">退款中</option>
           </select>
         </div>
 
@@ -45,8 +46,9 @@
         </div>
         <div class="form-group">
           <span>订单编号：</span>
-          <input name="order_num" class="form-control" placeholder="请输入订单编号" maxlength="32"
-            [(ngModel)]="searchParams.order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
+          <input name="exemption_order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
+            [(ngModel)]="searchParams.exemption_order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
+            appIgnoreSpace />
         </div>
         <div class="form-group">
           <span>下单时间：</span>
@@ -91,16 +93,45 @@
         <tbody>
           <tr *ngFor="let order of ticketOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]="order.order_id">{{order.order_id | zMaxLength:10}}</td>
-            <td>{{order.car_id}}</td>
-            <td>{{order.name}}</td>
-            <td>{{order.address}}</td>
-            <td>这里是上传资料</td>
+
+            <td [title]="order.order_id?order.order_id:''">
+              <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
+                {{order.order_id|zMaxLength:10}}
+              </span>
+              <span *ngIf="!order.order_id">--</span>
+            </td>
+
+            <td>
+              <div class="column-box">
+                <span *ngIf="order.car_type" class="car-type">{{order.car_type === 1 ? '小型车':'其他'}}</span>
+                <span>{{order.car_id}}</span>
+              </div>
+            </td>
+            <td>
+              <div class="column-box">
+                <span>{{order.name | zMaxLength:6}}</span>
+                <span>{{order.phone}}</span>
+              </div>
+            </td>
+            <td [title]="order.address?order.address:''">{{order.address?(order.address | zMaxLength:8):'--'}}</td>
+            <td>
+              <div class="material-container">
+                <img *ngIf="order.driving_license_front" [src]="order.driving_license_front"
+                  (click)="onOpenZoomPictureModal(order,order.driving_license_front)" />
+                <img *ngIf="order.driving_license_side" [src]="order.driving_license_side"
+                  (click)="onOpenZoomPictureModal(order,order.driving_license_side)" />
+                <img *ngIf="order.insurance_policy" [src]="order.insurance_policy"
+                  (click)="onOpenZoomPictureModal(order,order.insurance_policy)" />
+                <img *ngIf="order.payment_certificate" [src]="order.payment_certificate"
+                  (click)="onOpenZoomPictureModal(order,order.payment_certificate)" />
+              </div>
+            </td>
+
             <td>
               {{(order.real_amount||order.real_amount===0) ? ('￥ ' + (order.real_amount | centPriceChange)) : '--'}}
             </td>
             <td>
-              <div class="td-time">
+              <div class="column-box">
                 <span *ngIf="order.created_time">
                   {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm")):''}}
                 </span>
@@ -121,3 +152,6 @@
     </div>
   </div>
 </div>
+
+<!-- 图片放大 -->
+<app-z-photo-select [imageUrls]="imageUrls"></app-z-photo-select>

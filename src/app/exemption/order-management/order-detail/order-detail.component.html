@@ -33,7 +33,9 @@
           <td rowspan="2" class="row-title">车主信息</td>
 
           <td>车牌号：</td>
-          <td>{{orderRecord.car_id ? orderRecord.car_id : '--'}}</td>
+          <td>{{orderRecord.car_id ? orderRecord.car_id : '--'}}
+            <span *ngIf="orderRecord.car_type" class="car-type">{{orderRecord.car_type === 1 ? '小型车':'其他'}}</span>
+          </td>
 
           <td>订单状态：</td>
           <td style="color: #E82038;">{{orderRecord.status | exemptionOrderStatus}}</td>
@@ -43,9 +45,9 @@
             <span>{{orderRecord.processing_flow | exemptionFormat}}</span>
             <ng-container *ngIf="orderRecord.processing_flow===5">
               <span *ngIf="orderRecord.reject_type!==5">
-                {{orderRecord.reject_type | rejectType}}</span>
+                {{'，原因：'+(orderRecord.reject_type | rejectType)}}</span>
               <span *ngIf="orderRecord.reject_type===5">
-                {{orderRecord.reject_notice}}</span>
+                {{'，原因：'+ orderRecord.reject_notice}}</span>
             </ng-container>
           </td>
         </tr>
@@ -64,7 +66,8 @@
 
           <td>应付：</td>
           <td>
-            {{(orderRecord.total_amount||orderRecord.total_amount===0) ? ('￥ ' + (orderRecord.total_amount | centPriceChange)) : '--'}}
+            <span>服务费：</span>{{(orderRecord.total_amount||orderRecord.total_amount===0) ? ('￥ ' + (orderRecord.total_amount | centPriceChange)) : '--'}}
+            <span>，邮费：</span>{{(orderRecord.logistics_fee_user||orderRecord.logistics_fee_user===0) ? ('￥ ' + (orderRecord.logistics_fee_user | centPriceChange)) : '--'}}
           </td>
 
           <td>平台立减：</td>
@@ -84,7 +87,7 @@
           <td>物流单号：</td>
           <td>{{orderRecord.logistics_order_id ? orderRecord.logistics_order_id : '--'}}</td>
 
-          <td>邮费：</td>
+          <td>发件邮费：</td>
           <td>
             {{(orderRecord.logistics_fee||orderRecord.logistics_fee===0) ? ('￥ ' + (orderRecord.logistics_fee | centPriceChange)) : '--'}}
           </td>
@@ -182,7 +185,7 @@
           </td>
 
           <td>退款方式：</td>
-          <td>{{orderRecord.refund_type ===1 ? '微信' : '--'}}</td>
+          <td>{{(orderRecord.status===3 || orderRecord.status===6) && orderRecord.refund_type ===1 ? '微信' : '--'}}</td>
 
           <td>退款交易单号：</td>
           <td>{{orderRecord.refund_order_id ? orderRecord.refund_order_id : '--'}}</td>
@@ -224,3 +227,171 @@
 
 <!-- 图片放大 -->
 <app-z-photo-select [imageUrls]="imageUrls"></app-z-photo-select>
+
+<!-- 发货(物流设置)模态框 -->
+<div class="modal fade " id="logisticsModal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">物流设置</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #logisticsForm="ngForm">
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>物流公司：</span>
+            </label>
+            <div class="control-input">
+              <input name="logistics_company" placeholder="请输入1-10字物流公司名称" [(ngModel)]="editParams.logistics_company"
+                maxlength="10" class="form-control" required appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>物流单号：</span>
+            </label>
+            <div class="control-input">
+              <input name="logistics_order_id" placeholder="请输入物流单号" [(ngModel)]="editParams.logistics_order_id"
+                maxlength="50" class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9-]/g,'')" required
+                appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>发件邮费：</span>
+            </label>
+            <div class="control-input">
+              <input name="logistics_fee" placeholder="请输入发件邮费金额" [(ngModel)]="logistics_fee" maxlength="8"
+                class="form-control" (keypress)="inputNumberLimit($event)" (change)="onAmountChange($event)" required
+                appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!logisticsForm.form.valid"
+              (appZDebounceClick)="onSendGoodsClick()">确认发货
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 驳回模态框 -->
+<div class="modal fade " id="rejectModal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">驳回</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #rejectForm="ngForm">
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>驳回原因：</span>
+            </label>
+            <div class="control-input">
+              <select name="reject_type" class="form-control" [(ngModel)]="editParams.reject_type"
+                (change)="onChangeRejectType($event)" required>
+                <option value="">请选择</option>
+                <option value="2">提交材料不清晰</option>
+                <option value="3">存在未处理违章</option>
+                <option value="4">与车主协商一致</option>
+                <option value="5">其他</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="editParams.reject_type===5">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span></span>
+            </label>
+            <div class="control-input">
+              <input name="reject_notice_modal" placeholder="输入1-20字驳回原因" [(ngModel)]="editParams.reject_notice"
+                maxlength="20" class="form-control" required appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>备注：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="reject_remarks_modal" class="form-control" [(ngModel)]="editParams.reject_remarks"
+                maxlength="100" placeholder="输入0-100字备注">
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!rejectForm.form.valid"
+              (appZDebounceClick)="onRejectClick()">确认驳回
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 退款模态框 -->
+<div class="modal fade " id="refundModal" data-backdrop="false" data-keyboard="true" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">退款</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>退款金额：</span>
+            </label>
+            <div class="control-input">
+              <input name="refund_fee" placeholder="请输入退款金额" [(ngModel)]="refund_fee" maxlength="8" class="form-control"
+                (keypress)="inputNumberLimit($event)" (change)="onAmountChange($event)" required appIgnoreSpace>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>备注：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="refund_remarks_modal" class="form-control" [(ngModel)]="editParams.refund_remarks"
+                maxlength="100" placeholder="输入0-100字备注">
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
+              (appZDebounceClick)="onRefundClick()">确认退款
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

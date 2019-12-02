@@ -82,6 +82,17 @@
   text-align: center !important;
 }
 
+.car-type {
+  display: inline-block;
+  color: #409DFD;
+  font-size: 12px;
+  width: 45px;
+  height: 18px;
+  background: #C6E2FF;
+  border-radius: 4px;
+  text-align: center;
+}
+
 .material-container {
   display: inline-flex;
   flex-wrap: wrap;
@@ -129,7 +140,7 @@
   white-space: pre-line;
 }
 
-.form-control {
+.remark-box .form-control {
   font-size: 12px;
 }
 

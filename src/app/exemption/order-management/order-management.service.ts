@@ -11,7 +11,7 @@ export class OrderSearchParams extends EntityBase {
   public processing_flow: number = undefined; // 办理流程
   public phone: string = undefined; // 车主信息：手机号
   public name: string = undefined; // 车主信息：购买人
-  public order_id: string = undefined; // 订单id
+  public exemption_order_id: string = undefined; // 订单id
   public order_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
   public page_num = 1; // 页码
@@ -22,6 +22,7 @@ export class OrderSearchParams extends EntityBase {
 export class ExemptionOrderEntity extends EntityBase {
   public order_id: string = undefined; // 订单id
   public car_id: string = undefined; // 车主信息：车牌号
+  public car_type: number = undefined; // 车辆类型 1：小型车
   public name: string = undefined; // 车主信息：购买人
   public phone: string = undefined; // 车主信息：手机号
   public address: string = undefined; // 车主信息：收货地址
@@ -43,6 +44,7 @@ export class ExemptionOrderEntity extends EntityBase {
   public logistics_order_id: number = undefined; // 物流单号
   public logistics_company: string = undefined; // 物流公司
   public logistics_fee: number = undefined; // 邮费 单位：分
+  public logistics_fee_user: number = undefined; // 用户实付邮费 单位：分
   public refund_fee: number = undefined; // 退款金额（不能大于实付金额） 单位：分
   public refund_type: number = undefined; // 退款方式(1,'微信')
   public refund_order_id: string = undefined; // 退款交易号
@@ -60,7 +62,7 @@ export class EditParams extends EntityBase {
   public logistics_company: string = undefined; // 物流公司
   public logistics_fee: number = undefined; // 邮费 单位：分
   // 驳回参数
-  public reject_type: number = undefined; // 驳回原因 (1,'没有驳回'),(2,'提交材料不清晰'),(3,'存在未处理违章'),(4,'与车主协商一致'),(5,'其他')
+  public reject_type: any = ''; // 驳回原因 (1,'没有驳回'),(2,'提交材料不清晰'),(3,'存在未处理违章'),(4,'与车主协商一致'),(5,'其他')
   public reject_notice: string = undefined; // 当reject_type为5时显示的驳回原因
   public reject_remarks: string = undefined; // 驳回备注
   // 退款参数

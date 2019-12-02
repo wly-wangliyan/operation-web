@@ -21,6 +21,10 @@ export class OrderDetailComponent implements OnInit {
 
   private tipMsgList = ['', '保存成功', '提交办理完成', '制贴完成', '发货成功', '驳回成功', '退款成功', '确认收货成功'];
 
+  public logistics_fee: number; // 邮费
+
+  public refund_fee: number; // 退款金额
+
   public loading = true;
 
   public imageUrls = [];
@@ -108,6 +112,7 @@ export class OrderDetailComponent implements OnInit {
     } else if (type === 6) {
       this.isEditRefundRemark = false;
     }
+    this.searchText$.next();
   }
 
   // 格式化放大图片集合
@@ -146,11 +151,22 @@ export class OrderDetailComponent implements OnInit {
         this.requestChangeProcessFlow(process_flow);
       }, '制贴完成');
     } else if (process_flow === 4) {
-
+      this.editParams = new EditParams();
+      this.logistics_fee = null;
+      $('#logisticsModal').modal('show');
     } else if (process_flow === 5) {
-
+      this.editParams = new EditParams();
+      if (this.orderRecord.reject_remarks) {
+        this.editParams.reject_remarks = this.orderRecord.reject_remarks;
+      }
+      $('#rejectModal').modal('show');
     } else if (process_flow === 6) {
-
+      this.editParams = new EditParams();
+      this.refund_fee = null;
+      if (this.orderRecord.refund_remarks) {
+        this.editParams.refund_remarks = this.orderRecord.refund_remarks;
+      }
+      $('#refundModal').modal('show');
     } else if (process_flow === 7) {
       this.globalService.confirmationBox.open('提示', '确认收货后无法撤销，确认此操作吗？', () => {
         this.globalService.confirmationBox.close();
@@ -187,6 +203,7 @@ export class OrderDetailComponent implements OnInit {
       tipMsg = this.tipMsgList[type];
     }
     this.orderService.requestUpdateOrderDetailData(this.editParams, this.order_id).subscribe(() => {
+      this.closeModal(type);
       this.globalService.promptBox.open(tipMsg);
       this.onCancleClick(type);
       this.searchText$.next();
@@ -206,6 +223,91 @@ export class OrderDetailComponent implements OnInit {
         }
       }
     });
+  }
+
+  // 限制input[type='number']输入e
+  public inputNumberLimit(event: any): boolean {
+    const reg = /^\d*?\.?\d*?$/;
+    const keyCode = String.fromCharCode(event.keyCode);
+    return (keyCode && reg.test(keyCode));
+  }
+
+  // 格式化金额
+  public onAmountChange(event: any): void {
+    // 邮费
+    if (this.logistics_fee) {
+      if (isNaN(parseFloat(String(this.logistics_fee)))) {
+        this.logistics_fee = null;
+        this.editParams.logistics_fee = null;
+      } else {
+        const logistics_fee = parseFloat(String(this.logistics_fee)).toFixed(2);
+        this.logistics_fee = parseFloat(logistics_fee);
+      }
+    }
+
+    // 退款金额
+    if (this.refund_fee) {
+      if (isNaN(parseFloat(String(this.refund_fee)))) {
+        this.refund_fee = null;
+        this.editParams.refund_fee = null;
+      } else {
+        const refund_fee = parseFloat(String(this.refund_fee)).toFixed(2);
+        this.refund_fee = parseFloat(refund_fee);
+      }
+    }
+  }
+
+  // 确认发货
+  public onSendGoodsClick(): void {
+    if (Number(this.logistics_fee === 0)) {
+      this.globalService.promptBox.open('邮费应大于0！', null, 2000, null, false);
+      return;
+    }
+    this.editParams.logistics_fee = this.logistics_fee * 100;
+    this.editParams.reject_type = null;
+    this.requestUpdateOrderDetail(4);
+  }
+
+  // 修改驳回原因
+  public onChangeRejectType(event: any): void {
+    const reject_type = event.target.value;
+    this.editParams.reject_type = '';
+    this.editParams.reject_notice = null;
+    if (reject_type) {
+      this.editParams.reject_type = Number(reject_type);
+    }
+  }
+
+  // 确认驳回
+  public onRejectClick(): void {
+    this.requestUpdateOrderDetail(5);
+  }
+
+  // 确认退款
+  public onRefundClick(): void {
+    if (Number(this.refund_fee === 0)) {
+      this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
+      return;
+    }
+    const refund_fee = Number(this.refund_fee) * 100;
+    if (refund_fee - (this.orderRecord.real_amount) > 0) {
+      this.globalService.promptBox.open('退款金额应小于等于实付金额！', null, 2000, null, false);
+      return;
+    }
+    this.editParams.refund_fee = refund_fee;
+    this.editParams.reject_type = null;
+    this.requestUpdateOrderDetail(6);
+  }
+
+  // 关闭模态框
+  private closeModal(type: number): void {
+    if (type === 4) {
+      $('#logisticsModal').modal('hide');
+    } else if (type === 5) {
+      $('#rejectModal').modal('hide');
+    } else if (type === 6) {
+      $('#refundModal').modal('hide');
+    }
   }
 
   /**

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Subscription, Subject, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, OrderSearchParams, ExemptionOrderEntity } from '../order-management.service';
+import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 
 const PageSize = 15;
 
@@ -25,6 +26,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public pageIndex = 1; // 当前页码
   public noResultText = '数据加载中...';
 
+  public imageUrls = []; // 图片放大集合
+
   private requestSubscription: Subscription; // 获取数据
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
@@ -36,6 +39,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
     return this.orderList.length / PageSize + 1;
   }
+
+  @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -114,8 +119,35 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * 打开放大图片组件
+   */
+  public onOpenZoomPictureModal(orderRecord: ExemptionOrderEntity, image_url: string) {
+    this.imageUrls = [];
+    // 行驶证正本
+    if (orderRecord.driving_license_front) {
+      this.imageUrls.push(orderRecord.driving_license_front);
+    }
+    // 行驶证副本
+    if (orderRecord.driving_license_side) {
+      this.imageUrls.push(orderRecord.driving_license_side);
+    }
+    // 交强险保单
+    if (orderRecord.insurance_policy) {
+      this.imageUrls.push(orderRecord.insurance_policy);
+    }
+    // 车船税纳税凭证
+    if (orderRecord.payment_certificate) {
+      this.imageUrls.push(orderRecord.payment_certificate);
+    }
+    const openIndex = this.imageUrls.findIndex(imageItem => imageItem === image_url);
+    timer(0).subscribe(() => {
+      this.ZPhotoSelectComponent.zoomPicture(openIndex);
+    });
+  }
+
   /* 生成并检查参数有效性 */
-  public generateAndCheckParamsValid(): boolean {
+  private generateAndCheckParamsValid(): boolean {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),
       new Date(this.order_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(new Date(this.order_end_time).getHours(),

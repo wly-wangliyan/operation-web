@@ -51,6 +51,7 @@ import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
 import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-ckeditor.component';
 import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
+import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
 
 @NgModule({
   imports: [
@@ -113,6 +114,9 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     MaxNumberDealPipe,
     ProjectTypePipe,
     StoreProjectTypePipe,
+    ExemptionFormatPipe,
+    ExemptionOrderStatusPipe,
+    RejectTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -177,6 +181,9 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
     ValidateTimeLimitPipe,
     MaxNumberDealPipe,
     StoreProjectTypePipe,
+    ExemptionFormatPipe,
+    ExemptionOrderStatusPipe,
+    RejectTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
