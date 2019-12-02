@@ -196,6 +196,7 @@ export class OrderDetailComponent implements OnInit {
 
   /** 修改订单详情
    * @param type 1:修改订单备注 4:发货 5:驳回或修改驳回备注 6:退款或修改退款备注
+   * @param isEditRemark true 只修改备注 false 办理流程操作
    */
   private requestUpdateOrderDetail(type: number, isEditRemark: boolean = false): void {
     let tipMsg = this.tipMsgList[1];

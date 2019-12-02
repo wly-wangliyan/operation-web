@@ -149,11 +149,6 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!this.configParams.logistics_fee || Number(this.configParams.logistics_fee) === 0) {
-      this.configErrMsg = '邮费应大于0！';
-      return false;
-    }
-
     if (!tempContent) {
       this.configErrMsg = '请填写图文详情！';
       return false;
