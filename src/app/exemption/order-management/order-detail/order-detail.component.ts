@@ -234,25 +234,13 @@ export class OrderDetailComponent implements OnInit {
 
   // 格式化金额
   public onAmountChange(event: any): void {
-    // 邮费
-    if (this.logistics_fee) {
-      if (isNaN(parseFloat(String(this.logistics_fee)))) {
-        this.logistics_fee = null;
-        this.editParams.logistics_fee = null;
+    const target_value = event.target.value;
+    if (target_value) {
+      if (isNaN(parseFloat(String(target_value)))) {
+        event.target.value = null;
       } else {
-        const logistics_fee = parseFloat(String(this.logistics_fee)).toFixed(2);
-        this.logistics_fee = parseFloat(logistics_fee);
-      }
-    }
-
-    // 退款金额
-    if (this.refund_fee) {
-      if (isNaN(parseFloat(String(this.refund_fee)))) {
-        this.refund_fee = null;
-        this.editParams.refund_fee = null;
-      } else {
-        const refund_fee = parseFloat(String(this.refund_fee)).toFixed(2);
-        this.refund_fee = parseFloat(refund_fee);
+        const tmpValue = parseFloat(String(target_value)).toFixed(2);
+        event.target.value = parseFloat(tmpValue);
       }
     }
   }
@@ -296,7 +284,10 @@ export class OrderDetailComponent implements OnInit {
     }
     this.editParams.refund_fee = refund_fee;
     this.editParams.reject_type = null;
-    this.requestUpdateOrderDetail(6);
+    this.globalService.confirmationBox.open('提示', '操作后将退款金额原路返回至支付账户，此操作不可逆，请慎重操作！', () => {
+      this.globalService.confirmationBox.close();
+      this.requestUpdateOrderDetail(6);
+    }, '确认退款');
   }
 
   // 关闭模态框
