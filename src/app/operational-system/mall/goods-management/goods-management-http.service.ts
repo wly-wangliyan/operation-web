@@ -56,6 +56,8 @@ export class SpecificationParams extends EntityBase {
 export class CommodityEntity extends EntityBase {
     public commodity_id: string = undefined; // 商品id
     public commodity_name: string = undefined; // 商品名称
+    public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品
+    public buy_max_num: number = undefined; // 购买上限 -1:无上限
     public subtitle: string = undefined; // 副标题
     public commodity_images: Array<string> = []; // 商品图片列表
     public commodity_videos: Array<string> = []; // 商品视频

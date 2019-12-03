@@ -33,16 +33,16 @@ export class StoreProjectTypePipe implements PipeTransform {
 }
 
 /** 项目类别 */
-export const ProjectCategory = {
+export const StoreCategory = {
   1: '保养项目',
   2: '清洗养护项目',
   3: '维修项目'
 };
 
 @Pipe({
-  name: 'projectCategory'
+  name: 'storeCategory'
 })
-export class ProjectCategoryPipe implements PipeTransform {
+export class StoreCategoryPipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
     if (value === null || value === undefined) {
@@ -50,17 +50,17 @@ export class ProjectCategoryPipe implements PipeTransform {
     }
     if (value && (typeof value === 'string')) {
       // 当直接传递字符串时的处理
-      return ProjectCategory[value];
+      return StoreCategory[value];
     } else if (value && value.length > 0) {
       // 当传递数组类型时的处理
       let str = '';
       from(value).subscribe((code: any) => {
         // 拼接字符串
-        str = str ? str + '、' + ProjectCategory[code] : ProjectCategory[code];
+        str = str ? str + '、' + StoreCategory[code] : StoreCategory[code];
       });
       return str;
     } else {
-      return ProjectCategory[value];
+      return StoreCategory[value];
     }
   }
 

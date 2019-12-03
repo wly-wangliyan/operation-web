@@ -137,3 +137,35 @@
     letter-spacing: 0.15px;
     margin-bottom: 10px;
 }
+
+.commodity-type-btn {
+    font-size: 14px;
+    width: 120px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #888 !important;
+    border: 0;
+    background: #F7F8FA;
+    outline: none;
+    border-right: 1px solid rgba(136, 136, 136, 0.3);
+}
+
+.commodity-type-btn:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.commodity-type-btn:last-child {
+    border-right: none!important;
+    border-radius: 0 2px 2px 0;
+}
+
+.commodity-type-btn:hover {
+    color: #fff !important;
+    background: #315AC5;
+}
+
+.active-btn {
+    color: #fff !important;
+    background: #3E71F7;
+}

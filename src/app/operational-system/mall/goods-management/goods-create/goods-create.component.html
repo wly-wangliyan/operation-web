@@ -9,6 +9,18 @@
                 <div class="row control-row">
                     <label class="control-label">
                         <b>*</b>
+                        <span>商品类型</span>
+                    </label>
+                    <div class="control-input">
+                        <a name="commodity_type" class="commodity-type-btn" [class.active-btn]="commodityInfo.commodity_type===1"
+                           (click)="onChangeCommodityType(1)">实物商品</a>
+                        <a name="commodity_type" class="commodity-type-btn" [class.active-btn]="commodityInfo.commodity_type===2"
+                           (click)="onChangeCommodityType(2)" style="margin-right: 5px">虚拟商品</a>
+                    </div>
+                </div>
+                <div class="row control-row">
+                    <label class="control-label">
+                        <b>*</b>
                         <span>产品名称</span>
                     </label>
                     <div class="control-input">
@@ -152,6 +164,17 @@
                                 <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row control-row">
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>每人限购</span>
+                    </label>
+                    <div class="control-input" style="width: 350px">
+                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.buy_max_num"
+                               name="buy_max_num" placeholder="不输则为不限制购买数量" maxlength="2"
+                               oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace required>
                     </div>
                 </div>
                 <div class="row control-row">

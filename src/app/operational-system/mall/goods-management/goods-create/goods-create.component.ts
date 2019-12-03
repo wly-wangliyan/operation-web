@@ -257,6 +257,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     private requestCommodityById() {
         this.goodsManagementHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
             this.commodityInfo = data;
+            this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
             this.commodityInfo.specifications.forEach(specificationItem => {
                 const tempSpecificationItem = new SpecificationParamsItem();
                 tempSpecificationItem.specification_params = new SpecificationEntity(specificationItem);
@@ -458,6 +459,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    // 更改商品类型
+    public onChangeCommodityType(commodity_type: number) {
+        this.commodityInfo.commodity_type = commodity_type;
     }
 }
 
