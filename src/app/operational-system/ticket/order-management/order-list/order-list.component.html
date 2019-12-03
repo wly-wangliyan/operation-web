@@ -108,17 +108,17 @@
               </td>
             </ng-container>
             <td>{{order.buy_num || 0}} 张</td>
-            <td>{{order.total_price | centPriceChange:'￥'}}
+            <td>{{order.total_price | centPriceChange:'¥ ':'left'}}
             </td>
             <td>
-              {{order.discount_price | centPriceChange:'￥'}}
+              {{order.discount_price | centPriceChange:'¥ ':'left'}}
             </td>
             <td>
-              {{order.coupon_used_amount | centPriceChange:'￥'}}
+              {{order.coupon_used_amount | centPriceChange:'¥ ':'left'}}
             </td>
-            <td>{{order.real_price | centPriceChange:'￥'}}</td>
+            <td>{{order.real_price | centPriceChange:'¥ ':'left'}}</td>
             <td>
-              {{(order.buy_num*order.buy_price) | centPriceChange:'￥'}}
+              {{(order.buy_num*order.buy_price) | centPriceChange:'¥ ':'left'}}
             </td>
             <td>{{order.created_time?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>

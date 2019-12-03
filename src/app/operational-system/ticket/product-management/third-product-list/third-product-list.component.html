@@ -38,10 +38,10 @@
             <td>{{product.province}}{{product.city}}<span *ngIf="product.district">{{product.district}}</span></td>
             <td>{{product.sale_status | thirdSaleStatus}}</td>
             <td>
-              {{product.retail_price|centPriceChange:'￥'}}
+              {{product.retail_price|centPriceChange:'¥ ':'left'}}
             </td>
             <td>
-              {{product.buy_price|centPriceChange:'￥'}}
+              {{product.buy_price|centPriceChange:'¥ ':'left'}}
             </td>
             <td class="operation">
               <a [title]="'详情'" [routerLink]="['../third-detail',product.third_product_id,product.add_status,1]">详情</a>

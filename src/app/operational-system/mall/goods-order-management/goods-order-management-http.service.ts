@@ -35,6 +35,7 @@ export class OrderDetailEntity extends EntityBase {
   public unit_original_price = undefined; // 	int	单位分 原价
   public unit_sell_price = undefined; // 	int	单位分 售价
   public amount = undefined; // 	int	数量
+  public commodity_type = undefined; // int	商品类型 1：实物商品 2：虚拟商品
 }
 
 export class GoodsOrderEntity extends EntityBase {

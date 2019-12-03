@@ -13,7 +13,7 @@
       <nz-radio-group class="radio-group" [(ngModel)]="radioValue" [nzDisabled]="!isEditPaySetting">
         <label nz-radio [nzValue]="item.pay_setting_id" *ngFor="let item of paySettingList">
           <span class="name">{{item.pay_type|payType}}</span>
-          <span [ngClass]="item.pay_type===1?'credit-pay':'balance-pay'">{{item.balance|centPriceChange}}元</span>
+          <span [ngClass]="item.pay_type===1?'credit-pay':'balance-pay'">{{item.balance|centPriceChange:'元'}}</span>
         </label>
       </nz-radio-group>
       <div class="btn">

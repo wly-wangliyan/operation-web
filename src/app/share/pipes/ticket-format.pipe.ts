@@ -49,29 +49,30 @@ export class ThirdSaleStatusPipe implements PipeTransform {
   }
 }
 
-/** 钱数：分转换成元 */
-
+/**
+ *  钱数：分转换成元
+ * @param value 数值
+ * @param unit 单位/符号
+ * @param position 显示位置:默认在右侧
+ * @returns any
+ */
 @Pipe({
   name: 'centPriceChange'
 })
 export class CentPriceChangePipe implements PipeTransform {
 
-  public transform(value: any, unit = ''): any {
+  public transform(value: any, unit = '', position = 'right'): any {
     if (value === null || value === undefined || value === '') {
       return '--';
     } else if (value) {
-      if (unit === '￥' || unit === '¥') {
-        return `${unit} ${(Number(value) / 100).toFixed(2)}`;
-      } else if (unit === '元') {
-        return `${(Number(value) / 100).toFixed(2)} ${unit}`;
+      if (position === 'left') {
+        return `${unit}${(Number(value) / 100).toFixed(2)}`;
       } else {
         return `${(Number(value) / 100).toFixed(2)}${unit}`;
       }
     } else {
-      if (unit === '￥' || unit === '¥') {
-        return `${unit} ${value}`;
-      } else if (unit === '元') {
-        return `${value} ${unit}`;
+      if (position === 'left') {
+        return `${unit}${value}`;
       } else {
         return `${value}${unit}`;
       }

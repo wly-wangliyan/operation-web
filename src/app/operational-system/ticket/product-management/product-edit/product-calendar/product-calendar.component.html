@@ -21,13 +21,13 @@
                     </div>
                     <div>
                       <span>建议售价</span>
-                      <span><span *ngIf='calendarMap[key].retail_price'>¥</span>
-                        {{calendarMap[key].retail_price|centPriceChange|zMaxLength:7}}</span>
+                      <span>
+                        {{calendarMap[key].retail_price|centPriceChange:'¥ ':'left'|zMaxLength:7}}</span>
                     </div>
                     <div>
                       <span>结算价</span>
-                      <span><span *ngIf='calendarMap[key].buy_price'>¥</span>
-                        {{calendarMap[key].buy_price|centPriceChange|zMaxLength:7}}</span>
+                      <span>
+                        {{calendarMap[key].buy_price|centPriceChange:'¥ ':'left'|zMaxLength:7}}</span>
                     </div>
                     <div class="plat">
                       <span>平台售价</span>

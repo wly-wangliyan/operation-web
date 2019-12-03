@@ -18,25 +18,25 @@
         <tr>
           <td>应收：</td>
           <td>
-            {{orderDetail.total_price | centPriceChange:'￥'}}
+            {{orderDetail.total_price | centPriceChange:'¥ ':'left'}}
           </td>
           <td>平台立减：</td>
           <td>
-            {{orderDetail.discount_price | centPriceChange:'￥'}}
+            {{orderDetail.discount_price | centPriceChange:'¥ ':'left'}}
           </td>
           <td>优惠券：</td>
           <td>
-            {{orderDetail.coupon_used_amount | centPriceChange:'￥'}}
+            {{orderDetail.coupon_used_amount | centPriceChange:'¥ ':'left'}}
           </td>
         </tr>
         <tr>
           <td>实收：</td>
           <td>
-            {{orderDetail.real_price | centPriceChange:'￥'}}
+            {{orderDetail.real_price | centPriceChange:'¥ ':'left'}}
           </td>
           <td>结算总价：</td>
           <td>
-            {{(orderDetail.buy_num*orderDetail.buy_price) | centPriceChange:'￥'}}
+            {{(orderDetail.buy_num*orderDetail.buy_price) | centPriceChange:'¥ ':'left'}}
           </td>
           <td></td>
           <td></td>

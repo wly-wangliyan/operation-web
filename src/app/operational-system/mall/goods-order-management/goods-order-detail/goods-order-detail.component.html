@@ -19,36 +19,38 @@
           <td>发货状态：</td>
           <td style="line-height: 40px;">
             {{orderDetail.delivery_status | deliveryStatus}}
-            <button *ngIf="orderDetail.pay_status===2&&orderDetail.delivery_status===1" class='goods-btn' nz-button
-              nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
+            <button
+              *ngIf="orderDetail.detail[0]?.commodity_type===1&&orderDetail.pay_status===2&&orderDetail.delivery_status===1"
+              class='goods-btn' nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
             <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
               (click)="onConfiemClick(orderDetail)">确认收货</button>
-            <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;" nz-button
-              nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
+            <button *ngIf="orderDetail.detail[0]?.commodity_type===1&&orderDetail.delivery_status===2" class='goods-btn'
+              style="margin-right: 10px;" nz-button nzType="primary"
+              (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
           </td>
         </tr>
         <tr>
           <td>应收：</td>
           <td>
-            {{orderDetail.total_amount | centPriceChange:'￥'}}
+            {{orderDetail.total_amount | centPriceChange:'¥ ':'left'}}
           </td>
           <td>平台立减：</td>
           <td>
-            {{orderDetail.discount_price | centPriceChange:'￥'}}
+            {{orderDetail.discount_price | centPriceChange:'¥ ':'left'}}
           </td>
           <td>优惠券：</td>
           <td>
-            {{orderDetail.platform_coupon_amount | centPriceChange:'￥'}}
+            {{orderDetail.platform_coupon_amount | centPriceChange:'¥ ':'left'}}
           </td>
         </tr>
         <tr>
           <td>实收：</td>
           <td>
-            {{orderDetail.real_price | centPriceChange:'￥'}}
+            {{orderDetail.real_price | centPriceChange:'¥ ':'left'}}
           </td>
           <td>邮费：</td>
           <td>
-            {{orderDetail.postage | centPriceChange:'￥'}}
+            {{orderDetail.postage | centPriceChange:'¥ ':'left'}}
           </td>
           <td></td>
           <td></td>
@@ -56,7 +58,7 @@
         <tr>
           <td>退款金额：</td>
           <td>
-            {{orderDetail.refund_total_fee | centPriceChange:'￥'}}
+            {{orderDetail.refund_total_fee | centPriceChange:'¥ ':'left'}}
           </td>
           <td>退款方式：</td>
           <td>
@@ -140,6 +142,7 @@
         <thead>
           <tr>
             <th>商品名称</th>
+            <th>类型</th>
             <th>规格</th>
             <th>数量</th>
             <th>原价</th>
@@ -149,6 +152,7 @@
         <tbody>
           <tr *ngFor="let commodity of goodsInfo;let i=index">
             <td>{{commodity.commodity_name}}</td>
+            <td>{{commodity.commodity_type}}</td>
             <td>{{commodity.specification_name?commodity.specification_name:'--'}}</td>
             <td>
               {{commodity.amount||0}}

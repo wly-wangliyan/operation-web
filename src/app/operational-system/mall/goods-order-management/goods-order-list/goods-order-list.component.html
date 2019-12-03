@@ -118,15 +118,15 @@
             </ng-container>
             <td>{{order.detail&&order.detail[0].amount?order.detail[0].amount:0}}</td>
             <td>
-              {{order.total_amount | centPriceChange:'￥'}}
+              {{order.total_amount | centPriceChange:'¥ ':'left'}}
             </td>
             <td>
-              {{order.discount_price | centPriceChange:'￥'}}
+              {{order.discount_price | centPriceChange:'¥ ':'left'}}
             </td>
             <td>
-              {{order.platform_coupon_amount | centPriceChange:'￥'}}
+              {{order.platform_coupon_amount | centPriceChange:'¥ ':'left'}}
             </td>
-            <td>{{order.real_price | centPriceChange:'￥'}}</td>
+            <td>{{order.real_price | centPriceChange:'¥ ':'left'}}</td>
             <td>
               <span [title]="order.contact">{{order.contact||order.mobile ? (order.contact|zMaxLength:6) : '--'}}</span>
               <br *ngIf="order.contact" />
@@ -145,9 +145,10 @@
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../detail', order.order_id]">查看</a>
               <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
-              <a *ngIf="order.pay_status===2&&order.delivery_status===1" [title]="'发货'"
-                (click)="onEditDeliveryClick(order)">发货</a>
-              <a *ngIf="order.delivery_status===2" [title]="'修改物流'" (click)="onEditDeliveryClick(order)">修改物流</a>
+              <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"
+                [title]="'发货'" (click)="onEditDeliveryClick(order)">发货</a>
+              <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2" [title]="'修改物流'"
+                (click)="onEditDeliveryClick(order)">修改物流</a>
               <a *ngIf="order.delivery_status===2" [title]="'确认收货'" (click)="onConfiemClick(order)">确认收货</a>
             </td>
           </tr>
