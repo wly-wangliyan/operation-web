@@ -116,14 +116,8 @@
             <td [title]="order.address?order.address:''">{{order.address?(order.address | zMaxLength:8):'--'}}</td>
             <td>
               <div class="material-container">
-                <img *ngIf="order.driving_license_front" [src]="order.driving_license_front"
-                  (click)="onOpenZoomPictureModal(order,order.driving_license_front)" />
-                <img *ngIf="order.driving_license_side" [src]="order.driving_license_side"
-                  (click)="onOpenZoomPictureModal(order,order.driving_license_side)" />
-                <img *ngIf="order.insurance_policy" [src]="order.insurance_policy"
-                  (click)="onOpenZoomPictureModal(order,order.insurance_policy)" />
-                <img *ngIf="order.payment_certificate" [src]="order.payment_certificate"
-                  (click)="onOpenZoomPictureModal(order,order.payment_certificate)" />
+                <img *ngFor="let image of order.imageUrls;let openIndex = index;" [src]='image'
+                  (click)="onOpenZoomPictureModal(order,openIndex)" />
               </div>
             </td>
 

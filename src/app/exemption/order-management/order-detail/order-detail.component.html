@@ -189,24 +189,20 @@
           <td>{{orderRecord.refund_order_id ? orderRecord.refund_order_id : '--'}}</td>
         </tr>
         <tr>
-          <td class="row-title">办理资料</td>
+          <td class="row-title">上传资料</td>
           <td colspan="5" style="border-right: 0px">
             <div class="material-container">
               <div class="material-item" *ngIf="orderRecord.driving_license_front">
-                <img [src]="orderRecord.driving_license_front"
-                  (click)="onOpenZoomPictureModal(orderRecord.driving_license_front)" />
+                <img [src]="orderRecord.driving_license_front" (click)="onOpenZoomPictureModal(0)" />
                 <span>行驶证正本</span></div>
               <div class="material-item" *ngIf="orderRecord.driving_license_side">
-                <img [src]="orderRecord.driving_license_side"
-                  (click)="onOpenZoomPictureModal(orderRecord.driving_license_side)" />
+                <img [src]="orderRecord.driving_license_side" (click)="onOpenZoomPictureModal(1)" />
                 <span>行驶证副本</span></div>
               <div class="material-item" *ngIf="orderRecord.insurance_policy">
-                <img [src]="orderRecord.insurance_policy"
-                  (click)="onOpenZoomPictureModal(orderRecord.insurance_policy)" />
+                <img [src]="orderRecord.insurance_policy" (click)="onOpenZoomPictureModal(2)" />
                 <span>交强险保单</span></div>
               <div class="material-item" *ngIf="orderRecord.payment_certificate">
-                <img [src]="orderRecord.payment_certificate"
-                  (click)="onOpenZoomPictureModal(orderRecord.payment_certificate)" />
+                <img [src]="orderRecord.payment_certificate" (click)="onOpenZoomPictureModal(3)" />
                 <span>车船税纳税凭证</span></div>
             </div>
 

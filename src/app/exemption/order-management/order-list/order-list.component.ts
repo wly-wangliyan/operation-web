@@ -68,6 +68,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private requestOrderList() {
     this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
       this.orderList = res.results;
+      this.orderList.forEach(item => {
+        let urls = item.driving_license_front ? item.driving_license_front : '';
+        urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : urls);
+        urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : urls);
+        urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : urls);
+        item.imageUrls = urls ? urls.split(',') : [];
+      });
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
@@ -86,7 +93,15 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.orderService.continueOrderListData(this.linkUrl)
         .subscribe(res => {
-          this.orderList = this.orderList.concat(res.results);
+          const results = res.results;
+          results.forEach(item => {
+            let urls = item.driving_license_front ? item.driving_license_front : '';
+            urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : urls);
+            urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : urls);
+            urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : urls);
+            item.imageUrls = urls ? urls.split(',') : [];
+          });
+          this.orderList = this.orderList.concat(results);
           this.linkUrl = res.linkUrl;
         }, err => {
           this.globalService.httpErrorProcess(err);
@@ -122,25 +137,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   /**
    * 打开放大图片组件
    */
-  public onOpenZoomPictureModal(orderRecord: ExemptionOrderEntity, image_url: string) {
-    this.imageUrls = [];
-    // 行驶证正本
-    if (orderRecord.driving_license_front) {
-      this.imageUrls.push(orderRecord.driving_license_front);
-    }
-    // 行驶证副本
-    if (orderRecord.driving_license_side) {
-      this.imageUrls.push(orderRecord.driving_license_side);
-    }
-    // 交强险保单
-    if (orderRecord.insurance_policy) {
-      this.imageUrls.push(orderRecord.insurance_policy);
-    }
-    // 车船税纳税凭证
-    if (orderRecord.payment_certificate) {
-      this.imageUrls.push(orderRecord.payment_certificate);
-    }
-    const openIndex = this.imageUrls.findIndex(imageItem => imageItem === image_url);
+  public onOpenZoomPictureModal(orderRecord: ExemptionOrderEntity, openIndex: number) {
+    this.imageUrls = orderRecord.imageUrls ? orderRecord.imageUrls : [];
     timer(0).subscribe(() => {
       this.ZPhotoSelectComponent.zoomPicture(openIndex);
     });
