@@ -60,7 +60,7 @@ export class CentPriceChangePipe implements PipeTransform {
     if (value === null || value === undefined || value === '') {
       return '--';
     } else if (value) {
-      if (unit === '￥') {
+      if (unit === '￥' || unit === '¥') {
         return `${unit} ${(Number(value) / 100).toFixed(2)}`;
       } else if (unit === '元') {
         return `${(Number(value) / 100).toFixed(2)} ${unit}`;
@@ -68,7 +68,7 @@ export class CentPriceChangePipe implements PipeTransform {
         return `${(Number(value) / 100).toFixed(2)}${unit}`;
       }
     } else {
-      if (unit === '￥') {
+      if (unit === '￥' || unit === '¥') {
         return `${unit} ${value}`;
       } else if (unit === '元') {
         return `${value} ${unit}`;
