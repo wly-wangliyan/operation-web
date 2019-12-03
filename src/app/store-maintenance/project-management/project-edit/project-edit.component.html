@@ -1,0 +1,193 @@
+<!--编辑保养项目-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{'编辑'}}</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm"
+                  autocomplete="off">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentInsurance.ic_name" name="title"
+                               maxlength="20" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>项目ID</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="100" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>配套项目</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" [(ngModel)]="currentInsurance.ic_name" name="title"
+                               maxlength="20" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>规格单位</span>
+                    </label>
+                    <select class="form-control" [(ngModel)]="currentInsurance.details_link" style="width: 100px" name="vehicle_series_id" disabled>
+                        <option value="">数值</option>
+                    </select>
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>规格名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" style="width: 100px" placeholder="规格名称" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="10" autocomplete="off" required>
+                    </div>
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>规格单位</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" style="width: 100px" placeholder="规格单位" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="10" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>描述</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入0-100字描述" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="100" autocomplete="off" style="width: 490px">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!editForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--机油配件参数列表-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #paramPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">机油配件参数</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm"
+                  autocomplete="off">
+                <div class="row">
+                    <label class="control-label" style="width: 20px!important">
+                        <b>&nbsp;&nbsp;</b>
+                    </label>
+                    <nz-table style="width: 560px" [nzData]="paramList" [nzShowPagination]="false" [nzPageSize]="'15'" #paramTable>
+                        <thead>
+                        <tr>
+                            <th>参数名</th>
+                            <th>参数类型</th>
+                            <th>必填</th>
+                            <th>推荐</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let param of paramTable.data; let i=index">
+                            <td [title]="param.broker_company_name">{{param.broker_company_name|zMaxLength:40}}</td>
+                            <td>{{param.account}}</td>
+                            <td>
+                                <nz-switch [ngModel]="!param.discontinue_use" nzCheckedChildren="On" style="height: 10px" name="discontinue_use+{{i}}"
+                                           nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(param.broker_company_id,$event)"></nz-switch>
+                            </td>
+                            <td>
+                                <nz-switch [ngModel]="!param.discontinue_use" nzCheckedChildren="On" style="height: 10px" name="discontinue+{{i}}"
+                                           nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(param.broker_company_id,$event)"></nz-switch>
+                            </td>
+                            <td class="operation">
+                                <a [title]="'编辑'" (click)="onEditParamClick(param)">编辑</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--编辑机油配件参数-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #editParamPromptDiv>
+    <div class="modal-dialog modal-dialog-edit-param" role="document">
+        <div class="modal-content modal-content-edit-param">
+            <div class="modal-header">
+                <span class="modal-title">编辑参数</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm"
+                  autocomplete="off">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>参数名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control input-param" [(ngModel)]="currentInsurance.ic_name" name="title"
+                               maxlength="20" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>参数类型</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control input-param" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="100" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="row" style="overflow-y: auto;height: 200px">
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>&nbsp;</span>
+                    </label>
+                    <div class="options-space">
+                        <label>选项：</label>
+                        <ul>
+                            <li *ngFor="let item of optionList;let i=index">
+                                <input class="form-control input-option" [(ngModel)]="item.ic_name" name="ic_name{{item.time}}"
+                                       maxlength="10" autocomplete="off" placeholder="请输入1-10字选项名称">
+                                <span *ngIf="optionList.length > 1" style="color: #E82038" (click)="onDelOptionClick(i)">移除</span>
+                                <span *ngIf="i===optionList.length-1&&!item.ic_name&&optionList.length<50" style="color: #888888">添加</span>
+                                <span *ngIf="i===optionList.length-1&&item.ic_name&&optionList.length<50" style="color: #3E71F7" (click)="onAddOptionClick()">添加</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

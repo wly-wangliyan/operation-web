@@ -20,6 +20,11 @@ const routes: Routes = [{
       loadChildren: () => import('./notice-management/notice-management.module').then(m => m.NoticeManagementModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'push-management', /** 推送 */
+      loadChildren: () => import('./push-management/push-management.module').then(m => m.PushManagementModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'banner-management', pathMatch: 'full' }
   ]
 }];

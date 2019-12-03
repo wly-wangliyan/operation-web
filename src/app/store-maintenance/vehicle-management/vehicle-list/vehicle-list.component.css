@@ -1,0 +1,16 @@
+.search-container {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+}
+
+.operation a:hover {
+    color:rgba(62,113,247,1);
+}
+
+.search-btn-group {
+    margin: 0 0 0 30px;
+}
+
+.form-group {
+    margin-right: 30px;
+}

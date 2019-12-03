@@ -57,6 +57,8 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('通知管理', '/main/operation/mini-program/notice-management', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
+    const subFinanceMenu3 = new SideMenuItem('推送', '/main/operation/mini-program/push-management', systemMenu);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

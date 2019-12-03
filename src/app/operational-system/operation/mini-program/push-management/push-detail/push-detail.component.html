@@ -1,0 +1,91 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'小程序'" [level2Name]="'推送'" [level2RelativePath]="'../'" [level3Name]="'明细'">
+    </app-crumb>
+</div>
+<div class="content-flow">
+    <!-- 查看明细 -->
+    <div class="content-container">
+        <div class="table-item banner-table">
+            <table class="detail-table">
+                <tr>
+                    <td rowspan="6" class="td-img">
+                        <img style="width: 270px;margin: auto;" src="{{pushRecord.push_image?pushRecord.push_image:no_img_url}}" />
+                    </td>
+                    <td>标题：</td>
+                    <td>{{pushRecord.push_plan_name ? pushRecord.push_plan_name : '--'}}</td>
+                    <td>推送形式：</td>
+                    <td>{{pushRecord.push_type===1 ? '首页浮窗' : pushRecord.push_type === 2 ? '首页弹窗' : '--'}}</td>
+                    <td>状态：</td>
+                    <td>{{pushRecord.push_plan_status ? '展示中' : '已停用'}}</td>
+                </tr>
+                <tr>
+                    <td>定位人群：</td>
+                    <td colspan="5">
+                        <div style="display: grid">
+                            <span *ngIf="pushRecord.push_range===1">{{pushRecord.push_range|pushRange}}</span>
+                            <span *ngIf="pushRecord.push_range!==1">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.range_type|rangeType)+'-'+
+                            ('距离到期'+pushRecord.push_range_detail?.date_limit+'日时提醒')}}</span>
+                            <span *ngIf="pushRecord.push_speed_type===2">{{'触发后最小间隔'+pushRecord.push_speed?.push_interval+'小时再次推送，最大推送'+pushRecord.push_speed?.push_num+'次'}}</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>落地页：</td>
+                    <td colspan="5">
+                        {{pushRecord.push_location_url ? pushRecord.push_location_url : '--'}}</td>
+                </tr>
+                <tr>
+                    <td>创建时间：</td>
+                    <td>{{pushRecord.created_time ? (pushRecord.created_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+                    <td>上线时间：</td>
+                    <td>{{pushRecord.start_time ? (pushRecord.start_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+                    <td>下线时间：</td>
+                    <td *ngIf="pushRecord.end_time===9999999999">永不下线</td>
+                    <td *ngIf="pushRecord.end_time!==9999999999">
+                        {{pushRecord.end_time ? (pushRecord.end_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+                </tr>
+                <tr>
+                    <td>累计触达人数</td>
+                    <td>{{pushRecord.reach_user_num >= 0 ? pushRecord.reach_user_num : '--'}}</td>
+                    <td>累计点击量</td>
+                    <td>{{pushRecord.click_num >= 0 ? pushRecord.click_num : '--'}}</td>
+                    <td>累计点击人数</td>
+                    <td>{{pushRecord.click_user_num >= 0 ? pushRecord.click_user_num : '--'}}</td>
+                </tr>
+                <tr>
+                    <td>累计关闭数</td>
+                    <td>{{pushRecord.close_num >= 0 ? pushRecord.close_num : '--'}}</td>
+                    <td>累计关闭人数</td>
+                    <td>{{pushRecord.close_user_num >= 0 ? pushRecord.close_user_num : '--'}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-item click-table" *ngIf="clickStatisticsList && clickStatisticsList.length>0">
+            <table class="detail-table">
+                <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>触达人数</th>
+                    <th>点击量</th>
+                    <th>关闭数</th>
+                    <th>点击人数</th>
+                    <th>关闭人数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let click of clickStatisticsList">
+                    <td>{{click.push_count_date ? (click.push_count_date* 1000 | date:"y-MM-dd") : '--'}}</td>
+                    <td>{{click.reach_user_num >= 0 ? click.reach_user_num : '--'}}</td>
+                    <td>{{click.click_num >= 0 ? click.click_num : '--'}}</td>
+                    <td>{{click.close_num >= 0 ? click.close_num : '--'}}</td>
+                    <td>{{click.click_user_num >= 0 ? click.click_user_num : '--'}}</td>
+                    <td>{{click.close_user_num >= 0 ? click.close_user_num : '--'}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

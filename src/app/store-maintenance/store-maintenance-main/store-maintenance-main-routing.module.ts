@@ -28,6 +28,22 @@ const routes: Routes = [{
       path: 'work-fees-management',
       loadChildren: () => import('../work-fees-management/work-fees-management.module').then(m => m.WorkFeesManagementModule),
     },
+    {
+      path: 'vehicle-management',
+      loadChildren: () => import('../vehicle-management/vehicle-management.module').then(m => m.VehicleManagementModule),
+    },
+    {
+      path: 'project-management',
+      loadChildren: () => import('../project-management/project-management.module').then(m => m.ProjectManagementModule),
+    },
+    {
+      path: 'garage-management',
+      loadChildren: () => import('../garage-management/garage-management.module').then(m => m.GarageManagementModule),
+    },
+    {
+      path: 'supplier-management',
+      loadChildren: () => import('../supplier-management/supplier-management.module').then(m => m.SupplierManagementModule),
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];

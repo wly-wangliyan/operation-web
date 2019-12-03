@@ -304,7 +304,7 @@ export class ZPhotoSelectComponent implements OnInit {
     if (imageList.length > 0) {
       for (const index in imageList) {
         if (imageList.hasOwnProperty(index)) {
-          const imgReg = /(jpg|jpeg|png)$/;
+          const imgReg = /(jpg|jpeg|png|gif)$/;
           this.isValidImg = true;
 
           if (imageList[index].sourceFile) {

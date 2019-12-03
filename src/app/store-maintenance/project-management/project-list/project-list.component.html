@@ -1,0 +1,40 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'保养项目管理'" [level2Name]=""></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table [nzData]="brokerageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目ID</th>
+                    <th>项目名称</th>
+                    <th>配套项目</th>
+                    <th>规格单位</th>
+                    <th>参数</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of basicTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
+                    <td>{{data.account}}</td>
+                    <td>{{data.telephone}}</td>
+                    <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
+                    <td>
+                        {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
+                    </td>
+                    <td class="operation">
+                        <a [title]="'配件参数'" (click)="onEditParamClick(data)">配件参数</a>
+                        <a [title]="'编辑'" (click)="onEditProjectClick(data)">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<app-project-edit></app-project-edit>

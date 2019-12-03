@@ -1,0 +1,94 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'小程序'" [level2Name]="'推送'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    (appZDebounceClick)="onShowModal()">
+                新建
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+
+            <div class="form-group">
+                <span>标题：</span>
+                <input class="form-control" placeholder="请输入标题" maxlength="20" name="title" [(ngModel)]="searchParams.push_plan_name" />
+            </div>
+
+            <div class="form-group">
+                <span>上线时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #pushTable [nzData]="pushList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>标题</th>
+                    <th>推送形式</th>
+                    <th>上线时间</th>
+                    <th>下线时间</th>
+                    <th style="width: 23%">定位人群</th>
+                    <th>累计触达</th>
+                    <th>点击量</th>
+                    <th>点击人数</th>
+                    <th>启停</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of pushTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td>
+                        <img *ngIf='!data.push_image' style="width: 58px;height: 58px" src="/assets/images/image_space.png">
+                        <img *ngIf='data.push_image' style="width: 58px;height: 58px" [src]="data.push_image">
+                    </td>
+                    <td>{{data.push_plan_name}}</td>
+                    <td>{{data.push_type===1?'首页浮窗':data.push_type===2?'首页弹窗':'--'}}</td>
+                    <td>{{data.start_time ?(data.start_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td *ngIf="data.end_time===9999999999">永不下线</td>
+                    <td *ngIf="data.end_time!==9999999999">
+                        {{data.end_time ?(data.end_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td *ngIf="data.push_range===1">{{data.push_range|pushRange}}</td>
+                    <td *ngIf="data.push_range!==1">{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.range_type|rangeType)+'-'+
+                    ('距离到期'+data.push_range_detail?.date_limit+'日时提醒')}}</td>
+
+                    <td>{{data.reach_user_num >=0 ? data.reach_user_num: '--'}}</td>
+                    <td>{{data.click_num >=0 ? data.click_num: '--'}}</td>
+                    <td>{{data.click_user_num >=0 ? data.click_user_num: '--'}}</td>
+                    <td>
+                        <nz-switch [ngModel]="data.push_plan_status===1?true:false" nzCheckedChildren="On" style="height: 10px" nzUnCheckedChildren="Off"
+                                   (ngModelChange)="onSwitchChange(data.push_plan_id,$event)"></nz-switch>
+                    </td>
+                    <td class="operation">
+                        <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
+                        <a [title]="'明细'" [routerLink]="['../push-detail',data.push_plan_id]">明细</a>
+                        <a [title]="'删除'" *ngIf="data.push_plan_status!==1" (appZDebounceClick)="onDeleteClick(data.push_plan_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+<app-push-edit #pushEdit></app-push-edit>
