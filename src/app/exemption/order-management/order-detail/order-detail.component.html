@@ -66,18 +66,18 @@
 
           <td>应付：</td>
           <td>
-            <span>服务费：</span>{{orderRecord.total_amount | centPriceChange:'￥'}}
-            <span>，邮费：</span>{{orderRecord.logistics_fee_user | centPriceChange:'￥'}}
+            <span>服务费：</span>{{orderRecord.total_amount | centPriceChange:'¥ ':'left'}}
+            <span>，邮费：</span>{{orderRecord.logistics_fee_user | centPriceChange:'¥ ':'left'}}
           </td>
 
           <td>平台立减：</td>
           <td>
-            {{orderRecord.discounts_amount | centPriceChange:'￥'}}
+            {{orderRecord.discounts_amount | centPriceChange:'¥ ':'left'}}
           </td>
 
           <td>实付：</td>
           <td>
-            {{orderRecord.real_amount | centPriceChange:'￥'}}
+            {{orderRecord.real_amount | centPriceChange:'¥ ':'left'}}
           </td>
         </tr>
         <tr>
@@ -89,7 +89,7 @@
 
           <td>发件邮费：</td>
           <td>
-            {{orderRecord.logistics_fee | centPriceChange:'￥'}}
+            {{orderRecord.logistics_fee | centPriceChange:'¥ ':'left'}}
           </td>
         </tr>
         <tr>
@@ -180,7 +180,7 @@
           <td class="row-title">退款信息</td>
 
           <td>退款金额：</td>
-          <td>{{orderRecord.refund_fee  | centPriceChange:'￥'}}</td>
+          <td>{{orderRecord.refund_fee  | centPriceChange:'¥ ':'left'}}</td>
 
           <td>退款方式：</td>
           <td>{{(orderRecord.status===3 || orderRecord.status===6) && orderRecord.refund_type ===1 ? '微信' : '--'}}</td>
