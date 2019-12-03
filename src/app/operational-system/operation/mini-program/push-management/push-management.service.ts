@@ -43,6 +43,7 @@ export class PushEntity extends EntityBase {
   public click_user_num: number = undefined; // 	int	累计点击人数
   public close_user_num: number = undefined; // 	int	累计关闭人数
   public push_counts: Array<PushCountEntity> = []; // 	[PushPlan][]	推送统计列表
+  public url_type: number = undefined; // 	int	推送触发落地页url类型1:小程序原生页,2:H5
   public is_deleted: boolean = undefined; // 	bool	逻辑删除
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
@@ -81,6 +82,7 @@ export class PushParams extends EntityBase {
   public start_time = new Date().getTime() / 1000; // 	float	T	上线时间(现只有立即发布)传当前时间时间戳
   public end_time: number = undefined; // 	float	T	下线时间 9999999999为永不下线
   public description: string = undefined; // 	string	F
+  public url_type: number = undefined; // 	int	推送触发落地页url类型1:小程序原生页,2:H5
 
   constructor(entity?: PushEntity) {
     super();
@@ -102,6 +104,7 @@ export class PushParams extends EntityBase {
       this.start_time = entity.start_time; // 	float	T	上线时间(现只有立即发布)传当前时间时间戳
       this.end_time = entity.end_time; // 	float	T	下线时间 9999999999为永不下线
       this.description = entity.description; // 	string	F
+      this.url_type = entity.url_type;
     }
   }
   public toAddJson(): any {

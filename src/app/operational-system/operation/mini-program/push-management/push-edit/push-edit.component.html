@@ -128,10 +128,14 @@
                 <div class="row">
                     <label class=" control-label">
                         <b>&nbsp;</b>
-                        <span>&nbsp;</span>
+                        <span>落地页</span>
                     </label>
                     <div class="control-input">
-                        <div class="landing-page">落地页</div>
+                        <select class="form-control" [(ngModel)]="pushParams.url_type" name="url_type">
+                            <option [value]=null>请选择</option>
+                            <option [value]=2>H5</option>
+                            <option [value]=1>小程序原生页</option>
+                        </select>
                         <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="pushParams.push_location_url" name="push_location_url"
                                maxlength="2000" autocomplete="off" appIgnoreSpace style="border-left: none!important;">
                     </div>
@@ -183,7 +187,10 @@
                 <div class="modal-footer">
                     <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time || pushParams.coupon_service==0"
+                            [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
+                             || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||
+                             (!pushParams.range_type&&pushParams.push_range&&pushParams.push_range!==1) || !pushParams.push_speed_type ||
+                             !offline_status || (!pushParams.url_type&&pushParams.push_location_url) || (pushParams.url_type&&!pushParams.push_location_url)"
                             (appZDebounceClick)="onEditFormSubmit()">{{sureName}}
                     </button>
                 </div>

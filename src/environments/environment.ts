@@ -10,7 +10,7 @@ export const environment = {
   // OPERATION_SERVE: '//192.168.6.159:8000', // 测试用 刘新
   // OPERATION_SERVE: '//192.168.6.138:8000', // 测试用 米泉宇
   // OPERATION_SERVE: '//192.168.6.43:8000', // 测试用 商硕
-  // OPERATION_SERVE: '//192.168.6.119:8001', // 测试用 李国强
+  // OPERATION_SERVE: '//192.168.6.119:8000', // 测试用 李国强
   // OPERATION_SERVE: '//192.168.6.126:8002', // 测试 张永兴
   // MALL_DOMAIN: '//192.168.6.126:8000', // 测试 张永兴
   COMMENT_SERVE: '//comment-server-d.parkone.cn',

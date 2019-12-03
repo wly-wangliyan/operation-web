@@ -174,7 +174,7 @@
                     <div class="control-input" style="width: 350px">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.buy_max_num"
                                name="buy_max_num" placeholder="不输则为不限制购买数量" maxlength="2"
-                               oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace required>
+                               oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace>
                     </div>
                 </div>
                 <div class="row control-row">
@@ -199,7 +199,7 @@
                 <div class="row">
                     <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
                             (appZDebounceClick)="onAddOrEditCommoditySubmit()"
-                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid">
+                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid || !commodityInfo.commodity_type">
                         保存
                     </button>
                     <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
