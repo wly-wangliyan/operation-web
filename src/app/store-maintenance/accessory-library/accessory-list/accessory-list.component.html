@@ -102,7 +102,7 @@
             <td>{{(data.total_real_amount | zCompleteNumber)||0}} 元</td>
             <td>{{data.pay_time?(data.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
             <td>{{data.reserve_time?(data.reserve_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-            <td style='min-width: 70px;'>{{data.pay_status|payStatus}}</td>
+            <td style='min-width: 70px;'>{{data.pay_status|storePayStatus}}</td>
             <td class="operation">
               <a [title]="'编辑'" [routerLink]="['../order-detail',data.upkeep_order_id]">编辑</a>
               <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal()">推荐设置</a>

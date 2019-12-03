@@ -31,8 +31,8 @@ export class OrderDetailComponent implements OnInit {
   private itemRowArr3: Array<any> = [];
 
   constructor(private globalService: GlobalService,
-              private orderService: OrderManagementService,
-              private routeInfo: ActivatedRoute) { }
+    private orderService: OrderManagementService,
+    private routeInfo: ActivatedRoute) { }
 
   ngOnInit() {
     this.routeInfo.params.subscribe((params: Params) => {
@@ -65,7 +65,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   /** 完成服务 */
-  public onCompleteService(data: UpkeepOrderEntity) {
+  public onCompleteService() {
     this.globalService.confirmationBox.open('提示', `此操作不可逆，请确认是否已完成保养服务，<br>且车主已知晓并同意完成服务？`, () => {
       this.globalService.confirmationBox.close();
       // this.productService.requestDeleteProductData(data.product_id).subscribe(() => {

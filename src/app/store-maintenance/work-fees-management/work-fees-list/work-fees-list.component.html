@@ -62,7 +62,7 @@
             <td>{{data.payer_phone||'--'}}</td>
             <td>{{data.vehicle_brand_name||'--'}}</td>
             <td>{{(data.total_real_amount | zCompleteNumber)||0}} 元</td>
-            <td style='min-width: 70px;'>{{data.pay_status|payStatus}}</td>
+            <td style='min-width: 70px;'>{{data.pay_status|storePayStatus}}</td>
             <td class="operation">
               <a [title]="'编辑'" [routerLink]="['../edit',data.upkeep_order_id]">编辑</a>
             </td>

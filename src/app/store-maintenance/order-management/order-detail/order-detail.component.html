@@ -24,10 +24,10 @@
         <nz-descriptions nzBordered>
           <nz-descriptions-item nzTitle="车牌号：">{{upkeepOrderData.car_id||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="配送状态：">
-            <span style='color:#f91e1e;'>{{upkeepOrderData.pay_status|payStatus}}</span>
+            <span style='color:#f91e1e;'>{{upkeepOrderData.pay_status|storePayStatus}}</span>
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="订单状态：">
-            <span style='color:#f91e1e;'>{{upkeepOrderData.pay_status|payStatus}}</span>
+            <span style='color:#f91e1e;'>{{upkeepOrderData.pay_status|storePayStatus}}</span>
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="购买人：">{{upkeepOrderData.payer_name||'--'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="手机号：">{{upkeepOrderData.payer_phone||'--'}}</nz-descriptions-item>

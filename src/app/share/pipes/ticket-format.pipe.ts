@@ -56,7 +56,7 @@ export class ThirdSaleStatusPipe implements PipeTransform {
 })
 export class CentPriceChangePipe implements PipeTransform {
 
-  public transform(value: any, unit: string): any {
+  public transform(value: any, unit = ''): any {
     if (value === null || value === undefined || value === '') {
       return '--';
     } else if (value) {
@@ -65,7 +65,7 @@ export class CentPriceChangePipe implements PipeTransform {
       } else if (unit === '元') {
         return `${(Number(value) / 100).toFixed(2)} ${unit}`;
       } else {
-        return (Number(value) / 100).toFixed(2);
+        return `${(Number(value) / 100).toFixed(2)}${unit}`;
       }
     } else {
       if (unit === '￥') {
@@ -73,7 +73,7 @@ export class CentPriceChangePipe implements PipeTransform {
       } else if (unit === '元') {
         return `${value} ${unit}`;
       } else {
-        return value;
+        return `${value}${unit}`;
       }
     }
   }

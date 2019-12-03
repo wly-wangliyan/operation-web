@@ -116,19 +116,18 @@
                 </li>
                 <li class='price-item' *ngIf='type==="1"'>
                   <span class='price-title'>市场价</span>
-                  <span class='price-content'><span *ngIf='data.market_price'>¥</span>
-                    {{data.market_price|centPriceChange}}</span>
+                  <span class='price-content'>
+                    {{data.market_price|centPriceChange:'￥'}}</span>
                 </li>
                 <li class='price-item'>
                   <span class='price-title'>建议售价</span>
-                  <span class='price-content'><span
-                      *ngIf='data.price_calendar&&data.price_calendar.retail_price'>¥</span>
-                    {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange}}</span>
+                  <span class='price-content'>
+                    {{data.price_calendar&&data.price_calendar.retail_price|centPriceChange:'￥'}}</span>
                 </li>
                 <li class='price-item'>
                   <span class='price-title'>结算价</span>
-                  <span class='price-content'><span *ngIf='data.price_calendar&&data.price_calendar.buy_price'>¥</span>
-                    {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange}}</span>
+                  <span class='price-content'>
+                    {{data.price_calendar&&data.price_calendar.buy_price|centPriceChange:'￥'}}</span>
                 </li>
               </ul>
             </td>

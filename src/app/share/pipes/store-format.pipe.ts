@@ -67,24 +67,24 @@ export class StoreCategoryPipe implements PipeTransform {
 }
 
 /** 订单状态 */
-export const payStatus = {
+export const storePayStatus = {
   1: '未支付',
   2: '已支付',
   3: '已完成'
 };
 
 @Pipe({
-  name: 'payStatus'
+  name: 'storePayStatus'
 })
-export class PayStatusPipe implements PipeTransform {
+export class StorePayStatus implements PipeTransform {
 
   public transform(value: any, args?: any): any {
     if (!value) {
       return '--';
     } else if (value && (typeof value === 'string')) {
-      return payStatus[value];
+      return storePayStatus[value];
     } else {
-      return payStatus[value];
+      return storePayStatus[value];
     }
   }
 }

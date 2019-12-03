@@ -45,7 +45,7 @@ import {
   ValidateTimeLimitPipe,
   MaxNumberDealPipe
 } from './pipes/ticket-format.pipe';
-import { StoreCategoryPipe, StoreProjectTypePipe } from './pipes/store-format.pipe';
+import { StoreCategoryPipe, StoreProjectTypePipe, StorePayStatus } from './pipes/store-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
@@ -123,6 +123,7 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     PushSpeedPipe,
     PushPlanFormatPipe,
     StoreCategoryPipe,
+    StorePayStatus,
 
     // 指令
     IgnoreSpaceDirective,
@@ -195,6 +196,7 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     PushSpeedPipe,
     PushPlanFormatPipe,
     StoreCategoryPipe,
+    StorePayStatus,
 
     // 指令
     IgnoreSpaceDirective,
