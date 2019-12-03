@@ -231,7 +231,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
-
+                this.commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
                 if (this.commodity_id) {
                     this.requestEditCommodity();
                 } else {

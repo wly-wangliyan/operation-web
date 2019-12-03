@@ -10,7 +10,11 @@
                                            [videoAndPhotoUrls]="videoAndImgList"></app-z-preview-video-photo>
             </div>
             <div class="commodity-content">
-                <div class='commodity-name'>{{commodityInfo.commodity_name}}</div>
+                <div class='commodity-name'>
+                    {{commodityInfo.commodity_name}}
+                    <div *ngIf="commodityInfo.sales_status===2">已下架</div>
+                    <div *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type===1?'实物商品':'虚拟商品'}}</div>
+                </div>
                 <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
                 <div class="commodity-table">
                     <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false"

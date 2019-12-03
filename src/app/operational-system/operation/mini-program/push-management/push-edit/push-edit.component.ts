@@ -93,6 +93,8 @@ export class PushEditComponent implements OnInit {
     if (this.isCreatePush) {
       this.pushParams = new PushParams();
       this.cover_url = [];
+      this.offline_status = null;
+      this.pushParams.url_type = null;
     } else {
       this.showEditData(data);
     }
@@ -101,13 +103,13 @@ export class PushEditComponent implements OnInit {
 
   private showEditData(data: any) {
     this.pushParams = new PushParams(data);
-    console.log(this.pushParams, new PushParams(data));
     if (data.end_time === 9999999999) {
       this.offline_status = 1;
     } else {
       this.offline_status = 2;
       this.pushParams.end_time = data.end_time * 1000;
     }
+    this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : null;
     this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
   }
 
