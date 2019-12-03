@@ -52,6 +52,7 @@ export class ExemptionOrderEntity extends EntityBase {
   public driving_license_side: string = undefined; // 行驶证副本
   public insurance_policy: string = undefined; // 交强险保单
   public payment_certificate: string = undefined; // 车船税纳税凭证
+  public imageUrls: Array<any> = []; // 图片放大集合
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 }

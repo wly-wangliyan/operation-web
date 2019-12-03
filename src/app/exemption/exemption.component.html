@@ -4,9 +4,8 @@
       <div [routerLink]="'/main'"></div>
     </div>
     <ul class="main-herder-title">
-      <li [class.herder-active]="menuActive('/exemption', 'exemption')"
+      <li [class.header-exemption-active]="menuActive('/exemption', 'exemption')"
         [class.noPermissions]="!authService.checkPermissions(['exemption'])">
-        免检换贴
       </li>
     </ul>
     <div class="user">

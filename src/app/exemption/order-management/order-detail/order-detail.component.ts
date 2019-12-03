@@ -17,7 +17,7 @@ export class OrderDetailComponent implements OnInit {
 
   public orderRecord: ExemptionOrderEntity = new ExemptionOrderEntity();
 
-  private editParams: EditParams = new EditParams(); // 编辑参数
+  public editParams: EditParams = new EditParams(); // 编辑参数
 
   private tipMsgList = ['', '保存成功', '提交办理完成', '制贴完成', '发货成功', '驳回成功', '退款成功', '确认收货成功'];
 
@@ -305,8 +305,7 @@ export class OrderDetailComponent implements OnInit {
   /**
    * 打开放大图片组件
    */
-  public onOpenZoomPictureModal(image_url: string) {
-    const openIndex = this.imageUrls.findIndex(imageItem => imageItem === image_url);
+  public onOpenZoomPictureModal(openIndex: number) {
     timer(0).subscribe(() => {
       this.ZPhotoSelectComponent.zoomPicture(openIndex);
     });
