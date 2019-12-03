@@ -152,7 +152,7 @@
         <tbody>
           <tr *ngFor="let commodity of goodsInfo;let i=index">
             <td>{{commodity.commodity_name}}</td>
-            <td>{{commodity.commodity_type}}</td>
+            <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
             <td>{{commodity.specification_name?commodity.specification_name:'--'}}</td>
             <td>
               {{commodity.amount||0}}

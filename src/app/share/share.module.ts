@@ -32,6 +32,7 @@ import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-typ
 import { SelectMultiBrandFirmComponent } from './components/select-multi-brand-firm/select-multi-brand-firm.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
+import { MallCommodityTypePipe } from './pipes/mall-format.pipe';
 import {
   TicketFormatPipe,
   ThirdSaleStatusPipe,
@@ -53,6 +54,7 @@ import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-cked
 import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
 import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
+
 
 @NgModule({
   imports: [
@@ -124,6 +126,7 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
+    MallCommodityTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -197,6 +200,7 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
+    MallCommodityTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
