@@ -97,7 +97,7 @@ export class AuthService {
               location.href = location.origin + GlobalConst.HomePath;
             }*/
             this._isLoggedIn = true;
-            location.href = location.origin + GlobalConst.HomePath;
+            location.href = location.origin + '/operational-system' + GlobalConst.HomePath;
         }, err => {
             if (err.status === 403) {
                 this.noAuthority();
