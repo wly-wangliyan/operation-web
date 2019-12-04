@@ -62,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "login:build"
+            "browserTarget": "login:build",
+            "baseHref": "/login"
           },
           "configurations": {
             "production": {
@@ -183,7 +184,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "operational-system:build"
+            "browserTarget": "operational-system:build",
+            "baseHref": "/operational-system"
           },
           "configurations": {
             "production": {
@@ -304,7 +306,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "store-maintenance:build"
+            "browserTarget": "store-maintenance:build",
+            "baseHref": "/store-maintenance"
           },
           "configurations": {
             "production": {
@@ -421,7 +424,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "exemption:build"
+            "browserTarget": "exemption:build",
+            "baseHref": "/exemption"
           },
           "configurations": {
             "production": {
