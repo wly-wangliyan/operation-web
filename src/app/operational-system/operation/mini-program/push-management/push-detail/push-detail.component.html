@@ -38,7 +38,7 @@
                     <td>创建时间：</td>
                     <td>{{pushRecord.created_time ? (pushRecord.created_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
                     <td>上线时间：</td>
-                    <td>{{pushRecord.start_time ? (pushRecord.start_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
+                    <td>{{pushRecord.updated_time ? (pushRecord.updated_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
                     <td>下线时间：</td>
                     <td *ngIf="pushRecord.end_time===9999999999">永不下线</td>
                     <td *ngIf="pushRecord.end_time!==9999999999">

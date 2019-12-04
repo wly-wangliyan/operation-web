@@ -62,7 +62,7 @@
                     </td>
                     <td>{{data.push_plan_name}}</td>
                     <td>{{data.push_type===1?'首页浮窗':data.push_type===2?'首页弹窗':'--'}}</td>
-                    <td>{{data.start_time ?(data.start_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>{{data.updated_time ?(data.updated_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
                     <td *ngIf="data.end_time===9999999999">永不下线</td>
                     <td *ngIf="data.end_time!==9999999999">

@@ -10,7 +10,7 @@ import { EntityBase } from '../../../../../utils/z-entity';
 export class PushCountEntity extends EntityBase {
   public push_count_id: string = undefined; // 	string	推送统计id
   public push_plan: object = undefined; // 	obj	推送配置对象
-  public push_count_date: string = undefined; // 	float	推送统计日期
+  public push_count_date: number = undefined; // 	float	推送统计日期
   public reach_user_num: number = undefined; // 	int	触达(提示)次数
   public click_num: number = undefined; // 	int	点击次数
   public close_num: number = undefined; // 	int	关闭次数
@@ -25,7 +25,7 @@ export class PushCountEntity extends EntityBase {
 export class PushEntity extends EntityBase {
   public push_plan_id: string = undefined; // 	string	推送配置id
   public push_plan_name: string = undefined; // 	string	推送配置名称(标题)
-  public push_plan_status: string = undefined; // 	string	推送配置启停新状态
+  public push_plan_status: number = undefined; // 	int	推送配置启停新状态
   public push_plan_rank: number = undefined; // 	int	推送优先级
   public push_range: number = undefined; // 	int	推送人群定位1:全部,2:领券未使用用户,3:下单未支付用户,4:自定义
   public push_range_detail = undefined; // 	json	人群定位详情 {'range_type':1, 'coupon_id':'xxx','coupon_group_id':'xxx','coupon_service':2,'date_limit':15}
