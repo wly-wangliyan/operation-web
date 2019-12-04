@@ -231,11 +231,12 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
-                this.commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
+                const commodityInfo = this.commodityInfo.clone();
+                commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
                 if (this.commodity_id) {
-                    this.requestEditCommodity();
+                    this.requestEditCommodity(commodityInfo);
                 } else {
-                    this.requestCreateCommodity();
+                    this.requestCreateCommodity(commodityInfo);
                 }
             }, err => {
                 this.upLoadErrMsg(err);
@@ -275,8 +276,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
 
     // 创建商品
-    private requestCreateCommodity() {
-        this.goodsManagementHttpService.requestCreateCommodityData(this.commodityInfo).subscribe(data => {
+    private requestCreateCommodity(commodityInfo: CommodityEntity) {
+        this.goodsManagementHttpService.requestCreateCommodityData(commodityInfo).subscribe(data => {
             this.requestModifyCommoditySpecification(data.commodity_id);
         }, err => {
             this.processError(err);
@@ -284,8 +285,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
 
     // 修改商品
-    private requestEditCommodity() {
-        this.goodsManagementHttpService.requestEditCommodityData(this.commodity_id, this.commodityInfo).subscribe(() => {
+    private requestEditCommodity(commodityInfo: CommodityEntity) {
+        this.goodsManagementHttpService.requestEditCommodityData(this.commodity_id, commodityInfo).subscribe(() => {
             this.requestModifyCommoditySpecification(this.commodity_id);
         }, err => {
             this.processError(err);

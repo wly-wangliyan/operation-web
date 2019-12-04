@@ -5,7 +5,7 @@
         <div class="modal-content modal-content-common">
             <div class="modal-header">
                 <span class="modal-title">{{isCreatePush ? '新建' : '编辑'}}</span>
-                <button type="button" class="close" data-dismiss="modal">&times;
+                <button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;
                 </button>
             </div>
             <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editBannerForm="ngForm">
@@ -185,7 +185,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                    <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
                             [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
                              || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||

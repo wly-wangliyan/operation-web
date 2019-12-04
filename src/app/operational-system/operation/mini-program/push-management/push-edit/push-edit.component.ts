@@ -85,7 +85,6 @@ export class PushEditComponent implements OnInit {
         $(this.bannerPromptDiv.nativeElement).modal('show');
       });
     };
-    $('.form-horizontal').scrollTop(0);
     this.isCreatePush = data && data.push_plan_id ? false : true;
     this.push_id = data ? data.push_plan_id : '';
     this.sureCallback = sureFunc;
