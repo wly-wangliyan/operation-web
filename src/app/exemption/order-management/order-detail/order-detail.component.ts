@@ -226,26 +226,6 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  // 限制input[type='number']输入e
-  public inputNumberLimit(event: any): boolean {
-    const reg = /^\d*?\.?\d*?$/;
-    const keyCode = String.fromCharCode(event.keyCode);
-    return (keyCode && reg.test(keyCode));
-  }
-
-  // 格式化金额
-  public onAmountChange(event: any): void {
-    const target_value = event.target.value;
-    if (target_value) {
-      if (isNaN(parseFloat(String(target_value)))) {
-        event.target.value = null;
-      } else {
-        const tmpValue = parseFloat(String(target_value)).toFixed(2);
-        event.target.value = parseFloat(tmpValue);
-      }
-    }
-  }
-
   // 确认发货
   public onSendGoodsClick(): void {
     if (Number(this.logistics_fee) === 0) {

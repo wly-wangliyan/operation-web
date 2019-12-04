@@ -30,8 +30,7 @@
             <div class="price-title">原价</div>
             <div class="control-input small-group">
               <input name="total_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
-                [(ngModel)]="configParams.total_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
+                [(ngModel)]="configParams.total_amount" maxlength="8" appIgnoreSpace appFloatNumber required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
@@ -40,8 +39,7 @@
             <div class="price-title">结算价</div>
             <div class="control-input small-group">
               <input name="sale_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
-                [(ngModel)]="configParams.sale_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
+                [(ngModel)]="configParams.sale_amount" maxlength="8" appIgnoreSpace appFloatNumber required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
@@ -50,8 +48,7 @@
             <div class="price-title">售价</div>
             <div class="control-input small-group">
               <input name="real_amount" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
-                [(ngModel)]="configParams.real_amount" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
+                [(ngModel)]="configParams.real_amount" maxlength="8" appIgnoreSpace appFloatNumber required />
               <label class="one-word-lable">元</label>
             </div>
           </div>
@@ -60,8 +57,7 @@
             <div class="price-title">邮费</div>
             <div class="control-input small-group">
               <input name="logistics_fee" class="form-control" (focus)="configErrMsg=''" [disabled]="!isEdit"
-                [(ngModel)]="configParams.logistics_fee" (keypress)="inputNumberLimit($event)"
-                (change)="onAmountChange($event)" maxlength="8" appIgnoreSpace required />
+                [(ngModel)]="configParams.logistics_fee" maxlength="8" appIgnoreSpace appFloatNumber required />
               <label class="one-word-lable">元</label>
             </div>
           </div>

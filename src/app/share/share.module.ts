@@ -54,6 +54,7 @@ import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-cked
 import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
 import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
+import { FloatNumberDirective } from './directives/float-number.directive';
 
 
 @NgModule({
@@ -134,6 +135,7 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     TxtCopyDirective,
     ZTextCkeditorComponent,
     ZPhotoSelectUploadComponent,
+    FloatNumberDirective
   ],
   exports: [
     CommonModule,
@@ -205,7 +207,8 @@ import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from 
     // 指令
     IgnoreSpaceDirective,
     ZDebounceClickDirective,
-    TxtCopyDirective
+    TxtCopyDirective,
+    FloatNumberDirective
   ],
 })
 export class ShareModule {

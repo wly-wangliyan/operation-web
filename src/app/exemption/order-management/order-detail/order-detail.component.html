@@ -263,8 +263,7 @@
             </label>
             <div class="control-input">
               <input name="logistics_fee" placeholder="请输入发件邮费金额" [(ngModel)]="logistics_fee" maxlength="8"
-                class="form-control" (keypress)="inputNumberLimit($event)" (change)="onAmountChange($event)" required
-                appIgnoreSpace>
+                class="form-control" required appIgnoreSpace appFloatNumber>
             </div>
           </div>
 
@@ -362,7 +361,7 @@
             </label>
             <div class="control-input">
               <input name="refund_fee" placeholder="请输入退款金额" [(ngModel)]="refund_fee" maxlength="8" class="form-control"
-                (keypress)="inputNumberLimit($event)" (change)="onAmountChange($event)" required appIgnoreSpace>
+                required appIgnoreSpace appFloatNumber>
             </div>
           </div>
 
