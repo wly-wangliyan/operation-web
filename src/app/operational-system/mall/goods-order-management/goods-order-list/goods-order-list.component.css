@@ -1,34 +1,48 @@
 .search-container {
-    margin-left: 15px;
-    width: calc(100% - 30px);
-    padding: 0;
+  margin-left: 15px;
+  width: calc(100% - 30px);
+  padding: 0;
 }
 
 .search-form .form-group {
-    margin-right: 20px !important;
+  margin-right: 20px !important;
 }
 
 .form-group select {
-    width: 150px;
+  width: 150px;
 }
 
 .form-group .line {
-    margin: 0 8px;
+  margin: 0 8px;
 }
 
 .search-btn-group {
-    margin-top: -1px !important;
+  margin-top: -1px !important;
 }
 
 .img-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px;
 }
 
 .img-item img {
-    margin-right: 5px;
-    width: 90px;
-    height: 65px;
+  margin: 10px 5px 10px 0;
+  width: 90px;
+  height: 65px;
+}
+
+.operation {
+  width: 70px;
+  word-break: break-all;
+}
+
+.operation a {
+  margin: 0 3px !important;
+}
+
+:host ::ng-deep .ant-table-thead>tr>th,
+.ant-table-tbody>tr>td {
+  padding: 3px !important;
 }

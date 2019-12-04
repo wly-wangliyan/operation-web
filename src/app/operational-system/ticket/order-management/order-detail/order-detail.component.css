@@ -43,7 +43,8 @@
 .table-item table>thead tr>th,
 .table-item table>tbody tr>td {
   font-size: 12px;
-  color: #23242F;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
   padding: 4px 8px;
   vertical-align: middle;
   border-left: 1px solid #d4d4d4;

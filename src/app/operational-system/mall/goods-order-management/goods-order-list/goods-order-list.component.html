@@ -104,9 +104,9 @@
                 <div style="display: grid;text-align: left">
                   <a [title]="commodity.commodity_name"
                     [routerLink]="['../../goods-management/detail', commodity.commodity_id]">
-                    {{commodity.commodity_name | zMaxLength:10}}</a>
+                    {{commodity.commodity_name | zMaxLength:8}}</a>
                   <span [title]="commodity.specification_name">
-                    {{commodity.specification_name | zMaxLength:10}}</span>
+                    {{commodity.specification_name | zMaxLength:8}}</span>
                   <span>{{commodity.unit_sell_price | centPriceChange:'元'}}</span>
                 </div>
               </td>
@@ -147,6 +147,7 @@
               <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
               <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"
                 [title]="'发货'" (click)="onEditDeliveryClick(order)">发货</a>
+              <br>
               <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2" [title]="'修改物流'"
                 (click)="onEditDeliveryClick(order)">修改物流</a>
               <a *ngIf="order.delivery_status===2" [title]="'确认收货'" (click)="onConfiemClick(order)">确认收货</a>
