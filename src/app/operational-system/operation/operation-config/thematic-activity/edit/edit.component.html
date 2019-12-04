@@ -37,9 +37,8 @@
               <div class="link-group">
                 <div class="link-picture">
                   <app-z-photo-select-upload #{{element.element_id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                    [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="element.element_id" [imageWidth]="340"
-                    [imageHeight]="220" [imageUrls]="element.image_url" [aspectRatio]="1.55/1" [minCropBoxWidth]="340"
-                    [minCropBoxHeight]="220" [resizable]="true" [imageShowWidth]="340" [imageAddWidth]="340"
+                    [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="element.element_id" [imageWidth]="340"
+                    [imageHeight]="220" [imageUrls]="element.image_url" [imageShowWidth]="340" [imageAddWidth]="340"
                     (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
                   </app-z-photo-select-upload>
                 </div>
@@ -64,10 +63,9 @@
             <div class="link-group">
               <div class="link-picture">
                 <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
-                  [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="true"
+                  [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="false"
                   [file_id]="content.elements[0].element_id" [imageWidth]="690" [imageHeight]="220"
-                  [imageUrls]="content.elements[0].image_url" [aspectRatio]="3.136/1" [minCropBoxWidth]="345"
-                  [minCropBoxHeight]="110" [resizable]="true" [imageShowWidth]="690" [imageAddWidth]="690"
+                  [imageUrls]="content.elements[0].image_url" [imageShowWidth]="690" [imageAddWidth]="690"
                   (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
                 </app-z-photo-select-upload>
               </div>

@@ -9,8 +9,8 @@
           <div class="title" [innerHTML]="preview_title"></div>
           <ng-container *ngFor="let item of previewList;let i=index">
             <ng-container *ngIf="item.content_type===1">
-              <div class="picture-link">
-                <img class="small-picture" [src]="item.elements[0].image" style="margin-right: 5px;">
+              <div class="picture-link two-link">
+                <img class="small-picture" [src]="item.elements[0].image">
                 <img class="small-picture" [src]="item.elements[1].image">
               </div>
             </ng-container>
