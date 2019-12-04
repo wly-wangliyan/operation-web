@@ -31,8 +31,8 @@
                         <tbody>
                         <tr *ngFor="let specificationData of specificationTable.data; let i=index">
                             <td>{{specificationData.specification_name}}</td>
-                            <td>{{specificationData.unit_original_price}}</td>
-                            <td>{{specificationData.unit_sell_price}}</td>
+                            <td>{{specificationData.unit_original_price?specificationData.unit_original_price+'元':'--'}}</td>
+                            <td>{{specificationData.unit_sell_price?specificationData.unit_sell_price+'元':'--'}}</td>
                             <td>{{specificationData.stock}}</td>
                             <td>{{specificationData.sold_amount}}</td>
                         </tr>

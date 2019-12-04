@@ -74,3 +74,8 @@
 .commodity-footer {
     margin-top: 70px;
 }
+
+.artcontent {
+    width: 99%;
+    word-break: break-all;
+}

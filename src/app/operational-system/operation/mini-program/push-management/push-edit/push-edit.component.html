@@ -190,7 +190,7 @@
                             [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
                              || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||
                              (!pushParams.range_type&&pushParams.push_range&&pushParams.push_range!==1) || !pushParams.push_speed_type ||
-                             !offline_status || (!pushParams.url_type&&pushParams.push_location_url) || (pushParams.url_type&&!pushParams.push_location_url)"
+                             !offline_status || (!pushParams.url_type&&pushParams.push_location_url) || (pushParams.url_type&&pushParams.url_type!=='null'&&!pushParams.push_location_url)"
                             (appZDebounceClick)="onEditFormSubmit()">{{sureName}}
                     </button>
                 </div>
