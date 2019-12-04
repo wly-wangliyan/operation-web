@@ -95,7 +95,7 @@ export class PushEditComponent implements OnInit {
       this.pushParams = new PushParams();
       this.cover_url = [];
       this.offline_status = null;
-      this.pushParams.url_type = null;
+      this.pushParams.url_type = 0;
     } else {
       this.showEditData(data);
     }
@@ -110,7 +110,7 @@ export class PushEditComponent implements OnInit {
       this.offline_status = 2;
       this.pushParams.end_time = data.end_time * 1000;
     }
-    this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : null;
+    this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : 0;
     this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
   }
 
@@ -159,6 +159,7 @@ export class PushEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.pushParams.push_image = imageUrl.join(',');
+      this.pushParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
       this.pushParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
       if (this.verification()) {
         if (this.isCreatePush) {
