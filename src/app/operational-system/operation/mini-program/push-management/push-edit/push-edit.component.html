@@ -1,4 +1,4 @@
-<!--新增/编辑Banner-->
+<!--新增/编辑Push-->
 <div class="modal fade" id="editBannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true" #bannerPromptDiv>
     <div class="modal-dialog modal-dialog-common" role="document">
@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;
                 </button>
             </div>
-            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editBannerForm="ngForm">
                 <div class="row">
                     <label class="control-label">
                         <b>*</b>
@@ -53,10 +53,10 @@
                     <div class="push-rate location-crowd" style="margin-top: 10px">
                         <input *ngIf="pushParams.push_range===2&&pushParams.range_type===1" class="form-control" placeholder="请输入优惠券模板ID"
                                oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
-                               [(ngModel)]="pushParams.coupon_id" maxlength="10" name="coupon_id" autocomplete="off" required appIgnoreSpace>
+                               [(ngModel)]="pushParams.coupon_id" maxlength="50" name="coupon_id" autocomplete="off" required appIgnoreSpace>
                         <input *ngIf="pushParams.push_range===2&&pushParams.range_type===2" class="form-control" placeholder="请输入优惠券组ID"
                                oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
-                               [(ngModel)]="pushParams.coupon_group_id" maxlength="10" name="coupon_group_id" autocomplete="off" required appIgnoreSpace>
+                               [(ngModel)]="pushParams.coupon_group_id" maxlength="50" name="coupon_group_id" autocomplete="off" required appIgnoreSpace>
                         <select *ngIf="pushParams.push_range===2&&pushParams.range_type===3" class="form-control" [(ngModel)]="pushParams.coupon_service" name="coupon_service">
                             <option *ngFor="let item of coupon_service;let i=index" [value]=i>{{item}}</option>
                         </select>

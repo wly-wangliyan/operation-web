@@ -67,6 +67,7 @@ export class PushEditComponent implements OnInit {
   // 弹框close
   public onClose() {
     this.clear();
+    $('.form-horizontal').scrollTop(0);
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.pushParams = new PushParams();
     $(this.bannerPromptDiv.nativeElement).modal('hide');
@@ -84,6 +85,7 @@ export class PushEditComponent implements OnInit {
         $(this.bannerPromptDiv.nativeElement).modal('show');
       });
     };
+    $('.form-horizontal').scrollTop(0);
     this.isCreatePush = data && data.push_plan_id ? false : true;
     this.push_id = data ? data.push_plan_id : '';
     this.sureCallback = sureFunc;
