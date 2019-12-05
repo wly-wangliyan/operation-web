@@ -1,6 +1,6 @@
 <!--新增/编辑Push-->
-<div class="modal fade" id="editBannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #bannerPromptDiv>
+<div class="modal fade" id="editPushModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #pushPromptDiv>
     <div class="modal-dialog modal-dialog-common" role="document">
         <div class="modal-content modal-content-common">
             <div class="modal-header">
@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;
                 </button>
             </div>
-            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editBannerForm="ngForm">
+            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editPushModal="ngForm">
                 <div class="row">
                     <label class="control-label">
                         <b>*</b>
@@ -81,9 +81,9 @@
                            (click)="onChangeTeb('push_speed_type', 2)" style="margin-right: 5px">触发后持续推送</a>
                     </div>
                     <div class="push-rate" *ngIf="pushParams.push_speed_type===2">
-                        <span>最小间隔</span>
-                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="0-999"
-                               maxlength="3" autocomplete="off" oninput="value=value.replace(/[^0-9]/ig,'')" required appIgnoreSpace>
+                        <span>每</span>
+                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="1-999"
+                               maxlength="3" autocomplete="off" oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
                         <label>日</label>
                         <span>推送1次，最大推送</span>
                         <input class="form-control" [(ngModel)]="pushParams.push_num" name="push_num" placeholder="1-999" maxlength="3"
@@ -187,7 +187,7 @@
                 <div class="modal-footer">
                     <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
+                            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
                              || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||
                              (!pushParams.range_type&&pushParams.push_range&&pushParams.push_range!==1) || !pushParams.push_speed_type ||
                              !offline_status || ((!pushParams.url_type||pushParams.url_type==0)&&pushParams.push_location_url) ||
