@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "login-build": "node ./node_modules/@angular/cli/bin/ng build login",
+    "login-build": "node ./node_modules/@angular/cli/bin/ng build login --prod",
     "operational-system-build": "node ./node_modules/@angular/cli/bin/ng build operational-system --prod",
     "store-maintenance-build": "node ./node_modules/@angular/cli/bin/ng build store-maintenance --prod",
     "exemption-build": "node ./node_modules/@angular/cli/bin/ng build exemption --prod"
