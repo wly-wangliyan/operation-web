@@ -70,8 +70,8 @@
                     <th>时间</th>
                     <th>触达人数</th>
                     <th>点击量</th>
-                    <th>关闭数</th>
                     <th>点击人数</th>
+                    <th>关闭数</th>
                     <th>关闭人数</th>
                 </tr>
                 </thead>
@@ -80,8 +80,8 @@
                     <td>{{click.push_count_date ? (click.push_count_date* 1000 | date:"y-MM-dd") : '--'}}</td>
                     <td>{{click.reach_user_num >= 0 ? click.reach_user_num : '--'}}</td>
                     <td>{{click.click_num >= 0 ? click.click_num : '--'}}</td>
-                    <td>{{click.close_num >= 0 ? click.close_num : '--'}}</td>
                     <td>{{click.click_user_num >= 0 ? click.click_user_num : '--'}}</td>
+                    <td>{{click.close_num >= 0 ? click.close_num : '--'}}</td>
                     <td>{{click.close_user_num >= 0 ? click.close_user_num : '--'}}</td>
                 </tr>
                 </tbody>
