@@ -12,21 +12,3 @@
 .form-group .line {
   margin: 0 8px;
 }
-
-.car-type {
-  display: inline-block;
-  color: #409DFD;
-  font-size: 12px;
-  width: 45px;
-  height: 18px;
-  background: #C6E2FF;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.material-container img {
-  width: 60px;
-  height: 40px;
-  margin: 5px;
-  cursor: zoom-in;
-}

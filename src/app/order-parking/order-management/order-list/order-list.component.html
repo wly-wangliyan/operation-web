@@ -1,5 +1,13 @@
 <div class="content-header">
   <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+              (appZDebounceClick)="onExportClick()">
+        导出
+      </button>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
 
@@ -14,24 +22,8 @@
             <option value="1">未支付</option>
             <option value="2">已支付</option>
             <option value="3">已退款</option>
-            <option value="4">已完成</option>
+            <option value="4">已入场</option>
             <option value="5">已取消</option>
-            <option value="6">退款中</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <span>办理流程：</span>
-          <select name="process_flow" class="form-control" style="width: 130px;" [(ngModel)]="processing_flow"
-            (change)="onChangeProcessStatus($event)">
-            <option value="">全部</option>
-            <option value="1">待办理</option>
-            <option value="2">已提交办理</option>
-            <option value="3">制贴完成</option>
-            <option value="4">已发货</option>
-            <option value="5">已驳回</option>
-            <option value="6">已驳回并退款</option>
-            <option value="7">已确认收货</option>
           </select>
         </div>
         <div class="form-group">
@@ -40,7 +32,7 @@
             maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace>
         </div>
         <div class="form-group">
-          <span>购买人：</span>
+          <span>预订人：</span>
           <input name="name" class="form-control" [(ngModel)]="searchParams.name" placeholder="请输入购买人"
             autocomplete="off" maxlength="20" appIgnoreSpace />
         </div>
@@ -80,13 +72,12 @@
             <th>序号</th>
             <th>订单编号</th>
             <th>车牌号</th>
-            <th>购买人</th>
-            <th>收货地址</th>
-            <th>上传资料</th>
-            <th>合计实收</th>
+            <th>预订人</th>
+            <th>停车场</th>
+            <th>预付费</th>
+            <th>预约到场时间</th>
             <th>下单&支付时间</th>
             <th>订单状态</th>
-            <th>办理流程</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -103,7 +94,6 @@
 
             <td>
               <div class="column-box">
-                <span *ngIf="order.car_type" class="car-type">{{order.car_type === 1 ? '小型车':'其他'}}</span>
                 <span>{{order.car_id}}</span>
               </div>
             </td>
@@ -115,14 +105,12 @@
             </td>
             <td [title]="order.address?order.address:''">{{order.address?(order.address | zMaxLength:8):'--'}}</td>
             <td>
-              <div class="material-container">
-                <img *ngFor="let image of order.imageUrls;let openIndex = index;" [src]='image'
-                  (click)="onOpenZoomPictureModal(order,openIndex)" />
-              </div>
-            </td>
-
-            <td>
               {{order.real_amount  | centPriceChange:'¥ ':'left'}}
+            </td>
+            <td>
+              <span *ngIf="order.created_time">
+                  {{order.created_time ?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+                </span>
             </td>
             <td>
               <div class="column-box">
@@ -136,9 +124,9 @@
               </div>
             </td>
             <td>{{order.status | exemptionOrderStatus}}</td>
-            <td>{{order.processing_flow | exemptionFormat}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
+              <a [title]="'退款'" (click)="onRefundClick(order)">退款</a>
             </td>
           </tr>
         </tbody>

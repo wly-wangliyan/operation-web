@@ -5,6 +5,7 @@ import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, OrderSearchParams, ExemptionOrderEntity } from '../order-management.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
+import { environment } from '../../../../environments/environment';
 
 const PageSize = 15;
 
@@ -32,6 +33,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
+  private searchUrl: string;
 
   private get pageCount(): number {
     if (this.orderList.length % PageSize === 0) {
@@ -78,6 +80,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
+      this.exportSearchUrl();
     }, err => {
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
@@ -118,30 +121,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 改变办理流程
-  public onChangeProcessStatus(event: any): void {
-    const status = event.target.value;
-    this.searchParams.processing_flow = null;
-    if (status) {
-      this.searchParams.processing_flow = Number(status);
-    }
-  }
-
   // 条件查询
   public onSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
       this.searchText$.next();
     }
-  }
-
-  /**
-   * 打开放大图片组件
-   */
-  public onOpenZoomPictureModal(orderRecord: ExemptionOrderEntity, openIndex: number) {
-    this.imageUrls = orderRecord.imageUrls ? orderRecord.imageUrls : [];
-    timer(0).subscribe(() => {
-      this.ZPhotoSelectComponent.zoomPicture(openIndex);
-    });
   }
 
   /* 生成并检查参数有效性 */
@@ -173,6 +157,28 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.searchParams.pay_section = null;
     }
     return true;
+  }
+
+  // 退款
+  public onRefundClick(data) {
+    this.globalService.confirmationBox.open('提示', `确认退款给${data.car_id}车主？`, () => {
+      this.globalService.confirmationBox.close();
+    });
+  }
+
+  // 导出url
+  private exportSearchUrl() {
+    // tslint:disable-next-line:max-line-length
+    // this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+  }
+
+  // 导出订单列表
+  public onExportClick() {
+    if (this.generateAndCheckParamsValid() && this.searchUrl) {
+      window.open(this.searchUrl);
+    } else {
+      return;
+    }
   }
 
   // 下单开始时间的禁用部分
