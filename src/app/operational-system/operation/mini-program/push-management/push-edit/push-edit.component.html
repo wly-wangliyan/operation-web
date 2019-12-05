@@ -193,8 +193,8 @@
                 <div class="modal-footer">
                     <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
-                             || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||
+                            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0 || (offline_status === 2 && !pushParams.end_time)
+                             || ((!pushParams.coupon_service||pushParams.coupon_service==0)&&pushParams.range_type==3) || !pushParams.push_type || !pushParams.push_range ||
                              (!pushParams.range_type&&pushParams.push_range&&pushParams.push_range!==1) || !pushParams.push_speed_type ||
                              !offline_status || ((!pushParams.url_type||pushParams.url_type==0)&&pushParams.push_location_url) ||
                              (pushParams.url_type&&pushParams.url_type!=0&&!pushParams.push_location_url)"

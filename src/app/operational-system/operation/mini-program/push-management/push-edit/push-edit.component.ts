@@ -162,12 +162,13 @@ export class PushEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.pushParams.push_image = imageUrl.join(',');
-      this.pushParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
-      this.pushParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
+      const saveParams = this.pushParams.clone();
+      saveParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
+      saveParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
       if (this.verification()) {
         if (this.isCreatePush) {
           // 添加推送
-          this.pushService.requestAddPushData(this.pushParams).subscribe(() => {
+          this.pushService.requestAddPushData(saveParams).subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('添加成功！', () => {
               this.sureCallbackInfo();
@@ -178,7 +179,7 @@ export class PushEditComponent implements OnInit {
           });
         } else {
           // 编辑推送
-          this.pushService.requestUpdatePushData(this.push_id, this.pushParams).subscribe(() => {
+          this.pushService.requestUpdatePushData(this.push_id, saveParams).subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('修改成功！', () => {
               this.sureCallbackInfo();
