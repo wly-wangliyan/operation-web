@@ -122,7 +122,7 @@ export class ExpandedMenuComponent implements OnInit {
     } else if (path.includes('/order-parking')) {
       this.menuItems = this.orderParkingService.generateMenus_order_parking();
       this.menu_icon = false;
-      this.routeLinkList = this.exemptionService.routeLinkList;
+      this.routeLinkList = this.orderParkingService.routeLinkList;
     }
   }
 

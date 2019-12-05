@@ -56,7 +56,7 @@ export class SentryErrorHandler implements ErrorHandler {
   ],
   declarations: [
     OrderParkingEntryComponent,
-    OrderParkingComponent,
+    OrderParkingComponent
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

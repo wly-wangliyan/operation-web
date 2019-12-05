@@ -5,7 +5,6 @@ import { RouteMonitorService } from '../../core/route-monitor.service';
 import { MenuGuardService } from '../../core/menu-guard.service';
 import { HomeComponent } from '../../operational-system/main/home/home.component';
 import { OrderParkingMainComponent } from './order-parking-main.component';
-import { ServiceConfigComponent } from '../service-config/service-config.component';
 
 const routes: Routes = [{
   path: '', component: OrderParkingMainComponent,
@@ -13,7 +12,8 @@ const routes: Routes = [{
   children: [
     { path: 'home', component: HomeComponent },
     {
-      path: 'service-config', component: ServiceConfigComponent
+      path: 'service-config',
+      loadChildren: () => import('../service-config/service-config.module').then(m => m.ServiceConfigModule),
     },
     {
       path: 'order-management',

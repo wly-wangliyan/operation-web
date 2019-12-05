@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Subject, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { GlobalService } from '../../../core/global.service';
+import { GlobalService } from '../../../../core/global.service';
 
 @Component({
   selector: 'app-edit-config',
