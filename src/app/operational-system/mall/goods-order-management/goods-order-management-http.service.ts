@@ -38,6 +38,16 @@ export class OrderDetailEntity extends EntityBase {
   public commodity_type = undefined; // int	商品类型 1：实物商品 2：虚拟商品
 }
 
+export class OrderRefundEntity extends EntityBase {
+  public refund_order_id = ''; // 	string	退款交易单号id
+  public refund_status = ''; // 	int 退款状态 0未申请退款 1退款中，2已退款，3退款失败
+  public transaction_id = ''; // 	string	微信订单号
+  public refund_id = ''; // 	string	微信退款单号
+  public refund_fee = ''; // 	int	退款费用
+  public total_fee = ''; // 	int	标价金额
+  public cash_fee = ''; // 	int	单位分 现金支付金额
+}
+
 export class GoodsOrderEntity extends EntityBase {
   public order_id = ''; // 	string	订单ID
   public trade_no = ''; // 	string	微信支付订单id
@@ -72,10 +82,13 @@ export class GoodsOrderEntity extends EntityBase {
   public updated_time = undefined; // 	float	更新时间
   public created_time = undefined; // 	float	创建时间
   public detail: Array<OrderDetailEntity> = []; // 	obj[]	订单明细对象列表
+  public refund_order: OrderRefundEntity = undefined; // 	订单退款对象
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'detail') {
       return OrderDetailEntity;
+    } else if (propertyName === 'refund_order') {
+      return OrderRefundEntity;
     }
     return null;
   }
