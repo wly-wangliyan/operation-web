@@ -46,6 +46,7 @@ export class PushEditComponent implements OnInit {
   public cover_url = [];
   public coupon_service = ['请选择', '停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
   public offline_status = null;
+  public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
 
   private sureCallback: any;
   private closeCallback: any;
@@ -56,7 +57,7 @@ export class PushEditComponent implements OnInit {
 
   @Input() public data: any;
   @Input() public sureName = '保存';
-  @ViewChild('bannerPromptDiv', { static: false }) public bannerPromptDiv: ElementRef;
+  @ViewChild('pushPromptDiv', { static: false }) public pushPromptDiv: ElementRef;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private globalService: GlobalService, private pushService: PushManagementService) { }
@@ -70,7 +71,7 @@ export class PushEditComponent implements OnInit {
     $('.form-horizontal').scrollTop(0);
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.pushParams = new PushParams();
-    $(this.bannerPromptDiv.nativeElement).modal('hide');
+    $(this.pushPromptDiv.nativeElement).modal('hide');
   }
 
   /**
@@ -80,9 +81,9 @@ export class PushEditComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(data: any, sureFunc: any, closeFunc: any = null) {
-    const openBannerModal = () => {
+    const openPushModal = () => {
       timer(0).subscribe(() => {
-        $(this.bannerPromptDiv.nativeElement).modal('show');
+        $(this.pushPromptDiv.nativeElement).modal('show');
       });
     };
     this.isCreatePush = data && data.push_plan_id ? false : true;
@@ -99,7 +100,7 @@ export class PushEditComponent implements OnInit {
     } else {
       this.showEditData(data);
     }
-    openBannerModal();
+    openPushModal();
   }
 
   private showEditData(data: any) {
