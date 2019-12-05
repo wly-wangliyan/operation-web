@@ -30,6 +30,8 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public file_id = 'file';
 
+  @Input()public imgReg = /(jpg|jpeg|png)$/; // 限制图片格式
+
   @Input()
   public set imageUrls(imageUrls: Array<string>) {
     if (isNullOrUndefined(imageUrls)) {
@@ -304,14 +306,14 @@ export class ZPhotoSelectComponent implements OnInit {
     if (imageList.length > 0) {
       for (const index in imageList) {
         if (imageList.hasOwnProperty(index)) {
-          const imgReg = /(jpg|jpeg|png|gif)$/;
+          // const imgReg = /(jpg|jpeg|png)$/;
           this.isValidImg = true;
 
           if (imageList[index].sourceFile) {
             const file = imageList[index].sourceFile;
             const type = file.type.split('/')[1];
 
-            if (isNullOrUndefined(type) || !imgReg.test(type.toLowerCase())) {
+            if (isNullOrUndefined(type) || !this.imgReg.test(type.toLowerCase())) {
               this.isValidImg = false;
               this.selectedImgChange.emit('type_error');
               return;

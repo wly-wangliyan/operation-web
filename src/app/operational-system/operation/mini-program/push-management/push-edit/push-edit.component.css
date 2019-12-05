@@ -91,22 +91,21 @@ select {
 
 .push-rate label {
     height: 34px;
-    width: 40px;
+    width: 34px;
     text-align: center;
     line-height: 34px;
-    border: 0.5px solid rgba(136,136,136,.5);
+    border: 0.5px solid rgba(136,136,136,.4);
     background: #f8f9fb;
-    border-left: none;
     margin-right: 5px;
+    margin-left: -34px;
 }
 
 .push-rate label:last-child {
-    width: 34px;
     margin-right: 0;
 }
 
 .push-rate input {
-    width: 70px;
+    width: 100px;
     margin-left: 5px;
 }
 

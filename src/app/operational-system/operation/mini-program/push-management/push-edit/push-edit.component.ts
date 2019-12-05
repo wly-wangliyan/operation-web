@@ -46,6 +46,7 @@ export class PushEditComponent implements OnInit {
   public cover_url = [];
   public coupon_service = ['请选择', '停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
   public offline_status = null;
+  public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
 
   private sureCallback: any;
   private closeCallback: any;

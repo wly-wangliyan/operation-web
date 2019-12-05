@@ -84,7 +84,7 @@
                         <span>最小间隔</span>
                         <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="0-999"
                                maxlength="3" autocomplete="off" oninput="value=value.replace(/[^0-9]/ig,'')" required appIgnoreSpace>
-                        <label>小时</label>
+                        <label>日</label>
                         <span>推送1次，最大推送</span>
                         <input class="form-control" [(ngModel)]="pushParams.push_num" name="push_num" placeholder="1-999" maxlength="3"
                                autocomplete="off" oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
@@ -110,7 +110,7 @@
                         <span>图片</span>
                     </label>
                     <div class="control-input">
-                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
                                             [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
                                             [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
                                             [minCropBoxWidth]="300" [minCropBoxHeight]="300" [resizable]="true">
