@@ -162,6 +162,9 @@ export class PushEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.pushParams.push_image = imageUrl.join(',');
+      if (this.offline_status === 1) {
+        this.pushParams.end_time = 9999999999;
+      }
       const saveParams = this.pushParams.clone();
       saveParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
       saveParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
@@ -224,8 +227,6 @@ export class PushEditComponent implements OnInit {
           this.pushParams.end_time = offlineTimestamp;
         }
       }
-    } else if (this.offline_status === 1) {
-      this.pushParams.end_time = 9999999999;
     }
     return cisCheck;
   }
