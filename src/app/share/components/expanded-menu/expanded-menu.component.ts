@@ -12,6 +12,7 @@ import { MenuManagementService } from './menu-service/menu-management.service';
 import { MenuTicketService } from './menu-service/menu-ticket.service';
 import { MenuStoreMaintenanceService } from './menu-service/menu-store-maintenance.service';
 import { MenuExemptionService } from './menu-service/menu-exemption.service';
+import { MenuOrderParkingService } from './menu-service/menu-order-parking.service';
 
 /* 左侧菜单栏 */
 
@@ -40,7 +41,8 @@ export class ExpandedMenuComponent implements OnInit {
     private managementMenuService: MenuManagementService,
     private ticketMenuService: MenuTicketService,
     private storeManagementMenuService: MenuStoreMaintenanceService,
-    private exemptionService: MenuExemptionService) {
+    private exemptionService: MenuExemptionService,
+    private orderParkingService: MenuOrderParkingService) {
     const path = location.pathname;
     this.getMenuItems(path);
   }
@@ -77,6 +79,8 @@ export class ExpandedMenuComponent implements OnInit {
       return this.authService.checkPermissions(['store']);
     } else if (path.includes('/exemption')) {
       return this.authService.checkPermissions(['exemption']);
+    } else if (path.includes('/order-parking')) {
+      return this.authService.checkPermissions(['order-parking']);
     }
     return true;
   }
@@ -113,6 +117,10 @@ export class ExpandedMenuComponent implements OnInit {
       this.routeLinkList = this.storeManagementMenuService.routeLinkList;
     } else if (path.includes('/exemption')) {
       this.menuItems = this.exemptionService.generateMenus_exemption();
+      this.menu_icon = false;
+      this.routeLinkList = this.exemptionService.routeLinkList;
+    } else if (path.includes('/order-parking')) {
+      this.menuItems = this.orderParkingService.generateMenus_order_parking();
       this.menu_icon = false;
       this.routeLinkList = this.exemptionService.routeLinkList;
     }

@@ -1,0 +1,58 @@
+<!-- 选择标签 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">选择分类标签</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCloseLabel()">&times;
+        </button>
+      </div>
+      <div>
+        <form class="search-form">
+          <div class="form-group">
+            <span>标签名称</span>
+            <input class="form-control" [(ngModel)]="name" placeholder="请输入标签名称" autocomplete="off" name="product_name"
+              maxlength="10" appIgnoreSpace />
+          </div>
+          <button class="search" type="button" nz-button (click)="onSearchBtnClick()">查询
+          </button>
+        </form>
+        <div class="table-container label-table">
+          <div class="zmy-table">
+            <nz-table [nzData]="checkLabelList" nzBordered="true" [nzShowPagination]="false" [nzFrontPagination]='false'
+              [nzNoResult]="noResultText" #labelTable>
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>标签名称</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of labelTable.data; let i=index">
+                  <td>{{i+1}}</td>
+                  <td nzAlign="left" style="width: 400px;">
+                    <div class='label-recommend'>
+                      <div class='recommend'><i *ngIf="data.is_recommended" class="re-content">荐</i></div>
+                      {{data.name}}
+                    </div>
+                  </td>
+                  <td class="operation">
+                    <label nz-checkbox [(ngModel)]="data.checked"></label>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseLabel()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)='onSaveTagsId()'>
+            确认保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
