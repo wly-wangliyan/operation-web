@@ -43,9 +43,10 @@
                     <th>图片</th>
                     <th>标题</th>
                     <th>推送形式</th>
+                    <th>推送优先级</th>
                     <th>上线时间</th>
                     <th>下线时间</th>
-                    <th style="width: 23%">定位人群</th>
+                    <th style="width: 18%">定位人群</th>
                     <th>累计触达</th>
                     <th>点击量</th>
                     <th>点击人数</th>
@@ -60,8 +61,9 @@
                         <img *ngIf='!data.push_image' style="width: 58px;height: 58px" src="/assets/images/image_space.png">
                         <img *ngIf='data.push_image' style="width: 58px;height: 58px" [src]="data.push_image">
                     </td>
-                    <td>{{data.push_plan_name}}</td>
+                    <td [title]="data.push_plan_name">{{data.push_plan_name | zMaxLength: 10}}</td>
                     <td>{{data.push_type===1?'首页浮窗':data.push_type===2?'首页弹窗':'--'}}</td>
+                    <td>{{data.push_plan_rank?data.push_plan_rank:'--'}}</td>
                     <td>{{data.updated_time ?(data.updated_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
                     <td *ngIf="data.end_time===9999999999">永不下线</td>
