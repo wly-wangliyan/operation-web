@@ -46,7 +46,11 @@ export class PushDetailComponent implements OnInit {
       this.pushRecord = data;
       this.clickStatisticsList = data.push_counts ? data.push_counts : [];
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (err.status === 404) {
+        this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
+      } else {
+        this.globalService.httpErrorProcess(err);
+      }
     });
   }
 

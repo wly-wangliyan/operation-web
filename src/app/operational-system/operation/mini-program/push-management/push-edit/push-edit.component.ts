@@ -251,7 +251,9 @@ export class PushEditComponent implements OnInit {
   // 接口错误状态
   private errorProcess(err: any): any {
     if (!this.globalService.httpErrorProcess(err)) {
-      if (err.status === 422) {
+      if (!this.isCreatePush && err.status === 404) {
+        this.globalService.promptBox.open('该条数据已删除，请刷新后重试!', null, 2000, null, false);
+      } else if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
           if (content.resource === 'push_plan_rank' && content.code === 'existed_rank') {
