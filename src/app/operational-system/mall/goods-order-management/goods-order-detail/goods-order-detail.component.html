@@ -76,10 +76,12 @@
           </td>
           <td>手机号：</td>
           <td>{{orderDetail.mobile?orderDetail.mobile:'--'}}</td>
-          <td>收货地址：</td>
-          <td style="max-width: 300px;">
+          <td *ngIf="orderDetail.detail[0]?.commodity_type===1">收货地址：</td>
+          <td *ngIf="orderDetail.detail[0]?.commodity_type===1" style="max-width: 300px;">
             {{orderDetail.delivery_region||orderDetail.delivery_address ? orderDetail.delivery_region+orderDetail.delivery_address : '--'}}
           </td>
+          <td *ngIf="orderDetail.detail[0]?.commodity_type===2"></td>
+          <td *ngIf="orderDetail.detail[0]?.commodity_type===2"></td>
         </tr>
         <tr>
           <td>物流公司:</td>
