@@ -37,7 +37,7 @@
                 <tr>
                     <td>创建时间：</td>
                     <td>{{pushRecord.created_time ? (pushRecord.created_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
-                    <td>上线时间：</td>
+                    <td>更新时间：</td>
                     <td>{{pushRecord.updated_time ? (pushRecord.updated_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</td>
                     <td>下线时间：</td>
                     <td *ngIf="pushRecord.end_time===9999999999">永不下线</td>
@@ -70,8 +70,8 @@
                     <th>时间</th>
                     <th>触达人数</th>
                     <th>点击量</th>
-                    <th>关闭数</th>
                     <th>点击人数</th>
+                    <th>关闭数</th>
                     <th>关闭人数</th>
                 </tr>
                 </thead>
@@ -80,8 +80,8 @@
                     <td>{{click.push_count_date ? (click.push_count_date* 1000 | date:"y-MM-dd") : '--'}}</td>
                     <td>{{click.reach_user_num >= 0 ? click.reach_user_num : '--'}}</td>
                     <td>{{click.click_num >= 0 ? click.click_num : '--'}}</td>
-                    <td>{{click.close_num >= 0 ? click.close_num : '--'}}</td>
                     <td>{{click.click_user_num >= 0 ? click.click_user_num : '--'}}</td>
+                    <td>{{click.close_num >= 0 ? click.close_num : '--'}}</td>
                     <td>{{click.close_user_num >= 0 ? click.close_user_num : '--'}}</td>
                 </tr>
                 </tbody>
