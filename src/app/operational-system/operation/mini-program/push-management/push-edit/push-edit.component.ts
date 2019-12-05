@@ -162,10 +162,12 @@ export class PushEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.pushParams.push_image = imageUrl.join(',');
-      if (this.offline_status === 1) {
-        this.pushParams.end_time = 9999999999;
-      }
       const saveParams = this.pushParams.clone();
+      if (this.offline_status === 1) {
+        saveParams.end_time = 9999999999;
+      } else {
+        saveParams.end_time = new Date(this.pushParams.end_time).getTime() / 1000;
+      }
       saveParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
       saveParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
       if (this.verification()) {
@@ -223,8 +225,6 @@ export class PushEditComponent implements OnInit {
           this.errPositionItem.offline_time.isError = true;
           this.errPositionItem.offline_time.errMes = '下线时间应大于当前时间！';
           cisCheck = false;
-        } else {
-          this.pushParams.end_time = offlineTimestamp;
         }
       }
     }
