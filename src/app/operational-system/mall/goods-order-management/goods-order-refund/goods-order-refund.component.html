@@ -38,7 +38,7 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onClose()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid||isRefundBtnDisabled"
             (appZDebounceClick)="onEditFormSubmit()">
             {{sureName}}
           </button>

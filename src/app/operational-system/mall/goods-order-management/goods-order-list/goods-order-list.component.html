@@ -146,7 +146,7 @@
               <a [title]="'查看'" [routerLink]="['../detail', order.order_id]">查看</a>
               <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
               <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"
-                [title]="'发货'" (click)="onEditDeliveryClick(order)">发货</a>
+                [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
               <br>
               <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2" [title]="'修改物流'"
                 (click)="onEditDeliveryClick(order)">修改物流</a>

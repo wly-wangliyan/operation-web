@@ -21,6 +21,7 @@ export class GoodsOrderRefundComponent implements OnInit {
   public refund_price: string;
   public realPrice: number;
   public remark = '';
+  public isRefundBtnDisabled = false;
 
   private order_id: string; // 订单id
   private sureCallback: any;
@@ -85,6 +86,7 @@ export class GoodsOrderRefundComponent implements OnInit {
       this.isShowErrMes = true;
     } else {
       this.isShowErrMes = false;
+      this.isRefundBtnDisabled = true;
       this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认退款？', () => {
         this.globalService.confirmationBox.close();
         // 创建退款订单
@@ -102,6 +104,7 @@ export class GoodsOrderRefundComponent implements OnInit {
     this.orderHttpService.requestRefundOrder(refund_order_id).subscribe(() => {
       this.onClose();
       this.globalService.promptBox.open('保存成功！', () => {
+        this.isRefundBtnDisabled = false;
         this.sureCallbackInfo();
         this.currentOrder = new GoodsOrderEntity();
       });
