@@ -86,9 +86,9 @@ export class GoodsOrderRefundComponent implements OnInit {
       this.isShowErrMes = true;
     } else {
       this.isShowErrMes = false;
-      this.isRefundBtnDisabled = true;
       this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认退款？', () => {
         this.globalService.confirmationBox.close();
+        this.isRefundBtnDisabled = true;
         // 创建退款订单
         this.orderHttpService.requestCreateRefundOrder(this.order_id, this.refund_price, this.remark).subscribe(res => {
           this.requestRefundOrder(res.refund_order_id);
