@@ -16,7 +16,7 @@
       <form class="search-form" autocomplete="off">
         <div class="form-group">
           <span>订单状态：</span>
-          <select name="status" class="form-control" style="width: 130px;" [(ngModel)]="order_status"
+          <select name="status" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.pay_status"
             (change)="onChangeOrderStatus($event)">
             <option value="">全部</option>
             <option value="1">未支付</option>
@@ -28,18 +28,18 @@
         </div>
         <div class="form-group">
           <span>手机号：</span>
-          <input name="telephone" class="form-control" placeholder="请输入手机号" [(ngModel)]="searchParams.phone"
+          <input name="telephone" class="form-control" placeholder="请输入手机号" [(ngModel)]="searchParams.buyer_tel"
             maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace>
         </div>
         <div class="form-group">
-          <span>预订人：</span>
-          <input name="name" class="form-control" [(ngModel)]="searchParams.name" placeholder="请输入购买人"
+          <span>购买人：</span>
+          <input name="name" class="form-control" [(ngModel)]="searchParams.buyer_name" placeholder="请输入预订人"
             autocomplete="off" maxlength="20" appIgnoreSpace />
         </div>
         <div class="form-group">
           <span>订单编号：</span>
           <input name="exemption_order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
-            [(ngModel)]="searchParams.exemption_order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
+            [(ngModel)]="searchParams.order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
             appIgnoreSpace />
         </div>
         <div class="form-group">
@@ -72,7 +72,7 @@
             <th>序号</th>
             <th>订单编号</th>
             <th>车牌号</th>
-            <th>预订人</th>
+            <th>购买人</th>
             <th>停车场</th>
             <th>预付费</th>
             <th>预约到场时间</th>
@@ -99,34 +99,34 @@
             </td>
             <td>
               <div class="column-box">
-                <span>{{order.name | zMaxLength:6}}</span>
-                <span>{{order.phone}}</span>
+                <span>{{order.buyer_name | zMaxLength:6}}</span>
+                <span>{{order.buyer_tel}}</span>
               </div>
             </td>
-            <td [title]="order.address?order.address:''">{{order.address?(order.address | zMaxLength:8):'--'}}</td>
-            <td>
-              {{order.real_amount  | centPriceChange:'¥ ':'left'}}
+            <td [title]="order.parking_info?order.parking_info.parking_name:''">
+              {{order.parking_info?(order.parking_info.parking_name | zMaxLength:8):'--'}}
             </td>
             <td>
-              <span *ngIf="order.created_time">
-                  {{order.created_time ?(order.created_time* 1000 | date:"y-MM-dd HH:mm"):''}}
-                </span>
+              {{order.parking_info?.pre_price  | centPriceChange:'¥ ':'left'}}
+            </td>
+            <td>
+              <span>{{order.booking_arrive_time ?(order.booking_arrive_time* 1000 | date:"y-MM-dd HH:mm"):''}}</span>
             </td>
             <td>
               <div class="column-box">
-                <span *ngIf="order.created_time">
-                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                <span *ngIf="order.order_time">
+                  {{order.order_time ?('下单：'+(order.order_time* 1000 | date:"y-MM-dd HH:mm")):''}}
                 </span>
                 <span *ngIf="order.pay_time">
                   {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm")):''}}
                 </span>
-                <span *ngIf="!order.created_time && !order.pay_time">--</span>
+                <span *ngIf="!order.order_time && !order.pay_time">--</span>
               </div>
             </td>
-            <td>{{order.status | exemptionOrderStatus}}</td>
+            <td>{{order.order_status | bookingOrderStatus}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
-              <a [title]="'退款'" (click)="onRefundClick(order)">退款</a>
+              <a *ngIf="order.order_status===2" [title]="'退款'" (click)="onRefundClick(order)">退款</a>
             </td>
           </tr>
         </tbody>
@@ -134,6 +134,3 @@
     </div>
   </div>
 </div>
-
-<!-- 图片放大 -->
-<app-z-photo-select [imageUrls]="imageUrls"></app-z-photo-select>

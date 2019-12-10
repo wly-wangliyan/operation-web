@@ -12,66 +12,66 @@
         <tr>
           <td rowspan="2" class="row-title">车主信息</td>
           <td>订单状态：</td>
-          <td style="color: #E82038;">{{orderRecord.status | exemptionOrderStatus}}</td>
+          <td style="color: #E82038;">{{orderRecord.order_status | bookingOrderStatus}}</td>
 
           <td>车主短信(车主)：</td>
           <td style="line-height: 40px;color: #E82038">
-            已发送{{orderRecord.status}}次
-            <button type="button" class="sure-btn resend-btn" nz-button nzType="primary" (click)="onResendMessage()">重发</button>
+            已发送{{orderRecord.car_message_count||0}}次
+            <button type="button" class="sure-btn resend-btn" nz-button nzType="primary" (click)="onResendMessage(1)">重发</button>
           </td>
 
           <td>车主短信(停车场)：</td>
           <td style="line-height: 40px;color: #E82038">
-            已发送{{orderRecord.status}}次
-            <button type="button" class="sure-btn resend-btn" nz-button nzType="primary" (click)="onResendMessage()">重发</button>
+            已发送{{orderRecord.parking_message_count||0}}次
+            <button type="button" class="sure-btn resend-btn" nz-button nzType="primary" (click)="onResendMessage(2)">重发</button>
           </td>
         </tr>
         <tr>
           <td>车牌号：</td>
           <td>{{orderRecord.car_id ? orderRecord.car_id : '--'}}</td>
 
-          <td>预订人：</td>
-          <td>{{orderRecord.name ? orderRecord.name : '--'}}</td>
+          <td>购买人：</td>
+          <td>{{orderRecord.buyer_name ? orderRecord.buyer_name : '--'}}</td>
 
           <td>手机号：</td>
-          <td>{{orderRecord.phone ? orderRecord.phone : '--'}}</td>
+          <td>{{orderRecord.buyer_tel ? orderRecord.buyer_tel : '--'}}</td>
         </tr>
         <tr>
           <td rowspan="7" class="row-title">订单信息</td>
 
           <td>预约时长：</td>
-          <td>{{orderRecord.total_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.booking_days | centPriceChange:'¥ ':'left'}}</td>
 
           <td>预约到场时间：</td>
-          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>{{orderRecord.booking_arrive_time ? (orderRecord.booking_arrive_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
 
           <td></td><td></td>
         </tr>
         <tr>
           <td>应付预付费：</td>
-          <td>{{orderRecord.total_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.should_pre_price | centPriceChange:'¥ ':'left'}}</td>
 
           <td>平台立减：</td>
-          <td>{{orderRecord.discounts_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.minus_price | centPriceChange:'¥ ':'left'}}</td>
 
           <td>优惠：</td>
-          <td>{{orderRecord.discounts_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.coupon_price | centPriceChange:'¥ ':'left'}}</td>
         </tr>
         <tr>
           <td>实付预付费：</td>
-          <td>{{orderRecord.real_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.real_pre_price | centPriceChange:'¥ ':'left'}}</td>
 
           <td>退款金额：</td>
-          <td>{{orderRecord.real_amount | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.refund_price | centPriceChange:'¥ ':'left'}}</td>
 
           <td></td><td></td>
         </tr>
         <tr>
           <td>预约停车场：</td>
-          <td>{{orderRecord.logistics_company ? orderRecord.logistics_company : '--'}}</td>
+          <td>{{orderRecord.parking_info?.parking_name ? orderRecord.parking_info.parking_name : '--'}}</td>
 
           <td>地址：</td>
-          <td>{{orderRecord.logistics_order_id ? orderRecord.logistics_order_id : '--'}}</td>
+          <td>{{orderRecord.parking_info?.address ? orderRecord.parking_info.address : '--'}}</td>
 
           <td></td><td></td>
         </tr>
@@ -80,20 +80,20 @@
           <td>{{orderRecord.order_id ? orderRecord.order_id : '--'}}</td>
 
           <td>支付交易单号：</td>
-          <td>{{orderRecord.payment_order_id ? orderRecord.payment_order_id : '--'}}</td>
+          <td>{{orderRecord.trade_no ? orderRecord.trade_no : '--'}}</td>
 
           <td>下单时间：</td>
-          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>{{orderRecord.order_time ? (orderRecord.order_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
         </tr>
         <tr>
           <td>支付时间：</td>
           <td>{{orderRecord.pay_time ? (orderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
 
           <td>到场时间：</td>
-          <td>{{orderRecord.send_time ? (orderRecord.send_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>{{orderRecord.arrive_time ? (orderRecord.arrive_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
 
           <td>退款时间：</td>
-          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
         </tr>
         <tr>
           <td>订单备注：</td>
@@ -101,18 +101,18 @@
             <div class="remark-group">
               <div class="btn-box">
                 <button *ngIf="!isEditOrderRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
-                  nzType="primary" (click)="onEditClick(1)">编辑</button>
+                  nzType="primary" (click)="onEditClick()">编辑</button>
                 <ng-container *ngIf="isEditOrderRemark">
                   <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
-                    [disabled]="!orderRecord.order_remarks" (click)="onSaveClick(1)">保存</button>
+                    [disabled]="!orderRecord.remark" (click)="onSaveClick()">保存</button>
                   <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
-                    (click)="onCancleClick(1)">取消</button>
+                    (click)="onCancleClick()">取消</button>
                 </ng-container>
               </div>
               <div class="remark-box">
-                <span *ngIf="!isEditOrderRemark">{{orderRecord.order_remarks || '--'}}</span>
+                <span *ngIf="!isEditOrderRemark">{{orderRecord.remark || '--'}}</span>
                 <textarea *ngIf="isEditOrderRemark" name="order_remarks" class="form-control" placeholder="100字以内..."
-                  [(ngModel)]="orderRecord.order_remarks" maxlength="100"></textarea>
+                  [(ngModel)]="orderRecord.remark" maxlength="100"></textarea>
               </div>
             </div>
           </td>

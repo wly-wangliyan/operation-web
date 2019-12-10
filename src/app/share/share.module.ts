@@ -55,6 +55,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
 import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
 import { FloatNumberDirective } from './directives/float-number.directive';
+import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
 
 
 @NgModule({
@@ -128,6 +129,7 @@ import { FloatNumberDirective } from './directives/float-number.directive';
     StoreCategoryPipe,
     StorePayStatus,
     MallCommodityTypePipe,
+    BookingOrderStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -203,6 +205,7 @@ import { FloatNumberDirective } from './directives/float-number.directive';
     StoreCategoryPipe,
     StorePayStatus,
     MallCommodityTypePipe,
+    BookingOrderStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,

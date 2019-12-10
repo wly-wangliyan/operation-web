@@ -3,9 +3,10 @@ import { Subscription, Subject, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
-import { OrderManagementService, OrderSearchParams, ExemptionOrderEntity } from '../order-management.service';
+import { OrderManagementService, BookingOrderEntity, OrderSearchParams } from '../order-management.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { environment } from '../../../../environments/environment';
+import { HttpErrorEntity } from '../../../core/http.service';
 
 const PageSize = 15;
 
@@ -16,9 +17,7 @@ const PageSize = 15;
 })
 export class OrderListComponent implements OnInit, OnDestroy {
   public searchParams: OrderSearchParams = new OrderSearchParams(); // 条件筛选
-  public orderList: Array<ExemptionOrderEntity> = []; // 产品订单列表
-  public order_status: any = ''; // 订单状态
-  public processing_flow: any = ''; // 办理流程
+  public orderList: Array<BookingOrderEntity> = []; // 产品订单列表
   public order_start_time: any = ''; // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
   public pay_start_time: any = ''; // 支付开始时间
@@ -41,8 +40,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
     return this.orderList.length / PageSize + 1;
   }
-
-  @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -70,13 +67,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private requestOrderList() {
     this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
       this.orderList = res.results;
-      this.orderList.forEach(item => {
-        let urls = item.driving_license_front ? item.driving_license_front : '';
-        urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : urls);
-        urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : urls);
-        urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : urls);
-        item.imageUrls = urls ? urls.split(',') : [];
-      });
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
@@ -115,9 +105,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 改变订单状态
   public onChangeOrderStatus(event: any): void {
     const status = event.target.value;
-    this.searchParams.status = null;
+    this.searchParams.pay_status = null;
     if (status) {
-      this.searchParams.status = Number(status);
+      this.searchParams.pay_status = Number(status);
     }
   }
 
@@ -146,15 +136,15 @@ export class OrderListComponent implements OnInit, OnDestroy {
       return false;
     }
     if (this.order_start_time || this.order_end_time) {
-      this.searchParams.order_section = `${sTimestamp},${eTimeStamp}`;
+      this.searchParams.order_time = `${sTimestamp},${eTimeStamp}`;
     } else {
-      this.searchParams.order_section = null;
+      this.searchParams.order_time = null;
     }
 
     if (this.pay_start_time || this.pay_end_time) {
-      this.searchParams.pay_section = `${sPayTimestamp},${ePayTimeStamp}`;
+      this.searchParams.pay_time = `${sPayTimestamp},${ePayTimeStamp}`;
     } else {
-      this.searchParams.pay_section = null;
+      this.searchParams.pay_time = null;
     }
     return true;
   }
@@ -163,13 +153,42 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public onRefundClick(data) {
     this.globalService.confirmationBox.open('提示', `确认退款给${data.car_id}车主？`, () => {
       this.globalService.confirmationBox.close();
+      this.orderService.requestCreateRefundOrder({order_id: data.order_id}).subscribe(res => {
+        this.orderService.requestOrderRefund(res.body.refund_order_id).subscribe(res1 => {
+          this.globalService.promptBox.open('退款成功！');
+        }, err => {
+          this.errorProcess(err);
+        });
+      }, error => {
+        this.errorProcess(error);
+      });
     });
+  }
+
+  private errorProcess(err) {
+    if (err.status === 422) {
+      const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+      for (const content of error.errors) {
+        if (content.code === 'invalid' && content.field === 'refund_fee') {
+          this.globalService.promptBox.open('退款金额错误或无效！', null, 2000, null, false);
+          return;
+        } else if (content.code === 'not_allow' && content.resource === 'order') {
+          this.globalService.promptBox.open('该订单不允许退款！', null, 2000, null, false);
+          return;
+        } else if (content.code === 'fail' && content.resource === 'pay_refund') {
+          this.globalService.promptBox.open('退款失败！', null, 2000, null, false);
+          return;
+        }
+      }
+    } else {
+      this.globalService.httpErrorProcess(err);
+    }
   }
 
   // 导出url
   private exportSearchUrl() {
     // tslint:disable-next-line:max-line-length
-    // this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&buyer_tel=${this.searchParams.buyer_tel}&buyer_name=${this.searchParams.buyer_name}&order_id=${this.searchParams.order_id}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 导出订单列表
