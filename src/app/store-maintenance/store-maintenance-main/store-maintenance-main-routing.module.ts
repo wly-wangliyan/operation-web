@@ -44,6 +44,10 @@ const routes: Routes = [{
       path: 'supplier-management',
       loadChildren: () => import('../supplier-management/supplier-management.module').then(m => m.SupplierManagementModule),
     },
+    {
+      path: 'rescue-order',
+      loadChildren: () => import('../rescue-order/rescue-order.module').then(m => m.RescueOrderModule),
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];

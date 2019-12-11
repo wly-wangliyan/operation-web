@@ -21,6 +21,7 @@ export class MenuStoreMaintenanceService {
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generatePartsManagementMenu());
     menusItem.push(this.generateOrderSettlementMenu());
+    menusItem.push(this.generateRescueOrderMenu());
     menusItem.push(this.generateBusinessManagementMenu());
     menusItem.push(this.generateOtherMenu());
     return menusItem;
@@ -51,6 +52,14 @@ export class MenuStoreMaintenanceService {
     systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
     systemMenu.children.push(subFinanceMenu3);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 门店保养 》救援订单
+  private generateRescueOrderMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('救援订单', '/store-maintenance/rescue-order');
+    systemMenu.icon = '/assets/images/menu_order.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
