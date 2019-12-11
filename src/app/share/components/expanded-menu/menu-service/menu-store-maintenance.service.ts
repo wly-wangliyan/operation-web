@@ -46,7 +46,8 @@ export class MenuStoreMaintenanceService {
     systemMenu.icon = '/assets/images/menu_order.png';
     const subFinanceMenu1 = new SideMenuItem('订单管理', '/store-maintenance/order-management', systemMenu);
     // const subFinanceMenu2 = new SideMenuItem('结算管理', '/store-maintenance/brand-management', systemMenu);
-    const subFinanceMenu3 = new SideMenuItem('工时费管理', '/store-maintenance/work-fees-management', systemMenu);
+    // const subFinanceMenu3 = new SideMenuItem('工时费管理', '/store-maintenance/work-fees-management', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('服务费管理', '/store-maintenance/service-fees-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
     systemMenu.children.push(subFinanceMenu3);

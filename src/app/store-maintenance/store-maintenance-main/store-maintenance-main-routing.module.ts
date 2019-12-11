@@ -25,8 +25,8 @@ const routes: Routes = [{
       loadChildren: () => import('../order-management/order-management.module').then(m => m.OrderManagementModule),
     },
     {
-      path: 'work-fees-management',
-      loadChildren: () => import('../work-fees-management/work-fees-management.module').then(m => m.WorkFeesManagementModule),
+      path: 'service-fees-management',
+      loadChildren: () => import('../service-fees-management/service-fees-management.module').then(m => m.ServiceFeesManagementModule),
     },
     {
       path: 'vehicle-management',

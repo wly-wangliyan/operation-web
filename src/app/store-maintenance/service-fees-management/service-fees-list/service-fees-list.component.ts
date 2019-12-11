@@ -12,11 +12,11 @@ import { SelectMultiBrandFirmComponent } from '../../../share/components/select-
 const PageSize = 15;
 
 @Component({
-  selector: 'app-work-fees-list',
-  templateUrl: './work-fees-list.component.html',
-  styleUrls: ['./work-fees-list.component.css']
+  selector: 'app-service-fees-list',
+  templateUrl: './service-fees-list.component.html',
+  styleUrls: ['./service-fees-list.component.css']
 })
-export class WorkFeesListComponent implements OnInit {
+export class ServiceFeesListComponent implements OnInit {
 
   public orderList: Array<UpkeepOrderEntity> = [];
   public pageIndex = 1;

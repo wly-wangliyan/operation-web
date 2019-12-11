@@ -1,0 +1,75 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'服务费配置'" [level1RelativePath]="'../'" [level2Name]="'新建救援费'"></app-crumb>
+</div>
+<div class="content-flow">
+  <div class='des_card'>
+    <form nz-form class="content-layout" #rescueFeesForm="ngForm">
+      <div class="card_content">
+        <nz-form-item nzFlex>
+          <nz-form-label nzRequired [nzNoColon]='true'>救援名称</nz-form-label>
+          <nz-form-control>
+            搭电/换胎
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="5">
+            <nz-form-item nzFlex>
+              <nz-form-label nzRequired [nzNoColon]='true'>尾款原价</nz-form-label>
+              <nz-form-control>
+                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
+                  maxlength='20' />
+                <span class="unit">元</span>
+                <!-- <div *ngIf="productNameErrors" class="text-danger">
+                    <span class="input-error">{{productNameErrors}}</span>
+                  </div> -->
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-item nzFlex>
+              <nz-form-label nzRequired [nzNoColon]='true'>尾款现价</nz-form-label>
+              <nz-form-control>
+                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
+                  maxlength='20' />
+                <span class="unit">元</span>
+                <!-- <div *ngIf="productNameErrors" class="text-danger">
+                    <span class="input-error">{{productNameErrors}}</span>
+                  </div> -->
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-item nzFlex>
+              <nz-form-label nzRequired [nzNoColon]='true'>预付原价</nz-form-label>
+              <nz-form-control class="ml_10">
+                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
+                  maxlength='20' />
+                <span class="unit">元</span>
+                <!-- <div *ngIf="productNameErrors" class="text-danger">
+                    <span class="input-error">{{productNameErrors}}</span>
+                  </div> -->
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-item nzFlex>
+              <nz-form-label nzRequired [nzNoColon]='true'>预付现价</nz-form-label>
+              <nz-form-control class="ml_10">
+                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
+                  maxlength='20' />
+                <span class="unit">元</span>
+                <!-- <div *ngIf="productNameErrors" class="text-danger">
+                      <span class="input-error">{{productNameErrors}}</span>
+                    </div> -->
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div style="margin-top: 40px;margin-bottom: 40px">
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!rescueFeesForm.form.valid">保存</button>
+          <button class="close-btn" nz-button>取消</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

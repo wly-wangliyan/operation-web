@@ -1,0 +1,27 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuardService } from '../../core/auth-guard.service';
+import { RouteMonitorService } from '../../core/route-monitor.service';
+import { ServiceFeesManagementComponent } from './service-fees-management.component';
+import { ServiceFeesListComponent } from './service-fees-list/service-fees-list.component';
+import { RescueFeesEditComponent } from './rescue-fees-edit/rescue-fees-edit.component';
+
+const routes: Routes = [
+  {
+    path: '', component: ServiceFeesManagementComponent,
+    canActivateChild: [AuthGuardService, RouteMonitorService],
+    children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      { path: 'list', component: ServiceFeesListComponent },
+      { path: 'edit', component: RescueFeesEditComponent },
+      { path: '**', redirectTo: 'list', pathMatch: 'full' }
+    ]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class ServiceFeesManagementRoutingModule {
+}

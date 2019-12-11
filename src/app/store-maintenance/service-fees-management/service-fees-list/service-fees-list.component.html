@@ -8,7 +8,7 @@
 </div>
 <div class="content-flow">
   <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0 [(nzSelectedIndex)]='selectedTabIndex'>
-    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value">
+    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'>
       <div class="table-container">
         <div class="search-container">
           <form nz-form class="search-form">
@@ -65,7 +65,10 @@
                 <td>{{data.vehicle_brand_name||'--'}}</td>
                 <td>{{(data.total_real_amount | zCompleteNumber)||0}} 元</td>
                 <td>
-                  {{(data.total_real_amount | zCompleteNumber)||0}} 元
+                  <nz-switch [ngModel]="data.status===1?true:false"
+                    (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"
+                    nzUnCheckedChildren="Off" (click)="onSwitchClick(data.carline_id,data.status)">
+                  </nz-switch>
                 </td>
                 <td class="operation">
                   <a [title]="'编辑'" [routerLink]="['../edit',data.upkeep_order_id]">编辑</a>
