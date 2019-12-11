@@ -23,13 +23,15 @@ export class ErrMessageItem {
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   offline_time: ErrMessageItem = new ErrMessageItem();
+  push_plan_rank: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(offline_time)) {
+  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank)) {
       return;
     }
     this.icon = icon;
     this.offline_time = offline_time;
+    this.push_plan_rank = push_plan_rank;
   }
 }
 
@@ -46,6 +48,7 @@ export class PushEditComponent implements OnInit {
   public cover_url = [];
   public coupon_service = ['请选择', '停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
   public offline_status = null;
+  public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
 
   private sureCallback: any;
   private closeCallback: any;
@@ -56,7 +59,7 @@ export class PushEditComponent implements OnInit {
 
   @Input() public data: any;
   @Input() public sureName = '保存';
-  @ViewChild('bannerPromptDiv', { static: false }) public bannerPromptDiv: ElementRef;
+  @ViewChild('pushPromptDiv', { static: false }) public pushPromptDiv: ElementRef;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private globalService: GlobalService, private pushService: PushManagementService) { }
@@ -70,7 +73,7 @@ export class PushEditComponent implements OnInit {
     $('.form-horizontal').scrollTop(0);
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.pushParams = new PushParams();
-    $(this.bannerPromptDiv.nativeElement).modal('hide');
+    $(this.pushPromptDiv.nativeElement).modal('hide');
   }
 
   /**
@@ -80,9 +83,9 @@ export class PushEditComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(data: any, sureFunc: any, closeFunc: any = null) {
-    const openBannerModal = () => {
+    const openPushModal = () => {
       timer(0).subscribe(() => {
-        $(this.bannerPromptDiv.nativeElement).modal('show');
+        $(this.pushPromptDiv.nativeElement).modal('show');
       });
     };
     this.isCreatePush = data && data.push_plan_id ? false : true;
@@ -99,7 +102,7 @@ export class PushEditComponent implements OnInit {
     } else {
       this.showEditData(data);
     }
-    openBannerModal();
+    openPushModal();
   }
 
   private showEditData(data: any) {
@@ -116,8 +119,6 @@ export class PushEditComponent implements OnInit {
 
   // 切换tab
   public onChangeTeb(type: string, status: number): void {
-    this.errPositionItem.offline_time.isError = false;
-    this.errPositionItem.offline_time.errMes = '';
     switch (type) {
       case 'push_range':
         this.pushParams.range_type = null;
@@ -145,6 +146,8 @@ export class PushEditComponent implements OnInit {
       case 'offline_status':
         this.pushParams.end_time = null;
         this.offline_status = status;
+        this.errPositionItem.offline_time.isError = false;
+        this.errPositionItem.offline_time.errMes = '';
         break;
     }
   }
@@ -159,12 +162,18 @@ export class PushEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.pushParams.push_image = imageUrl.join(',');
-      this.pushParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
-      this.pushParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
+      const saveParams = this.pushParams.clone();
+      if (this.offline_status === 1) {
+        saveParams.end_time = 9999999999;
+      } else {
+        saveParams.end_time = new Date(this.pushParams.end_time).getTime() / 1000;
+      }
+      saveParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
+      saveParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
       if (this.verification()) {
         if (this.isCreatePush) {
           // 添加推送
-          this.pushService.requestAddPushData(this.pushParams).subscribe(() => {
+          this.pushService.requestAddPushData(saveParams).subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('添加成功！', () => {
               this.sureCallbackInfo();
@@ -175,7 +184,7 @@ export class PushEditComponent implements OnInit {
           });
         } else {
           // 编辑推送
-          this.pushService.requestUpdatePushData(this.push_id, this.pushParams).subscribe(() => {
+          this.pushService.requestUpdatePushData(this.push_id, saveParams).subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('修改成功！', () => {
               this.sureCallbackInfo();
@@ -216,12 +225,8 @@ export class PushEditComponent implements OnInit {
           this.errPositionItem.offline_time.isError = true;
           this.errPositionItem.offline_time.errMes = '下线时间应大于当前时间！';
           cisCheck = false;
-        } else {
-          this.pushParams.end_time = offlineTimestamp;
         }
       }
-    } else if (this.offline_status === 1) {
-      this.pushParams.end_time = 9999999999;
     }
     return cisCheck;
   }
@@ -230,6 +235,7 @@ export class PushEditComponent implements OnInit {
   public clear(): void {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.offline_time.isError = false;
+    this.errPositionItem.push_plan_rank.isError = false;
   }
 
   // 确定按钮回调
@@ -245,12 +251,14 @@ export class PushEditComponent implements OnInit {
   // 接口错误状态
   private errorProcess(err: any): any {
     if (!this.globalService.httpErrorProcess(err)) {
-      if (err.status === 422) {
+      if (!this.isCreatePush && err.status === 404) {
+        this.globalService.promptBox.open('该条数据已删除，请刷新后重试!', null, 2000, null, false);
+      } else if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'title') {
-            // this.errPositionItem.title.isError = true;
-            // this.errPositionItem.title.errMes = '标题错误或无效！';
+          if (content.resource === 'push_plan_rank' && content.code === 'existed_rank') {
+            this.errPositionItem.push_plan_rank.isError = true;
+            this.errPositionItem.push_plan_rank.errMes = '此优先级重复，请重新设置！';
             return;
           }
         }

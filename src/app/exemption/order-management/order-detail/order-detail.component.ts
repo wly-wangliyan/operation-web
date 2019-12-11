@@ -293,7 +293,6 @@ export class OrderDetailComponent implements OnInit {
 
   // 打包下载
   public onDownloadClick(): void {
-    const downloadUrl = `${environment.EXEMPTION_DOMAIN}/exemption/download/orders/${this.order_id}`;
-    window.open(downloadUrl);
+    this.orderService.requestDownloadMaterial(this.order_id);
   }
 }

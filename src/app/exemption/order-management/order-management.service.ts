@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from 'src/utils/z-entity';
-import { Observable } from 'rxjs/index';
+import { Observable, timer } from 'rxjs/index';
 import { map } from 'rxjs/internal/operators';
-import { HttpResponse } from '@angular/common/http';
-import { HttpService, LinkResponse } from '../../core/http.service';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpService, LinkResponse, HttpErrorEntity } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
+import { GlobalService } from '../../core/global.service';
 
 export class OrderSearchParams extends EntityBase {
   public status: number = undefined; // 订单状态
@@ -90,7 +91,7 @@ export class OrderManagementService {
 
   private domain = environment.EXEMPTION_DOMAIN; // 免检域名
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private globalService: GlobalService) { }
 
   /**
    * 获取订单列表
@@ -142,5 +143,48 @@ export class OrderManagementService {
     const httpUrl = `${this.domain}/exemption/orders/${order_id}`;
     const body = { processing_flow };
     return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 打包下载
+   * @param order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDownloadMaterial(order_id: string): any {
+    const url = `${this.domain}/exemption/download/orders/${order_id}`;
+    const xhr = new XMLHttpRequest();
+    const that = this;
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';  // 返回类型blob
+    // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+    xhr.withCredentials = true;
+    xhr.onload = function () {
+      // 请求完成
+      if (this.status === 200) {
+        // 返回200
+        const blob = this.response;
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a表情href
+        reader.onload = function (e: any) {
+          // 转换完成，创建一个a标签用于下载
+          const a = document.createElement('a');
+          document.body.appendChild(a);
+          a.href = e.target.result;
+          a.click();
+          timer().subscribe(() => {
+            document.body.removeChild(a);
+          });
+        };
+      } else {
+        if (this.status === 422) {
+          that.globalService.promptBox.open('图片链接格式不正确，打包下载失败!', null, 2000, null, false);
+        } else {
+          const httpErrorProcess = HttpErrorEntity.Create({ status: this.status });
+          that.globalService.httpErrorProcess(httpErrorProcess);
+        }
+      }
+    };
+    // 发送ajax请求
+    xhr.send();
   }
 }

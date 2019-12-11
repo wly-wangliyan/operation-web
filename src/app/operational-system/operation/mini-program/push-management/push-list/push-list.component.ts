@@ -167,7 +167,9 @@ export class PushListComponent implements OnInit {
         this.globalService.promptBox.open('删除成功');
         this.searchText$.next();
       }, err => {
-        if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 404) {
+          this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
+        } else if (!this.globalService.httpErrorProcess(err)) {
           this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
           this.searchText$.next();
         }

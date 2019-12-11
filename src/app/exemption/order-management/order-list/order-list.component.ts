@@ -70,9 +70,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.orderList = res.results;
       this.orderList.forEach(item => {
         let urls = item.driving_license_front ? item.driving_license_front : '';
-        urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : urls);
-        urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : urls);
-        urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : urls);
+        urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : '');
+        urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : '');
+        urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : '');
         item.imageUrls = urls ? urls.split(',') : [];
       });
       this.linkUrl = res.linkUrl;
@@ -96,9 +96,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
           const results = res.results;
           results.forEach(item => {
             let urls = item.driving_license_front ? item.driving_license_front : '';
-            urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : urls);
-            urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : urls);
-            urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : urls);
+            urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : '');
+            urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : '');
+            urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : '');
             item.imageUrls = urls ? urls.split(',') : [];
           });
           this.orderList = this.orderList.concat(results);

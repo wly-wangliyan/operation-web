@@ -1,6 +1,6 @@
 <!--新增/编辑Push-->
-<div class="modal fade" id="editBannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #bannerPromptDiv>
+<div class="modal fade" id="editPushModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #pushPromptDiv>
     <div class="modal-dialog modal-dialog-common" role="document">
         <div class="modal-content modal-content-common">
             <div class="modal-header">
@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;
                 </button>
             </div>
-            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editBannerForm="ngForm">
+            <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" id="form-horizontal" #editPushModal="ngForm">
                 <div class="row">
                     <label class="control-label">
                         <b>*</b>
@@ -27,8 +27,14 @@
                     <div class="control-input">
                         <input class="form-control" placeholder="请输入1-100数值" [(ngModel)]="pushParams.push_plan_rank" style="width: 230px;margin-right: 20px"
                                maxlength="3" oninput="if(value&&value==0){value=1}else if(Number(value)>100){value=100}else{value=value.replace(/[^0-9]/ig,'')}"
-                               name="push_plan_rank" autocomplete="off" required appIgnoreSpace>
+                               (change)="errPositionItem.push_plan_rank.isError=false" name="push_plan_rank" autocomplete="off" required appIgnoreSpace>
                         <span>优先级数值越高则优先推送</span>
+                    </div>
+                </div>
+                <div class="row row-message" style="height: 20px">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.push_plan_rank?.isError">{{errPositionItem?.push_plan_rank?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -81,10 +87,10 @@
                            (click)="onChangeTeb('push_speed_type', 2)" style="margin-right: 5px">触发后持续推送</a>
                     </div>
                     <div class="push-rate" *ngIf="pushParams.push_speed_type===2">
-                        <span>最小间隔</span>
-                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="0-999"
-                               maxlength="3" autocomplete="off" oninput="value=value.replace(/[^0-9]/ig,'')" required appIgnoreSpace>
-                        <label>小时</label>
+                        <span>每</span>
+                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="1-999"
+                               maxlength="3" autocomplete="off" oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
+                        <label>日</label>
                         <span>推送1次，最大推送</span>
                         <input class="form-control" [(ngModel)]="pushParams.push_num" name="push_num" placeholder="1-999" maxlength="3"
                                autocomplete="off" oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
@@ -110,7 +116,7 @@
                         <span>图片</span>
                     </label>
                     <div class="control-input">
-                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
                                             [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
                                             [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
                                             [minCropBoxWidth]="300" [minCropBoxHeight]="300" [resizable]="true">
@@ -187,8 +193,8 @@
                 <div class="modal-footer">
                     <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || offline_status === 2 && !pushParams.end_time
-                             || (pushParams.coupon_service==0&&pushParams.push_range===3) || !pushParams.push_type || !pushParams.push_range ||
+                            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0 || (offline_status === 2 && !pushParams.end_time)
+                             || ((!pushParams.coupon_service||pushParams.coupon_service==0)&&pushParams.range_type==3) || !pushParams.push_type || !pushParams.push_range ||
                              (!pushParams.range_type&&pushParams.push_range&&pushParams.push_range!==1) || !pushParams.push_speed_type ||
                              !offline_status || ((!pushParams.url_type||pushParams.url_type==0)&&pushParams.push_location_url) ||
                              (pushParams.url_type&&pushParams.url_type!=0&&!pushParams.push_location_url)"
