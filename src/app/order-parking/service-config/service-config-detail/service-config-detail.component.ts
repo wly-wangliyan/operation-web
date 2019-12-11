@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../core/global.service';
 import { Subject } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
-import { ServiceConfigService, ParkingEntity, ParkingSearchParams } from '../service-config.service';
+import { ServiceConfigService, ParkingEntity } from '../service-config.service';
 
 @Component({
   selector: 'app-service-config-detail',
@@ -13,7 +13,7 @@ import { ServiceConfigService, ParkingEntity, ParkingSearchParams } from '../ser
 export class ServiceConfigDetailComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public parkingDetailData: ParkingEntity = new ParkingEntity();
@@ -41,11 +41,10 @@ export class ServiceConfigDetailComponent implements OnInit {
     this.routerInfo.params.subscribe((params: Params) => {
       this.parking_id = params.parking_id;
     });
-    this.checkLabelNamesList = ['标签111'];
-
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
         this.parkingDetailData = res;
+        this.imgUrls = this.parkingDetailData.images ? this.parkingDetailData.images : [];
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

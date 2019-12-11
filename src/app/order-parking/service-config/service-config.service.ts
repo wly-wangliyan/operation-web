@@ -13,10 +13,10 @@ export class ParkingSearchParams extends EntityBase {
 
 export class ServiceConfigParams extends EntityBase {
   public tags: Array<any> = []; // array	F	标签
-  public origin_price: number = undefined; // integer	T	原价 / 每日 单位: 分
-  public sale_price: number = undefined; // integer	T	售价 / 每日 单位: 分
-  public pre_price: number = undefined; // integer	T	预付费用 单位: 分
-  public minus_price: number = undefined; // integer	T	下单立减 单位: 分
+  public origin_fee: number = undefined; // integer	T	原价 / 每日 单位: 分
+  public sale_fee: number = undefined; // integer	T	售价 / 每日 单位: 分
+  public pre_fee: number = undefined; // integer	T	预付费用 单位: 分
+  public minus_fee: number = undefined; // integer	T	下单立减 单位: 分
   public min_days: number = undefined; // integer	T	最低预定天数
   public main_tel: string = undefined; // string	T	常用联系电话
   public standby_tel: string = undefined; // string	T	备用联系电话
@@ -29,8 +29,8 @@ export class ParkingEntity extends EntityBase {
   public parking_id: string = undefined; // string  停车场ID
   public area_type: number = undefined; // integer	用地类型 1: 路内 2: 路外
   public parking_name: string = undefined; // string 停车场名称
-  public images: string = undefined; // string 图片
-  public operate_type: string = undefined; // integer	管理模式 / 运营模式 1: 非封闭 2: 封闭 - 1: 未知
+  public images: Array<any> = []; // string 图片
+  public operate_type: number = undefined; // integer	管理模式 / 运营模式 1: 非封闭 2: 封闭 - 1: 未知
   public province: string = undefined; // string 省
   public city: string = undefined; // string 市
   public district: string = undefined; // string 区
@@ -41,14 +41,15 @@ export class ParkingEntity extends EntityBase {
   public lat: string = undefined; // string	纬度
   public location: number = undefined; // point	位置坐标
   public tags: Array<any> = undefined; // array	标签
-  public origin_price: number = undefined; // integer	原价 单位: 分
-  public sale_price: number = undefined; // integer	售价 单位: 分
-  public pre_price: number = undefined; // integer	预付 单位: 分
-  public minus_price: number = undefined; // integer	下单立减 单位: 分
+  public origin_fee: number = undefined; // integer	原价 单位: 分
+  public sale_fee: number = undefined; // integer	售价 单位: 分
+  public pre_fee: number = undefined; // integer	预付 单位: 分
+  public minus_fee: number = undefined; // integer	下单立减 单位: 分
   public min_days: number = undefined; // integer	最低预定
   public main_tel: string = undefined; // string	手机号(主)
   public standby_tel: string = undefined; // string	手机号(备)
   public instruction: string = undefined; // string	预约说明
+  public notice: string = undefined; // string	购买须知
   public is_deleted: boolean = undefined; // bool	逻辑删除 默认: False
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
@@ -69,7 +70,7 @@ export class ParkingLinkResponse extends LinkResponse {
 })
 export class ServiceConfigService {
 
-  private domain = environment.EXEMPTION_DOMAIN; // 免检域名
+  private domain = environment.BOOKING_DOMAIN; // 预约泊车域名
 
   constructor(private httpService: HttpService) { }
 
@@ -97,19 +98,19 @@ export class ServiceConfigService {
    * @param parking_name 停车场名称
    */
   public requestBeanParkingListData(parking_name: string): Observable<ParkingLinkResponse> {
-    const httpUrl = `${this.domain}/admin/parkings`;
+    const httpUrl = `${this.domain}/admin/base_parkings`;
     return this.httpService.get(httpUrl, { parking_name })
       .pipe(map(res => new ParkingLinkResponse(res)));
   }
 
   /**
    * 添加停车场
-   * @param parking_ids 停车场ids
+   * @param park_ids 停车场ids
    * @returns Observable<HttpResponse<any>>
    */
-  public requestAddParkingIds(parking_ids: string): Observable<HttpResponse<any>> {
+  public requestAddParkingIds(park_ids: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/parkings`;
-    return this.httpService.post(httpUrl, { parking_ids });
+    return this.httpService.post(httpUrl, { park_ids });
   }
 
   /**

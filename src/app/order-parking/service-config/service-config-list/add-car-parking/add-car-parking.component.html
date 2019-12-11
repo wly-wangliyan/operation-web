@@ -18,8 +18,12 @@
         </form>
         <div class='parking-box'>
           <div *ngFor='let data of checkParkingList;let i=index;'>
-            <span>【路外】{{data.name}}</span>
-            <label nz-checkbox [(ngModel)]="data.checked"></label>
+            <div style="vertical-align: top;">
+              <span>【路外】</span>
+              <div class="park-name">{{data.parking_name}}</div>
+              <label nz-checkbox [(ngModel)]="data.checked"></label>
+            </div>
+
           </div>
         </div>
         <div class="modal-footer">

@@ -92,3 +92,8 @@ img {
   width: 100px;
   height: 100px;
 }
+
+.image {
+  display: inline-block;
+  vertical-align: top;
+}
