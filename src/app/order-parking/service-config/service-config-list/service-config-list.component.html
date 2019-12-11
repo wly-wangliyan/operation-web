@@ -57,7 +57,7 @@
             <td class="operation">
               <a [title]="'服务配置'" [routerLink]="['../service-config-edit',data.parking_id]">服务配置</a>
               <a [title]="'查看详情'" [routerLink]="['../service-config-detail',data.parking_id]">查看详情</a>
-              <a [title]="'删除'">删除</a>
+              <a [title]="'删除'" (appZDebounceClick)='onDeleteProduct(data)'>删除</a>
             </td>
           </tr>
         </tbody>

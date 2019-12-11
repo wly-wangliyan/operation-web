@@ -27,6 +27,7 @@ export class ServiceConfigParams extends EntityBase {
 // 停车场实体
 export class ParkingEntity extends EntityBase {
   public parking_id: string = undefined; // string  停车场ID
+  public park_id: string = undefined; // string  停车场ID
   public area_type: number = undefined; // integer	用地类型 1: 路内 2: 路外
   public parking_name: string = undefined; // string 停车场名称
   public images: Array<any> = []; // string 图片

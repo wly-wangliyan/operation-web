@@ -78,9 +78,9 @@ export class AddCarParkingComponent implements OnInit {
   public onSaveParkingIds() {
     const checkedParkingList = this.checkParkingList.filter(i => i.checked);
     if (checkedParkingList.length === 0) {
-      this.globalService.promptBox.open(`请添加停车场!`, null, 2000, '/assets/images/warning.png');
+      this.globalService.promptBox.open(`请选择停车场!`, null, 2000, '/assets/images/warning.png');
     } else {
-      const park_ids = checkedParkingList.map(i => i.parking_id).join(',');
+      const park_ids = checkedParkingList.map(i => i.park_id).join(',');
       this.serviceConfigService.requestAddParkingIds(park_ids).subscribe(() => {
         this.globalService.promptBox.open('添加成功！');
         this.searchText$.next();
