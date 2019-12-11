@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
 import {
-  UpkeepOrderEntity,
-  OrderManagementService,
-  SearchOrderParams,
-} from 'src/app/store-maintenance/order-management/order-management.service';
+  ServiceFeeEntity,
+  ServiceFeesManagementService,
+  SearchParams,
+} from '../service-fees-management.service';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { SelectMultiBrandFirmComponent } from '../../../share/components/select-multi-brand-firm/select-multi-brand-firm.component';
 
 const PageSize = 15;
 
@@ -18,15 +17,10 @@ const PageSize = 15;
 })
 export class ServiceFeesListComponent implements OnInit {
 
-  public orderList: Array<UpkeepOrderEntity> = [];
+  public serviceFeeList: Array<ServiceFeeEntity> = [];
   public pageIndex = 1;
-  public searchParams = new SearchOrderParams();
+  public searchParams = new SearchParams();
   public noResultText = '数据加载中...';
-  public start_pay_time = null; // 支付时间
-  public end_pay_time = null;
-  public start_reserve_time = null; // 预定时间
-  public end_reserve_time = null;
-  public workerList: Array<any> = [];
   public tabs: Array<any> = [];
   public selectedTabIndex: number;
 
@@ -35,35 +29,35 @@ export class ServiceFeesListComponent implements OnInit {
   private linkUrl: string;
 
   private get pageCount(): number {
-    if (this.orderList.length % PageSize === 0) {
-      return this.orderList.length / PageSize;
+    if (this.serviceFeeList.length % PageSize === 0) {
+      return this.serviceFeeList.length / PageSize;
     }
-    return this.orderList.length / PageSize + 1;
+    return this.serviceFeeList.length / PageSize + 1;
   }
 
-  @ViewChild(SelectMultiBrandFirmComponent, { static: true }) public selectMultiBrandFirmComponent: SelectMultiBrandFirmComponent;
-
-  constructor(private globalService: GlobalService, private orderService: OrderManagementService) { }
+  constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService) { }
 
   ngOnInit() {
     this.tabs = [
       { key: 1, value: '救援费管理' },
     ];
     this.selectedTabIndex = 0;
-    // this.onTabChange(this.selectedTabIndex);
-    // 订单管理列表
+    const obj = new ServiceFeeEntity();
+    obj.service_fee_name = '1321223';
+    this.serviceFeeList.push(obj);
+    // 救援费管理列表
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.orderService.requestOrderList(this.searchParams))
+        this.feesService.requestServiceFeeListData(this.searchParams))
     ).subscribe(res => {
-      this.orderList = res.results.map(i => ({ ...i, item_categorys: i.upkeep_item_categorys ? i.upkeep_item_categorys.split(',') : [] }));
+      this.serviceFeeList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    this.searchText$.next();
+    // this.searchText$.next();
   }
 
   // 查询按钮
@@ -80,8 +74,8 @@ export class ServiceFeesListComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       // tslint:disable-next-line:no-unused-expression
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.orderService.continueOrderList(this.linkUrl).subscribe(res => {
-        this.orderList = this.orderList.concat(res.results);
+      this.continueRequestSubscription = this.feesService.continueServiceFeeListData(this.linkUrl).subscribe(res => {
+        this.serviceFeeList = this.serviceFeeList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);

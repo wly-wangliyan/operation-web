@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'服务费配置'" [level1RelativePath]="'../'" [level2Name]="'新建救援费'"></app-crumb>
+  <app-crumb [level1Name]="'服务费配置'" [level1RelativePath]="'../'" [level2Name]="'编辑救援费'"></app-crumb>
 </div>
 <div class="content-flow">
   <div class='des_card'>
@@ -16,12 +16,10 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>尾款原价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
-                  maxlength='20' />
+                <input class="price-input" nz-input autocomplete="off"
+                  [(ngModel)]="searchFeeParams.balance_initial_price" name="balance_initial_price" required
+                  appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                    <span class="input-error">{{productNameErrors}}</span>
-                  </div> -->
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -29,12 +27,10 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>尾款现价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
-                  maxlength='20' />
+                <input class="price-input" nz-input autocomplete="off"
+                  [(ngModel)]="searchFeeParams.balance_current_price" name="balance_current_price" name="main-title"
+                  required appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                    <span class="input-error">{{productNameErrors}}</span>
-                  </div> -->
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -42,12 +38,10 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>预付原价</nz-form-label>
               <nz-form-control class="ml_10">
-                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
-                  maxlength='20' />
+                <input class="price-input" nz-input autocomplete="off"
+                  [(ngModel)]="searchFeeParams.prepay_initial_price" name="prepay_initial_price" name="main-title"
+                  required appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                    <span class="input-error">{{productNameErrors}}</span>
-                  </div> -->
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -55,12 +49,10 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>预付现价</nz-form-label>
               <nz-form-control class="ml_10">
-                <input class="price-input" nz-input autocomplete="off" name="main-title" appFloatNumber required
-                  maxlength='20' />
+                <input class="price-input" nz-input autocomplete="off"
+                  [(ngModel)]="searchFeeParams.prepay_current_price" name="prepay_current_price" name="main-title"
+                  required appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                      <span class="input-error">{{productNameErrors}}</span>
-                    </div> -->
               </nz-form-control>
             </nz-form-item>
           </div>

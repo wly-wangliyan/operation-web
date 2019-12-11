@@ -67,6 +67,7 @@ export class ServiceConfigEditComponent implements OnInit {
     this.configParams.main_tel = this.parkingDetailData.main_tel;
     this.configParams.standby_tel = this.parkingDetailData.standby_tel;
   }
+  
   // 价钱数据处理
   private getFeeData(fee: number) {
     return Number((Number(fee) / 100).toFixed(2));
