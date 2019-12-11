@@ -55,6 +55,7 @@ import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
 import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
 import { FloatNumberDirective } from './directives/float-number.directive';
+import { MaxNumberDirective } from './directives/max-number.directive';
 import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
 
 
@@ -137,7 +138,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     TxtCopyDirective,
     ZTextCkeditorComponent,
     ZPhotoSelectUploadComponent,
-    FloatNumberDirective
+    FloatNumberDirective,
+    MaxNumberDirective
   ],
   exports: [
     CommonModule,
@@ -211,7 +213,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     IgnoreSpaceDirective,
     ZDebounceClickDirective,
     TxtCopyDirective,
-    FloatNumberDirective
+    FloatNumberDirective,
+    MaxNumberDirective
   ],
 })
 export class ShareModule {

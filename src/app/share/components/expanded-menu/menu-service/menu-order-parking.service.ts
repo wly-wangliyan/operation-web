@@ -21,9 +21,9 @@ export class MenuOrderParkingService {
     return menusItem;
   }
 
-  // 服务配置
+  // 产品配置
   private generateServiceConfigMenu() {
-    const systemMenu = new SideMenuItem('服务配置', '/order-parking/service-config');
+    const systemMenu = new SideMenuItem('产品配置', '/order-parking/service-config');
     systemMenu.icon = '/assets/images/menu_part.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;

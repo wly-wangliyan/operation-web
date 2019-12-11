@@ -1,5 +1,6 @@
 :host ::ng-deep .ant-form-item label {
   width: 80px;
+  text-align: left;
 }
 
 .des_card {
@@ -67,28 +68,6 @@
   color: rgba(62, 113, 247, 1);
 }
 
-ul li {
-  line-height: 40px;
-  margin-bottom: 10px;
-}
-
-ul li span:first-child {
-  width: 100px;
-  display: inline-block;
-  font-size: 14px;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: rgba(136, 136, 136, 1);
-}
-
-ul li span:last-child {
-  font-size: 14px;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: rgba(35, 36, 47, 1);
-}
-
-img {
-  width: 100px;
-  height: 100px;
+.sure-btn {
+  margin-right: 20px;
 }

@@ -6,6 +6,7 @@ import { RouteMonitorService } from '../../core/route-monitor.service';
 import { ServiceConfigComponent } from './service-config.component';
 import { ServiceConfigListComponent } from './service-config-list/service-config-list.component';
 import { ServiceConfigDetailComponent } from './service-config-detail/service-config-detail.component';
+import { ServiceConfigEditComponent } from './service-config-edit/service-config-edit.component';
 
 const routes: Routes = [{
   path: '', component: ServiceConfigComponent,
@@ -13,7 +14,8 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'service-config-list', pathMatch: 'full' },
     { path: 'service-config-list', component: ServiceConfigListComponent },
-    { path: 'service-config-detail/:order_id', component: ServiceConfigDetailComponent },
+    { path: 'service-config-edit', component: ServiceConfigEditComponent },
+    { path: 'service-config-detail', component: ServiceConfigDetailComponent },
   ]
 }];
 

@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'服务配置'"></app-crumb>
+  <app-crumb [level1Name]="'产品配置'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg" (click)='onAddCarParking()'>
       <a>添加停车场</a>
@@ -9,8 +9,8 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #ticketOrderTable>
+      <nz-table [nzData]="productConfigList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #productConfigTable>
         <thead>
           <tr>
             <th>序号</th>
@@ -24,38 +24,35 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of ticketOrderTable.data; let i=index">
+          <tr *ngFor="let data of productConfigTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-
-            <td [title]="order.order_id?order.order_id:''">
-              <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
-                {{order.order_id|zMaxLength:10}}
-              </span>
-              <span *ngIf="!order.order_id">--</span>
-            </td>
-
             <td>
-              <div class="column-box">
-                <span *ngIf="order.car_type" class="car-type">{{order.car_type === 1 ? '小型车':'其他'}}</span>
-                <span>{{order.car_id}}</span>
-              </div>
+              {{data.images}}
             </td>
             <td>
               <div class="column-box">
-                <span>{{order.name | zMaxLength:6}}</span>
-                <span>{{order.phone}}</span>
+                <span *ngIf="data.car_type" class="car-type">{{data.car_type === 1 ? '小型车':'其他'}}</span>
+                <span>{{data.car_id}}</span>
               </div>
             </td>
-            <td [title]="order.address?order.address:''">{{order.address?(order.address | zMaxLength:8):'--'}}</td>
             <td>
-              {{order.real_amount  | centPriceChange:'¥ ':'left'}}
+              <div *ngFor='let tag of data.tags;let t=index;'>
+                <span>{{tag}}</span><span *ngIf='(t+1)!==data.tags.length'>; </span>
+              </div>
             </td>
             <td>
-              {{order.real_amount  | centPriceChange:'¥ ':'left'}}
+              <div>主：{{data.main_tel||'--'}}</div>
+              <div>备：{{data.standby_tel||'--'}}</div>
+            </td>
+            <td>
+              {{data.sale_price  | centPriceChange:'元'}}
+            </td>
+            <td>
+              {{data.min_days||'--'}}<span *ngIf='data.min_days||data.min_days===0'>天</span>
             </td>
             <td class="operation">
-              <a [title]="'服务配置'" [routerLink]="['../order-detail', order.order_id]">服务配置</a>
-              <a [title]="'查看详情'" (click)='onViewServiceConfigDetail()'>查看详情</a>
+              <a [title]="'服务配置'" [routerLink]="['../service-config-edit']">服务配置</a>
+              <a [title]="'查看详情'" [routerLink]="['../service-config-detail']">查看详情</a>
               <a [title]="'删除'">删除</a>
             </td>
           </tr>
@@ -65,4 +62,3 @@
   </div>
 </div>
 <app-add-car-parking #addCarParking></app-add-car-parking>
-<app-detail #serviceConfigDetail></app-detail>
