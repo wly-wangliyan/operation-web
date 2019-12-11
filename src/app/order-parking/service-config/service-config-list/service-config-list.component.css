@@ -1,0 +1,11 @@
+.image {
+  float: left;
+  width: 100px;
+  margin: 10px;
+}
+
+.tel {
+  width: 120px;
+  display: inline-block;
+  text-align: left;
+}

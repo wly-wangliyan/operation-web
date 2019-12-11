@@ -14,8 +14,8 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'service-config-list', pathMatch: 'full' },
     { path: 'service-config-list', component: ServiceConfigListComponent },
-    { path: 'service-config-edit', component: ServiceConfigEditComponent },
-    { path: 'service-config-detail', component: ServiceConfigDetailComponent },
+    { path: 'service-config-edit/:parking_id', component: ServiceConfigEditComponent },
+    { path: 'service-config-detail/:parking_id', component: ServiceConfigDetailComponent },
   ]
 }];
 

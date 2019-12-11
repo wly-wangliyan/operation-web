@@ -42,10 +42,6 @@ export class ServiceConfigListComponent implements OnInit {
     private serviceConfigService: ServiceConfigService) { }
 
   public ngOnInit() {
-    const obj = new ParkingEntity();
-    obj.images = '43324324';
-    // const obj = { images: '43324324' };
-    this.productConfigList.push(obj);
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.serviceConfigService.requestParkingListData(this.searchParams).subscribe(res => {
         this.productConfigList = res.results;

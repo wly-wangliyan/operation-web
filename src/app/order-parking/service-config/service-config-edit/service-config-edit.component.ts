@@ -16,7 +16,7 @@ import { ServiceConfigService, ParkingEntity, ServiceConfigParams } from '../ser
 export class ServiceConfigEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public parkingDetailData: ParkingEntity = new ParkingEntity();
@@ -43,17 +43,43 @@ export class ServiceConfigEditComponent implements OnInit {
     this.routerInfo.params.subscribe((params: Params) => {
       this.parking_id = params.parking_id;
     });
-    this.checkLabelNamesList = ['标签111'];
 
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
         this.parkingDetailData = res;
+        this.getDetailData()
+        this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
     });
     this.searchText$.next();
   }
+
+  // 配置详情数据处理
+  private getDetailData() {
+    this.checkLabelNamesList = this.parkingDetailData.tags ? this.parkingDetailData.tags : [];
+    this.configParams.origin_fee = this.getFeeData(this.parkingDetailData.origin_fee);
+    this.configParams.sale_fee = this.getFeeData(this.parkingDetailData.sale_fee);
+    this.configParams.pre_fee = this.getFeeData(this.parkingDetailData.pre_fee);
+    this.configParams.minus_fee = this.getFeeData(this.parkingDetailData.minus_fee);
+    this.configParams.min_days = this.parkingDetailData.min_days;
+    this.configParams.main_tel = this.parkingDetailData.main_tel;
+    this.configParams.standby_tel = this.parkingDetailData.standby_tel;
+  }
+  // 价钱数据处理
+  private getFeeData(fee: number) {
+    return Number((Number(fee) / 100).toFixed(2));
+  }
+
+  // 富文本数据处理
+  private getEditorData(instruction: string, notice: string) {
+    CKEDITOR.instances.orderInstructionEditor.destroy(true);
+    CKEDITOR.instances.purchaseInstructionEditor.destroy(true);
+    CKEDITOR.replace('orderInstructionEditor').setData(instruction);
+    CKEDITOR.replace('purchaseInstructionEditor').setData(notice);
+  }
+
 
   // 添加标签
   public onAddTagClick() {
@@ -69,7 +95,6 @@ export class ServiceConfigEditComponent implements OnInit {
     }
   }
 
-
   // 删除标签
   public onDelTag(i: number) {
     this.checkLabelNamesList.splice(i, 1);
@@ -77,27 +102,27 @@ export class ServiceConfigEditComponent implements OnInit {
 
   // 保存数据
   public onSaveFormSubmit() {
-    this.configParams.tags = this.checkLabelNamesList;
-    this.configParams.instruction = CKEDITOR.instances.orderInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
-    this.configParams.notice = CKEDITOR.instances.purchaseInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
-    const reg = /^(1[3-9])\d{9}$/g;
-    if (!reg.test(this.configParams.main_tel)) {
+    const regPhone = /^(1[3-9])\d{9}$/g;
+    const regTel = /^\d{3}-\d{8}|(1[3-9])\d{9}$/g;
+    if (!regPhone.test(this.parkingDetailData.main_tel)) {
       this.clear();
       this.mainTelErrors = '请输入正确的常用电话！';
-    } else if (!reg.test(this.configParams.main_tel)) {
+    } else if (!regTel.test(this.parkingDetailData.main_tel)) {
       this.clear();
       this.standbyTelErrors = '请输入正确的备用电话！';
-    } else if (!CKEDITOR.instances.instruction.getData()) {
+    } else if (!CKEDITOR.instances.orderInstructionEditor.getData()) {
       this.clear();
       this.tagNameErrors = '请输入预约说明！';
-    } else if (!CKEDITOR.instances.notice.getData()) {
+    } else if (!CKEDITOR.instances.purchaseInstructionEditor.getData()) {
       this.clear();
       this.tagNameErrors = '请输入购买须知！';
     } else {
       this.clear();
+      this.handleParams();
       this.serviceConfigService.requestUpdateSweviceConfigData(this.configParams, this.parking_id).subscribe(() => {
         this.globalService.promptBox.open('服务配置保存成功！');
         this.searchText$.next();
+        timer(2000).subscribe(() => this.router.navigateByUrl('/order-parking/service-config'));
       }, err => {
         this.handleErrorFunc(err);
       });
@@ -116,6 +141,17 @@ export class ServiceConfigEditComponent implements OnInit {
     this.standbyTelErrors = '';
     this.instructionErrors = '';
     this.noticeErrors = '';
+  }
+
+  // 处理服务配置入参
+  private handleParams() {
+    this.configParams.tags = this.checkLabelNamesList;
+    this.configParams.origin_fee = Number(this.configParams.origin_fee) * 100;
+    this.configParams.sale_fee = Number(this.configParams.sale_fee) * 100;
+    this.configParams.pre_fee = Number(this.configParams.pre_fee) * 100;
+    this.configParams.minus_fee = Number(this.configParams.minus_fee) * 100;
+    this.configParams.instruction = CKEDITOR.instances.orderInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+    this.configParams.notice = CKEDITOR.instances.purchaseInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
   }
 
   // 处理错误信息
