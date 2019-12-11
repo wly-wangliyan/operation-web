@@ -79,3 +79,25 @@ export class PushSpeedPipe implements PipeTransform {
     }
   }
 }
+
+/** 自定义推送人群 */
+export const diyRangeType = {
+  1: '临近车险投保日期用户',
+  2: '临近年检日期用户'
+};
+
+@Pipe({
+  name: 'diyRangeType'
+})
+export class DiyRangeTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (!value) {
+      return '--';
+    } else if (value && (typeof value === 'string')) {
+      return diyRangeType[value];
+    } else {
+      return diyRangeType[value];
+    }
+  }
+}

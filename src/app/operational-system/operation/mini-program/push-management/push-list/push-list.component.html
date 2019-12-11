@@ -2,8 +2,7 @@
     <app-crumb [level1Name]="'小程序'" [level2Name]="'推送'"></app-crumb>
     <ul class="header-right">
         <li>
-            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-                    (appZDebounceClick)="onShowModal()">
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary" [routerLink]="['../push-create']">
                 新建
             </button>
         </li>
@@ -71,8 +70,10 @@
                         {{data.end_time ?(data.end_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
                     <td *ngIf="data.push_range===1">{{data.push_range|pushRange}}</td>
-                    <td *ngIf="data.push_range!==1">{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.range_type|rangeType)+'-'+
+                    <td *ngIf="data.push_range===2">{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.range_type|rangeType)+'-'+
                     ('距离到期'+data.push_range_detail?.date_limit+'日时提醒')}}</td>
+                    <td *ngIf="data.push_range===4">{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.free_range_type|diyRangeType)+'-'+
+                    ('临近投保日期'+data.push_range_detail?.free_date_limit+'日时提醒')}}</td>
 
                     <td>{{data.reach_user_num >=0 ? data.reach_user_num: '--'}}</td>
                     <td>{{data.click_num >=0 ? data.click_num: '--'}}</td>
@@ -82,7 +83,7 @@
                                    (ngModelChange)="onSwitchChange(data.push_plan_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
+                        <a [title]="'编辑'" [routerLink]="['../push-edit',data.push_plan_id]">编辑</a>
                         <a [title]="'明细'" [routerLink]="['../push-detail',data.push_plan_id]">明细</a>
                         <a [title]="'删除'" *ngIf="data.push_plan_status!==1" (appZDebounceClick)="onDeleteClick(data.push_plan_id)">删除</a>
                     </td>
@@ -92,5 +93,3 @@
         </div>
     </div>
 </div>
-
-<app-push-edit #pushEdit></app-push-edit>

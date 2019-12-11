@@ -1,65 +1,21 @@
-<!--
 <div class="content-header">
-    <app-crumb [level1Name]="'车型原厂参数'" [level2Name]=""></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg big-white-btn">
-            <a (click)="onImportClick('vehicle')">导入车型</a>
-        </li>
-        <li class="big-bg big-white-btn">
-            <a (click)="onImportClick('param')">导入原厂参数</a>
-        </li>
-        <li class="big-bg">
-            <a href="/assets/download/vehicle_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
-        </li>
-    </ul>
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="search-container">
         <form class="search-form">
             <div class="form-group">
-                <span>品牌：</span>
-                <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id" (change)="onChangeBrand($event)"
+                <span>状态：</span>
+                <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id"
                         name="vehicle_brand_id">
                     <option value="">全部</option>
-                    <option *ngFor="let vehicleBrand of vehicleBrandList" [value]="vehicleBrand.vehicle_brand_id"
-                            [title]="vehicleBrand.vehicle_brand_name">
-                        {{vehicleBrand.vehicle_brand_name | zMaxLength:15}}
-                    </option>
+                    <option value="">营业中</option>
+                    <option value="">停业休息</option>
                 </select>
             </div>
             <div class="form-group">
-                <span>厂商：</span>
-                <select class="form-control" [(ngModel)]="searchParams.vehicle_firm_id" (change)="onChangeFirm($event)" name="vehicle_firm_id">
-                    <option value="">全部</option>
-                    <option *ngFor="let vehicleFirm of vehicleFirmList" [value]="vehicleFirm.vehicle_firm_id"
-                            [title]="vehicleFirm.vehicle_firm_name">
-                        {{vehicleFirm.vehicle_firm_name | zMaxLength:15}}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span>车系：</span>
-                <select class="form-control" [(ngModel)]="searchParams.vehicle_series_id" name="vehicle_series_id">
-                    <option value="">全部</option>
-                    <option *ngFor="let vehicleSeries of vehicleSeriesList" [value]="vehicleSeries.vehicle_series_id"
-                            [title]="vehicleSeries.vehicle_series_name">
-                        {{vehicleSeries.vehicle_series_name | zMaxLength:15}}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span>排量：</span>
-                <select class="form-control" [(ngModel)]="searchParams.vehicle_series_id" name="vehicle_series_id">
-                    <option value="">全部</option>
-                    <option *ngFor="let vehicleSeries of vehicleSeriesList" [value]="vehicleSeries.vehicle_series_id"
-                            [title]="vehicleSeries.vehicle_series_name">
-                        {{vehicleSeries.vehicle_series_name | zMaxLength:15}}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span>生产年份：</span>
-                <input class="form-control" placeholder="请输入年款" autocomplete="off" maxlength="4" oninput="value=value.replace(/[^\d]/g,'')"
+                <span>汽修店名称：</span>
+                <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="4" oninput="value=value.replace(/[^\d]/g,'')"
                        name="vehicle_year_model" [(ngModel)]="searchParams.vehicle_year_model"/>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
@@ -75,12 +31,12 @@
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>品牌</th>
-                    <th>品牌类型</th>
-                    <th>车系</th>
-                    <th>发动机排量</th>
-                    <th>生产年份</th>
-                    <th>启停</th>
+                    <th>汽修店名称</th>
+                    <th>所属企业</th>
+                    <th>类型</th>
+                    <th>客服电话</th>
+                    <th>营业时间</th>
+                    <th>营业状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -92,14 +48,15 @@
                     <td>{{data.telephone}}</td>
                     <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
                     <td>
-                        {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'&#45;&#45;'}}
+                        {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
                     </td>
                     <td>
                         <nz-switch [ngModel]="!data.discontinue_use" nzCheckedChildren="On" style="height: 10px"
                                    nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.broker_company_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="'../edit'">编辑</a>
+                        <a [title]="'编辑'" [routerLink]="'../edit'">编辑资料</a>
+                        <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>
                     </td>
                 </tr>
                 </tbody>
@@ -107,4 +64,3 @@
         </div>
     </div>
 </div>
--->

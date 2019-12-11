@@ -1,15 +1,9 @@
-.modal {
-    z-index: 1000;
-}
-
-.form-horizontal {
-    height: 650px;
-    overflow-y: auto;
+.content-flow {
+  background: #fff !important;
 }
 
 .row-message {
-    margin-top: -6px !important;
-    /*height: 14px !important;*/
+    margin-top: -8px !important;
 }
 
 .row-message .err-message {
@@ -83,9 +77,8 @@ select {
 
 .push-rate {
     display: inline-flex;
-    width: 450px;
     line-height: 34px;
-    margin-left: 128px;
+    margin-left: 105px;
     margin-top: 10px;
 }
 
@@ -116,7 +109,7 @@ select {
 .location-crowd input:first-child {
     margin-left: 0;
     margin-right: 5px;
-    width: 155px;
+    width: 220px;
 }
 
 :host ::ng-deep.ant-calendar-picker {
@@ -125,7 +118,15 @@ select {
 
 .break-line {
     width: 95%;
-    margin: 10px 0 15px 3% !important;
+    margin: 10px 0 15px 0 !important;
     height:2px;
     border:1px solid rgba(136,136,136,.5);
+}
+
+.modal-footer {
+    width: 560px;
+}
+
+.sure-btn {
+    margin-left: 0;
 }

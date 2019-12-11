@@ -18,7 +18,7 @@ const PageSize = 15;
 export class PushListComponent implements OnInit {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选参数
-  public pushList: Array<PushEntity> = []; // banner列表
+  public pushList: Array<PushEntity> = []; // push列表
   public noResultText = '数据加载中...';
   public start_time: any = '';
   public end_time: any = '';
@@ -35,8 +35,6 @@ export class PushListComponent implements OnInit {
     }
     return this.pushList.length / PageSize + 1;
   }
-
-  @ViewChild('pushEdit', { static: false }) public pushEdit: PushEditComponent;
 
   constructor(
       private globalService: GlobalService,
@@ -144,18 +142,6 @@ export class PushListComponent implements OnInit {
           }
         }
       }
-    });
-  }
-
-  // 显示添加编辑Pushmodal
-  public onShowModal(data?: PushEntity) {
-    this.pushEdit.open(data, () => {
-      this.pushEdit.clear();
-      timer(0).subscribe(() => {
-        this.searchText$.next();
-      });
-    }, () => {
-      this.pushEdit.clear();
     });
   }
 

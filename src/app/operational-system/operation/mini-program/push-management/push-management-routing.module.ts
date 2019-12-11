@@ -5,6 +5,7 @@ import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { PushManagementComponent } from './push-management.component';
 import { PushListComponent } from './push-list/push-list.component';
 import { PushDetailComponent } from './push-detail/push-detail.component';
+import { PushEditComponent } from './push-edit/push-edit.component';
 
 const routes: Routes = [{
   path: '', component: PushManagementComponent,
@@ -12,6 +13,8 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'push-list', pathMatch: 'full' },
     { path: 'push-list', component: PushListComponent },
+    { path: 'push-create', component: PushEditComponent},
+    { path: 'push-edit/:push_plan_id', component: PushEditComponent },
     { path: 'push-detail/:push_plan_id', component: PushDetailComponent },
     { path: '**', redirectTo: 'push-list', pathMatch: 'full' }
   ]

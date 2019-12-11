@@ -1,1 +1,127 @@
-<p>garage-edit works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../list'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="content-main">
+        <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>所属企业</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="company_name" name="company_name" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>店铺名称</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>类型</span>
+                </label>
+                <div class="control-input">
+                    <select class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_type" name="upkeep_merchant_type" disabled>
+                        <option value="">全部</option>
+                        <option value="1">4S品牌店</option>
+                        <option value="2">汽修店</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="height: 110px">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>商家图片</span>
+                </label>
+                <ul style="display: flex">
+                    <li *ngFor="let item of currentBusiness.image_url;let i=index;" style="margin-right: 15px">
+                        <img [src]="item" style="width: 100px;height: 100px">
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系人</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentBusiness.contact" name="contact" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系电话</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentBusiness.telephone" name="telephone" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>门店地址</span>
+                </label>
+                <div class="control-input" style="width: 540px!important;">
+                    <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address"
+                           [title]="currentBusiness.address" name="address" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>地图坐标</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentBusiness.lon + '、' + currentBusiness.lat" name="lon" disabled>
+                    <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>可提前预定</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" (change)="errPositionItem.booking.isError=false" required
+                           type="number" [(ngModel)]="currentBusiness.booking" name="booking" (keypress)="inputNumberLimit($event)">
+                    <button nz-button class="common-btn" style="width: 34px; padding: 0">天</button>
+                </div>
+                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>客服电话</span>
+                </label>
+                <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
+                    <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" required maxlength="12"
+                           [(ngModel)]="item.tel" placeholder="请输入座机或手机号">
+                    <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
+                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
+                </div>
+                <span class="msg-span">注：最多可添加2个</span>
+            </div>
+            <div style="margin-left: 120px;height: 15px;">
+                <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
+            </div>
+            <div style="margin-top: 40px;margin-bottom: 40px">
+                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
+                        (appZDebounceClick)="onEditFormSubmit()">保存
+                </button>
+                <button class="close-btn" nz-button (click)="onClose()">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 地图组件 -->
+<app-z-map-select-point [mapObj]="mapItem"></app-z-map-select-point>

@@ -1,11 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { isUndefined } from 'util';
-import { Subscription, timer } from 'rxjs';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { PushManagementService, PushParams } from '../push-management.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export class ErrMessageItem {
   public isError = false;
@@ -24,14 +24,16 @@ export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   offline_time: ErrMessageItem = new ErrMessageItem();
   push_plan_rank: ErrMessageItem = new ErrMessageItem();
+  push_speed: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank)) {
+  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem, push_speed?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank) || isUndefined(push_speed)) {
       return;
     }
     this.icon = icon;
     this.offline_time = offline_time;
     this.push_plan_rank = push_plan_rank;
+    this.push_speed = push_speed;
   }
 }
 
@@ -42,79 +44,68 @@ export class ErrPositionItem {
 })
 export class PushEditComponent implements OnInit {
 
-  public isCreatePush = true;
   public pushParams: PushParams = new PushParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
-  public coupon_service = ['请选择', '停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
+  public coupon_service = ['停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
   public offline_status = null;
   public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
+  public levelName = '新建';
 
-  private sureCallback: any;
-  private closeCallback: any;
-  private requestSubscription: Subscription;
   private push_id: string;
 
   private is_save = false; // 防止连续出发保存事件
 
   @Input() public data: any;
-  @Input() public sureName = '保存';
-  @ViewChild('pushPromptDiv', { static: false }) public pushPromptDiv: ElementRef;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  constructor(private globalService: GlobalService, private pushService: PushManagementService) { }
+  constructor(private globalService: GlobalService,
+              private pushService: PushManagementService,
+              private route: ActivatedRoute,
+              private router: Router) {
+    this.route.paramMap.subscribe(map => {
+      this.push_id = map.get('push_plan_id');
+    });
+  }
 
   public ngOnInit() {
+    this.levelName = this.push_id ? '编辑' : '新建';
+    if (this.push_id) {
+      this.getPushDetail();
+    } else {
+      this.pushParams.url_type = '';
+      this.pushParams.free_range_type = 1;
+    }
   }
 
-  // 弹框close
+  // 获取详情
+  private getPushDetail(): void {
+    this.pushService.requestPushDetail(this.push_id).subscribe(data => {
+      this.pushParams = new PushParams(data);
+      if (data.end_time === 9999999999) {
+        this.offline_status = 1;
+      } else {
+        this.offline_status = 2;
+        this.pushParams.end_time = data.end_time * 1000;
+      }
+      this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : '';
+      this.pushParams.free_range_type = 1;
+      this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
+    }, err => {
+      if (err.status === 404) {
+        this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
+      } else {
+        this.globalService.httpErrorProcess(err);
+      }
+    });
+  }
+
+  // 点击取消编辑、新建
   public onClose() {
-    this.clear();
-    $('.form-horizontal').scrollTop(0);
-    this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.pushParams = new PushParams();
-    $(this.pushPromptDiv.nativeElement).modal('hide');
-  }
-
-  /**
-   * 打开确认框
-   * @param sureName 确认按钮文本(默认为确定)
-   * @param sureFunc 确认回调
-   * @param closeFunc 取消回调
-   */
-  public open(data: any, sureFunc: any, closeFunc: any = null) {
-    const openPushModal = () => {
-      timer(0).subscribe(() => {
-        $(this.pushPromptDiv.nativeElement).modal('show');
-      });
-    };
-    this.isCreatePush = data && data.push_plan_id ? false : true;
-    this.push_id = data ? data.push_plan_id : '';
-    this.sureCallback = sureFunc;
-    this.closeCallback = closeFunc;
-    this.clear();
-    this.is_save = false;
-    if (this.isCreatePush) {
-      this.pushParams = new PushParams();
-      this.cover_url = [];
-      this.offline_status = null;
-      this.pushParams.url_type = 0;
-    } else {
-      this.showEditData(data);
-    }
-    openPushModal();
-  }
-
-  private showEditData(data: any) {
-    this.pushParams = new PushParams(data);
-    if (data.end_time === 9999999999) {
-      this.offline_status = 1;
-    } else {
-      this.offline_status = 2;
-      this.pushParams.end_time = data.end_time * 1000;
-    }
-    this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : 0;
-    this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
+    this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
+      this.globalService.confirmationBox.close();
+      this.router.navigate(['../../push-list'], {relativeTo: this.route});
+    });
   }
 
   // 切换tab
@@ -125,14 +116,14 @@ export class PushEditComponent implements OnInit {
         this.pushParams.date_limit = null;
         this.pushParams.coupon_id = '';
         this.pushParams.coupon_group_id = '';
-        this.pushParams.coupon_service = 0;
+        this.pushParams.coupon_service = '';
         this.pushParams.push_range = status;
         break;
       case 'range_type':
         this.pushParams.coupon_id = '';
         this.pushParams.coupon_group_id = '';
         this.pushParams.date_limit = null;
-        this.pushParams.coupon_service = 0;
+        this.pushParams.coupon_service = '';
         this.pushParams.range_type = status;
         break;
       case 'push_speed_type':
@@ -168,15 +159,12 @@ export class PushEditComponent implements OnInit {
       } else {
         saveParams.end_time = new Date(this.pushParams.end_time).getTime() / 1000;
       }
-      saveParams.coupon_service = this.pushParams.coupon_service === 0 ? null : this.pushParams.coupon_service;
-      saveParams.url_type = Number(this.pushParams.url_type) === 0 ? null : Number(this.pushParams.url_type);
       if (this.verification()) {
-        if (this.isCreatePush) {
+        if (!this.push_id) {
           // 添加推送
           this.pushService.requestAddPushData(saveParams).subscribe(() => {
-            this.onClose();
             this.globalService.promptBox.open('添加成功！', () => {
-              this.sureCallbackInfo();
+              this.router.navigate(['../../push_list'], {relativeTo: this.route});
             });
           }, err => {
             this.is_save = false;
@@ -185,9 +173,8 @@ export class PushEditComponent implements OnInit {
         } else {
           // 编辑推送
           this.pushService.requestUpdatePushData(this.push_id, saveParams).subscribe(() => {
-            this.onClose();
             this.globalService.promptBox.open('修改成功！', () => {
-              this.sureCallbackInfo();
+              this.router.navigate(['../../push_list'], {relativeTo: this.route});
             });
           }, err => {
             this.is_save = false;
@@ -209,6 +196,12 @@ export class PushEditComponent implements OnInit {
     if (!this.pushParams.push_image) {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请重新上传图片！';
+      cisCheck = false;
+    }
+
+    if (Number(this.pushParams.push_num_everyday) > Number(this.pushParams.push_num)) {
+      this.errPositionItem.push_speed.isError = true;
+      this.errPositionItem.push_speed.errMes = '每日推送次数不能大于最大推送次数！';
       cisCheck = false;
     }
 
@@ -238,20 +231,10 @@ export class PushEditComponent implements OnInit {
     this.errPositionItem.push_plan_rank.isError = false;
   }
 
-  // 确定按钮回调
-  private sureCallbackInfo(): any {
-    if (this.sureCallback) {
-      const temp = this.sureCallback;
-      this.closeCallback = null;
-      this.sureCallback = null;
-      temp();
-    }
-  }
-
   // 接口错误状态
   private errorProcess(err: any): any {
     if (!this.globalService.httpErrorProcess(err)) {
-      if (!this.isCreatePush && err.status === 404) {
+      if (this.push_id && err.status === 404) {
         this.globalService.promptBox.open('该条数据已删除，请刷新后重试!', null, 2000, null, false);
       } else if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);

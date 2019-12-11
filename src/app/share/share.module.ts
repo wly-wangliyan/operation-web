@@ -53,7 +53,7 @@ import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
 import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-ckeditor.component';
 import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
-import { PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
+import { DiyRangeTypePipe, PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
 import { FloatNumberDirective } from './directives/float-number.directive';
 import { MaxNumberDirective } from './directives/max-number.directive';
 import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
@@ -131,6 +131,7 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     StorePayStatus,
     MallCommodityTypePipe,
     BookingOrderStatusPipe,
+    DiyRangeTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -208,6 +209,7 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     StorePayStatus,
     MallCommodityTypePipe,
     BookingOrderStatusPipe,
+    DiyRangeTypePipe,
 
     // 指令
     IgnoreSpaceDirective,
