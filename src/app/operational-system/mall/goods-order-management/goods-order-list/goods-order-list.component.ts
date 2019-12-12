@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity, SearchParams } from '../goods-order-management-http.service';
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
@@ -9,6 +9,7 @@ import { GoodsOrderRefundComponent } from '../goods-order-refund/goods-order-ref
 import { environment } from '../../../../../environments/environment';
 import { GoodsOrderRemarkComponent } from '../goods-order-remark/goods-order-remark.component';
 import { GoodsWriteOffComponent } from '../goods-write-off/goods-write-off.component';
+import { BusinessEntity, BusinessManagementService, SearchParams as BussinessParams } from '../../business-management/business-management.service';
 
 const PageSize = 15;
 
@@ -28,17 +29,20 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
-    private orderHttpService: GoodsOrderManagementHttpService) { }
+    private orderHttpService: GoodsOrderManagementHttpService, private businessService: BusinessManagementService) { }
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
+  public bussinessParams: BussinessParams = new BussinessParams(); // 条件筛选
   public orderList: Array<GoodsOrderEntity> = []; // 产品订单列表
   public pageIndex = 1; // 当前页码
   public noResultText = '数据加载中...';
+  public businessList: Array<BusinessEntity> = [];
   public supplierList: Array<any> = [];
   public tabs: Array<any> = [];
   public selectedTabIndex: number;
 
   private searchText$ = new Subject<any>();
+  private searchSupplierText$ = new Subject<any>();
 
   private continueRequestSubscription: Subscription; // 分页获取数据
 
@@ -58,17 +62,6 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   public pay_start_time: any = ''; // 支付开始时间
   public pay_end_time: any = ''; // 支付结束时间
-
-  public pay_status = ''; // 	int	F	订单状态 1:待支付 2:已支付 3:已取消
-  public delivery_status = ''; // 	int	F	发货状态 1:待发货 2:已发货 3:已签收
-  public mobile = undefined; // 	String	F	购买人手机号
-  public contact = undefined; // 	String	F	收货人
-  public order_id = undefined; // 	string	F	订单ID
-  public commodity_name = undefined; // 	string	F	商品名称
-  public order_time = undefined; // 	string	F	下单时间 12154.0,232645.0
-  public pay_time = undefined; // 	string	F	支付时间 12154.0,232645.0
-  public page_num = 1; // 页码
-  public page_size = 45; // 每页条数
 
   public ngOnInit() {
     this.tabs = [
@@ -97,6 +90,19 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       this.onTabChange(0);
     });
     this.searchText$.next();
+
+    this.searchSupplierText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.businessService.requestBusinessList(this.bussinessParams))
+    ).subscribe(res => {
+      this.businessList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchSupplierText$.next();
   }
 
   // 切换tab

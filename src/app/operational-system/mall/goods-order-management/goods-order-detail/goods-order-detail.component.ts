@@ -61,12 +61,6 @@ export class GoodsOrderDetailComponent implements OnInit {
       this.orderStatusChange();
       this.goodsInfo = res.detail;
       this.writeOffList = res.write_off;
-      this.writeOffList = [
-        { id: '1111', write_off_status: 1 },
-        { id: '3442444444444444', write_off_status: 2 },
-        { id: '34343432432432432', write_off_status: 3 },
-        { id: '33333222222222222', write_off_status: 1 },
-      ]
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
