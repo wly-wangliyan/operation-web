@@ -105,6 +105,10 @@ export class OperationalSystemComponent implements AfterViewInit, OnDestroy {
       case '/exemption':
         window.open(`${location.protocol}//${location.host}/exemption`);
         break;
+        // 预约泊车
+      case '/order-parking':
+        window.open(`${location.protocol}//${location.host}/order-parking`);
+        break;
       default:
         const menu_name = '/main' + menu;
         this.router.navigate([menu_name]);

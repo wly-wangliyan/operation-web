@@ -6,17 +6,17 @@
         <form class="search-form">
             <div class="form-group">
                 <span>状态：</span>
-                <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id"
-                        name="vehicle_brand_id">
+                <select class="form-control" [(ngModel)]="searchParams.status"
+                        name="status">
                     <option value="">全部</option>
-                    <option value="">营业中</option>
-                    <option value="">停业休息</option>
+                    <option value="1">营业中</option>
+                    <option value="2">停业休息</option>
                 </select>
             </div>
             <div class="form-group">
                 <span>汽修店名称：</span>
-                <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="4" oninput="value=value.replace(/[^\d]/g,'')"
-                       name="vehicle_year_model" [(ngModel)]="searchParams.vehicle_year_model"/>
+                <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="50" oninput="value=value.replace(/[^\d]/g,'')"
+                       name="repair_shop_name" [(ngModel)]="searchParams.repair_shop_name"/>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
                     </button>
@@ -26,7 +26,7 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="brokerageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+            <nz-table [nzData]="garageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
                       (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
                 <thead>
                 <tr>
@@ -43,19 +43,28 @@
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
-                    <td>{{data.account}}</td>
-                    <td>{{data.telephone}}</td>
-                    <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
-                    <td>
-                        {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
+                    <td [title]="data.repair_shop_name">{{data.repair_shop_name|zMaxLength:10}}</td>
+                    <td [title]="data.repair_company?.repair_company_name?data.repair_company?.repair_company_name:'--'">
+                        {{data.repair_company?(data.repair_company.repair_company_name|zMaxLength:10):'--'}}
+                    </td>
+                    <td>汽修店</td>
+                    <td [title]="data.service_telephone?data.service_telephone:''">
+                        {{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}
                     </td>
                     <td>
-                        <nz-switch [ngModel]="!data.discontinue_use" nzCheckedChildren="On" style="height: 10px"
-                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.broker_company_id,$event)"></nz-switch>
+                        <span *ngIf="!data.door_start_time&&!data.shop_start_time">--</span>
+                        <span>
+                            {{data.door_start_time?'上门保养：'+(data.door_start_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+                            <br *ngIf="data.door_start_time" />
+                            {{data.shop_start_time?'到店保养：'+(data.shop_start_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+                        </span>
+                    </td>
+                    <td>
+                        <nz-switch [ngModel]="data.status===1" nzCheckedChildren="On" style="height: 10px"
+                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.repair_shop_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑资料'" [routerLink]="'../edit'">编辑资料</a>
+                        <a [title]="'编辑资料'" [routerLink]="['../edit', data.repair_shop_id]">编辑资料</a>
                        <!-- <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>-->
                         <a [title]="'救援服务配置'" (click)="onHelpServiceClick()">救援服务配置</a>
                     </td>

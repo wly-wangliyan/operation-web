@@ -1,13 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BrokerageEntity, InsuranceService } from '../../../operational-system/insurance/insurance.service';
-import { SearchUpkeepProductParams } from '../../../operational-system/maintenance/business-management/business-management.service';
 import { FileImportViewModel } from '../../../../utils/file-import.model';
-import { ProgressModalComponent } from '../../../share/components/progress-modal/progress-modal.component';
 import { Subject, Subscription } from 'rxjs';
 import { BrokerageCompanyEditComponent } from '../../../operational-system/insurance/brokerage-company-management/brokerage-company-edit/brokerage-company-edit.component';
 import { GlobalService } from '../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
+import { GarageManagementService, RepairShopEntity, SearchParams } from '../garage-management.service';
 
 const PageSize = 15;
 
@@ -18,14 +17,13 @@ const PageSize = 15;
 })
 export class GarageListComponent implements OnInit {
 
-  public brokerageList: Array<BrokerageEntity> = [];
+  public garageList: Array<RepairShopEntity> = [];
   public pageIndex = 1;
   public noResultText = '数据加载中...';
-  public searchParams = new SearchUpkeepProductParams();
+  public searchParams = new SearchParams();
   public vehicleBrandList = [];
   public vehicleFirmList = [];
   public vehicleSeriesList = [];
-  public importViewModel: FileImportViewModel = new FileImportViewModel();
   public time = null;
 
   @ViewChild('helpServicePromptDiv', { static: true }) public helpServicePromptDiv: ElementRef;
@@ -33,35 +31,27 @@ export class GarageListComponent implements OnInit {
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-  private importSpotSubscription: Subscription;
 
   @ViewChild(BrokerageCompanyEditComponent, {static: true}) public brokerageEditComponent: BrokerageCompanyEditComponent;
 
   private get pageCount(): number {
-    if (this.brokerageList.length % PageSize === 0) {
-      return this.brokerageList.length / PageSize;
+    if (this.garageList.length % PageSize === 0) {
+      return this.garageList.length / PageSize;
     }
-    return this.brokerageList.length / PageSize + 1;
+    return this.garageList.length / PageSize + 1;
   }
 
   constructor(private globalService: GlobalService,
-              private insuranceService: InsuranceService) {
+              private garageService: GarageManagementService) {
   }
 
   ngOnInit() {
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>
-            this.insuranceService.requestBrokerageList())
+            this.garageService.requestRepairShopsList(this.searchParams))
     ).subscribe(res => {
-      this.brokerageList = res.results;
-      this.brokerageList.forEach(value => {
-        const ic_company_name = [];
-        value.ic_company.forEach(value1 => {
-          ic_company_name.push(value1.ic_name);
-        });
-        value.ic_company_name = ic_company_name.join(',');
-      });
+      this.garageList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -70,18 +60,14 @@ export class GarageListComponent implements OnInit {
     this.searchText$.next();
   }
 
-  // 显示添加编辑项目modal
-  public onEditBtnClick(data: BrokerageEntity) {
-  }
-
   // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.insuranceService.continueBrokerageList(this.linkUrl).subscribe(res => {
-        this.brokerageList = this.brokerageList.concat(res.results);
+      this.continueRequestSubscription = this.garageService.continueRepairShopsList(this.linkUrl).subscribe(res => {
+        this.garageList = this.garageList.concat(res.results);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -91,9 +77,9 @@ export class GarageListComponent implements OnInit {
 
   // 开启、关闭经济公司
   public onSwitchChange(broker_company_id, event) {
-    const swith = event ? false : true;
-    const params = { discontinue_use: swith };
-    this.insuranceService.requestOpenBrokerCompany(broker_company_id, params).subscribe(res => {
+    const swith = event ? 1 : 2;
+    const params = { status: swith };
+    this.garageService.requestRepairShopsStatus(broker_company_id, params).subscribe(res => {
       if (event) {
         this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
       } else {

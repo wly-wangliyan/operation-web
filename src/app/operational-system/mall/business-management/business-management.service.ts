@@ -8,7 +8,7 @@ import { HttpResponse } from '@angular/common/http';
 
 export class SearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业中 2.停业休息
-  business_name = ''; // 	F	商家名称
+  public business_name = ''; // 	F	商家名称
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
