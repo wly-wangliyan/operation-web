@@ -1,0 +1,51 @@
+<!-- 选择核销券码 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">核销券码</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <div>
+        <div class="table-container label-table">
+          <div class="zmy-table">
+            <nz-table [nzData]="writeOffList" nzBordered="true" [nzShowPagination]="false" [nzFrontPagination]='false'
+              [nzNoResult]="noResultText" #writeOffTable>
+              <thead>
+                <tr>
+                  <th [nzAlign]="'left'" nzShowCheckbox nzShowRowSelection [(nzChecked)]="isAllDisplayDataChecked"
+                    [nzShowRowSelection]=false [nzIndeterminate]="isIndeterminate" (nzCheckedChange)="checkAll($event)"
+                    class="check-padding">&nbsp;&nbsp;全选
+                  </th>
+                  <th>核销码</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of writeOffTable.data; let i=index">
+                  <td *ngIf='data.write_off_status===1' nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]"
+                    (nzCheckedChange)="refreshStatus()"></td>
+                  <td *ngIf='data.write_off_status!==1'>--</td>
+                  <td style="width: 400px;">
+                    <a [ngClass]='data.write_off_status!==1?"text-line":""'>{{data.id}}</a>
+                  </td>
+                  <td>
+                    {{data.write_off_status|writeOffStatus}}
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+            确认核销
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,8 @@ import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity, S
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
 import { GoodsOrderRefundComponent } from '../goods-order-refund/goods-order-refund.component';
 import { environment } from '../../../../../environments/environment';
+import { GoodsOrderRemarkComponent } from '../goods-order-remark/goods-order-remark.component';
+import { GoodsWriteOffComponent } from '../goods-write-off/goods-write-off.component';
 
 const PageSize = 15;
 
@@ -29,18 +31,18 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     private orderHttpService: GoodsOrderManagementHttpService) { }
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选
-
   public orderList: Array<GoodsOrderEntity> = []; // 产品订单列表
-
-  private requestSubscription: Subscription; // 获取数据
-
   public pageIndex = 1; // 当前页码
-
   public noResultText = '数据加载中...';
+  public supplierList: Array<any> = [];
+  public tabs: Array<any> = [];
+  public selectedTabIndex: number;
 
   private searchText$ = new Subject<any>();
 
   private continueRequestSubscription: Subscription; // 分页获取数据
+
+  private requestSubscription: Subscription; // 获取数据
 
   private linkUrl: string; // 分页url
 
@@ -48,6 +50,8 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
   @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;
+  @ViewChild('orderRemark', { static: true }) public orderRemark: GoodsOrderRemarkComponent;
+  @ViewChild('writeOff', { static: true }) public writeOff: GoodsWriteOffComponent;
 
   public order_start_time: any = ''; // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
@@ -67,11 +71,66 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   public page_size = 45; // 每页条数
 
   public ngOnInit() {
+    this.tabs = [
+      { key: 0, value: '全部' },
+      { key: 1, value: '待支付' },
+      { key: 2, value: '待发货' },
+      { key: 3, value: '已发货' },
+      { key: 4, value: '已完成' },
+      { key: 5, value: '售后/退款' },
+      { key: 6, value: '已关闭' },
+    ];
+
+    this.supplierList = [
+      { key: 0, value: '全部' },
+      { key: 1, value: '待支付' },
+      { key: 2, value: '待发货' },
+      { key: 3, value: '已发货' },
+      { key: 4, value: '已完成' },
+      { key: 5, value: '售后/退款' },
+      { key: 6, value: '已关闭' },
+    ];
+    this.selectedTabIndex = 0;
+
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestOrderList();
+      this.onTabChange(0);
     });
     this.searchText$.next();
+  }
+
+  // 切换tab
+  public onTabChange(key: number) {
+    if (key === 1) {
+      this.initParams();
+      this.searchParams.pay_status = 1;
+    } else if (key === 2) {
+      this.initParams();
+      this.searchParams.delivery_status = 1;
+    } else if (key === 3) {
+      this.initParams();
+      this.searchParams.delivery_status = 2;
+    } else if (key === 4) {
+      this.initParams();
+      this.searchParams.order_status = 2;
+    } else if (key === 5) {
+      this.initParams();
+      this.searchParams.refund_type = 2;
+    } else if (key === 6) {
+      this.initParams();
+      this.searchParams.pay_status = 3;
+    } else {
+      this.initParams();
+    }
+    this.requestOrderList();
+  }
+
+  // 初始化参数
+  private initParams() {
+    this.searchParams.pay_status = null;
+    this.searchParams.delivery_status = null;
+    this.searchParams.refund_type = null;
+    this.searchParams.order_status = null;
   }
 
   public ngOnDestroy() {
@@ -125,7 +184,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   // 导出url
   private exportSearchUrl() {
     // tslint:disable-next-line:max-line-length
-    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&refund_type=${this.searchParams.refund_type}&order_status=${this.searchParams.order_status}&commodity_type=${this.searchParams.commodity_type}&shipping_method=${this.searchParams.shipping_method}&business_name=${this.searchParams.business_name}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 下单开始时间的禁用部分
@@ -256,6 +315,27 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       this.orderHttpService.requestConfirmReceipt(data.order_id).subscribe(res => {
         this.searchText$.next();
         this.globalService.promptBox.open('确认收货成功！');
+      });
+    });
+  }
+
+  /*
+  * 修改备注信息
+  * @param data GoodsOrderEntity 商品信息
+  * */
+  public onUpdateRemarkClick(title: string, data: GoodsOrderEntity) {
+    this.orderRemark.open(title, data, () => {
+      timer(0).subscribe(() => {
+        this.searchText$.next();
+      });
+    }, '保存');
+  }
+
+  // 核销
+  public onWriteOff(data: GoodsOrderEntity) {
+    this.writeOff.open(data, () => {
+      timer(0).subscribe(() => {
+        this.searchText$.next();
       });
     });
   }

@@ -9,35 +9,45 @@
         </button>
       </div>
       <form *ngIf="currentOrder" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>物流公司</span>
-          </label>
-          <div class=" control-input">
-            <input class="form-control" placeholder="请输入1-10字物流公司名称" [(ngModel)]="currentOrder.delivery_company"
-              name="delivery_company" maxlength="10" appIgnoreSpace required>
-          </div>
+        <div class="row radio">
+          <nz-radio-group [(ngModel)]="currentOrder.is_delivery" name='radio-value' [nzButtonStyle]="'solid'">
+            <label nz-radio-button nzValue=1>物流发货</label>
+            <label nz-radio-button nzValue=2>无须配送</label>
+          </nz-radio-group>
         </div>
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>物流单号</span>
-          </label>
-          <div class=" control-input">
-            <input class="form-control" placeholder="请输入物流单号" [(ngModel)]="currentOrder.delivery_order" maxlength="50"
-              name="delivery_order" appIgnoreSpace required onInput="value=value.replace(/[^a-zA-Z0-9_]/g,'')">
+        <div *ngIf='currentOrder.is_delivery==="1"'>
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>物流单号</span>
+            </label>
+            <div class=" control-input">
+              <input class="form-control" placeholder="请输入物流单号" [(ngModel)]="currentOrder.delivery_order" maxlength="50"
+                name="delivery_order" appIgnoreSpace required onInput="value=value.replace(/[^a-zA-Z0-9_]/g,'')">
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>邮费</span>
-          </label>
-          <div class=" control-input">
-            <input class="form-control" placeholder="请输入邮费金额" [(ngModel)]="postage" name="postage" (input)="errMes=''"
-              (change)="onAmountChange($event)" (keypress)="inputNumberLimit($event)" maxlength="7" appIgnoreSpace
-              required>
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>物流公司</span>
+            </label>
+            <div class=" control-input">
+              <select class="form-control" name="shipping_method" [(ngModel)]="currentOrder.delivery_company">
+                <option value=''>选择物流公司</option>
+                <option *ngFor='let data of deliveryCompany' value=data.key>{{data.value}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>邮费</span>
+            </label>
+            <div class=" control-input">
+              <input class="form-control" placeholder="请输入邮费金额" [(ngModel)]="postage" name="postage" (input)="errMes=''"
+                (change)="onAmountChange($event)" (keypress)="inputNumberLimit($event)" maxlength="7" appIgnoreSpace
+                required>
+            </div>
           </div>
         </div>
         <div class="row row-message">
@@ -45,6 +55,9 @@
           <div class="control-input err-message">
             <span *ngIf="errMes">{{errMes}}</span>
           </div>
+        </div>
+        <div class="row text" *ngIf='currentOrder.is_delivery==="2"'>
+          <p>无需物流则不用填写物流信息</p>
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onClose()">取消</button>

@@ -42,9 +42,9 @@ export class ServiceFeesListComponent implements OnInit {
       { key: 1, value: '救援费管理' },
     ];
     this.selectedTabIndex = 0;
-    const obj = new ServiceFeeEntity();
-    obj.service_fee_name = '1321223';
-    this.serviceFeeList.push(obj);
+    // const obj = new ServiceFeeEntity();
+    // obj.service_fee_name = '1321223';
+    // this.serviceFeeList.push(obj);
     // 救援费管理列表
     this.searchText$.pipe(
       debounceTime(500),
@@ -57,7 +57,7 @@ export class ServiceFeesListComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchText$.next();
+    this.searchText$.next();
   }
 
   // 查询按钮

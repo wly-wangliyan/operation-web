@@ -20,6 +20,8 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   public errMes = ''; // 错误信息
   public postage = 0;
   public sureName: string;
+  public radioValue: string;
+  public deliveryCompany: Array<any> = [];
 
   private order_id: string; // 订单id
   private sureCallback: any;
@@ -33,6 +35,21 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.currentOrder.is_delivery = '1';
+    this.deliveryCompany = [
+      { key: '顺丰速运', value: '顺丰速运' },
+      { key: '圆通速递', value: '圆通速递' },
+      { key: '申通快递', value: '申通快递' },
+      { key: '中通快递', value: '中通快递' },
+      { key: '百世快递', value: '百世快递' },
+      { key: '韵达快递', value: '韵达快递' },
+      { key: '天天快递', value: '天天快递' },
+      { key: '中国邮政', value: '中国邮政' },
+      { key: 'EMS', value: 'EMS' },
+      { key: '宅急送', value: '宅急送' },
+      { key: '德邦物流', value: '德邦物流' },
+      { key: '京东快递', value: '京东快递' },
+    ];
   }
 
   // 键盘按下事件
@@ -81,18 +98,19 @@ export class GoodsOrderDeliveryComponent implements OnInit {
     if (Number(this.postage) >= 10000) {
       this.errMes = '邮费金额应小于10000元！';
       return;
-    }
-    this.currentOrder.postage = this.postage * 100;
-    // 修改邮费信息
-    this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
-      this.onClose();
-      this.globalService.promptBox.open('保存成功！', () => {
-        this.sureCallbackInfo();
-        this.currentOrder = new GoodsOrderEntity();
+    } else {
+      this.currentOrder.postage = this.postage * 100;
+      // 修改邮费信息
+      this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
+        this.onClose();
+        this.globalService.promptBox.open('保存成功！', () => {
+          this.sureCallbackInfo();
+          this.currentOrder = new GoodsOrderEntity();
+        });
+      }, err => {
+        this.errorProcess(err);
       });
-    }, err => {
-      this.errorProcess(err);
-    });
+    }
   }
 
   // 确定按钮回调

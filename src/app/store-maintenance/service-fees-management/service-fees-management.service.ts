@@ -54,7 +54,7 @@ export class ServiceFeeLinkResponse extends LinkResponse {
 })
 export class ServiceFeesManagementService {
 
-  private domain = environment.BOOKING_DOMAIN; // 预约泊车域名
+  private domain = environment.STORE_SERVE; // 预约泊车域名
 
   constructor(private httpService: HttpService) { }
 

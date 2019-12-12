@@ -1,7 +1,7 @@
 .search-container {
-  margin-left: 15px;
   width: calc(100% - 30px);
   padding: 0;
+  border: none;
 }
 
 .search-form .form-group {
@@ -20,17 +20,61 @@
   margin-top: -1px !important;
 }
 
+.table-container {
+  margin: 0 15px 15px 0;
+}
+
+:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(odd) {
+  background: rgba(241, 241, 241, 1);
+}
+
+:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(even) td {
+  border-right: 1px solid rgba(202, 202, 202, 1);
+}
+
+:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(even) td:first-child,
+.ant-table-tbody>tr:nth-child(even) td:last-child {
+  border-right: none;
+}
+
+:host ::ng-deep .goods-order .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab,
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+  width: 140px;
+}
+
+:host ::ng-deep .goods-order .ant-table {
+  border: 1px solid rgba(202, 202, 202, 1);
+  margin-top: 10px;
+}
+
+:host ::ng-deep .goods-order .ant-table-thead>tr>th {
+  height: 40px;
+  background: rgba(202, 202, 202, 1);
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
+}
+
 .img-item {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding-left: 10px;
+  position: relative;
 }
 
 .img-item img {
   margin: 10px 5px 10px 0;
   width: 90px;
   height: 65px;
+}
+
+.fee {
+  display: grid;
+  text-align: center;
+  position: absolute;
+  right: 24px;
 }
 
 .operation {
