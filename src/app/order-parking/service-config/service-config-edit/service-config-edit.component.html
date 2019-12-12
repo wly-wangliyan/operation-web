@@ -16,7 +16,7 @@
           <nz-form-label [nzNoColon]='true'>
             <span style="padding-left:10px">标签</span></nz-form-label>
           <nz-form-control>
-            <div class="control-input" style="display: contents!important;">
+            <div class="control-input">
               <ul>
                 <li *ngFor="let tag of checkLabelNamesList; let i=index">
                   <div>{{tag}}</div>
@@ -48,7 +48,7 @@
                     <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="originPriceUnit">
-                        <input class="price-input" [(ngModel)]="configParams.origin_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="origin_fee" nz-input autocomplete="off"
                           name="origin_price" appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
@@ -63,8 +63,8 @@
                     <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="salePriceUnit">
-                        <input class="price-input" [(ngModel)]="configParams.sale_fee" nz-input autocomplete="off"
-                          name="sale_price" appFloatNumber [appMaxNumber]='99999.99' required />
+                        <input class="price-input" [(ngModel)]="sale_fee" nz-input autocomplete="off" name="sale_price"
+                          appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #salePriceUnit>元</ng-template>
                     </nz-form-control>
@@ -78,8 +78,8 @@
                     <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
                     <nz-form-control>
                       <nz-input-group style="margin-left: -30px;" [nzSuffix]="prePriceUnit">
-                        <input class="price-input" [(ngModel)]="configParams.pre_fee" nz-input autocomplete="off"
-                          name="pre_price" appFloatNumber [appMaxNumber]='99999.99' required />
+                        <input class="price-input" [(ngModel)]="pre_fee" nz-input autocomplete="off" name="pre_price"
+                          appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #prePriceUnit>元</ng-template>
                       <div *ngIf="prePriceErrors" class="text-danger">
@@ -95,7 +95,7 @@
                     <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="minusPriceUnit">
-                        <input class="price-input" [(ngModel)]="configParams.minus_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off"
                           name="minus_price" appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #minusPriceUnit>元</ng-template>
@@ -134,7 +134,7 @@
                     <nz-form-label [nzNoColon]='true'>常用</nz-form-label>
                     <nz-form-control>
                       <input class="params" [(ngModel)]="configParams.main_tel" nz-input autocomplete="off"
-                        name="main_tel" required maxlength='20' />
+                        name="main_tel" required maxlength='11' />
                       <div *ngIf="mainTelErrors" class="text-danger">
                         <span class="input-error">{{mainTelErrors}}</span>
                       </div>
@@ -146,7 +146,7 @@
                     <nz-form-label [nzNoColon]='true'>备用</nz-form-label>
                     <nz-form-control>
                       <input class="params" [(ngModel)]="configParams.standby_tel" nz-input autocomplete="off"
-                        name="standby_tel" required maxlength='20' />
+                        name="standby_tel" required maxlength='12' />
                       <div *ngIf="standbyTelErrors" class="text-danger">
                         <span class="input-error">{{standbyTelErrors}}</span>
                       </div>

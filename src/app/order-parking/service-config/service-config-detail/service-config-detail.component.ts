@@ -13,7 +13,7 @@ import { ServiceConfigService, ParkingEntity } from '../service-config.service';
 export class ServiceConfigDetailComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-    private routerInfo: ActivatedRoute, private router: Router) {
+              private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public parkingDetailData: ParkingEntity = new ParkingEntity();
@@ -21,7 +21,7 @@ export class ServiceConfigDetailComponent implements OnInit {
   public productTicketList: Array<any> = [];
   public imgUrls: Array<any> = [];
   public product_image_url: Array<any> = [];
-  public loading = false;
+  public loading = true;
   public parking_id: string;
   public productNameErrors = '';
   public tagNameErrors = '';
@@ -45,6 +45,7 @@ export class ServiceConfigDetailComponent implements OnInit {
       this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
         this.parkingDetailData = res;
         this.imgUrls = this.parkingDetailData.images ? this.parkingDetailData.images : [];
+        this.loading = false;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

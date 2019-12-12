@@ -26,10 +26,13 @@
         <tbody>
           <tr *ngFor="let data of productConfigTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td>
+            <td *ngIf='data.images&&data.images.length!==0'>
               <div *ngFor='let img of data.images;let t=index;'>
                 <img *ngIf='t===0' [src]="img" width="100">
               </div>
+            </td>
+            <td *ngIf='!data.images||data.images.length===0'>
+              <img src="/assets/images/image_space_3_2.png" />
             </td>
             <td>
               {{data.parking_name}}

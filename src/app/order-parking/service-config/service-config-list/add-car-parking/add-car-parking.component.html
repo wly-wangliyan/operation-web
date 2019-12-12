@@ -13,7 +13,7 @@
           <div>
             <img (click)='onSearchBtnClick()' src="/assets/images/search.png">
             <input class="search-input" [(ngModel)]="parking_name" placeholder="输入停车场名称搜索" autocomplete="off"
-              name="product_name" maxlength="10" appIgnoreSpace />
+              name="product_name" maxlength="10" appIgnoreSpace (keyup)="onSearchBtnClick()" />
           </div>
         </form>
         <div class='parking-box'>
