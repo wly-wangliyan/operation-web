@@ -1,1 +1,106 @@
-<p>order-detail works!</p>
+<div class="content-header">
+  <app-crumb [level1Name]="'救援订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
+  </app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+  <div class="content-container">
+    <div class="table-item order-table">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="8" class="row-title">订单信息</td>
+
+          <td>服务状态：</td>
+          <td style="color: #E82038;">{{orderRecord.service_status}}</td>
+
+          <td>订单状态：</td>
+          <td style="color: #E82038;">{{orderRecord.order_status | exemptionOrderStatus}}</td>
+
+          <td>订单编号：</td>
+          <td>{{orderRecord.order_id ? orderRecord.order_id : '--'}}</td>
+        </tr>
+        <tr>
+          <td>车主姓名：</td>
+          <td>{{orderRecord.contact_name ? orderRecord.contact_name : '--'}}</td>
+
+          <td>手机号：</td>
+          <td>{{orderRecord.contact_tel ? orderRecord.contact_tel : '--'}}</td>
+
+          <td>车牌号：</td>
+          <td>{{orderRecord.car_id ? orderRecord.car_id : '--'}}</td>
+        </tr>
+        <tr>
+          <td>地址：</td>
+          <td>{{orderRecord.address ? orderRecord.address : '--'}}</td>
+
+          <td>救援项目：</td>
+          <td>{{orderRecord.rescue_project_type === 1? '搭电' : '换胎'}}</td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>总金额：</td>
+          <td>{{orderRecord.total_right_fee | centPriceChange:'元'}}</td>
+
+          <td>预付费：</td>
+          <td>
+            <span>应收：</span>{{orderRecord.right_prepaid_fee | centPriceChange:'元'}}
+            <span>，实收：</span>{{orderRecord.real_prepaid_fee | centPriceChange:'元'}}
+          </td>
+
+          <td>立减：</td>
+          <td>
+            <span>尾款：</span>{{orderRecord.balance_platform_discount | centPriceChange:'元'}}
+            <span>，预付：</span>{{orderRecord.prepaid_platform_discount | centPriceChange:'元'}}
+          </td>
+        </tr>
+        <tr>
+          <td>优惠：</td>
+          <td>
+            <span>尾款：</span>{{orderRecord.balance_coupon_discount | centPriceChange:'元'}}
+            <span>，预付：</span>{{orderRecord.prepaid_coupon_discount | centPriceChange:'元'}}
+          </td>
+
+          <td></td>
+          <td></td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>汽修店：</td>
+          <td>{{orderRecord.repair_shop_name || '--'}}</td>
+
+          <td>下单时间：</td>
+          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td>支付时间：</td>
+          <td>{{orderRecord.pay_time ? (orderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+        </tr>
+        <tr>
+          <td>接单时间：</td>
+          <td>{{orderRecord.take_order_time ? (orderRecord.take_order_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td>完成时间：</td>
+          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>退款时间：</td>
+          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td>退款原因：</td>
+          <td>{{orderRecord.refund_reason || '--'}}</td>
+
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
