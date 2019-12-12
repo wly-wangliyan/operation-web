@@ -14,7 +14,7 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'list', pathMatch: 'full'},
       {path: 'list', component: GarageListComponent},
-      {path: 'edit', component: GarageEditComponent},
+      {path: 'edit/:repair_shop_id', component: GarageEditComponent},
       {path: 'supply-config-list', component: SupplyConfigListComponent},
       {path: '**', redirectTo: 'list', pathMatch: 'full'}
     ]

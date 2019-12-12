@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ValidateHelper } from '../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../core/http.service';
 import { isUndefined } from 'util';
+import { GarageManagementService, RepairShopEntity } from '../garage-management.service';
+import { DateFormatHelper } from '../../../../utils/date-format-helper';
 
 export class ErrMessageItem {
   public isError = false;
@@ -47,7 +49,7 @@ export class ErrPositionItem {
 })
 export class GarageEditComponent implements OnInit {
 
-  public currentBusiness = new UpkeepMerchantEntity();
+  public currentGarage = new RepairShopEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public mapItem: MapItem = new MapItem();
   public is_add_tel = true;
@@ -55,7 +57,7 @@ export class GarageEditComponent implements OnInit {
   public company_name: string;
   public time = null;
 
-  private upkeep_merchant_id: string;
+  private repair_shop_id: string;
 
   @Input() public data: any;
   @Input() public sureName: string;
@@ -68,35 +70,31 @@ export class GarageEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService,
               private activatedRoute: ActivatedRoute,
-              private businessManagementService: BusinessManagementService,
+              private garageService: GarageManagementService,
               private router: Router) {
-    activatedRoute.queryParams.subscribe(queryParams => {
-      this.upkeep_merchant_id = queryParams.upkeep_merchant_id;
+    this.activatedRoute.paramMap.subscribe(map => {
+      this.repair_shop_id = map.get('repair_shop_id');
     });
   }
 
   public ngOnInit(): void {
     this.service_telephones.push({tel: '', time: new Date().getTime()});
-    /*this.continueRequestSubscription = this.businessManagementService.requestUpkeepMerchantDetail(this.upkeep_merchant_id)
+    this.garageService.requestRepairShopsDetail(this.repair_shop_id)
         .subscribe(res => {
-          this.currentBusiness = res;
-          this.currentBusiness.image_url = res.image_url.length > 0 ? res.image_url : ['/assets/images/image_space.png'];
+          this.currentGarage = res;
+          this.currentGarage.images = res.images.length > 0 ? res.images : ['/assets/images/image_space.png'];
           const telList = res.service_telephone ? res.service_telephone.split(',') : [''];
           telList.forEach(value => {
             this.service_telephones.push({tel: value, time: new Date().getTime()});
           });
           this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
-          this.company_name = res.UpkeepCompany.company_name;
-          const regionObj = new RegionEntity(this.currentBusiness);
+          this.company_name = res.repair_company.repair_company_name;
+          const regionObj = new RegionEntity(this.currentGarage);
           this.proCityDistSelectComponent.regionsObj = regionObj;
           this.proCityDistSelectComponent.initRegions(regionObj);
-          this.currentBusiness.VehicleFirm.forEach(value => {
-            this.brand_ids.push(value.vehicle_brand.vehicle_brand_id);
-            this.firm_ids.push(value.vehicle_firm_id);
-          });
         }, err => {
           this.globalService.httpErrorProcess(err);
-        });*/
+        });
   }
 
   // 键盘按下事件
@@ -112,17 +110,12 @@ export class GarageEditComponent implements OnInit {
     this.clear();
     if (this.verification()) {
       // 编辑商家
-      const firms = [];
-      this.currentBusiness.VehicleFirm.forEach(value => {
-        firms.push(value.vehicle_firm_id);
-      });
       const telList = this.service_telephones.map(value => value.tel);
       const params = {
-        vehicle_firm_ids: firms.join(','),
-        booking: this.currentBusiness.booking,
+        // door_start_time: DateFormatHelper.getSecondTimeSum(this.currentGarage.door_start_time),
         service_telephone: telList.join(',')
       };
-      this.businessManagementService.requestUpdateUpkeepMerchant(this.upkeep_merchant_id, params).subscribe(() => {
+      this.garageService.requestEditRepairShops(this.repair_shop_id, params).subscribe(() => {
         this.onClose();
         this.globalService.promptBox.open('保存成功！', () => {
         });
@@ -135,11 +128,6 @@ export class GarageEditComponent implements OnInit {
   // 表单提交校验
   private verification() {
     let isCheck = true;
-    if (this.currentBusiness.booking <= 0 || this.currentBusiness.booking > 60) {
-      this.errPositionItem.booking.isError = true;
-      this.errPositionItem.booking.errMes = '可提前预定天数范围为1到60！';
-      isCheck = false;
-    }
     this.service_telephones.forEach(value => {
       if (!ValidateHelper.Phone(value.tel)) {
         this.errPositionItem.service_telephone.isError = true;
@@ -158,7 +146,6 @@ export class GarageEditComponent implements OnInit {
   // 清空
   public clear() {
     this.errPositionItem.service_telephone.isError = false;
-    this.errPositionItem.booking.isError = false;
   }
 
   // 接口错误状态
@@ -182,14 +169,14 @@ export class GarageEditComponent implements OnInit {
    */
   public openMapModal() {
     this.mapItem.point = [];
-    if (this.currentBusiness.address) {
+    if (this.currentGarage.address) {
       this.mapItem.hasDetailedAddress = true;
     }
-    if (this.currentBusiness.lon && this.currentBusiness.lat) {
-      this.mapItem.point.push(Number(this.currentBusiness.lon));
-      this.mapItem.point.push(Number(this.currentBusiness.lat));
+    if (this.currentGarage.lon && this.currentGarage.lat) {
+      this.mapItem.point.push(Number(this.currentGarage.lon));
+      this.mapItem.point.push(Number(this.currentGarage.lat));
     }
-    this.mapItem.address = this.currentBusiness.address;
+    this.mapItem.address = this.currentGarage.address;
     this.zMapSelectPointComponent.openMap();
   }
 

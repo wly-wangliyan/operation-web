@@ -43,30 +43,30 @@
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.repair_shop_name">{{data.repair_shop_name|zMaxLength:10}}</td>
-                    <td [title]="data.repair_company?.repair_company_name?data.repair_company?.repair_company_name:'--'">
-                        {{data.repair_company?(data.repair_company.repair_company_name|zMaxLength:10):'--'}}
+                    <td [title]="data.source.repair_shop_name">{{data.source.repair_shop_name|zMaxLength:10}}</td>
+                    <td [title]="data.source.repair_company?.repair_company_name?data.source.repair_company?.repair_company_name:'--'">
+                        {{data.source.repair_company?(data.source.repair_company.repair_company_name|zMaxLength:10):'--'}}
                     </td>
                     <td>汽修店</td>
-                    <td [title]="data.service_telephone?data.service_telephone:''">
-                        {{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}
+                    <td [title]="data.source.service_telephone?data.source.service_telephone:''">
+                        {{data.source.service_telephone?(data.source.service_telephone|zMaxLength:12):'--'}}
                     </td>
                     <td>
-                        <span *ngIf="!data.door_start_time&&!data.shop_start_time">--</span>
+                        <span *ngIf="!data.source.door_start_time&&!data.source.shop_start_time">--</span>
                         <span>
-                            {{data.door_start_time?'上门保养：'+(data.door_start_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+                            {{data.door_start_time?'上门保养：'+data.door_start_time+data.door_end_time:''}}
                             <br *ngIf="data.door_start_time" />
-                            {{data.shop_start_time?'到店保养：'+(data.shop_start_time* 1000 | date:"y-MM-dd HH:mm"):''}}
+                            {{data.shop_start_time?'到店保养：'+data.shop_start_time+data.shop_end_time:''}}
                         </span>
                     </td>
                     <td>
-                        <nz-switch [ngModel]="data.status===1" nzCheckedChildren="On" style="height: 10px"
-                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.repair_shop_id,$event)"></nz-switch>
+                        <nz-switch [ngModel]="data.source.status===1" nzCheckedChildren="On" style="height: 10px"
+                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.source.repair_shop_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑资料'" [routerLink]="['../edit', data.repair_shop_id]">编辑资料</a>
+                        <a [title]="'编辑资料'" [routerLink]="['../edit', data.source.repair_shop_id]">编辑资料</a>
                        <!-- <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>-->
-                        <a [title]="'救援服务配置'" (click)="onHelpServiceClick()">救援服务配置</a>
+                        <a [title]="'救援服务配置'" (click)="onHelpServiceClick(data.source.rescue_config)">救援服务配置</a>
                     </td>
                 </tr>
                 </tbody>

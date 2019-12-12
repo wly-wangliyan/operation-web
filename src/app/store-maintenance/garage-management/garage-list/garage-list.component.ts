@@ -6,9 +6,26 @@ import { BrokerageCompanyEditComponent } from '../../../operational-system/insur
 import { GlobalService } from '../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
-import { GarageManagementService, RepairShopEntity, SearchParams } from '../garage-management.service';
+import { GarageManagementService, RepairShopEntity, RescueConfig, SearchParams } from '../garage-management.service';
+import { DateFormatHelper } from '../../../../utils/date-format-helper';
 
 const PageSize = 15;
+
+class RepairShopItem {
+  public door_start_time = null; // 上门服务开始时间 默认:空
+  public door_end_time = null; // 上门服务结束时间 默认:空
+  public shop_start_time = null; // 到店服务开始时间 默认:空
+  public shop_end_time = null; // 到店服务结束时间 默认:空
+  public source: RepairShopEntity;
+
+  constructor(source: RepairShopEntity) {
+    this.source = source;
+    this.door_start_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
+    this.door_end_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
+    this.shop_start_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
+    this.shop_end_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
+  }
+}
 
 @Component({
   selector: 'app-garage-list',
@@ -17,7 +34,7 @@ const PageSize = 15;
 })
 export class GarageListComponent implements OnInit {
 
-  public garageList: Array<RepairShopEntity> = [];
+  public garageList: Array<RepairShopItem> = [];
   public pageIndex = 1;
   public noResultText = '数据加载中...';
   public searchParams = new SearchParams();
@@ -25,6 +42,9 @@ export class GarageListComponent implements OnInit {
   public vehicleFirmList = [];
   public vehicleSeriesList = [];
   public time = null;
+  public currentRescueConfig: RescueConfig = new RescueConfig();
+  public service_start_time; // 	服务开始时间 默认:空
+  public service_end_time; // 服务结束时间 默认:空
 
   @ViewChild('helpServicePromptDiv', { static: true }) public helpServicePromptDiv: ElementRef;
 
@@ -51,7 +71,10 @@ export class GarageListComponent implements OnInit {
         switchMap(() =>
             this.garageService.requestRepairShopsList(this.searchParams))
     ).subscribe(res => {
-      this.garageList = res.results;
+      // this.garageList = res.results;
+      res.results.forEach(value => {
+        this.garageList.push(new RepairShopItem(value));
+      });
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -106,7 +129,8 @@ export class GarageListComponent implements OnInit {
   }
 
   // 救援服务配置
-  public onHelpServiceClick() {
+  public onHelpServiceClick(data: RescueConfig) {
+    this.currentRescueConfig = data;
     $(this.helpServicePromptDiv.nativeElement).modal('show');
   }
 

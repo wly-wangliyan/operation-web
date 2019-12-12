@@ -12,6 +12,8 @@ export class OrderDetailComponent implements OnInit {
 
   public orderRecord: RescueOrderEntity = new RescueOrderEntity();
 
+  public loading = false;
+
   private order_id: string; // order_id
 
   constructor(

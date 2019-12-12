@@ -32,7 +32,7 @@ export class RepairShopEntity extends EntityBase {
   public repair_shop_id: string = undefined; // 	汽修店ID 主键
   public repair_company: RepairCompanyEntity = undefined; // 	所属企业 外键
   public repair_shop_name: string = undefined; // 	汽修店商家名称
-  public images: string = undefined; // 	汽修店图片/商家图片
+  public images: Array<any> = undefined; // 	汽修店图片/商家图片
   public contacts: string = undefined; // 	联系人
   public telephone: string = undefined; // 联系电话
   public province: string = undefined; // 省
@@ -129,7 +129,7 @@ export class GarageManagementService {
    * @param repair_shop_id 汽修店ID
    * @returns Observable<GoodsOrderEntity>
    */
-  public requestRepairShopsDetail(repair_shop_id: string): Observable<BusinessEntity> {
+  public requestRepairShopsDetail(repair_shop_id: string): Observable<RepairShopEntity> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}`;
     return this.httpService.get(httpUrl)
         .pipe(map(res => BusinessEntity.Create(res.body)));
