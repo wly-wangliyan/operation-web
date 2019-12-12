@@ -12,3 +12,7 @@
 .form-group .line {
   margin: 0 8px;
 }
+
+::ng-deep .z-modal .mes {
+  padding: 0 20px !important;
+}

@@ -9,7 +9,7 @@ import { GlobalService } from '../../core/global.service';
 
 export class RescueOrderSearchParams extends EntityBase {
   public order_type = 3; // 订单类型 1：到店保养 2：上门保养 3：救援订单
-  public order_status = ''; // 1：待支付 2：待支付 3：已取消 4：已退款
+  public order_status = ''; // 1：待支付 2：已支付 3：已取消 4：已退款
   public service_status = ''; // 服务状态 1：待接单 2：待服务 3：已完成 4：已拒绝
   public rescue_project_type = ''; // 救援项目类别 1：搭电 2：换胎
   public contact_tel: string = undefined; // 手机号
@@ -67,7 +67,13 @@ export class RefundParams extends EntityBase {
   public order_type = 3; // 订单类型 1：到店保养 2：上门保养 3:救援订单
   public order_id: string = undefined; // 订单id
   public refund_fee: number = undefined; // 退款金额
-  public refund_remark: string = undefined; // 退款备注
+  public refund_reason: string = undefined; // 退款原因
+
+  public toEditJson(): any {
+    const json = this.json();
+    json.refund_fee = json.refund_fee * 100;
+    return json;
+  }
 }
 
 export class RescueOrderLinkResponse extends LinkResponse {
@@ -85,7 +91,7 @@ export class RescueOrderLinkResponse extends LinkResponse {
 })
 export class RescueOrderService {
 
-  private domain = environment.EXEMPTION_DOMAIN; // 免检域名
+  private domain = environment.EXEMPTION_DOMAIN;
 
   constructor(private httpService: HttpService, private globalService: GlobalService) { }
 
@@ -94,7 +100,7 @@ export class RescueOrderService {
    * @param searchParams 条件检索参数
    */
   public requestOrderListData(searchParams: RescueOrderSearchParams): Observable<RescueOrderLinkResponse> {
-    const httpUrl = `${this.domain}/exemption/orders`;
+    const httpUrl = `${this.domain}/orders`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new RescueOrderLinkResponse(res)));
   }
@@ -114,8 +120,11 @@ export class RescueOrderService {
    * @returns Observable<RescueOrderEntity>
    */
   public requestOrderDetailData(order_id: string): Observable<RescueOrderEntity> {
-    const httpUrl = `${this.domain}/exemption/orders/${order_id}`;
-    return this.httpService.get(httpUrl).pipe(map(res => RescueOrderEntity.Create(res.body)));
+    const httpUrl = `${this.domain}/orders/${order_id}`;
+    const body = {
+      order_type: 3
+    };
+    return this.httpService.get(httpUrl, body).pipe(map(res => RescueOrderEntity.Create(res.body)));
   }
 
   /**
@@ -125,6 +134,6 @@ export class RescueOrderService {
    */
   public requestOrderRefundData(params: RefundParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/refund_orders`;
-    return this.httpService.put(httpUrl, params.json());
+    return this.httpService.put(httpUrl, params.toEditJson());
   }
 }

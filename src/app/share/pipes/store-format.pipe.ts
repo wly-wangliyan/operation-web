@@ -88,3 +88,66 @@ export class StorePayStatus implements PipeTransform {
     }
   }
 }
+
+/** 救援订单状态 */
+const RescueOrderStatus = {
+  1: '待支付',
+  2: '已支付',
+  3: '已取消',
+  4: '已退款',
+  5: '退款中'
+};
+
+@Pipe({
+  name: 'rescueOrderStatus'
+})
+export class RescueOrderStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = RescueOrderStatus[value];
+    } else {
+      result = RescueOrderStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
+/** 驳回类型 */
+const RescueServiceStatus = {
+  1: '待接单',
+  2: '待服务',
+  3: '已完成',
+  4: '已拒绝'
+};
+
+@Pipe({
+  name: 'rescueServiceStatus'
+})
+export class RescueServiceStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = RescueServiceStatus[value];
+    } else {
+      result = RescueServiceStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}

@@ -46,7 +46,13 @@ import {
   ValidateTimeLimitPipe,
   MaxNumberDealPipe
 } from './pipes/ticket-format.pipe';
-import { StoreCategoryPipe, StoreProjectTypePipe, StorePayStatus } from './pipes/store-format.pipe';
+import {
+  StoreCategoryPipe,
+  StoreProjectTypePipe,
+  StorePayStatus,
+  RescueOrderStatusPipe,
+  RescueServiceStatusPipe
+} from './pipes/store-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
 import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
@@ -132,6 +138,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     MallCommodityTypePipe,
     BookingOrderStatusPipe,
     DiyRangeTypePipe,
+    RescueOrderStatusPipe,
+    RescueServiceStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -210,6 +218,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     MallCommodityTypePipe,
     BookingOrderStatusPipe,
     DiyRangeTypePipe,
+    RescueOrderStatusPipe,
+    RescueServiceStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,

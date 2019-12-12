@@ -55,7 +55,7 @@
         </div>
         <div class="form-group">
           <span>订单编号：</span>
-          <input name="order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
+          <input name="rescue_order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
             [(ngModel)]="searchParams.order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
         </div>
         <div class="form-group">
@@ -105,36 +105,46 @@
           <tr *ngFor="let order of rescueOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
 
-            <td [title]="order.order_id?order.order_id:''">
-              <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
-                {{order.order_id|zMaxLength:10}}
+            <td [title]="order.rescue_order_id?order.rescue_order_id:''">
+              <span *ngIf="order.rescue_order_id" [appTxtCopy]="order.rescue_order_id">
+                {{order.rescue_order_id|zMaxLength:10}}
               </span>
-              <span *ngIf="!order.order_id">--</span>
+              <span *ngIf="!order.rescue_order_id">--</span>
             </td>
 
             <td>
               <div class="column-box">
-                <span>{{order.contact_name | zMaxLength:6}}</span>
-                <span>{{order.contact_tel || ''}}</span>
+                <ng-container *ngIf="order.contact_name || order.contact_tel">
+                  <span>{{order.contact_name | zMaxLength:6}}</span>
+                  <span>{{order.contact_tel || ''}}</span>
+                </ng-container>
+                <ng-container *ngIf="!order.contact_name && !order.contact_tel">
+                  <span>--</span>
+                </ng-container>
               </div>
             </td>
             <td>
-              <div class="column-box">
-                <span>{{order.address | zMaxLength:6}}</span>
-                <span>{{order.repair_shop_name  || ''}}</span>
-              </div>
+              <ng-container *ngIf="order.address || order.repair_shop_name">
+                <div class="column-box">
+                  <span>{{order.address | zMaxLength:6}}</span>
+                  <span>{{order.repair_shop_name  || ''}}</span>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!order.address && !order.repair_shop_name">
+                <span>--</span>
+              </ng-container>
             </td>
             <td>{{order.rescue_project_type === 1? '搭电' : '换胎'}}</td>
 
-            <td>{{order.total_right_fee | centPriceChange:'¥ ':'left'}}</td>
+            <td>{{order.total_right_fee | centPriceChange:'元'}}</td>
 
-            <td>{{order.right_prepaid_fee | centPriceChange:'¥ ':'left'}}</td>
+            <td>{{order.right_prepaid_fee | centPriceChange:'元'}}</td>
 
-            <td>{{order.prepaid_coupon_discount | centPriceChange:'¥ ':'left'}}</td>
+            <td>{{order.prepaid_coupon_discount | centPriceChange:'元'}}</td>
 
-            <td>{{order.real_prepaid_fee | centPriceChange:'¥ ':'left'}}</td>
+            <td>{{order.real_prepaid_fee | centPriceChange:'元'}}</td>
 
-            <td>{{order.prepaid_platform_discount | centPriceChange:'¥ ':'left'}}</td>
+            <td>{{order.prepaid_platform_discount | centPriceChange:'元'}}</td>
 
             <td>
               <div class="column-box">
@@ -147,15 +157,62 @@
                 <span *ngIf="!order.created_time && !order.pay_time">--</span>
               </div>
             </td>
-            <td>{{order.order_status}}</td>
-            <td>{{order.service_status}}</td>
+            <td>{{order.order_status | rescueOrderStatus}}</td>
+            <td>{{order.service_status | rescueServiceStatus}}</td>
             <td class="operation">
-              <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
-              <a [title]="'退款'" (click)="onRefundClick()">退款</a>
+              <a [title]="'查看'" [routerLink]="['../order-detail', order.rescue_order_id]">查看</a>
+              <a *ngIf="order.order_status===2" [title]="'退款'" (click)="onRefundClick(order)">退款</a>
             </td>
           </tr>
         </tbody>
       </nz-table>
+    </div>
+  </div>
+</div>
+
+<!-- 退款模态框 -->
+<div class="modal fade " id="refundModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">退款</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>退款金额：</span>
+            </label>
+            <div class="control-input">
+              <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundParams.refund_fee" maxlength="8"
+                class="form-control" required appFloatNumber>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>退款原因：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="refund_reason" class="form-control" [(ngModel)]="refundParams.refund_reason"
+                maxlength="20" placeholder="输入0-20字退款原因">
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
+              (appZDebounceClick)="onRefundCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
