@@ -34,10 +34,10 @@ export class ParkingEntity extends EntityBase {
   public lat: string = undefined; // 纬度
   public location: any = undefined; // point	位置坐标
   public tags: Array<any> = undefined; // 标签
-  public origin_price: number = undefined; // 原价 单位:分
-  public sale_price: number = undefined; // 售价 单位:分
-  public pre_price: number = undefined; // 预付 单位:分
-  public minus_price: number = undefined; // 下单立减 单位:分
+  public origin_fee: number = undefined; // 原价 单位:分
+  public sale_fee: number = undefined; // 售价 单位:分
+  public pre_fee: number = undefined; // 预付 单位:分
+  public minus_fee: number = undefined; // 下单立减 单位:分
   public min_days: number = undefined; // 最低预定
   public main_tel: string = undefined; // 手机号(主)
   public standby_tel: string = undefined; // 手机号(备)
@@ -69,14 +69,14 @@ export class BookingOrderEntity extends EntityBase {
   public arrive_time: number = undefined; // 到场时间
   public refund_time: number = undefined; // 退款时间
   public remark: string = undefined; // 订单备注
-  public total_price: number = undefined; // 应付总金额 单位:分
-  public should_pre_price: number = undefined; // 应付预付金 单位:分
-  public real_pre_price: number = undefined; // 实付预付金 单位:分
-  public real_price: number = undefined; // 实付金额 单位:分
-  public minus_price: number = undefined; // 平台立减 单位：分
-  public parking_price: number = undefined; // 取车时现场支付停车场 单位：分
-  public coupon_price: number = undefined; // 优惠卷优惠金额 单位：分
-  public refund_price: number = undefined; // 退款金额
+  public total_fee: number = undefined; // 应付总金额 单位:分
+  public should_pre_fee: number = undefined; // 应付预付金 单位:分
+  public real_pre_fee: number = undefined; // 实付预付金 单位:分
+  public real_fee: number = undefined; // 实付金额 单位:分
+  public minus_fee: number = undefined; // 平台立减 单位：分
+  public parking_fee: number = undefined; // 取车时现场支付停车场 单位：分
+  public coupon_fee: number = undefined; // 优惠卷优惠金额 单位：分
+  public refund_fee: number = undefined; // 退款金额
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 

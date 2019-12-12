@@ -49,20 +49,20 @@
         </tr>
         <tr>
           <td>应付预付费：</td>
-          <td>{{orderRecord.should_pre_price | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.should_pre_fee | centPriceChange:'¥ ':'left'}}</td>
 
           <td>平台立减：</td>
-          <td>{{orderRecord.minus_price | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.minus_fee | centPriceChange:'¥ ':'left'}}</td>
 
           <td>优惠：</td>
-          <td>{{orderRecord.coupon_price | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.coupon_fee | centPriceChange:'¥ ':'left'}}</td>
         </tr>
         <tr>
           <td>实付预付费：</td>
-          <td>{{orderRecord.real_pre_price | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.real_pre_fee | centPriceChange:'¥ ':'left'}}</td>
 
           <td *ngIf="orderRecord.order_status===3">退款金额：</td>
-          <td *ngIf="orderRecord.order_status===3">{{orderRecord.refund_price | centPriceChange:'¥ ':'left'}}</td>
+          <td *ngIf="orderRecord.order_status===3">{{orderRecord.refund_fee | centPriceChange:'¥ ':'left'}}</td>
           <td *ngIf="orderRecord.order_status!==3"></td>
           <td *ngIf="orderRecord.order_status!==3"></td>
 

@@ -106,7 +106,7 @@
               {{order.parking_info?(order.parking_info.parking_name | zMaxLength:8):'--'}}
             </td>
             <td>
-              {{order.parking_info?.pre_price  | centPriceChange:'¥ ':'left'}}
+              {{order.parking_info?.pre_fee  | centPriceChange:'¥ ':'left'}}
             </td>
             <td>
               <span>{{order.booking_arrive_time ?(order.booking_arrive_time* 1000 | date:"y-MM-dd HH:mm"):''}}</span>

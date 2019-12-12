@@ -141,10 +141,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   // 退款
-  public onRefundClick(data) {
+  public onRefundClick(data: BookingOrderEntity) {
     this.globalService.confirmationBox.open('提示', `确认退款给${data.car_id}车主？`, () => {
       this.globalService.confirmationBox.close();
-      this.orderService.requestCreateRefundOrder({order_id: data.order_id}).subscribe(res => {
+      const params = {order_id: data.order_id, refund_fee: data.real_fee};
+      this.orderService.requestCreateRefundOrder(params).subscribe(res => {
         this.orderService.requestOrderRefund(res.body.refund_order_id).subscribe(res1 => {
           this.globalService.promptBox.open('退款成功！');
         }, err => {
@@ -166,7 +167,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
         } else if (content.code === 'not_allow' && content.resource === 'order') {
           this.globalService.promptBox.open('该订单不允许退款！', null, 2000, null, false);
           return;
-        } else if (content.code === 'fail' && content.resource === 'pay_refund') {
+        } else if (content.code === 'failure' && content.resource === 'pay_refund') {
           this.globalService.promptBox.open('退款失败！', null, 2000, null, false);
           return;
         }
