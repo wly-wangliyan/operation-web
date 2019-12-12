@@ -55,12 +55,77 @@
                                    nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.broker_company_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="'../edit'">编辑资料</a>
-                        <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>
+                        <a [title]="'编辑资料'" [routerLink]="'../edit'">编辑资料</a>
+                       <!-- <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>-->
+                        <a [title]="'救援服务配置'" (click)="onHelpServiceClick()">救援服务配置</a>
                     </td>
                 </tr>
                 </tbody>
             </nz-table>
+        </div>
+    </div>
+</div>
+
+<!--救援服务配置-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #helpServicePromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">救援服务配置</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+                </button>
+            </div>
+            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+                <div style="margin-bottom: 10px">支持服务：</div>
+                <label nz-checkbox>搭电</label>
+                <div class="service-space">
+                    <div class="row">
+                        <label class="control-label">服务时间</label>
+                        <div class="control-input">
+                            <app-date-clock style="float:left;" [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
+                            <span style="float:left;margin: 5px 8px"> 至 </span>
+                            <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">救援范围</label>
+                        <div class="control-input service-input">
+                            <input nz-input class="form-control" name="t" required maxlength="5"
+                                   [(ngModel)]="time">
+                            <label>KM</label>
+                            <span>范围内</span>
+                        </div>
+                    </div>
+                </div>
+                <label nz-checkbox>换胎</label>
+                <div class="service-space">
+                    <div class="row">
+                        <label class="control-label">服务时间</label>
+                        <div class="control-input">
+                            <app-date-clock style="float:left;" [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
+                            <span style="float:left;margin: 5px 8px"> 至 </span>
+                            <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">救援范围</label>
+                        <div class="control-input service-input">
+                            <input nz-input class="form-control" name="t" required maxlength="5"
+                                   [(ngModel)]="time">
+                            <label>KM</label>
+                            <span>范围内</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">
+                        确定
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

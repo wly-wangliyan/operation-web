@@ -4,7 +4,6 @@ import {
   UpkeepMerchantEntity
 } from '../../../operational-system/maintenance/business-management/business-management.service';
 import { MapItem, ZMapSelectPointComponent } from '../../../share/components/z-map-select-point/z-map-select-point.component';
-import { Subscription } from 'rxjs';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { ProCityDistSelectComponent, RegionEntity } from '../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
 import { SelectBrandFirmComponent } from '../../../share/components/select-brand-firm/select-brand-firm.component';
@@ -54,6 +53,7 @@ export class GarageEditComponent implements OnInit {
   public is_add_tel = true;
   public service_telephones = [];
   public company_name: string;
+  public time = null;
 
   private upkeep_merchant_id: string;
 

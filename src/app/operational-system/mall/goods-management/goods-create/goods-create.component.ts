@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs/index';
 import { isNullOrUndefined } from 'util';
@@ -14,6 +14,7 @@ import {
     SpecificationEntity,
     SpecificationParams
 } from '../goods-management-http.service';
+import { differenceInCalendarDays } from 'date-fns';
 
 @Component({
     selector: 'app-goods-create',
@@ -38,18 +39,29 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
 
+    public start_time = ''; // 价格日历开始时间
+
+    public end_time = ''; // 价格日历结束时间
+
+    public weekList = [];
+
+    public time = null;
+
     private commodity_id: string;
 
     private onSubmitSubscription: any;
+
+    private currentSpecification = new SpecificationEntity();
 
     @ViewChild('goodsImg', {static: false}) public goodsImgSelectComponent: ZPhotoSelectComponent;
 
     @ViewChild('goodsVideo', {static: false}) public goodsVideoSelectComponent: ZVideoSelectComponent;
 
+    @ViewChild('pricePromptDiv', { static: true }) public pricePromptDiv: ElementRef;
+
     /**
      * 格式化商品规格列表数据
-     * @returns {Array<SpecificationParamsItem>}
-     * @constructor
+     * @returns Array<SpecificationParamsItem>
      */
     public get FormatCommoditySpecificationList(): Array<SpecificationParamsItem> {
         const formatCommoditySpecificationList: Array<SpecificationParamsItem> = [];
@@ -61,6 +73,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         formatCommoditySpecificationList.forEach(formatItem => {
             KeyboardHelper.bindElement('unit_original_price_' + formatItem.idCount);
             KeyboardHelper.bindElement('unit_sell_price_' + formatItem.idCount);
+            KeyboardHelper.bindElement('settlement_price_' + formatItem.idCount);
             KeyboardHelper.bindElement('stock_' + formatItem.idCount);
         });
         return formatCommoditySpecificationList;
@@ -68,8 +81,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     /**
      * 校验是否选择了图片
-     * @returns {boolean}
-     * @constructor
+     * @returns boolean
      */
     public get CheckImgValid(): boolean {
         if (this.goodsImgSelectComponent) {
@@ -83,8 +95,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     /**
      * 校验是否填写商品规格数据
-     * @returns {boolean}
-     * @constructor
+     * @returns boolean
      */
     public get CheckCommoditySpecificationValid(): boolean {
         for (let formatSpecificationIndex = 0; formatSpecificationIndex < this.FormatCommoditySpecificationList.length; formatSpecificationIndex++) {
@@ -103,8 +114,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     /**
      * 校验是否填写编辑器内容
-     * @returns {boolean}
-     * @constructor
+     * @returns boolean
      */
     public get CheckEditorValid(): boolean {
         if (!CKEDITOR.instances.goodsEditor.getData()) {
@@ -133,6 +143,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         } else {
             this.commoditySpecificationList.push(new SpecificationParamsItem());
         }
+
+        const weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+        weekList.forEach(value => {
+            this.weekList.push({checked: false, label: value});
+        });
     }
 
     public ngOnDestroy() {
@@ -168,9 +183,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
      * 商品规格数据转换
      * 如01转为1
      * 1.0转为1
-     * @param {number} specificationIndex
-     * @param event
-     * @param {number} reverseType 转换类型 1：原价；2：售价；3：库存
+     * @param number specificationIndex
+     * @param event 事件
+     * @param number reverseType 转换类型 1：原价；2：售价；3：库存 4:结算价格
      */
     public reverseSpecificationParams(specificationIndex: number, event: any, reverseType: number) {
         const reverseCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex].specification_params;
@@ -184,6 +199,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 break;
             case 3:
                 reverseCommoditySpecificationItem.stock = inputValue ? parseInt(event.target.value) : null;
+                break;
+            case 4:
+                reverseCommoditySpecificationItem.settlement_price = inputValue ? parseFloat(event.target.value) : null;
                 break;
         }
     }
@@ -230,7 +248,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
                 this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
                 this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
-                this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData();
+                this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
                 const commodityInfo = this.commodityInfo.clone();
                 commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
                 if (this.commodity_id) {
@@ -358,6 +376,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 (specificationItemParams.specification_name === '') ||
                 isNullOrUndefined(specificationItemParams.unit_original_price) ||
                 isNullOrUndefined(specificationItemParams.unit_sell_price) ||
+                isNullOrUndefined(specificationItemParams.settlement_price) ||
                 isNullOrUndefined(specificationItemParams.stock)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格未填写！`;
@@ -463,8 +482,93 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
 
     // 更改商品类型
-    public onChangeCommodityType(commodity_type: number) {
-        this.commodityInfo.commodity_type = commodity_type;
+    public onChangeCommodityType(name: string, stutas: number) {
+        this.commodityInfo[name] = stutas;
+    }
+
+    // 设置价格日历
+    public onSettingPriceClick(data: SpecificationEntity) {
+        this.currentSpecification = data;
+        $(this.pricePromptDiv.nativeElement).modal('show');
+    }
+
+    // 弹框close
+    public onClose() {
+        this.clear();
+        $(this.pricePromptDiv.nativeElement).modal('hide');
+    }
+
+    // 清空
+    private clear() {
+    }
+
+    // 键盘按下事件
+    public onKeydownEvent(event: any) {
+        if (event.keyCode === 13) {
+            this.onEditFormSubmit();
+            return false;
+        }
+    }
+
+    // form提交
+    public onEditFormSubmit() {
+        this.clear();
+    }
+
+    /**
+    * 选择价格日历时间范围
+    * type 选择类型 1：全选 2：工作日 3：周末
+    */
+    public onChooseDateClick(type) {
+        switch (type) {
+            case 1:
+                this.weekList.forEach(value => {
+                    value.checked = true;
+                });
+                break;
+            case 2:
+                this.weekList.forEach((value, index) => {
+                    if (index < 5) {
+                        value.checked = true;
+                    } else {
+                        value.checked = false;
+                    }
+                });
+                break;
+            case 3:
+                this.weekList.forEach((value, index) => {
+                    if (index < 5) {
+                        value.checked = false;
+                    } else {
+                        value.checked = true;
+                    }
+                });
+                break;
+        }
+    }
+
+    // 价格日历日期开始时间的禁用部分
+    public disabledStartTime = (startValue: Date): boolean => {
+        if (differenceInCalendarDays(startValue, new Date()) > 0) {
+            return true;
+        } else if (!startValue || !this.end_time) {
+            return false;
+        } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.end_time).setHours(0, 0, 0, 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 价格日历日期结束时间的禁用部分
+    public disabledEndTime = (endValue: Date): boolean => {
+        if (!endValue || !this.start_time) {
+            return false;
+        } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.start_time).setHours(0, 0, 0, 0)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

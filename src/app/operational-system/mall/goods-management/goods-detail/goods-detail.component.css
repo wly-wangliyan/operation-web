@@ -16,15 +16,29 @@
 }
 
 .commodity-name div {
-    width: 80px;
+    min-width: 80px;
     height: 20px;
-    background: #3E71F7;
+    padding: 0 10px;
     text-align: center;
-    color: #fff;
     font-size: 14px;
     font-weight: 500;
     margin: 2px 0 0 10px;
     border-radius: 4px;
+}
+
+.commodity-name div:nth-child(1) {
+    background: #C6E2FF;
+    color: #409DFD;
+}
+
+.commodity-name div:nth-child(2) {
+    background: #E1F3D8;
+    color: #67C23A;
+}
+
+.commodity-name div:nth-child(3) {
+    background: #FAECD8;
+    color: #E6A23C;
 }
 
 .commodity-subtitle {
@@ -63,6 +77,15 @@
     font-size: 13px;
     margin-bottom: 15px;
 }
+
+.commodity-info span {
+    margin-left: 20px;
+}
+
+.commodity-info span:first-child {
+    margin-left: 0;
+}
+
 
 .commodity-info:last-child {
     margin-bottom: 0;

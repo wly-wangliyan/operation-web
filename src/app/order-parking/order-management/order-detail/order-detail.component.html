@@ -61,8 +61,10 @@
           <td>实付预付费：</td>
           <td>{{orderRecord.real_pre_price | centPriceChange:'¥ ':'left'}}</td>
 
-          <td>退款金额：</td>
-          <td>{{orderRecord.refund_price | centPriceChange:'¥ ':'left'}}</td>
+          <td *ngIf="orderRecord.order_status===3">退款金额：</td>
+          <td *ngIf="orderRecord.order_status===3">{{orderRecord.refund_price | centPriceChange:'¥ ':'left'}}</td>
+          <td *ngIf="orderRecord.order_status!==3"></td>
+          <td *ngIf="orderRecord.order_status!==3"></td>
 
           <td></td><td></td>
         </tr>
@@ -92,8 +94,11 @@
           <td>到场时间：</td>
           <td>{{orderRecord.arrive_time ? (orderRecord.arrive_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
 
-          <td>退款时间：</td>
-          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td *ngIf="orderRecord.order_status===3">退款时间：</td>
+          <td *ngIf="orderRecord.order_status===3">{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+
+          <td *ngIf="orderRecord.order_status!==3"></td>
+          <td *ngIf="orderRecord.order_status!==3"></td>
         </tr>
         <tr>
           <td>订单备注：</td>

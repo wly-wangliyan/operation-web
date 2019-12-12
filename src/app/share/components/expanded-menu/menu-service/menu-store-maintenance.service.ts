@@ -19,11 +19,11 @@ export class MenuStoreMaintenanceService {
     this.menu_icon = false;
     this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
-    menusItem.push(this.generatePartsManagementMenu());
+    // menusItem.push(this.generatePartsManagementMenu());
     menusItem.push(this.generateOrderSettlementMenu());
     menusItem.push(this.generateRescueOrderMenu());
     menusItem.push(this.generateBusinessManagementMenu());
-    menusItem.push(this.generateOtherMenu());
+    // menusItem.push(this.generateOtherMenu());
     return menusItem;
   }
 
@@ -49,7 +49,7 @@ export class MenuStoreMaintenanceService {
     // const subFinanceMenu2 = new SideMenuItem('结算管理', '/store-maintenance/brand-management', systemMenu);
     // const subFinanceMenu3 = new SideMenuItem('工时费管理', '/store-maintenance/work-fees-management', systemMenu);
     const subFinanceMenu3 = new SideMenuItem('服务费管理', '/store-maintenance/service-fees-management', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
+    // systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
     systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
@@ -71,7 +71,7 @@ export class MenuStoreMaintenanceService {
     const subFinanceMenu1 = new SideMenuItem('汽修店管理', '/store-maintenance/garage-management', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('供应商管理', '/store-maintenance/supplier-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    systemMenu.children.push(subFinanceMenu2);
+    // systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

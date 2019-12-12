@@ -16,6 +16,8 @@ export class GoodsDetailComponent implements OnInit {
 
     public commodityInfo: CommodityEntity = new CommodityEntity();
 
+    public stock: number;
+
     private commodity_id: string;
 
     constructor(private route: ActivatedRoute,
@@ -43,6 +45,9 @@ export class GoodsDetailComponent implements OnInit {
             this.commodityInfo.specifications.forEach(specificationsItem => {
                 specificationsItem.unit_original_price = specificationsItem.unit_original_price / 100;
                 specificationsItem.unit_sell_price = specificationsItem.unit_sell_price / 100;
+            });
+            this.stock = this.commodityInfo.specifications.map(v => v.stock).reduce((prev, curr) =>{
+                return prev + curr;
             });
             this.videoAndImgList = this.commodityInfo.commodity_videos.concat(this.commodityInfo.commodity_images);
         }, err => {

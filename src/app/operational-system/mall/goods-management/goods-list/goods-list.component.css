@@ -25,3 +25,26 @@
 .line {
     margin: 0 8px;
 }
+
+.goods-tip {
+    text-align: left;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.goods-tip label {
+    min-width: 70px;
+    height: 20px;
+    padding: 0 10px;
+    border-radius:4px;
+    text-align: center;
+    margin-right: 10px;
+}
+.goods-tip label:first-child {
+    background: #C6E2FF;
+    color: #409DFD;
+}
+.goods-tip label:nth-child(2) {
+    background: #E1F3D8;
+    color: #67C23A;
+}

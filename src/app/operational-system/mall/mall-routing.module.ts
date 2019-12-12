@@ -22,6 +22,11 @@ const routes: Routes = [{
             loadChildren: () => import('./goods-order-management/goods-order-management.module').then(m => m.GoodsOrderManagementModule),
             canLoad: [AuthGuardService]
         },
+        {
+            path: 'goods-business',
+            loadChildren: () => import('./business-management/business-management.module').then(m => m.BusinessManagementModule),
+            canLoad: [AuthGuardService]
+        },
         {path: '**', redirectTo: 'home', pathMatch: 'full'}
     ]
 }];

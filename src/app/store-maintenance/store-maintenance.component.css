@@ -110,12 +110,12 @@
 }
 
 .main-herder-title li {
-    width: 130px;
+    width: 250px;
     height: 76px;
     text-align: center;
     cursor: pointer;
 }
 
 .herder-active {
-    background: rgba(0, 0, 0, 0.33);
+    background: url('/assets/images/icon_store_maintenance.png') no-repeat center;
 }

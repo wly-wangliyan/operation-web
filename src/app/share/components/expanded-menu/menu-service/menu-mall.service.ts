@@ -19,6 +19,7 @@ export class MenuMallService {
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateGoodsManagementMenu());
     menusItem.push(this.generateGoodsOrderMenu());
+    menusItem.push(this.generateBusinessMenu());
     return menusItem;
   }
 
@@ -34,6 +35,14 @@ export class MenuMallService {
   private generateGoodsOrderMenu(): SideMenuItem {
     const orderMenu = new SideMenuItem('产品订单', '/main/mall/goods-order');
     orderMenu.icon = '/assets/images/menu_order.png';
+    this.routeLinkList.push(orderMenu);
+    return orderMenu;
+  }
+
+  // 商城 》商家列表
+  private generateBusinessMenu(): SideMenuItem {
+    const orderMenu = new SideMenuItem('商家列表', '/main/mall/goods-business');
+    orderMenu.icon = '/assets/images/menu_merchant.png';
     this.routeLinkList.push(orderMenu);
     return orderMenu;
   }

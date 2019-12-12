@@ -7,12 +7,12 @@ import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 
 export class OrderSearchParams extends EntityBase {
-  public pay_status: number = undefined; // 订单状态
-  public buyer_tel: string = undefined; // 车主信息：手机号
-  public buyer_name: string = undefined; // 车主信息：预定人
-  public order_id: string = undefined; // 订单id
-  public order_time: string = undefined; // 下单时间
-  public pay_time: string = undefined; // 支付时间
+  public order_status = ''; // 订单状态
+  public buyer_tel = ''; // 车主信息：手机号
+  public buyer_name = ''; // 车主信息：预定人
+  public order_id = ''; // 订单id
+  public order_time = ''; // 下单时间
+  public pay_time = ''; // 支付时间
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -144,7 +144,7 @@ export class OrderManagementService {
    */
   public requestUpdateOrderDetailData(params: any, order_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/orders/${order_id}/remark`;
-    return this.httpService.put(httpUrl, params);
+    return this.httpService.patch(httpUrl, params);
   }
 
   /**
@@ -174,6 +174,6 @@ export class OrderManagementService {
    */
   public requestResendMessage(order_id: string, param: any): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/orders/${order_id}/send_message`;
-    return this.httpService.put(httpUrl, param);
+    return this.httpService.get(httpUrl, param);
   }
 }

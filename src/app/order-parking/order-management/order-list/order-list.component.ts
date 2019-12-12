@@ -102,15 +102,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 改变订单状态
-  public onChangeOrderStatus(event: any): void {
-    const status = event.target.value;
-    this.searchParams.pay_status = null;
-    if (status) {
-      this.searchParams.pay_status = Number(status);
-    }
-  }
-
   // 条件查询
   public onSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
@@ -188,7 +179,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 导出url
   private exportSearchUrl() {
     // tslint:disable-next-line:max-line-length
-    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&buyer_tel=${this.searchParams.buyer_tel}&buyer_name=${this.searchParams.buyer_name}&order_id=${this.searchParams.order_id}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    this.searchUrl = `${environment.BOOKING_DOMAIN}/admin/orders/export?order_status=${this.searchParams.order_status}&buyer_tel=${this.searchParams.buyer_tel}&buyer_name=${this.searchParams.buyer_name}&order_id=${this.searchParams.order_id}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 导出订单列表

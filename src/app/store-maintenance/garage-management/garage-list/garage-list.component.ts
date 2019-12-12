@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BrokerageEntity, InsuranceService } from '../../../operational-system/insurance/insurance.service';
 import { SearchUpkeepProductParams } from '../../../operational-system/maintenance/business-management/business-management.service';
 import { FileImportViewModel } from '../../../../utils/file-import.model';
@@ -26,8 +26,9 @@ export class GarageListComponent implements OnInit {
   public vehicleFirmList = [];
   public vehicleSeriesList = [];
   public importViewModel: FileImportViewModel = new FileImportViewModel();
+  public time = null;
 
-  @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
+  @ViewChild('helpServicePromptDiv', { static: true }) public helpServicePromptDiv: ElementRef;
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -118,15 +119,31 @@ export class GarageListComponent implements OnInit {
     this.searchText$.next();
   }
 
-  // 解订阅
-  public onCloseUnsubscribe() {
-    this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
+  // 救援服务配置
+  public onHelpServiceClick() {
+    $(this.helpServicePromptDiv.nativeElement).modal('show');
   }
 
-  public onCancelData() {
-    this.onCloseUnsubscribe();
-    this.importViewModel.initImportData();
-    $('#importBerthPromptDiv').modal('hide');
-    $('#importParamPromptDiv').modal('hide');
+  // 弹框close
+  public onClose() {
+    this.clear();
+    $(this.helpServicePromptDiv.nativeElement).modal('hide');
+  }
+
+  // 清空
+  private clear() {
+  }
+
+  // 键盘按下事件
+  public onKeydownEvent(event: any) {
+    if (event.keyCode === 13) {
+      this.onEditFormSubmit();
+      return false;
+    }
+  }
+
+  // form提交
+  public onEditFormSubmit() {
+    this.clear();
   }
 }

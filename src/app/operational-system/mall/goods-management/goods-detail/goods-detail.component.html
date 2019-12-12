@@ -12,8 +12,10 @@
             <div class="commodity-content">
                 <div class='commodity-name'>
                     {{commodityInfo.commodity_name}}
-                    <div *ngIf="commodityInfo.sales_status===2">已下架</div>
+                    <!--<div *ngIf="commodityInfo.sales_status===2">已下架</div>-->
                     <div *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type===1?'实物商品':'虚拟商品'}}</div>
+                    <div *ngIf="commodityInfo.shipping_method">{{commodityInfo.shipping_method===1?'平台自营':'由'+'供应'}}</div>
+                    <div *ngIf="stock===0">已售罄</div>
                 </div>
                 <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
                 <div class="commodity-table">
@@ -40,15 +42,18 @@
                     </nz-table>
                 </div>
                 <div class="commodity-info">
-                    上架时间：
-                    {{(commodityInfo.sales_status === 1 && commodityInfo.shelf_time) ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
-                </div>
-                <div class="commodity-info">
-                    下架时间：
-                    {{(commodityInfo.sales_status === 2 && commodityInfo.removal_time) ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
-                </div>
-                <div class="commodity-info">
                     产品ID：{{commodityInfo.commodity_id}}
+                </div>
+                <div class="commodity-info">
+                    供应商家：{{commodityInfo.commodity_id}}
+                </div>
+                <div class="commodity-info">
+                    <span>创建时间：</span>
+                    {{commodityInfo.created_time ? (commodityInfo.created_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
+                    <span>上架时间：</span>
+                    {{(commodityInfo.sales_status === 1 && commodityInfo.shelf_time) ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
+                    <span>下架时间：</span>
+                    {{(commodityInfo.sales_status === 2 && commodityInfo.removal_time) ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
                 </div>
             </div>
         </div>

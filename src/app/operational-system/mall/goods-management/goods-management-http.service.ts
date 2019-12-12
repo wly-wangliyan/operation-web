@@ -15,6 +15,7 @@ export class CommoditySearchParams extends EntityBase {
     public sales_status: number = undefined; // 销售状态 1销售中,2已下架
     public commodity_name: string = undefined; // 商品名称
     public shelf_time: string = undefined; // 商品上架时间 逗号分割 例：1232154,1234546
+    public created_time: string = undefined; // 创建时间 逗号分割 例：1232154,1234546
     public page_size = 45; // 每页数量 默认15
     public page_num = 1; // 第几页 默认1
 }
@@ -73,6 +74,12 @@ export class CommodityEntity extends EntityBase {
     public unit_sell_price_section: string = undefined; // 售价区间
     public unit_original_price_section: string = undefined; // 原价区间
     public sold_amount_sum = 0; // 销量，已售数量之和
+    public category: number = undefined; // 	1餐饮卷 2车周边
+    public shipping_method: number = undefined; // 	供货方式 1平台自营，2第三方供应
+    public collection_type: number = undefined; // 收款方式 1平台 2此供应商户
+    public validity_type: number = undefined; // 	有效期类型 1.付款后立即生效 2.使用日期当日有效 *使用日期信息
+    public freight_fee: number = undefined; // 	运费 单位分
+    public business_id: string = undefined; // 商家id
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'specification') {
@@ -94,8 +101,25 @@ export class CommodityEntity extends EntityBase {
         delete json.unit_sell_price_section;
         delete json.unit_original_price_section;
         delete json.sold_amount_sum;
+        delete json.category;
+        delete json.shipping_method;
+        delete json.validity_type;
+        delete json.freight_fee;
+        delete json.collection_type;
+        delete json.business_id;
         return json;
     }
+}
+
+/**
+ * 价格日历实体
+ */
+export class SpecificationDateEntity extends EntityBase {
+    public start_time: number = undefined; // 日历开始时间
+    public end_time: number = undefined; // 日历结束时间
+    public week_range: number = undefined; // 例子：[1,2]星期一，星期二
+    public stock_day: number = undefined; // 	每日库存
+    public unit_sell_price_day: number = undefined; // 	每日售价
 }
 
 /**
@@ -107,8 +131,10 @@ export class SpecificationEntity extends EntityBase {
     public specification_name: string = undefined; // 规格名称
     public unit_original_price: number = undefined; // 单位分 原价
     public unit_sell_price: number = undefined; // 单位分 售价
+    public settlement_price: number = undefined; // 单位分 结算价格
     public stock: number = undefined; // 库存
     public sold_amount = 0; // 已售数量
+    public stock_json: SpecificationDateEntity = undefined; // 商品有效期为使用日期当日有效时的库存信息
     public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
     public created_time: number = undefined; // 创建时间
     public updated_time: number = undefined; // 更新时间
@@ -116,6 +142,9 @@ export class SpecificationEntity extends EntityBase {
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'commodity') {
             return CommodityEntity;
+        }
+        if (propertyName === 'stock_json') {
+            return SpecificationDateEntity;
         }
         return null;
     }
@@ -128,8 +157,10 @@ export class SpecificationEntity extends EntityBase {
             this.specification_name = source.specification_name;
             this.unit_original_price = source.unit_original_price ? (source.unit_original_price / 100) : source.unit_original_price;
             this.unit_sell_price = source.unit_sell_price ? (source.unit_sell_price / 100) : source.unit_sell_price;
+            this.settlement_price = source.settlement_price ? (source.settlement_price / 100) : source.settlement_price;
             this.stock = source.stock;
             this.sold_amount = source.sold_amount;
+            this.stock_json = source.stock_json;
             this.specification_id = source.specification_id;
             this.specification_id = source.specification_id;
             this.specification_id = source.specification_id;

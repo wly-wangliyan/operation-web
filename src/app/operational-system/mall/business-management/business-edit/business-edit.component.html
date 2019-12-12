@@ -1,5 +1,5 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../list'"></app-crumb>
+    <app-crumb [level1Name]="'商家列表'" [level2Name]="'编辑'" [level1RelativePath]="'../../list'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="content-main">
@@ -19,7 +19,7 @@
                     <span>店铺名称</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_name" name="upkeep_merchant_name" disabled>
+                    <input class="form-control" [(ngModel)]="currentBusiness.mall_business_name" name="mall_business_name" disabled>
                 </div>
             </div>
             <div class="row">
@@ -28,20 +28,10 @@
                     <span>类型</span>
                 </label>
                 <div class="control-input">
-                    <select class="form-control" [(ngModel)]="currentBusiness.upkeep_merchant_type" name="upkeep_merchant_type" disabled>
+                    <select class="form-control" [(ngModel)]="currentBusiness.business_type" name="business_type" disabled>
                         <option value="">全部</option>
-                        <option value="1">4S品牌店</option>
-                        <option value="2">汽修店</option>
+                        <option value="1">商城供应商</option>
                     </select>
-                </div>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>服务类型</span>
-                </label>
-                <div class="control-input">
-                    <label nz-checkbox name="checkbox" [nzDisabled]="true">救援服务</label>
                 </div>
             </div>
             <div class="row" style="height: 110px">
@@ -50,7 +40,7 @@
                     <span>商家图片</span>
                 </label>
                 <ul style="display: flex">
-                    <li *ngFor="let item of currentBusiness.image_url;let i=index;" style="margin-right: 15px">
+                    <li *ngFor="let item of currentBusiness.images;let i=index;" style="margin-right: 15px">
                         <img [src]="item" style="width: 100px;height: 100px">
                     </li>
                 </ul>
@@ -61,7 +51,7 @@
                     <span>联系人</span>
                 </label>
                 <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentBusiness.contact" name="contact" disabled>
+                    <input class="form-control" [(ngModel)]="currentBusiness.contacts" name="contacts" disabled>
                 </div>
             </div>
             <div class="row">
@@ -95,47 +85,14 @@
                 </div>
             </div>
             <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>上门保养服务时间</span>
+                <label class=" control-label">
+                    <b>&nbsp;</b>
+                    <span>&nbsp;</span>
                 </label>
-                <div class="control-input">
-                    <app-date-clock [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                    <span style="margin: 0 8px"> 至 </span>
-                    <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                </div>
-                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>到店保养服务时间</span>
-                </label>
-                <div class="control-input">
-                    <app-date-clock [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                    <span style="margin: 0 8px"> 至 </span>
-                    <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                </div>
-                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>客服电话</span>
-                </label>
-                <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
-                    <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" required maxlength="12"
-                           [(ngModel)]="item.tel" placeholder="请输入座机或手机号">
-                    <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
-                </div>
-                <span class="msg-span">注：最多可添加2个</span>
-            </div>
-            <div style="margin-left: 120px;height: 15px;">
-                <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
+                <label nz-checkbox [(ngModel)]="postage_status" name="postage_status" required>发货需要录入物流邮费</label>
             </div>
             <div style="margin-top: 40px;margin-bottom: 40px">
-                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || currentBusiness.VehicleFirm?.length===0"
+                <button class="sure-btn" nz-button nzType="primary"
                         (appZDebounceClick)="onEditFormSubmit()">保存
                 </button>
                 <button class="close-btn" nz-button (click)="onClose()">取消</button>

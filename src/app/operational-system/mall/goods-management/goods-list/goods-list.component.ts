@@ -200,9 +200,9 @@ export class GoodsListComponent implements OnInit, OnDestroy {
         }
 
         if (this.start_time || this.end_time) {
-            this.searchParams.shelf_time = `${sTimestamp},${eTimeStamp}`;
+            this.searchParams.created_time = `${sTimestamp},${eTimeStamp}`;
         } else {
-            this.searchParams.shelf_time = null;
+            this.searchParams.created_time = null;
         }
         return true;
     }

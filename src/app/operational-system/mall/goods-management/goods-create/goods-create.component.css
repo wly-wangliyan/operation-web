@@ -9,6 +9,11 @@
     width: 900px;
 }
 
+.table-container {
+    max-height: 350px;
+    overflow-y: auto!important;
+}
+
 .control-row {
     align-items: flex-start !important;
 }
@@ -87,6 +92,7 @@
     align-items: center;
     font-size: 12px;
     letter-spacing: 0.14px;
+    height: 30px;
 }
 
 .table td .td-content input {
@@ -99,6 +105,7 @@
 
 .table td .special-td-content input {
     padding-right: 40px;
+    width: 100%;
 }
 
 .table td .td-content .one-word-lable {
@@ -115,6 +122,7 @@
 
 .table td .sold-amount-container {
     color: #888888;
+    width: 50px;
 }
 
 .operation-container {
@@ -140,9 +148,41 @@
 
 .commodity-type-btn {
     font-size: 14px;
-    width: 120px;
+    width: 100px;
+    height: 57px;
+    line-height: 27px;
+    text-align: center;
+    color: #888 !important;
+    background:rgba(247,248,250,1);
+    border:1px dashed rgba(136,136,136,1);
+    border-right: none;
+    display: grid;
+}
+
+.commodity-type-btn span:last-child {
+    font-size: 12px;
+}
+
+.commodity-type-btn:first-child {
+    border-radius: 1px 0 0 1px;
+}
+
+.commodity-type-btn:last-child {
+    border-right:1px dashed rgba(136,136,136,1);
+    border-radius: 0 1px 1px 0;
+}
+
+.commodity-type-btn:hover {
+    color: #3E71F7 !important;
+    background: rgba(62,113,247,0.5);
+}
+
+.tab-btn {
+    font-size: 14px;
+    min-width: 120px;
     height: 34px;
     line-height: 34px;
+    padding: 0 10px;
     text-align: center;
     color: #888 !important;
     border: 0;
@@ -151,21 +191,73 @@
     border-right: 1px solid rgba(136, 136, 136, 0.3);
 }
 
-.commodity-type-btn:first-child {
+.tab-btn:first-child {
     border-radius: 2px 0 0 2px;
 }
 
-.commodity-type-btn:last-child {
+.tab-btn:last-child {
     border-right: none!important;
     border-radius: 0 2px 2px 0;
 }
 
-.commodity-type-btn:hover {
+.tab-btn:hover {
     color: #fff !important;
     background: #315AC5;
+}
+
+.commodity-type-active-btn {
+    background:rgba(62,113,247,0.2);
+    border:1px dashed rgba(62,113,247,1)!important;
+    color: #3E71F7!important;
 }
 
 .active-btn {
     color: #fff !important;
     background: #3E71F7;
+}
+
+.price-setting-btn {
+    width: 80px;
+    height: 30px;
+    border-radius: 1px;
+}
+
+.form-horizontal > .row label {
+    width: 70px;
+    text-align: left;
+    margin-left: 0;
+}
+
+.form-horizontal > .row > div .one-word-lable {
+    width: 34px;
+    margin-left: -34px;
+    line-height: 34px;
+    text-align: center;
+}
+
+
+.form-horizontal > .row div {
+    width: 360px;
+}
+
+.form-horizontal > .row input {
+    width: 200px;
+    height: 34px;
+    border-radius: 1px;
+    background: #F7F8FA !important;
+    display: inline-flex;
+}
+
+.modal {
+    z-index: 1000;
+}
+
+::ng-deep .ant-calendar-picker {
+    width: 150px!important;
+}
+
+.price-date-btn {
+    color: #3E71F7;
+    margin: 0 20px 0 15px;
+    cursor: pointer;
 }
