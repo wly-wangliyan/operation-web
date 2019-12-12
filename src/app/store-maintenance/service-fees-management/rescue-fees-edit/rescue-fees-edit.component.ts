@@ -18,13 +18,17 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
   public searchFeeParams: SearchFeeParams = new SearchFeeParams();
   public loading = false;
   public service_fee_id: string;
+  public balance_initial_price: string;
+  public balance_current_price: string;
+  public prepay_initial_price: string;
+  public prepay_current_price: string;
 
   private searchText$ = new Subject<any>();
 
@@ -35,10 +39,10 @@ export class RescueFeesEditComponent implements OnInit {
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.feesService.requestServiceFeeDetailData(this.service_fee_id).subscribe(res => {
         this.serviceFeeData = res;
-        this.searchFeeParams.balance_initial_price = this.getFeeData(this.serviceFeeData.balance_initial_price);
-        this.searchFeeParams.balance_current_price = this.getFeeData(this.serviceFeeData.balance_current_price);
-        this.searchFeeParams.prepay_initial_price = this.getFeeData(this.serviceFeeData.prepay_initial_price);
-        this.searchFeeParams.prepay_current_price = this.getFeeData(this.serviceFeeData.prepay_current_price);
+        this.balance_initial_price = this.getFeeData(this.serviceFeeData.balance_initial_price);
+        this.balance_current_price = this.getFeeData(this.serviceFeeData.balance_current_price);
+        this.prepay_initial_price = this.getFeeData(this.serviceFeeData.prepay_initial_price);
+        this.prepay_current_price = this.getFeeData(this.serviceFeeData.prepay_current_price);
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
@@ -48,16 +52,16 @@ export class RescueFeesEditComponent implements OnInit {
 
   // 价钱数据处理
   private getFeeData(fee: number) {
-    return Number((Number(fee) / 100).toFixed(2));
+    return (Number(fee) / 100).toFixed(2);
   }
 
   // 保存数据
   public onSaveFormSubmit() {
-    this.searchFeeParams.balance_initial_price = Number(this.searchFeeParams.balance_initial_price) * 100;
-    this.searchFeeParams.balance_current_price = Number(this.searchFeeParams.balance_current_price) * 100;
-    this.searchFeeParams.prepay_initial_price = Number(this.searchFeeParams.prepay_initial_price) * 100;
-    this.searchFeeParams.prepay_current_price = Number(this.searchFeeParams.prepay_current_price) * 100;
-    this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id).subscribe(() => {
+    this.searchFeeParams.balance_initial_price = Number(this.balance_initial_price) * 100;
+    this.searchFeeParams.balance_current_price = Number(this.balance_current_price) * 100;
+    this.searchFeeParams.prepay_initial_price = Number(this.prepay_initial_price) * 100;
+    this.searchFeeParams.prepay_current_price = Number(this.prepay_current_price) * 100;
+    this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
       this.globalService.promptBox.open('编辑救援费成功！');
       this.searchText$.next();
       timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/service-fees-management'));

@@ -56,9 +56,9 @@
                 <td>{{i+(pageIndex-1)*15+1}}</td>
                 <td>{{data.service_fee_name}}</td>
                 <td>{{(data.balance_initial_price|centPriceChange:'元')}}</td>
-                <td>{{data.payer_phone|centPriceChange:'元'}}</td>
-                <td>{{data.vehicle_brand_name|centPriceChange:'元'}}</td>
-                <td>{{data.total_real_amount|centPriceChange:'元'}}</td>
+                <td>{{data.balance_current_price|centPriceChange:'元'}}</td>
+                <td>{{data.prepay_initial_price|centPriceChange:'元'}}</td>
+                <td>{{data.prepay_current_price|centPriceChange:'元'}}</td>
                 <!-- <td>
                   <nz-switch [ngModel]="data.status===1?true:false"
                     (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"

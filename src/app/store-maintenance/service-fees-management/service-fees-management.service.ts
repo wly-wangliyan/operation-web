@@ -54,7 +54,7 @@ export class ServiceFeeLinkResponse extends LinkResponse {
 })
 export class ServiceFeesManagementService {
 
-  private domain = environment.STORE_SERVE; // 预约泊车域名
+  private domain = environment.STORE_DOMAIN; // 保养域名
 
   constructor(private httpService: HttpService) { }
 
@@ -104,9 +104,9 @@ export class ServiceFeesManagementService {
    * @param params SearchFeeParams 参数
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateFeeData(params: SearchFeeParams, service_fee_id: string): Observable<HttpResponse<any>> {
+  public requestUpdateFeeData(params: SearchFeeParams, service_fee_id: string, fee_type: number): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/service_fees/${service_fee_id}`;
-    return this.httpService.put(httpUrl, params);
+    return this.httpService.put(httpUrl, { ...params, fee_type });
   }
 
 }
