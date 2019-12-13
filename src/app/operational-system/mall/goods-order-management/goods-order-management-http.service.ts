@@ -102,11 +102,14 @@ export class GoodsOrderEntity extends EntityBase {
   public pay_time = undefined; // 	float	支付时间
   public pay_expire_time = undefined; // 	float	支付到期时间
   public delivery_time = undefined; // 	float	发货时间
+  public platform_desc = undefined; // 	String 平台备注
+  public business_desc = undefined; // 	String 商家备注
+  public refund_time = undefined; // 	float 退款时间
   public confirm_time = undefined; // 	float	确认收货时间
   public updated_time = undefined; // 	float	更新时间
   public created_time = undefined; // 	float	创建时间
   public detail: Array<OrderDetailEntity> = []; // 	obj[]	订单明细对象列表
-  public write_off: Array<WriteOffEntity> = []; // 	obj[]	核销码对象列表
+  public write_off_code: Array<WriteOffEntity> = []; // 	obj[]	核销码对象列表
   public refund_order: OrderRefundEntity = undefined; // 	订单退款对象
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
@@ -114,7 +117,7 @@ export class GoodsOrderEntity extends EntityBase {
       return OrderDetailEntity;
     } else if (propertyName === 'refund_order') {
       return OrderRefundEntity;
-    } else if (propertyName === 'write_off') {
+    } else if (propertyName === 'write_off_code') {
       return WriteOffEntity;
     }
     return null;
@@ -235,11 +238,12 @@ export class GoodsOrderManagementHttpService {
    * @param refund_desc 退款备注
    * @returns Observable<HttpResponse<any>>
    */
-  public requestModifyOrderDesc(order_id: string, order_desc: string, refund_desc: string): Observable<HttpResponse<any>> {
+  public requestModifyOrderDesc(order_id: string, order_desc: string, platform_desc: string, business_desc: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/orders/${order_id}/remark`;
     return this.httpService.patch(httpUrl, {
       order_desc,
-      refund_desc
+      platform_desc,
+      business_desc,
     });
   }
 
@@ -251,7 +255,7 @@ export class GoodsOrderManagementHttpService {
    */
   public requestWriteOffCode(order_id: string, write_off_codes: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/orders/${order_id}/write_off_code`;
-    return this.httpService.patch(httpUrl, {
+    return this.httpService.put(httpUrl, {
       write_off_codes
     });
   }

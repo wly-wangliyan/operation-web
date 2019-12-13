@@ -39,7 +39,7 @@ export class GoodsWriteOffComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-    private globalService: GlobalService) {
+              private globalService: GlobalService) {
   }
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class GoodsWriteOffComponent implements OnInit {
 
   // 弹框close
   public onClose() {
-    this.initCheckBox()
+    this.initCheckBox();
     $(this.projectPromptDiv.nativeElement).modal('hide');
   }
 
@@ -102,13 +102,8 @@ export class GoodsWriteOffComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.currentOrder = JSON.parse(JSON.stringify(orderInfo));
-    this.writeOffList = this.currentOrder.write_off;
-    this.writeOffList = [
-      { id: '1111', write_off_status: 1 },
-      { id: '3442444444444444', write_off_status: 2 },
-      { id: '34343432432432432', write_off_status: 3 },
-      { id: '33333222222222222', write_off_status: 1 },
-    ];
+    this.writeOffList = this.currentOrder.write_off_code;
+    this.noResultText = '暂无数据';
     openProjectModal();
     return;
   }

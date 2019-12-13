@@ -27,7 +27,7 @@
             <label>订单编号：</label>
             <span>{{orderDetail.order_id?orderDetail.order_id:'--'}}</span>
           </div>
-          <!-- 交易单号：???????? -->
+          <!-- 交易单号： -->
           <div class="card-text">
             <label>交易单号：</label>
             <span>{{orderDetail.refund_order?.transaction_id || '--'}}</span>
@@ -82,20 +82,20 @@
         <button *ngIf="orderStepStatus===2" class='goods-btn' style="margin-right: 10px;" nz-button nzType="primary"
           (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
-      <!-- 备注（平台）?????????? -->
+      <!-- 备注（平台） -->
       <div nz-card-grid>
-        <span class="remark_info" [title]='orderDetail.order_remark'>
+        <span class="remark_info" [title]='orderDetail.platform_desc'>
           <label style="padding-left: 16px;">备注（平台）: </label>
-          <span>{{(orderDetail.order_remark| zMaxLength:30) || '--'}}</span>
+          <span>{{(orderDetail.platform_desc| zMaxLength:30) || '--'}}</span>
         </span>
         <button class='goods-btn' nz-button nzType="primary"
           (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
       </div>
-      <!-- 备注（商家）?????? -->
+      <!-- 备注（商家） -->
       <div nz-card-grid>
-        <span class="remark_info" [title]='orderDetail.order_remark'>
+        <span class="remark_info" [title]='orderDetail.business_desc'>
           <label>备注（商家）: </label>
-          <span>{{(orderDetail.order_remark| zMaxLength:30) || '--'}}</span>
+          <span>{{(orderDetail.business_desc| zMaxLength:30) || '--'}}</span>
         </span>
         <button class='goods-btn' nz-button nzType="primary"
           (click)="onUpdateRemarkClick('备注（商家）',orderDetail)">编辑</button></div>
@@ -161,9 +161,8 @@
         </div>
         <div style="margin: 20px 0 10px;">
           <div class="card-text">
-            <!-- 配送方式：????? -->
             <label>配送方式：</label>
-            <span>{{orderDetail.postage | centPriceChange:'元'}}</span>
+            <span>{{orderDetail.is_delivery |deliveryMethod}}</span>
           </div>
           <div class="card-text">
             <label>物流邮费：</label>
@@ -174,12 +173,10 @@
             <span>{{orderDetail.delivery_time ?(orderDetail.delivery_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
           </div>
           <div class="card-text">
-            <!-- 收货方式：????? -->
             <label>收货方式：</label>
             <span>{{orderDetail.confirm_type | confirmType}}</span>
           </div>
           <div class="card-text">
-            <!-- 收货时间就是确认收货时间吗？ -->
             <label>收货时间：</label>
             <span>{{orderDetail.confirm_time ?(orderDetail.confirm_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
           </div>
@@ -209,10 +206,10 @@
             <label>交易单号：</label>
             <span>{{orderDetail.refund_order?.transaction_id || '--'}}</span>
           </div>
-          <!-- 退款时间：??????? -->
+          <!-- 退款时间： -->
           <div class="card-text">
             <label>退款时间：</label>
-            <span>{{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
+            <span>{{orderDetail.refund_time ?(orderDetail.refund_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
           </div>
           <div class="card-text">
             <label>退款备注：</label>
@@ -268,7 +265,7 @@
           <td>
             {{commodity.unit_sell_price | centPriceChange:'元'}}
           </td>
-          <!-- 合计应付 -->
+          <!-- 合计应付 ？？？-->
           <td>
             {{commodity.unit_sell_price | centPriceChange:'元'}}
           </td>

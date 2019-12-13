@@ -41,7 +41,8 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onClose()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!writeOffList||writeOffList.length===0"
+            (appZDebounceClick)="onEditFormSubmit()">
             确认核销
           </button>
         </div>

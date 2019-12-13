@@ -40,6 +40,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   public supplierList: Array<any> = [];
   public tabs: Array<any> = [];
   public selectedTabIndex: number;
+  public refund_type = '0';
 
   private searchText$ = new Subject<any>();
   private searchSupplierText$ = new Subject<any>();
@@ -74,15 +75,15 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       { key: 6, value: '已关闭' },
     ];
 
-    this.supplierList = [
-      { key: 0, value: '全部' },
-      { key: 1, value: '待支付' },
-      { key: 2, value: '待发货' },
-      { key: 3, value: '已发货' },
-      { key: 4, value: '已完成' },
-      { key: 5, value: '售后/退款' },
-      { key: 6, value: '已关闭' },
-    ];
+    // this.supplierList = [
+    //   { key: 0, value: '全部' },
+    //   { key: 1, value: '待支付' },
+    //   { key: 2, value: '待发货' },
+    //   { key: 3, value: '已发货' },
+    //   { key: 4, value: '已完成' },
+    //   { key: 5, value: '售后/退款' },
+    //   { key: 6, value: '已关闭' },
+    // ];
     this.selectedTabIndex = 0;
 
     // 定义查询延迟时间
@@ -108,36 +109,32 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   // 切换tab
   public onTabChange(key: number) {
     if (key === 1) {
-      this.initParams();
       this.searchParams.pay_status = 1;
     } else if (key === 2) {
-      this.initParams();
       this.searchParams.delivery_status = 1;
     } else if (key === 3) {
-      this.initParams();
       this.searchParams.delivery_status = 2;
     } else if (key === 4) {
-      this.initParams();
       this.searchParams.order_status = 2;
     } else if (key === 5) {
-      this.initParams();
       this.searchParams.refund_type = 2;
     } else if (key === 6) {
-      this.initParams();
       this.searchParams.pay_status = 3;
     } else {
-      this.initParams();
+      this.initSearchParams();
     }
     this.requestOrderList();
   }
 
-  // 初始化参数
-  private initParams() {
-    this.searchParams.pay_status = null;
-    this.searchParams.delivery_status = null;
-    this.searchParams.refund_type = null;
-    this.searchParams.order_status = null;
+  // 初始化检索参数
+  public initSearchParams() {
+    this.searchParams = new SearchParams();
+    this.order_start_time = ''; // 下单开始时间
+    this.order_end_time = ''; // 下单结束时间
+    this.pay_start_time = ''; // 支付开始时间
+    this.pay_end_time = ''; // 支付结束时间
   }
+
 
   public ngOnDestroy() {
     this.requestSubscription && this.requestSubscription.unsubscribe();
@@ -146,6 +143,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 请求订单列表
   private requestOrderList() {
+    this.searchParams.refund_type = this.refund_type !== '0' ? Number(this.refund_type) : null;
     this.orderHttpService.requestGoodsOrderList(this.searchParams).subscribe(res => {
       this.orderList = res.results;
       this.linkUrl = res.linkUrl;

@@ -212,9 +212,9 @@ export class PayStatusPipe implements PipeTransform {
 
 /** 签收方式 */
 export const confirmType = {
-  1: '买家操作',
-  2: '管理员操作',
-  3: '系统自动'
+  1: '客户签收',
+  2: '管理员签收',
+  3: '系统自动收货'
 };
 
 @Pipe({

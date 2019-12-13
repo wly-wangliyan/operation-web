@@ -8,7 +8,8 @@
 </div>
 <div class="content-flow">
   <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0 [(nzSelectedIndex)]='selectedTabIndex'>
-    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'>
+    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'
+      (nzClick)='initSearchParams()'>
       <div class="search-container">
         <form class="search-form">
           <div class="form-group">
@@ -22,9 +23,8 @@
           </div>
           <div class="form-group" *ngIf='tab.key===0||tab.key===2||tab.key===3||tab.key===4'>
             <span>售后/退款：</span>
-            <select class="form-control" style="width: 100px;" name="refund_type"
-              [(ngModel)]="searchParams.refund_type">
-              <option value=null>全部</option>
+            <select class="form-control" style="width: 100px;" name="refund_type" [(ngModel)]="refund_type">
+              <option value=0>全部</option>
               <option value=1>全部退款</option>
               <option value=2>部分退款</option>
             </select>
@@ -35,7 +35,7 @@
               [(ngModel)]="searchParams.shipping_method">
               <option value=0>全部</option>
               <option value=1>平台自营</option>
-              <option *ngFor='let data of supplierList' value=data.key>{{data.value}}</option>
+              <option *ngFor='let data of businessList' value=data.mall_business_id>{{data.mall_business_name}}</option>
             </select>
           </div>
           <div class="form-group">
@@ -107,7 +107,8 @@
                     下单时间：{{order.pay_time ?(order.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
                   </td>
                   <td>
-                    <a style="margin-right: 10px;" [title]="'查看详情'" [routerLink]="['../detail', order.order_id]">
+                    <a style="margin-right: 10px;" [title]="'查看详情'"
+                      [routerLink]="['../detail', order.order_id,order.detail[0]?.commodity_type]">
                       <img src="/assets/images/detail.png" /></a>
                     <a [title]="'备注'" (click)="onUpdateRemarkClick('订单备注',order)"><img
                         src="/assets/images/remark.png" /></a>
@@ -157,12 +158,10 @@
                   <td>{{order.refund_type | refundType}}({{order.refund_status | refundStatus}})</td>
                   <td>{{order.pay_status | payStatus}}</td>
                   <td class="operation">
-                    <a [title]="'查看'"
-                      [routerLink]="['../detail', order.order_id,order.detail[0]?.commodity_type]">查看</a>
                     <a [title]="'核销'" (click)="onWriteOff(order)">核销</a>
                     <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
-                    <!-- *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1" -->
-                    <a [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
+                    <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"
+                      [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
                     <br>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2" [title]="'修改物流'"
                       (click)="onEditDeliveryClick(order)">修改物流</a>

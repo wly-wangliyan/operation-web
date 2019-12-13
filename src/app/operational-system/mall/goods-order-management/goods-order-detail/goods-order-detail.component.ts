@@ -60,7 +60,7 @@ export class GoodsOrderDetailComponent implements OnInit {
       this.orderDetail = res;
       this.orderStatusChange();
       this.goodsInfo = res.detail;
-      this.writeOffList = res.write_off;
+      this.writeOffList = res.write_off_code;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
