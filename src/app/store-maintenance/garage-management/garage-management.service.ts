@@ -5,7 +5,6 @@ import { HttpService, LinkResponse } from '../../core/http.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { BusinessEntity, BusinessLinkResponse } from '../../operational-system/mall/business-management/business-management.service';
 
 export class SearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业 2.不营业
@@ -73,7 +72,8 @@ export class RescueConfig extends EntityBase {
   public repair_shop: RepairShopEntity = undefined; // 	汽修店 外键
   public service_start_time: number = undefined; // 	服务开始时间 默认:空
   public service_end_time: number = undefined; // 服务结束时间 默认:空
-  public rescue_range: number = undefined; // 救援范围
+  public rescue_range = ''; // 救援范围
+  public is_deleted: boolean = undefined;  // 是否删除
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
 
@@ -100,7 +100,7 @@ export class RepairShopsLinkResponse extends LinkResponse {
 })
 export class GarageManagementService {
 
-  private domain = environment.MALL_DOMAIN; // 商城域名
+  private domain = environment.STORE_DOMAIN; // 商城域名
 
   constructor(private httpService: HttpService) { }
 
@@ -132,7 +132,7 @@ export class GarageManagementService {
   public requestRepairShopsDetail(repair_shop_id: string): Observable<RepairShopEntity> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}`;
     return this.httpService.get(httpUrl)
-        .pipe(map(res => BusinessEntity.Create(res.body)));
+        .pipe(map(res => RepairShopEntity.Create(res.body)));
   }
 
   /**
@@ -166,5 +166,20 @@ export class GarageManagementService {
   public requestEditRescueConfig(repair_shop_id: string, params: any): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/rescue_config`;
     return this.httpService.put(httpUrl, params);
+  }
+
+  /**
+   * 获取救援服务卑职
+   * @param repair_shop_id 参数
+   */
+  public requestRescueConfigData(repair_shop_id: string): Observable<Array<RescueConfig>> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/rescue_config`;
+    return this.httpService.get(httpUrl).pipe(map(result => {
+      const tempList: Array<RescueConfig> = [];
+      result.body.forEach(res => {
+        tempList.push(RescueConfig.Create(res));
+      });
+      return tempList;
+    }));
   }
 }

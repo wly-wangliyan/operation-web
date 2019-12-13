@@ -83,7 +83,7 @@
                                    (ngModelChange)="onSwitchChange(data.push_plan_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../push-edit',data.push_plan_id]">编辑</a>
+                        <a *ngIf="data.push_plan_status===2" [title]="'编辑'" [routerLink]="['../push-edit',data.push_plan_id]">编辑</a>
                         <a [title]="'明细'" [routerLink]="['../push-detail',data.push_plan_id]">明细</a>
                         <a [title]="'删除'" *ngIf="data.push_plan_status!==1" (appZDebounceClick)="onDeleteClick(data.push_plan_id)">删除</a>
                     </td>

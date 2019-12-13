@@ -40,7 +40,7 @@
           <td rowspan="7" class="row-title">订单信息</td>
 
           <td>预约时长：</td>
-          <td>{{orderRecord.booking_days | centPriceChange:'¥ ':'left'}}</td>
+          <td>{{orderRecord.booking_days?orderRecord.booking_days+'天':'--'}}</td>
 
           <td>预约到场时间：</td>
           <td>{{orderRecord.booking_arrive_time ? (orderRecord.booking_arrive_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>

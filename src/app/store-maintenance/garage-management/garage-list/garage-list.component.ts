@@ -1,8 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { BrokerageEntity, InsuranceService } from '../../../operational-system/insurance/insurance.service';
-import { FileImportViewModel } from '../../../../utils/file-import.model';
 import { Subject, Subscription } from 'rxjs';
-import { BrokerageCompanyEditComponent } from '../../../operational-system/insurance/brokerage-company-management/brokerage-company-edit/brokerage-company-edit.component';
 import { GlobalService } from '../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
@@ -11,19 +8,19 @@ import { DateFormatHelper } from '../../../../utils/date-format-helper';
 
 const PageSize = 15;
 
-class RepairShopItem {
-  public door_start_time = null; // 上门服务开始时间 默认:空
-  public door_end_time = null; // 上门服务结束时间 默认:空
-  public shop_start_time = null; // 到店服务开始时间 默认:空
-  public shop_end_time = null; // 到店服务结束时间 默认:空
-  public source: RepairShopEntity;
+class RescueConfigItem {
+  public service_start_time = undefined; // 	服务开始时间 默认:空
+  public service_end_time = undefined; // 服务结束时间 默认:空
+  public rangeErrmsg = '';
+  public timeErrmsg = '';
+  public checked = false;
+  public source: RescueConfig = new RescueConfig();
 
-  constructor(source: RepairShopEntity) {
+  constructor(source: RescueConfig) {
     this.source = source;
-    this.door_start_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
-    this.door_end_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
-    this.shop_start_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
-    this.shop_end_time = DateFormatHelper.getMinuteOrTime(source.door_start_time);
+    this.checked = !source.is_deleted;
+    this.service_start_time = DateFormatHelper.getMinuteOrTime(source.service_start_time ? source.service_start_time : 0);
+    this.service_end_time = DateFormatHelper.getMinuteOrTime(source.service_end_time ? source.service_end_time : 0);
   }
 }
 
@@ -34,7 +31,7 @@ class RepairShopItem {
 })
 export class GarageListComponent implements OnInit {
 
-  public garageList: Array<RepairShopItem> = [];
+  public garageList: Array<RepairShopEntity> = [];
   public pageIndex = 1;
   public noResultText = '数据加载中...';
   public searchParams = new SearchParams();
@@ -42,17 +39,14 @@ export class GarageListComponent implements OnInit {
   public vehicleFirmList = [];
   public vehicleSeriesList = [];
   public time = null;
-  public currentRescueConfig: RescueConfig = new RescueConfig();
-  public service_start_time; // 	服务开始时间 默认:空
-  public service_end_time; // 服务结束时间 默认:空
+  public rescueConfigList: Array<RescueConfigItem> = [];
 
   @ViewChild('helpServicePromptDiv', { static: true }) public helpServicePromptDiv: ElementRef;
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-
-  @ViewChild(BrokerageCompanyEditComponent, {static: true}) public brokerageEditComponent: BrokerageCompanyEditComponent;
+  private repair_shop_id: string; // 当前汽修店id
 
   private get pageCount(): number {
     if (this.garageList.length % PageSize === 0) {
@@ -71,10 +65,7 @@ export class GarageListComponent implements OnInit {
         switchMap(() =>
             this.garageService.requestRepairShopsList(this.searchParams))
     ).subscribe(res => {
-      // this.garageList = res.results;
-      res.results.forEach(value => {
-        this.garageList.push(new RepairShopItem(value));
-      });
+      this.garageList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -129,9 +120,27 @@ export class GarageListComponent implements OnInit {
   }
 
   // 救援服务配置
-  public onHelpServiceClick(data: RescueConfig) {
-    this.currentRescueConfig = data;
-    $(this.helpServicePromptDiv.nativeElement).modal('show');
+  public onHelpServiceClick(repair_shop_id: string) {
+    this.rescueConfigList = [];
+    this.repair_shop_id = repair_shop_id;
+    this.garageService.requestRescueConfigData(repair_shop_id).subscribe(res => {
+      res.forEach(value => {
+        this.rescueConfigList.push(new RescueConfigItem(value));
+      });
+      if (res.length === 0) {
+        const params = [];
+        params.push({source: new RescueConfig()}, {source: new RescueConfig()});
+        params.forEach((value, index) => {
+          value.rescue_service_type = index + 1;
+          value.is_deleted = true;
+          value.rescue_range = null;
+          this.rescueConfigList.push(new RescueConfigItem(value));
+        });
+      }
+      $(this.helpServicePromptDiv.nativeElement).modal('show');
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 弹框close
@@ -142,6 +151,10 @@ export class GarageListComponent implements OnInit {
 
   // 清空
   private clear() {
+    this.rescueConfigList.forEach(value => {
+      value.rangeErrmsg = '';
+      value.timeErrmsg = '';
+    });
   }
 
   // 键盘按下事件
@@ -155,5 +168,40 @@ export class GarageListComponent implements OnInit {
   // form提交
   public onEditFormSubmit() {
     this.clear();
+    if (this.verification()) {
+      this.rescueConfigList.forEach(value => {
+        value.source.is_deleted = !value.checked;
+      });
+      const params = {rescue_config: this.rescueConfigList.map(v => v.source)};
+      this.garageService.requestEditRescueConfig(this.repair_shop_id, params).subscribe(res => {
+        this.globalService.promptBox.open('保存成功！');
+        this.searchText$.next();
+        this.onClose();
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }
+  }
+
+  // 表单提交校验
+  private verification(): boolean {
+    let cisCheck = true;
+    this.rescueConfigList.forEach(value => {
+      if (!value.source.rescue_range && value.checked) {
+        value.rangeErrmsg = '请填写救援范围！';
+        cisCheck = false;
+      }
+      value.source.service_start_time = DateFormatHelper.getSecondTimeSum(value.service_start_time);
+      value.source.service_end_time = DateFormatHelper.getSecondTimeSum(value.service_end_time);
+      if (((!value.source.service_start_time || value.source.service_start_time === 0) ||
+          (!value.source.service_end_time || value.source.service_end_time === 0)) && value.checked) {
+        value.timeErrmsg = '请填写服务时间！';
+        cisCheck = false;
+      } else if (value.source.service_start_time > value.source.service_end_time) {
+        value.timeErrmsg = '服务开始时间不可大于结束时间！';
+        cisCheck = false;
+      }
+    });
+    return cisCheck;
   }
 }

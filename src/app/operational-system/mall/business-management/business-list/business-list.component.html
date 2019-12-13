@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <span>商家名称：</span>
-                <input class="form-control" placeholder="请输入商家名称" autocomplete="off" maxlength="50" oninput="value=value.replace(/[^\d]/g,'')"
+                <input class="form-control" placeholder="请输入商家名称" autocomplete="off" maxlength="50"
                        name="vehicle_year_model" [(ngModel)]="searchParams.business_name"/>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询

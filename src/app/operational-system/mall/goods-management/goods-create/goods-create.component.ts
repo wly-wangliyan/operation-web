@@ -10,11 +10,12 @@ import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-sele
 import { ZVideoSelectComponent } from '../../../../share/components/z-video-select/z-video-select.component';
 import {
     CommodityEntity,
-    GoodsManagementHttpService,
+    GoodsManagementHttpService, SpecificationDateEntity,
     SpecificationEntity,
     SpecificationParams
 } from '../goods-management-http.service';
 import { differenceInCalendarDays } from 'date-fns';
+import { BusinessEntity } from '../../business-management/business-management.service';
 
 @Component({
     selector: 'app-goods-create',
@@ -39,11 +40,13 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
 
-    public start_time = ''; // 价格日历开始时间
+    public start_time = null; // 价格日历开始时间
 
-    public end_time = ''; // 价格日历结束时间
+    public end_time = null; // 价格日历结束时间
 
     public weekList = [];
+
+    public businessList: Array<BusinessEntity> = []; // 商家列表
 
     public time = null;
 
@@ -51,7 +54,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     private onSubmitSubscription: any;
 
-    private currentSpecification = new SpecificationEntity();
+    private currentSpecification: SpecificationDateEntity = new SpecificationDateEntity();
+
+    private specificationIndex: number;
 
     @ViewChild('goodsImg', {static: false}) public goodsImgSelectComponent: ZPhotoSelectComponent;
 
@@ -94,6 +99,18 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * 校验选项卡
+     * @returns boolean
+     */
+    public get CheckTabValia(): boolean {
+        if (!this.commodityInfo.commodity_type || !this.commodityInfo.collection_type || !this.commodityInfo.shipping_method
+        || (!this.commodityInfo.validity_type && this.commodityInfo.commodity_type === 2)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 校验是否填写商品规格数据
      * @returns boolean
      */
@@ -103,8 +120,12 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             if (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
                 (lastCommoditySpecificationItem.specification_name === '') ||
                 isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
-                isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) ||
-                isNullOrUndefined(lastCommoditySpecificationItem.stock)) {
+                (isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) && this.commodityInfo.validity_type === 1) ||
+                (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.unit_sell_price_day)
+                    && this.commodityInfo.validity_type === 2) ||
+                (isNullOrUndefined(lastCommoditySpecificationItem.stock) && this.commodityInfo.validity_type === 1) ||
+                (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.stock_day
+                    && this.commodityInfo.validity_type === 2)) || (!lastCommoditySpecificationItem.stock_json && this.commodityInfo.validity_type === 2)) {
                 return false;
             }
             return true;
@@ -136,14 +157,13 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         if (this.commodity_id) {
             this.levelTwoName = '编辑产品';
             this.listRelativePath = '../../list';
-
             timer(500).subscribe(() => {
                 this.requestCommodityById();
             });
         } else {
             this.commoditySpecificationList.push(new SpecificationParamsItem());
         }
-
+        this.requestbusinessList();
         const weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
         weekList.forEach(value => {
             this.weekList.push({checked: false, label: value});
@@ -281,6 +301,13 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 const tempSpecificationItem = new SpecificationParamsItem();
                 tempSpecificationItem.specification_params = new SpecificationEntity(specificationItem);
                 tempSpecificationItem.is_create = false;
+                if (tempSpecificationItem.specification_params.stock_json) {
+                    tempSpecificationItem.specification_params.stock_json.unit_sell_price_day =
+                        tempSpecificationItem.specification_params.stock_json.unit_sell_price_day ?
+                            (tempSpecificationItem.specification_params.stock_json.unit_sell_price_day / 100) :
+                            tempSpecificationItem.specification_params.stock_json.unit_sell_price_day;
+                }
+
                 this.commoditySpecificationList.push(tempSpecificationItem);
             });
             if (this.commodityInfo.specifications.length === 0) {
@@ -288,6 +315,15 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             }
             CKEDITOR.instances.goodsEditor.destroy(true);
             CKEDITOR.replace('goodsEditor', {width: '900px'}).setData(this.commodityInfo.commodity_description);
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
+    // 获取商家列表
+    private requestbusinessList() {
+        this.goodsManagementHttpService.requestBusinessListData().subscribe(data => {
+            this.businessList = data;
         }, err => {
             this.globalService.httpErrorProcess(err);
         });
@@ -318,6 +354,12 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         specificationParams.specification_objs = [];
         this.commoditySpecificationList.forEach(commoditySpecificationItem => {
             if (!commoditySpecificationItem.is_delete) {
+                if (this.commodityInfo.validity_type === 1) {
+                    commoditySpecificationItem.specification_params.stock_json = new SpecificationDateEntity();
+                } else {
+                    commoditySpecificationItem.specification_params.unit_sell_price = null;
+                    commoditySpecificationItem.specification_params.stock = null;
+                }
                 specificationParams.specification_objs.push(commoditySpecificationItem.specification_params);
             } else if (!commoditySpecificationItem.is_create) {
                 delete_specification_ids.push(commoditySpecificationItem.specification_params.specification_id);
@@ -371,13 +413,16 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         for (let specificationIndex = 0; specificationIndex < this.FormatCommoditySpecificationList.length; specificationIndex++) {
             const specificationItem = this.FormatCommoditySpecificationList[specificationIndex];
             const specificationItemParams = specificationItem.specification_params;
-
             if (isNullOrUndefined(specificationItemParams.specification_name) ||
                 (specificationItemParams.specification_name === '') ||
                 isNullOrUndefined(specificationItemParams.unit_original_price) ||
-                isNullOrUndefined(specificationItemParams.unit_sell_price) ||
+                (isNullOrUndefined(specificationItemParams.unit_sell_price) && this.commodityInfo.validity_type === 1) ||
+                (specificationItemParams.stock_json && isNullOrUndefined(specificationItemParams.stock_json.unit_sell_price_day)
+                    && this.commodityInfo.validity_type === 2) ||
                 isNullOrUndefined(specificationItemParams.settlement_price) ||
-                isNullOrUndefined(specificationItemParams.stock)) {
+                (isNullOrUndefined(specificationItemParams.stock) && this.commodityInfo.validity_type === 1) ||
+                (specificationItemParams.stock_json && isNullOrUndefined(specificationItemParams.stock_json.stock_day)
+                    && this.commodityInfo.validity_type === 2) || (!specificationItemParams.stock_json && this.commodityInfo.validity_type === 2)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格未填写！`;
                 return false;
@@ -403,17 +448,30 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格原价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if ((specificationItemParams.unit_sell_price < 0.01) || (specificationItemParams.unit_sell_price > 999999.99)) {
+            if ((specificationItemParams.settlement_price < 0.01) || (specificationItemParams.settlement_price > 999999.99)) {
+                this.specificationErrMsgItem.isError = true;
+                this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价输入错误，请输入0.01-999999.99！`;
+                return false;
+            }
+            if ((this.commodityInfo.validity_type === 1 && (specificationItemParams.unit_sell_price < 0.01 || specificationItemParams.unit_sell_price > 999999.99)) ||
+                (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day < 0.01 || specificationItemParams.stock_json.unit_sell_price_day > 999999.99))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if (specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) {
+            if (specificationItemParams.settlement_price > specificationItemParams.unit_original_price) {
+                this.specificationErrMsgItem.isError = true;
+                this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价应小于等于原价！`;
+                return false;
+            }
+            if ((this.commodityInfo.validity_type === 1 && specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) ||
+                (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day / 100) > specificationItemParams.unit_original_price)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价应小于等于原价！`;
                 return false;
             }
-            if (!stockReg.test(specificationItemParams.stock.toString())) {
+            if ((this.commodityInfo.validity_type === 1 && !stockReg.test(specificationItemParams.stock.toString())) ||
+                (this.commodityInfo.validity_type === 2 && !stockReg.test(specificationItemParams.stock_json.stock_day.toString()))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格库存输入错误，请输入0-10000！`;
                 return false;
@@ -484,22 +542,40 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     // 更改商品类型
     public onChangeCommodityType(name: string, stutas: number) {
         this.commodityInfo[name] = stutas;
+        if (name === 'shipping_method' && stutas === 1) {
+            this.commodityInfo.collection_type = '1';
+        }
     }
 
     // 设置价格日历
-    public onSettingPriceClick(data: SpecificationEntity) {
-        this.currentSpecification = data;
+    public onSettingPriceClick(data: SpecificationEntity, index: number) {
+        this.initErrMsg();
+        this.start_time = null;
+        this.end_time = null;
+        this.weekList.forEach(value => {
+            value.checked = false;
+        });
+        this.specificationIndex = index;
+        data.stock_json = data.stock_json ? data.stock_json : new SpecificationDateEntity();
+        this.currentSpecification = JSON.parse(JSON.stringify(data.stock_json));
+        this.start_time = this.currentSpecification.start_time ? new Date(this.currentSpecification.start_time * 1000) : null;
+        this.end_time = this.currentSpecification.end_time ? new Date(this.currentSpecification.end_time * 1000) : null;
+        if (this.currentSpecification.week_range) {
+            this.weekList.forEach((value, weekIndex) => {
+                this.currentSpecification.week_range.forEach(value1 => {
+                    if (weekIndex === value1 - 1) {
+                        value.checked = true;
+                    }
+                });
+            });
+        }
         $(this.pricePromptDiv.nativeElement).modal('show');
     }
 
     // 弹框close
     public onClose() {
-        this.clear();
+        this.currentSpecification = new SpecificationDateEntity();
         $(this.pricePromptDiv.nativeElement).modal('hide');
-    }
-
-    // 清空
-    private clear() {
     }
 
     // 键盘按下事件
@@ -510,9 +586,33 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * 校验价格日历
+     * @returns boolean
+     */
+    public get CheckPriceDateValid(): boolean {
+        let checkValid = false;
+        this.weekList.forEach(value => {
+           if (value.checked) {
+               checkValid = true;
+           }
+        });
+        return checkValid;
+    }
+
     // form提交
     public onEditFormSubmit() {
-        this.clear();
+        this.currentSpecification.start_time = this.start_time ? new Date(this.start_time).getTime() / 1000 : null;
+        this.currentSpecification.end_time = this.end_time ? new Date(this.end_time).getTime() / 1000 : null;
+        const weeks = [];
+        this.weekList.forEach((value, index) => {
+            if (value.checked) {
+                weeks.push(index + 1);
+            }
+        });
+        this.currentSpecification.week_range = weeks;
+        this.commoditySpecificationList[this.specificationIndex].specification_params.stock_json = this.currentSpecification;
+        $(this.pricePromptDiv.nativeElement).modal('hide');
     }
 
     /**
@@ -549,7 +649,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 价格日历日期开始时间的禁用部分
     public disabledStartTime = (startValue: Date): boolean => {
-        if (differenceInCalendarDays(startValue, new Date()) > 0) {
+        if (differenceInCalendarDays(startValue, new Date()) < 0) {
             return true;
         } else if (!startValue || !this.end_time) {
             return false;
@@ -562,7 +662,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 价格日历日期结束时间的禁用部分
     public disabledEndTime = (endValue: Date): boolean => {
-        if (!endValue || !this.start_time) {
+        if (differenceInCalendarDays(endValue, new Date()) < 0) {
+            return true;
+        } else if (!endValue || !this.start_time) {
             return false;
         } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.start_time).setHours(0, 0, 0, 0)) {
             return true;

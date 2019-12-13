@@ -23,8 +23,10 @@
                     <td colspan="5">
                         <div style="display: grid">
                             <span *ngIf="pushRecord.push_range===1">{{pushRecord.push_range|pushRange}}</span>
-                            <span *ngIf="pushRecord.push_range!==1">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.range_type|rangeType)+'-'+
+                            <span *ngIf="pushRecord.push_range===2">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.range_type|rangeType)+'-'+
                             ('距离到期'+pushRecord.push_range_detail?.date_limit+'日时提醒')}}</span>
+                            <span *ngIf="pushRecord.push_range===4">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.free_range_type|diyRangeType)+'-'+
+                            ('临近投保日期'+pushRecord.push_range_detail?.free_date_limit+'日时提醒')}}</span>
                             <span *ngIf="pushRecord.push_speed_type===2">{{'触发后最小间隔'+pushRecord.push_speed?.push_interval+'小时再次推送，最大推送'+pushRecord.push_speed?.push_num+'次'}}</span>
                         </div>
                     </td>

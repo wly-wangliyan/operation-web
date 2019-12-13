@@ -148,6 +148,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.orderService.requestCreateRefundOrder(params).subscribe(res => {
         this.orderService.requestOrderRefund(res.body.refund_order_id).subscribe(res1 => {
           this.globalService.promptBox.open('退款成功！');
+          this.searchText$.next();
         }, err => {
           this.errorProcess(err);
         });

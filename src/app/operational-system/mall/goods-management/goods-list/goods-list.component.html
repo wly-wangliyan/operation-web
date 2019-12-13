@@ -78,7 +78,7 @@
                                 </a>
                                 <div class="goods-tip">
                                     <label *ngIf="commodity.commodity_type">{{commodity.commodity_type===1?'实物商品':'虚拟商品'}}</label>
-                                    <label *ngIf="commodity.shipping_method">{{commodity.shipping_method===1?'平台自营':'由'+'供应'}}</label>
+                                    <label *ngIf="commodity.shipping_method">{{commodity.shipping_method===1?'平台自营':'由'+commodity.mall_business_name+'供应'}}</label>
                                 </div>
                             </div>
                         </div>

@@ -30,11 +30,11 @@
         [class.noPermissions]="!((authService.user && authService.user.is_superuser) || authService.checkPermissions(['management']))">
         管理设置
       </li>
-      <!--<li [class.herder-active]="menuActive('/store-maintenance', 'store')"
+      <li [class.herder-active]="menuActive('/store-maintenance', 'store')"
         (click)="onMainMenuClick('/store-maintenance')"
         [class.noPermissions]="!authService.checkPermissions(['store'])">
         汽修店服务
-      </li>-->
+      </li>
       <li [class.herder-active]="menuActive('/exemption', 'exemption')" (click)="onMainMenuClick('/exemption')"
         [class.noPermissions]="!authService.checkPermissions(['exemption'])">
         免检换贴

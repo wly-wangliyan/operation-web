@@ -34,12 +34,12 @@
                            (click)="onChangeCommodityType('shipping_method', 1)">平台自营</a>
                         <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method===2"
                            (click)="onChangeCommodityType('shipping_method', 2)" style="margin-right: 5px">第三方供应</a>
-                        <select *ngIf="commodityInfo.shipping_method===2" class="form-control" name="status" style="width: 180px"
-                                [(ngModel)]="commodityInfo.commodity_id" required>
+                        <select *ngIf="commodityInfo.shipping_method===2" class="form-control" name="mall_business_id" style="width: 180px"
+                                [(ngModel)]="commodityInfo.mall_business_id" required>
                             <option value="">请选择供应商家</option>
-                            <!--<option *ngFor="let saleStatus of saleStatus" [value]="saleStatus">
-                                {{saleStatus | saleStatus}}
-                            </option>-->
+                            <option *ngFor="let item of businessList" [value]="item.mall_business_id">
+                                {{item.mall_business_name}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -48,11 +48,11 @@
                         <b>*</b>
                         <span>收款方</span>
                     </label>
-                    <div class="control-input">
-                        <select class="form-control" name="status" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
-                                required [disabled]="commodityInfo.shipping_method!==2||!commodityInfo.commodity_id">
-                            <option [value]=1>平台</option>
-                            <option [value]=2>此供应商户</option>
+                    <div class="control-input" >
+                        <select class="form-control" name="collection_type" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
+                                required [disabled]="commodityInfo.shipping_method!==2||!commodityInfo.mall_business_id">
+                            <option value=1>平台</option>
+                            <option value=2>此供应商户</option>
                         </select>
                     </div>
                 </div>
@@ -198,7 +198,8 @@
                                                (input)="initErrMsg()" maxlength="5" appIgnoreSpace>
                                     </div>
                                     <div class="td-content stock-content" *ngIf="commodityInfo.validity_type===2">
-                                        <button name="close_btn" type="button" class="price-setting-btn" nz-button (click)="onSettingPriceClick(formatCommoditySpecification.specification_params)">
+                                        <button name="close_btn" type="button" class="price-setting-btn" nz-button
+                                                (click)="onSettingPriceClick(formatCommoditySpecification.specification_params, specificationIndex)">
                                             <img src="/assets/images/icon_calendar.png">设置
                                         </button>
                                     </div>
@@ -268,7 +269,7 @@
                 <div class="row">
                     <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
                             (appZDebounceClick)="onAddOrEditCommoditySubmit()"
-                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid || !commodityInfo.commodity_type">
+                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid || !CheckTabValia ">
                         保存
                     </button>
                     <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
@@ -298,11 +299,11 @@
                     </label>
                     <div class="control-input">
                         <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false [nzShowTime]="false"
-                                        [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
                                         nzFormat="yyyy-MM-dd"></nz-date-picker>
                         <span style="margin: 5px 7px">至</span>
                         <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzShowTime]="false"
-                                        [nzDisabledDate]="disabledEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        [nzDisabledDate]="disabledEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
                                         nzFormat="yyyy-MM-dd"></nz-date-picker>
                     </div>
                 </div>
@@ -319,14 +320,14 @@
                         <span class="price-date-btn" (click)="onChooseDateClick(3)">周末</span>
                     </div>
                 </div>
-                <!--<div class="row">
+                <div class="row">
                     <label class=" control-label">
                         <b>*</b>
                         <span>售价</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" placeholder="请输入售价" [(ngModel)]="currentSpecification.stock_json.unit_sell_price_day"
-                               maxlength="9" name="bundle_id" required appIgnoreSpace appFloatNumber>
+                        <input class="form-control" placeholder="请输入售价" [(ngModel)]="currentSpecification.unit_sell_price_day"
+                               maxlength="9" name="unit_sell_price_day" required appIgnoreSpace appFloatNumber>
                         <label class="one-word-lable">元</label>
                     </div>
                 </div>
@@ -336,15 +337,15 @@
                         <span>库存</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" placeholder="请输入库存" [(ngModel)]="currentSpecification.stock_json.stock_day" maxlength="5"
+                        <input class="form-control" placeholder="请输入库存" [(ngModel)]="currentSpecification.stock_day" maxlength="5"
                                onInput="value=value.replace(/\./g, '')"
-                               name="bundle_id" autocomplete="off" required appIgnoreSpace appFloatNumber>
+                               name="stock_day" autocomplete="off" required appIgnoreSpace appFloatNumber>
                         <label class="one-word-lable">件</label>
                     </div>
-                </div>-->
+                </div>
                 <div class="modal-footer">
                     <button class="close-btn" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || !CheckPriceDateValid"
                             (appZDebounceClick)="onEditFormSubmit()">
                         确定
                     </button>

@@ -16,6 +16,7 @@ RUN cp src/environments/environment.`echo $version | tr '[A-Z]' '[a-z]'`.ts src/
     && npm run login-build \
     && npm run operational-system-build \
     && npm run exemption-build \
+    && npm run store-maintenance-build \
     && npm run order-parking-build
 
 ### final image

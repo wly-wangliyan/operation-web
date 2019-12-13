@@ -78,7 +78,6 @@ export class GarageEditComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.service_telephones.push({tel: '', time: new Date().getTime()});
     this.garageService.requestRepairShopsDetail(this.repair_shop_id)
         .subscribe(res => {
           this.currentGarage = res;
@@ -88,7 +87,7 @@ export class GarageEditComponent implements OnInit {
             this.service_telephones.push({tel: value, time: new Date().getTime()});
           });
           this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
-          this.company_name = res.repair_company.repair_company_name;
+          this.company_name = res.repair_company ? res.repair_company.repair_company_name : '';
           const regionObj = new RegionEntity(this.currentGarage);
           this.proCityDistSelectComponent.regionsObj = regionObj;
           this.proCityDistSelectComponent.initRegions(regionObj);
@@ -140,7 +139,7 @@ export class GarageEditComponent implements OnInit {
 
   // 取消按钮
   public onClose() {
-    this.router.navigate(['/main/maintenance/business-management']);
+    this.router.navigate(['/store-maintenance/garage-management/list']);
   }
 
   // 清空

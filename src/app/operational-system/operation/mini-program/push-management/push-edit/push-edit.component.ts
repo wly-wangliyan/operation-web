@@ -129,7 +129,9 @@ export class PushEditComponent implements OnInit {
       case 'push_speed_type':
         this.pushParams.push_interval = null;
         this.pushParams.push_num = null;
+        this.pushParams.push_num_everyday = null;
         this.pushParams.push_speed_type = status;
+        this.errPositionItem.push_speed.isError = false;
         break;
       case 'push_type':
         this.pushParams.push_type = status;
@@ -164,7 +166,7 @@ export class PushEditComponent implements OnInit {
           // 添加推送
           this.pushService.requestAddPushData(saveParams).subscribe(() => {
             this.globalService.promptBox.open('添加成功！', () => {
-              this.router.navigate(['../../push_list'], {relativeTo: this.route});
+              this.router.navigate(['../push_list'], {relativeTo: this.route});
             });
           }, err => {
             this.is_save = false;

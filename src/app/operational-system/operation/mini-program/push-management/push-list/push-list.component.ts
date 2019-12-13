@@ -135,6 +135,8 @@ export class PushListComponent implements OnInit {
           for (const content of error.errors) {
             if (content.resource === 'end_time' && content.code === 'already_expired') {
               this.globalService.promptBox.open('当前时间已超出下线时间，无法开启!', null, 2000, null, false);
+            } else if (content.resource === 'push_plan_rank' && content.code === 'existed_rank') {
+              this.globalService.promptBox.open('该推送优先级与现有优先级重复，无法开启!', null, 2000, null, false);
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
             }

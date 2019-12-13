@@ -1,5 +1,5 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../list'"></app-crumb>
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../../list'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="content-main">
@@ -20,15 +20,6 @@
                 </label>
                 <div class="control-input">
                     <input class="form-control" [(ngModel)]="currentGarage.repair_shop_name" name="repair_shop_name" disabled>
-                </div>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>服务类型</span>
-                </label>
-                <div class="control-input">
-                    <label nz-checkbox name="checkbox" [nzDisabled]="true">救援服务</label>
                 </div>
             </div>
             <div class="row" style="height: 110px">
@@ -84,41 +75,17 @@
             <div class="row">
                 <label class="control-label">
                     <b>*</b>
-                    <span>上门保养服务时间</span>
-                </label>
-                <div class="control-input">
-                    <app-date-clock [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                    <span style="margin: 0 8px"> 至 </span>
-                    <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                </div>
-                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>到店保养服务时间</span>
-                </label>
-                <div class="control-input">
-                    <app-date-clock [has24]="false" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                    <span style="margin: 0 8px"> 至 </span>
-                    <app-date-clock [has24]="true" [(hour)]="time" [(minute)]="time"></app-date-clock>
-                </div>
-                <span class="msg-tip" *ngIf="errPositionItem.booking?.isError">{{errPositionItem?.booking?.errMes}}</span>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
                     <span>客服电话</span>
                 </label>
                 <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
                     <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" required maxlength="12"
-                           [(ngModel)]="item.tel" placeholder="请输入座机或手机号">
+                           [(ngModel)]="item.tel" placeholder="请输入座机或手机号" (change)="errPositionItem.service_telephone.isError=false">
                     <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
                     <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
                 </div>
                 <span class="msg-span">注：最多可添加2个</span>
             </div>
-            <div style="margin-left: 120px;height: 15px;">
+            <div style="margin-left: 150px;height: 15px;">
                 <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
             </div>
             <div style="margin-top: 40px;margin-bottom: 40px">

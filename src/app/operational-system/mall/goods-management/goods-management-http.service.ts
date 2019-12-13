@@ -6,6 +6,7 @@ import { HttpService, LinkResponse } from '../../../core/http.service';
 import { environment } from '../../../../environments/environment';
 import { EntityBase } from '../../../../utils/z-entity';
 import { FileUpdate } from '../../../../utils/file-update';
+import { BusinessEntity } from '../business-management/business-management.service';
 
 /**** 实体类 ****/
 /**
@@ -31,7 +32,7 @@ export class CommodityOperationParams extends EntityBase {
  * 规格操作参数
  */
 export class SpecificationParams extends EntityBase {
-    public specification_objs: Array<SpecificationEntity> = []; // 规格对象列表 创建/更新
+    public specification_objs: Array<any> = []; // 规格对象列表 创建/更新
     public delete_specification_ids: string = undefined; // 规格ids 'wq32','2qwe' 删除
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
@@ -42,12 +43,17 @@ export class SpecificationParams extends EntityBase {
     }
 
     public toEditJson(): any {
-        const json = this.json();
+        const json = this;
         json.specification_objs.forEach(specificationObj => {
             specificationObj.unit_original_price = specificationObj.unit_original_price * 100;
-            specificationObj.unit_sell_price = specificationObj.unit_sell_price * 100;
+            specificationObj.unit_sell_price = specificationObj.unit_sell_price ? specificationObj.unit_sell_price * 100 : specificationObj.unit_sell_price;
+            specificationObj.settlement_price = specificationObj.settlement_price * 100;
+            if (specificationObj.stock_json) {
+                specificationObj.stock_json.unit_sell_price_day = specificationObj.stock_json.unit_sell_price_day * 100;
+                specificationObj.stock_json = JSON.stringify(specificationObj.stock_json);
+            }
         });
-        return json;
+        return JSON.stringify(json);
     }
 }
 
@@ -75,11 +81,12 @@ export class CommodityEntity extends EntityBase {
     public unit_original_price_section: string = undefined; // 原价区间
     public sold_amount_sum = 0; // 销量，已售数量之和
     public category: number = undefined; // 	1餐饮卷 2车周边
-    public shipping_method: number = undefined; // 	供货方式 1平台自营，2第三方供应
-    public collection_type: number = undefined; // 收款方式 1平台 2此供应商户
+    public shipping_method = ''; // 	供货方式 1平台自营，2第三方供应
+    public collection_type = '1'; // 收款方式 1平台 2此供应商户
     public validity_type: number = undefined; // 	有效期类型 1.付款后立即生效 2.使用日期当日有效 *使用日期信息
     public freight_fee: number = undefined; // 	运费 单位分
-    public business_id: string = undefined; // 商家id
+    public mall_business_id = ''; // 商家id
+    public mall_business_name = ''; // 商家名称
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'specification') {
@@ -102,11 +109,7 @@ export class CommodityEntity extends EntityBase {
         delete json.unit_original_price_section;
         delete json.sold_amount_sum;
         delete json.category;
-        delete json.shipping_method;
-        delete json.validity_type;
         delete json.freight_fee;
-        delete json.collection_type;
-        delete json.business_id;
         return json;
     }
 }
@@ -117,7 +120,7 @@ export class CommodityEntity extends EntityBase {
 export class SpecificationDateEntity extends EntityBase {
     public start_time: number = undefined; // 日历开始时间
     public end_time: number = undefined; // 日历结束时间
-    public week_range: number = undefined; // 例子：[1,2]星期一，星期二
+    public week_range: Array<number> = undefined; // 例子：[1,2]星期一，星期二
     public stock_day: number = undefined; // 	每日库存
     public unit_sell_price_day: number = undefined; // 	每日售价
 }
@@ -269,6 +272,18 @@ export class GoodsManagementHttpService {
         const url = this.domain + `/admin/commodities/${commodity_id}/specification`;
         const body = modifyParams.toEditJson();
         return this.httpService.post(url, body);
+    }
+
+    /**
+     * 获取商家列表
+     * @param CommoditySearchParams searchParams
+     * @returns Observable<CommodityLinkResponse>
+     */
+    public requestBusinessListData(): Observable<Array<BusinessEntity>> {
+        const url = this.domain + `/admin/business`;
+        return this.httpService.get(url).pipe(map(res => {
+            return res.body;
+        }));
     }
 
     /**
