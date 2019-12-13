@@ -121,6 +121,29 @@ export class RefundStatusPipe implements PipeTransform {
   }
 }
 
+/** 订单状态 */
+@Pipe({
+  name: 'orderStatusFormat'
+})
+export class OrderStatusFormatPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value.pay_status === 1) {
+      result = '待支付';
+    } else if (value.pay_status === 2 && value.delivery_status === 1) {
+      result = '待发货';
+    } else if (value.delivery_status === 2) {
+      result = '已发货';
+    } else if (value.order_status === 2) {
+      result = '已完成';
+    } else if (value.pay_status === 3) {
+      result = '已关闭';
+    }
+    return result;
+  }
+}
+
 
 /** 核销状态 */
 const WriteOffStatus = {

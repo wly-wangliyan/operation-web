@@ -8,7 +8,7 @@ import { GoodsOrderListComponent } from './goods-order-list/goods-order-list.com
 import { GoodsOrderDetailComponent } from './goods-order-detail/goods-order-detail.component';
 import {
   ConfirmTypePipe, DeliveryStatusPipe, PayStatusPipe, RealGoodsDeliveryStatusPipe, DeliveryMethodPipe,
-  RefundTypePipe, RefundStatusPipe, WriteOffStatusPipe
+  RefundTypePipe, RefundStatusPipe, WriteOffStatusPipe, OrderStatusFormatPipe
 } from './goods-order.pipe';
 import { GoodsOrderDeliveryComponent } from './goods-order-delivery/goods-order-delivery.component';
 import { GoodsOrderRefundComponent } from './goods-order-refund/goods-order-refund.component';
@@ -33,6 +33,7 @@ import { GoodsWriteOffComponent } from './goods-write-off/goods-write-off.compon
     RefundTypePipe,
     RefundStatusPipe,
     WriteOffStatusPipe,
+    OrderStatusFormatPipe,
     GoodsOrderDeliveryComponent,
     GoodsOrderRefundComponent,
     GoodsOrderRemarkComponent,

@@ -88,7 +88,6 @@ export class GoodsOrderDetailComponent implements OnInit {
     }
   }
 
-
   /*
   * 确认收货
   * @param data GoodsOrderEntity 商品信息

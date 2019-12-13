@@ -5,7 +5,7 @@
     <li class="big-bg" *ngIf="type==='2'">
       <a (click)="onWriteOff(orderDetail)">核销券码</a>
     </li>
-    <li class="big-bg">
+    <li class="big-bg" *ngIf='orderDetail.is_refundable'>
       <a (click)="onEditRefundClick(orderDetail)">退款</a>
     </li>
   </ul>
@@ -74,12 +74,12 @@
             </div>
           </div>
         </div>
-        <button *ngIf="orderStepStatus===1" class='goods-btn' nz-button nzType="primary"
-          (click)="onEditDeliveryClick(orderDetail)">发货</button>
-        <button *ngIf="orderStepStatus===2||orderStepStatus===3" class='goods-btn' nz-button nzType="primary"
+        <button *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1" class='goods-btn'
+          nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
+        <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
           (click)="onConfiemClick(orderDetail)">确认收货</button>
-        <button *ngIf="orderStepStatus===2||orderStepStatus===3" class='goods-btn' style="margin-right: 10px;" nz-button
-          nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
+        <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;"
+          nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
       <!-- 备注（平台） -->
       <div nz-card-grid class="leftBootm-card">
@@ -255,7 +255,7 @@
             </td>
           </ng-container>
           <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
-          <!-- 供应商？？？？？ -->
+          <!-- 供应商-->
           <td>{{commodity.business_name||'--'}}</td>
           <td>{{commodity.amount||0}}</td>
           <td>
@@ -289,8 +289,11 @@
           <td>
             <a [ngClass]='item.write_off_status!==1?"text-line":""'>{{item.id}}</a>
           </td>
-          <td>{{item.start_time}}-{{item.end_time}}</td>
-          <td>{{item.write_off_time||'--'}}</td>
+          <td>
+            {{item.start_time?(item.start_time* 1000 | date:"y-MM-dd"):'--'}} -
+            {{item.end_time?(item.end_time* 1000 | date:"y-MM-dd"):'--'}}
+          </td>
+          <td>{{item.write_off_time?(item.write_off_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
           <td>
             {{item.write_off_people||'--'}}
           </td>

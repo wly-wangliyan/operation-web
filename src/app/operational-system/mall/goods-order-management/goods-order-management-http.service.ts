@@ -47,9 +47,9 @@ export class OrderDetailEntity extends EntityBase {
 
 export class WriteOffEntity extends EntityBase {
   public id = ''; // 	string	核销码
-  public start_time = ''; // 	string	开始时间
-  public end_time = ''; // 	string	结束时间
-  public write_off_time = ''; // string 核销时间
+  public start_time: number = undefined; // 	string	开始时间
+  public end_time: number = undefined; // 	string	结束时间
+  public write_off_time: number = undefined; // string 核销时间
   public write_off_people = ''; // 	string	核销人
   public write_off_status = 1; // 	number	核销状态
 }

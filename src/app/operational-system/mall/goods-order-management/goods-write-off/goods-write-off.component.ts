@@ -21,6 +21,7 @@ export class GoodsWriteOffComponent implements OnInit {
   public mapOfCheckedId: { [key: string]: boolean } = {};
   public checkedList: Array<any> = [];
   public writeOffList: Array<any> = [];
+  public unWriteOffList: Array<any> = [];
 
   public currentOrder: GoodsOrderEntity = new GoodsOrderEntity();
   public sureName: string;
@@ -39,7 +40,7 @@ export class GoodsWriteOffComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   ngOnInit() {
@@ -103,6 +104,7 @@ export class GoodsWriteOffComponent implements OnInit {
     this.closeCallback = closeFunc;
     this.currentOrder = JSON.parse(JSON.stringify(orderInfo));
     this.writeOffList = this.currentOrder.write_off_code;
+    this.unWriteOffList = this.writeOffList.filter(i => i.write_off_status === 1);
     this.noResultText = '暂无数据';
     openProjectModal();
     return;
@@ -116,15 +118,18 @@ export class GoodsWriteOffComponent implements OnInit {
   // form提交
   public onEditFormSubmit() {
     const write_off_codes = this.checkedList.join(',');
-    // 核销券码
-    this.orderHttpService.requestWriteOffCode(this.order_id, write_off_codes).subscribe(() => {
-      this.onClose();
-      this.globalService.promptBox.open('保存成功！', () => {
-        this.sureCallbackInfo();
-        this.currentOrder = new GoodsOrderEntity();
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认核销？', () => {
+      this.globalService.confirmationBox.close();
+      // 核销券码
+      this.orderHttpService.requestWriteOffCode(this.order_id, write_off_codes).subscribe(() => {
+        this.onClose();
+        this.globalService.promptBox.open('保存成功！', () => {
+          this.sureCallbackInfo();
+          this.currentOrder = new GoodsOrderEntity();
+        });
+      }, err => {
+        this.errorProcess(err);
       });
-    }, err => {
-      this.errorProcess(err);
     });
   }
 

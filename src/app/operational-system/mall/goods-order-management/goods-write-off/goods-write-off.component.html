@@ -17,7 +17,8 @@
                 <tr>
                   <th [nzAlign]="'left'" nzShowCheckbox nzShowRowSelection [(nzChecked)]="isAllDisplayDataChecked"
                     [nzShowRowSelection]=false [nzIndeterminate]="isIndeterminate" (nzCheckedChange)="checkAll($event)"
-                    class="check-padding">&nbsp;&nbsp;全选
+                    class="check-padding"
+                    [nzDisabled]="!writeOffList||writeOffList.length===0||unWriteOffList.length===0">&nbsp;&nbsp;全选
                   </th>
                   <th>核销码</th>
                   <th>状态</th>
@@ -41,7 +42,8 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onClose()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!writeOffList||writeOffList.length===0"
+          <button class="sure-btn" nz-button nzType="primary"
+            [disabled]="!writeOffList||writeOffList.length===0||unWriteOffList.length===0"
             (appZDebounceClick)="onEditFormSubmit()">
             确认核销
           </button>
