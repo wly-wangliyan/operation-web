@@ -39,8 +39,12 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   public businessList: Array<BusinessEntity> = [];
   public supplierList: Array<any> = [];
   public tabs: Array<any> = [];
+  public tab: number;
   public selectedTabIndex: number;
   public refund_type = '0';
+  public commodity_type = '0';
+  public shipping_method = '0';
+  public tab_refund_type = null;
 
   private searchText$ = new Subject<any>();
   private searchSupplierText$ = new Subject<any>();
@@ -75,15 +79,6 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       { key: 6, value: '已关闭' },
     ];
 
-    // this.supplierList = [
-    //   { key: 0, value: '全部' },
-    //   { key: 1, value: '待支付' },
-    //   { key: 2, value: '待发货' },
-    //   { key: 3, value: '已发货' },
-    //   { key: 4, value: '已完成' },
-    //   { key: 5, value: '售后/退款' },
-    //   { key: 6, value: '已关闭' },
-    // ];
     this.selectedTabIndex = 0;
 
     // 定义查询延迟时间
@@ -108,6 +103,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 切换tab
   public onTabChange(key: number) {
+    this.tab = key;
     if (key === 1) {
       this.searchParams.pay_status = 1;
     } else if (key === 2) {
@@ -117,11 +113,9 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     } else if (key === 4) {
       this.searchParams.order_status = 2;
     } else if (key === 5) {
-      this.searchParams.refund_type = 2;
+      this.tab_refund_type = 2;
     } else if (key === 6) {
       this.searchParams.pay_status = 3;
-    } else {
-      this.initSearchParams();
     }
     this.requestOrderList();
   }
@@ -143,7 +137,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 请求订单列表
   private requestOrderList() {
-    this.searchParams.refund_type = this.refund_type !== '0' ? Number(this.refund_type) : null;
+    this.handelParams();
     this.orderHttpService.requestGoodsOrderList(this.searchParams).subscribe(res => {
       this.orderList = res.results;
       this.linkUrl = res.linkUrl;
@@ -157,10 +151,26 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 处理入参
+  private handelParams() {
+    this.searchParams.refund_type = this.tab === 5 ? 2 : this.refund_type !== '0' ? Number(this.refund_type) : null;
+    this.searchParams.commodity_type = this.commodity_type !== '0' ? Number(this.commodity_type) : null;
+    if (this.shipping_method !== '0' && this.shipping_method !== '1') {
+      this.searchParams.shipping_method = 2;
+      this.searchParams.business_id = this.shipping_method;
+    } else if (this.shipping_method === '1') {
+      this.searchParams.shipping_method = 1;
+      this.searchParams.business_id = '';
+    } else {
+      this.searchParams.shipping_method = null;
+      this.searchParams.business_id = '';
+    }
+  }
+
   // 条件筛选
   public onSearchBtnClick() {
     if (this.generateAndCheckParamsValid()) {
-      this.searchText$.next();
+      this.onTabChange(this.tab);
     }
   }
 
@@ -187,8 +197,9 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 导出url
   private exportSearchUrl() {
+    this.handelParams();
     // tslint:disable-next-line:max-line-length
-    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&refund_type=${this.searchParams.refund_type}&order_status=${this.searchParams.order_status}&commodity_type=${this.searchParams.commodity_type}&shipping_method=${this.searchParams.shipping_method}&business_name=${this.searchParams.business_name}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&refund_type=${this.searchParams.refund_type}&order_status=${this.searchParams.order_status}&commodity_type=${this.searchParams.commodity_type}&shipping_method=${this.searchParams.shipping_method}&business_id=${this.searchParams.business_id}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 下单开始时间的禁用部分

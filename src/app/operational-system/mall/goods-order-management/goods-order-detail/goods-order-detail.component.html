@@ -3,7 +3,7 @@
   </app-crumb>
   <ul class="header-right" *ngIf='orderDetail.is_refundable'>
     <li class="big-bg" *ngIf="type==='2'">
-      <a (click)="onEditRefundClick(orderDetail)">核销券码</a>
+      <a (click)="onWriteOff(orderDetail)">核销券码</a>
     </li>
     <li class="big-bg">
       <a (click)="onEditRefundClick(orderDetail)">退款</a>
@@ -14,12 +14,8 @@
   <div class='des_card'>
     <nz-card nzTitle="" class="top-card">
       <div nz-card-grid class="leftTop-card">
-        <!-- 虚拟商品：已发货 -->
-        <div class="delivery-status" *ngIf="type==='2'">
-          {{orderDetail.delivery_status | deliveryStatus}}
-        </div>
-        <!-- 实物商品 -->
-        <div class="delivery-status" *ngIf="type==='1'">
+        <!-- 虚拟商品 -->
+        <div class="delivery-status">
           {{orderStepStatus | realGoodsDeliveryStatus}}
         </div>
         <div style="margin: 20px 0 10px;">
@@ -43,36 +39,39 @@
           </div>
         </div>
       </div>
-      <!-- 虚拟商品 -->
-      <div nz-card-grid class="rightTop-card" *ngIf="type==='2'">
-        <div class="card-title">
-          无需配送
-        </div>
-        <div class="card-content">
-          此订单商品为虚拟商品，无需配送！
-        </div>
-      </div>
-      <!-- 实物商品 -->
-      <div nz-card-grid class="rightTop-card" *ngIf="type==='1'">
-        <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
-        <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
-        <!-- 实物商品--已发货（无需配送） -->
-        <div *ngIf="orderStepStatus===3">
-          <div class="card-title">
-            无需配送
+      <div nz-card-grid class="rightTop-card">
+        <div style="width: 70%;float: left; ">
+          <!-- 未支付/已关闭（超时未支付） -->
+          <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
+          <!-- 待发货 -->
+          <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
+          <!-- 虚拟商品：已发货 -->
+          <div *ngIf="orderStepStatus===2&&type==='2'">
+            <div class="card-title">
+              无需配送
+            </div>
+            <div class="card-content">
+              此订单商品为虚拟商品，无需配送！
+            </div>
           </div>
-          <div class="card-content">
-            此订单无需物流配送，记得提醒买家确认收货！
+          <!-- 实物商品--已发货（无需配送） -->
+          <div *ngIf="orderStepStatus===3&&type==='1'">
+            <div class="card-title">
+              无需配送
+            </div>
+            <div class="card-content">
+              此订单无需物流配送，记得提醒买家确认收货！
+            </div>
           </div>
-        </div>
-        <!-- 物流信息 -->
-        <div *ngIf="orderStepStatus===2||orderStepStatus===4||orderStepStatus===5">
-          <div class="card-title">
-            {{orderDetail.delivery_company}}
-          </div>
-          <div>{{orderDetail.delivery_order}}</div>
-          <div class="card-content">
-            暂不支持物流信息跟踪，敬请期待！
+          <!-- 物流信息 -->
+          <div *ngIf="orderStepStatus===2||orderStepStatus===4||orderStepStatus===5">
+            <div class="card-title">
+              {{orderDetail.delivery_company}}
+            </div>
+            <div>{{orderDetail.delivery_order}}</div>
+            <div class="card-content">
+              暂不支持物流信息跟踪，敬请期待！
+            </div>
           </div>
         </div>
         <button *ngIf="orderStepStatus===1" class='goods-btn' nz-button nzType="primary"
@@ -83,7 +82,7 @@
           (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
       <!-- 备注（平台） -->
-      <div nz-card-grid>
+      <div nz-card-grid class="leftBootm-card">
         <span class="remark_info" [title]='orderDetail.platform_desc'>
           <label style="padding-left: 16px;">备注（平台）: </label>
           <span>{{(orderDetail.platform_desc| zMaxLength:30) || '--'}}</span>
@@ -92,7 +91,7 @@
           (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
       </div>
       <!-- 备注（商家） -->
-      <div nz-card-grid>
+      <div nz-card-grid class="rightBootm-card">
         <span class="remark_info" [title]='orderDetail.business_desc'>
           <label>备注（商家）: </label>
           <span>{{(orderDetail.business_desc| zMaxLength:30) || '--'}}</span>
@@ -265,9 +264,9 @@
           <td>
             {{commodity.unit_sell_price | centPriceChange:'元'}}
           </td>
-          <!-- 合计应付 ？？？-->
+          <!-- 合计应付-->
           <td>
-            {{commodity.unit_sell_price | centPriceChange:'元'}}
+            {{commodity.amount*commodity.unit_sell_price | centPriceChange:'元'}}
           </td>
         </tr>
       </tbody>
@@ -298,6 +297,9 @@
           <td>
             {{item.write_off_status|writeOffStatus}}
           </td>
+        </tr>
+        <tr *ngIf='!writeOffList||writeOffList.length===0'>
+          <td colspan="5" style="text-align: center;">暂无数据</td>
         </tr>
       </tbody>
     </table>

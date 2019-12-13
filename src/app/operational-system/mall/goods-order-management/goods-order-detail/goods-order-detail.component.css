@@ -205,7 +205,6 @@
 }
 
 .remark_info {
-  width: 45%;
   display: inline-block;
   line-height: 22px;
 }
@@ -226,4 +225,12 @@
 
 .text-line {
   text-decoration: line-through !important;
+}
+
+.leftBootm-card {
+  height: 100px;
+}
+
+.rightBootm-card {
+  height: 100px;
 }

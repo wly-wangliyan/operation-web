@@ -13,7 +13,7 @@ export class SearchParams extends EntityBase {
   public order_status = null; // int F	订单状态 1未完成，2已完成
   public commodity_type = 0; // int	F	商品类型 1：实物商品 2：虚拟商品
   public shipping_method = 0; // int	供货方式 1平台自营，2第三方供应
-  public business_name = ''; // string	F	商家名称
+  public business_id = ''; // string	F	商家Id
   public mobile = ''; // 	String	F	购买人手机号
   public contact = ''; // 	String	F	收货人
   public order_id = ''; // 	string	F	订单ID

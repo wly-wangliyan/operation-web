@@ -14,8 +14,7 @@
         <form class="search-form">
           <div class="form-group">
             <span>商品类型：</span>
-            <select class="form-control" style="width: 100px;" name="commodity_type"
-              [(ngModel)]="searchParams.commodity_type">
+            <select class="form-control" style="width: 100px;" name="commodity_type" [(ngModel)]="commodity_type">
               <option value=0>全部</option>
               <option value=1>实物商品</option>
               <option value=2>虚拟商品</option>
@@ -31,11 +30,11 @@
           </div>
           <div class="form-group">
             <span>供应商：</span>
-            <select class="form-control" style="width: 100px;" name="shipping_method"
-              [(ngModel)]="searchParams.shipping_method">
+            <select class="form-control" style="width: 100px;" name="shipping_method" [(ngModel)]="shipping_method">
               <option value=0>全部</option>
               <option value=1>平台自营</option>
-              <option *ngFor='let data of businessList' value=data.mall_business_id>{{data.mall_business_name}}</option>
+              <option *ngFor='let data of businessList' [value]=data.mall_business_id>{{data.mall_business_name}}
+              </option>
             </select>
           </div>
           <div class="form-group">
@@ -154,11 +153,11 @@
                     <div>{{order.contact}}</div>
                     <div>{{order.mobile}}</div>
                   </td>
-                  <td>{{order.delivery_method | deliveryMethod}}</td>
+                  <td>{{order.is_delivery |deliveryMethod}}</td>
                   <td>{{order.refund_type | refundType}}({{order.refund_status | refundStatus}})</td>
                   <td>{{order.pay_status | payStatus}}</td>
                   <td class="operation">
-                    <a [title]="'核销'" (click)="onWriteOff(order)">核销</a>
+                    <a *ngIf="order.detail[0]?.commodity_type===2" [title]="'核销'" (click)="onWriteOff(order)">核销</a>
                     <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"
                       [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
