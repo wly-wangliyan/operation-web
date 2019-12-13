@@ -17,6 +17,7 @@ export class AddCarParkingComponent implements OnInit {
   public checkParkingList: Array<any> = [];
   public parkingList: Array<ParkingEntity> = [];
   public parking_name = '';
+  public loading = true;
 
   private sureCallback: any;
   private subscription: Subscription;
@@ -34,6 +35,7 @@ export class AddCarParkingComponent implements OnInit {
       this.serviceConfigService.requestBeanParkingListData(this.parking_name).subscribe(res => {
         this.parkingList = res.results;
         this.checkParkingList = this.parkingList.map(i => ({ ...i, checked: false }));
+        this.loading = false;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
@@ -51,6 +53,7 @@ export class AddCarParkingComponent implements OnInit {
    * 取消按钮触发关闭模态框，释放订阅。
    */
   public onClose() {
+    this.loading = true;
     this.searchText$.next();
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -67,6 +70,7 @@ export class AddCarParkingComponent implements OnInit {
    * @param sureFunc 确认回调
    */
   public open(sureFunc: any) {
+    this.loading = true;
     this.searchText$.next();
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {

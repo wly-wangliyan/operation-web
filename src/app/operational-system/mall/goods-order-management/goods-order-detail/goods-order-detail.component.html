@@ -140,7 +140,8 @@
           <div class="card-text">
             <label>联系人：</label>
             <span>{{orderDetail.contact||'--'}}</span>
-            <a [appTxtCopy]='orderDetail.contact'><img class="copy" src="/assets/images/copy.png" /></a>
+            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderDetail.contact'><img class="copy"
+                src="/assets/images/copy.png" /></a>
           </div>
           <div class="card-text">
             <label>联系电话：</label>
@@ -256,7 +257,7 @@
           </ng-container>
           <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
           <!-- 供应商-->
-          <td>{{commodity.business_name||'--'}}</td>
+          <td>{{commodity.shipping_method===1?'平台自营':commodity.shipping_method===2?commodity.business_name:'--'}}</td>
           <td>{{commodity.amount||0}}</td>
           <td>
             {{commodity.unit_original_price | centPriceChange:'元'}}

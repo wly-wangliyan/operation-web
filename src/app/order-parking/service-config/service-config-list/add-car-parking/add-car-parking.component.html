@@ -8,7 +8,10 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
         </button>
       </div>
-      <div>
+      <div *ngIf="loading" style='text-align: center;margin: 200px 0;'>
+        <nz-spin nzSimple></nz-spin>
+      </div>
+      <div *ngIf="!loading">
         <form class="search-form">
           <div>
             <img (click)='onSearchBtnClick()' src="/assets/images/search.png">
