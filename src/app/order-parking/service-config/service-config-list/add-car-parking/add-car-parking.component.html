@@ -23,8 +23,8 @@
               <div class="park-name">{{data.parking_name}}</div>
               <label nz-checkbox [(ngModel)]="data.checked"></label>
             </div>
-
           </div>
+          <div style="text-align: center;" *ngIf="!checkParkingList||checkParkingList.length===0">暂无数据</div>
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onClose()">取消</button>
