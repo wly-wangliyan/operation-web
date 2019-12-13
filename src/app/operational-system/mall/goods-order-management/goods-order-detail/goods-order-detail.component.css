@@ -234,3 +234,7 @@
 .rightBootm-card {
   height: 100px;
 }
+
+label {
+  width: 80px;
+}

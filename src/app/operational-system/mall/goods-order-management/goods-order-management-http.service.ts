@@ -38,6 +38,7 @@ export class OrderDetailEntity extends EntityBase {
   public commodity_images = []; // 	Array	商品图片列表
   public specification_id = ''; // 	string	规格id
   public specification_name = ''; // 	string	规格名称
+  public business_name = ''; // 	string	供应商
   public unit_original_price = undefined; // 	int	单位分 原价
   public unit_sell_price = undefined; // 	int	单位分 售价
   public amount = undefined; // 	int	数量

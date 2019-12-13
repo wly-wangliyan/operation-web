@@ -46,7 +46,7 @@
           <!-- 待发货 -->
           <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
           <!-- 虚拟商品：已发货 -->
-          <div *ngIf="orderStepStatus===2&&type==='2'">
+          <div *ngIf="(orderStepStatus!==0&&orderStepStatus!==1&&orderStepStatus!==6)&&type==='2'">
             <div class="card-title">
               无需配送
             </div>
@@ -64,7 +64,7 @@
             </div>
           </div>
           <!-- 物流信息 -->
-          <div *ngIf="orderStepStatus===2||orderStepStatus===4||orderStepStatus===5">
+          <div *ngIf="(orderStepStatus===2||orderStepStatus===4||orderStepStatus===5)&&type==='1'">
             <div class="card-title">
               {{orderDetail.delivery_company}}
             </div>
@@ -78,13 +78,13 @@
           (click)="onEditDeliveryClick(orderDetail)">发货</button>
         <button *ngIf="orderStepStatus===2||orderStepStatus===3" class='goods-btn' nz-button nzType="primary"
           (click)="onConfiemClick(orderDetail)">确认收货</button>
-        <button *ngIf="orderStepStatus===2" class='goods-btn' style="margin-right: 10px;" nz-button nzType="primary"
-          (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
+        <button *ngIf="orderStepStatus===2||orderStepStatus===3" class='goods-btn' style="margin-right: 10px;" nz-button
+          nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
       <!-- 备注（平台） -->
       <div nz-card-grid class="leftBootm-card">
         <span class="remark_info" [title]='orderDetail.platform_desc'>
-          <label style="padding-left: 16px;">备注（平台）: </label>
+          <label style="padding-left: 16px;width: 120px;">备注（平台）: </label>
           <span>{{(orderDetail.platform_desc| zMaxLength:30) || '--'}}</span>
         </span>
         <button class='goods-btn' nz-button nzType="primary"
@@ -93,7 +93,7 @@
       <!-- 备注（商家） -->
       <div nz-card-grid class="rightBootm-card">
         <span class="remark_info" [title]='orderDetail.business_desc'>
-          <label>备注（商家）: </label>
+          <label style="width: 120px;">备注（商家）: </label>
           <span>{{(orderDetail.business_desc| zMaxLength:30) || '--'}}</span>
         </span>
         <button class='goods-btn' nz-button nzType="primary"
@@ -256,7 +256,7 @@
           </ng-container>
           <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
           <!-- 供应商？？？？？ -->
-          <td>{{commodity.specification_name?commodity.specification_name:'--'}}</td>
+          <td>{{commodity.business_name||'--'}}</td>
           <td>{{commodity.amount||0}}</td>
           <td>
             {{commodity.unit_original_price | centPriceChange:'元'}}

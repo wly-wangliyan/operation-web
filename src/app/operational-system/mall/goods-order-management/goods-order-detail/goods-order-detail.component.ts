@@ -72,7 +72,11 @@ export class GoodsOrderDetailComponent implements OnInit {
     } else if (this.orderDetail.delivery_status === 1) {
       this.orderStepStatus = 1; // 待发货
     } else if (this.orderDetail.delivery_status === 2) {
-      this.orderStepStatus = 2; // 已发货
+      if (this.orderDetail.is_delivery === '1') {
+        this.orderStepStatus = 2; // 已发货（物流发货）
+      } else {
+        this.orderStepStatus = 3; // 已发货（无须配送）
+      }
     } else if (this.orderDetail.order_status === 2) {
       this.orderStepStatus = 4; // 已完成
     } else if (this.orderDetail.pay_status === 3) {
