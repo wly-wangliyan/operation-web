@@ -49,7 +49,7 @@
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="originPriceUnit">
                         <input class="price-input" [(ngModel)]="origin_fee" nz-input autocomplete="off"
-                          name="origin_price" appFloatNumber [appMaxNumber]='99999.99' required />
+                          name="origin_price" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
                       <div *ngIf="originPriceErrors" class="text-danger">
@@ -64,7 +64,7 @@
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="salePriceUnit">
                         <input class="price-input" [(ngModel)]="sale_fee" nz-input autocomplete="off" name="sale_price"
-                          appFloatNumber [appMaxNumber]='99999.99' required />
+                          maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #salePriceUnit>元</ng-template>
                     </nz-form-control>
@@ -79,7 +79,7 @@
                     <nz-form-control>
                       <nz-input-group style="margin-left: -30px;" [nzSuffix]="prePriceUnit">
                         <input class="price-input" [(ngModel)]="pre_fee" nz-input autocomplete="off" name="pre_price"
-                          appFloatNumber [appMaxNumber]='99999.99' required />
+                          maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #prePriceUnit>元</ng-template>
                       <div *ngIf="prePriceErrors" class="text-danger">
@@ -95,7 +95,7 @@
                     <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="minusPriceUnit">
-                        <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off" maxlength='8'
                           name="minus_price" appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #minusPriceUnit>元</ng-template>
@@ -111,7 +111,7 @@
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="minDaysUnit">
                         <input class="price-input" [(ngModel)]="configParams.min_days" nz-input autocomplete="off"
-                          name="min_days" required appFloatNumber [appMaxNumber]='99999' />
+                          maxlength='8' name="min_days" required appFloatNumber [appMaxNumber]='99999' />
                       </nz-input-group>
                       <ng-template #minDaysUnit>日</ng-template>
                       <div *ngIf="minDaysErrors" class="text-danger">

@@ -18,7 +18,7 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
@@ -52,7 +52,7 @@ export class RescueFeesEditComponent implements OnInit {
 
   // 价钱数据处理
   private getFeeData(fee: number) {
-    return fee ? (Number(fee) / 100).toFixed(2) : '';
+    return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
   }
 
   // 保存数据

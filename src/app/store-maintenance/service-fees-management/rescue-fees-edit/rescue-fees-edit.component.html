@@ -17,7 +17,7 @@
               <nz-form-label nzRequired [nzNoColon]='true'>尾款原价</nz-form-label>
               <nz-form-control>
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_initial_price"
-                  name="balance_initial_price" required appFloatNumber [appMaxNumber]='99999.99' />
+                  name="balance_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
               </nz-form-control>
             </nz-form-item>
@@ -27,7 +27,7 @@
               <nz-form-label nzRequired [nzNoColon]='true'>尾款现价</nz-form-label>
               <nz-form-control>
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_current_price"
-                  name="balance_current_price" required appFloatNumber [appMaxNumber]='99999.99' />
+                  name="balance_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
               </nz-form-control>
             </nz-form-item>
@@ -37,7 +37,7 @@
               <nz-form-label nzRequired [nzNoColon]='true'>预付原价</nz-form-label>
               <nz-form-control class="ml_10">
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_initial_price"
-                  name="prepay_initial_price" required appFloatNumber [appMaxNumber]='99999.99' />
+                  name="prepay_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
               </nz-form-control>
             </nz-form-item>
@@ -47,7 +47,7 @@
               <nz-form-label nzRequired [nzNoColon]='true'>预付现价</nz-form-label>
               <nz-form-control class="ml_10">
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_current_price"
-                  name="prepay_current_price" required appFloatNumber [appMaxNumber]='99999.99' />
+                  name="prepay_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
               </nz-form-control>
             </nz-form-item>

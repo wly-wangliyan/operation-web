@@ -16,7 +16,7 @@ import { ServiceConfigService, ParkingEntity, ServiceConfigParams } from '../ser
 export class ServiceConfigEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public parkingDetailData: ParkingEntity = new ParkingEntity();
@@ -73,7 +73,7 @@ export class ServiceConfigEditComponent implements OnInit {
 
   // 价钱数据处理
   private getFeeData(fee: number) {
-    return fee ? (Number(fee) / 100).toFixed(2) : '';
+    return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
   }
 
   // 富文本数据处理
