@@ -6,6 +6,7 @@ export const environment = {
   TICKET_SERVER: '//ticket-server-y.parkone.cn',
   MALL_DOMAIN: '//mall-server-y.parkone.cn',
   EXEMPTION_DOMAIN: '//exemption-server-y.parkone.cn',
+  STORE_DOMAIN: '//mdby-server-y.parkone.cn',
   BOOKING_DOMAIN: '//booking-server-y.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
 };
