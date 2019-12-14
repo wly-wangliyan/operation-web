@@ -103,7 +103,7 @@
                   <td>{{i+(pageIndex-1)*15+1}}</td>
                   <td colspan="8" nzAlign="left">
                     订单号：{{order.order_id}} /
-                    下单时间：{{order.pay_time ?(order.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
+                    下单时间：{{order.order_time ?(order.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}
                   </td>
                   <td>
                     <a style="margin-right: 10px;" [title]="'查看详情'"
