@@ -166,7 +166,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         this.requestbusinessList();
         const weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
         weekList.forEach(value => {
-            this.weekList.push({checked: false, label: value});
+            this.weekList.push({checked: false, disabled: false, label: value});
         });
     }
 
@@ -574,6 +574,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 });
             });
         }
+        // this.onDateChange();
         $(this.pricePromptDiv.nativeElement).modal('show');
     }
 
@@ -650,6 +651,41 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 });
                 break;
         }
+    }
+
+    // 根据日期变化设置week可选范围
+    public onDateChange() {
+       /* const start_index = this.start_time.getDay() - 1;
+        const end_index = this.end_time.getDay() > 0 ? this.end_time.getDay() - 1 : 6;
+        this.weekList.forEach((value) => {
+            value.disabled = false;
+        });
+        // 不夸周的设置，跨周全部可选
+        if (this.end_time.getDate() - this.start_time.getDate() <  6) {
+            // 开始日期在weekList中index大于结束日期的判断
+            if (start_index > end_index) {
+                this.weekList.forEach((value, index) => {
+                    if (start_index > index && end_index < index) {
+                        value.checked = false;
+                        value.disabled = true;
+                    }
+                });
+            } else if (start_index < end_index) { // 开始日期在weekList中index小于结束日期的判断
+                this.weekList.forEach((value, index) => {
+                    if (start_index > index || end_index < index) {
+                        value.checked = false;
+                        value.disabled = true;
+                    }
+                });
+            } else {
+                this.weekList.forEach((value, index) => { // 开始日期结束日期同一天的，只能选一天
+                    if (start_index !== index) {
+                        value.checked = false;
+                        value.disabled = true;
+                    }
+                });
+            }
+        }*/
     }
 
     // 价格日历日期开始时间的禁用部分
