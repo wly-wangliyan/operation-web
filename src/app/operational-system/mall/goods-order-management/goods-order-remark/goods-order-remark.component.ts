@@ -65,8 +65,8 @@ export class GoodsOrderRemarkComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.currentOrder = JSON.parse(JSON.stringify(orderInfo));
-    this.remark = this.title === '订单备注' ? this.currentOrder.order_remark :
-      this.title === '备注（平台）' ? this.currentOrder.platform_desc : this.title === '备注（商家）' ? this.currentOrder.business_desc : '';
+    this.remark = (this.title === '备注（平台）' || this.title === '备注') ? this.currentOrder.platform_desc
+      : this.title === '备注（商家）' ? this.currentOrder.business_desc : '';
     openProjectModal();
     return;
   }
@@ -78,8 +78,8 @@ export class GoodsOrderRemarkComponent implements OnInit {
 
   // form提交
   public onEditFormSubmit() {
-    const order_desc = this.title === '订单备注' ? this.remark : this.currentOrder.order_remark;
-    const platform_desc = this.title === '备注（平台）' ? this.remark : this.currentOrder.platform_desc;
+    const order_desc = '';
+    const platform_desc = (this.title === '备注（平台）' || this.title === '备注') ? this.remark : this.currentOrder.platform_desc;
     const business_desc = this.title === '备注（商家）' ? this.remark : this.currentOrder.business_desc;
     // 修改备注信息
     this.orderHttpService.requestModifyOrderDesc(this.order_id, order_desc, platform_desc, business_desc).subscribe(() => {
