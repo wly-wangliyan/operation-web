@@ -31,7 +31,7 @@ export class GoodsOrderRefundComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -110,6 +110,7 @@ export class GoodsOrderRefundComponent implements OnInit {
       });
     }, err => {
       this.globalService.promptBox.open('退款失败,请重试!', null, 2000, '/assets/images/warning.png');
+      this.isRefundBtnDisabled = false;
     });
   }
 
