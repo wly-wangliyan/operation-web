@@ -16,3 +16,7 @@
 ::ng-deep .z-modal .mes {
   padding: 0 20px !important;
 }
+
+.operation a {
+  margin: auto 5px;
+}
