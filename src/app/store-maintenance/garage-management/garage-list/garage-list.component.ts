@@ -197,7 +197,8 @@ export class GarageListComponent implements OnInit {
           (!value.source.service_end_time || value.source.service_end_time === 0)) && value.checked) {
         value.timeErrmsg = '请填写服务时间！';
         cisCheck = false;
-      } else if (value.source.service_start_time >= value.source.service_end_time && Number(value.source.service_end_time) > 0) {
+      } else if (value.source.service_start_time >= value.source.service_end_time &&
+          (Number(value.source.service_start_time) !== 0 || Number(value.source.service_end_time) !== 0)) {
         value.timeErrmsg = '服务开始时间应小于结束时间！';
         cisCheck = false;
       }

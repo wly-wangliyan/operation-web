@@ -30,11 +30,11 @@
                         <span>供货方式</span>
                     </label>
                     <div class="control-input">
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method===1"
+                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='1'"
                            (click)="onChangeCommodityType('shipping_method', 1)">平台自营</a>
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method===2"
+                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='2'"
                            (click)="onChangeCommodityType('shipping_method', 2)" style="margin-right: 5px">第三方供应</a>
-                        <select *ngIf="commodityInfo.shipping_method===2" class="form-control" name="mall_business_id" style="width: 180px"
+                        <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id" style="width: 180px"
                                 [(ngModel)]="commodityInfo.mall_business_id" required>
                             <option value="">请选择供应商家</option>
                             <option *ngFor="let item of businessList" [value]="item.mall_business_id">
@@ -50,7 +50,7 @@
                     </label>
                     <div class="control-input" >
                         <select class="form-control" name="collection_type" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
-                                required [disabled]="commodityInfo.shipping_method!==2||!commodityInfo.mall_business_id">
+                                required [disabled]="commodityInfo.shipping_method!='2'||!commodityInfo.mall_business_id">
                             <option value=1>平台</option>
                             <option value=2>此供应商户</option>
                         </select>
@@ -299,11 +299,11 @@
                     <div class="control-input">
                         <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false [nzShowTime]="false"
                                         [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
-                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                        (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
                         <span style="margin: 5px 7px">至</span>
                         <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzShowTime]="false"
                                         [nzDisabledDate]="disabledEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
-                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                        (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
                     </div>
                 </div>
 
@@ -313,7 +313,7 @@
                         <span>适用</span>
                     </label>
                     <div class="control-input">
-                        <label nz-checkbox *ngFor="let item of weekList;let i=index" [(ngModel)]="item.checked" name="{{i}}">{{item.label}}</label>
+                        <label nz-checkbox *ngFor="let item of weekList;let i=index" [(ngModel)]="item.checked" [nzDisabled]="item.disabled" name="{{i}}">{{item.label}}</label>
                         <span class="price-date-btn" (click)="onChooseDateClick(1)">全选</span>
                         <span class="price-date-btn" (click)="onChooseDateClick(2)">工作日</span>
                         <span class="price-date-btn" (click)="onChooseDateClick(3)">周末</span>

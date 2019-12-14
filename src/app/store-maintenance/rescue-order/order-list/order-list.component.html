@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'救援订单'" [level2Name]="'产品订单'"></app-crumb>
+  <app-crumb [level1Name]="'救援订单'"></app-crumb>
 </div>
 <div class="content-flow">
 
@@ -162,7 +162,8 @@
             <td>{{order.service_status | rescueServiceStatus}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.rescue_order_id]">查看</a>
-              <a *ngIf="order.order_status===2" [title]="'退款'" (click)="onRefundClick(order)">退款</a>
+              <a *ngIf="order.order_status===2 && order.service_status!==3" [title]="'退款'"
+                (click)="onRefundClick(order)">退款</a>
             </td>
           </tr>
         </tbody>

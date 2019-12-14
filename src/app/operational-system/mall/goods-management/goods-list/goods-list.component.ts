@@ -161,9 +161,12 @@ export class GoodsListComponent implements OnInit, OnDestroy {
                             failMsg = data.sales_status === this.saleStatus[0] ? '下架参数错误或无效！' : '上架参数错误或无效！';
                         } else if (content.resource === 'operation' && content.code === 'not_allow') {
                             failMsg = '不允许上架！';
+                        } else if (content.resource === 'commodity' && content.code === 'not_operation') {
+                            failMsg = '此商品供应商不在营业中，不能上架！';
                         }
                     }
                 }
+                this.searchText$.next();
                 this.globalService.promptBox.open(failMsg, null, 2000, null, false);
             }
         });

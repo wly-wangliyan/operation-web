@@ -14,7 +14,7 @@
                     {{commodityInfo.commodity_name}}
                     <!--<div *ngIf="commodityInfo.sales_status===2">已下架</div>-->
                     <div *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type===1?'实物商品':'虚拟商品'}}</div>
-                    <div *ngIf="commodityInfo.shipping_method">{{commodityInfo.shipping_method===1?'平台自营':'由'+commodityInfo.mall_business_name+'供应'}}</div>
+                    <div *ngIf="commodityInfo.shipping_method">{{commodityInfo.shipping_method=='1'?'平台自营':'由'+commodityInfo.mall_business_name+'供应'}}</div>
                     <div *ngIf="stock===0">已售罄</div>
                 </div>
                 <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
