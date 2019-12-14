@@ -32,7 +32,7 @@ export class PromptLoadingComponent implements OnInit {
   }
 
   public close() {
-    timer(500).subscribe(() => {
+    timer(0).subscribe(() => {
       this.loading = false;
     });
   }
