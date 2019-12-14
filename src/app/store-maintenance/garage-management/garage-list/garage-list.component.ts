@@ -193,7 +193,7 @@ export class GarageListComponent implements OnInit {
       }
       value.source.service_start_time = DateFormatHelper.getSecondTimeSum(value.service_start_time);
       value.source.service_end_time = DateFormatHelper.getSecondTimeSum(value.service_end_time);
-      if (((!value.source.service_start_time || value.source.service_start_time === 0) ||
+      if (((!value.source.service_start_time || value.source.service_start_time === 0) &&
           (!value.source.service_end_time || value.source.service_end_time === 0)) && value.checked) {
         value.timeErrmsg = '请填写服务时间！';
         cisCheck = false;
