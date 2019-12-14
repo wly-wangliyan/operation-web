@@ -131,7 +131,7 @@
                       </div>
                       <div class="fee">
                         <span>{{commodity.unit_sell_price | centPriceChange:'元'}}</span>
-                        <span>{{commodity.amount}}</span>
+                        <span>x{{commodity.amount||0}}</span>
                       </div>
                     </td>
                   </ng-container>
