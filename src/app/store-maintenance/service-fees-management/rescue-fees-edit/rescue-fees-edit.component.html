@@ -29,6 +29,9 @@
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_current_price"
                   name="balance_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
+                <div *ngIf="balanceCurrentPriceErrors" class="text-danger">
+                  <span class="input-error">{{balanceCurrentPriceErrors}}</span>
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -49,6 +52,9 @@
                 <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_current_price"
                   name="prepay_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 <span class="unit">元</span>
+                <div *ngIf="prepayCurrentPriceErrors" class="text-danger">
+                  <span class="input-error">{{prepayCurrentPriceErrors}}</span>
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -56,7 +62,7 @@
         <div style="margin-top: 40px;margin-bottom: 40px">
           <button class="sure-btn" nz-button nzType="primary" [disabled]="!rescueFeesForm.form.valid"
             (appZDebounceClick)='onSaveFormSubmit()'>保存</button>
-          <button class="close-btn" nz-button>取消</button>
+          <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>
       </div>
     </form>

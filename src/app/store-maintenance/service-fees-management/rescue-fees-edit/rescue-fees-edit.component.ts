@@ -18,7 +18,7 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-    private routerInfo: ActivatedRoute, private router: Router) {
+              private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
@@ -29,6 +29,8 @@ export class RescueFeesEditComponent implements OnInit {
   public balance_current_price: string;
   public prepay_initial_price: string;
   public prepay_current_price: string;
+  public balanceCurrentPriceErrors = '';
+  public prepayCurrentPriceErrors = '';
 
   private searchText$ = new Subject<any>();
 
@@ -55,19 +57,37 @@ export class RescueFeesEditComponent implements OnInit {
     return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
   }
 
+  public onCancelBtn() {
+    this.balanceCurrentPriceErrors = '';
+    this.prepayCurrentPriceErrors = '';
+    this.searchText$.next();
+  }
+
   // 保存数据
   public onSaveFormSubmit() {
-    this.searchFeeParams.balance_initial_price = Number(this.balance_initial_price) * 100;
-    this.searchFeeParams.balance_current_price = Number(this.balance_current_price) * 100;
-    this.searchFeeParams.prepay_initial_price = Number(this.prepay_initial_price) * 100;
-    this.searchFeeParams.prepay_current_price = Number(this.prepay_current_price) * 100;
-    this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
-      this.globalService.promptBox.open('编辑救援费成功！');
-      this.searchText$.next();
-      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/service-fees-management'));
-    }, err => {
-      this.handleErrorFunc(err);
-    });
+
+    if (Number(this.balance_current_price) > Number(this.balance_initial_price)) {
+      this.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
+      this.prepayCurrentPriceErrors = '';
+    } else if (Number(this.prepay_current_price) > Number(this.prepay_initial_price)) {
+      this.prepayCurrentPriceErrors = '预付现价不得大于预付原价！';
+      this.balanceCurrentPriceErrors = '';
+    } else {
+      this.balanceCurrentPriceErrors = '';
+      this.prepayCurrentPriceErrors = '';
+      this.searchFeeParams.balance_initial_price = Number(this.balance_initial_price) * 100;
+      this.searchFeeParams.balance_current_price = Number(this.balance_current_price) * 100;
+      this.searchFeeParams.prepay_initial_price = Number(this.prepay_initial_price) * 100;
+      this.searchFeeParams.prepay_current_price = Number(this.prepay_current_price) * 100;
+      this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
+        this.globalService.promptBox.open('编辑救援费成功！');
+        this.searchText$.next();
+        timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/service-fees-management'));
+      }, err => {
+        this.handleErrorFunc(err);
+      });
+    }
+
   }
 
   // 处理错误信息
