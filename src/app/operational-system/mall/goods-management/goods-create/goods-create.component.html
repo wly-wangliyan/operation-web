@@ -50,7 +50,7 @@
                     </label>
                     <div class="control-input" >
                         <select class="form-control" name="collection_type" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
-                                required [disabled]="commodityInfo.shipping_method!=2||!commodityInfo.mall_business_id">
+                                required [disabled]="commodityInfo.shipping_method!='2'||!commodityInfo.mall_business_id">
                             <option value=1>平台</option>
                             <option value=2>此供应商户</option>
                         </select>
