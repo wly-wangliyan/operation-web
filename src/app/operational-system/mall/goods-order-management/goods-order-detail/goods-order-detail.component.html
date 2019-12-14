@@ -2,7 +2,7 @@
   <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
   </app-crumb>
   <ul class="header-right" *ngIf='orderDetail.is_refundable'>
-    <li class="big-bg" *ngIf="type==='2'">
+    <li class="big-bg" *ngIf="type==='2'&&orderDetail.delivery_status===2">
       <a (click)="onWriteOff(orderDetail)">核销券码</a>
     </li>
     <li class="big-bg" *ngIf='orderDetail.is_refundable'>
@@ -76,7 +76,7 @@
         </div>
         <button *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1" class='goods-btn'
           nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
-        <button *ngIf="orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
+        <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
           (click)="onConfiemClick(orderDetail)">确认收货</button>
         <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;"
           nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>

@@ -118,19 +118,23 @@ export class GoodsWriteOffComponent implements OnInit {
   // form提交
   public onEditFormSubmit() {
     const write_off_codes = this.checkedList.join(',');
-    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认核销？', () => {
-      this.globalService.confirmationBox.close();
-      // 核销券码
-      this.orderHttpService.requestWriteOffCode(this.order_id, write_off_codes).subscribe(() => {
-        this.onClose();
-        this.globalService.promptBox.open('保存成功！', () => {
-          this.sureCallbackInfo();
-          this.currentOrder = new GoodsOrderEntity();
+    if (this.checkedList.length === 0) {
+      this.globalService.promptBox.open('请勾选核销码!', null, 2000, '/assets/images/warning.png');
+    } else {
+      this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认核销？', () => {
+        this.globalService.confirmationBox.close();
+        // 核销券码
+        this.orderHttpService.requestWriteOffCode(this.order_id, write_off_codes).subscribe(() => {
+          this.onClose();
+          this.globalService.promptBox.open('保存成功！', () => {
+            this.sureCallbackInfo();
+            this.currentOrder = new GoodsOrderEntity();
+          });
+        }, err => {
+          this.errorProcess(err);
         });
-      }, err => {
-        this.errorProcess(err);
       });
-    });
+    }
   }
 
   // 确定按钮回调
