@@ -122,6 +122,11 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 初始化检索参数
   public initSearchParams() {
+    this.refund_type = '0';
+    this.commodity_type = '0';
+    this.shipping_method = '0';
+    this.tab_refund_type = null;
+    this.commodity_type = '0';
     this.searchParams = new SearchParams();
     this.order_start_time = ''; // 下单开始时间
     this.order_end_time = ''; // 下单结束时间
