@@ -185,7 +185,6 @@ export class GarageListComponent implements OnInit {
 
   // 表单提交校验
   private verification(): boolean {
-    debugger;
     let cisCheck = true;
     this.rescueConfigList.forEach(value => {
       if (!value.source.rescue_range && value.checked) {
