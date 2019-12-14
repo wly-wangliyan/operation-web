@@ -40,7 +40,7 @@
         </div>
       </div>
       <div nz-card-grid class="rightTop-card">
-        <div style="width: 70%;float: left; ">
+        <div style="width: 68%;float: left; ">
           <!-- 未支付/已关闭（超时未支付） -->
           <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
           <!-- 待发货 -->
@@ -111,7 +111,8 @@
           </div>
           <div class="card-text">
             <label>立减/优惠：</label>
-            <span>平台立减{{orderDetail.discount_price | centPriceChange:'元'}}，优惠券抵扣{{orderDetail.platform_coupon_amount | centPriceChange:'元'}}</span>
+            <span
+              class="card-span">平台立减{{orderDetail.discount_price | centPriceChange:'元'}}，优惠券抵扣{{orderDetail.platform_coupon_amount | centPriceChange:'元'}}</span>
           </div>
           <div class="card-text">
             <label>商品运费：</label>
@@ -196,15 +197,16 @@
           </div>
           <div class="card-text">
             <label>退款状态：</label>
-            <span>{{orderDetail.refund_status|refundStatus}}</span>
+            <span>{{orderDetail.refund_order?.refund_status|refundStatus}}</span>
           </div>
           <div class="card-text">
             <label>退款金额：</label>
-            <span>{{orderDetail.total_refund_fee | centPriceChange:'元'}}</span>
+            <span>{{orderDetail.refund_total_fee | centPriceChange:'元'}}</span>
           </div>
           <div class="card-text">
             <label>交易单号：</label>
-            <span>{{orderDetail.refund_order?.transaction_id || '--'}}</span>
+            <span class="card-span"
+              style="word-break: break-all;">{{orderDetail.refund_order?.transaction_id || '--'}}</span>
           </div>
           <!-- 退款时间： -->
           <div class="card-text">
@@ -213,7 +215,8 @@
           </div>
           <div class="card-text">
             <label>退款备注：</label>
-            <span>{{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}</span>
+            <span class="card-span"
+              [title]='orderDetail.refund_remark'>{{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}</span>
           </div>
         </div>
       </div>

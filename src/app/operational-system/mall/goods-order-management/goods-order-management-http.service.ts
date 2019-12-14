@@ -92,6 +92,7 @@ export class GoodsOrderEntity extends EntityBase {
   public is_refundable = undefined; // boolean 是否可以退款 true 可以退款 false 不可以退款
   public refund_way = undefined; // number 1:原路返回
   public refund_order_id = undefined; // String 退款交易单号
+  public refund_total_fee = undefined; // integer	退款总金额
   public order_remark = undefined; // String 订单备注
   public refund_remark = undefined; // String 退款备注
   public refund_status = undefined; // int 退款状态 0未申请退款 1退款中，2已退款，3退款失败

@@ -177,7 +177,7 @@ export class WriteOffStatusPipe implements PipeTransform {
 
 /** 发货状态 */
 const RealGoodsDeliveryStatus = {
-  0: '未支付',
+  0: '待支付',
   1: '待发货',
   2: '已发货',
   3: '已发货',

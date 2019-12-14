@@ -65,3 +65,10 @@ label {
   text-align: center;
   margin-bottom: 95px;
 }
+
+.select-font {
+  font-size: 14px;
+  font-family: STHeitiSC-Light;
+  font-weight: 300;
+  color: #6c757d;
+}
