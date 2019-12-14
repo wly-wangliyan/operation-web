@@ -133,10 +133,10 @@ export class OrderStatusFormatPipe implements PipeTransform {
       result = '待支付';
     } else if (value.pay_status === 2 && value.delivery_status === 1) {
       result = '待发货';
-    } else if (value.delivery_status === 2) {
-      result = '已发货';
     } else if (value.order_status === 2 && value.pay_status !== 3) {
       result = '已完成';
+    } else if (value.order_status !== 2 && value.delivery_status === 2) {
+      result = '已发货';
     } else if (value.pay_status === 3) {
       result = '已关闭';
     }
