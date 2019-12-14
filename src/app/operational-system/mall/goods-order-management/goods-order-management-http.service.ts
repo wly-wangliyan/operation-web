@@ -107,6 +107,7 @@ export class GoodsOrderEntity extends EntityBase {
   public delivery_time = undefined; // 	float	发货时间
   public platform_desc = undefined; // 	String 平台备注
   public business_desc = undefined; // 	String 商家备注
+  public validity_type = undefined; // 	String 商家备注
   public refund_time = undefined; // 	float 退款时间
   public confirm_time = undefined; // 	float	确认收货时间
   public updated_time = undefined; // 	float	更新时间

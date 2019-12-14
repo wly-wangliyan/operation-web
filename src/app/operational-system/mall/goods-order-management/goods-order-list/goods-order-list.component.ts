@@ -202,9 +202,10 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 导出url
   private exportSearchUrl() {
-    this.handelParams();
+    console.log('1', this.searchParams.commodity_type);
+
     // tslint:disable-next-line:max-line-length
-    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status}&delivery_status=${this.searchParams.delivery_status}&refund_type=${this.searchParams.refund_type}&order_status=${this.searchParams.order_status}&commodity_type=${this.searchParams.commodity_type}&shipping_method=${this.searchParams.shipping_method}&business_id=${this.searchParams.business_id}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    this.searchUrl = `${environment.MALL_DOMAIN}/admin/orders/export?pay_status=${this.searchParams.pay_status || ''}&delivery_status=${this.searchParams.delivery_status || ''}&refund_type=${this.searchParams.refund_type || ''}&order_status=${this.searchParams.order_status || ''}&commodity_type=${this.searchParams.commodity_type || ''}&shipping_method=${this.searchParams.shipping_method || ''}&business_id=${this.searchParams.business_id}&mobile=${this.searchParams.mobile}&contact=${this.searchParams.contact}&order_id=${this.searchParams.order_id}&commodity_name=${this.searchParams.commodity_name}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 
   // 下单开始时间的禁用部分
