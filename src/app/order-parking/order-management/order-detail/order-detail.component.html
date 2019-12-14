@@ -73,7 +73,8 @@
           <td>{{orderRecord.parking_info?.parking_name ? orderRecord.parking_info.parking_name : '--'}}</td>
 
           <td>地址：</td>
-          <td>{{orderRecord.parking_info?.address ? orderRecord.parking_info.address : '--'}}</td>
+          <td>{{orderRecord.parking_info?.address ? orderRecord.parking_info.province+
+                  orderRecord.parking_info.city+orderRecord.parking_info.district+orderRecord.parking_info.address : '--'}}</td>
 
           <td></td><td></td>
         </tr>
