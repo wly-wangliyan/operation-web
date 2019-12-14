@@ -63,6 +63,8 @@ import { DiyRangeTypePipe, PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, Ran
 import { FloatNumberDirective } from './directives/float-number.directive';
 import { MaxNumberDirective } from './directives/max-number.directive';
 import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
+import { PromptLoadingComponent } from './components/prompt-loading/prompt-loading.component';
+import { IntNumberDirective } from './directives/int-number.directive';
 
 
 @NgModule({
@@ -97,6 +99,7 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     TxtCopyComponent,
     ZTextCkeditorComponent,
     ZPhotoSelectUploadComponent,
+    PromptLoadingComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -148,7 +151,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     ZTextCkeditorComponent,
     ZPhotoSelectUploadComponent,
     FloatNumberDirective,
-    MaxNumberDirective
+    MaxNumberDirective,
+    IntNumberDirective
   ],
   exports: [
     CommonModule,
@@ -178,6 +182,7 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     TxtCopyComponent,
     ZTextCkeditorComponent,
     ZPhotoSelectUploadComponent,
+    PromptLoadingComponent,
 
     // 管道
     ZMaxLengthPipe,
@@ -226,7 +231,8 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
     ZDebounceClickDirective,
     TxtCopyDirective,
     FloatNumberDirective,
-    MaxNumberDirective
+    MaxNumberDirective,
+    IntNumberDirective
   ],
 })
 export class ShareModule {

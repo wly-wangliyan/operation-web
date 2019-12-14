@@ -33,6 +33,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
+  private selectOrder: RescueOrderEntity = new RescueOrderEntity(); // 选中行
+  private refunding = false;
 
   private get pageCount(): number {
     if (this.orderList.length % PageSize === 0) {
@@ -109,22 +111,28 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   // 退款
   public onRefundClick(orderItem: RescueOrderEntity): void {
+    this.selectOrder = orderItem;
+
     this.refundParams = new RefundParams();
     this.refundParams.order_id = orderItem.rescue_order_id;
     if (orderItem.refund_reason) {
       this.refundParams.refund_reason = orderItem.refund_reason;
     }
+    this.refunding = false;
     $('#refundModal').modal('show');
   }
 
   // 确认退款
   public onRefundCheckClick(): void {
+    if (this.refunding) {
+      return;
+    }
     if (!this.refundParams.refund_fee || Number(this.refundParams.refund_fee) === 0) {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-    if (Number(this.refundParams.refund_fee) < Number(this.refundParams.refund_fee)) {
-      this.globalService.promptBox.open('退款金额应小于等于！', null, 2000, null, false);
+    if (Number(this.selectOrder.real_prepaid_fee) < Number(this.refundParams.refund_fee) * 100) {
+      this.globalService.promptBox.open(`退款金额应小于等于预付实收金额！`, null, 2000, null, false);
       return;
     }
     this.globalService.confirmationBox.open('提示', '操作后将退款金额原路返回至支付账户，此操作不可逆，请慎重操作！', () => {
@@ -134,11 +142,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   private requestRefund(): void {
+    this.refunding = true;
     this.orderService.requestOrderRefundData(this.refundParams).subscribe(() => {
+      this.refunding = false;
       $('#refundModal').modal('hide');
       this.globalService.promptBox.open('退款成功');
       this.searchText$.next();
     }, err => {
+      this.refunding = false;
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
           const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);

@@ -91,7 +91,7 @@ export class RescueOrderLinkResponse extends LinkResponse {
 })
 export class RescueOrderService {
 
-  private domain = environment.EXEMPTION_DOMAIN;
+  private domain = environment.STORE_DOMAIN;
 
   constructor(private httpService: HttpService, private globalService: GlobalService) { }
 
@@ -134,6 +134,6 @@ export class RescueOrderService {
    */
   public requestOrderRefundData(params: RefundParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/refund_orders`;
-    return this.httpService.put(httpUrl, params.toEditJson());
+    return this.httpService.post(httpUrl, params.toEditJson());
   }
 }

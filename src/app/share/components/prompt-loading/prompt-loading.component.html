@@ -1,0 +1,5 @@
+<!-- loading -->
+<div class="prompt-loading" *ngIf="loading" [class.opaque]="opaque">
+  <nz-spin *ngIf="!msg" nzSimple [nzSize]="'large'"></nz-spin>
+  <span *ngIf="msg">{{msg}}</span>
+</div>

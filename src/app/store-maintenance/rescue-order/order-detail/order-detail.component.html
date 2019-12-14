@@ -13,7 +13,11 @@
           <td rowspan="8" class="row-title">订单信息</td>
 
           <td>服务状态：</td>
-          <td style="color: #E82038;">{{orderRecord.service_status | rescueServiceStatus}}</td>
+          <td>
+            <span *ngIf="orderRecord.service_status>=0"
+              style="color: #E82038;">{{orderRecord.service_status | rescueServiceStatus}}</span>
+            <span *ngIf="!orderRecord.service_status">--</span>
+          </td>
 
           <td>订单状态：</td>
           <td style="color: #E82038;">{{orderRecord.order_status | rescueOrderStatus}}</td>
@@ -103,4 +107,5 @@
       </table>
     </div>
   </div>
+  <app-prompt-loading></app-prompt-loading>
 </div>
