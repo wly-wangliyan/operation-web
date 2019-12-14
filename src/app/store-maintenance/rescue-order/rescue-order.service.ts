@@ -32,6 +32,7 @@ export class RescueOrderEntity extends EntityBase {
   public contact_tel: string = undefined; // 联系手机号
   public repair_shop_name: string = undefined; // 汽修店名称
   public repair_shop_id: string = undefined; // 汽修店id
+  public repair_shop_district: string = undefined; // 汽修店所在区域
   public rescue_project_type: number = undefined; // 救援项目类别 1：搭电 2：换胎
   public real_prepaid_fee: number = undefined; // 实收预付费 单位：分
   public right_prepaid_fee: number = undefined; // 应收预付费 单位：分

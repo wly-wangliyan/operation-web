@@ -124,14 +124,14 @@
               </div>
             </td>
             <td>
-              <ng-container *ngIf="order.address || order.repair_shop_name">
+              <ng-container *ngIf="order.repair_shop_district || order.repair_shop_name">
                 <div class="column-box">
-                  <span [title]="order.address || ''">{{order.address | zMaxLength:6}}</span>
+                  <span [title]="order.repair_shop_district || ''">{{order.repair_shop_district | zMaxLength:6}}</span>
                   <span [title]="order.repair_shop_name || ''">
                     {{order.repair_shop_name ? (order.repair_shop_name|zMaxLength:6) : ''}}</span>
                 </div>
               </ng-container>
-              <ng-container *ngIf="!order.address && !order.repair_shop_name">
+              <ng-container *ngIf="!order.repair_shop_district && !order.repair_shop_name">
                 <span>--</span>
               </ng-container>
             </td>
