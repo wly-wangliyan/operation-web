@@ -30,6 +30,8 @@ export class GoodsOrderDetailComponent implements OnInit {
 
   public orderStepStatus: number; // 订单流程状态
 
+  public orderInfo: string; // 收件人信息
+
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
   @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;
   @ViewChild('orderRemark', { static: true }) public orderRemark: GoodsOrderRemarkComponent;
@@ -61,6 +63,7 @@ export class GoodsOrderDetailComponent implements OnInit {
       this.orderStatusChange();
       this.goodsInfo = res.detail;
       this.writeOffList = res.write_off_code;
+      this.orderInfo = `${this.orderDetail.contact}${this.orderDetail.mobile}${this.type === '1' ? this.orderDetail.delivery_address : ''}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -77,7 +80,7 @@ export class GoodsOrderDetailComponent implements OnInit {
       } else {
         this.orderStepStatus = 3; // 已发货（无须配送）
       }
-    } else if (this.orderDetail.order_status === 2) {
+    } else if (this.orderDetail.order_status === 2 && this.orderDetail.pay_status !== 3) {
       this.orderStepStatus = 4; // 已完成
     } else if (this.orderDetail.pay_status === 3) {
       if (this.orderDetail.refund_status === 2) {
