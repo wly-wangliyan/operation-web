@@ -63,7 +63,8 @@ export class GoodsOrderDetailComponent implements OnInit {
       this.orderStatusChange();
       this.goodsInfo = res.detail;
       this.writeOffList = res.write_off_code;
-      this.orderInfo = `${this.orderDetail.contact}${this.orderDetail.mobile}${this.type === '1' ? this.orderDetail.delivery_address : ''}`;
+      this.orderInfo = `${this.orderDetail.contact}${this.orderDetail.mobile}${this.type === '1'
+        ? (this.orderDetail.delivery_region + this.orderDetail.delivery_address) : ''}`;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

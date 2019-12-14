@@ -25,7 +25,6 @@
             <label>订单编号：</label>
             <span>{{orderDetail.order_id?orderDetail.order_id:'--'}}</span>
           </div>
-          <!-- 交易单号： -->
           <div class="card-text">
             <label>交易单号：</label>
             <span>{{orderDetail.trade_no || '--'}}</span>
@@ -34,7 +33,6 @@
             <label>下单时间：</label>
             <span>{{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
           </div>
-          <!-- 下单渠道： -->
           <div class="card-text">
             <label>下单渠道：</label>
             <span>{{orderDetail.order_channel===1?'美行停车小程序':'--'}}</span>
@@ -83,7 +81,6 @@
         <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;"
           nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
-      <!-- 备注（平台） -->
       <div nz-card-grid class="leftBootm-card">
         <span class="remark_info" [title]='orderDetail.platform_desc'>
           <label style="padding-left: 16px;width: 120px;">备注（平台）: </label>
@@ -92,7 +89,6 @@
         <button class='goods-btn' nz-button nzType="primary"
           (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
       </div>
-      <!-- 备注（商家） -->
       <div nz-card-grid class="rightBootm-card">
         <span class="remark_info" [title]='orderDetail.business_desc'>
           <label style="width: 120px;">备注（商家）: </label>
@@ -124,7 +120,6 @@
             <label>实收金额：</label>
             <span>{{orderDetail.real_price | centPriceChange:'元'}}</span>
           </div>
-          <!-- 收款账户： -->
           <div class="card-text">
             <label>收款账户：</label>
             <span>{{orderDetail.collection_type===1 ?'平台':orderDetail.collection_type===1 ?orderDetail.business_name:'--'}}</span>
@@ -150,10 +145,10 @@
             <label>联系电话：</label>
             <span>{{orderDetail.mobile||'--'}}</span>
           </div>
-          <!-- 实物商品 -->
           <div class="card-text" *ngIf="type==='1'">
             <label>收货地址：</label>
-            <span>{{orderDetail.delivery_address||'--'}}</span>
+            <span class="card-span">{{orderDetail.delivery_region}}{{orderDetail.delivery_address}}</span>
+            <span *ngIf='!orderDetail.delivery_region&&!orderDetail.delivery_address'>--</span>
           </div>
 
         </div>
@@ -190,9 +185,6 @@
           售后/退款
         </div>
         <div style="margin: 20px 0 10px;">
-          <!-- 类型： -->
-          <!-- 退款状态： -->
-          <!-- 退款时间： -->
           <div class="card-text">
             <label>类型：</label>
             <span>{{orderDetail.refund_type|refundType}}</span>
@@ -210,7 +202,6 @@
             <span class="card-span"
               style="word-break: break-all;">{{orderDetail.refund_order?.transaction_id || '--'}}</span>
           </div>
-          <!-- 退款时间： -->
           <div class="card-text">
             <label>退款时间：</label>
             <span>{{orderDetail.refund_time ?(orderDetail.refund_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
@@ -261,7 +252,6 @@
             </td>
           </ng-container>
           <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
-          <!-- 供应商-->
           <td>{{commodity.shipping_method===1?'平台自营':commodity.shipping_method===2?commodity.business_name:'--'}}</td>
           <td>{{commodity.amount||0}}</td>
           <td>
@@ -270,7 +260,6 @@
           <td>
             {{commodity.unit_sell_price | centPriceChange:'元'}}
           </td>
-          <!-- 合计应付-->
           <td>
             {{commodity.amount*commodity.unit_sell_price | centPriceChange:'元'}}
           </td>
