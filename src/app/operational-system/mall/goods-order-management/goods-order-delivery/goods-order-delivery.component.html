@@ -47,7 +47,7 @@
             <div class=" control-input">
               <input class="form-control" placeholder="请输入邮费金额" [(ngModel)]="postage" name="postage" (input)="errMes=''"
                 (change)="onAmountChange($event)" (keypress)="inputNumberLimit($event)" maxlength="7" appIgnoreSpace
-                required>
+                [appMaxNumber]='9999.99' required>
             </div>
           </div>
         </div>
