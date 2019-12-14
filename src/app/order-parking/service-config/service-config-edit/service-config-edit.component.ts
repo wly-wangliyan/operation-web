@@ -16,7 +16,7 @@ import { ServiceConfigService, ParkingEntity, ServiceConfigParams } from '../ser
 export class ServiceConfigEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-    private routerInfo: ActivatedRoute, private router: Router) {
+              private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public parkingDetailData: ParkingEntity = new ParkingEntity();
@@ -108,7 +108,16 @@ export class ServiceConfigEditComponent implements OnInit {
   public onSaveFormSubmit() {
     const regPhone = /^(1[3-9])\d{9}$/g;
     const regTel = /^\d{3}-\d{8}|(1[3-9])\d{9}$/g;
-    if (!regPhone.test(this.configParams.main_tel)) {
+    if (Number(this.sale_fee) > Number(this.origin_fee)) {
+      this.clear();
+      this.salePriceErrors = '售价不得大于原价！';
+    } else if (Number(this.pre_fee) > Number(this.sale_fee)) {
+      this.clear();
+      this.prePriceErrors = '预付费用不得大于售价！';
+    } else if (Number(this.minus_fee) > (Number(this.sale_fee))) {
+      this.clear();
+      this.minusPriceErrors = '下单立减费用不得大于售价！';
+    } else if (!regPhone.test(this.configParams.main_tel)) {
       this.clear();
       this.mainTelErrors = '请输入正确的常用电话！';
     } else if (!regTel.test(this.configParams.standby_tel)) {

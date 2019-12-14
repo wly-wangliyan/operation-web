@@ -52,7 +52,8 @@
                           name="origin_price" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
-                      <div *ngIf="originPriceErrors" class="text-danger">
+                      <!-- *ngIf="originPriceErrors" -->
+                      <div class="text-danger">
                         <span class="input-error">{{originPriceErrors}}</span>
                       </div>
                     </nz-form-control>
@@ -62,28 +63,32 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
                     <nz-form-control>
-                      <nz-input-group [nzSuffix]="salePriceUnit">
-                        <input class="price-input" [(ngModel)]="sale_fee" nz-input autocomplete="off" name="sale_price"
-                          maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
-                      </nz-input-group>
-                      <ng-template #salePriceUnit>元</ng-template>
+                      <div>
+                        <nz-input-group [nzSuffix]="salePriceUnit">
+                          <input class="price-input" [(ngModel)]="sale_fee" nz-input autocomplete="off"
+                            name="sale_price" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                        </nz-input-group>
+                        <ng-template #salePriceUnit>元</ng-template>
+                      </div>
+                      <div *ngIf="salePriceErrors" class="text-danger">
+                        <span class="input-error">{{salePriceErrors}}</span>
+                      </div>
                     </nz-form-control>
-                    <div *ngIf="salePriceErrors" class="text-danger">
-                      <span class="input-error">{{salePriceErrors}}</span>
-                    </div>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="8">
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
                     <nz-form-control>
-                      <nz-input-group style="margin-left: -30px;" [nzSuffix]="prePriceUnit">
-                        <input class="price-input" [(ngModel)]="pre_fee" nz-input autocomplete="off" name="pre_price"
-                          maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
-                      </nz-input-group>
-                      <ng-template #prePriceUnit>元</ng-template>
-                      <div *ngIf="prePriceErrors" class="text-danger">
-                        <span class="input-error">{{prePriceErrors}}</span>
+                      <div>
+                        <nz-input-group style="margin-left: -30px;" [nzSuffix]="prePriceUnit">
+                          <input class="price-input" [(ngModel)]="pre_fee" nz-input autocomplete="off" name="pre_price"
+                            maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                        </nz-input-group>
+                        <ng-template #prePriceUnit>元</ng-template>
+                        <div *ngIf="prePriceErrors" class="text-danger" style="margin-left: -30px;">
+                          <span class="input-error">{{prePriceErrors}}</span>
+                        </div>
                       </div>
                     </nz-form-control>
                   </nz-form-item>
@@ -94,11 +99,13 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
                     <nz-form-control>
-                      <nz-input-group [nzSuffix]="minusPriceUnit">
-                        <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off" maxlength='8'
-                          name="minus_price" appFloatNumber [appMaxNumber]='99999.99' required />
-                      </nz-input-group>
-                      <ng-template #minusPriceUnit>元</ng-template>
+                      <div>
+                        <nz-input-group [nzSuffix]="minusPriceUnit">
+                          <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off" maxlength='8'
+                            name="minus_price" appFloatNumber [appMaxNumber]='99999.99' required />
+                        </nz-input-group>
+                        <ng-template #minusPriceUnit>元</ng-template>
+                      </div>
                       <div *ngIf="minusPriceErrors" class="text-danger">
                         <span class="input-error">{{minusPriceErrors}}</span>
                       </div>
