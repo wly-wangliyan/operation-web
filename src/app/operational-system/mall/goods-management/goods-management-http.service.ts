@@ -272,7 +272,8 @@ export class GoodsManagementHttpService {
      */
     public requestModifyCommoditySpecificationData(commodity_id: string, modifyParams: SpecificationParams): Observable<HttpResponse<any>> {
         const url = this.domain + `/admin/commodities/${commodity_id}/specification`;
-        const body = modifyParams.toEditJson();
+        const params = modifyParams.clone();
+        const body = params.toEditJson();
         return this.httpService.post(url, body);
     }
 

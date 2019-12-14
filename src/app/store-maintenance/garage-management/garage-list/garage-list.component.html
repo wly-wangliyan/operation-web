@@ -83,7 +83,6 @@
                             <label class="control-label">服务时间</label>
                             <div class="control-input">
                                 <app-date-clock style="float:left;" [has24]="false" [(hour)]="item.service_start_time.hour"
-                                                onInput="onInput()"
                                                 [(minute)]="item.service_start_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
                                 <span style="float:left;margin: 5px 8px"> 至 </span>
                                 <app-date-clock [has24]="true" [(hour)]="item.service_end_time.hour"
