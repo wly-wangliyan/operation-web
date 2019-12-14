@@ -120,12 +120,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             if (isNullOrUndefined(lastCommoditySpecificationItem.specification_name) ||
                 (lastCommoditySpecificationItem.specification_name === '') ||
                 isNullOrUndefined(lastCommoditySpecificationItem.unit_original_price) ||
-                (isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) && this.commodityInfo.validity_type === 1) ||
-                (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.unit_sell_price_day)
+                (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.stock_day)
                     && this.commodityInfo.validity_type === 2) ||
-                (isNullOrUndefined(lastCommoditySpecificationItem.stock) && this.commodityInfo.validity_type === 1) ||
-                (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.stock_day
-                    && this.commodityInfo.validity_type === 2)) || (!lastCommoditySpecificationItem.stock_json && this.commodityInfo.validity_type === 2)) {
+                (isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) && this.commodityInfo.validity_type !== 2)
+                || (!lastCommoditySpecificationItem.stock_json && this.commodityInfo.validity_type === 2)) {
                 return false;
             }
             return true;
@@ -354,11 +352,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         specificationParams.specification_objs = [];
         this.commoditySpecificationList.forEach(commoditySpecificationItem => {
             if (!commoditySpecificationItem.is_delete) {
-                if (this.commodityInfo.validity_type === 1) {
-                    commoditySpecificationItem.specification_params.stock_json = new SpecificationDateEntity();
-                } else {
+                if (this.commodityInfo.validity_type === 2) {
                     commoditySpecificationItem.specification_params.unit_sell_price = null;
                     commoditySpecificationItem.specification_params.stock = null;
+                } else {
+                    commoditySpecificationItem.specification_params.stock_json = new SpecificationDateEntity();
                 }
                 specificationParams.specification_objs.push(commoditySpecificationItem.specification_params);
             } else if (!commoditySpecificationItem.is_create) {
