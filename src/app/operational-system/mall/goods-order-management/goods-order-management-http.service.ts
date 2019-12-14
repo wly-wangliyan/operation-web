@@ -57,7 +57,7 @@ export class WriteOffEntity extends EntityBase {
 
 export class OrderRefundEntity extends EntityBase {
   public refund_order_id = ''; // 	string	退款交易单号id
-  public refund_status = ''; // 	int 退款状态 0未申请退款 1退款中，2已退款，3退款失败
+  public refund_status: number = undefined; // 	int 退款状态 0未申请退款 1退款中，2已退款，3退款失败
   public transaction_id = ''; // 	string	微信订单号
   public refund_id = ''; // 	string	微信退款单号
   public refund_fee = ''; // 	int	退款费用

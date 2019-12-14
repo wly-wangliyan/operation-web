@@ -84,7 +84,7 @@ export class GoodsOrderDetailComponent implements OnInit {
     } else if (this.orderDetail.order_status === 2 && this.orderDetail.pay_status !== 3) {
       this.orderStepStatus = 4; // 已完成
     } else if (this.orderDetail.pay_status === 3) {
-      if (this.orderDetail.refund_status === 2) {
+      if (this.orderDetail.refund_order && this.orderDetail.refund_order.refund_status === 2) {
         this.orderStepStatus = 5; // 已关闭(全额退款)
       } else {
         this.orderStepStatus = 6; // 已关闭(已取消：超时未支付)
