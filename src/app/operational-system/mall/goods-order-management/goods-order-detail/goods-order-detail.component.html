@@ -17,6 +17,8 @@
         <!-- 虚拟商品 -->
         <div class="delivery-status">
           {{orderStepStatus | realGoodsDeliveryStatus}}
+          <span *ngIf='orderStepStatus===5'><span class="line"></span> 订单已全额退款，交易自动关闭</span>
+          <span *ngIf='orderStepStatus===6'><span class="line"></span> 订单超时未支付，交易自动关闭</span>
         </div>
         <div style="margin: 20px 0 10px;">
           <div class="card-text">
@@ -141,7 +143,7 @@
           <div class="card-text">
             <label>联系人：</label>
             <span>{{orderDetail.contact||'--'}}</span>
-            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderDetail.contact'><img class="copy"
+            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img class="copy"
                 src="/assets/images/copy.png" /></a>
           </div>
           <div class="card-text">
