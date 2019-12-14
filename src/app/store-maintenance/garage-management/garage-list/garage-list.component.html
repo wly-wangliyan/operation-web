@@ -83,6 +83,7 @@
                             <label class="control-label">服务时间</label>
                             <div class="control-input">
                                 <app-date-clock style="float:left;" [has24]="false" [(hour)]="item.service_start_time.hour"
+                                                onInput="onInput()"
                                                 [(minute)]="item.service_start_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
                                 <span style="float:left;margin: 5px 8px"> 至 </span>
                                 <app-date-clock [has24]="true" [(hour)]="item.service_end_time.hour"
@@ -95,8 +96,9 @@
                         <div class="row">
                             <label class="control-label">救援范围</label>
                             <div class="control-input service-input">
-                                <input nz-input class="form-control" name="rescue_range_{{i}}" required maxlength="5"
-                                       [(ngModel)]="item.source.rescue_range" (change)="item.rangeErrmsg=''">
+                                <input nz-input class="form-control" name="rescue_range_{{i}}" required maxlength="8"
+                                       onInput="if(Number(value)>99999){value=99999}"
+                                       [(ngModel)]="item.source.rescue_range" (change)="item.rangeErrmsg=''" appFloatNumber>
                                 <label>KM</label>
                                 <span>范围内</span>
                             </div>
