@@ -70,7 +70,7 @@ export class GoodsOrderEntity extends EntityBase {
   public trade_no = ''; // 	string	微信支付订单id
   public htcode = ''; // 	string	用户ID
   public commodity_ids = ''; // 	String	商品ids
-  public is_delivery = '1'; // 	是否需要邮寄 1为需要， 2为不需要
+  public is_delivery = 1; // 	是否需要邮寄 1为需要， 2为不需要
   public pay_status = undefined; // 	integer	订单状态 1:待支付 2:已支付 3:已取消
   public delivery_status = undefined; // 	integer	发货状态 1:待发货 2:已发货 3:已签收
   public order_status = undefined; // 	integer	订单状态 1未完成，2已完成

@@ -94,7 +94,6 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     ).subscribe(res => {
       this.businessList = res.results;
       this.linkUrl = res.linkUrl;
-      this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -122,6 +121,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 初始化检索参数
   public initSearchParams() {
+    this.noResultText = '数据加载中...';
     this.refund_type = '0';
     this.commodity_type = '0';
     this.shipping_method = '0';

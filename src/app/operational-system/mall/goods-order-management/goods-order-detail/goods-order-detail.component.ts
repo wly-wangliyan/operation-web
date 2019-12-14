@@ -75,7 +75,7 @@ export class GoodsOrderDetailComponent implements OnInit {
     } else if (this.orderDetail.delivery_status === 1) {
       this.orderStepStatus = 1; // 待发货
     } else if (this.orderDetail.delivery_status === 2) {
-      if (this.orderDetail.is_delivery === '1') {
+      if (this.orderDetail.is_delivery === 1) {
         this.orderStepStatus = 2; // 已发货（物流发货）
       } else {
         this.orderStepStatus = 3; // 已发货（无须配送）
