@@ -50,11 +50,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     public time = null;
 
+    public currentSpecification: SpecificationDateEntity = new SpecificationDateEntity();
+
     private commodity_id: string;
 
     private onSubmitSubscription: any;
-
-    private currentSpecification: SpecificationDateEntity = new SpecificationDateEntity();
 
     private specificationIndex: number;
 
@@ -231,13 +231,13 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         if (this.checkCommodityParamsValid(false)) {
             timer(0).subscribe(() => {
                 this.commoditySpecificationList.push(new SpecificationParamsItem());
-                const ele = document.getElementById('table-container');
-                if (ele.scrollHeight >= ele.clientHeight) {
-                    timer(0).subscribe(() => {
-                        // 设置滚动条到最底部
-                        ele.scrollTop = ele.scrollHeight;
-                    });
-                }
+            });
+        }
+        const ele = document.getElementById('table-container');
+        if (ele.scrollHeight >= ele.clientHeight) {
+            timer(0).subscribe(() => {
+                // 设置滚动条到最底部
+                ele.scrollTop = ele.scrollHeight;
             });
         }
     }

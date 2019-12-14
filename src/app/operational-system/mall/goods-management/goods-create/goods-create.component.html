@@ -30,11 +30,11 @@
                         <span>供货方式</span>
                     </label>
                     <div class="control-input">
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method===1"
+                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='1'"
                            (click)="onChangeCommodityType('shipping_method', 1)">平台自营</a>
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method===2"
+                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='2'"
                            (click)="onChangeCommodityType('shipping_method', 2)" style="margin-right: 5px">第三方供应</a>
-                        <select *ngIf="commodityInfo.shipping_method===2" class="form-control" name="mall_business_id" style="width: 180px"
+                        <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id" style="width: 180px"
                                 [(ngModel)]="commodityInfo.mall_business_id" required>
                             <option value="">请选择供应商家</option>
                             <option *ngFor="let item of businessList" [value]="item.mall_business_id">
@@ -50,7 +50,7 @@
                     </label>
                     <div class="control-input" >
                         <select class="form-control" name="collection_type" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
-                                required [disabled]="commodityInfo.shipping_method!==2||!commodityInfo.mall_business_id">
+                                required [disabled]="commodityInfo.shipping_method!=2||!commodityInfo.mall_business_id">
                             <option value=1>平台</option>
                             <option value=2>此供应商户</option>
                         </select>
