@@ -58,6 +58,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     private specificationIndex: number;
 
+    private delete_specification_ids = [];
+
     @ViewChild('goodsImg', {static: false}) public goodsImgSelectComponent: ZPhotoSelectComponent;
 
     @ViewChild('goodsVideo', {static: false}) public goodsVideoSelectComponent: ZVideoSelectComponent;
@@ -231,7 +233,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.commoditySpecificationList.push(new SpecificationParamsItem());
                 const ele = document.getElementById('table-container');
                 if (ele.scrollHeight >= ele.clientHeight) {
-                    timer(500).subscribe(() => {
+                    timer(0).subscribe(() => {
                         // 设置滚动条到最底部
                         ele.scrollTop = ele.scrollHeight;
                     });
@@ -241,17 +243,16 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
 
     // 点击移除商品规格
-    public onDeleteCommoditySpecification(specification_id: string) {
-        const specificationIndex = this.commoditySpecificationList
-            .findIndex( value => value.specification_params.specification_id === specification_id);
+    public onDeleteCommoditySpecification(specificationIndex: number) {
         const deleteCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex];
         deleteCommoditySpecificationItem.is_delete = true;
+
         this.commoditySpecificationList.splice(specificationIndex, 1);
         this.initErrMsg();
 
         if (!deleteCommoditySpecificationItem.is_create) {
             timer(0).subscribe(() => {
-                this.commoditySpecificationList.push(deleteCommoditySpecificationItem);
+                this.delete_specification_ids.push(deleteCommoditySpecificationItem.specification_params.specification_id);
             });
         }
     }
@@ -356,7 +357,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 创建/修改规格
     private requestModifyCommoditySpecification(commodity_id: string) {
-        const delete_specification_ids = [];
         const specificationParams = new SpecificationParams();
         specificationParams.specification_objs = [];
         this.commoditySpecificationList.forEach(commoditySpecificationItem => {
@@ -368,11 +368,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                     commoditySpecificationItem.specification_params.stock_json = new SpecificationDateEntity();
                 }
                 specificationParams.specification_objs.push(commoditySpecificationItem.specification_params);
-            } else if (!commoditySpecificationItem.is_create) {
-                delete_specification_ids.push(commoditySpecificationItem.specification_params.specification_id);
             }
         });
-        specificationParams.delete_specification_ids = delete_specification_ids.join(',');
+        specificationParams.delete_specification_ids = this.delete_specification_ids.join(',');
 
         this.goodsManagementHttpService.requestModifyCommoditySpecificationData(commodity_id, specificationParams).subscribe(() => {
             this.processSuccess();
@@ -472,7 +470,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 return false;
             }
             if ((this.commodityInfo.validity_type !== 2 && Number(specificationItemParams.unit_sell_price) > Number(specificationItemParams.unit_original_price)) ||
-                (this.commodityInfo.validity_type === 2 && (Number(specificationItemParams.stock_json.unit_sell_price_day) / 100) > Number(specificationItemParams.unit_original_price))) {
+                (this.commodityInfo.validity_type === 2 && Number(specificationItemParams.stock_json.unit_sell_price_day) > Number(specificationItemParams.unit_original_price))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价应小于等于原价！`;
                 return false;
