@@ -34,8 +34,8 @@
 
 .goods-tip label {
     min-width: 70px;
-    height: 20px;
-    padding: 0 10px;
+    min-height: 20px;
+    padding: 3px 10px;
     border-radius:4px;
     text-align: center;
     margin-right: 10px;

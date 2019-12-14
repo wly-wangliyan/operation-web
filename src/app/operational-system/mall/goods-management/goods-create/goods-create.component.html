@@ -131,7 +131,7 @@
                         <b>*</b>
                         <span>产品规格</span>
                     </label>
-                    <div class="control-input table-container">
+                    <div class="control-input table-container" id='table-container'>
                         <table class="table">
                             <thead>
                             <tr>
@@ -213,8 +213,7 @@
                                     <div class="td-content operation-container">
                                         <a class="remove-a" [title]="'移除'"
                                            *ngIf="FormatCommoditySpecificationList.length > 1"
-                                           (click)="onDeleteCommoditySpecification(specificationIndex)">
-                                            移除
+                                           (click)="onDeleteCommoditySpecification(formatCommoditySpecification.specification_params.specification_id)">                                            移除
                                         </a>
                                         <a [title]="'添加'"
                                            *ngIf="(FormatCommoditySpecificationList.length < 50) && (specificationIndex === FormatCommoditySpecificationList.length - 1)"

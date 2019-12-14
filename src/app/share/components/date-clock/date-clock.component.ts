@@ -45,6 +45,9 @@ export class DateClockComponent {
     if (intValue === '') {
       event.target.value = this.hourValue = null;
       this.hourChange.emit(this.hourValue);
+    } else if (this.minuteValue !== '00' && Number(event.target.value) >= 24) {
+      this.hourValue = this.formatDate('23');
+      this.hourChange.emit(this.hourValue);
     } else if (intValue >= 0 && intValue <= maxValue) {
       this.hourValue = this.formatDate(event.target.value);
       event.target.value = this.formatDate(event.target.value);

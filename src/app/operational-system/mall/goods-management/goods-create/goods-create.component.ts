@@ -229,13 +229,21 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         if (this.checkCommodityParamsValid(false)) {
             timer(0).subscribe(() => {
                 this.commoditySpecificationList.push(new SpecificationParamsItem());
-                $('.table-container').scrollTop(350);
+                const ele = document.getElementById('table-container');
+                if (ele.scrollHeight >= ele.clientHeight) {
+                    timer(500).subscribe(() => {
+                        // 设置滚动条到最底部
+                        ele.scrollTop = ele.scrollHeight;
+                    });
+                }
             });
         }
     }
 
     // 点击移除商品规格
-    public onDeleteCommoditySpecification(specificationIndex: number) {
+    public onDeleteCommoditySpecification(specification_id: string) {
+        const specificationIndex = this.commoditySpecificationList
+            .findIndex( value => value.specification_params.specification_id === specification_id);
         const deleteCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex];
         deleteCommoditySpecificationItem.is_delete = true;
         this.commoditySpecificationList.splice(specificationIndex, 1);
@@ -414,11 +422,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
             const specificationItemParams = specificationItem.specification_params;
             if (isNullOrUndefined(specificationItemParams.specification_name) ||
                 (specificationItemParams.specification_name === '') ||
-                isNullOrUndefined(specificationItemParams.unit_original_price) ||
-                (isNullOrUndefined(specificationItemParams.unit_sell_price) && this.commodityInfo.validity_type === 1) ||
+                isNullOrUndefined(Number(specificationItemParams.unit_original_price)) ||
+                (isNullOrUndefined(Number(specificationItemParams.unit_sell_price)) && this.commodityInfo.validity_type === 1) ||
                 (specificationItemParams.stock_json && isNullOrUndefined(specificationItemParams.stock_json.unit_sell_price_day)
                     && this.commodityInfo.validity_type === 2) ||
-                isNullOrUndefined(specificationItemParams.settlement_price) ||
+                isNullOrUndefined(Number(specificationItemParams.settlement_price)) ||
                 (isNullOrUndefined(specificationItemParams.stock) && this.commodityInfo.validity_type === 1) ||
                 (specificationItemParams.stock_json && isNullOrUndefined(specificationItemParams.stock_json.stock_day)
                     && this.commodityInfo.validity_type === 2) || (!specificationItemParams.stock_json && this.commodityInfo.validity_type === 2)) {
@@ -442,29 +450,29 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                     return false;
                 }
             }
-            if ((specificationItemParams.unit_original_price < 0.01) || (specificationItemParams.unit_original_price > 999999.99)) {
+            if ((Number(specificationItemParams.unit_original_price) < 0.01) || (Number(specificationItemParams.unit_original_price) > 999999.99)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格原价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if ((specificationItemParams.settlement_price < 0.01) || (specificationItemParams.settlement_price > 999999.99)) {
+            if ((Number(specificationItemParams.settlement_price) < 0.01) || (Number(specificationItemParams.settlement_price) > 999999.99)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if ((this.commodityInfo.validity_type !== 2 && (specificationItemParams.unit_sell_price < 0.01 || specificationItemParams.unit_sell_price > 999999.99)) ||
+            if ((this.commodityInfo.validity_type !== 2 && (Number(specificationItemParams.unit_sell_price) < 0.01 || Number(specificationItemParams.unit_sell_price) > 999999.99)) ||
                 (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day < 0.01 || specificationItemParams.stock_json.unit_sell_price_day > 999999.99))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if (specificationItemParams.settlement_price > specificationItemParams.unit_original_price) {
+            if (Number(specificationItemParams.settlement_price) > Number(specificationItemParams.unit_original_price)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价应小于等于原价！`;
                 return false;
             }
-            if ((this.commodityInfo.validity_type !== 2 && specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) ||
-                (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day / 100) > specificationItemParams.unit_original_price)) {
+            if ((this.commodityInfo.validity_type !== 2 && Number(specificationItemParams.unit_sell_price) > Number(specificationItemParams.unit_original_price)) ||
+                (this.commodityInfo.validity_type === 2 && (Number(specificationItemParams.stock_json.unit_sell_price_day) / 100) > Number(specificationItemParams.unit_original_price))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价应小于等于原价！`;
                 return false;
