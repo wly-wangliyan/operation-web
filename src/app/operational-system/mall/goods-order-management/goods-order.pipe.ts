@@ -64,7 +64,7 @@ export class DeliveryMethodPipe implements PipeTransform {
 const RefundType = {
   1: '全部退款',
   2: '部分退款',
-  3: '未退款',
+  3: '--',
 };
 
 @Pipe({
@@ -135,7 +135,7 @@ export class OrderStatusFormatPipe implements PipeTransform {
       result = '待发货';
     } else if (value.delivery_status === 2) {
       result = '已发货';
-    } else if (value.order_status === 2) {
+    } else if (value.order_status === 2 && value.pay_status !== 3) {
       result = '已完成';
     } else if (value.pay_status === 3) {
       result = '已关闭';

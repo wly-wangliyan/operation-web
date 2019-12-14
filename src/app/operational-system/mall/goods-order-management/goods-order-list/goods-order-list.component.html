@@ -155,7 +155,8 @@
                     <div>{{order.mobile}}</div>
                   </td>
                   <td>{{order.is_delivery |deliveryMethod}}</td>
-                  <td>{{order.refund_type | refundType}}({{order.refund_order?.refund_status | refundStatus}})
+                  <td>{{order.refund_type | refundType}}
+                    <span *ngIf='order.refund_type!==3'>({{order.refund_order?.refund_status | refundStatus}})</span>
                   </td>
                   <td>{{order | orderStatusFormat}}</td>
                   <td class="operation">
