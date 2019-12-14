@@ -17,6 +17,8 @@ export class CommoditySearchParams extends EntityBase {
     public commodity_name: string = undefined; // 商品名称
     public shelf_time: string = undefined; // 商品上架时间 逗号分割 例：1232154,1234546
     public created_time: string = undefined; // 创建时间 逗号分割 例：1232154,1234546
+    public commodity_type = ''; // 	商品类型 1：实物商品 2：虚拟商品
+    public shipping_method = ''; //  供货方式 1平台自营，2第三方供应
     public page_size = 45; // 每页数量 默认15
     public page_num = 1; // 第几页 默认1
 }
