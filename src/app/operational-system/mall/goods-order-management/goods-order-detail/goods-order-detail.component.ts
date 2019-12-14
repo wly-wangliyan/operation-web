@@ -73,7 +73,7 @@ export class GoodsOrderDetailComponent implements OnInit {
   private orderStatusChange() {
     if (this.orderDetail.pay_status === 1) {
       this.orderStepStatus = 0; // 未支付
-    } else if (this.orderDetail.delivery_status === 1) {
+    } else if (this.orderDetail.delivery_status === 1 && this.orderDetail.pay_status === 2) {
       this.orderStepStatus = 1; // 待发货
     } else if (this.orderDetail.order_status !== 2 && this.orderDetail.delivery_status === 2) {
       if (this.orderDetail.is_delivery === 1) {

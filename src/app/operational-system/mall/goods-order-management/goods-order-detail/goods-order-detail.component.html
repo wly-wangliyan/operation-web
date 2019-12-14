@@ -284,12 +284,12 @@
           <td>
             <a [ngClass]='item.write_off_status!==1?"text-line":""'>{{item.id}}</a>
           </td>
-          <td *ngIf='orderDetail.validity_type===2'>
+          <td *ngIf='orderDetail.validity_type!==1'>
             {{item.start_time?(item.start_time* 1000 | date:"y-MM-dd"):'--'}} -
             {{item.end_time?(item.end_time* 1000 | date:"y-MM-dd"):'--'}}
           </td>
           <td *ngIf='orderDetail.validity_type===1'>
-            至 {{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}} 起有效
+            自 {{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}} 起有效
           </td>
           <td>{{item.write_off_time?(item.write_off_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
           <td>
