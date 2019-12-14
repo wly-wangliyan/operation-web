@@ -145,6 +145,7 @@ export class ServiceConfigComponent implements OnInit, OnDestroy {
   // 取消编辑
   public onCancelClick(): void {
     this.isEdit = false;
+    this.configErrMsg = '';
     this.searchText$.next();
     CKEDITOR.instances.serviceConfigEditor.setReadOnly(true);
   }
