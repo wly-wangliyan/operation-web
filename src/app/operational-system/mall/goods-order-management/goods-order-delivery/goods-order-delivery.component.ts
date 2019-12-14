@@ -31,11 +31,11 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
-    this.currentOrder.is_delivery = '1';
+    this.currentOrder.is_delivery = 1;
     this.deliveryCompany = [
       { key: '顺丰速运', value: '顺丰速运' },
       { key: '圆通速递', value: '圆通速递' },

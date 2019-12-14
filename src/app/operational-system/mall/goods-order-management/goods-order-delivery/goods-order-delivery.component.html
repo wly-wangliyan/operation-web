@@ -11,11 +11,11 @@
       <form *ngIf="currentOrder" (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
         <div class="row radio">
           <nz-radio-group [(ngModel)]="currentOrder.is_delivery" name='radio-value' [nzButtonStyle]="'solid'">
-            <label nz-radio-button nzValue=1>物流发货</label>
-            <label nz-radio-button nzValue=2>无须配送</label>
+            <label nz-radio-button [nzValue]="1">物流发货</label>
+            <label nz-radio-button [nzValue]="2">无须配送</label>
           </nz-radio-group>
         </div>
-        <div *ngIf='currentOrder.is_delivery==="1"'>
+        <div *ngIf='currentOrder.is_delivery===1'>
           <div class="row">
             <label class="control-label">
               <b>*</b>
@@ -57,7 +57,7 @@
             <span *ngIf="errMes">{{errMes}}</span>
           </div>
         </div>
-        <div class="row text" *ngIf='currentOrder.is_delivery==="2"'>
+        <div class="row text" *ngIf='currentOrder.is_delivery===2'>
           <p>无需物流则不用填写物流信息</p>
         </div>
         <div class="modal-footer">

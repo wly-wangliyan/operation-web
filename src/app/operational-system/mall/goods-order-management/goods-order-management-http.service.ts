@@ -25,7 +25,7 @@ export class SearchParams extends EntityBase {
 }
 
 export class ModifyOrderParams extends EntityBase {
-  public is_delivery = '1'; // 	是否需要邮寄 1为需要， 2为不需要
+  public is_delivery = 1; // 	是否需要邮寄 1为需要， 2为不需要
   public delivery_company = undefined; // 	String	物流公司
   public delivery_order = undefined; // 	String	物流单号
   public postage = undefined; // 	integer	邮费 单位分
