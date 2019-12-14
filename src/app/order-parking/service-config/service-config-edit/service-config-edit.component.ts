@@ -114,9 +114,9 @@ export class ServiceConfigEditComponent implements OnInit {
     } else if (Number(this.pre_fee) > Number(this.sale_fee)) {
       this.clear();
       this.prePriceErrors = '预付费用不得大于售价！';
-    } else if (Number(this.minus_fee) > (Number(this.sale_fee))) {
+    } else if (Number(this.minus_fee) > (Number(this.pre_fee))) {
       this.clear();
-      this.minusPriceErrors = '下单立减费用不得大于售价！';
+      this.minusPriceErrors = '下单立减不得大于预付费用！';
     } else if (!regPhone.test(this.configParams.main_tel)) {
       this.clear();
       this.mainTelErrors = '请输入正确的常用电话！';
