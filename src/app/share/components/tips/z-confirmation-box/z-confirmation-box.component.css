@@ -54,6 +54,7 @@
   box-shadow: none;
   border: none;
   border-radius: 0 !important;
+  padding-bottom: 1px;
 }
 
 .z-modal-body {
