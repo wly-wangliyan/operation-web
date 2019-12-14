@@ -166,6 +166,7 @@ export class GoodsListComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
+                this.searchText$.next();
                 this.globalService.promptBox.open(failMsg, null, 2000, null, false);
             }
         });
