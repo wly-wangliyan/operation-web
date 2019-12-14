@@ -31,7 +31,7 @@
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>名称</th>
+                    <th style="width: 18%;">名称</th>
                     <th>所属企业</th>
                     <th>类型</th>
                     <th>营业状态</th>
@@ -41,7 +41,23 @@
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.mall_business_name">{{data.mall_business_name|zMaxLength:10}}</td>
+                    <td>
+                        <div class="img-item">
+                            <div class="img-box">
+                                <ng-container *ngIf="data.images.length > 0">
+                                    <img [src]="data.images[0]"/>
+                                </ng-container>
+                                <ng-container *ngIf="data.images === 0">
+                                    <img src="/assets/images/image_space_3_2.png"/>
+                                </ng-container>
+                            </div>
+                            <div style="display: grid">
+                                <a style="word-break: keep-all;text-align: left" [title]="data.mall_business_name">
+                                    {{data.mall_business_name | zMaxLength:15}}
+                                </a>
+                            </div>
+                        </div>
+                    </td>
                     <td [title]="data.company?.company_name?data.company?.company_name:'--'">
                         {{data.company?(data.company.company_name|zMaxLength:10):'--'}}
                     </td>

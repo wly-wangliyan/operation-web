@@ -104,7 +104,7 @@ export class PushEditComponent implements OnInit {
   public onClose() {
     this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
       this.globalService.confirmationBox.close();
-      this.router.navigate(['../../push-list'], {relativeTo: this.route});
+      this.router.navigate(['/main/operation/mini-program/push-management/push-list'], {relativeTo: this.route});
     });
   }
 

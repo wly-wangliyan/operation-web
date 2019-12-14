@@ -229,6 +229,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         if (this.checkCommodityParamsValid(false)) {
             timer(0).subscribe(() => {
                 this.commoditySpecificationList.push(new SpecificationParamsItem());
+                $('.table-container').scrollTop(350);
             });
         }
     }
@@ -451,7 +452,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价输入错误，请输入0.01-999999.99！`;
                 return false;
             }
-            if ((this.commodityInfo.validity_type === 1 && (specificationItemParams.unit_sell_price < 0.01 || specificationItemParams.unit_sell_price > 999999.99)) ||
+            if ((this.commodityInfo.validity_type !== 2 && (specificationItemParams.unit_sell_price < 0.01 || specificationItemParams.unit_sell_price > 999999.99)) ||
                 (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day < 0.01 || specificationItemParams.stock_json.unit_sell_price_day > 999999.99))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价输入错误，请输入0.01-999999.99！`;
@@ -462,13 +463,13 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格结算价应小于等于原价！`;
                 return false;
             }
-            if ((this.commodityInfo.validity_type === 1 && specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) ||
+            if ((this.commodityInfo.validity_type !== 2 && specificationItemParams.unit_sell_price > specificationItemParams.unit_original_price) ||
                 (this.commodityInfo.validity_type === 2 && (specificationItemParams.stock_json.unit_sell_price_day / 100) > specificationItemParams.unit_original_price)) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格售价应小于等于原价！`;
                 return false;
             }
-            if ((this.commodityInfo.validity_type === 1 && !stockReg.test(specificationItemParams.stock.toString())) ||
+            if ((this.commodityInfo.validity_type !== 2 && !stockReg.test(specificationItemParams.stock.toString())) ||
                 (this.commodityInfo.validity_type === 2 && !stockReg.test(specificationItemParams.stock_json.stock_day.toString()))) {
                 this.specificationErrMsgItem.isError = true;
                 this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格库存输入错误，请输入0-10000！`;
