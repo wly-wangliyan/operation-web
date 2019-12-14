@@ -171,7 +171,7 @@
                       (click)="onEditDeliveryClick(order)">修改物流</a>
                     <a *ngIf="order.delivery_status===2" [title]="'确认收货'" (click)="onConfiemClick(order)">确认收货</a>
                     <div
-                      *ngIf='!order.is_refundable&&order.detail[0]?.commodity_type===1&&(order.order_status===2||order.delivery_status===3)'>
+                      *ngIf='!order.is_refundable&&order.detail[0]?.commodity_type===1&&(order.order_status===2||(order.delivery_status!==1&&order.delivery_status!==2))'>
                       --
                     </div>
                   </td>
