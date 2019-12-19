@@ -13,6 +13,7 @@ export class RewardEntity extends EntityBase {
   public reward_id: string = undefined; // 奖品-优惠券模板ID
   public reward_num: number = undefined; // 奖品库存
   public reward_probability: number = undefined; // 中奖概率
+  public reward_text: string = undefined; // 提示文字
   public real_reward_probability: number = undefined; // 实际的中奖概率
   public related_reward_id = ''; // 赠品-优惠券模板ID
   public related_reward_type = 1; // 赠品类型 1:优惠券,2:优惠券组
@@ -26,6 +27,7 @@ export class RewardEntity extends EntityBase {
       this.reward_id = source.reward_id;
       this.reward_num = source.reward_num;
       this.reward_probability = source.reward_probability;
+      this.reward_text = source.reward_text;
       this.related_reward_id = source.related_reward_id;
       this.related_reward_type = source.related_reward_type;
       this.is_deleted = source.is_deleted;

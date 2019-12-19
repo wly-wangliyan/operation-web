@@ -79,43 +79,49 @@
           <span>领赠设置</span>
         </label>
         <div class="reward-container">
-          <div *ngFor="let reward of editRewardList;let i=index;" class="reward-item">
-            <div>
-              <div class="item-group">
-                <div class="reward-title" *ngIf="i===0">优惠券模板ID</div>
+          <div *ngFor="let reward of editRewardList;let i=index;" class="reward-item-new">
+            <div class="item-row">
+              <label class="row-title">可领取</label>
+              <div class="control-input" style="margin-right: 10px;">
+                <label class="eight-word-lable">优惠券模板ID</label>
                 <input name="reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_id" placeholder=""
                   class="form-control" (change)="onChangeRewardID($event,i)" maxlength="32"
                   oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" required appIgnoreSpace />
               </div>
-              <div class="item-group">
-                <div class="reward-title" *ngIf="i===0">库存</div>
-                <input name="reward_num_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_num" placeholder=""
-                  class="form-control" style="width: 100px;" oninput="value=value.replace(/[^\d]/g,'')"
-                  (keyup)="onNumberKeyUp(i)" required />
-              </div>
-              <div class="item-group">
-                <div class="reward-title" *ngIf="i===0">中奖概率</div>
-                <input name="reward_probability_{{i}}_{{reward.time}} " [(ngModel)]="reward.reward_probability"
-                  placeholder="" class="form-control" maxlength="7" (change)="onRateChange($event,i)"
-                  (keypress)="inputNumberLimit($event)" style="width: 100px;" required />
-              </div>
-              <div class="item-group">
-                <div class="reward-title" *ngIf="i===0">赠品</div>
-                <div class="related-group">
-                  <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control"
-                    [(ngModel)]="reward.related_reward_type" (change)="onRelatedChange($event,i)">
-                    <option [value]=1>优惠券模板ID</option>
-                    <option [value]=2>优惠券组ID</option>
-                  </select>
-                  <input name="related_reward_id_{{i}}_{{reward.time}}" [(ngModel)]="reward.related_reward_id"
-                    placeholder="" class="form-control" maxlength="32"
-                    oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
-                </div>
+              <div class="control-input">
+                <label class="four-word-lable">库存</label>
+                <input name="reward_num_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_num"
+                  placeholder="可输入0-1000000数值" class="form-control" oninput="value=value.replace(/[^\d]/g,'')"
+                  maxlength="7" (keyup)="onNumberKeyUp(i)" required />
               </div>
             </div>
-
-            <div class="item-group" style="margin-right: 0;">
-              <div class="reward-title" style="height: 12px;" *ngIf="i===0"></div>
+            <div class="item-row">
+              <label class="row-title"></label>
+              <div class="control-input" style="margin-right: 10px;">
+                <label class="eight-word-lable">提示文字</label>
+                <input name="reward_text_{{i}}_{{reward.time}}" [(ngModel)]="reward.reward_text" maxlength="15"
+                  placeholder="可输入15字以内文字" class="form-control" appIgnoreSpace />
+              </div>
+              <div class="control-input">
+                <label class="four-word-lable">中奖概率</label>
+                <input name="reward_probability_{{i}}_{{reward.time}} " [(ngModel)]="reward.reward_probability"
+                  placeholder="可输入0.00001-1数值" class="form-control" (change)="onRateChange($event,i)"
+                  (keypress)="inputNumberLimit($event)" required maxlength="7" />
+              </div>
+            </div>
+            <div class="item-row">
+              <label class="row-title">赠品</label>
+              <div class="control-input" style="margin-right: 10px;">
+                <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control" style="width: 130px;"
+                  [(ngModel)]="reward.related_reward_type" (change)="onRelatedChange($event,i)">
+                  <option [value]=1>优惠券模板ID</option>
+                  <option [value]=2>优惠券组ID</option>
+                </select>
+                <input name="related_reward_id_{{i}}_{{reward.time}}" appIgnoreSpace
+                  [(ngModel)]="reward.related_reward_id" placeholder="" maxlength="32" class="form-control"
+                  oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" />
+              </div>
+              <div class="control-input" style="margin-right: 30px;"></div>
               <div class="button-group">
                 <button class="close-btn" type="button" nz-button (click)="onAddRewardClick()"
                   *ngIf="editRewardList.length===(i+1)" [disabled]="editRewardList.length>=5">添加</button>

@@ -13,7 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-config-edit',
   templateUrl: './config-edit.component.html',
-  styleUrls: ['./config-edit.component.css']
+  styleUrls: ['./config-edit.component.less']
 })
 export class ConfigEditComponent implements OnInit {
 
@@ -315,13 +315,18 @@ export class ConfigEditComponent implements OnInit {
       for (const rewardIndex in this.editRewardList) {
         if (this.editRewardList.hasOwnProperty(rewardIndex)) {
 
-          // if (this.editRewardList[rewardIndex].reward_num === 0) {
-          //   this.rewardErrMsg = '库存应大于0！';
-          //   return false;
-          // }
+          if (this.editRewardList[rewardIndex].reward_num > 1000000) {
+            this.rewardErrMsg = '库存应小于等于1000000！';
+            return false;
+          }
 
           if (this.editRewardList[rewardIndex].reward_probability === 0) {
-            this.rewardErrMsg = '中奖概率应大于等于0.00001';
+            this.rewardErrMsg = '中奖概率应大于等于0.00001,小于等于1';
+            return;
+          }
+
+          if (this.editRewardList[rewardIndex].reward_probability > 1) {
+            this.rewardErrMsg = '中奖概率应大于等于0.00001,小于等于1';
             return;
           }
 
