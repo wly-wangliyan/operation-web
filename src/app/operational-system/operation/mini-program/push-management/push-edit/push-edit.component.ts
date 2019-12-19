@@ -59,10 +59,11 @@ export class PushEditComponent implements OnInit {
   @Input() public data: any;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  constructor(private globalService: GlobalService,
-              private pushService: PushManagementService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(
+    private globalService: GlobalService,
+    private pushService: PushManagementService,
+    private route: ActivatedRoute,
+    private router: Router) {
     this.route.paramMap.subscribe(map => {
       this.push_id = map.get('push_plan_id');
     });
@@ -104,7 +105,7 @@ export class PushEditComponent implements OnInit {
   public onClose() {
     this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
       this.globalService.confirmationBox.close();
-      this.router.navigate(['/main/operation/mini-program/push-management/push-list'], {relativeTo: this.route});
+      this.router.navigate(['/main/operation/mini-program/push-management/push-list'], { relativeTo: this.route });
     });
   }
 
@@ -118,6 +119,8 @@ export class PushEditComponent implements OnInit {
         this.pushParams.coupon_group_id = '';
         this.pushParams.coupon_service = '';
         this.pushParams.push_range = status;
+        this.pushParams.free_range_type = 1;
+        this.pushParams.free_date_limit = null;
         break;
       case 'range_type':
         this.pushParams.coupon_id = '';
@@ -145,6 +148,13 @@ export class PushEditComponent implements OnInit {
     }
   }
 
+  public onChangeFreeRangeType(event: any): void {
+    if (event.target.value) {
+      this.pushParams.free_date_limit = null;
+      this.pushParams.free_range_type = Number(event.target.value);
+    }
+  }
+
   // form提交
   public onEditFormSubmit(): void {
     if (this.is_save) {
@@ -166,7 +176,7 @@ export class PushEditComponent implements OnInit {
           // 添加推送
           this.pushService.requestAddPushData(saveParams).subscribe(() => {
             this.globalService.promptBox.open('添加成功！', () => {
-              this.router.navigate(['../push_list'], {relativeTo: this.route});
+              this.router.navigate(['../push_list'], { relativeTo: this.route });
             });
           }, err => {
             this.is_save = false;
@@ -176,7 +186,7 @@ export class PushEditComponent implements OnInit {
           // 编辑推送
           this.pushService.requestUpdatePushData(this.push_id, saveParams).subscribe(() => {
             this.globalService.promptBox.open('修改成功！', () => {
-              this.router.navigate(['../../push_list'], {relativeTo: this.route});
+              this.router.navigate(['../../push_list'], { relativeTo: this.route });
             });
           }, err => {
             this.is_save = false;
@@ -214,7 +224,7 @@ export class PushEditComponent implements OnInit {
         cisCheck = false;
       } else {
         const offlineTimestamp = new Date(this.pushParams.end_time).setHours(new Date(this.pushParams.end_time).getHours(),
-            new Date(this.pushParams.end_time).getMinutes(), 0, 0) / 1000;
+          new Date(this.pushParams.end_time).getMinutes(), 0, 0) / 1000;
         const currentTimeStamp = new Date().getTime() / 1000;
         if (offlineTimestamp - currentTimeStamp <= 0) {
           this.errPositionItem.offline_time.isError = true;
