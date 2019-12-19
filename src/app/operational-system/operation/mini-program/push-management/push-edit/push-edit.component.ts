@@ -90,7 +90,7 @@ export class PushEditComponent implements OnInit {
         this.pushParams.end_time = data.end_time * 1000;
       }
       this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : '';
-      this.pushParams.free_range_type = 1;
+      this.pushParams.free_range_type = this.pushParams.free_range_type ? this.pushParams.free_range_type : 1;
       this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
     }, err => {
       if (err.status === 404) {

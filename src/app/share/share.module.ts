@@ -59,7 +59,14 @@ import { TxtCopyDirective } from './directives/txt-copy/txt-copy.directive';
 import { ZTextCkeditorComponent } from './components/z-text-ckeditor/z-text-ckeditor.component';
 import { ZPhotoSelectUploadComponent } from './components/z-photo-select-upload/z-photo-select-upload.component';
 import { ExemptionFormatPipe, ExemptionOrderStatusPipe, RejectTypePipe, } from './pipes/exemption-format.pipe';
-import { DiyRangeTypePipe, PushPlanFormatPipe, PushRangePipe, PushSpeedPipe, RangeTypePipe } from './pipes/push-plan-format.pipe';
+import {
+  DiyRangeTypePipe,
+  PushPlanFormatPipe,
+  PushRangePipe,
+  PushSpeedPipe,
+  RangeTypePipe,
+  DiyRangeTypeMsgPipe
+} from './pipes/push-plan-format.pipe';
 import { FloatNumberDirective } from './directives/float-number.directive';
 import { MaxNumberDirective } from './directives/max-number.directive';
 import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
@@ -143,6 +150,7 @@ import { IntNumberDirective } from './directives/int-number.directive';
     DiyRangeTypePipe,
     RescueOrderStatusPipe,
     RescueServiceStatusPipe,
+    DiyRangeTypeMsgPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -225,6 +233,7 @@ import { IntNumberDirective } from './directives/int-number.directive';
     DiyRangeTypePipe,
     RescueOrderStatusPipe,
     RescueServiceStatusPipe,
+    DiyRangeTypeMsgPipe,
 
     // 指令
     IgnoreSpaceDirective,

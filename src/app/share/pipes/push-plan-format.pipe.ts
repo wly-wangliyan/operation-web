@@ -101,3 +101,33 @@ export class DiyRangeTypePipe implements PipeTransform {
     }
   }
 }
+
+/** 自定义推送人群类型对应提示 */
+const DiyRangeTypeMsg = {
+  1: '临近投保日期',
+  2: '临近年检日期'
+};
+
+@Pipe({
+  name: 'diyRangeTypeMsg'
+})
+export class DiyRangeTypeMsgPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = DiyRangeTypeMsg[value];
+    } else {
+      result = DiyRangeTypeMsg[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
