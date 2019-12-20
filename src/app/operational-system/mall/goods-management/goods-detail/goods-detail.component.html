@@ -1,73 +1,76 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'产品管理'" [level2Name]="'查看产品'" [level1RelativePath]="'../../list'"></app-crumb>
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'查看产品'" [level1RelativePath]="'../../list'"></app-crumb>
 </div>
 
 <div class="content-flow">
-    <div class='content-container'>
-        <div class="commodity-header">
-            <div class="commodity-preview">
-                <app-z-preview-video-photo [isControls]="true"
-                                           [videoAndPhotoUrls]="videoAndImgList"></app-z-preview-video-photo>
-            </div>
-            <div class="commodity-content">
-                <div class='commodity-name'>
-                    {{commodityInfo.commodity_name}}
-                    <!--<div *ngIf="commodityInfo.sales_status===2">已下架</div>-->
-                    <div *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type===1?'实物商品':'虚拟商品'}}</div>
-                    <div *ngIf="commodityInfo.shipping_method">{{commodityInfo.shipping_method=='1'?'平台自营':'由'+commodityInfo.mall_business_name+'供应'}}</div>
-                    <div *ngIf="stock===0">已售罄</div>
-                </div>
-                <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
-                <div class="commodity-table">
-                    <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false"
-                              [nzNoResult]="noResultInfoText" nzBordered #specificationTable>
-                        <thead>
-                        <tr>
-                            <th>规格名称</th>
-                            <th>原价</th>
-                            <th>售价</th>
-                            <th>库存</th>
-                            <th>已售</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let specificationData of specificationTable.data; let i=index">
-                            <td>{{specificationData.specification_name}}</td>
-                            <td>{{specificationData.unit_original_price?specificationData.unit_original_price+'元':'--'}}</td>
-                            <td>{{specificationData.unit_sell_price?specificationData.unit_sell_price+'元':'--'}}</td>
-                            <td>{{specificationData.stock}}</td>
-                            <td>{{specificationData.sold_amount}}</td>
-                        </tr>
-                        </tbody>
-                    </nz-table>
-                </div>
-                <div class="commodity-info">
-                    产品ID：{{commodityInfo.commodity_id}}
-                </div>
-                <div class="commodity-info">
-                    <span>创建时间：</span>
-                    {{commodityInfo.created_time ? (commodityInfo.created_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
-                    <span>上架时间：</span>
-                    {{(commodityInfo.sales_status === 1 && commodityInfo.shelf_time) ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
-                    <span>下架时间：</span>
-                    {{(commodityInfo.sales_status === 2 && commodityInfo.removal_time) ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
-                </div>
-            </div>
+  <div class='content-container'>
+    <div class="commodity-header">
+      <div class="commodity-preview">
+        <app-z-preview-video-photo [isControls]="true" [videoAndPhotoUrls]="videoAndImgList">
+        </app-z-preview-video-photo>
+      </div>
+      <div class="commodity-content">
+        <div class='commodity-name'>
+          {{commodityInfo.commodity_name}}
+          <!--<div *ngIf="commodityInfo.sales_status===2">已下架</div>-->
+          <div *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type===1?'实物商品':'虚拟商品'}}</div>
+          <div *ngIf="commodityInfo.shipping_method">
+            {{commodityInfo.shipping_method=='1'?'平台自营':'由'+commodityInfo.mall_business_name+'供应'}}</div>
+          <div *ngIf="stock===0">已售罄</div>
         </div>
-        <div class="commodity-footer">
-            <div class='description-name'>产品描述</div>
-            <form nz-form class="description-container">
-                <div class="description-content">
-                    <nz-form-item nzFlex>
-                        <nz-form-control>
-                            <div class='temp-content' *ngIf='commodityInfo.commodity_description'>
-                                <div class="artcontent"
-                                     [innerHTML]="commodityInfo.commodity_description | htmlPipe"></div>
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </form>
+        <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
+        <div class="commodity-table">
+          <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
+            nzBordered #specificationTable>
+            <thead>
+              <tr>
+                <th>规格名称</th>
+                <th>原价</th>
+                <th>售价</th>
+                <th>库存</th>
+                <th>已售</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let specificationData of specificationTable.data; let i=index">
+                <td>{{specificationData.specification_name}}</td>
+                <td>{{specificationData.unit_original_price?specificationData.unit_original_price+'元':'--'}}</td>
+                <td>{{specificationData.unit_sell_price?specificationData.unit_sell_price+'元':'--'}}</td>
+                <td>{{specificationData.stock}}</td>
+                <td>{{specificationData.sold_amount}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
         </div>
+        <div class="commodity-info">
+          <span>所属分类：</span>
+          {{'餐饮券'}}
+          <span>产品ID：</span>
+          {{commodityInfo.commodity_id}}
+        </div>
+        <div class="commodity-info">
+          <span>创建时间：</span>
+          {{commodityInfo.created_time ? (commodityInfo.created_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
+          <span>上架时间：</span>
+          {{(commodityInfo.sales_status === 1 && commodityInfo.shelf_time) ? (commodityInfo.shelf_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
+          <span>下架时间：</span>
+          {{(commodityInfo.sales_status === 2 && commodityInfo.removal_time) ? (commodityInfo.removal_time * 1000 | date: 'yyyy.MM.dd HH:mm') : '--'}}
+        </div>
+      </div>
     </div>
+    <div class="commodity-footer">
+      <div class='description-name'>产品描述</div>
+      <form nz-form class="description-container">
+        <div class="description-content">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <div class='temp-content' *ngIf='commodityInfo.commodity_description'>
+                <div class="artcontent" [innerHTML]="commodityInfo.commodity_description | htmlPipe"></div>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

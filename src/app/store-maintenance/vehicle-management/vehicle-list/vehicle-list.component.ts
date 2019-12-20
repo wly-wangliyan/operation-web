@@ -37,7 +37,7 @@ export class VehicleListComponent implements OnInit {
   private linkUrl: string;
   private importSpotSubscription: Subscription;
 
-  @ViewChild(BrokerageCompanyEditComponent, {static: true}) public brokerageEditComponent: BrokerageCompanyEditComponent;
+  @ViewChild(BrokerageCompanyEditComponent, { static: true }) public brokerageEditComponent: BrokerageCompanyEditComponent;
 
   private get pageCount(): number {
     if (this.brokerageList.length % PageSize === 0) {
@@ -52,9 +52,9 @@ export class VehicleListComponent implements OnInit {
 
   ngOnInit() {
     this.searchText$.pipe(
-        debounceTime(500),
-        switchMap(() =>
-            this.insuranceService.requestBrokerageList())
+      debounceTime(500),
+      switchMap(() =>
+        this.insuranceService.requestBrokerageList())
     ).subscribe(res => {
       this.brokerageList = res.results;
       this.brokerageList.forEach(value => {
@@ -136,7 +136,7 @@ export class VehicleListComponent implements OnInit {
   public onChangeFirm(event: any) {
     this.vehicleSeriesList = [];
     this.searchParams.vehicle_series_id = '';
-    if (event.target.value ) {
+    if (event.target.value) {
       // this.requestSeriesList(event.target.value);
     }
   }
@@ -158,7 +158,7 @@ export class VehicleListComponent implements OnInit {
       const index = this.importViewModel.address.lastIndexOf('.');
       const type = this.importViewModel.address.substring(index, length);
       if (type !== '.xlsx' && type !== '.csv') {
-        this.globalService.promptBox.open('文件格式错误！');
+        this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
         return;
       }
     }

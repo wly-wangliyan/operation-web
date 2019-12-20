@@ -7,22 +7,25 @@ import { GoodsListComponent } from './goods-list/goods-list.component';
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
 import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
-
+import { LabelManagementComponent } from './label-management/label-management.component';
+import { LabelEditComponent } from './label-management/label-edit/label-edit.component';
 @NgModule({
-    imports: [
-        ShareModule,
-        CommonModule,
-        GoodsManagementRoutingModule,
-    ],
-    declarations: [
-        GoodsManagementComponent,
-        GoodsListComponent,
-        GoodsCreateComponent,
-        GoodsDetailComponent,
-    ],
-    providers: [
-        GoodsManagementHttpService,
-    ]
+  imports: [
+    ShareModule,
+    CommonModule,
+    GoodsManagementRoutingModule,
+  ],
+  declarations: [
+    GoodsManagementComponent,
+    GoodsListComponent,
+    GoodsCreateComponent,
+    GoodsDetailComponent,
+    LabelManagementComponent,
+    LabelEditComponent
+  ],
+  providers: [
+    GoodsManagementHttpService,
+  ]
 })
 export class GoodsManagementModule {
 }

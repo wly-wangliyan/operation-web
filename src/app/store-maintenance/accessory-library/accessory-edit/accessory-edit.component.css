@@ -73,6 +73,8 @@
 
 .table-form {
   width: 900px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 :host ::ng-deep .table-form .ant-table {

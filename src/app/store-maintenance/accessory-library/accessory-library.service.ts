@@ -1,9 +1,236 @@
 import { Injectable } from '@angular/core';
+import { EntityBase } from 'src/utils/z-entity';
+import { Observable } from 'rxjs/index';
+import { map } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
+import { HttpService, LinkResponse } from '../../core/http.service';
+import { environment } from '../../../environments/environment';
+
+
+// 规格实体
+export class SpecificationEntity extends EntityBase {
+  public specification_id: string = undefined; // string	规格id-主键
+  public accessory: string = undefined; // object	配件对象 Accessory
+  public image: string = undefined; // string	图片
+  public accessory_model: string = undefined; // string	配件型号
+  public content: string = undefined; // string	净含量
+  public original_fee: number = undefined; // float	原价 单位：分
+  public buy_fee: number = undefined; // float	结算价 单位：分
+  public sale_fee: number = undefined; // float	售价 单位：分
+  public store: number = undefined; // integer	库存
+  public sale_num: number = undefined; // integer	销量
+  public is_deleted = false; // bool	是否删除
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+  public time = new Date().getTime();
+}
+
+// 项目实体
+export class ProjectEntity extends EntityBase {
+  public project_id: string = undefined; // string	项目id - 主键
+  public project_number: string = undefined; // string	项目编号
+  public project_name: string = undefined; // string	项目名称
+  public related_project_name: string = undefined; // string	配套项目名称
+  public specification: SpecificationEntity = undefined; // json	规格 { 'type': 1, 'name': 'xxx', 'unit': 'xxx' } 1: 数值
+  public description: string = undefined; // string	描述
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'specification') {
+      return SpecificationEntity;
+    }
+    return null;
+  }
+}
+
+// 品牌实体
+export class AccessoryBrandEntity extends EntityBase {
+  public accessory_brand_id: string = undefined; // string	配件品牌id - 主键
+  public brand_name: string = undefined; // string	配件品牌名称
+  public sign_image: string = undefined; // string	配件品牌标志图片
+  public introduce: string = undefined; // string	简介
+  public is_deleted: boolean = undefined; // bool	是否删除
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+}
+
+// 配件实体
+export class AccessoryEntity extends EntityBase {
+  public accessory_id: string = undefined; // string	配件id - 主键
+  public accessory_name: string = undefined; // tring	配件名称
+  public accessory_images: number = undefined; // string	图片 多个逗号分隔
+  public project: ProjectEntity = undefined; // 项目对象 Project
+  public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
+  public specifications: Array<SpecificationEntity> = []; // object	规格 Specification
+  public accessory_params: {} = undefined; // json	参数
+  // { 'oil_num': 'xxx', 'oil_type': 1, 'oil_api': 'xxx', 'oil_place': 'xxx', 'oil_expire': 'xxx' } 1：全合成 2：半合成 3：矿物质
+  public detail: string = undefined; // string	图文详情
+  public car_series: number = undefined; // object	车系对象 多对多
+  public real_prepaid_fee: number = undefined; // float	实际预付价 单位：分
+  public right_prepaid_fee: number = undefined; // float	应付预付价 单位：分
+  public is_deleted: boolean = undefined; // bool	是否删除
+  public sale_status: boolean = undefined; // integer	销售状态 1：在售 2：停售
+  public min_origin_price: number = undefined; // integer	最小原价
+  public max_original_price: number = undefined; // integer	最大原价
+  public min_buy_price: number = undefined; // integer	最小结算价
+  public max_buy_price: number = undefined; // integer	最大结算价
+  public min_sale_price: number = undefined; // integer	最小售价
+  public max_sale_price: number = undefined; // integer	最大售价
+  public sale_num: number = undefined; // integer	销量
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'project') {
+      return ProjectEntity;
+    } else if (propertyName === 'accessory_brand') {
+      return AccessoryBrandEntity;
+    } else if (propertyName === 'specifications') {
+      return SpecificationEntity;
+    }
+    return null;
+  }
+}
+
+
+export class AccessoryLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<AccessoryEntity> {
+    const tempList: Array<AccessoryEntity> = [];
+    results.forEach(res => {
+      tempList.push(AccessoryEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class ProjectLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<ProjectEntity> {
+    const tempList: Array<ProjectEntity> = [];
+    results.forEach(res => {
+      tempList.push(ProjectEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+// 查询参数
+export class SearchParams extends EntityBase {
+  public project_id = ''; // string	F	所属项目
+  public accessory_name: string = undefined; // string	F	配件名称
+  public accessory_id: string = undefined; // string	F	配件id
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
+}
+
+// 配件库参数
+export class SearchAccessoryParams extends EntityBase {
+  public project_id: string = undefined; // string	F	所属项目Id
+  public project_name: string = undefined; // string	F	所属项目名称
+  public accessory_name: string = undefined; // string	F	配件名称
+  public accessory_images: string = undefined; // string	T	图片 多个逗号分隔
+  public accessory_brand_id: string = undefined; // string	F	配件品牌id
+  public real_prepaid_fee: number = undefined; // float	F	实际预付费 单位：分
+  public right_prepaid_fee: number = undefined; // float	F	应付预付费 单位：分
+  public accessory_params: {}; // json	F	参数
+  public specifications: Array<SpecificationEntity> = []; // object	规格 Specification
+  public detail: string = undefined; // string	T	图文详情 无：''
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'specifications') {
+      return SpecificationEntity;
+    }
+    return null;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccessoryLibraryService {
 
-  constructor() { }
+  private domain = environment.STORE_DOMAIN; // 保养域名
+
+  constructor(private httpService: HttpService) { }
+
+  /**
+   * 获取配件库列表
+   * @param searchParams 条件检索参数
+   */
+  public requestAccessoryListData(searchParams: SearchParams): Observable<AccessoryLinkResponse> {
+    const httpUrl = `${this.domain}/accessories`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new AccessoryLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求服务费列表
+   * @param string url linkUrl
+   * @returns Observable<AccessoryLinkResponse>
+   */
+  public continueAccessoryistData(url: string): Observable<AccessoryLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new AccessoryLinkResponse(res)));
+  }
+
+  /**
+   * 修改配件的销售状态
+   * @param accessory_id string	T	服务费ID
+   * @param sale_status boolean	T	销售状态 默认：False 停售
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateStatusData(accessory_id: string, sale_status: boolean): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}/sale_status`;
+    return this.httpService.patch(httpUrl, { sale_status });
+  }
+
+  /**
+   * 获取配置库详情
+   * @param accessory_id string	T	配件库ID
+   * @returns Observable<AccessoryEntity>
+   */
+  public requestAccessoryDetailData(accessory_id: string): Observable<AccessoryEntity> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => AccessoryEntity.Create(res.body)));
+  }
+
+  /**
+   * 获取项目列表
+   */
+  public requestProjectListData(): Observable<ProjectLinkResponse> {
+    const httpUrl = `${this.domain}/projects/all`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => new ProjectLinkResponse(res)));
+  }
+
+  /**
+   * 新建配件库
+   * @param params SearchAccessoryParams 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestAddAccessoryData(params: SearchAccessoryParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/accessories`;
+    return this.httpService.post(httpUrl, { params });
+  }
+
+  /**
+   * 编辑配件库
+   * @param accessory_id 配件id
+   * @param params SearchAccessoryParams 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateAccessoryData(params: SearchAccessoryParams, accessory_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}`;
+    return this.httpService.put(httpUrl, { params });
+  }
+
+
+  /**
+   * 删除配件
+   * @param accessory_id 配件id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeleteAccessoryData(accessory_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}`;
+    return this.httpService.delete(httpUrl);
+  }
+
 }
+

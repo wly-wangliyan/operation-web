@@ -23,26 +23,35 @@ export class MenuMallService {
     return menusItem;
   }
 
+
   // 商城 》产品列表
   private generateGoodsManagementMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('产品列表', '/main/mall/goods-management');
+    const brokerageMenu = new SideMenuItem('商品管理', '/main/mall/goods-management');
     brokerageMenu.icon = '/assets/images/menu_part.png';
+    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/mall/goods-management/list', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('分类管理', '/main/mall/goods-management/label-list', brokerageMenu);
+    brokerageMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
   }
 
   // 商城 》产品订单
   private generateGoodsOrderMenu(): SideMenuItem {
-    const orderMenu = new SideMenuItem('产品订单', '/main/mall/goods-order');
+    const orderMenu = new SideMenuItem('订单管理', '/main/mall/goods-order');
     orderMenu.icon = '/assets/images/menu_order.png';
+    const subFinanceMenu1 = new SideMenuItem('产品订单', '/main/mall/goods-order', orderMenu);
+    orderMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(orderMenu);
     return orderMenu;
   }
 
   // 商城 》商家列表
   private generateBusinessMenu(): SideMenuItem {
-    const orderMenu = new SideMenuItem('商家列表', '/main/mall/goods-business');
+    const orderMenu = new SideMenuItem('商家管理', '/main/mall/goods-business');
     orderMenu.icon = '/assets/images/menu_merchant.png';
+    const subFinanceMenu1 = new SideMenuItem('商家列表', '/main/mall/goods-business', orderMenu);
+    orderMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(orderMenu);
     return orderMenu;
   }
