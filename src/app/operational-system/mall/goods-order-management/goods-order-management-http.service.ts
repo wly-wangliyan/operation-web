@@ -65,6 +65,16 @@ export class OrderRefundEntity extends EntityBase {
   public cash_fee = ''; // 	int	单位分 现金支付金额
 }
 
+// 物流公司实体
+export class LogisticsEntity extends EntityBase {
+  public logistics_id: string = undefined; // string	id - 主键
+  public logistics_tag: string = undefined; // string	物流公司标签
+  public logistics_name: string = undefined; // string	物流公司名称
+  public logistics_logo: string = undefined; // string	物流公司图片
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+}
+
 export class GoodsOrderEntity extends EntityBase {
   public order_id = ''; // 	string	订单ID
   public trade_no = ''; // 	string	微信支付订单id
@@ -142,6 +152,15 @@ export class OrderLinkResponse extends LinkResponse {
   }
 }
 
+export class LogisticsLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<LogisticsEntity> {
+    const tempList: Array<LogisticsEntity> = [];
+    results.forEach(res => {
+      tempList.push(LogisticsEntity.Create(res));
+    });
+    return tempList;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -170,6 +189,17 @@ export class GoodsOrderManagementHttpService {
   public continueOrderList(url: string): Observable<OrderLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new OrderLinkResponse(res)));
   }
+
+  /**
+   * 获取物流公司下拉列表
+   * @returns Observable<LogisticsLinkResponse>
+   */
+  public requestLogisticsList(): Observable<LogisticsLinkResponse> {
+    const httpUrl = `${this.domain}/logistics`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => new LogisticsLinkResponse(res)));
+  }
+
 
   /**
    * 获取订单详情

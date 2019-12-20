@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import {
   GoodsOrderEntity,
   GoodsOrderManagementHttpService,
-  ModifyOrderParams
+  ModifyOrderParams,
+  LogisticsEntity
 } from '../goods-order-management-http.service';
 
 @Component({
@@ -17,12 +19,14 @@ import {
 export class GoodsOrderDeliveryComponent implements OnInit {
 
   public currentOrder: ModifyOrderParams = new ModifyOrderParams();
+  public logisticsList: Array<LogisticsEntity> = [];
   public errMes = ''; // 错误信息
   public postage = 0;
   public sureName: string;
   public radioValue: string;
   public deliveryCompany: Array<any> = [];
 
+  private searchLogisticsText$ = new Subject<any>();
   private order_id: string; // 订单id
   private sureCallback: any;
   private closeCallback: any;
@@ -31,11 +35,23 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-    private globalService: GlobalService) {
+              private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
     this.currentOrder.is_delivery = 1;
+    // 物流公司下拉列表
+    this.searchLogisticsText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.orderHttpService.requestLogisticsList())
+    ).subscribe(res => {
+      this.logisticsList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    // this.searchLogisticsText$.next();
+
     this.deliveryCompany = [
       { key: '顺丰速运', value: '顺丰速运' },
       { key: '圆通速递', value: '圆通速递' },
