@@ -31,7 +31,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-    private globalService: GlobalService) {
+              private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -49,6 +49,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
       { key: '宅急送', value: '宅急送' },
       { key: '德邦物流', value: '德邦物流' },
       { key: '京东快递', value: '京东快递' },
+      { key: '特急送', value: '特急送' },
     ];
   }
 

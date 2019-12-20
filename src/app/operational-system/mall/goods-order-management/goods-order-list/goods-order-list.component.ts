@@ -121,6 +121,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 初始化检索参数
   public initSearchParams() {
+    this.orderList = [];
     this.noResultText = '数据加载中...';
     this.refund_type = '0';
     this.commodity_type = '0';
