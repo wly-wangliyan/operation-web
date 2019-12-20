@@ -5,7 +5,7 @@
       <a (click)="onImportClick('vehicle')">导入车型</a>
     </li>
     <li class="big-bg">
-      <a href="/assets/download/vehicle_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
+      <a href="/assets/download/car_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
     </li>
   </ul>
 </div>
@@ -14,51 +14,51 @@
     <form class="search-form">
       <div class="form-group">
         <span>品牌：</span>
-        <select class="form-control" [(ngModel)]="searchParams.vehicle_brand_id" (change)="onChangeBrand($event)"
-          name="vehicle_brand_id">
+        <select class="form-control" [(ngModel)]="searchParams.car_brand_id" (change)="onChangeBrand($event)"
+          name="car_brand_id">
           <option value="">全部</option>
-          <option *ngFor="let vehicleBrand of vehicleBrandList" [value]="vehicleBrand.vehicle_brand_id"
-            [title]="vehicleBrand.vehicle_brand_name">
-            {{vehicleBrand.vehicle_brand_name | zMaxLength:15}}
+          <option *ngFor="let carBrand of carBrandList" [value]="carBrand.car_brand_id"
+            [title]="carBrand.car_brand_name">
+            {{carBrand.car_brand_name | zMaxLength:15}}
           </option>
         </select>
       </div>
       <div class="form-group">
         <span>厂商：</span>
-        <select class="form-control" [(ngModel)]="searchParams.vehicle_firm_id" (change)="onChangeFirm($event)"
-          name="vehicle_firm_id">
+        <select class="form-control" [(ngModel)]="searchParams.car_factory_id" (change)="onChangeFactory($event)"
+          name="car_factory_id">
           <option value="">全部</option>
-          <option *ngFor="let vehicleFirm of vehicleFirmList" [value]="vehicleFirm.vehicle_firm_id"
-            [title]="vehicleFirm.vehicle_firm_name">
-            {{vehicleFirm.vehicle_firm_name | zMaxLength:15}}
+          <option *ngFor="let carFactory of carFactoryList" [value]="carFactory.car_factory_id"
+            [title]="carFactory.car_factory_name">
+            {{carFactory.car_factory_name | zMaxLength:15}}
           </option>
         </select>
       </div>
       <div class="form-group">
         <span>车系：</span>
-        <select class="form-control" [(ngModel)]="searchParams.vehicle_series_id" name="vehicle_series_id">
+        <select class="form-control" [(ngModel)]="searchParams.car_series_id" name="car_series_id"
+          (change)="onChangeSeries($event)">
           <option value="">全部</option>
-          <option *ngFor="let vehicleSeries of vehicleSeriesList" [value]="vehicleSeries.vehicle_series_id"
-            [title]="vehicleSeries.vehicle_series_name">
-            {{vehicleSeries.vehicle_series_name | zMaxLength:15}}
+          <option *ngFor="let carSeries of carSeriesList" [value]="carSeries.car_series_id"
+            [title]="carSeries.car_series_name">
+            {{carSeries.car_series_name | zMaxLength:15}}
           </option>
         </select>
       </div>
       <div class="form-group">
         <span>排量：</span>
-        <select class="form-control" [(ngModel)]="searchParams.vehicle_series_id" name="vehicle_series_id">
+        <select class="form-control" [(ngModel)]="searchParams.car_displacement" name="car_displacement">
           <option value="">全部</option>
-          <option *ngFor="let vehicleSeries of vehicleSeriesList" [value]="vehicleSeries.vehicle_series_id"
-            [title]="vehicleSeries.vehicle_series_name">
-            {{vehicleSeries.vehicle_series_name | zMaxLength:15}}
+          <option *ngFor="let carParam of carParamList" [value]="carParam.car_displacement"
+            [title]="carParam.car_displacement">
+            {{carParam.car_displacement | zMaxLength:15}}
           </option>
         </select>
       </div>
       <div class="form-group">
         <span>生产年份：</span>
         <input class="form-control" placeholder="请输入年款" autocomplete="off" maxlength="4"
-          oninput="value=value.replace(/[^\d]/g,'')" name="vehicle_year_model"
-          [(ngModel)]="searchParams.vehicle_year_model" />
+          oninput="value=value.replace(/[^\d]/g,'')" name="car_year_num" [(ngModel)]="searchParams.car_year_num" />
         <div class="search-btn-group">
           <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
           </button>
@@ -68,7 +68,7 @@
   </div>
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="brokerageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+      <nz-table [nzData]="carTypeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
         <thead>
           <tr>
@@ -84,16 +84,15 @@
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
-            <td>{{data.account}}</td>
-            <td>{{data.telephone}}</td>
-            <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
+            <td [title]="data.car_brand?.car_brand_name">{{data.car_brand?.car_brand_name|zMaxLength:20}}</td>
+            <td [title]="data.car_factory?.car_factory_name">{{data.car_factory?.car_factory_name|zMaxLength:20}}</td>
+            <td [title]="data.car_series?.car_series_name">{{data.car_series?.car_series_name|zMaxLength:20}}</td>
+            <td [title]="data.car_displacement">{{data.car_displacement|zMaxLength:20}}</td>
+            <td>{{data.car_year_num}}</td>
             <td>
-              {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
-            </td>
-            <td>
-              <nz-switch [ngModel]="!data.discontinue_use" nzCheckedChildren="On" style="height: 10px"
-                nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.broker_company_id,$event)"></nz-switch>
+              <nz-switch [ngModel]="data.status" (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true
+                nzCheckedChildren="On" nzUnCheckedChildren="Off" (click)="onSwitchClick(data,data.status)">
+              </nz-switch>
             </td>
           </tr>
         </tbody>

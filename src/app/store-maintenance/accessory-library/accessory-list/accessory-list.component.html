@@ -91,7 +91,7 @@
             <td>{{data.sale_num}}</td>
             <td>
               <nz-switch [ngModel]="data.sale_status===1?true:false"
-                (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"
+                (ngModelChange)="onSwitchChange(data.sale_status, $event)" [nzControl]=true nzCheckedChildren="On"
                 nzUnCheckedChildren="Off" (click)="onSwitchClick(data.accessory_id,data.sale_status)">
               </nz-switch>
             </td>
