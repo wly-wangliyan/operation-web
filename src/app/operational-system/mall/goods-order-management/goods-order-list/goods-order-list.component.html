@@ -8,8 +8,7 @@
 </div>
 <div class="content-flow">
   <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0 [(nzSelectedIndex)]='selectedTabIndex'>
-    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzSelect)='onTabChange(tab.key)'
-      (nzClick)='initSearchParams()'>
+    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value" (nzClick)='onTabChange(tab.key)'>
       <div class="search-container">
         <form class="search-form">
           <div class="form-group">
@@ -20,12 +19,12 @@
               <option value=2>虚拟商品</option>
             </select>
           </div>
-          <div class="form-group" *ngIf='tab.key!==1&&tab.key!==5'>
+          <div class="form-group" *ngIf='tab.key===0||tab.key===5'>
             <span>售后/退款：</span>
             <select class="form-control" style="width: 100px;" name="refund_type" [(ngModel)]="refund_type">
               <option value=0>全部</option>
               <option value=1>全部退款</option>
-              <option value=2 *ngIf="tab.key!==6">部分退款</option>
+              <option value=2>部分退款</option>
             </select>
           </div>
           <div class="form-group">
@@ -161,8 +160,8 @@
                   <td>{{order | orderStatusFormat}}</td>
                   <td class="operation">
                     <!-- 虚拟产品有核销 -->
-                    <a *ngIf="order.detail[0]?.commodity_type===2&&order.delivery_status===2" [title]="'核销'"
-                      (click)="onWriteOff(order)">核销</a>
+                    <a *ngIf="order.detail[0]?.commodity_type===2&&order.delivery_status===2&&order.is_refundable"
+                      [title]="'核销'" (click)="onWriteOff(order)">核销</a>
                     <!-- 根据是否可以退款状态区分是否显示退款按钮 -->
                     <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1"

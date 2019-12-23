@@ -5,7 +5,7 @@
     <li class="big-bg" *ngIf="type==='2'&&orderDetail.delivery_status===2">
       <a (click)="onWriteOff(orderDetail)">核销券码</a>
     </li>
-    <li class="big-bg" *ngIf='orderDetail.is_refundable'>
+    <li class="big-bg">
       <a (click)="onEditRefundClick(orderDetail)">退款</a>
     </li>
   </ul>
@@ -23,7 +23,7 @@
         <div style="margin: 20px 0 10px;">
           <div class="card-text">
             <label>订单编号：</label>
-            <span>{{orderDetail.order_id?orderDetail.order_id:'--'}}</span>
+            <span>{{orderDetail.order_id || '--'}}</span>
           </div>
           <div class="card-text">
             <label>交易单号：</label>

@@ -15,7 +15,7 @@ export class MallCommodityTypePipe implements PipeTransform {
     if (value === null || value === undefined || value === '') {
       return '--';
     }
-    if (value && (typeof value === 'string')) {
+    if (value) {
       // 当直接传递字符串时的处理
       return mallCommodityType[value];
     } else {

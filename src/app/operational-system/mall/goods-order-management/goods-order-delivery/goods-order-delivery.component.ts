@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../../core/http.service';
@@ -35,7 +35,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {

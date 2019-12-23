@@ -3,7 +3,7 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
-import { GoodsOrderEntity, GoodsOrderManagementHttpService, OrderDetailEntity, SearchParams } from '../goods-order-management-http.service';
+import { GoodsOrderEntity, GoodsOrderManagementHttpService, SearchParams } from '../goods-order-management-http.service';
 import { GoodsOrderDeliveryComponent } from '../goods-order-delivery/goods-order-delivery.component';
 import { GoodsOrderRefundComponent } from '../goods-order-refund/goods-order-refund.component';
 import { environment } from '../../../../../environments/environment';
@@ -45,28 +45,22 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   public commodity_type = '0';
   public shipping_method = '0';
   public tab_refund_type = null;
+  public order_start_time: any = ''; // 下单开始时间
+  public order_end_time: any = ''; // 下单结束时间
+  public pay_start_time: any = ''; // 支付开始时间
+  public pay_end_time: any = ''; // 支付结束时间
 
   private searchText$ = new Subject<any>();
   private searchSupplierText$ = new Subject<any>();
-
   private continueRequestSubscription: Subscription; // 分页获取数据
-
   private requestSubscription: Subscription; // 获取数据
-
   private linkUrl: string; // 分页url
-
   private searchUrl: string;
 
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
   @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;
   @ViewChild('orderRemark', { static: true }) public orderRemark: GoodsOrderRemarkComponent;
   @ViewChild('writeOff', { static: true }) public writeOff: GoodsWriteOffComponent;
-
-  public order_start_time: any = ''; // 下单开始时间
-  public order_end_time: any = ''; // 下单结束时间
-
-  public pay_start_time: any = ''; // 支付开始时间
-  public pay_end_time: any = ''; // 支付结束时间
 
   public ngOnInit() {
     this.tabs = [
@@ -103,6 +97,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   // 切换tab
   public onTabChange(key: number) {
     this.tab = key;
+    this.initSearchParams();
     if (key === 1) {
       this.searchParams.pay_status = 1;
     } else if (key === 2) {
@@ -120,7 +115,8 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   }
 
   // 初始化检索参数
-  public initSearchParams() {
+  private initSearchParams() {
+    this.orderList = [];
     this.noResultText = '数据加载中...';
     this.refund_type = '0';
     this.commodity_type = '0';
@@ -133,7 +129,6 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     this.pay_start_time = ''; // 支付开始时间
     this.pay_end_time = ''; // 支付结束时间
   }
-
 
   public ngOnDestroy() {
     this.requestSubscription && this.requestSubscription.unsubscribe();
@@ -175,7 +170,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
   // 条件筛选
   public onSearchBtnClick() {
     if (this.generateAndCheckParamsValid()) {
-      this.onTabChange(this.tab);
+      this.requestOrderList();
     }
   }
 
@@ -269,8 +264,8 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   /* 生成并检查参数有效性 */
   public generateAndCheckParamsValid(): boolean {
-    const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),
-      new Date(this.order_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
+    const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(
+      new Date(this.order_start_time).getHours(), new Date(this.order_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(new Date(this.order_end_time).getHours(),
       new Date(this.order_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
     const sPayTimestamp = this.pay_start_time ? (new Date(this.pay_start_time).setHours(new Date(this.pay_start_time).getHours(),
@@ -358,5 +353,4 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
       });
     });
   }
-
 }
