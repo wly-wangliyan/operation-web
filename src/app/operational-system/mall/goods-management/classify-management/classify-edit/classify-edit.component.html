@@ -1,0 +1,29 @@
+<!-- 新建/编辑标签 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalClassify" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">{{sort_id?'编辑':'新建'}}</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCloseClassify()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #classifyForm="ngForm">
+        <nz-form-item nzFlex style="margin-left: 40px;">
+          <nz-form-label nzRequired [nzNoColon]='true'>分类名称</nz-form-label>
+          <nz-form-control class="form_control">
+            <input type="text" nz-input class="form-control" [(ngModel)]="sort_name" placeholder="输入1-10字分类名称"
+              maxlength='10' name='label-name' (keydown)="onKeydownEvent($event)" required />
+          </nz-form-control>
+        </nz-form-item>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseClassify()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!classifyForm.valid"
+            (appZDebounceClick)='onSaveClassifyName()'>
+            确认
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

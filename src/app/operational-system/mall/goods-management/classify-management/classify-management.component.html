@@ -1,0 +1,35 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="'标签管理'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" (click)='onEditClassify("","")'>
+      <a>新建</a>
+    </li>
+  </ul>
+</div>
+<div class="content-flow Classify-table">
+  <div class="zmy-table">
+    <nz-table [nzData]="classifyList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #classifyTable>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>ID</th>
+          <th>名称</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of classifyTable.data;let i =index">
+          <td>{{i+1}}</td>
+          <td>{{data.sort_id}}</td>
+          <td>{{data.sort_name}}</td>
+          <td class="operation">
+            <a [title]="'编辑'" (click)='onEditClassify(data.sort_id,data.sort_name)'>编辑</a>
+            <a [title]="'删除'" (click)='onDelClassify(data.sort_id)'>删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<app-classify-edit #classifyEdit></app-classify-edit>

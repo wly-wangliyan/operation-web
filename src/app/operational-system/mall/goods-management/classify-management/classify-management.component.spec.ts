@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LabelManagementComponent } from './label-management.component';
+import { ClassifyManagementComponent } from './classify-management.component';
 
-describe('LabelManagementComponent', () => {
-  let component: LabelManagementComponent;
-  let fixture: ComponentFixture<LabelManagementComponent>;
+describe('ClassifyManagementComponent', () => {
+  let component: ClassifyManagementComponent;
+  let fixture: ComponentFixture<ClassifyManagementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LabelManagementComponent ]
+      declarations: [ ClassifyManagementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LabelManagementComponent);
+    fixture = TestBed.createComponent(ClassifyManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

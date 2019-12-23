@@ -7,8 +7,8 @@ import { GoodsListComponent } from './goods-list/goods-list.component';
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
 import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
-import { LabelManagementComponent } from './label-management/label-management.component';
-import { LabelEditComponent } from './label-management/label-edit/label-edit.component';
+import { ClassifyManagementComponent } from './classify-management/classify-management.component';
+import { ClassifyEditComponent } from './classify-management/classify-edit/classify-edit.component';
 @NgModule({
   imports: [
     ShareModule,
@@ -20,8 +20,8 @@ import { LabelEditComponent } from './label-management/label-edit/label-edit.com
     GoodsListComponent,
     GoodsCreateComponent,
     GoodsDetailComponent,
-    LabelManagementComponent,
-    LabelEditComponent
+    ClassifyManagementComponent,
+    ClassifyEditComponent
   ],
   providers: [
     GoodsManagementHttpService,

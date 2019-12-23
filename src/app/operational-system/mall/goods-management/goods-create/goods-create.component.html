@@ -85,11 +85,12 @@
             <span>所属分类</span>
           </label>
           <div class="control-input">
-            <select class="form-control" name="collection_type" style="width: 240px"
-              [(ngModel)]="commodityInfo.collection_type" required>
-              <option [value]="null">请选择</option>
-              <option [value]="1">平台</option>
-              <option [value]="2">此供应商户</option>
+            <select class="form-control" name="sort_id" style="width: 240px" [(ngModel)]="commodityInfo.sort_id"
+              required>
+              <option value="">请选择</option>
+              <option *ngFor="let item of classifyList" [value]="item.sort_id">
+                {{item.sort_name}}
+              </option>
             </select>
           </div>
         </div>
@@ -100,13 +101,13 @@
           </label>
           <div>
             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="1"
-              [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100" [imageUrls]="commodityInfo.commodity_images"
-              [minCropBoxWidth]="400" [minCropBoxHeight]="400" (selectedImgChange)="onSelectedPicture($event)"
-              file_id="goodsImg" #goodsImg></app-z-photo-select>
+              [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100" [imageUrls]="coverImgList"
+              [minCropBoxWidth]="400" [minCropBoxHeight]="400" (selectedImgChange)="onSelectedCoverPicture($event)"
+              file_id="coverImg" #coverImg></app-z-photo-select>
             <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传1张</p>
             <div class="row row-message special-row-message">
               <div class="control-input">
-                <span *ngIf="imgErrMsgItem?.isError">{{imgErrMsgItem?.errMes}}</span>
+                <span *ngIf="coverImgErrMsgItem?.isError">{{coverImgErrMsgItem?.errMes}}</span>
               </div>
             </div>
           </div>
