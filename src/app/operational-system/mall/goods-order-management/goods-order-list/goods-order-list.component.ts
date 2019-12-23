@@ -107,7 +107,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
     } else if (key === 4) {
       this.searchParams.order_status = 2;
     } else if (key === 5) {
-      this.tab_refund_type = 2;
+      this.searchParams.after_sale = true;
     } else if (key === 6) {
       this.searchParams.pay_status = 3;
     }
@@ -153,7 +153,7 @@ export class GoodsOrderListComponent implements OnInit, OnDestroy {
 
   // 处理入参
   private handelParams() {
-    this.searchParams.refund_type = this.tab === 5 ? 2 : this.refund_type !== '0' ? Number(this.refund_type) : null;
+    this.searchParams.refund_type = this.refund_type !== '0' ? Number(this.refund_type) : null;
     this.searchParams.commodity_type = this.commodity_type !== '0' ? Number(this.commodity_type) : null;
     if (this.shipping_method !== '0' && this.shipping_method !== '1') {
       this.searchParams.shipping_method = 2;

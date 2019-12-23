@@ -189,7 +189,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     } else {
       this.commoditySpecificationList.push(new SpecificationParamsItem());
     }
-    this.requestClassifyList();
+    // this.requestClassifyList();
     this.requestbusinessList();
     const weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
     weekList.forEach(value => {
