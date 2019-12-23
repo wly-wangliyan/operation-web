@@ -90,6 +90,7 @@ export class CommodityEntity extends EntityBase {
   public mall_business_id = ''; // 商家id
   public mall_business_name = ''; // 商家名称
   public sort_id = ''; // 分类id
+  public sort_name = ''; // 分类名称
   public cover_image = ''; // 封面图片
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
