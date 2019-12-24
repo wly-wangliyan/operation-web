@@ -153,10 +153,10 @@
             <td>
               <div class="column-box">
                 <span *ngIf="order.created_time">
-                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
                 </span>
                 <span *ngIf="order.pay_time">
-                  {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm")):''}}
+                  {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
                 </span>
                 <span *ngIf="!order.created_time && !order.pay_time">--</span>
               </div>
@@ -175,7 +175,7 @@
 
             <td class="operation">
               <div>
-                <a [title]="'查看'" [routerLink]="['../order-detail', order.door_order_id]">查看</a>
+                <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
                 <a [title]="'人工匹配'" [routerLink]="['../order-detail', order.door_order_id]">人工匹配</a>
                 <a *ngIf="(order.order_status===2 || order.order_status===4) && !order.refund_status" [title]="'退款'"
                   (click)="onRefundClick(order)">退款</a>

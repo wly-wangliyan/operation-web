@@ -1,0 +1,155 @@
+.content-flow {
+  position: relative;
+  background: #fff !important;
+}
+
+.content-container {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-right: 10px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.table-item {
+  width: 100%;
+  min-width: 900px;
+}
+
+.order-table table tr>td {
+  text-align: left;
+}
+
+.table-item table {
+  border: 1px solid #d4d4d4;
+  text-align: center;
+  word-break: break-all;
+  width: 100%;
+  margin: 0;
+}
+
+.table-item table tr {
+  height: 50px;
+}
+
+.table-item table tr>td,
+.table-item table>thead tr>th,
+.table-item table>tbody tr>td {
+  height: 50px;
+  box-sizing: border-box;
+  color: #23242f;
+  font-size: 12px;
+  vertical-align: middle;
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  border-top: 1px solid #d4d4d4;
+  cursor: default;
+  padding: 4px 20px;
+}
+
+.table-item table>thead tr>th {
+  background-color: #cacaca;
+  font-weight: 400;
+}
+
+.order-table table tr:first-child>td:nth-child(even),
+.order-table table tr>td:nth-child(odd) {
+  min-width: 118px;
+  background: #F7F8FA;
+}
+
+.order-table table tr>td:nth-child(even) {
+  max-width: 300px;
+}
+
+@media screen and (max-width: 1355px) {
+  .order-table table tr>td:nth-child(even) {
+    max-width: 150px;
+  }
+}
+
+.order-table table tr:first-child>td:nth-child(odd) {
+  background: #fff;
+}
+
+.detail-table {
+  width: 100%;
+}
+
+.detail-table caption {
+  caption-side: top;
+  font-size: 18px;
+  color: #23242F;
+  font-weight: 500;
+  text-indent: 10px;
+}
+
+.row-title {
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.sure-btn {
+  margin: 0 !important;
+}
+
+.resend-btn {
+  height: 27px;
+  width: 60px;
+  margin: 0 !important;
+}
+
+.remark-info {
+  max-width: 300px;
+}
+
+.remark-group {
+  height: 100%;
+}
+
+.remark-box {
+  margin: 8px 0 5px 0;
+  white-space: pre-line;
+}
+
+.remark-box .form-control {
+  font-size: 12px;
+}
+
+.btn-box {
+  text-align: right;
+}
+
+.btn-box .edit-btn {
+  width: 60px;
+  height: 27px;
+  margin-left: 8px;
+}
+
+::ng-deep .z-modal .mes {
+  padding: 0 20px !important;
+}
+
+@media screen and (max-width: 1355px) {
+  .remark-info {
+    max-width: 150px;
+  }
+}
+
+.img-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.img-box {
+  width: 80px;
+  position: relative;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.img-box img {
+  width: 80px;
+}

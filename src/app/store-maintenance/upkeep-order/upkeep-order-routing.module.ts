@@ -4,7 +4,7 @@ import { AuthGuardService } from '../../core/auth-guard.service';
 import { RouteMonitorService } from '../../core/route-monitor.service';
 import { UpkeepOrderComponent } from './upkeep-order.component';
 import { OrderListComponent } from './order-list/order-list.component';
-
+import { BatteryDetailComponent } from './battery-detail/battery-detail.component';
 
 const routes: Routes = [{
   path: '', component: UpkeepOrderComponent,
@@ -12,7 +12,7 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: OrderListComponent },
-    // { path: 'order-detail/:order_id', component: OrderDetailComponent },
+    { path: 'bettery-detail/:order_id', component: BatteryDetailComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];

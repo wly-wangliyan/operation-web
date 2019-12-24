@@ -21,6 +21,22 @@ export class UpkeepOrderSearchParams extends EntityBase {
   public page_size = 45; // 每页条数
 }
 
+export class MatchParams extends EntityBase {
+  public repair_shop_id: string = undefined; // 汽修店id
+  public repair_shop_name: string = undefined; // 汽修店
+  public accessory_id: string = undefined; // 配件id
+  public accessory_name: string = undefined; // 配件名称
+  public specification_id: string = undefined; // 规格id
+  public battery_model: string = undefined; // 配件型号
+  public original_fee: string = undefined; // 商品价格
+
+  public toEditJson(): any {
+    const json = this.json();
+    json.original_fee = json.original_fee * 100;
+    return json;
+  }
+}
+
 // 保养订单退款订单实体
 export class DoorRefundOrderEntity extends EntityBase {
   public door_refund_order_id: string = undefined; // 上门保养退款订单id-主键
@@ -157,5 +173,55 @@ export class UpkeepOrderService {
   public requestOrderRefundData(door_order_id: string, params: DoorRefundParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/door_orders/${door_order_id}`;
     return this.httpService.post(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 人工匹配
+   * @param door_order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestMatchDate(door_order_id: string, params: MatchParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/door_orders/${door_order_id}`;
+    return this.httpService.put(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 编辑期望送达日期
+   * @param door_order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditDate(door_order_id: string, expect_date: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/door_orders/${door_order_id}/expect_date`;
+    const body = {
+      expect_date
+    };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 编辑订单备注
+   * @param door_order_id 订单ID
+   * @param remark 备注
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditRemark(door_order_id: string, remark: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/door_orders/${door_order_id}/remark`;
+    const body = {
+      remark
+    };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 重新发送短信
+   * @param order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestResendMessage(order_id: string, order_type: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/orders/${order_id}/send_short_message`;
+    const body = {
+      order_type
+    };
+    return this.httpService.post(httpUrl, body);
   }
 }

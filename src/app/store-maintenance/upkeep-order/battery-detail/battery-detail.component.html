@@ -1,0 +1,217 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'保养订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+
+    <div class="table-item order-table" *ngIf="orderRecord && orderRecord.door_order_id">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="9" class="row-title">订单信息</td>
+
+          <td>订单状态：</td>
+          <td>
+            <span *ngIf="orderRecord.order_status"
+              style="color: #E82038;">{{orderRecord.order_status | doorOrderStatus}}</span>
+            <span *ngIf="!orderRecord.order_status">--</span>
+          </td>
+
+          <td>配送汽修店：</td>
+          <td>{{orderRecord.repair_shop_name || '--'}}</td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>短信（汽修店）：</td>
+          <td>
+            <div style="display: flex;justify-content: space-between;align-items: center;">
+              <span>已发送{{orderRecord.repair_message_count||0}}次</span>
+              <div>
+                <button *ngIf="orderRecord.repair_message_content" type="button" class="sure-btn resend-btn"
+                  [title]="orderRecord.repair_message_content" [appTxtCopy]='orderRecord.repair_message_content'
+                  nz-button nzType="primary" style="margin-right: 5px !important;">复制</button>
+                <button type="button" class="sure-btn resend-btn" nz-button nzType="primary"
+                  (click)="onResendMessage()">重发</button>
+              </div>
+            </div>
+          </td>
+
+          <td></td>
+          <td></td>
+
+          <td></td>
+          <td></td>
+
+        </tr>
+        <tr>
+          <td>购买人：</td>
+          <td>{{orderRecord.contact_name || '--'}}</td>
+
+          <td>手机号：</td>
+          <td>{{orderRecord.contact_tel || '--'}}</td>
+
+          <td>车型：</td>
+          <td>{{orderRecord.car_model || '--'}}</td>
+
+        </tr>
+        <tr>
+          <td>地址：</td>
+          <td>{{orderRecord.address || '--'}}</td>
+
+          <td>期望送达日期：</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditExpectDate" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="onEditClick(1)">编辑</button>
+                <ng-container *ngIf="isEditExpectDate">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!expect_date" (click)="onSaveClick(1)">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancleClick(1)">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span
+                  *ngIf="!isEditExpectDate">{{orderRecord.expect_date ? (orderRecord.expect_date* 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                <nz-date-picker *ngIf="isEditExpectDate" [(ngModel)]="expect_date" [nzShowToday]=false
+                  [nzDisabledDate]="disabledExpectTime" name='expect-date' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                  nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+              </div>
+            </div>
+          </td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>总金额：</td>
+          <td>{{orderRecord.total_right_fee | centPriceChange:'元'}}</td>
+
+          <td>预付费：</td>
+          <td>
+            <span>应收：</span>{{orderRecord.right_prepaid_fee | centPriceChange:'元'}}
+            <span>，实收：</span>{{orderRecord.real_prepaid_fee | centPriceChange:'元'}}
+          </td>
+
+          <td>立减：</td>
+          <td>
+            <span>尾款：</span>{{orderRecord.balance_platform_discount | centPriceChange:'元'}}
+            <span>，预付：</span>{{orderRecord.prepaid_platform_discount | centPriceChange:'元'}}
+          </td>
+        </tr>
+        <tr>
+          <td>优惠劵：</td>
+          <td>
+            <span>尾款：</span>{{orderRecord.balance_coupon_discount | centPriceChange:'元'}}
+            <span>，预付：</span>{{orderRecord.prepaid_coupon_discount | centPriceChange:'元'}}
+          </td>
+
+          <td></td>
+          <td></td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>订单编号：</td>
+          <td>{{orderRecord.door_order_id || '--'}}</td>
+
+          <td>下单时间：</td>
+          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+
+          <td>支付时间：</td>
+          <td>{{orderRecord.pay_time ? (orderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+        </tr>
+        <tr>
+
+          <td>完成时间：</td>
+          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+
+          <td>退款时间：</td>
+          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+
+          <td>退款金额：</td>
+          <td>{{orderRecord.refund_fee | centPriceChange:'元'}}</td>
+        </tr>
+        <tr>
+          <td>订单备注：</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="onEditClick(2)">编辑</button>
+                <ng-container *ngIf="isEditRemark">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!orderRecord.remark" (click)="onSaveClick(2)">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancleClick(2)">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span *ngIf="!isEditRemark">{{orderRecord.remark || '--'}}</span>
+                <textarea *ngIf="isEditRemark" name="order_remarks" class="form-control" placeholder="100字以内..."
+                  [(ngModel)]="orderRecord.remark" maxlength="100"></textarea>
+              </div>
+            </div>
+          </td>
+
+          <td>取消原因：</td>
+          <td>{{orderRecord.cancel_reason || '--'}}</td>
+
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item" *ngIf="accessoryData && accessoryData.accessory_id" style="margin-top: 60px;">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>配件</th>
+            <th>品牌</th>
+            <th>规格</th>
+            <th>数量</th>
+            <th>供应商</th>
+            <th>配送仓库</th>
+            <th>原价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="7" style="background-color: #f1f1f1;">
+              <div style="text-align: left !important;">蓄电池</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="img-item">
+                <div class="img-box">
+                  <ng-container *ngIf="accessoryData.accessory_images">
+                    <ng-container *ngFor="let image_url of accessoryData.accessory_images.split(',');let i=index">
+                      <img *ngIf="i===0" src="{{image_url}}" />
+                    </ng-container>
+                  </ng-container>
+                  <img *ngIf="!accessoryData.accessory_images" src="/assets/images/image_space.png" />
+                </div>
+                <div style="text-align: left;padding: 10px 0;">
+                  <span>{{accessoryData || '--'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>{{accessoryData.brand_name || '--'}}</td>
+            <td>{{accessoryData.click_person >= 0 ? click.click_person : '--'}}</td>
+            <td>{{accessoryData.buy_num || 0}}</td>
+            <td>{{accessoryData.supplier_name || '--'}}</td>
+            <td>{{accessoryData.warehouse_name || '--'}}</td>
+            <td>{{accessoryData.original_fee | centPriceChange:'元'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-prompt-loading></app-prompt-loading>
+</div>
