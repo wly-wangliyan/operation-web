@@ -24,6 +24,13 @@ export class RepairCompanyEntity extends EntityBase {
   public updated_time: number = undefined; // 更新时间
 }
 
+export class EditRepairShopParams extends EntityBase {
+  public door_run_start_time: number = null; // 上门服务开始时间 默认:空
+  public door_run_end_time: number = null; // 上门服务结束时间 默认:空
+  public service_telephone = ''; // T 此为搭电换胎通知手机号
+  public battery_telephone = ''; // T 此为换电瓶通知手机号
+}
+
 /*
 * 汽修店
 * */
@@ -41,11 +48,12 @@ export class RepairShopEntity extends EntityBase {
   public lat: string = undefined; // 经度
   public lon: string = undefined; // 纬度
   public location = undefined; // 	位置点
-  public door_start_time: number = null; // 上门服务开始时间 默认:空
-  public door_end_time: number = null; // 上门服务结束时间 默认:空
+  public door_run_start_time: number = null; // 上门服务开始时间 默认:空
+  public door_run_end_time: number = null; // 上门服务结束时间 默认:空
   public shop_start_time: number = null; // 到店服务开始时间 默认:空
   public shop_end_time: number = null; // 到店服务结束时间 默认:空
-  public service_telephone: string = undefined; // 客服电话 默认:空
+  public service_telephone: string = undefined; // T 此为搭电换胎通知手机号
+  public battery_telephone: string = undefined; // T 此为换电瓶通知手机号
   public status: number = undefined; // 营业状态 1:营业 2:关闭
   public serve_type: number = undefined; // 服务类型 1:保养服务 2:救援服务
   public rescue_config: RescueConfig = undefined; // 救援配置
@@ -57,6 +65,7 @@ export class RepairShopEntity extends EntityBase {
       return RepairCompanyEntity;
     }
     if (propertyName === 'rescue_config') {
+      // tslint:disable-next-line: no-use-before-declare
       return RescueConfig;
     }
     return null;
@@ -112,7 +121,7 @@ export class GarageManagementService {
   public requestRepairShopsList(searchParams: SearchParams): Observable<RepairShopsLinkResponse> {
     const httpUrl = `${this.domain}/repair_shops`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new RepairShopsLinkResponse(res)));
+      .pipe(map(res => new RepairShopsLinkResponse(res)));
   }
 
   /**
@@ -132,7 +141,7 @@ export class GarageManagementService {
   public requestRepairShopsDetail(repair_shop_id: string): Observable<RepairShopEntity> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}`;
     return this.httpService.get(httpUrl)
-        .pipe(map(res => RepairShopEntity.Create(res.body)));
+      .pipe(map(res => RepairShopEntity.Create(res.body)));
   }
 
   /**

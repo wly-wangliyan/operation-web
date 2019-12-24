@@ -1,101 +1,123 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../../list'"></app-crumb>
+  <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../../list'">
+  </app-crumb>
 </div>
 <div class="content-flow">
-    <div class="content-main">
-        <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>所属企业</span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="company_name" name="company_name" disabled>
-                </div>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>店铺名称</span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentGarage.repair_shop_name" name="repair_shop_name" disabled>
-                </div>
-            </div>
-            <div class="row" style="height: 110px">
-                <label class=" control-label">
-                    <b>*</b>
-                    <span>商家图片</span>
-                </label>
-                <ul style="display: flex">
-                    <li *ngFor="let item of currentGarage.images;let i=index;" style="margin-right: 15px">
-                        <img [src]="item" style="width: 100px;height: 100px">
-                    </li>
-                </ul>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>联系人</span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentGarage.contacts" name="contact" disabled>
-                </div>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>联系电话</span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentGarage.telephone" name="telephone" disabled>
-                </div>
-            </div>
-            <div class="row">
-                <label class=" control-label">
-                    <b>*</b>
-                    <span>门店地址</span>
-                </label>
-                <div class="control-input" style="width: 540px!important;">
-                    <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
-                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentGarage.address"
-                           [title]="currentGarage.address" name="address" disabled>
-                </div>
-            </div>
-            <div class="row">
-                <label class=" control-label">
-                    <b>*</b>
-                    <span>地图坐标</span>
-                </label>
-                <div class="control-input">
-                    <input class="form-control" [(ngModel)]="currentGarage.lon + '、' + currentGarage.lat" name="lon" disabled>
-                    <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
-                </div>
-            </div>
-            <div class="row">
-                <label class="control-label">
-                    <b>*</b>
-                    <span>客服电话</span>
-                </label>
-                <div class="control-input" *ngFor="let item of service_telephones;let i=index" [class.tel-input]="i!==0">
-                    <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" required maxlength="12"
-                           [(ngModel)]="item.tel" placeholder="请输入座机或手机号" (change)="errPositionItem.service_telephone.isError=false">
-                    <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
-                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
-                </div>
-                <span class="msg-span">注：最多可添加2个</span>
-            </div>
-            <div style="margin-left: 150px;height: 15px;">
-                <span class="msg-tip" *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
-            </div>
-            <div style="margin-top: 40px;margin-bottom: 40px">
-                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
-                        (appZDebounceClick)="onEditFormSubmit()">保存
-                </button>
-                <button class="close-btn" nz-button (click)="onClose()">取消</button>
-            </div>
-        </form>
-    </div>
+  <div class="content-main">
+    <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>所属企业</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="company_name" name="company_name" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>店铺名称</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="currentGarage.repair_shop_name" name="repair_shop_name" disabled>
+        </div>
+      </div>
+      <div class="row" style="height: 110px">
+        <label class=" control-label">
+          <b>*</b>
+          <span>商家图片</span>
+        </label>
+        <ul style="display: flex">
+          <li *ngFor="let item of currentGarage.images;let i=index;" style="margin-right: 15px">
+            <img [src]="item" style="width: 100px;height: 100px">
+          </li>
+        </ul>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>联系人</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="currentGarage.contacts" name="contact" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>联系电话</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="currentGarage.telephone" name="telephone" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class=" control-label">
+          <b>*</b>
+          <span>门店地址</span>
+        </label>
+        <div class="control-input" style="width: 540px!important;">
+          <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
+          <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentGarage.address"
+            [title]="currentGarage.address" name="address" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class=" control-label">
+          <b>*</b>
+          <span>地图坐标</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="currentGarage.lon + '、' + currentGarage.lat" name="lon" disabled>
+          <button class="common-btn" nz-button (click)="openMapModal()">查看</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>上门保养服务时间</span>
+        </label>
+        <div class="control-input">
+          <app-date-clock [has24]="false" [(hour)]="door_start_time.hour" [(minute)]="door_start_time.minute">
+          </app-date-clock>
+          <span class="line"> - </span>
+          <app-date-clock [has24]="true" [(hour)]="door_end_time.hour" [(minute)]="door_end_time.minute">
+          </app-date-clock>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;</b>
+          <span>客服电话</span>
+        </label>
+        <div class="control-input ">
+          <input class="form-control" name="service_telephone" maxlength="11" appIntNumber
+            [(ngModel)]="editParams.service_telephone" placeholder="请输入搭电换胎通知手机号"
+            (change)="errPositionItem.service_telephone.isError=false">
+          <!-- <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
+          <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button> -->
+        </div>
+        <div class="control-input tel-input">
+          <input class="form-control" name="battery_telephone" maxlength="11" appIntNumber
+            [(ngModel)]="editParams.battery_telephone" placeholder="请输入换电瓶通知手机号"
+            (change)="errPositionItem.service_telephone.isError=false">
+        </div>
+        <!-- <span class="msg-span">注：最多可添加2个</span> -->
+      </div>
+      <div style="margin-left: 150px;height: 15px;">
+        <span class="msg-tip"
+          *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
+      </div>
+      <div style="margin-top: 40px;margin-bottom: 40px">
+        <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+          (appZDebounceClick)="onEditFormSubmit()">保存
+        </button>
+        <button class="close-btn" nz-button (click)="onClose()">取消</button>
+      </div>
+    </form>
+  </div>
+  <app-prompt-loading></app-prompt-loading>
 </div>
 
 <!-- 地图组件 -->

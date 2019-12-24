@@ -1,95 +1,105 @@
-.row{
-    margin-left:0!important;
-    margin-right: 0!important;
-    height: 44px;
-    align-items: center!important;
-    margin-bottom:0!important;
-    display: block;
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  height: 44px;
+  align-items: center !important;
+  margin-bottom: 0 !important;
+  display: block;
 }
 
-.row b{
-    margin-right:10px!important;
+.row b {
+  margin-right: 10px !important;
 }
 
-.control-label{
-    margin-left: 20px;
-    margin-bottom:0!important;
-    width:150px!important;
-    padding-right: 10px;
-    padding-left:0!important;
-    float: left;
+.control-label {
+  margin-left: 20px;
+  margin-bottom: 0 !important;
+  width: 150px !important;
+  padding-right: 10px;
+  padding-left: 0 !important;
+  float: left;
 }
 
-.control-label b{
-    float: left;
+.control-label b {
+  float: left;
 }
 
-.control-label span{
-    float: left;
+.control-label span {
+  float: left;
 }
 
-.control-input{
-    display: flex!important;
-    align-items: center!important;
-    width:448px!important;
-    float: left;
+.control-input {
+  display: flex !important;
+  align-items: center !important;
+  width: 448px !important;
+  float: left;
 }
 
-.control-input label{
-    margin-bottom:0!important;
+.control-input label {
+  margin-bottom: 0 !important;
 }
 
 .control-input img {
-    width: 100px;
-    height: 100px;
+  width: 100px;
+  height: 100px;
 }
 
-.form-control{
-    font-size: 14px!important;
-    margin-right: 0!important;
-    height: 34px!important;
-    border-radius:1px;
+.form-control {
+  font-size: 14px !important;
+  margin-right: 0 !important;
+  height: 34px !important;
+  border-radius: 1px;
+  box-shadow: none !important;
 }
 
 nz-range-picker {
-    margin: 0 8px 12px 0;
+  margin: 0 8px 12px 0;
 }
 
 .content-flow {
-    background: #fff!important;
-    margin-left: 15px;
+  background: #fff !important;
+  margin-left: 15px;
 }
 
 .common-btn {
-    width:80px;
-    height:34px;
-    background:rgba(255,255,255,1);
-    border-radius:1px;
-    border-left: none;
+  width: 80px;
+  height: 34px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 1px;
+  border-left: none;
 }
 
 .common-btn:hover {
-    border: 1px solid #d9d9d9;
-    border-left: none;
-    color: rgba(0,0,0,0.65);
+  border: 1px solid #d9d9d9;
+  border-left: none;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .sure-btn {
-    margin: 0 31px 0 170px;
+  margin: 0 31px 0 170px;
 }
 
-.msg-span, .msg-tip {
-    vertical-align: middle;
-    line-height: 34px;
-    margin-left: 20px;
+.msg-span,
+.msg-tip {
+  vertical-align: middle;
+  line-height: 34px;
+  margin-left: 20px;
 }
 
 .msg-tip {
-    color: #E82038;
+  color: #E82038;
 }
 
 .tel-input {
-    margin-left: 170px;
-    margin-top: 10px;
-    clear: both;
+  margin-left: 170px;
+  margin-top: 10px;
+  clear: both;
+}
+
+.line {
+  margin: 0 8px;
+}
+
+::ng-deep .z-modal .mes {
+  padding: 0 20px !important;
 }

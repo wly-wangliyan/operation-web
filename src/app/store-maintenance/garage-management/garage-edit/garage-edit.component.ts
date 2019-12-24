@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import {
   BusinessManagementService,
   UpkeepMerchantEntity
@@ -12,8 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ValidateHelper } from '../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../core/http.service';
 import { isUndefined } from 'util';
-import { GarageManagementService, RepairShopEntity } from '../garage-management.service';
-import { DateFormatHelper } from '../../../../utils/date-format-helper';
+import { GarageManagementService, RepairShopEntity, EditRepairShopParams } from '../garage-management.service';
+import { DateFormatHelper, TimeItem } from '../../../../utils/date-format-helper';
+import { PromptLoadingComponent } from '../../../share/components/prompt-loading/prompt-loading.component';
 
 export class ErrMessageItem {
   public isError = false;
@@ -33,7 +34,7 @@ export class ErrPositionItem {
   booking: ErrMessageItem = new ErrMessageItem();
 
   constructor(service_telephone?: ErrMessageItem, booking?: ErrMessageItem, jump_link?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(service_telephone) || isUndefined(booking)) {
       return;
     }
@@ -47,31 +48,38 @@ export class ErrPositionItem {
   templateUrl: './garage-edit.component.html',
   styleUrls: ['./garage-edit.component.css']
 })
-export class GarageEditComponent implements OnInit {
+export class GarageEditComponent implements OnInit, AfterViewInit {
 
   public currentGarage = new RepairShopEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
+  public editParams: EditRepairShopParams = new EditRepairShopParams();
   public mapItem: MapItem = new MapItem();
   public is_add_tel = true;
   public service_telephones = [];
   public company_name: string;
   public time = null;
+  public doorTimes = { begin_time: null, end_time: null }; // 上门保养时间
+
+  public door_start_time: TimeItem = new TimeItem();
+  public door_end_time: TimeItem = new TimeItem();
 
   private repair_shop_id: string;
 
   @Input() public data: any;
   @Input() public sureName: string;
 
-  @ViewChild('pagePromptDiv', {static: true}) public pagePromptDiv: ElementRef;
-  @ViewChild('coverImg', {static: true}) public coverImgSelectComponent: ZPhotoSelectComponent;
-  @ViewChild('projectInfoPro', {static: true}) public proCityDistSelectComponent: ProCityDistSelectComponent;
-  @ViewChild(ZMapSelectPointComponent, {static: true}) public zMapSelectPointComponent: ZMapSelectPointComponent;
-  @ViewChild(SelectBrandFirmComponent, {static: true}) public selectBrandFirmComponent: SelectBrandFirmComponent;
+  @ViewChild('pagePromptDiv', { static: true }) public pagePromptDiv: ElementRef;
+  @ViewChild('coverImg', { static: true }) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('projectInfoPro', { static: true }) public proCityDistSelectComponent: ProCityDistSelectComponent;
+  @ViewChild(ZMapSelectPointComponent, { static: true }) public zMapSelectPointComponent: ZMapSelectPointComponent;
+  @ViewChild(SelectBrandFirmComponent, { static: true }) public selectBrandFirmComponent: SelectBrandFirmComponent;
+  @ViewChild(PromptLoadingComponent, { static: true }) public promptLoading: PromptLoadingComponent;
 
-  constructor(private globalService: GlobalService,
-              private activatedRoute: ActivatedRoute,
-              private garageService: GarageManagementService,
-              private router: Router) {
+  constructor(
+    private globalService: GlobalService,
+    private activatedRoute: ActivatedRoute,
+    private garageService: GarageManagementService,
+    private router: Router) {
     this.activatedRoute.paramMap.subscribe(map => {
       this.repair_shop_id = map.get('repair_shop_id');
     });
@@ -79,21 +87,31 @@ export class GarageEditComponent implements OnInit {
 
   public ngOnInit(): void {
     this.garageService.requestRepairShopsDetail(this.repair_shop_id)
-        .subscribe(res => {
-          this.currentGarage = res;
-          this.currentGarage.images = res.images.length > 0 ? res.images : ['/assets/images/image_space.png'];
-          const telList = res.service_telephone ? res.service_telephone.split(',') : [''];
-          telList.forEach(value => {
-            this.service_telephones.push({tel: value, time: new Date().getTime()});
-          });
-          this.is_add_tel = this.service_telephones.length >= 2 ? false : true;
-          this.company_name = res.repair_company ? res.repair_company.repair_company_name : '';
-          const regionObj = new RegionEntity(this.currentGarage);
-          this.proCityDistSelectComponent.regionsObj = regionObj;
-          this.proCityDistSelectComponent.initRegions(regionObj);
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      .subscribe(res => {
+        this.currentGarage = res;
+        this.currentGarage.images = res.images.length > 0 ? res.images : ['/assets/images/image_space.png'];
+        this.door_start_time = res.door_run_start_time ? DateFormatHelper.getMinuteOrTime(res.door_run_start_time)
+          : new TimeItem();
+        this.door_end_time = res.door_run_end_time ? DateFormatHelper.getMinuteOrTime(res.door_run_end_time)
+          : new TimeItem();
+
+        this.editParams.door_run_start_time = res.door_run_start_time;
+        this.editParams.door_run_end_time = res.door_run_end_time;
+        this.editParams.service_telephone = res.service_telephone || '';
+        this.editParams.battery_telephone = res.battery_telephone || '';
+        this.company_name = res.repair_company ? res.repair_company.repair_company_name : '';
+        const regionObj = new RegionEntity(this.currentGarage);
+        this.proCityDistSelectComponent.regionsObj = regionObj;
+        this.proCityDistSelectComponent.initRegions(regionObj);
+        this.promptLoading.close();
+      }, err => {
+        this.promptLoading.close();
+        this.globalService.httpErrorProcess(err);
+      });
+  }
+
+  public ngAfterViewInit() {
+    this.promptLoading.open(null, true);
   }
 
   // 键盘按下事件
@@ -108,13 +126,7 @@ export class GarageEditComponent implements OnInit {
   public onEditFormSubmit() {
     this.clear();
     if (this.verification()) {
-      // 编辑商家
-      const telList = this.service_telephones.map(value => value.tel);
-      const params = {
-        // door_start_time: DateFormatHelper.getSecondTimeSum(this.currentGarage.door_start_time),
-        service_telephone: telList.join(',')
-      };
-      this.garageService.requestEditRepairShops(this.repair_shop_id, params).subscribe(() => {
+      this.garageService.requestEditRepairShops(this.repair_shop_id, this.editParams).subscribe(() => {
         this.onClose();
         this.globalService.promptBox.open('保存成功！', () => {
         });
@@ -125,16 +137,25 @@ export class GarageEditComponent implements OnInit {
   }
 
   // 表单提交校验
-  private verification() {
-    let isCheck = true;
-    this.service_telephones.forEach(value => {
-      if (!ValidateHelper.Phone(value.tel)) {
-        this.errPositionItem.service_telephone.isError = true;
-        this.errPositionItem.service_telephone.errMes = '客服电话格式错误！';
-        isCheck = false;
-      }
-    });
-    return isCheck;
+  private verification(): boolean {
+    const door_start_time = DateFormatHelper.getSecondTimeSum(this.door_start_time);
+    const door_end_time = DateFormatHelper.getSecondTimeSum(this.door_end_time);
+
+    if (door_start_time >= door_end_time) {
+      this.globalService.promptBox.open('上门保养服务的开始时间需小于结束时间！', null, 2000, null, false);
+      return false;
+    }
+    this.editParams.door_run_start_time = door_start_time;
+    this.editParams.door_run_end_time = door_end_time;
+    if (!ValidateHelper.Phone(this.editParams.service_telephone)) {
+      this.globalService.promptBox.open('客服电话-搭电换胎通知手机号格式错误！', null, 2000, null, false);
+      return false;
+    }
+    if (!ValidateHelper.Phone(this.editParams.battery_telephone)) {
+      this.globalService.promptBox.open('客服电话-换电瓶通知手机号格式错误！', null, 2000, null, false);
+      return false;
+    }
+    return true;
   }
 
   // 取消按钮
@@ -189,7 +210,7 @@ export class GarageEditComponent implements OnInit {
   // 添加客服联系电话
   public onAddTelClick() {
     this.is_add_tel = false;
-    this.service_telephones.push({tel: '', time: new Date().getTime()});
+    this.service_telephones.push({ tel: '', time: new Date().getTime() });
   }
 
   // 移除客服联系电话
