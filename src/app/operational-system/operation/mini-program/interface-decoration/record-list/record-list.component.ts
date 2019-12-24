@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BannerEntity, BannerService, SearchParams } from '../../banner-management/banner.service';
+import { BannerEntity, BannerService } from '../../banner-management/banner.service';
 import { Subject, Subscription, timer } from 'rxjs';
-import { BannerEditComponent } from '../../banner-management/banner-edit/banner-edit.component';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
+import { InterfaceDecorationService, PageEntity, SearchParams } from '../interface-decoration.service';
 
 @Component({
   selector: 'app-record-list',
@@ -14,7 +14,7 @@ export class RecordListComponent implements OnInit {
 
   public searchParams: SearchParams = new SearchParams(); // 条件筛选参数
 
-  public bannerList: Array<BannerEntity> = []; // banner列表
+  public recordList: Array<PageEntity> = []; // 草稿、发布记录列表
 
   public noResultText = '数据加载中...';
 
@@ -28,28 +28,30 @@ export class RecordListComponent implements OnInit {
 
   constructor(
       private globalService: GlobalService,
-      private bannerService: BannerService) { }
+      private interfaceDecorationService: InterfaceDecorationService) {
+      this.searchParams.page_type = 1;
+  }
 
   public ngOnInit() {
     const arr = [1, 2, 3, 4, 5];
     const index = 1;
     arr[index] = arr.splice(index - 1, 1, arr[index])[0];
-    this.generateBannerList();
+    this.generatePageList();
   }
 
-  // 初始化获取banner列表
-  private generateBannerList(): void {
+  // 初始化获取page列表
+  private generatePageList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestBannerList();
+      this.requestPageList();
     });
     this.searchText$.next();
   }
 
-  // 请求banner列表
-  private requestBannerList(): void {
-    this.requestSubscription = this.bannerService.requestBannerListData(this.searchParams).subscribe(res => {
-      this.bannerList = res.results;
+  // 请求Page列表
+  private requestPageList(): void {
+    this.requestSubscription = this.interfaceDecorationService.requestPageListData(this.searchParams).subscribe(res => {
+      this.recordList = res.results;
       this.noResultText = '暂无数据';
     }, err => {
       this.noResultText = '暂无数据';
@@ -57,11 +59,11 @@ export class RecordListComponent implements OnInit {
     });
   }
 
-  // 删除Banner
-  public onDeleteClick(banner_id: string): void {
+  // 删除Page
+  public onDeleteClick(page_id: string): void {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
-      this.bannerService.requestDeleteBannerData(banner_id).subscribe(() => {
+      this.interfaceDecorationService.requestDeletePageData(page_id).subscribe(() => {
         this.globalService.promptBox.open('删除成功');
         this.searchText$.next();
       }, err => {
@@ -74,11 +76,16 @@ export class RecordListComponent implements OnInit {
   }
 
   // tab页切换
-  public onTabChange(banner_type: number) {
+  public onTabChange(page_type: number) {
     this.searchParams = new SearchParams();
     this.start_time = null;
     this.end_time = null;
-    this.searchParams.banner_type = banner_type;
+    this.searchParams.page_type = page_type;
     this.searchText$.next();
+  }
+
+  // 重新发布
+  public onReleaseClick(page_id: string) {
+
   }
 }

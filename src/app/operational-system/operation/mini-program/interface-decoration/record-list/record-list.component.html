@@ -4,15 +4,15 @@
 
 <div class="content-flow">
     <div class="tab-bar-list">
-        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.banner_type">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.page_type">
             <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">草稿</label>
             <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">发布记录</label>
         </nz-radio-group>
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table *ngIf="searchParams.banner_type===1"
-                #bannerTable [nzData]="bannerList" [nzPageSize]="bannerList.length"
+            <nz-table *ngIf="searchParams.page_type===1" #recordTable
+                      [nzData]="recordList" [nzPageSize]="recordList.length"
                       [nzShowPagination]="false" [nzNoResult]="noResultText">
                 <thead>
                 <tr>
@@ -23,11 +23,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of bannerTable.data; let i=index">
+                <tr *ngFor="let data of recordTable.data; let i=index">
 
-                    <td>{{data.title}}</td>
+                    <td>{{data.category===1?'发现':'首页'}}</td>
 
-                    <td>{{data.title}}</td>
+                    <td>{{data.page_name}}</td>
 
                     <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
@@ -38,8 +38,8 @@
                 </tr>
                 </tbody>
             </nz-table>
-            <nz-table *ngIf="searchParams.banner_type===2"
-                      #bannerTable [nzData]="bannerList" [nzPageSize]="bannerList.length"
+            <nz-table *ngIf="searchParams.page_type===2"
+                      #recordTable1 [nzData]="recordList" [nzPageSize]="recordList.length"
                       [nzShowPagination]="false" [nzNoResult]="noResultText">
                 <thead>
                 <tr>
@@ -51,20 +51,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of bannerTable.data; let i=index">
+                <tr *ngFor="let data of recordTable1.data; let i=index">
 
-                    <td>{{data.title}}</td>
-
-                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>发现</td>
 
                     <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
-                    <td>{{data.title}}</td>
+                    <td>{{data.release_time ?(data.release_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td>{{data.release_status===0?'未生效':data.release_status===1?'生效中':data.release_status===2?'已失效':'--'}}</td>
 
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../banner-detail',data.banner_id]">编辑</a>
-                        <a [title]="'重新发布'" (appZDebounceClick)="onDeleteClick(data.banner_id)">重新发布</a>
-                        <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.banner_id)">删除</a>
+                        <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
+                        <a [title]="'重新发布'" (appZDebounceClick)="onReleaseClick(data.page_id)">重新发布</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>
