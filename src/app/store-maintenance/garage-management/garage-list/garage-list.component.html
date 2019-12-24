@@ -1,120 +1,151 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'"></app-crumb>
+  <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'"></app-crumb>
 </div>
 <div class="content-flow">
-    <div class="search-container">
-        <form class="search-form">
-            <div class="form-group">
-                <span>状态：</span>
-                <select class="form-control" [(ngModel)]="searchParams.status"
-                        name="status">
-                    <option value="">全部</option>
-                    <option value="1">营业中</option>
-                    <option value="2">停业休息</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span>汽修店名称：</span>
-                <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="50"
-                       name="repair_shop_name" [(ngModel)]="searchParams.repair_shop_name"/>
-                <div class="search-btn-group">
-                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="table-container">
-        <div class="zmy-table">
-            <nz-table [nzData]="garageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>汽修店名称</th>
-                    <th>所属企业</th>
-                    <th>客服电话</th>
-                    <th>营业状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let data of basicTable.data; let i=index">
-                    <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.repair_shop_name">{{data.repair_shop_name|zMaxLength:10}}</td>
-                    <td [title]="data.repair_company?.repair_company_name?data.repair_company?.repair_company_name:'--'">
-                        {{data.repair_company?(data.repair_company.repair_company_name|zMaxLength:10):'--'}}
-                    </td>
-                    <td [title]="data.service_telephone?data.service_telephone:''">
-                        {{data.service_telephone?(data.service_telephone|zMaxLength:12):'--'}}
-                    </td>
-                    <td>
-                        <nz-switch [ngModel]="data.status===1" nzCheckedChildren="On" style="height: 10px"
-                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.repair_shop_id,$event)"></nz-switch>
-                    </td>
-                    <td class="operation">
-                        <a [title]="'编辑资料'" [routerLink]="['../edit', data.repair_shop_id]">编辑资料</a>
-                       <!-- <a [title]="'供货配置'" [routerLink]="'../supply-config-list'">供货配置</a>-->
-                        <a [title]="'救援服务配置'" (click)="onHelpServiceClick(data.repair_shop_id)">救援服务配置</a>
-                    </td>
-                </tr>
-                </tbody>
-            </nz-table>
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <span>状态：</span>
+        <select class="form-control" [(ngModel)]="searchParams.status" name="status">
+          <option value="">全部</option>
+          <option value="1">营业中</option>
+          <option value="2">停业休息</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>汽修店名称：</span>
+        <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="50" name="repair_shop_name"
+          [(ngModel)]="searchParams.repair_shop_name" />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
         </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="garageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>汽修店名称</th>
+            <th>所属企业</th>
+            <th>客服电话</th>
+            <th>营业时间</th>
+            <th>营业状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <div class="img-item">
+                <div class="img-box">
+                  <ng-container *ngIf="data.images && data.images.length>0">
+                    <img src="{{data.images[0]}}" />
+                  </ng-container>
+                  <img *ngIf="!data.images" src="/assets/images/image_space.png" />
+                </div>
+                <div style="text-align: left;">
+                  <span [title]="data.repair_shop_name ||''"
+                    style="word-break: keep-all;">{{data.repair_shop_name | zMaxLength:10}}</span>
+                </div>
+              </div>
+            </td>
+            <td [title]="data.repair_company?.repair_company_name?data.repair_company?.repair_company_name:'--'">
+              {{data.repair_company?(data.repair_company.repair_company_name|zMaxLength:10):'--'}}
+            </td>
+            <td>
+              <div class="column-box">
+                <ng-container *ngIf="data.service_telephone || data.battery_telephone">
+                  <span *ngIf="data.service_telephone"><span
+                      class="td-tip">搭电换胎：</span>{{data.service_telephone}}</span>
+                  <span *ngIf="data.battery_telephone"><span class="td-tip">换电瓶：</span>{{data.battery_telephone}}</span>
+                </ng-container>
+                <ng-container *ngIf="!data.service_telephone && !data.battery_telephone">
+                  <span>--</span>
+                </ng-container>
+              </div>
+            </td>
+            <td>
+              <div class="column-box">
+                <ng-container *ngIf="data.door_run_start_time || data.door_run_end_time">
+                  <span>上门保养：{{(data.door_run_start_time || 0) | zDuration3}} -
+                    {{(data.door_run_end_time || 0)|zDuration3}}</span>
+                </ng-container>
+              </div>
+              <span *ngIf="!data.door_run_start_time && !data.door_run_end_time">--</span>
+            </td>
+            <td>
+              <nz-switch [ngModel]="data.status===1" nzCheckedChildren="On" style="height: 10px"
+                nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.repair_shop_id,$event)"></nz-switch>
+            </td>
+            <td class="operation">
+              <a [title]="'编辑资料'" [routerLink]="['../edit', data.repair_shop_id]">编辑资料</a>
+              <a [title]="'供货配置'" [routerLink]="['../supply-config-list', data.repair_shop_id]">供货配置</a>
+              <a [title]="'救援服务配置'" (click)="onHelpServiceClick(data.repair_shop_id)">救援服务配置</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
     </div>
+  </div>
 </div>
 
 <!--救援服务配置-->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #helpServicePromptDiv>
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">救援服务配置</span>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
-                </button>
+  aria-labelledby="myModalLabel" aria-hidden="true" #helpServicePromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">救援服务配置</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+        <div style="margin-bottom: 10px">支持服务：</div>
+        <div *ngFor="let item of rescueConfigList;let i=index" style="display: grid">
+          <label nz-checkbox [(ngModel)]="item.checked"
+            name="is_deleted_{{i}}">{{item.source.rescue_service_type===1?'搭电':'换胎'}}</label>
+          <div class="service-space">
+            <div class="row">
+              <label class="control-label">服务时间</label>
+              <div class="control-input">
+                <app-date-clock style="float:left;" [has24]="false" [(hour)]="item.service_start_time.hour"
+                  [(minute)]="item.service_start_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
+                <span style="float:left;margin: 5px 8px"> 至 </span>
+                <app-date-clock [has24]="true" [(hour)]="item.service_end_time.hour"
+                  [(minute)]="item.service_end_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
+              </div>
             </div>
-            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-                <div style="margin-bottom: 10px">支持服务：</div>
-                <div *ngFor="let item of rescueConfigList;let i=index" style="display: grid">
-                    <label nz-checkbox [(ngModel)]="item.checked" name="is_deleted_{{i}}">{{item.source.rescue_service_type===1?'搭电':'换胎'}}</label>
-                    <div class="service-space">
-                        <div class="row">
-                            <label class="control-label">服务时间</label>
-                            <div class="control-input">
-                                <app-date-clock style="float:left;" [has24]="false" [(hour)]="item.service_start_time.hour"
-                                                [(minute)]="item.service_start_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
-                                <span style="float:left;margin: 5px 8px"> 至 </span>
-                                <app-date-clock [has24]="true" [(hour)]="item.service_end_time.hour"
-                                                [(minute)]="item.service_end_time.minute" (change)="item.timeErrmsg=''"></app-date-clock>
-                            </div>
-                        </div>
-                        <div class="row" style="height: 15px;color: #e82038">
-                            <span>{{item.timeErrmsg}}</span>
-                        </div>
-                        <div class="row">
-                            <label class="control-label">救援范围</label>
-                            <div class="control-input service-input">
-                                <input nz-input class="form-control" name="rescue_range_{{i}}" required maxlength="8"
-                                       onInput="if(Number(value)>99999){value=99999}"
-                                       [(ngModel)]="item.source.rescue_range" (change)="item.rangeErrmsg=''" appFloatNumber>
-                                <label>KM</label>
-                                <span>范围内</span>
-                            </div>
-                        </div>
-                        <div class="row" style="height: 15px;color: #e82038">
-                            <span>{{item.rangeErrmsg}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary"
-                            (appZDebounceClick)="onEditFormSubmit()">
-                        确定
-                    </button>
-                </div>
-            </form>
+            <div class="row" style="height: 15px;color: #e82038">
+              <span>{{item.timeErrmsg}}</span>
+            </div>
+            <div class="row">
+              <label class="control-label">救援范围</label>
+              <div class="control-input service-input">
+                <input nz-input class="form-control" name="rescue_range_{{i}}" required maxlength="8"
+                  onInput="if(Number(value)>99999){value=99999}" [(ngModel)]="item.source.rescue_range"
+                  (change)="item.rangeErrmsg=''" appFloatNumber>
+                <label>KM</label>
+                <span>范围内</span>
+              </div>
+            </div>
+            <div class="row" style="height: 15px;color: #e82038">
+              <span>{{item.rangeErrmsg}}</span>
+            </div>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()">
+            确定
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

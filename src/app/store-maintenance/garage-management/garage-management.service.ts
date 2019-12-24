@@ -94,6 +94,25 @@ export class RescueConfig extends EntityBase {
   }
 }
 
+// 供货配置实体
+export class SupplyConfigEntity extends EntityBase {
+  public supply_config_id: string = undefined; // 救援配置ID 主键
+  public repair_shop: RepairShopEntity = undefined; // 	汽修店 外键
+  public accessory: number = undefined; // 	服务开始时间 默认:空
+  public supply_type: number = undefined; // 供货方式 1:门店自供 2:第三方供应商
+  public supplier = ''; // 供应商
+  public warehouse: boolean = undefined;  // 仓库
+  public created_time: number = undefined; // 创建时间
+  public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'repair_shop') {
+      return RepairShopEntity;
+    }
+    return null;
+  }
+}
+
 export class RepairShopsLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<RepairShopEntity> {
     const tempList: Array<RepairShopEntity> = [];
@@ -190,5 +209,24 @@ export class GarageManagementService {
       });
       return tempList;
     }));
+  }
+
+  /**
+   * 获取供货配置列表
+   * @param searchParams 条件检索参数
+   */
+  public requestSupplyConfigList(searchParams: SearchParams, repair_shop_id: string): Observable<RepairShopsLinkResponse> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/accessories`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new RepairShopsLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求汽修店列表
+   * @param string url linkUrl
+   * @returns Observable<BusinessLinkResponse>
+   */
+  public continueSupplyConfigList(url: string): Observable<RepairShopsLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new RepairShopsLinkResponse(res)));
   }
 }

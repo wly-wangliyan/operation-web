@@ -116,3 +116,47 @@ export class ZDuration2Pipe implements PipeTransform {
     return isNullOrUndefined(formatDate) ? '--' : formatDate;
   }
 }
+
+@Pipe({
+  name: 'zDuration3'
+})
+
+/** 根据时长时间戳转换时长(时分)字符串 */
+export class ZDuration3Pipe implements PipeTransform {
+
+  public transform(durationTimeStamp: number, ignoreSeconds: boolean = true): any {
+    if (durationTimeStamp === null || durationTimeStamp === undefined) {
+      // 未传递时间戳则认为无效
+      return '--';
+    }
+
+    let totalSeconds = Math.floor(Number(durationTimeStamp));
+    if (totalSeconds <= 0) {
+      if (!ignoreSeconds) {
+        return '00:00:00';
+      } else {
+        return '00:00';
+      }
+    }
+
+    if (ignoreSeconds) {
+      const second = totalSeconds % 3600 % 60;
+      if (second !== 0) {
+        totalSeconds = totalSeconds - second + 60; // 当秒数不为0时进位(进一分钟)
+      }
+    }
+
+    const hours = Math.floor(Number(totalSeconds / (60 * 60)));
+    const minutes = Math.floor(Number(totalSeconds % 3600 / 60));
+    const seconds = Math.floor(Number(totalSeconds % 3600 % 60));
+    const formatHour = hours ? hours > 10 ? hours : '0' + hours : '00';
+    const formatMinutes = minutes ? minutes > 10 ? minutes : '0' + minutes : '00';
+    const formatSeconds = seconds ? seconds > 10 ? seconds : '0' + seconds : '00';
+    let formatDate = formatHour + ':' + formatMinutes;
+    if (!ignoreSeconds) {
+      formatDate = formatDate + ':' + formatSeconds;
+    }
+
+    return isNullOrUndefined(formatDate) ? '--' : formatDate;
+  }
+}
