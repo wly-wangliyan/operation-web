@@ -5,12 +5,26 @@ import { HttpService, LinkResponse } from '../../core/http.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { AccessoryEntity } from '../accessory-library/accessory-library.service';
 
 export class SearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业 2.不营业
   public repair_shop_name = ''; // 	F	汽修店名称
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
+}
+
+export class SupplyConfigParams extends EntityBase {
+  public accessory_name: string = undefined; // 配件名称
+  public supply_type = ''; // 供货方式 1:门店自供 2:第三方供应商
+  public project_id = ''; // 保养项目ID(机油ID/机油滤清器ID) "xxx"
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
+}
+
+export class SetSupplyConfigParams extends EntityBase {
+  public supply_type: any = ''; // 供应方式 1:第三方供应商 2:门店自供
+  public accessory_ids: string = undefined; // 配件ID集合 "xxx,xxx"
 }
 
 /*
@@ -98,10 +112,10 @@ export class RescueConfig extends EntityBase {
 export class SupplyConfigEntity extends EntityBase {
   public supply_config_id: string = undefined; // 救援配置ID 主键
   public repair_shop: RepairShopEntity = undefined; // 	汽修店 外键
-  public accessory: number = undefined; // 	服务开始时间 默认:空
+  public accessory: AccessoryEntity = undefined; // 配件
   public supply_type: number = undefined; // 供货方式 1:门店自供 2:第三方供应商
-  public supplier = ''; // 供应商
-  public warehouse: boolean = undefined;  // 仓库
+  public supplier: any = undefined; // 供应商
+  public warehouse: any = undefined;  // 仓库
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
 
@@ -109,7 +123,20 @@ export class SupplyConfigEntity extends EntityBase {
     if (propertyName === 'repair_shop') {
       return RepairShopEntity;
     }
+    if (propertyName === 'accessory') {
+      return AccessoryEntity;
+    }
     return null;
+  }
+}
+
+export class SupplyConfigLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<AccessoryEntity> {
+    const tempList: Array<AccessoryEntity> = [];
+    results.forEach(res => {
+      tempList.push(AccessoryEntity.Create(res));
+    });
+    return tempList;
   }
 }
 
@@ -180,7 +207,7 @@ export class GarageManagementService {
    * @param params 参数列表
    * @returns Observable<HttpResponse<any>>
    */
-  public requestEditRepairShops(repair_shop_id: string, params: any): Observable<HttpResponse<any>> {
+  public requestEditRepairShops(repair_shop_id: string, params: EditRepairShopParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}`;
     return this.httpService.put(httpUrl, params);
   }
@@ -197,7 +224,7 @@ export class GarageManagementService {
   }
 
   /**
-   * 获取救援服务卑职
+   * 获取救援服务配置
    * @param repair_shop_id 参数
    */
   public requestRescueConfigData(repair_shop_id: string): Observable<Array<RescueConfig>> {
@@ -215,18 +242,29 @@ export class GarageManagementService {
    * 获取供货配置列表
    * @param searchParams 条件检索参数
    */
-  public requestSupplyConfigList(searchParams: SearchParams, repair_shop_id: string): Observable<RepairShopsLinkResponse> {
+  public requestSupplyConfigList(searchParams: SupplyConfigParams, repair_shop_id: string): Observable<SupplyConfigLinkResponse> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/accessories`;
     return this.httpService.get(httpUrl, searchParams.json())
-      .pipe(map(res => new RepairShopsLinkResponse(res)));
+      .pipe(map(res => new SupplyConfigLinkResponse(res)));
   }
 
   /**
    * 通过linkUrl继续请求汽修店列表
    * @param string url linkUrl
-   * @returns Observable<BusinessLinkResponse>
+   * @returns Observable<SupplyConfigLinkResponse>
    */
-  public continueSupplyConfigList(url: string): Observable<RepairShopsLinkResponse> {
-    return this.httpService.get(url).pipe(map(res => new RepairShopsLinkResponse(res)));
+  public continueSupplyConfigList(url: string): Observable<SupplyConfigLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new SupplyConfigLinkResponse(res)));
+  }
+
+  /**
+   * 设置供货方式
+   * @param repair_shop_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestSetSupplyConfig(repair_shop_id: string, params: SetSupplyConfigParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/supply_config`;
+    return this.httpService.put(httpUrl, params.json());
   }
 }
