@@ -78,15 +78,15 @@ export class AccessoryEditComponent implements OnInit {
     this.routerInfo.params.subscribe((params: Params) => {
       this.accessory_id = params.accessory_id;
     });
-    const obj = new SpecificationEntity();
-    obj.specification_id = '2134';
-    this.specificationsList.push(obj);
-    const obj1 = new SpecificationEntity();
-    obj1.specification_id = '2313';
-    this.specificationsList.push(obj1);
-    const obj2 = new SpecificationEntity();
-    obj2.specification_id = '2313';
-    this.specificationsList.push(obj2);
+    // const obj = new SpecificationEntity();
+    // obj.specification_id = '2134';
+    // this.specificationsList.push(obj);
+    // const obj1 = new SpecificationEntity();
+    // obj1.specification_id = '2313';
+    // this.specificationsList.push(obj1);
+    // const obj2 = new SpecificationEntity();
+    // obj2.specification_id = '2313';
+    // this.specificationsList.push(obj2);
     this.specificationsTempList = this.specificationsList;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.accessoryLibraryService.requestAccessoryDetailData(this.accessory_id).subscribe(res => {
@@ -99,7 +99,9 @@ export class AccessoryEditComponent implements OnInit {
         this.globalService.httpErrorProcess(err);
       });
     });
-    // this.searchText$.next();
+    if (this.accessory_id) {
+      this.searchText$.next();
+    }
   }
 
   // 编辑配置库数据处理

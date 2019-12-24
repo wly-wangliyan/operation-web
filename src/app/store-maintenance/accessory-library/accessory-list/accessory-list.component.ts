@@ -21,6 +21,7 @@ export class AccessoryListComponent implements OnInit {
 
   public projectList: Array<ProjectEntity> = [];
   public accessoryList: Array<AccessoryEntity> = [];
+  public accessoryNewList: Array<any> = [];
   public pageIndex = 1;
   public searchParams = new SearchParams();
   public noResultText = '数据加载中...';
@@ -45,9 +46,9 @@ export class AccessoryListComponent implements OnInit {
   constructor(private globalService: GlobalService, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
-    const obj = new AccessoryEntity();
-    obj.accessory_id = '232342';
-    this.accessoryList.push(obj);
+    // const obj = new AccessoryEntity();
+    // obj.accessory_id = '232342';
+    // this.accessoryList.push(obj);
     // 配件库列表
     this.searchText$.pipe(
       debounceTime(500),
@@ -55,12 +56,17 @@ export class AccessoryListComponent implements OnInit {
         this.accessoryLibraryService.requestAccessoryListData(this.searchParams))
     ).subscribe(res => {
       this.accessoryList = res.results;
+      this.accessoryNewList = this.accessoryList.map(i => ({
+        ...i,
+        accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+      }));
+
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchText$.next();
+    this.searchText$.next();
 
     // 项目列表
     this.searchProjectText$.pipe(
@@ -127,6 +133,10 @@ export class AccessoryListComponent implements OnInit {
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.accessoryLibraryService.continueAccessoryistData(this.linkUrl).subscribe(res => {
         this.accessoryList = this.accessoryList.concat(res.results);
+        this.accessoryNewList = this.accessoryList.map(i => ({
+          ...i,
+          accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+        }));
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);

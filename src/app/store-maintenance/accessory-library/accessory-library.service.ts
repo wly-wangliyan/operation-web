@@ -59,6 +59,7 @@ export class AccessoryEntity extends EntityBase {
   public accessory_id: string = undefined; // string	配件id - 主键
   public accessory_name: string = undefined; // tring	配件名称
   public accessory_images: string = undefined; // string	图片 多个逗号分隔
+  public accessory_imagesList: Array<any> = []; // array	图片数组
   public project: ProjectEntity = undefined; // 项目对象 Project
   public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
   public specifications: Array<SpecificationEntity> = []; // object	规格 Specification
