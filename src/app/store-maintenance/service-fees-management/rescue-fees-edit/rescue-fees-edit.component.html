@@ -8,50 +8,60 @@
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>救援名称</nz-form-label>
           <nz-form-control>
-            搭电/换胎
+            {{serviceFeeData.service_fee_name}}
           </nz-form-control>
         </nz-form-item>
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="6">
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>尾款原价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_initial_price"
-                  name="balance_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
-                <span class="unit">元</span>
+                <nz-input-group [nzAddOnAfter]="'元'">
+                  <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_initial_price"
+                    name="balance_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="6">
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>尾款现价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_current_price"
-                  name="balance_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
-                <span class="unit">元</span>
+                <div>
+                  <nz-input-group [nzAddOnAfter]="'元'">
+                    <input class="price-input" nz-input autocomplete="off" [(ngModel)]="balance_current_price"
+                      name="balance_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                  </nz-input-group>
+                </div>
                 <div *ngIf="balanceCurrentPriceErrors" class="text-danger">
                   <span class="input-error">{{balanceCurrentPriceErrors}}</span>
                 </div>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="6">
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>预付原价</nz-form-label>
-              <nz-form-control class="ml_10">
-                <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_initial_price"
-                  name="prepay_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
-                <span class="unit">元</span>
+              <nz-form-control>
+                <div>
+                  <nz-input-group [nzAddOnAfter]="'元'">
+                    <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_initial_price"
+                      name="prepay_initial_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                  </nz-input-group>
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="5">
+          <div nz-col [nzSpan]="6">
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>预付现价</nz-form-label>
-              <nz-form-control class="ml_10">
-                <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_current_price"
-                  name="prepay_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
-                <span class="unit">元</span>
+              <nz-form-control>
+                <div>
+                  <nz-input-group [nzAddOnAfter]="'元'">
+                    <input class="price-input" nz-input autocomplete="off" [(ngModel)]="prepay_current_price"
+                      name="prepay_current_price" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                  </nz-input-group>
+                </div>
                 <div *ngIf="prepayCurrentPriceErrors" class="text-danger">
                   <span class="input-error">{{prepayCurrentPriceErrors}}</span>
                 </div>
@@ -60,7 +70,7 @@
           </div>
         </div>
         <div style="margin-top: 40px;margin-bottom: 40px">
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!rescueFeesForm.form.valid"
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="loading&&!rescueFeesForm.form.valid"
             (appZDebounceClick)='onSaveFormSubmit()'>保存</button>
           <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>

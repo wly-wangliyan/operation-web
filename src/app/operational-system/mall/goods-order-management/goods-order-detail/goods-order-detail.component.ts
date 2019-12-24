@@ -24,13 +24,13 @@ export class GoodsOrderDetailComponent implements OnInit {
 
   public writeOffList: Array<WriteOffEntity> = []; // 商品核销
 
-  private order_id: string; // 订单id
-
   public type: string; // 商品类型
 
   public orderStepStatus: number; // 订单流程状态
 
   public orderInfo: string; // 收件人信息
+
+  private order_id: string; // 订单id
 
   @ViewChild('orderDeliveryComponent', { static: true }) public orderDeliveryComponent: GoodsOrderDeliveryComponent;
   @ViewChild('orderRefund', { static: true }) public orderRefund: GoodsOrderRefundComponent;

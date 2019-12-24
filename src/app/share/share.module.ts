@@ -51,7 +51,10 @@ import {
   StoreProjectTypePipe,
   StorePayStatus,
   RescueOrderStatusPipe,
-  RescueServiceStatusPipe
+  RescueServiceStatusPipe,
+  DoorOrderStatusPipe,
+  DoorRefundStatusPipe,
+  DoorRefundOrderStatusPipe
 } from './pipes/store-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
@@ -151,6 +154,9 @@ import { IntNumberDirective } from './directives/int-number.directive';
     RescueOrderStatusPipe,
     RescueServiceStatusPipe,
     DiyRangeTypeMsgPipe,
+    DoorOrderStatusPipe,
+    DoorRefundStatusPipe,
+    DoorRefundOrderStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -234,6 +240,9 @@ import { IntNumberDirective } from './directives/int-number.directive';
     RescueOrderStatusPipe,
     RescueServiceStatusPipe,
     DiyRangeTypeMsgPipe,
+    DoorOrderStatusPipe,
+    DoorRefundStatusPipe,
+    DoorRefundOrderStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,

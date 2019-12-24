@@ -35,7 +35,7 @@
               <select class="form-control select-font" name="shipping_method"
                 [(ngModel)]="currentOrder.delivery_company">
                 <option value=''>选择物流公司</option>
-                <option *ngFor='let data of deliveryCompany' [value]=data.key>{{data.value}}</option>
+                <option *ngFor='let data of logisticsList' [value]=data.logistics_tag>{{data.logistics_name}}</option>
               </select>
             </div>
           </div>

@@ -1,355 +1,385 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'产品管理'" [level2Name]="levelTwoName" [level1RelativePath]="listRelativePath"></app-crumb>
+  <app-crumb [level1Name]="'产品管理'" [level2Name]="levelTwoName" [level1RelativePath]="listRelativePath"></app-crumb>
 </div>
 
 <div class="content-flow">
-    <div class='content-container'>
-        <form class="form-horizontal" #commodityForm="ngForm" autocomplete="off">
-            <div class="card_content">
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>商品类型</span>
-                    </label>
-                    <div class="control-input">
-                        <a name="commodity_type" class="commodity-type-btn" [class.commodity-type-active-btn]="commodityInfo.commodity_type===1"
-                           (click)="onChangeCommodityType('commodity_type', 1)">
-                            <span>实物商品</span>
-                            <span>物流发货</span>
-                        </a>
-                        <a name="commodity_type" class="commodity-type-btn" [class.commodity-type-active-btn]="commodityInfo.commodity_type===2"
-                           (click)="onChangeCommodityType('commodity_type', 2)" style="margin-right: 5px">
-                            <span>虚拟商品</span>
-                            <span>无需配送</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>供货方式</span>
-                    </label>
-                    <div class="control-input">
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='1'"
-                           (click)="onChangeCommodityType('shipping_method', 1)">平台自营</a>
-                        <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='2'"
-                           (click)="onChangeCommodityType('shipping_method', 2)" style="margin-right: 5px">第三方供应</a>
-                        <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id" style="width: 180px"
-                                [(ngModel)]="commodityInfo.mall_business_id" required>
-                            <option value="">请选择供应商家</option>
-                            <option *ngFor="let item of businessList" [value]="item.mall_business_id">
-                                {{item.mall_business_name}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>收款方</span>
-                    </label>
-                    <div class="control-input" >
-                        <select class="form-control" name="collection_type" style="width: 240px" [(ngModel)]="commodityInfo.collection_type"
-                                required [disabled]="commodityInfo.shipping_method!='2'||!commodityInfo.mall_business_id">
-                            <option value=1>平台</option>
-                            <option value=2>此供应商户</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>产品名称</span>
-                    </label>
-                    <div class="control-input">
-                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name"
-                               name="commodity_name" placeholder="输入1-20个字标题" minlength="1" maxlength="20"
-                               appIgnoreSpace required>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label special-control-label">
-                        <span>副标题</span>
-                    </label>
-                    <div class="control-input">
-                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
-                               placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
+  <div class='content-container'>
+    <form class="form-horizontal" #commodityForm="ngForm" autocomplete="off">
+      <div class="card_content">
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>商品类型</span>
+          </label>
+          <div class="control-input">
+            <a name="commodity_type" class="commodity-type-btn"
+              [class.commodity-type-active-btn]="commodityInfo.commodity_type===1"
+              (click)="onChangeCommodityType('commodity_type', 1)">
+              <span>实物商品</span>
+              <span>物流发货</span>
+            </a>
+            <a name="commodity_type" class="commodity-type-btn"
+              [class.commodity-type-active-btn]="commodityInfo.commodity_type===2"
+              (click)="onChangeCommodityType('commodity_type', 2)" style="margin-right: 5px">
+              <span>虚拟商品</span>
+              <span>无需配送</span>
+            </a>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>供货方式</span>
+          </label>
+          <div class="control-input">
+            <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='1'"
+              (click)="onChangeCommodityType('shipping_method', 1)">平台自营</a>
+            <a name="shipping_method" class="tab-btn" [class.active-btn]="commodityInfo.shipping_method=='2'"
+              (click)="onChangeCommodityType('shipping_method', 2)" style="margin-right: 5px">第三方供应</a>
+            <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id"
+              style="width: 180px" [(ngModel)]="commodityInfo.mall_business_id" required>
+              <option value="">请选择供应商家</option>
+              <option *ngFor="let item of businessList" [value]="item.mall_business_id">
+                {{item.mall_business_name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>收款方</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" name="collection_type" style="width: 240px"
+              [(ngModel)]="commodityInfo.collection_type" required
+              [disabled]="commodityInfo.shipping_method!='2'||!commodityInfo.mall_business_id">
+              <option value=1>平台</option>
+              <option value=2>此供应商户</option>
+            </select>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品名称</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name" name="commodity_name"
+              placeholder="输入1-20个字标题" minlength="1" maxlength="20" appIgnoreSpace required>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label special-control-label">
+            <span>副标题</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
+              placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
 
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>产品图片</span>
-                    </label>
-                    <div>
-                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                            [maxLength]="6" [isCutCoverImg]="true" [imageWidth]="100"
-                                            [imageHeight]="100" [imageUrls]="commodityInfo.commodity_images"
-                                            [minCropBoxWidth]="400" [minCropBoxHeight]="400"
-                                            (selectedImgChange)="onSelectedPicture($event)" file_id="goodsImg"
-                                            #goodsImg></app-z-photo-select>
-                        <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</p>
-                        <div class="row row-message special-row-message">
-                            <div class="control-input">
-                                <span *ngIf="imgErrMsgItem?.isError">{{imgErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label special-control-label">
-                        <span>视频介绍</span>
-                    </label>
-                    <div>
-                        <app-z-video-select [hasAddVideo]="true" [hasDeleteVideo]="true" [videoWidth]="100"
-                                            [videoHeight]="100" [videoUrls]="commodityInfo.commodity_videos"
-                                            (selectedVideoChange)="onSelectedVideo($event)" file_id="goodsVideo"
-                                            #goodsVideo></app-z-video-select>
-                        <p class="cover-hint">注：限MP4格式，大小20M以内</p>
-                        <div class="row row-message special-row-message">
-                            <div class="control-input">
-                                <span *ngIf="videoErrMsgItem?.isError">{{videoErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row control-row" *ngIf="commodityInfo.commodity_type===2">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>有效期</span>
-                    </label>
-                    <div class="control-input" style="width: 275px">
-                        <a name="validity_type" class="tab-btn" [class.active-btn]="commodityInfo.validity_type===1"
-                           (click)="onChangeCommodityType('validity_type', 1)">付款后立即生效</a>
-                        <a name="validity_type" class="tab-btn" [class.active-btn]="commodityInfo.validity_type===2"
-                           (click)="onChangeCommodityType('validity_type', 2)">使用日期当日有效</a>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>产品规格</span>
-                    </label>
-                    <div class="control-input table-container" id='table-container'>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>规格名称</th>
-                                <th>原价</th>
-                                <th *ngIf="commodityInfo.validity_type!==2">售价</th>
-                                <th>结算价</th>
-                                <th>库存</th>
-                                <th></th>
-                                <th style="width: 15%;"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let formatCommoditySpecification of FormatCommoditySpecificationList; let specificationIndex=index;">
-                                <td>
-                                    <div class="td-content">
-                                        <input type="text" class="form-control"
-                                               [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
-                                               [name]="'specification_name_' + formatCommoditySpecification.idCount"
-                                               (input)="initErrMsg()" placeholder="输入1-10字规格名称" minlength="1"
-                                               maxlength="10" appIgnoreSpace>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td-content special-td-content">
-                                        <input type="text" class="form-control"
-                                               [id]="'unit_original_price_' + formatCommoditySpecification.idCount"
-                                               [(ngModel)]="formatCommoditySpecification.specification_params.unit_original_price"
-                                               [name]="'unit_original_price_' + formatCommoditySpecification.idCount"
-                                               (blur)="reverseSpecificationParams(specificationIndex, $event, 1)"
-                                               (input)="initErrMsg()" maxlength="9" appIgnoreSpace>
-                                        <label class="one-word-lable">元</label>
-                                    </div>
-                                </td>
-                                <td *ngIf="commodityInfo.validity_type!==2">
-                                    <div class="td-content special-td-content">
-                                        <input type="text" class="form-control"
-                                               [id]="'unit_sell_price_' + formatCommoditySpecification.idCount"
-                                               [(ngModel)]="formatCommoditySpecification.specification_params.unit_sell_price"
-                                               [name]="'unit_sell_price_' + formatCommoditySpecification.idCount"
-                                               (blur)="reverseSpecificationParams(specificationIndex, $event, 2)"
-                                               (input)="initErrMsg()" maxlength="9" appIgnoreSpace>
-                                        <label class="one-word-lable">元</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td-content special-td-content">
-                                        <input type="text" class="form-control"
-                                               [id]="'settlement_price_' + formatCommoditySpecification.idCount"
-                                               [(ngModel)]="formatCommoditySpecification.specification_params.settlement_price"
-                                               [name]="'settlement_price_' + formatCommoditySpecification.idCount"
-                                               (blur)="reverseSpecificationParams(specificationIndex, $event, 4)"
-                                               (input)="initErrMsg()" maxlength="9" appIgnoreSpace>
-                                        <label class="one-word-lable">元</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td-content stock-content" *ngIf="commodityInfo.validity_type!==2">
-                                        <input type="text" class="form-control"
-                                               [id]="'stock_' + formatCommoditySpecification.idCount"
-                                               [(ngModel)]="formatCommoditySpecification.specification_params.stock"
-                                               [name]="'stock_' + formatCommoditySpecification.idCount"
-                                               (blur)="reverseSpecificationParams(specificationIndex, $event, 3)"
-                                               (input)="initErrMsg()" maxlength="5" appIgnoreSpace>
-                                    </div>
-                                    <div class="td-content stock-content" *ngIf="commodityInfo.validity_type===2">
-                                        <button name="close_btn" type="button" class="price-setting-btn" nz-button
-                                                (click)="onSettingPriceClick(formatCommoditySpecification.specification_params, specificationIndex)">
-                                            <img src="/assets/images/icon_calendar.png">设置
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td-content sold-amount-container">
-                                        <span>已售：{{formatCommoditySpecification.specification_params.sold_amount}}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td-content operation-container">
-                                        <a class="remove-a" [title]="'移除'"
-                                           *ngIf="FormatCommoditySpecificationList.length > 1"
-                                           (click)="onDeleteCommoditySpecification(specificationIndex)">                                            移除
-                                        </a>
-                                        <a [title]="'添加'"
-                                           *ngIf="(FormatCommoditySpecificationList.length < 50) && (specificationIndex === FormatCommoditySpecificationList.length - 1)"
-                                           [class.disabled]="!CheckCommoditySpecificationValid"
-                                           (click)="onAddCommoditySpecification()">
-                                            添加
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="row row-message">
-                            <div class="control-input">
-                                <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>&nbsp;</b>
-                        <span>限购</span>
-                    </label>
-                    <div class="control-input" style="width: 250px">
-                        <span>终身限购</span>
-                        <input type="text" class="form-control" style="width: 160px;margin-left: 10px" [(ngModel)]="commodityInfo.buy_max_num"
-                               name="buy_max_num" placeholder="不输则为不限制" maxlength="2"
-                               oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace>
-                        <label class="one-word-lable">件</label>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>产品描述</span>
-                    </label>
-                    <div class="control-input description-input">
-                        <app-z-text-ckeditor ckEditorId="goodsEditor"></app-z-text-ckeditor>
-                    </div>
-                </div>
-                <div class="row control-row">
-                    <label class="control-label"></label>
-                    <div class="control-input special-control-input" style="margin-bottom: 10px;">
-                        <div class="row row-message">
-                            <div class="control-input">
-                                <span *ngIf="editorErrMsgItem?.isError">{{editorErrMsgItem?.errMes}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-                            (appZDebounceClick)="onAddOrEditCommoditySubmit()"
-                            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid || !CheckTabValia ">
-                        保存
-                    </button>
-                    <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
-                        取消
-                    </button>
-                </div>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>所属分类</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" name="sort_id" style="width: 240px" [(ngModel)]="commodityInfo.sort_id"
+              required>
+              <option value="">请选择</option>
+              <option *ngFor="let item of classifyList" [value]="item.sort_id">
+                {{item.sort_name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>封面图片</span>
+          </label>
+          <div>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="1"
+              [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100" [imageUrls]="coverImgList"
+              [minCropBoxWidth]="400" [minCropBoxHeight]="400" (selectedImgChange)="onSelectedCoverPicture($event)"
+              file_id="coverImg" #coverImg></app-z-photo-select>
+            <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传1张</p>
+            <div class="row row-message special-row-message">
+              <div class="control-input">
+                <span *ngIf="coverImgErrMsgItem?.isError">{{coverImgErrMsgItem?.errMes}}</span>
+              </div>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品图片</span>
+          </label>
+          <div>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="6"
+              [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100" [imageUrls]="commodityInfo.commodity_images"
+              [minCropBoxWidth]="400" [minCropBoxHeight]="400" (selectedImgChange)="onSelectedPicture($event)"
+              file_id="goodsImg" #goodsImg></app-z-photo-select>
+            <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</p>
+            <div class="row row-message special-row-message">
+              <div class="control-input">
+                <span *ngIf="imgErrMsgItem?.isError">{{imgErrMsgItem?.errMes}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label special-control-label">
+            <span>视频介绍</span>
+          </label>
+          <div>
+            <app-z-video-select [hasAddVideo]="true" [hasDeleteVideo]="true" [videoWidth]="100" [videoHeight]="100"
+              [videoUrls]="commodityInfo.commodity_videos" (selectedVideoChange)="onSelectedVideo($event)"
+              file_id="goodsVideo" #goodsVideo></app-z-video-select>
+            <p class="cover-hint">注：限MP4格式，大小20M以内</p>
+            <div class="row row-message special-row-message">
+              <div class="control-input">
+                <span *ngIf="videoErrMsgItem?.isError">{{videoErrMsgItem?.errMes}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row control-row" *ngIf="commodityInfo.commodity_type===2">
+          <label class="control-label">
+            <b>*</b>
+            <span>有效期</span>
+          </label>
+          <div class="control-input" style="width: 275px">
+            <a name="validity_type" class="tab-btn" [class.active-btn]="commodityInfo.validity_type===1"
+              (click)="onChangeCommodityType('validity_type', 1)">付款后立即生效</a>
+            <a name="validity_type" class="tab-btn" [class.active-btn]="commodityInfo.validity_type===2"
+              (click)="onChangeCommodityType('validity_type', 2)">使用日期当日有效</a>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品规格</span>
+          </label>
+          <div class="control-input table-container" id='table-container'>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>规格名称</th>
+                  <th>原价</th>
+                  <th *ngIf="commodityInfo.validity_type!==2">售价</th>
+                  <th>结算价</th>
+                  <th>库存</th>
+                  <th></th>
+                  <th style="width: 15%;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let formatCommoditySpecification of FormatCommoditySpecificationList; let specificationIndex=index;">
+                  <td>
+                    <div class="td-content">
+                      <input type="text" class="form-control"
+                        [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
+                        [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
+                        placeholder="输入1-10字规格名称" minlength="1" maxlength="10" appIgnoreSpace>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="td-content special-td-content">
+                      <input type="text" class="form-control"
+                        [id]="'unit_original_price_' + formatCommoditySpecification.idCount"
+                        [(ngModel)]="formatCommoditySpecification.specification_params.unit_original_price"
+                        [name]="'unit_original_price_' + formatCommoditySpecification.idCount"
+                        (blur)="reverseSpecificationParams(specificationIndex, $event, 1)" (input)="initErrMsg()"
+                        maxlength="9" appIgnoreSpace>
+                      <label class="one-word-lable">元</label>
+                    </div>
+                  </td>
+                  <td *ngIf="commodityInfo.validity_type!==2">
+                    <div class="td-content special-td-content">
+                      <input type="text" class="form-control"
+                        [id]="'unit_sell_price_' + formatCommoditySpecification.idCount"
+                        [(ngModel)]="formatCommoditySpecification.specification_params.unit_sell_price"
+                        [name]="'unit_sell_price_' + formatCommoditySpecification.idCount"
+                        (blur)="reverseSpecificationParams(specificationIndex, $event, 2)" (input)="initErrMsg()"
+                        maxlength="9" appIgnoreSpace>
+                      <label class="one-word-lable">元</label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="td-content special-td-content">
+                      <input type="text" class="form-control"
+                        [id]="'settlement_price_' + formatCommoditySpecification.idCount"
+                        [(ngModel)]="formatCommoditySpecification.specification_params.settlement_price"
+                        [name]="'settlement_price_' + formatCommoditySpecification.idCount"
+                        (blur)="reverseSpecificationParams(specificationIndex, $event, 4)" (input)="initErrMsg()"
+                        maxlength="9" appIgnoreSpace>
+                      <label class="one-word-lable">元</label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="td-content stock-content" *ngIf="commodityInfo.validity_type!==2">
+                      <input type="text" class="form-control" [id]="'stock_' + formatCommoditySpecification.idCount"
+                        [(ngModel)]="formatCommoditySpecification.specification_params.stock"
+                        [name]="'stock_' + formatCommoditySpecification.idCount"
+                        (blur)="reverseSpecificationParams(specificationIndex, $event, 3)" (input)="initErrMsg()"
+                        maxlength="5" appIgnoreSpace>
+                    </div>
+                    <div class="td-content stock-content" *ngIf="commodityInfo.validity_type===2">
+                      <button name="close_btn" type="button" class="price-setting-btn" nz-button
+                        (click)="onSettingPriceClick(formatCommoditySpecification.specification_params, specificationIndex)">
+                        <img src="/assets/images/icon_calendar.png">设置
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="td-content sold-amount-container">
+                      <span>已售：{{formatCommoditySpecification.specification_params.sold_amount}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="td-content operation-container">
+                      <a class="remove-a" [title]="'移除'" *ngIf="FormatCommoditySpecificationList.length > 1"
+                        (click)="onDeleteCommoditySpecification(specificationIndex)"> 移除
+                      </a>
+                      <a [title]="'添加'"
+                        *ngIf="(FormatCommoditySpecificationList.length < 50) && (specificationIndex === FormatCommoditySpecificationList.length - 1)"
+                        [class.disabled]="!CheckCommoditySpecificationValid" (click)="onAddCommoditySpecification()">
+                        添加
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row row-message">
+              <div class="control-input">
+                <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>限购</span>
+          </label>
+          <div class="control-input" style="width: 250px">
+            <span>终身限购</span>
+            <input type="text" class="form-control" style="width: 160px;margin-left: 10px"
+              [(ngModel)]="commodityInfo.buy_max_num" name="buy_max_num" placeholder="不输则为不限制" maxlength="2"
+              oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace>
+            <label class="one-word-lable">件</label>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>产品描述</span>
+          </label>
+          <div class="control-input description-input">
+            <app-z-text-ckeditor ckEditorId="goodsEditor"></app-z-text-ckeditor>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label"></label>
+          <div class="control-input special-control-input" style="margin-bottom: 10px;">
+            <div class="row row-message">
+              <div class="control-input">
+                <span *ngIf="editorErrMsgItem?.isError">{{editorErrMsgItem?.errMes}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+            (appZDebounceClick)="onAddOrEditCommoditySubmit()"
+            [disabled]="!commodityForm.form.valid || !CheckImgValid || !CheckCommoditySpecificationValid || !CheckEditorValid || !CheckTabValia ">
+            保存
+          </button>
+          <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
+            取消
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!--设置价格日历-->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #pricePromptDiv>
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">价格日历设置</span>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
-                </button>
-            </div>
-            <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
-                <div class="row" style="height: 30px">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>日期</span>
-                    </label>
-                    <div class="control-input">
-                        <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false [nzShowTime]="false"
-                                        [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
-                                        (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
-                        <span style="margin: 5px 7px">至</span>
-                        <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzShowTime]="false"
-                                        [nzDisabledDate]="disabledEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
-                                        (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <label class="control-label">
-                        <b>*</b>
-                        <span>适用</span>
-                    </label>
-                    <div class="control-input">
-                        <label nz-checkbox *ngFor="let item of weekList;let i=index" [(ngModel)]="item.checked" [nzDisabled]="item.disabled" name="{{i}}">{{item.label}}</label>
-                        <span class="price-date-btn" (click)="onChooseDateClick(1)">全选</span>
-                        <span class="price-date-btn" (click)="onChooseDateClick(2)">工作日</span>
-                        <span class="price-date-btn" (click)="onChooseDateClick(3)">周末</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>售价</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" placeholder="请输入售价" [(ngModel)]="currentSpecification.unit_sell_price_day"
-                               maxlength="9" name="unit_sell_price_day" required appIgnoreSpace appFloatNumber>
-                        <label class="one-word-lable">元</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class=" control-label">
-                        <b>*</b>
-                        <span>库存</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" placeholder="请输入库存" [(ngModel)]="currentSpecification.stock_day" maxlength="5"
-                               onInput="value=value.replace(/\./g, '')"
-                               name="stock_day" autocomplete="off" required appIgnoreSpace appFloatNumber>
-                        <label class="one-word-lable">件</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || !CheckPriceDateValid"
-                            (appZDebounceClick)="onEditFormSubmit()">
-                        确定
-                    </button>
-                </div>
-            </form>
+  aria-labelledby="myModalLabel" aria-hidden="true" #pricePromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">价格日历设置</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+        <div class="row" style="height: 30px">
+          <label class=" control-label">
+            <b>*</b>
+            <span>日期</span>
+          </label>
+          <div class="control-input">
+            <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false [nzShowTime]="false"
+              [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
+              (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
+            <span style="margin: 5px 7px">至</span>
+            <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzShowTime]="false"
+              [nzDisabledDate]="disabledEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}" required
+              (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
+          </div>
         </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>适用</span>
+          </label>
+          <div class="control-input">
+            <label nz-checkbox *ngFor="let item of weekList;let i=index" [(ngModel)]="item.checked"
+              [nzDisabled]="item.disabled" name="{{i}}">{{item.label}}</label>
+            <span class="price-date-btn" (click)="onChooseDateClick(1)">全选</span>
+            <span class="price-date-btn" (click)="onChooseDateClick(2)">工作日</span>
+            <span class="price-date-btn" (click)="onChooseDateClick(3)">周末</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class=" control-label">
+            <b>*</b>
+            <span>售价</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请输入售价" [(ngModel)]="currentSpecification.unit_sell_price_day"
+              maxlength="9" name="unit_sell_price_day" required appIgnoreSpace appFloatNumber>
+            <label class="one-word-lable">元</label>
+          </div>
+        </div>
+        <div class="row">
+          <label class=" control-label">
+            <b>*</b>
+            <span>库存</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="请输入库存" [(ngModel)]="currentSpecification.stock_day" maxlength="5"
+              onInput="value=value.replace(/\./g, '')" name="stock_day" autocomplete="off" required appIgnoreSpace
+              appFloatNumber>
+            <label class="one-word-lable">件</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid || !CheckPriceDateValid"
+            (appZDebounceClick)="onEditFormSubmit()">
+            确定
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

@@ -8,18 +8,19 @@
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>所属项目</nz-form-label>
           <nz-form-control>
-            <input class="pro-input" nz-input autocomplete="off" name="project" disabled />
+            <input class="pro-input" nz-input [(ngModel)]="accessoryParams.project_name" autocomplete="off"
+              name="project" disabled />
             <a class="choose" (click)='onOpenProjectModal()'>选择</a>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
           <nz-form-control>
-            <input class="pro-name" placeholder="输入1-30个字标题" nz-input autocomplete="off" name="main-title" required
-              maxlength='30' />
-            <!-- <div *ngIf="productNameErrors" class="text-danger">
-              <span class="input-error">{{productNameErrors}}</span>
-            </div> -->
+            <input class="pro-name" [(ngModel)]="accessoryParams.accessory_name" placeholder="输入1-30个字标题" nz-input
+              autocomplete="off" name="accessory-name" required maxlength='30' />
+            <div *ngIf="accessoryNameErrors" class="text-danger">
+              <span class="input-error">{{accessoryNameErrors}}</span>
+            </div>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
@@ -29,21 +30,14 @@
               [isCutCoverImg]="true" [aspectRatio]='1/1' [maxLength]="6" file_id="accessoryImg" [imageWidth]='100'
               [imageHeight]='100' [imageAddHeight]="100" [minCropBoxWidth]="400" [minCropBoxHeight]="400">
             </app-z-photo-select>
-            <!-- <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
+            <div *ngIf="errPositionItem?.icon?.isError" class="text-danger" style='margin-top: -14px;'>
               <span class="input-error input_time_valid">{{ errPositionItem?.icon?.errMes}}</span>
-            </div> -->
+            </div>
             <div>注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</div>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>所属品牌</nz-form-label>
-          <nz-form-control>
-            <input class="pro-input" nz-input autocomplete="off" name="project" disabled />
-            <a class="choose" (click)='onOpenBrandModal()'>选择</a>
-          </nz-form-control>
-        </nz-form-item>
         <!-- 机油 -->
-        <nz-form-item nzFlex>
+        <nz-form-item nzFlex *ngIf='false'>
           <nz-form-label nzRequired [nzNoColon]='true'>参数</nz-form-label>
           <nz-form-control>
             <div class="params-box">
@@ -115,22 +109,21 @@
           <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
           <nz-form-control>
             <div class="table-form">
-              <nz-table [nzData]="list" [nzShowPagination]="false" [nzFrontPagination]='false'
+              <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
                 [nzNoResult]="noResultText" #basicTable>
                 <thead>
                   <tr>
                     <th>图片</th>
-                    <th>净含量</th>
-                    <th>原价</th>
-                    <th>结算价</th>
-                    <th>售价</th>
+                    <th>型号</th>
+                    <th>尾款原价</th>
+                    <th>尾款现价</th>
                     <th>库存</th>
                     <th></th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let data of list; let i=index">
+                  <tr *ngFor="let data of specificationsList; let i=index">
                     <td>
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
@@ -143,100 +136,83 @@
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="unit">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
+                        <input class="price-input" [(ngModel)]="data.accessory_model" nz-input autocomplete="off"
+                          name="accessory-model-{{data.time}}" required maxlength='20' />
                       </nz-input-group>
                       <ng-template #unit>L</ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="priceUnit1">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
+                        <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
+                          name="original-fee-{{data.time}}" required maxlength='20' />
                       </nz-input-group>
                       <ng-template #priceUnit1>元</ng-template>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="priceUnit2">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
+                        <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
+                          name="sale-fee-{{data.time}}" required maxlength='20' />
                       </nz-input-group>
                       <ng-template #priceUnit2>元</ng-template>
                     </td>
                     <td>
-                      <nz-input-group [nzSuffix]="priceUnit3">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
-                      </nz-input-group>
-                      <ng-template #priceUnit3>元</ng-template>
-                    </td>
-                    <td>
-                      <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                        maxlength='20' />
+                      <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
+                        name="store-{{data.time}}" required maxlength='20' />
                     </td>
                     <td>
                       <span class='volume'>已售：150</span>
                     </td>
                     <td class="operation">
-                      <a [title]="'移除'" class="del-btn" *ngIf="list.length>1" (click)="onDelSpecifications(i)">移除</a>
-                      <a [title]="'添加'" class="add-btn" *ngIf="list.length<5&&i===list.length-1"
+                      <a [title]="'移除'" class="del-btn" *ngIf="specificationsList.length>1"
+                        (click)="onDelSpecifications(data,i)">移除</a>
+                      <a [title]="'添加'" class="add-btn"
+                        *ngIf="specificationsList.length<50&&i===specificationsList.length-1"
                         (click)="onAddSpecifications()">添加</a>
                     </td>
                   </tr>
                 </tbody>
               </nz-table>
             </div>
-
           </nz-form-control>
         </nz-form-item>
-        <!-- 机油滤清器 -->
         <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>价格</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]='true'>预付价格</nz-form-label>
           <nz-form-control>
-            <div class="table-form">
-              <nz-table [nzData]="list" [nzShowPagination]="false" [nzFrontPagination]='false'
-                [nzNoResult]="noResultText" #priceTable>
-                <thead>
-                  <tr>
-                    <th>原价</th>
-                    <th>结算价</th>
-                    <th>售价</th>
-                    <th>库存</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of list; let i=index">
-                    <td>
-                      <nz-input-group [nzSuffix]="priceUnit1">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
+            <div class="params-box">
+              <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item nzFlex>
+                    <nz-form-label [nzNoColon]='true'>预付原价</nz-form-label>
+                    <nz-form-control>
+                      <nz-input-group [nzSuffix]="originPriceUnit">
+                        <input class="price-input" [(ngModel)]="right_prepaid_fee" nz-input autocomplete="off"
+                          name="right_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
-                      <ng-template #priceUnit1>元</ng-template>
-                    </td>
-                    <td>
-                      <nz-input-group [nzSuffix]="priceUnit2">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
-                      </nz-input-group>
-                      <ng-template #priceUnit2>元</ng-template>
-                    </td>
-                    <td>
-                      <nz-input-group [nzSuffix]="priceUnit3">
-                        <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                          maxlength='20' />
-                      </nz-input-group>
-                      <ng-template #priceUnit3>元</ng-template>
-                    </td>
-                    <td>
-                      <input class="price-input" nz-input autocomplete="off" name="main-title" required
-                        maxlength='20' />
-                    </td>
-                    <td>
-                      <span class='volume'>已售：150</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </nz-table>
+                      <ng-template #originPriceUnit>元</ng-template>
+                      <div class="text-danger">
+                        <span class="input-error">{{prepaidOriginPriceErrors}}</span>
+                      </div>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item nzFlex>
+                    <nz-form-label [nzNoColon]='true'>预付现价</nz-form-label>
+                    <nz-form-control>
+                      <div>
+                        <nz-input-group [nzSuffix]="salePriceUnit">
+                          <input class="price-input" [(ngModel)]="real_prepaid_fee" nz-input autocomplete="off"
+                            name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                        </nz-input-group>
+                        <ng-template #salePriceUnit>元</ng-template>
+                      </div>
+                      <div class="text-danger">
+                        <span class="input-error">{{prepaidSalePriceErrors}}</span>
+                      </div>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -244,13 +220,14 @@
           <nz-form-label nzRequired [nzNoColon]='true'>图文详情</nz-form-label>
           <nz-form-control>
             <app-z-text-ckeditor ckEditorId='accessoryEditor' #accessoryEditor></app-z-text-ckeditor>
-            <!-- <div *ngIf="productIntroduceErrors" class="text-danger">
-              <span class="input-error">{{productIntroduceErrors}}</span>
-            </div> -->
+            <div class="text-danger">
+              <span class="input-error">{{accessoryDetailErrors}}</span>
+            </div>
           </nz-form-control>
         </nz-form-item>
         <div style="margin-top: 40px;margin-bottom: 40px">
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!workFeesForm.form.valid">保存</button>
+          <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)='onSaveFormSubmit()'
+            [disabled]="!workFeesForm.form.valid">保存</button>
           <button class="close-btn" nz-button>取消</button>
         </div>
       </div>
@@ -258,6 +235,5 @@
   </div>
 </div>
 <!-- 选择保养项目 -->
-<app-choose-project #chooseProject></app-choose-project>
-<!-- 选择配件品牌 -->
-<app-choose-brand #chooseBrand></app-choose-brand>
+<app-choose-project #chooseProject [selectedProjectid]="accessoryParams.project_id"
+  (selectedProject)="onSelectedProject($event)"></app-choose-project>

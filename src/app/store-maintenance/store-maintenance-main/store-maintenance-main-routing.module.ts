@@ -48,6 +48,10 @@ const routes: Routes = [{
       path: 'rescue-order',
       loadChildren: () => import('../rescue-order/rescue-order.module').then(m => m.RescueOrderModule),
     },
+    {
+      path: 'upkeep-order',
+      loadChildren: () => import('../upkeep-order/upkeep-order.module').then(m => m.UpkeepOrderModule),
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];

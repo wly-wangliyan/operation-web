@@ -194,4 +194,9 @@ export class ServiceConfigEditComponent implements OnInit {
     }
   }
 
+  public onCancelBtn() {
+    this.router.navigateByUrl('/order-parking/service-config');
+  }
+
+
 }

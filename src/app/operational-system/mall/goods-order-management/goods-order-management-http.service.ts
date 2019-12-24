@@ -10,6 +10,7 @@ export class SearchParams extends EntityBase {
   public pay_status = null; // 	int	F	订单状态 1:待支付 2:已支付 3:已取消
   public delivery_status = null; // 	int	F	发货状态 1:待发货 2:已发货 3:已签收
   public refund_type = null; // int	F	退款类型 1全部退款，2部分退款,3未退款 售后/退款传2
+  public after_sale = false; // bool	F	售后/退款 True是售后/退款 False 不是售后/退款
   public order_status = null; // int F	订单状态 1未完成，2已完成
   public commodity_type = 0; // int	F	商品类型 1：实物商品 2：虚拟商品
   public shipping_method = 0; // int	供货方式 1平台自营，2第三方供应
@@ -65,6 +66,16 @@ export class OrderRefundEntity extends EntityBase {
   public cash_fee = ''; // 	int	单位分 现金支付金额
 }
 
+// 物流公司实体
+export class LogisticsEntity extends EntityBase {
+  public logistics_id: string = undefined; // string	id - 主键
+  public logistics_tag: string = undefined; // string	物流公司标签
+  public logistics_name: string = undefined; // string	物流公司名称
+  public logistics_logo: string = undefined; // string	物流公司图片
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+}
+
 export class GoodsOrderEntity extends EntityBase {
   public order_id = ''; // 	string	订单ID
   public trade_no = ''; // 	string	微信支付订单id
@@ -78,6 +89,7 @@ export class GoodsOrderEntity extends EntityBase {
   public total_amount = undefined; // 	integer	总金额 (应收金额 单位分)
   public discount_price = undefined; // 	integer	平台立减 单位分
   public platform_coupon_amount = undefined; // 	integer	平台优惠劵 单位分
+  public coupon_real_amount = undefined; // 	integer	优惠卷使用金额(实际使用)  单位分
   public real_price = undefined; // 	float	实付金额 (支付金额 单位分)
   public postage = undefined; // 	integer	邮费 单位分
   public contact = ''; // 	String	收货人
@@ -142,6 +154,15 @@ export class OrderLinkResponse extends LinkResponse {
   }
 }
 
+export class LogisticsLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<LogisticsEntity> {
+    const tempList: Array<LogisticsEntity> = [];
+    results.forEach(res => {
+      tempList.push(LogisticsEntity.Create(res));
+    });
+    return tempList;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -170,6 +191,17 @@ export class GoodsOrderManagementHttpService {
   public continueOrderList(url: string): Observable<OrderLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new OrderLinkResponse(res)));
   }
+
+  /**
+   * 获取物流公司下拉列表
+   * @returns Observable<LogisticsLinkResponse>
+   */
+  public requestLogisticsList(): Observable<LogisticsLinkResponse> {
+    const httpUrl = `${this.domain}/logistics`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => new LogisticsLinkResponse(res)));
+  }
+
 
   /**
    * 获取订单详情

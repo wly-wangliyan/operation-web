@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 /** 发货状态 */
 const DeliveryStatus = {
-  1: '未发货',
+  1: '待发货',
   2: '已发货',
   3: '已收货'
 };
@@ -92,9 +92,8 @@ export class RefundTypePipe implements PipeTransform {
 
 /** 退款状态 */
 const RefundStatus = {
-  0: '未申请退款',
   1: '退款中',
-  2: '已退款',
+  2: '退款完成',
   3: '退款失败',
 };
 

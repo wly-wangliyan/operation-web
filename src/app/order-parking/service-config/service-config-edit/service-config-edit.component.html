@@ -186,7 +186,7 @@
         <div nz-row style="margin:20px 80px 0;">
           <button class="sure-btn" nz-button nzType="primary" [disabled]='!serviceConfigForm.valid'
             (appZDebounceClick)="onSaveFormSubmit()">保存</button>
-          <button class="close-btn" nz-button nzType="default">取消</button>
+          <button class="close-btn" nz-button nzType="default" (click)="onCancelBtn()">取消</button>
         </div>
       </div>
     </form>

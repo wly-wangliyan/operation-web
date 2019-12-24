@@ -19,10 +19,10 @@ export class MenuStoreMaintenanceService {
     this.menu_icon = false;
     this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
-    // menusItem.push(this.generatePartsManagementMenu());
+    menusItem.push(this.generatePartsManagementMenu());
     menusItem.push(this.generateOrderSettlementMenu());
     menusItem.push(this.generateBusinessManagementMenu());
-    // menusItem.push(this.generateOtherMenu());
+    menusItem.push(this.generateOtherMenu());
     return menusItem;
   }
 
@@ -31,11 +31,11 @@ export class MenuStoreMaintenanceService {
     const systemMenu = new SideMenuItem('配件管理', null);
     systemMenu.icon = '/assets/images/menu_part.png';
     const subFinanceMenu1 = new SideMenuItem('配件库', '/store-maintenance/accessory-library', systemMenu);
-    const subFinanceMenu2 = new SideMenuItem('配件品牌管理', '/store-maintenance/brand-management', systemMenu);
-    const subFinanceMenu3 = new SideMenuItem('保养项目管理', '/store-maintenance/project-management', systemMenu);
+    // const subFinanceMenu2 = new SideMenuItem('配件品牌管理', '/store-maintenance/brand-management', systemMenu);
+    // const subFinanceMenu3 = new SideMenuItem('保养项目管理', '/store-maintenance/project-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    systemMenu.children.push(subFinanceMenu2);
-    systemMenu.children.push(subFinanceMenu3);
+    // systemMenu.children.push(subFinanceMenu2);
+    // systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
@@ -49,8 +49,10 @@ export class MenuStoreMaintenanceService {
     // const subFinanceMenu3 = new SideMenuItem('工时费管理', '/store-maintenance/work-fees-management', systemMenu);
     const subFinanceMenu3 = new SideMenuItem('服务费管理', '/store-maintenance/service-fees-management', systemMenu);
     const subFinanceMenu4 = new SideMenuItem('救援订单', '/store-maintenance/rescue-order', systemMenu);
+    const subFinanceMenu5 = new SideMenuItem('保养订单', '/store-maintenance/upkeep-order', systemMenu);
     // systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
+    systemMenu.children.push(subFinanceMenu5);
     systemMenu.children.push(subFinanceMenu3);
     systemMenu.children.push(subFinanceMenu4);
     this.routeLinkList.push(systemMenu);

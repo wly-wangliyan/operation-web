@@ -1,0 +1,80 @@
+.column-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn-group {
+  margin-top: -1px !important;
+}
+
+.form-group .line {
+  margin: 0 8px;
+}
+
+::ng-deep .z-modal .mes {
+  padding: 0 20px !important;
+}
+
+.operation div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.operation a {
+  margin: 3px 5px 3px 5px;
+}
+
+.img-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.img-box {
+  width: 80px;
+  position: relative;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.img-box img {
+  width: 80px;
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.match-info label {
+  display: inline-block;
+  height: 20px;
+  padding: 0 8px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 5px 0 0;
+  border-radius: 4px;
+}
+
+.match-info img {
+  height: 18px;
+  margin: 10px 5px 0 0;
+}
+
+.match-info label:nth-child(odd) {
+  background: #c6e2ff;
+  color: #409dfd;
+}
+
+.match-info label:nth-child(even) {
+  background: #e1f3d8;
+  color: #67c23a;
+}

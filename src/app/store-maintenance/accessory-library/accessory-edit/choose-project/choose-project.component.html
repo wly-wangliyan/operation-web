@@ -8,9 +8,9 @@
         <div class="contet-box">
           <div class="content-list">
             <ul>
-              <li *ngFor="let category of projectCategories" (click)="onCategoryClick(category)"
-                [class.active]="category === currentCategory">
-                {{category | storeProjectType}}
+              <li *ngFor="let item of projectList" (click)="onProjectClick(item)"
+                [class.active]="item.project_id === currentProjectId">
+                {{item.project_name}}
               </li>
             </ul>
           </div>

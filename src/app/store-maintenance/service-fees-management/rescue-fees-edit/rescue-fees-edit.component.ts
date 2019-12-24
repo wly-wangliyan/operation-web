@@ -18,17 +18,17 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-    private routerInfo: ActivatedRoute, private router: Router) {
+              private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
   public searchFeeParams: SearchFeeParams = new SearchFeeParams();
   public loading = false;
   public service_fee_id: string;
-  public balance_initial_price: string;
-  public balance_current_price: string;
-  public prepay_initial_price: string;
-  public prepay_current_price: string;
+  public balance_initial_price = '';
+  public balance_current_price = '';
+  public prepay_initial_price = '';
+  public prepay_current_price = '';
   public balanceCurrentPriceErrors = '';
   public prepayCurrentPriceErrors = '';
 
@@ -45,6 +45,7 @@ export class RescueFeesEditComponent implements OnInit {
         this.balance_current_price = this.getFeeData(this.serviceFeeData.balance_current_price);
         this.prepay_initial_price = this.getFeeData(this.serviceFeeData.prepay_initial_price);
         this.prepay_current_price = this.getFeeData(this.serviceFeeData.prepay_current_price);
+        this.loading = true;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

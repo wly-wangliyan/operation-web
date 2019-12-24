@@ -121,7 +121,7 @@ export class RescueOrderStatusPipe implements PipeTransform {
   }
 }
 
-/** 驳回类型 */
+/** 救援服务状态 */
 const RescueServiceStatus = {
   1: '待接单',
   2: '待服务',
@@ -144,6 +144,99 @@ export class RescueServiceStatusPipe implements PipeTransform {
       result = RescueServiceStatus[value];
     } else {
       result = RescueServiceStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
+/** 上门保养订单状态 */
+const DoorOrderStatus = {
+  1: '待支付',
+  2: '待服务',
+  3: '已取消',
+  4: '已完成',
+  5: '已关闭'
+};
+
+@Pipe({
+  name: 'doorOrderStatus'
+})
+export class DoorOrderStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = DoorOrderStatus[value];
+    } else {
+      result = DoorOrderStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
+/** 上门保养订单退款状态 */
+const DoorRefundStatus = {
+  1: '已部分退款',
+  2: '已全额退款'
+};
+
+@Pipe({
+  name: 'doorRefundStatus'
+})
+export class DoorRefundStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = DoorRefundStatus[value];
+    } else {
+      result = DoorRefundStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
+
+/** 上门保养退款订单状态 */
+const DoorRefundOrderStatus = {
+  0: '未申请退款',
+  1: '退款中',
+  2: '已退款',
+  3: '退款失败'
+};
+
+@Pipe({
+  name: 'doorRefundOrderStatus'
+})
+export class DoorRefundOrderStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = DoorRefundOrderStatus[value];
+    } else {
+      result = DoorRefundOrderStatus[value];
     }
     if (!result) {
       result = '--';

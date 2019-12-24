@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlobalService } from '../../../../core/global.service';
 import {
-  ProjectManagemantHttpService,
-  ProjectEntity
-} from 'src/app/operational-system/maintenance/project-managemant/project-managemant-http.service';
-
+  AccessoryLibraryService,
+  ProjectEntity,
+} from '../../accessory-library.service';
 @Component({
   selector: 'app-choose-brand',
   templateUrl: './choose-brand.component.html',
@@ -13,13 +13,11 @@ import {
 })
 export class ChooseBrandComponent implements OnInit {
 
-  @Input() private selectedCategory: number; // 已选中的项目类别
+  @Input() private selectedCategory: string; // 已选中的项目类别
 
   @Input() private selectedProjectid: string; // 已选中的配件/服务Id
 
-  public projectCategories = [1, 2]; // 项目类别 1:机油 2:机油滤清器
-
-  public projectList: Array<ProjectEntity> = []; // 保养项目列表
+  public projectList: Array<ProjectEntity> = []; // 项目列表
 
   public currentProjectList: Array<ProjectEntity> = []; // 所选项目类别对应的保养项目列表
 
@@ -27,28 +25,54 @@ export class ChooseBrandComponent implements OnInit {
 
   private requestSubscription: Subscription; // 分页获取数据
 
-  public currentCategory: number;
+  public currentCategory: string;
 
   public tipMsg = ''; // 提示信息
 
+  private searchText$ = new Subject<any>();
+
   constructor(
     private globalService: GlobalService,
-    private projectService: ProjectManagemantHttpService
+    private accessoryLibraryService: AccessoryLibraryService,
   ) { }
 
   @Output('selectedProject') public selectedProject = new EventEmitter();
 
   public ngOnInit() {
+    // 项目列表
+    this.searchText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.accessoryLibraryService.requestProjectListData())
+    ).subscribe(res => {
+      this.projectList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   /**
    * 打开
    */
   public open() {
+    const obj = new ProjectEntity();
+    obj.project_id = '1';
+    obj.project_name = '机油';
+    this.projectList.push(obj);
+    const obj1 = new ProjectEntity();
+    obj1.project_id = '2';
+    obj1.project_name = '机油滤清器';
+    this.projectList.push(obj1);
+    const obj2 = new ProjectEntity();
+    obj2.project_id = '3';
+    obj2.project_name = '蓄电池';
+    this.projectList.push(obj2);
+    console.log('1', this.projectList);
+
+    // this.searchText$.next();
     setTimeout(() => {
       this.initModal();
       $('#chooseBrandModal').modal();
-      this.requestPrijectList();
     }, 0);
   }
 
@@ -72,13 +96,13 @@ export class ChooseBrandComponent implements OnInit {
     $('#selectProjectModal').modal('hide');
   }
 
-  public onCategoryClick(category: number) {
+  public onCategoryClick(category: string) {
     this.tipMsg = '';
     this.currentProjectList = [];
     this.currentProject = new ProjectEntity();
     this.currentCategory = category;
     if (this.projectList) {
-      this.currentProjectList = this.projectList.filter(value => value.upkeep_item_category === category);
+      this.currentProjectList = this.projectList.filter(value => value.project_id === category);
     }
   }
 
@@ -88,27 +112,9 @@ export class ChooseBrandComponent implements OnInit {
     this.currentProject = project;
   }
 
-  // 获取所有配件/服务
-  private requestPrijectList() {
-    this.projectList = [];
-    this.requestSubscription = this.projectService.requestProjectListData().subscribe(res => {
-      this.projectList = res;
-      if (this.selectedCategory && this.selectedProjectid) {
-        this.onCategoryClick(this.selectedCategory);
-        if (this.currentProjectList.some(value => value.upkeep_item_id === this.selectedProjectid)) {
-          const project = this.currentProjectList.filter(value => value.upkeep_item_id === this.selectedProjectid);
-          this.currentProject = project[0];
-        }
-      }
-    }, err => {
-      $('#selectProjectModal').modal('hide');
-      this.globalService.httpErrorProcess(err);
-    });
-  }
-
   // 回传选中事件
   public onSelectEmit() {
-    if (this.currentProject && this.currentProject.upkeep_item_id) {
+    if (this.currentProject && this.currentProject.project_id) {
       this.selectedProject.emit(
         {
           category: this.currentCategory,

@@ -13,7 +13,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: AccessoryListComponent },
-      { path: 'edit', component: AccessoryEditComponent },
+      { path: 'edit/:accessory_id', component: AccessoryEditComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }

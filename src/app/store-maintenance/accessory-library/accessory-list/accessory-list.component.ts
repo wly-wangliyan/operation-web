@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
 import {
-  UpkeepOrderEntity,
-  OrderManagementService,
-  SearchOrderParams,
-} from 'src/app/store-maintenance/order-management/order-management.service';
-import { Subject, Subscription } from 'rxjs/index';
+  AccessoryLibraryService,
+  SearchParams,
+  ProjectEntity,
+  AccessoryEntity
+} from '../accessory-library.service';
+import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { SelectMultiBrandFirmComponent } from '../../../share/components/select-multi-brand-firm/select-multi-brand-firm.component';
+
 
 const PageSize = 15;
 
@@ -18,9 +19,11 @@ const PageSize = 15;
 })
 export class AccessoryListComponent implements OnInit {
 
-  public orderList: Array<UpkeepOrderEntity> = [];
+  public projectList: Array<ProjectEntity> = [];
+  public accessoryList: Array<AccessoryEntity> = [];
+  public accessoryNewList: Array<any> = [];
   public pageIndex = 1;
-  public searchParams = new SearchOrderParams();
+  public searchParams = new SearchParams();
   public noResultText = '数据加载中...';
   public start_pay_time = null; // 支付时间
   public end_pay_time = null;
@@ -29,39 +32,53 @@ export class AccessoryListComponent implements OnInit {
   public workerList: Array<any> = [];
 
   private searchText$ = new Subject<any>();
+  private searchProjectText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
   private get pageCount(): number {
-    if (this.orderList.length % PageSize === 0) {
-      return this.orderList.length / PageSize;
+    if (this.accessoryList.length % PageSize === 0) {
+      return this.accessoryList.length / PageSize;
     }
-    return this.orderList.length / PageSize + 1;
+    return this.accessoryList.length / PageSize + 1;
   }
 
-  @ViewChild(SelectMultiBrandFirmComponent, { static: true }) public selectMultiBrandFirmComponent: SelectMultiBrandFirmComponent;
-
-  constructor(private globalService: GlobalService, private orderService: OrderManagementService) { }
+  constructor(private globalService: GlobalService, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
-    // 订单管理列表
+    // const obj = new AccessoryEntity();
+    // obj.accessory_id = '232342';
+    // this.accessoryList.push(obj);
+    // 配件库列表
     this.searchText$.pipe(
       debounceTime(500),
       switchMap(() =>
-        this.orderService.requestOrderList(this.searchParams))
+        this.accessoryLibraryService.requestAccessoryListData(this.searchParams))
     ).subscribe(res => {
-      this.orderList = res.results.map(i => ({ ...i, item_categorys: i.upkeep_item_categorys ? i.upkeep_item_categorys.split(',') : [] }));
+      this.accessoryList = res.results;
+      this.accessoryNewList = this.accessoryList.map(i => ({
+        ...i,
+        accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+      }));
+
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
     this.searchText$.next();
-  }
 
-  // 推荐设置打开所属厂商选择组件
-  public onOpenBrandFirmModal(): void {
-    this.selectMultiBrandFirmComponent.open();
+    // 项目列表
+    this.searchProjectText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.accessoryLibraryService.requestProjectListData())
+    ).subscribe(res => {
+      this.projectList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    // this.searchProjectText$.next();
   }
 
   // 查询按钮
@@ -70,17 +87,39 @@ export class AccessoryListComponent implements OnInit {
     this.searchText$.next();
   }
 
+  // 开关状态改变
+  public onSwitchChange(status: number, event: boolean) {
+    timer(2000).subscribe(() => {
+      return status = event === true ? 1 : 2;
+    });
+  }
+
+  // 开关点击调用接口
+  public onSwitchClick(accessory_id: string, status: boolean) {
+    const text = status ? '开启' : '关闭';
+    this.globalService.confirmationBox.open('提示', '下架后，将不支持在线购买', () => {
+      this.accessoryLibraryService.requestUpdateStatusData(accessory_id, status).subscribe(res => {
+        this.globalService.promptBox.open(`${text}成功`);
+        this.searchText$.next();
+      }, err => {
+        this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
+        this.searchText$.next();
+      });
+
+    });
+  }
+
   /** 删除配件 */
-  public onDeleteAccessory(data: UpkeepOrderEntity) {
+  public onDeleteAccessory(data: AccessoryEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      // this.productService.requestDeleteProductData(data.product_id).subscribe(() => {
-      //   this.globalService.promptBox.open('删除成功', () => {
-      //     this.searchText$.next();
-      //   });
-      // },err => {
-      //   this.globalService.httpErrorProcess(err);
-      // });
+      this.accessoryLibraryService.requestDeleteAccessoryData(data.accessory_id).subscribe(() => {
+        this.globalService.promptBox.open('删除成功', () => {
+          this.searchText$.next();
+        });
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
     });
   }
 
@@ -92,8 +131,12 @@ export class AccessoryListComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       // tslint:disable-next-line:no-unused-expression
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.orderService.continueOrderList(this.linkUrl).subscribe(res => {
-        this.orderList = this.orderList.concat(res.results);
+      this.continueRequestSubscription = this.accessoryLibraryService.continueAccessoryistData(this.linkUrl).subscribe(res => {
+        this.accessoryList = this.accessoryList.concat(res.results);
+        this.accessoryNewList = this.accessoryList.map(i => ({
+          ...i,
+          accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+        }));
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
