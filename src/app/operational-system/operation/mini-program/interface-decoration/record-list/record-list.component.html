@@ -1,0 +1,74 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'小程序'" [level2Name]="'草稿/发布记录'"></app-crumb>
+</div>
+
+<div class="content-flow">
+    <div class="tab-bar-list">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.banner_type">
+            <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">草稿</label>
+            <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">发布记录</label>
+        </nz-radio-group>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table *ngIf="searchParams.banner_type===1"
+                #bannerTable [nzData]="bannerList" [nzPageSize]="bannerList.length"
+                      [nzShowPagination]="false" [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>模块</th>
+                    <th>名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of bannerTable.data; let i=index">
+
+                    <td>{{data.title}}</td>
+
+                    <td>{{data.title}}</td>
+
+                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td class="operation">
+                        <a [title]="'编辑'" [routerLink]="['../banner-detail',data.banner_id]">编辑</a>
+                        <a [title]="'删除'" *ngIf="!data.is_use" (appZDebounceClick)="onDeleteClick(data.banner_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+            <nz-table *ngIf="searchParams.banner_type===2"
+                      #bannerTable [nzData]="bannerList" [nzPageSize]="bannerList.length"
+                      [nzShowPagination]="false" [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>模块</th>
+                    <th>创建时间</th>
+                    <th>发布时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of bannerTable.data; let i=index">
+
+                    <td>{{data.title}}</td>
+
+                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td>{{data.title}}</td>
+
+                    <td class="operation">
+                        <a [title]="'编辑'" [routerLink]="['../banner-detail',data.banner_id]">编辑</a>
+                        <a [title]="'重新发布'" (appZDebounceClick)="onDeleteClick(data.banner_id)">重新发布</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.banner_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

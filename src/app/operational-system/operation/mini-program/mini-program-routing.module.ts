@@ -25,6 +25,11 @@ const routes: Routes = [{
       loadChildren: () => import('./push-management/push-management.module').then(m => m.PushManagementModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'interface-decoration', /** 界面装修、草稿发布记录 */
+      loadChildren: () => import('./interface-decoration/interface-decoration.module').then(m => m.InterfaceDecorationModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'banner-management', pathMatch: 'full' }
   ]
 }];
