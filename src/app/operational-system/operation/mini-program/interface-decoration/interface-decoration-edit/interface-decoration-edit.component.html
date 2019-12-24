@@ -21,7 +21,7 @@
         </div>
         <div class="preview-space">
             <img src="/assets/images/interface-decoration/nav_top.png">
-            <ng-container *ngFor="let item of previewList;let i=index">
+            <div *ngFor="let item of templatesList;let i=index" style="background: #fff">
                 <div *ngIf="item.template_type===1" class="template-1" [class.mould-edit-active]="mouldIndex===i"
                      (click)="onMouldEditClick(1, i, $event)" id="template_1_{{i}}">
                     <li *ngFor="let img of item.image;let k=index">
@@ -90,7 +90,7 @@
                         </li>
                     </ul>
                 </div>
-            </ng-container>
+            </div>
             <div>
                 <div class="mobile-bottom">没有更多了</div>
                 <img src="/assets/images/interface-decoration/nav_bottom.png">
@@ -112,10 +112,10 @@
                         <span>模板单行数量</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group (change)="onImgNumChange()">
-                            <label nz-radio nzValue="3">单行3个</label>
-                            <label nz-radio nzValue="4">单行4个</label>
-                            <label nz-radio nzValue="5">单行5个</label>
+                        <nz-radio-group [(ngModel)]="count" name="count" (change)="onImgNumChange()">
+                            <label nz-radio [nzValue]=3>单行3个</label>
+                            <label nz-radio [nzValue]=4>单行4个</label>
+                            <label nz-radio [nzValue]=5>单行5个</label>
                         </nz-radio-group>
                     </div>
                 </div>
@@ -125,12 +125,12 @@
                         <span>ICON内容</span>
                     </label>
                     <div class="control-input">
-                        <div *ngFor="let item of previewList[0].image" style="margin-right: 90px">
-                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                                [imageWidth]="45" [imageHeight]="45" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
-                                                [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true" [imageShowWidth]="45">
-                            </app-z-photo-select>
+                        <div *ngFor="let item of templatesList" style="margin-right: 100px">
+                            <app-z-photo-select-upload #{{item.template_id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                                       [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="45"
+                                                       [imageHeight]="45" [imageUrls]="item.image_url" [imageAddWidth]="45"
+                                                       (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                            </app-z-photo-select-upload>
                             <span>未定义</span>
                         </div>
                     </div>
@@ -181,12 +181,12 @@
                         <span>广告图片</span>
                     </label>
                     <div class="control-input" style="display: inline-grid">
-                        <div *ngFor="let item of previewList[0].image">
-                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                                [imageWidth]="345" [imageHeight]="90" [imageUrls]="cover_url" #coverImg [aspectRatio]="3.83/1"
-                                                [minCropBoxWidth]="345" [minCropBoxHeight]="90" [resizable]="true" [imageShowWidth]="345">
-                            </app-z-photo-select>
+                        <div *ngFor="let item of templatesList[0].image" style="margin-bottom: 10px">
+                            <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                                       [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="345"
+                                                       [imageHeight]="90" [imageUrls]="item.image_url" [imageAddWidth]="345"
+                                                       (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                            </app-z-photo-select-upload>
                         </div>
                     </div>
                 </div>
@@ -244,24 +244,24 @@
                         <span>图文内容</span>
                     </label>
                     <div class="control-input" style="display: inline-grid">
-                        <div *ngFor="let item of previewList[0].image" style="display: inline-flex">
+                        <div *ngFor="let item of templatesList[0].image" style="display: inline-flex;margin-bottom: 10px">
                             <div>
                                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link" name="jump_link"
                                        maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
-                                <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                    [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                                    [imageWidth]="345" [imageHeight]="90" [imageUrls]="cover_url" #coverImg [aspectRatio]="3.83/1"
-                                                    [minCropBoxWidth]="345" [minCropBoxHeight]="90" [resizable]="true" [imageShowWidth]="345">
-                                </app-z-photo-select>
+                                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="152"
+                                                           [imageHeight]="75" [imageUrls]="item.image_url" [imageAddWidth]="152"
+                                                           (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                                </app-z-photo-select-upload>
                             </div>
                             <div>
                                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link" name="jump_link"
                                        maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
-                                <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                    [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                                    [imageWidth]="345" [imageHeight]="90" [imageUrls]="cover_url" #coverImg [aspectRatio]="3.83/1"
-                                                    [minCropBoxWidth]="345" [minCropBoxHeight]="90" [resizable]="true" [imageShowWidth]="345">
-                                </app-z-photo-select>
+                                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="152"
+                                                           [imageHeight]="75" [imageUrls]="item.image_url" [imageAddWidth]="152"
+                                                           (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+                                </app-z-photo-select-upload>
                             </div>
                         </div>
                     </div>
@@ -355,11 +355,7 @@
                         <select class="form-control" style="width: 147px" [(ngModel)]="bannerParams.belong_to" name="belong_to" required>
                             <option [value]=''>请选择</option>
                             <option [value]=1>指定商品</option>
-                            <option [value]=2>指定商品类别</option>
-                            <option [value]=3>指定票务产品</option>
-                            <option [value]=4>指定票务产品标签</option>
-                            <option [value]=5>小程序原生页</option>
-                            <option [value]=6>H5链接</option>
+                            <option [value]=2>指定票务产品</option>
                         </select>
                         <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
                                maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 193px;border-left: none!important;">
@@ -397,11 +393,7 @@
                             <select class="form-control" style="width: 190px" [(ngModel)]="bannerParams.belong_to" name="belong_to" required>
                                 <option [value]=''>请选择</option>
                                 <option [value]=1>指定商品</option>
-                                <option [value]=2>指定商品类别</option>
-                                <option [value]=3>指定票务产品</option>
-                                <option [value]=4>指定票务产品标签</option>
-                                <option [value]=5>小程序原生页</option>
-                                <option [value]=6>H5链接</option>
+                                <option [value]=2>指定票务产品</option>
                             </select>
                         </div>
                     </div>

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Subscription, timer } from 'rxjs';
 import { debug } from 'util';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
+import { PageEntity } from '../interface-decoration.service';
 
 @Component({
   selector: 'app-interface-decoration-edit',
@@ -13,9 +14,11 @@ export class InterfaceDecorationEditComponent implements OnInit {
   public mouldList = ['ICON魔方', '单行轮播广告', '左右布局(1)', '左右布局(2)', '单行左右滑动', '商品推荐'];
   public mouldType = 0;
   public mouldIndex = -1;
-  public previewList = [];
+  public previewData: PageEntity = new PageEntity();
+  public templatesList = [];
   public cover_url = [];
   public bannerParams = {};
+  public count = 3;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;
@@ -73,7 +76,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 创建模板
   public onCreateMould(index: number) {
-    this.previewList.push({template_type: index, image: [1, 2, 3]});
+    this.templatesList.push({template_type: index, image: [1, 2, 3]});
     if (index === 5) {
       timer(0).subscribe(() => {
         this.drag();
@@ -129,5 +132,10 @@ export class InterfaceDecorationEditComponent implements OnInit {
   }
 
   public onImgNumChange() {
+    for (let i = 0; i < this.count; i++) {
+      if (this.count) {
+
+      }
+    }
   }
 }
