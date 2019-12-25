@@ -9,3 +9,10 @@
 :host ::ng-deep .ant-input {
   height: 34px;
 }
+
+.classify-input {
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+}

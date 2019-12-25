@@ -2,11 +2,10 @@
  * Created by zhoulihan on 16-8-23.
  */
 
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 import { LocalStorageProvider } from '../app/share/localstorage-provider';
 
-export let file_import = (file, path, success, error) => {
-  const domain = environment.OPERATION_SERVE;
+export let file_import = (file, path, success, error, domain = environment.OPERATION_SERVE) => {
   const form = new FormData();
   for (const param in file) {
     if (file.hasOwnProperty(param)) {

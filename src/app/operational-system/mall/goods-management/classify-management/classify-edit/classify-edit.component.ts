@@ -68,7 +68,7 @@ export class ClassifyEditComponent implements OnInit {
             return;
           } else if (content.code === 'invalid') {
             this.globalService.promptBox.open(`${field}输入错误!`, null, 2000, '/assets/images/warning.png');
-          } else if (content.code === 'already_existed') {
+          } else if (content.code === 'already_exist') {
             this.globalService.promptBox.open('该分类名称已存在，请重新输入!', null, 2000, '/assets/images/warning.png');
           } else {
             this.globalService.promptBox.open('分类名称保存失败,请重试!', null, 2000, '/assets/images/warning.png');

@@ -16,7 +16,7 @@ import {
 } from '../goods-management-http.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { BusinessEntity } from '../../business-management/business-management.service';
-import { SearchSortParams, SortEntity, ClassifyManagementHttpService } from '../classify-management-http.service';
+import { SortEntity, ClassifyManagementHttpService } from '../classify-management-http.service';
 
 @Component({
   selector: 'app-goods-create',
@@ -58,8 +58,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   public currentSpecification: SpecificationDateEntity = new SpecificationDateEntity();
 
   public classifyList: Array<SortEntity> = [];
-
-  public searchSortParams: SearchSortParams = new SearchSortParams();
 
   private commodity_id: string;
 
@@ -189,7 +187,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     } else {
       this.commoditySpecificationList.push(new SpecificationParamsItem());
     }
-    // this.requestClassifyList();
+    this.requestClassifyList();
     this.requestbusinessList();
     const weekList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
     weekList.forEach(value => {
@@ -377,8 +375,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   // 获取所属分类列表
   private requestClassifyList() {
-    this.searchSortParams.page_size === 999;
-    this.classifyHttpService.requestClassifyListData(this.searchSortParams).subscribe(res => {
+    this.classifyHttpService.requestClassifyAllListData().subscribe(res => {
       this.classifyList = res.results;
     }, err => {
       this.globalService.httpErrorProcess(err);

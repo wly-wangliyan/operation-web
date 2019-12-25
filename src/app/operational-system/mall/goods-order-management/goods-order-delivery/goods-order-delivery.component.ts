@@ -22,6 +22,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
   public logisticsList: Array<LogisticsEntity> = [];
   public errMes = ''; // 错误信息
   public postage = 0;
+  public postage_status: number;
   public sureName: string;
   public radioValue: string;
   public deliveryCompany: Array<any> = [];
@@ -50,23 +51,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchLogisticsText$.next();
-
-    this.deliveryCompany = [
-      { key: '顺丰速运', value: '顺丰速运' },
-      { key: '圆通速递', value: '圆通速递' },
-      { key: '申通快递', value: '申通快递' },
-      { key: '中通快递', value: '中通快递' },
-      { key: '百世快递', value: '百世快递' },
-      { key: '韵达快递', value: '韵达快递' },
-      { key: '天天快递', value: '天天快递' },
-      { key: '中国邮政', value: '中国邮政' },
-      { key: 'EMS', value: 'EMS' },
-      { key: '宅急送', value: '宅急送' },
-      { key: '德邦物流', value: '德邦物流' },
-      { key: '京东快递', value: '京东快递' },
-      { key: '特急送', value: '特急送' },
-    ];
+    this.searchLogisticsText$.next();
   }
 
   // 键盘按下事件
@@ -97,6 +82,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
     this.clear();
     this.sureName = sureName;
     this.order_id = orderInfo.order_id;
+    this.postage_status = orderInfo.postage_status;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.currentOrder = JSON.parse(JSON.stringify(orderInfo));
@@ -116,7 +102,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
       this.errMes = '邮费金额应小于10000元！';
       return;
     } else {
-      this.currentOrder.postage = this.postage * 100;
+      this.currentOrder.postage = this.postage_status === 1 ? this.postage * 100 : 0;
       // 修改邮费信息
       this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
         this.onClose();

@@ -92,6 +92,7 @@ export class GoodsOrderEntity extends EntityBase {
   public coupon_real_amount = undefined; // 	integer	优惠卷使用金额(实际使用)  单位分
   public real_price = undefined; // 	float	实付金额 (支付金额 单位分)
   public postage = undefined; // 	integer	邮费 单位分
+  public postage_status = undefined; // 	integer	是否录入物流邮费
   public contact = ''; // 	String	收货人
   public mobile = ''; // 	String	手机号
   public delivery_address = ''; // 	String	收货地址 例：远航西路IT国际201
@@ -169,6 +170,8 @@ export class LogisticsLinkResponse extends LinkResponse {
 })
 export class GoodsOrderManagementHttpService {
 
+  private operationDomain = environment.OPERATION_SERVE; // 运营域名
+
   private domain = environment.MALL_DOMAIN; // 商城域名
 
   constructor(private httpService: HttpService) { }
@@ -197,7 +200,7 @@ export class GoodsOrderManagementHttpService {
    * @returns Observable<LogisticsLinkResponse>
    */
   public requestLogisticsList(): Observable<LogisticsLinkResponse> {
-    const httpUrl = `${this.domain}/logistics`;
+    const httpUrl = `${this.operationDomain}/logistics`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new LogisticsLinkResponse(res)));
   }

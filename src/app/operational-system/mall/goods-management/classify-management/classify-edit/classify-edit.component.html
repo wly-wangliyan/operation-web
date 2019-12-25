@@ -12,7 +12,7 @@
         <nz-form-item nzFlex style="margin-left: 40px;">
           <nz-form-label nzRequired [nzNoColon]='true'>分类名称</nz-form-label>
           <nz-form-control class="form_control">
-            <input type="text" nz-input class="form-control" [(ngModel)]="sort_name" placeholder="输入1-10字分类名称"
+            <input type="text" nz-input class="form-control classify-input" [(ngModel)]="sort_name" placeholder="输入1-10字分类名称"
               maxlength='10' name='label-name' (keydown)="onKeydownEvent($event)" required />
           </nz-form-control>
         </nz-form-item>

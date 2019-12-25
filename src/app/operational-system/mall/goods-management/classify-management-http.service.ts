@@ -58,6 +58,16 @@ export class ClassifyManagementHttpService {
   }
 
   /**
+   * 获取全部分类列表
+   * @returns Observable<SortLinkResponse>
+   */
+  public requestClassifyAllListData(): Observable<SortLinkResponse> {
+    const httpUrl = `${this.domain}/sorts/all`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => new SortLinkResponse(res)));
+  }
+
+  /**
    * 删除分类
    * @param sort_id string 分类id
    * @returns Observable<HttpResponse<any>>

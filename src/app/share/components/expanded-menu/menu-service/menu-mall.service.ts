@@ -28,7 +28,7 @@ export class MenuMallService {
   private generateGoodsManagementMenu(): SideMenuItem {
     const brokerageMenu = new SideMenuItem('商品管理', '/main/mall/goods-management');
     brokerageMenu.icon = '/assets/images/menu_part.png';
-    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/mall/goods-management/list', brokerageMenu);
+    const subFinanceMenu1 = new SideMenuItem('产品列表', '/main/mall/goods-management', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('分类管理', '/main/mall/goods-management/classify-list', brokerageMenu);
     brokerageMenu.children.push(subFinanceMenu2);
