@@ -59,6 +59,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public classifyList: Array<SortEntity> = [];
 
+  public aspectRatio = 1.78 / 1; // 截取图片比例
+
   private commodity_id: string;
 
   private onSubmitSubscription: any;
@@ -66,6 +68,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   private specificationIndex: number;
 
   private delete_specification_ids = [];
+
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
@@ -93,20 +96,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       KeyboardHelper.bindElement('stock_' + formatItem.idCount);
     });
     return formatCommoditySpecificationList;
-  }
-
-  /**
-   * 校验是否选择了封面图片
-   * @returns boolean
-   */
-  public get CheckCoverImgValid(): boolean {
-    if (this.coverImgSelectComponent) {
-      const images = this.coverImgSelectComponent.imageList.map(item => item.sourceUrl);
-      if (images.length > 0) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**
@@ -168,10 +157,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private globalService: GlobalService,
-              private goodsManagementHttpService: GoodsManagementHttpService,
-              private classifyHttpService: ClassifyManagementHttpService) {
+    private router: Router,
+    private globalService: GlobalService,
+    private goodsManagementHttpService: GoodsManagementHttpService,
+    private classifyHttpService: ClassifyManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -457,11 +446,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     this.initErrMsg(true);
 
     if (isCheckCommodity) {
-      if (!this.CheckCoverImgValid) {
-        this.coverImgErrMsgItem.isError = true;
-        this.coverImgErrMsgItem.errMes = '请选择封面图片！';
-        return false;
-      }
       if (!this.CheckImgValid) {
         this.imgErrMsgItem.isError = true;
         this.imgErrMsgItem.errMes = '请选择产品图片！';

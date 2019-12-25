@@ -239,36 +239,38 @@ export class ProductListComponent implements OnInit, OnDestroy {
     }
     if (this.importViewModel.checkFormDataValid()) {
       this.progressModalComponent.openOrClose(true);
-      this.importSpotSubscription = this.productLibraryService.requestImportProductData(
-        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
-          this.progressModalComponent.openOrClose(false);
-          $('#dataImportModal').modal('hide');
-          const date = JSON.parse(res.response);
-          this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
-            this.importViewModel.initImportData();
-            $('#importProductPromptDiv').modal('hide');
-            this.searchText$.next();
-          }, -1);
-        }, err => {
-          this.progressModalComponent.openOrClose(false);
-          timer(300).subscribe(() => {
-            if (!this.globalService.httpErrorProcess(err)) {
-              if (err.status === 422) {
-                const tempErr = JSON.parse(err.responseText);
-                const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-                if (error.field === 'FILE' && error.code === 'invalid') {
-                  this.globalService.promptBox.open('导入文件不能为空！', null, 2000, null, false);
-                } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
-                  this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
-                } else if (error.resource === 'FILE' && error.code === 'scale_out') {
-                  this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
-                } else {
-                  this.globalService.promptBox.open('导入失败，请重新上传！', null, 2000, null, false);
-                }
-              }
-            }
-          });
-        });
+      console.log('32243', this.importViewModel);
+
+      // this.importSpotSubscription = this.productLibraryService.requestImportProductData(
+      //   this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+      //     this.progressModalComponent.openOrClose(false);
+      //     $('#dataImportModal').modal('hide');
+      //     const date = JSON.parse(res.response);
+      //     this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+      //       this.importViewModel.initImportData();
+      //       $('#importProductPromptDiv').modal('hide');
+      //       this.searchText$.next();
+      //     }, -1);
+      //   }, err => {
+      //     this.progressModalComponent.openOrClose(false);
+      //     timer(300).subscribe(() => {
+      //       if (!this.globalService.httpErrorProcess(err)) {
+      //         if (err.status === 422) {
+      //           const tempErr = JSON.parse(err.responseText);
+      //           const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+      //           if (error.field === 'FILE' && error.code === 'invalid') {
+      //             this.globalService.promptBox.open('导入文件不能为空！', null, 2000, null, false);
+      //           } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+      //             this.globalService.promptBox.open('文件格式错误！', null, 2000, null, false);
+      //           } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+      //             this.globalService.promptBox.open('单次最大可导入200条，请重新上传！', null, 2000, null, false);
+      //           } else {
+      //             this.globalService.promptBox.open('导入失败，请重新上传！', null, 2000, null, false);
+      //           }
+      //         }
+      //       }
+      //     });
+      //   });
     } else {
       this.globalService.promptBox.open('文件地址不能为空，请选择！', null, 2000, null, false);
     }

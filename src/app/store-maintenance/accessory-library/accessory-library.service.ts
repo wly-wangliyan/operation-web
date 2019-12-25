@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 // 规格实体
 export class SpecificationEntity extends EntityBase {
   public specification_id: string = undefined; // string	规格id-主键
+  public name: string = undefined; // string	名称
   public accessory: string = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片
   public imageList = []; // arr	图片数组

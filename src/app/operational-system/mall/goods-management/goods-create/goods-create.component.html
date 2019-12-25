@@ -95,16 +95,17 @@
           </div>
         </div>
         <div class="row control-row">
-          <label class="control-label">
-            <b>*</b>
+          <label class="control-label special-control-label">
             <span>封面图片</span>
           </label>
           <div>
-            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="1"
-              [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100" [imageUrls]="coverImgList"
-              [minCropBoxWidth]="400" [minCropBoxHeight]="400" (selectedImgChange)="onSelectedCoverPicture($event)"
-              file_id="coverImg" #coverImg></app-z-photo-select>
-            <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传1张</p>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+              [imageWidth]="194*aspectRatio" [imageHeight]="94" [imageUrls]="coverImgList" #coverImg
+              [aspectRatio]="aspectRatio" [minCropBoxWidth]="345" [minCropBoxHeight]="194" [resizable]="true"
+              [imageShowWidth]="194*aspectRatio">
+            </app-z-photo-select>
+            <p class="cover-hint">注：尺寸750 × 388px，格式PNG或JPG，大小2M以内，最多上传1张</p>
             <div class="row row-message special-row-message">
               <div class="control-input">
                 <span *ngIf="coverImgErrMsgItem?.isError">{{coverImgErrMsgItem?.errMes}}</span>

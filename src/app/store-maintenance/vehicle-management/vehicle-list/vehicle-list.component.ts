@@ -225,13 +225,13 @@ export class VehicleListComponent implements OnInit {
                 const tempErr = JSON.parse(err.responseText);
                 const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
                 if (error.field === 'FILE' && error.code === 'invalid') {
-                  this.globalService.promptBox.open('导入文件错误或无效！');
+                  this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
                 } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
-                  this.globalService.promptBox.open('文件格式错误！');
+                  this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
                 } else if (error.resource === 'FILE' && error.code === 'scale_out') {
-                  this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！');
+                  this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！', null, 2000, '/assets/images/warning.png');
                 } else {
-                  this.globalService.promptBox.open('导入文件错误或无效！');
+                  this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
                 }
               }
             }

@@ -110,6 +110,7 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryData.specification_info.forEach(i => i.imageList = i.image ? i.image.split(',') : []);
     this.specificationsList = this.accessoryData.specification_info;
     this.specificationsTempList = this.accessoryData.specification_info;
+    this.getProjectInfo();
   }
 
   // 编辑配置库数据处理
@@ -139,12 +140,17 @@ export class AccessoryEditComponent implements OnInit {
     if (event) {
       this.accessoryParams.project_id = event.project.project_id;
       this.accessoryParams.project_name = event.project.project_name;
-      this.accessoryLibraryService.requestProjectDetailData(this.accessoryParams.project_id).subscribe(res => {
-        this.projectInfo = res;
-      }, err => {
-        this.handleErrorFunc(err, 1);
-      });
+      this.getProjectInfo();
     }
+  }
+
+  // 获取项目信息
+  private getProjectInfo() {
+    this.accessoryLibraryService.requestProjectDetailData(this.accessoryParams.project_id).subscribe(res => {
+      this.projectInfo = res;
+    }, err => {
+      this.handleErrorFunc(err, 1);
+    });
   }
 
   // 清空
@@ -190,26 +196,10 @@ export class AccessoryEditComponent implements OnInit {
       $('.table-form').scrollTop('400');
     });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
-    const batteryModelList = this.specificationsList.filter(m => !m.battery_model);
-    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_balance_fee);
-    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_balance_fee);
-    const storeList = this.specificationsList.filter(s => !s.store);
     const specificationsPriceList = this.specificationsList.filter(i =>
       Number(i.sale_balance_fee) > Number(i.original_balance_fee));
     if (imageNoneList.length !== 0) {
       this.globalService.promptBox.open(`请选择规格图片后再添加!`, null, 2000, '/assets/images/warning.png');
-    } else if (batteryModelList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写型号后再添加!`, null, 2000, '/assets/images/warning.png');
-    } else if (originalBalanceFeeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写尾款原价后再添加!`, null, 2000, '/assets/images/warning.png');
-    } else if (saleBalanceFeeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写尾款现价后再添加!`, null, 2000, '/assets/images/warning.png');
-    } else if (storeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写库存后再添加!`, null, 2000, '/assets/images/warning.png');
     } else if (specificationsPriceList.length !== 0) {
       this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
     } else {
@@ -232,28 +222,12 @@ export class AccessoryEditComponent implements OnInit {
   public onSaveFormSubmit() {
     this.handleParams();
     const regPhone = /^(1[3-9])\d{9}$/g;
-    const batteryModelList = this.accessoryParams.battery_specification.filter(m => !m.battery_model);
-    const originalBalanceFeeList = this.accessoryParams.battery_specification.filter(o => !o.original_balance_fee);
-    const saleBalanceFeeList = this.accessoryParams.battery_specification.filter(b => !b.sale_balance_fee);
-    const storeList = this.accessoryParams.battery_specification.filter(s => !s.store);
     const specificationsPriceList = this.accessoryParams.battery_specification.filter(a =>
       Number(a.sale_balance_fee) > Number(a.original_balance_fee));
     if (this.accessoryImgComponent.imageList.length === 0) {
       this.clear();
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传产品图片！';
-    } else if (batteryModelList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写型号!`, null, 2000, '/assets/images/warning.png');
-    } else if (originalBalanceFeeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写尾款原价!`, null, 2000, '/assets/images/warning.png');
-    } else if (saleBalanceFeeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写尾款现价!`, null, 2000, '/assets/images/warning.png');
-    } else if (storeList.length !== 0) {
-      this.clear();
-      this.globalService.promptBox.open(`请填写库存!`, null, 2000, '/assets/images/warning.png');
     } else if (specificationsPriceList.length !== 0) {
       this.clear();
       this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
@@ -327,7 +301,7 @@ export class AccessoryEditComponent implements OnInit {
             '产品名称' : content.field === 'accessory_images' ? '图片' : content.field === 'accessory_brand_id' ? '所属品牌'
               : content.field === 'accessory_params' ? '参数' : content.field === 'detail' ? '图文详情'
                 : content.field === 'battery_specification' ? '规格' : content.field === 'right_prepaid_fee' ? '预约原价'
-                  : content.field === 'real_prepaid_fee' ? '预付现价' : '';
+                  : content.field === 'real_prepaid_fee' ? '预付现价' : content.field === 'operation_telephone' ? '运营手机号' : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
@@ -342,5 +316,4 @@ export class AccessoryEditComponent implements OnInit {
       }
     }
   }
-
 }
