@@ -8,7 +8,6 @@ import { environment } from '../../../environments/environment';
 import { GlobalService } from '../../core/global.service';
 
 export class RescueOrderSearchParams extends EntityBase {
-  public order_type = 3; // 订单类型 1：到店保养 2：上门保养 3：救援订单
   public order_status = ''; // 1：待支付 2：已支付 3：已取消 4：已退款
   public service_status = ''; // 服务状态 1：待接单 2：待服务 3：已完成 4：已拒绝
   public rescue_project_type = ''; // 救援项目类别 1：搭电 2：换胎
@@ -34,6 +33,10 @@ export class RescueOrderEntity extends EntityBase {
   public repair_shop_id: string = undefined; // 汽修店id
   public repair_shop_district: string = undefined; // 汽修店所在区域
   public rescue_project_type: number = undefined; // 救援项目类别 1：搭电 2：换胎
+  public real_fee: number = undefined; // 实收费用 单位：分
+  public right_fee: number = undefined; // 应收费用 单位：分
+  public platform_discount: number = undefined; // 平台立减 单位：分
+  public coupon_discount: number = undefined; // 优惠卷优惠金额 单位：分
   public real_prepaid_fee: number = undefined; // 实收预付费 单位：分
   public right_prepaid_fee: number = undefined; // 应收预付费 单位：分
   public real_balance_fee: number = undefined; // 实收尾款 单位：分
@@ -60,13 +63,66 @@ export class RescueOrderEntity extends EntityBase {
   public refund_fee: number = undefined; // 退款金额
   public pay_expire_time: number = undefined; // 支付订单失效时间
   public take_expire_time: number = undefined; // 接收订单失效时间
+  public rescue_prepaid_order: PrepaidOrderEntity = undefined; // 预付订单
+  public rescue_balance_order: BalanceOrderEntity = undefined; // 尾款订单
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'rescue_prepaid_order') {
+      // tslint:disable-next-line: no-use-before-declare
+      return PrepaidOrderEntity;
+    }
+    if (propertyName === 'rescue_balance_order') {
+      // tslint:disable-next-line: no-use-before-declare
+      return BalanceOrderEntity;
+    }
+    return null;
+  }
+}
+
+// 救援退款订单基类
+export class RefundOrderEntity extends EntityBase {
+  public rescue_order: RescueOrderEntity = undefined; // 救援订单对象
+  public trade_no: string = undefined; // 微信支付订单id
+  public pay_time: number = undefined; // 支付时间
+  public order_status: number = undefined; // 订单状态 1：待支付 2：已支付 3：已取消 4：已关闭
+  public refund_time: number = undefined; // 退款时间
+  public refund_fee: number = undefined; // 退款金额
+  public refund_reason: string = undefined; // 退款原因
+  public refund_status: number = undefined; // 退款状态 1退款中，2已部分退款，3已全额退款，4退款失败
+  public pay_expire_time: number = undefined; // 支付订单失效时间
+  public order_type: number = undefined; // 订单类型 1：预付 2：尾款
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'rescue_order') {
+      return RescueOrderEntity;
+    }
+    return null;
+  }
+}
+
+// 预付订单
+export class PrepaidOrderEntity extends RefundOrderEntity {
+  public rescue_prepaid_order_id: string = undefined; // 救援预付订单id
+  public real_prepaid_fee: number = undefined; // 实收预付费 单位：分
+  public right_prepaid_fee: number = undefined; // 应收预付费 单位：分
+  public prepaid_platform_discount: number = undefined; // 预付平台立减 单位：分
+  public prepaid_coupon_discount: number = undefined; // 预付优惠卷优惠金额 单位：分
+}
+
+// 尾款订单
+export class BalanceOrderEntity extends RefundOrderEntity {
+  public rescue_balance_order_id: string = undefined; // 救援尾款订单id
+  public real_balance_fee: number = undefined; // 实收尾款 单位：分
+  public right_balance_fee: number = undefined; // 应收尾款 单位：分
+  public balance_platform_discount: number = undefined; // 尾款平台立减 单位：分
+  public balance_coupon_discount: number = undefined; // 尾款优惠卷优惠金额 单位：分
 }
 
 export class RefundParams extends EntityBase {
-  public order_type = 3; // 订单类型 1：到店保养 2：上门保养 3:救援订单
-  public order_id: string = undefined; // 订单id
   public refund_fee: number = undefined; // 退款金额
   public refund_reason: string = undefined; // 退款原因
 
@@ -101,7 +157,7 @@ export class RescueOrderService {
    * @param searchParams 条件检索参数
    */
   public requestOrderListData(searchParams: RescueOrderSearchParams): Observable<RescueOrderLinkResponse> {
-    const httpUrl = `${this.domain}/orders`;
+    const httpUrl = `${this.domain}/rescue_orders`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new RescueOrderLinkResponse(res)));
   }
@@ -117,24 +173,33 @@ export class RescueOrderService {
 
   /**
    * 获取订单详情
-   * @param order_id 订单ID
+   * @param rescue_order_id 订单ID
    * @returns Observable<RescueOrderEntity>
    */
-  public requestOrderDetailData(order_id: string): Observable<RescueOrderEntity> {
-    const httpUrl = `${this.domain}/orders/${order_id}`;
-    const body = {
-      order_type: 3
-    };
-    return this.httpService.get(httpUrl, body).pipe(map(res => RescueOrderEntity.Create(res.body)));
+  public requestOrderDetailData(rescue_order_id: string): Observable<RescueOrderEntity> {
+    const httpUrl = `${this.domain}/rescue_orders/${rescue_order_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => RescueOrderEntity.Create(res.body)));
   }
 
   /**
-   * 退款
+   * 救援预付订单退款
    * @param params 参数
+   * @param rescue_prepaid_order_id 预付订单id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestOrderRefundData(params: RefundParams): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/refund_orders`;
+  public requestPrepaidRefundData(params: RefundParams, rescue_prepaid_order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/rescue_prepaid_orders/${rescue_prepaid_order_id}/refund_orders`;
+    return this.httpService.post(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 救援尾款订单退款
+   * @param params 参数
+   * @param rescue_balance_order_id 尾款订单id
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestBalanceRefundData(params: RefundParams, rescue_balance_order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/rescue_balance_orders/${rescue_balance_order_id}/refund_orders`;
     return this.httpService.post(httpUrl, params.toEditJson());
   }
 }

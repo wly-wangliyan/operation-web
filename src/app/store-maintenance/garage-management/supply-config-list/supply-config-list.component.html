@@ -15,8 +15,8 @@
           <span>供货方式：</span>
           <select class="form-control" [(ngModel)]="searchParams.supply_type" name="supply_type">
             <option value="">全部</option>
-            <option value="1">门店自供</option>
-            <option value="2">第三方供应商</option>
+            <option value="1">第三方供应商</option>
+            <option value="2">门店自供</option>
           </select>
         </div>
 
@@ -70,7 +70,7 @@
               </div>
             </td>
             <td [title]="data.accessory_brand || ''">{{data.accessory_brand || '--'}}</td>
-            <td>{{data.supply_type?(data.supply_type===1?'门店自供':'第三方供应商'):'--'}}</td>
+            <td>{{data.supply_type?(data.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
             <td>--</td>
             <td>--</td>
             <td class="operation">
@@ -104,7 +104,7 @@
               <select class="form-control" [(ngModel)]="configParams.supply_type" name="supply_type"
                 (change)="onChangeSupplyType($event)" required>
                 <option value="">请选择</option>
-                <option value="1">门店自供</option>
+                <option value="2">门店自供</option>
               </select>
             </div>
           </div>
