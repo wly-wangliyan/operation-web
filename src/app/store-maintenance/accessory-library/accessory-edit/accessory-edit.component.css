@@ -45,10 +45,10 @@
   display: inline-block;
   width: 72px;
   border-left: 1px solid #EEEFF5;
-  height: 30px;
+  height: 29px;
   text-align: center;
   background: #fff;
-  line-height: 30px;
+  line-height: 29px;
 }
 
 .unit {
@@ -122,4 +122,18 @@
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(62, 113, 247, 1) !important;
+}
+
+.img-danger {
+  position: absolute;
+  margin-top: -8px;
+  left: 21px;
+}
+
+.img-danger .input-error {
+  font-size: 12px;
+}
+
+:host ::ng-deep .ant-table-tbody>tr {
+  height: 68px;
 }

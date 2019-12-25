@@ -78,7 +78,7 @@ export class AccessoryListComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchProjectText$.next();
+    this.searchProjectText$.next();
   }
 
   // 查询按钮
@@ -88,24 +88,21 @@ export class AccessoryListComponent implements OnInit {
   }
 
   // 开关状态改变
-  public onSwitchChange(status: number, event: boolean) {
+  public onSwitchChange(status: boolean, event: boolean) {
     timer(2000).subscribe(() => {
-      return status = event === true ? 1 : 2;
+      return status = event;
     });
   }
 
   // 开关点击调用接口
   public onSwitchClick(accessory_id: string, status: boolean) {
-    const text = status ? '开启' : '关闭';
-    this.globalService.confirmationBox.open('提示', '下架后，将不支持在线购买', () => {
-      this.accessoryLibraryService.requestUpdateStatusData(accessory_id, status).subscribe(res => {
-        this.globalService.promptBox.open(`${text}成功`);
-        this.searchText$.next();
-      }, err => {
-        this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
-        this.searchText$.next();
-      });
-
+    const text = !status ? '开启' : '关闭';
+    this.accessoryLibraryService.requestUpdateStatusData(accessory_id, !status).subscribe(res => {
+      this.globalService.promptBox.open(`${text}成功`);
+      this.searchText$.next();
+    }, err => {
+      this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
+      this.searchText$.next();
     });
   }
 

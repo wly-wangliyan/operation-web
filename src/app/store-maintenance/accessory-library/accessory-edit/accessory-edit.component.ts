@@ -3,13 +3,14 @@ import { ChooseProjectComponent } from './choose-project/choose-project.componen
 import { isUndefined } from 'util';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../core/global.service';
-import { Subject, timer } from 'rxjs/index';
+import { Subject, timer, forkJoin } from 'rxjs/index';
 import { debounceTime } from 'rxjs/operators';
 import {
   AccessoryLibraryService,
   SpecificationEntity,
   AccessoryEntity,
   SearchAccessoryParams,
+  ProjectEntity,
 } from '../accessory-library.service';
 import { HttpErrorEntity } from '../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
@@ -32,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,51 +50,44 @@ export class ErrPositionItem {
 export class AccessoryEditComponent implements OnInit {
 
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
+  public errSpecificationsItem: ErrPositionItem = new ErrPositionItem();
   public accessoryParams = new SearchAccessoryParams();
   public specificationsList: Array<SpecificationEntity> = [];
   public specificationsTempList: Array<SpecificationEntity> = [];
   public specificationsDelList: Array<SpecificationEntity> = [];
+  public projectInfo: ProjectEntity = new ProjectEntity();
   public accessoryData = new AccessoryEntity();
   public noResultText = '数据加载中...';
   public accessory_id = '';
-  public sale_fee = '';
+  public sale_balance_fee = '';
   public right_prepaid_fee = '';
   public real_prepaid_fee = '';
-  public accessoryNameErrors = '';
+  public operationTelErrors = '';
   public prepaidOriginPriceErrors = '';
   public prepaidSalePriceErrors = '';
   public accessoryDetailErrors = '';
   public accessory_image_url: Array<any> = [];
+  public specifications_image_num: number;
 
   private searchText$ = new Subject<any>();
 
   @ViewChild('chooseProject', { static: true }) public chooseProject: ChooseProjectComponent;
-  @ViewChild('accessoryImg', { static: true }) public accessoryImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('accessoryImg', { static: true }) public accessoryImgComponent: ZPhotoSelectComponent;
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
       this.accessory_id = params.accessory_id;
     });
-    // const obj = new SpecificationEntity();
-    // obj.specification_id = '2134';
-    // this.specificationsList.push(obj);
-    // const obj1 = new SpecificationEntity();
-    // obj1.specification_id = '2313';
-    // this.specificationsList.push(obj1);
-    // const obj2 = new SpecificationEntity();
-    // obj2.specification_id = '2313';
-    // this.specificationsList.push(obj2);
-    this.specificationsTempList = this.specificationsList;
+    // 配件库列表
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.accessoryLibraryService.requestAccessoryDetailData(this.accessory_id).subscribe(res => {
         this.accessoryData = res;
-        this.specificationsList = this.accessoryData.specifications;
-        this.specificationsTempList = this.accessoryData.specifications;
         this.getDetailData();
+        this.getDetailNumData();
         this.getEditorData(res.detail);
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -101,11 +95,25 @@ export class AccessoryEditComponent implements OnInit {
     });
     if (this.accessory_id) {
       this.searchText$.next();
+    } else {
+      this.specificationsList.push(new SpecificationEntity());
     }
   }
 
-  // 编辑配置库数据处理
+  // 数据处理
   private getDetailData() {
+    this.accessoryParams.accessory_name = this.accessoryData.accessory_name;
+    this.accessory_image_url = this.accessoryData.accessory_images ? this.accessoryData.accessory_images.split(',') : [];
+    this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
+    this.accessoryParams.project_id = this.accessoryData.project ? this.accessoryData.project.project_id : '';
+    this.accessoryParams.project_name = this.accessoryData.project ? this.accessoryData.project.project_name : '';
+    this.accessoryData.specification_info.forEach(i => i.imageList = i.image ? i.image.split(',') : []);
+    this.specificationsList = this.accessoryData.specification_info;
+    this.specificationsTempList = this.accessoryData.specification_info;
+  }
+
+  // 编辑配置库数据处理
+  private getDetailNumData() {
     this.right_prepaid_fee = this.getFeeData(this.accessoryData.right_prepaid_fee);
     this.real_prepaid_fee = this.getFeeData(this.accessoryData.real_prepaid_fee);
   }
@@ -131,6 +139,11 @@ export class AccessoryEditComponent implements OnInit {
     if (event) {
       this.accessoryParams.project_id = event.project.project_id;
       this.accessoryParams.project_name = event.project.project_name;
+      this.accessoryLibraryService.requestProjectDetailData(this.accessoryParams.project_id).subscribe(res => {
+        this.projectInfo = res;
+      }, err => {
+        this.handleErrorFunc(err, 1);
+      });
     }
   }
 
@@ -138,7 +151,9 @@ export class AccessoryEditComponent implements OnInit {
   public clear() {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.ic_name.isError = false;
-    this.accessoryNameErrors = '';
+    this.errSpecificationsItem.icon.isError = false;
+    this.errSpecificationsItem.ic_name.isError = false;
+    this.operationTelErrors = '';
     this.prepaidOriginPriceErrors = '';
     this.prepaidSalePriceErrors = '';
     this.accessoryDetailErrors = '';
@@ -156,12 +171,50 @@ export class AccessoryEditComponent implements OnInit {
     }
   }
 
+  // 选择图片时校验图片格式
+  public onSelectSpecificationsPic(event: any, i: number) {
+    this.errSpecificationsItem.icon.isError = false;
+    this.specifications_image_num = i;
+    if (event === 'type_error') {
+      this.errSpecificationsItem.icon.isError = true;
+      this.errSpecificationsItem.icon.errMes = '格式错误，请重新上传！';
+    } else if (event === 'size_over') {
+      this.errSpecificationsItem.icon.isError = true;
+      this.errSpecificationsItem.icon.errMes = '图片大小不得高于2M！';
+    }
+  }
+
   // 添加规格
   public onAddSpecifications() {
     timer(0).subscribe(() => {
       $('.table-form').scrollTop('400');
     });
-    this.specificationsList.push(new SpecificationEntity());
+    const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
+    const batteryModelList = this.specificationsList.filter(m => !m.battery_model);
+    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_balance_fee);
+    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_balance_fee);
+    const storeList = this.specificationsList.filter(s => !s.store);
+    const specificationsPriceList = this.specificationsList.filter(i =>
+      Number(i.sale_balance_fee) > Number(i.original_balance_fee));
+    if (imageNoneList.length !== 0) {
+      this.globalService.promptBox.open(`请选择规格图片后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (batteryModelList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写型号后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (originalBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款原价后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (saleBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款现价后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (storeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写库存后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (specificationsPriceList.length !== 0) {
+      this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
+    } else {
+      this.specificationsList.push(new SpecificationEntity());
+    }
   }
 
   // 删除规格
@@ -173,54 +226,94 @@ export class AccessoryEditComponent implements OnInit {
     } else {
       this.specificationsList.splice(i, 1);
     }
-
   }
 
   // 保存数据
   public onSaveFormSubmit() {
-    if (Number(this.accessoryData.real_prepaid_fee) > Number(this.accessoryData.right_prepaid_fee)) {
+    this.handleParams();
+    const regPhone = /^(1[3-9])\d{9}$/g;
+    const batteryModelList = this.accessoryParams.battery_specification.filter(m => !m.battery_model);
+    const originalBalanceFeeList = this.accessoryParams.battery_specification.filter(o => !o.original_balance_fee);
+    const saleBalanceFeeList = this.accessoryParams.battery_specification.filter(b => !b.sale_balance_fee);
+    const storeList = this.accessoryParams.battery_specification.filter(s => !s.store);
+    const specificationsPriceList = this.accessoryParams.battery_specification.filter(a =>
+      Number(a.sale_balance_fee) > Number(a.original_balance_fee));
+    if (this.accessoryImgComponent.imageList.length === 0) {
+      this.clear();
+      this.errPositionItem.icon.isError = true;
+      this.errPositionItem.icon.errMes = '请上传产品图片！';
+    } else if (batteryModelList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写型号!`, null, 2000, '/assets/images/warning.png');
+    } else if (originalBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款原价!`, null, 2000, '/assets/images/warning.png');
+    } else if (saleBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款现价!`, null, 2000, '/assets/images/warning.png');
+    } else if (storeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写库存!`, null, 2000, '/assets/images/warning.png');
+    } else if (specificationsPriceList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
+    } else if (Number(this.accessoryData.real_prepaid_fee) > Number(this.accessoryData.right_prepaid_fee)) {
       this.clear();
       this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
+    } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
+      this.clear();
+      this.operationTelErrors = '请输入正确的运营手机号！';
+    } else if (!CKEDITOR.instances.accessoryEditor.getData()) {
+      this.clear();
+      this.accessoryDetailErrors = '请输入图文详情！';
     } else {
       this.clear();
-      this.handleParams();
-      if (!this.accessory_id) {// 新增
-        this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
-          this.globalService.promptBox.open('新建配件库成功！');
-          this.searchText$.next();
-          timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
-        }, err => {
-          this.handleErrorFunc(err, 1);
+      forkJoin(this.accessoryImgComponent.upload()).subscribe(
+        data => {
+          this.accessory_image_url = this.accessoryImgComponent.imageList.map(i => i.sourceUrl);
+          this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
+          let i = 0;
+          const specificationsListLength = this.specificationsImgSelectList.length;
+          this.specificationsImgSelectList.forEach((child, index) => {
+            child.upload().subscribe(() => {
+              const newImage = child.imageList.map(s => s.sourceUrl);
+              this.specificationsList[index].image = newImage.join(',');
+              i++;
+              if (i === specificationsListLength) {
+                const imageNoneList = this.accessoryParams.battery_specification.filter(v => !v.image);
+                if (imageNoneList.length !== 0) {
+                  this.clear();
+                  this.globalService.promptBox.open(`请上传规格图片!`, null, 2000, '/assets/images/warning.png');
+                } else {
+                  if (!this.accessory_id) {// 新增
+                    this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
+                      this.globalService.promptBox.open('新建配件库成功！');
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                    }, err => {
+                      this.handleErrorFunc(err, 1);
+                    });
+                  } else {// 编辑
+                    this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
+                      this.globalService.promptBox.open('编辑配件库成功！');
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                    }, err => {
+                      this.handleErrorFunc(err, 1);
+                    });
+                  }
+                }
+              }
+            });
+          });
         });
-      } else {// 编辑
-        this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
-          this.globalService.promptBox.open('编辑配件库成功！');
-          this.searchText$.next();
-          timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
-        }, err => {
-          this.handleErrorFunc(err, 1);
-        });
-      }
     }
   }
 
-
   // 处理服务配置入参
   private handleParams() {
-    this.accessoryImgSelectComponent.upload().subscribe(() => {
-      this.accessory_image_url = this.accessoryImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
-    });
-    this.specificationsImgSelectList.forEach((child, index) => {
-      child.upload().subscribe(() => {
-        const newImage = child.imageList.map(i => i.sourceUrl);
-        this.specificationsList[index].image = newImage.join(',');
-      });
-    });
-    this.accessoryParams.specifications = this.specificationsList.concat(this.specificationsDelList);
+    this.accessoryParams.battery_specification = this.specificationsList.concat(this.specificationsDelList);
     this.accessoryParams.right_prepaid_fee = Number(this.right_prepaid_fee) * 100;
     this.accessoryParams.real_prepaid_fee = Number(this.real_prepaid_fee) * 100;
-    this.accessoryData.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+    this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
   }
 
   // 处理错误信息
@@ -233,7 +326,7 @@ export class AccessoryEditComponent implements OnInit {
           const field = content.field === 'project_id' ? '项目名称' : content.field === 'accessory_name' ?
             '产品名称' : content.field === 'accessory_images' ? '图片' : content.field === 'accessory_brand_id' ? '所属品牌'
               : content.field === 'accessory_params' ? '参数' : content.field === 'detail' ? '图文详情'
-                : content.field === 'specifications' ? '规格' : content.field === 'right_prepaid_fee' ? '预约原价'
+                : content.field === 'battery_specification' ? '规格' : content.field === 'right_prepaid_fee' ? '预约原价'
                   : content.field === 'real_prepaid_fee' ? '预付现价' : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');

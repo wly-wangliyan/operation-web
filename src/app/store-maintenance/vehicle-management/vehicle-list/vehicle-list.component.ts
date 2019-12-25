@@ -78,7 +78,7 @@ export class VehicleListComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    // this.searchBrandText$.next();
+    this.searchBrandText$.next();
   }
 
   // 翻页方法
@@ -105,19 +105,16 @@ export class VehicleListComponent implements OnInit {
 
   // 开关点击调用接口
   public onSwitchClick(data: CarParamEntity, status: boolean) {
-    const text = status ? '开启' : '关闭';
-    const car_status = status ? 1 : 2;
-    this.globalService.confirmationBox.open('提示', '下架后，将不支持在线购买', () => {
-      this.vehicleManagementService.requestUpdateStatusData(data.car_series && data.car_series.car_series_id,
-        data.car_param_id, car_status).subscribe(res => {
-          this.globalService.promptBox.open(`${text}成功`);
-          this.searchText$.next();
-        }, err => {
-          this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
-          this.searchText$.next();
-        });
-
-    });
+    const text = !status ? '开启' : '关闭';
+    const car_status = !status ? 1 : 2;
+    this.vehicleManagementService.requestUpdateStatusData(data.car_series && data.car_series.car_series_id,
+      data.car_param_id, car_status).subscribe(res => {
+        this.globalService.promptBox.open(`${text}成功`);
+        this.searchText$.next();
+      }, err => {
+        this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
+        this.searchText$.next();
+      });
   }
 
   // 查询
@@ -141,6 +138,8 @@ export class VehicleListComponent implements OnInit {
 
   // 变更厂商
   public onChangeFactory(event: any) {
+    console.log('2', event.target.value);
+
     this.searchParams.car_series_id = '';
     this.searchParams.car_displacement = '';
     this.carSeriesList = [];
@@ -173,7 +172,7 @@ export class VehicleListComponent implements OnInit {
   private requestSeriesListByFactory(car_brand_id: string, car_factory_id: string) {
     this.vehicleManagementService.requestCarSeriesListData(car_brand_id, car_factory_id)
       .subscribe(res => {
-        this.carFactoryList = res.results;
+        this.carSeriesList = res.results;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

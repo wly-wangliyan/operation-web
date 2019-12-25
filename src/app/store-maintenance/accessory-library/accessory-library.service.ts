@@ -12,11 +12,12 @@ export class SpecificationEntity extends EntityBase {
   public specification_id: string = undefined; // string	规格id-主键
   public accessory: string = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片
-  public accessory_model: string = undefined; // string	配件型号
+  public imageList = []; // arr	图片数组
+  public battery_model: string = undefined; // string	配件型号
   public content: string = undefined; // string	净含量
-  public original_fee: number = undefined; // float	原价 单位：分
+  public original_balance_fee: number = undefined; // float	原价 单位：分
   public buy_fee: number = undefined; // float	结算价 单位：分
-  public sale_fee: number = undefined; // float	售价 单位：分
+  public sale_balance_fee: number = undefined; // float	售价 单位：分
   public store: number = undefined; // integer	库存
   public sale_num: number = undefined; // integer	销量
   public is_deleted = false; // bool	是否删除
@@ -59,10 +60,11 @@ export class AccessoryEntity extends EntityBase {
   public accessory_id: string = undefined; // string	配件id - 主键
   public accessory_name: string = undefined; // tring	配件名称
   public accessory_images: string = undefined; // string	图片 多个逗号分隔
+  public operation_telephone: string = undefined; // string	运营手机号
   public accessory_imagesList: Array<any> = []; // array	图片数组
   public project: ProjectEntity = undefined; // 项目对象 Project
   public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
-  public specifications: Array<SpecificationEntity> = []; // object	规格 Specification
+  public specification_info: Array<SpecificationEntity> = []; // object	规格 Specification
   public accessory_params: {} = undefined; // json	参数
   // { 'oil_num': 'xxx', 'oil_type': 1, 'oil_api': 'xxx', 'oil_place': 'xxx', 'oil_expire': 'xxx' } 1：全合成 2：半合成 3：矿物质
   public detail: string = undefined; // string	图文详情
@@ -71,22 +73,23 @@ export class AccessoryEntity extends EntityBase {
   public right_prepaid_fee: number = undefined; // float	应付预付价 单位：分
   public is_deleted: boolean = undefined; // bool	是否删除
   public sale_status: boolean = undefined; // integer	销售状态 1：在售 2：停售
-  public min_origin_price: number = undefined; // integer	最小原价
-  public max_original_price: number = undefined; // integer	最大原价
+  public min_right_balance: number = undefined; // integer	最小原价
+  public max_right_balance: number = undefined; // integer	最大原价
   public min_buy_price: number = undefined; // integer	最小结算价
   public max_buy_price: number = undefined; // integer	最大结算价
-  public min_sale_price: number = undefined; // integer	最小售价
-  public max_sale_price: number = undefined; // integer	最大售价
+  public min_real_balance: number = undefined; // integer	最小售价
+  public max_real_balance: number = undefined; // integer	最大售价
   public sale_num: number = undefined; // integer	销量
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
+  public supply_type: number = undefined; // 供应方式  1:第三方供应商 2:门店自供
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'project') {
       return ProjectEntity;
     } else if (propertyName === 'accessory_brand') {
       return AccessoryBrandEntity;
-    } else if (propertyName === 'specifications') {
+    } else if (propertyName === 'specification_info') {
       return SpecificationEntity;
     }
     return null;
@@ -129,14 +132,15 @@ export class SearchAccessoryParams extends EntityBase {
   public project_name: string = undefined; // string	F	所属项目名称
   public accessory_name: string = undefined; // string	F	配件名称
   public accessory_images: string = undefined; // string	T	图片 多个逗号分隔
+  public operation_telephone: string = undefined; // string	T	运营手机号
   public accessory_brand_id: string = undefined; // string	F	配件品牌id
   public real_prepaid_fee: number = undefined; // float	F	实际预付费 单位：分
   public right_prepaid_fee: number = undefined; // float	F	应付预付费 单位：分
   public accessory_params: {}; // json	F	参数
-  public specifications: Array<SpecificationEntity> = []; // object	规格 Specification
+  public battery_specification: Array<SpecificationEntity> = []; // object	规格 Specification
   public detail: string = undefined; // string	T	图文详情 无：''
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'specifications') {
+    if (propertyName === 'battery_specification') {
       return SpecificationEntity;
     }
     return null;
@@ -202,13 +206,21 @@ export class AccessoryLibraryService {
   }
 
   /**
+   * 获取项目详情--取规格名称
+   */
+  public requestProjectDetailData(project_id: string): Observable<ProjectEntity> {
+    const httpUrl = `${this.domain}/projects/${project_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => ProjectEntity.Create(res.body)));
+  }
+
+  /**
    * 新建配件库
    * @param params SearchAccessoryParams 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestAddAccessoryData(params: SearchAccessoryParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories`;
-    return this.httpService.post(httpUrl, { params });
+    return this.httpService.post(httpUrl, params);
   }
 
   /**
@@ -219,7 +231,7 @@ export class AccessoryLibraryService {
    */
   public requestUpdateAccessoryData(params: SearchAccessoryParams, accessory_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}`;
-    return this.httpService.put(httpUrl, { params });
+    return this.httpService.put(httpUrl, params);
   }
 
 

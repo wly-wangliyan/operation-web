@@ -53,18 +53,6 @@ export class ChooseProjectComponent implements OnInit {
    */
   public open() {
     this.initModal();
-    // const obj = new ProjectEntity();
-    // obj.project_id = '1';
-    // obj.project_name = '机油';
-    // this.projectList.push(obj);
-    // const obj1 = new ProjectEntity();
-    // obj1.project_id = '2';
-    // obj1.project_name = '机油滤清器';
-    // this.projectList.push(obj1);
-    // const obj2 = new ProjectEntity();
-    // obj2.project_id = '3';
-    // obj2.project_name = '蓄电池';
-    // this.projectList.push(obj2);
     this.searchText$.next();
     setTimeout(() => {
       $('#chooseProjectModal').modal();

@@ -227,7 +227,7 @@ export class VehicleManagementHttpService {
       eventEmitter.next(data);
     }, err => {
       eventEmitter.error(err);
-    });
+    }, this.domain);
     return eventEmitter;
   }
 

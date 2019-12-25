@@ -37,7 +37,7 @@
               <nz-form-label>ID</nz-form-label>
               <nz-form-control>
                 <input class="form-control" placeholder="请输入ID" autocomplete="off"
-                  [(ngModel)]="searchParams.accessory_id" name="accessory_id" maxlength='20' />
+                  [(ngModel)]="searchParams.accessory_id" name="accessory_id" maxlength='50' />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -97,24 +97,24 @@
             <td>{{data.project?.project_name||'--'}}</td>
             <td>{{data.accessory_brand?.brand_name||'--'}}</td>
             <td>
-              <span *ngIf='data.min_origin_price!==data.max_original_price'>
-                {{data.min_origin_price|centPriceChange}}-</span>
-              {{data.max_original_price|centPriceChange:'元'}}
+              <span *ngIf='data.min_right_balance!==data.max_right_balance'>
+                {{data.min_right_balance|centPriceChange}}-</span>
+              {{data.max_right_balance|centPriceChange:'元'}}
             </td>
             <td>
-              <span *ngIf='data.min_sale_price!==data.max_sale_price'>
-                {{data.min_sale_price|centPriceChange}}-</span>
-              {{data.max_sale_price|centPriceChange:'元'}}</td>
+              <span *ngIf='data.min_real_balance!==data.max_real_balance'>
+                {{data.min_real_balance|centPriceChange}}-</span>
+              {{data.max_real_balance|centPriceChange:'元'}}</td>
             <td>
               <span *ngIf='data.min_buy_price!==data.max_buy_price'>
                 {{data.min_buy_price|centPriceChange}}-
               </span>
               {{data.max_buy_price|centPriceChange:'元'}}</td>
-            <td>{{data.sale_num}}</td>
+            <td>{{data.sale_num||0}}</td>
             <td>
-              <nz-switch [ngModel]="data.sale_status===1?true:false"
-                (ngModelChange)="onSwitchChange(data.sale_status, $event)" [nzControl]=true nzCheckedChildren="On"
-                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.accessory_id,data.sale_status)">
+              <nz-switch [ngModel]="data.sale_status" (ngModelChange)="onSwitchChange(data.sale_status, $event)"
+                [nzControl]=true nzCheckedChildren="On" nzUnCheckedChildren="Off"
+                (click)="onSwitchClick(data.accessory_id,data.sale_status)">
               </nz-switch>
             </td>
             <td class="operation">
