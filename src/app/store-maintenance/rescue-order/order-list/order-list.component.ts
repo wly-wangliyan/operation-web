@@ -4,7 +4,6 @@ import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
 import { RescueOrderService, RescueOrderSearchParams, RescueOrderEntity } from '../rescue-order.service';
 import { debounceTime } from 'rxjs/operators';
-import { HttpErrorEntity } from '../../../core/http.service';
 
 const PageSize = 15;
 

@@ -2,12 +2,9 @@
   <app-crumb [level1Name]="'救援订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
   </app-crumb>
 </div>
-<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
-  <nz-spin nzSimple></nz-spin>
-</div>
-<div class="content-flow" [hidden]="loading">
+<div class="content-flow">
   <div class="content-container">
-    <div class="table-item order-table">
+    <div class="table-item order-table" *ngIf="orderRecord && orderRecord.rescue_order_id">
       <table class="detail-table">
         <tr>
           <td rowspan="8" class="row-title">订单信息</td>
@@ -19,11 +16,11 @@
             <span *ngIf="!orderRecord.service_status">--</span>
           </td>
 
-          <td>订单状态：</td>
-          <td style="color: #E82038;">{{orderRecord.order_status | rescueOrderStatus}}</td>
-
           <td>订单编号：</td>
           <td>{{orderRecord.rescue_order_id || '--'}}</td>
+
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <td>车主姓名：</td>
@@ -45,28 +42,20 @@
           <td></td>
           <td></td>
         </tr>
+
         <tr>
-          <td>总金额：</td>
-          <td>{{orderRecord.total_right_fee | centPriceChange:'元'}}</td>
+          <td>应收</td>
+          <td>{{orderRecord.right_fee | centPriceChange:'元'}}</td>
 
-          <td>预付费：</td>
-          <td>
-            <span>应收：</span>{{orderRecord.right_prepaid_fee | centPriceChange:'元'}}
-            <span>，实收：</span>{{orderRecord.real_prepaid_fee | centPriceChange:'元'}}
-          </td>
+          <td>优惠</td>
+          <td>{{orderRecord.coupon_discount | centPriceChange:'元'}}</td>
 
-          <td>立减：</td>
-          <td>
-            <span>尾款：</span>{{orderRecord.balance_platform_discount | centPriceChange:'元'}}
-            <span>，预付：</span>{{orderRecord.prepaid_platform_discount | centPriceChange:'元'}}
-          </td>
+          <td>立减</td>
+          <td>{{orderRecord.platform_discount | centPriceChange:'元'}}</td>
         </tr>
         <tr>
-          <td>优惠：</td>
-          <td>
-            <span>尾款：</span>{{orderRecord.balance_coupon_discount | centPriceChange:'元'}}
-            <span>，预付：</span>{{orderRecord.prepaid_coupon_discount | centPriceChange:'元'}}
-          </td>
+          <td>实收</td>
+          <td>{{orderRecord.real_fee | centPriceChange:'元'}}</td>
 
           <td></td>
           <td></td>
@@ -74,38 +63,204 @@
           <td></td>
           <td></td>
         </tr>
+
         <tr>
           <td>汽修店：</td>
           <td>{{orderRecord.repair_shop_name || '--'}}</td>
 
-          <td>下单时间：</td>
-          <td>{{orderRecord.created_time ? (orderRecord.created_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
-
-          <td>支付时间：</td>
-          <td>{{orderRecord.pay_time ? (orderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
-        </tr>
-        <tr>
           <td>接单时间：</td>
-          <td>{{orderRecord.take_order_time ? (orderRecord.take_order_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>{{orderRecord.take_order_time ? (orderRecord.take_order_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+          </td>
 
           <td>完成时间：</td>
-          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
-
-          <td></td>
-          <td></td>
+          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
         </tr>
         <tr>
-          <td>退款时间：</td>
-          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+          <td>预付退款时间：</td>
+          <td>
+            {{prepaidOrderRecord?.refund_time ? (prepaidOrderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+          </td>
 
-          <td>退款原因：</td>
-          <td>{{orderRecord.refund_reason || '--'}}</td>
+          <td>预付退款金额：</td>
+          <td>
+            {{prepaidOrderRecord && prepaidOrderRecord.refund_fee>0?(prepaidOrderRecord.refund_fee | centPriceChange:'元'):'--'}}
+          </td>
 
-          <td></td>
-          <td></td>
+          <td>预付退款原因</td>
+          <td>{{prepaidOrderRecord?.refund_reason || '--'}}</td>
         </tr>
+        <tr>
+          <td>尾款退款时间：</td>
+          <td>
+            {{balanceOrderRecord?.refund_time ? (balanceOrderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+          </td>
+
+          <td>尾款退款金额：</td>
+          <td>
+            {{balanceOrderRecord && balanceOrderRecord.refund_fee>0?(balanceOrderRecord.refund_fee | centPriceChange:'元'):'--'}}
+          </td>
+
+          <td>尾款退款原因</td>
+          <td>{{balanceOrderRecord?.refund_reason || '--'}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item" *ngIf="prepaidOrderRecord && prepaidOrderRecord.rescue_prepaid_order_id">
+      <table class="detail-table">
+        <caption>预付</caption>
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>订单类型</th>
+            <th>应收</th>
+            <th>优惠券</th>
+            <th>平台立减</th>
+            <th>实收</th>
+            <th>下单&支付时间</th>
+            <th>订单状态</th>
+            <th>售后/退款</th>
+            <th *ngIf="prepaidOrderRecord.order_status===2 && !prepaidOrderRecord.refund_fee">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span *ngIf="prepaidOrderRecord.rescue_prepaid_order_id"
+                [appTxtCopy]="prepaidOrderRecord.rescue_prepaid_order_id">
+                {{prepaidOrderRecord.rescue_prepaid_order_id}}
+              </span>
+              <span *ngIf="!prepaidOrderRecord.rescue_prepaid_order_id">--</span>
+            </td>
+            <td>预付</td>
+            <td>{{prepaidOrderRecord.right_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>{{prepaidOrderRecord.prepaid_coupon_discount | centPriceChange:'元'}}</td>
+            <td>{{prepaidOrderRecord.prepaid_platform_discount | centPriceChange:'元'}}</td>
+            <td>{{prepaidOrderRecord.real_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>
+              <div class="column-box">
+                <span *ngIf="prepaidOrderRecord.created_time">
+                  {{prepaidOrderRecord.created_time ?('下单：'+(prepaidOrderRecord.created_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
+                </span>
+                <span *ngIf="prepaidOrderRecord.pay_time">
+                  {{prepaidOrderRecord.pay_time ?('支付：'+(prepaidOrderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
+                </span>
+                <span *ngIf="!prepaidOrderRecord.created_time && !prepaidOrderRecord.pay_time">--</span>
+              </div>
+            </td>
+
+            <td>{{prepaidOrderRecord.order_status?orderStatus[prepaidOrderRecord.order_status]:orderStatus[0]}}</td>
+
+            <td>{{prepaidOrderRecord.refund_status?refundStatus[prepaidOrderRecord.refund_status]:refundStatus[0]}}</td>
+
+            <td class="operation" *ngIf="prepaidOrderRecord.order_status===2 && !prepaidOrderRecord.refund_fee">
+              <a [title]="'退款'" (click)="onRefundClick(1)">退款</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-item" *ngIf="balanceOrderRecord && balanceOrderRecord.rescue_balance_order_id">
+      <table class="detail-table">
+        <caption>尾款</caption>
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>订单类型</th>
+            <th>应收</th>
+            <th>优惠券</th>
+            <th>平台立减</th>
+            <th>实收</th>
+            <th>下单&支付时间</th>
+            <th>订单状态</th>
+            <th>售后/退款</th>
+            <th *ngIf="balanceOrderRecord.order_status===2 && !balanceOrderRecord.refund_fee">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span *ngIf="balanceOrderRecord.rescue_balance_order_id"
+                [appTxtCopy]="balanceOrderRecord.rescue_balance_order_id">
+                {{balanceOrderRecord.rescue_balance_order_id}}
+              </span>
+              <span *ngIf="!balanceOrderRecord.rescue_balance_order_id">--</span>
+            </td>
+            <td>尾款</td>
+            <td>{{balanceOrderRecord.right_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.prepaid_coupon_discount | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.prepaid_platform_discount | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.real_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>
+              <div class="column-box">
+                <span *ngIf="balanceOrderRecord.created_time">
+                  {{balanceOrderRecord.created_time ?('下单：'+(balanceOrderRecord.created_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
+                </span>
+                <span *ngIf="balanceOrderRecord.pay_time">
+                  {{balanceOrderRecord.pay_time ?('支付：'+(balanceOrderRecord.pay_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
+                </span>
+                <span *ngIf="!balanceOrderRecord.created_time && !balanceOrderRecord.pay_time">--</span>
+              </div>
+            </td>
+
+            <td>{{balanceOrderRecord.order_status?orderStatus[balanceOrderRecord.order_status]:orderStatus[0]}}</td>
+
+            <td>{{balanceOrderRecord.refund_status?refundStatus[balanceOrderRecord.refund_status]:refundStatus[0]}}</td>
+
+            <td class="operation" *ngIf="balanceOrderRecord.order_status===2 && !balanceOrderRecord.refund_fee">
+              <a [title]="'退款'" (click)="onRefundClick(2)">退款</a>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
   <app-prompt-loading></app-prompt-loading>
+</div>
+
+<!-- 退款模态框 -->
+<div class="modal fade " id="refundModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">退款</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>退款金额：</span>
+            </label>
+            <div class="control-input">
+              <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundParams.refund_fee" maxlength="8"
+                class="form-control" required appFloatNumber>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>退款原因：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="refund_reason" class="form-control" [(ngModel)]="refundParams.refund_reason"
+                maxlength="20" placeholder="输入0-20字退款原因">
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
+              (appZDebounceClick)="onRefundCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

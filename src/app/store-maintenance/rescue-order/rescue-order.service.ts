@@ -63,8 +63,22 @@ export class RescueOrderEntity extends EntityBase {
   public refund_fee: number = undefined; // 退款金额
   public pay_expire_time: number = undefined; // 支付订单失效时间
   public take_expire_time: number = undefined; // 接收订单失效时间
+  public rescue_prepaid_order: PrepaidOrderEntity = undefined; // 预付订单
+  public rescue_balance_order: BalanceOrderEntity = undefined; // 尾款订单
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'rescue_prepaid_order') {
+      // tslint:disable-next-line: no-use-before-declare
+      return PrepaidOrderEntity;
+    }
+    if (propertyName === 'rescue_balance_order') {
+      // tslint:disable-next-line: no-use-before-declare
+      return BalanceOrderEntity;
+    }
+    return null;
+  }
 }
 
 // 救援退款订单基类
@@ -72,8 +86,9 @@ export class RefundOrderEntity extends EntityBase {
   public rescue_order: RescueOrderEntity = undefined; // 救援订单对象
   public trade_no: string = undefined; // 微信支付订单id
   public pay_time: number = undefined; // 支付时间
-  public order_status: number = undefined; // 订单状态 1：待支付 2：已支付 3：已取消 4：已退款
+  public order_status: number = undefined; // 订单状态 1：待支付 2：已支付 3：已取消 4：已关闭
   public refund_time: number = undefined; // 退款时间
+  public refund_fee: number = undefined; // 退款金额
   public refund_reason: string = undefined; // 退款原因
   public refund_status: number = undefined; // 退款状态 1退款中，2已部分退款，3已全额退款，4退款失败
   public pay_expire_time: number = undefined; // 支付订单失效时间
@@ -91,6 +106,7 @@ export class RefundOrderEntity extends EntityBase {
 
 // 预付订单
 export class PrepaidOrderEntity extends RefundOrderEntity {
+  public rescue_prepaid_order_id: string = undefined; // 救援预付订单id
   public real_prepaid_fee: number = undefined; // 实收预付费 单位：分
   public right_prepaid_fee: number = undefined; // 应收预付费 单位：分
   public prepaid_platform_discount: number = undefined; // 预付平台立减 单位：分
@@ -162,10 +178,7 @@ export class RescueOrderService {
    */
   public requestOrderDetailData(rescue_order_id: string): Observable<RescueOrderEntity> {
     const httpUrl = `${this.domain}/rescue_orders/${rescue_order_id}`;
-    const body = {
-      order_type: 3
-    };
-    return this.httpService.get(httpUrl, body).pipe(map(res => RescueOrderEntity.Create(res.body)));
+    return this.httpService.get(httpUrl).pipe(map(res => RescueOrderEntity.Create(res.body)));
   }
 
   /**
@@ -174,7 +187,7 @@ export class RescueOrderService {
    * @param rescue_prepaid_order_id 预付订单id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestRefundData(params: RefundParams, rescue_prepaid_order_id: string): Observable<HttpResponse<any>> {
+  public requestPrepaidRefundData(params: RefundParams, rescue_prepaid_order_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/rescue_prepaid_orders/${rescue_prepaid_order_id}/refund_orders`;
     return this.httpService.post(httpUrl, params.toEditJson());
   }
@@ -185,7 +198,7 @@ export class RescueOrderService {
    * @param rescue_balance_order_id 尾款订单id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestOrderRefundData(params: RefundParams, rescue_balance_order_id: string): Observable<HttpResponse<any>> {
+  public requestBalanceRefundData(params: RefundParams, rescue_balance_order_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/rescue_balance_orders/${rescue_balance_order_id}/refund_orders`;
     return this.httpService.post(httpUrl, params.toEditJson());
   }
