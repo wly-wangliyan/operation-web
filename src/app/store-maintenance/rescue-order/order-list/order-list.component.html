@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group">
-          <span>项目名称：</span>
+          <span>救援项目：</span>
           <select name="rescue_project_type" class="form-control" style="width: 130px;"
             [(ngModel)]="searchParams.rescue_project_type">
             <option value="">全部</option>
@@ -50,8 +50,8 @@
             maxlength="20" appIgnoreSpace />
         </div>
         <div class="form-group">
-          <span>应援汽修店：</span>
-          <input name="repair_shop_name" class="form-control" placeholder="请输入应援汽修店名称" maxlength="32"
+          <span>汽修店：</span>
+          <input name="repair_shop_name" class="form-control" placeholder="请输入汽修店名称" maxlength="32"
             [(ngModel)]="searchParams.repair_shop_name" appIgnoreSpace />
         </div>
         <div class="form-group">
@@ -66,19 +66,19 @@
           <span class='line'>-</span>
           <nz-date-picker [(ngModel)]="order_end_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderEndTime"
             name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+            </button>
+          </div>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <span>支付时间：</span>
           <nz-date-picker [(ngModel)]="pay_start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartPayTime"
             name='pay_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
           <span class='line'>-</span>
           <nz-date-picker [(ngModel)]="pay_end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayTime"
             name='pay_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-          <div class="search-btn-group">
-            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-            </button>
-          </div>
-        </div>
+        </div> -->
       </form>
     </div>
     <div class="zmy-table">
@@ -91,12 +91,12 @@
             <th>车主信息</th>
             <th>汽修店</th>
             <th>项目名称</th>
-            <th>总金额</th>
-            <th>预付应收</th>
-            <th>优惠券</th>
-            <th>平台立减</th>
-            <th>预付实收</th>
-            <th>下单&支付时间</th>
+
+            <th>应收</th>
+            <th>优惠/立减</th>
+            <th>实收</th>
+
+            <th>下单时间</th>
             <th>订单状态</th>
             <th>服务状态</th>
             <th>操作</th>
@@ -138,84 +138,28 @@
             </td>
             <td>{{order.rescue_project_type === 1? '搭电' : '换胎'}}</td>
 
-            <td>{{order.total_right_fee | centPriceChange:'元'}}</td>
-
-            <td>{{order.right_prepaid_fee | centPriceChange:'元'}}</td>
-
-            <td>{{order.prepaid_coupon_discount | centPriceChange:'元'}}</td>
-
-            <td>{{order.prepaid_platform_discount | centPriceChange:'元'}}</td>
-
-            <td>{{order.real_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>{{order.right_fee | centPriceChange:'元'}}</td>
 
             <td>
               <div class="column-box">
-                <span *ngIf="order.created_time">
-                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm")):''}}
-                </span>
-                <span *ngIf="order.pay_time">
-                  {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm")):''}}
-                </span>
-                <span *ngIf="!order.created_time && !order.pay_time">--</span>
+                <span><span>平台立减：</span>{{(order.platform_discount || 0) | centPriceChange:'元'}}</span>
+                <span><span>优惠券：</span>{{(order.coupon_discount || 0) | centPriceChange:'元'}}</span>
               </div>
+
             </td>
+
+            <td>{{order.real_fee | centPriceChange:'元'}}</td>
+
+            <td>{{order.created_time ?(order.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}</td>
+
             <td>{{order.order_status | rescueOrderStatus}}</td>
             <td>{{order.service_status | rescueServiceStatus}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.rescue_order_id]">查看</a>
-              <a *ngIf="order.order_status===2 && order.service_status!==3" [title]="'退款'"
-                (click)="onRefundClick(order)">退款</a>
             </td>
           </tr>
         </tbody>
       </nz-table>
-    </div>
-  </div>
-</div>
-
-<!-- 退款模态框 -->
-<div class="modal fade " id="refundModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-common">
-    <div class="modal-content modal-content-common">
-      <div class="modal-header">
-        <span class="modal-title">退款</span>
-        <button type="button" class="close" data-dismiss="modal">×</button>
-      </div>
-      <div class="modal-body">
-        <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
-
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>退款金额：</span>
-            </label>
-            <div class="control-input">
-              <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundParams.refund_fee" maxlength="8"
-                class="form-control" required appFloatNumber>
-            </div>
-          </div>
-
-          <div class="row">
-            <label class="control-label">
-              <b>&nbsp;</b>
-              <span>退款原因：</span>
-            </label>
-            <div class="control-input">
-              <textarea name="refund_reason" class="form-control" [(ngModel)]="refundParams.refund_reason"
-                maxlength="20" placeholder="输入0-20字退款原因">
-              </textarea>
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
-              (appZDebounceClick)="onRefundCheckClick()">确认
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   </div>
 </div>
