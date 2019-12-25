@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from 'src/utils/z-entity';
-import { Observable, timer } from 'rxjs/index';
+import { Observable, Subject } from 'rxjs/index';
 import { map } from 'rxjs/internal/operators';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { HttpService, LinkResponse, HttpErrorEntity } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
-import { GlobalService } from '../../core/global.service';
-import { AccessoryEntity } from '../accessory-library/accessory-library.service';
+import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../accessory-library/accessory-library.service';
+import { RepairShopEntity } from '../garage-management/garage-management.service';
 
 export class UpkeepOrderSearchParams extends EntityBase {
-  public order_type = 3; // 订单类型 1：到店保养 2：上门保养 3：救援订单
   public order_status = ''; // 1：待支付 2：已支付 3：已取消 4：已退款
   public contact_tel: string = undefined; // 手机号
   public contact_name: string = undefined; // 购买人
@@ -22,19 +21,23 @@ export class UpkeepOrderSearchParams extends EntityBase {
 }
 
 export class MatchParams extends EntityBase {
-  public repair_shop_id: string = undefined; // 汽修店id
+  public repair_shop_id = ''; // 汽修店id
   public repair_shop_name: string = undefined; // 汽修店
-  public accessory_id: string = undefined; // 配件id
+  public accessory_id = ''; // 配件id
   public accessory_name: string = undefined; // 配件名称
-  public specification_id: string = undefined; // 规格id
+  public specification_id = ''; // 规格id
   public battery_model: string = undefined; // 配件型号
-  public original_fee: string = undefined; // 商品价格
+  public original_fee: number = undefined; // 商品价格
+}
 
-  public toEditJson(): any {
-    const json = this.json();
-    json.original_fee = json.original_fee * 100;
-    return json;
-  }
+export class AccessoryInfoEntity extends AccessoryEntity {
+  public battery_model: string = undefined; // 配件型号
+  public brand_name: string = undefined; // 品牌
+  public buy_num: number = undefined; // 数量
+  public original_fee: number = undefined; // 原价
+  public supplier_name: string = undefined; // 供应商
+  public warehouse_name: string = undefined; // 仓库
+  public specification_id: string = undefined; // 规格id
 }
 
 // 保养订单退款订单实体
@@ -56,7 +59,7 @@ export class UpkeepOrderEntity extends EntityBase {
   public repair_shop_district: string = undefined; // 汽修店所在区域
   public buy_num: number = undefined; // 购买数量
   public is_matched: boolean = undefined; // 是否匹配
-  public accessory_info: AccessoryEntity = undefined; // 配件信息
+  public accessory_info: Array<AccessoryInfoEntity> = undefined; // 配件信息
   public original_fee: number = undefined; // 原价
   public real_prepaid_fee: number = undefined; // 实收预付费 单位：分
   public right_prepaid_fee: number = undefined; // 应收预付费 单位：分
@@ -96,7 +99,7 @@ export class UpkeepOrderEntity extends EntityBase {
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'accessory_info') {
-      return AccessoryEntity;
+      return AccessoryInfoEntity;
     } else if (propertyName === 'door_refund_order') {
       return DoorRefundOrderEntity;
     }
@@ -131,14 +134,14 @@ export class UpkeepOrderService {
 
   private domain = environment.STORE_DOMAIN;
 
-  constructor(private httpService: HttpService, private globalService: GlobalService) { }
+  constructor(private httpService: HttpService) { }
 
   /**
    * 获取订单列表
    * @param searchParams 条件检索参数
    */
   public requestOrderListData(searchParams: UpkeepOrderSearchParams): Observable<UpkeepOrderLinkResponse> {
-    const httpUrl = `${this.domain}/orders`;
+    const httpUrl = `${this.domain}/door_orders`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new UpkeepOrderLinkResponse(res)));
   }
@@ -154,15 +157,12 @@ export class UpkeepOrderService {
 
   /**
    * 获取订单详情
-   * @param order_id 订单ID
+   * @param door_order_id 订单ID
    * @returns Observable<UpkeepOrderEntity>
    */
-  public requestOrderDetailData(order_id: string): Observable<UpkeepOrderEntity> {
-    const httpUrl = `${this.domain}/orders/${order_id}`;
-    const body = {
-      order_type: 3
-    };
-    return this.httpService.get(httpUrl, body).pipe(map(res => UpkeepOrderEntity.Create(res.body)));
+  public requestOrderDetailData(door_order_id: string): Observable<UpkeepOrderEntity> {
+    const httpUrl = `${this.domain}/door_orders/${door_order_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => UpkeepOrderEntity.Create(res.body)));
   }
 
   /**
@@ -171,8 +171,52 @@ export class UpkeepOrderService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestOrderRefundData(door_order_id: string, params: DoorRefundParams): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/door_orders/${door_order_id}`;
+    const httpUrl = `${this.domain}/door_orders/${door_order_id}/refund_orders`;
     return this.httpService.post(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 获取项目列表
+   */
+  public requestProjectListData(): Observable<Array<ProjectEntity>> {
+    const httpUrl = `${this.domain}/projects/all`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<ProjectEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(ProjectEntity.Create(data));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 获取规格列表
+   * @param accesspry_id 配件id
+   */
+  public requestSpecificationData(accesspry_id: string): Observable<Array<SpecificationEntity>> {
+    const httpUrl = `${this.domain}/accessies/${accesspry_id}/specifications/all`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<SpecificationEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(SpecificationEntity.Create(data));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 通过配件(蓄电池)获取汽修店
+   * @param accesspry_id 配件id
+   */
+  public requestRepairShopData(accesspry_id: string): Observable<Array<RepairShopEntity>> {
+    const httpUrl = `${this.domain}/accessories/${accesspry_id}/repair_shops/all`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<RepairShopEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(RepairShopEntity.Create(data));
+      });
+      return tempList;
+    }));
   }
 
   /**
@@ -182,7 +226,7 @@ export class UpkeepOrderService {
    */
   public requestMatchDate(door_order_id: string, params: MatchParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/door_orders/${door_order_id}`;
-    return this.httpService.put(httpUrl, params.toEditJson());
+    return this.httpService.put(httpUrl, params.json());
   }
 
   /**
@@ -223,5 +267,46 @@ export class UpkeepOrderService {
       order_type
     };
     return this.httpService.post(httpUrl, body);
+  }
+
+  /**
+   * 获取汽修店已配置的电瓶配件列表
+   * @param project_id 保养项目id
+   * @returns Subject<[Array<AccessoryEntity>]
+   */
+  public requestAllOfConfigAccessoryData(project_id: string): Observable<Array<any>> {
+    const url = `${this.domain}/projects/${project_id}/config_accessories?page_num=1&page_size=1000`;
+    const subject = new Subject<Array<any>>();
+    this.requestLinkAllOfConfigAccessoryList(url, [[], []], subject);
+    return subject;
+  }
+
+  /**
+   * 递归获取汽修店已配置的电瓶配件列表
+   * @param url linkUrl
+   * @param dataArray 数据
+   * @param subject 通知
+   */
+  private requestLinkAllOfConfigAccessoryList(url: string, dataArray: Array<any>, subject: Subject<Array<any>>) {
+    this.httpService.get(url).subscribe(data => {
+      // 数据转换
+      const results = data.body;
+      results.forEach(jsonObj => {
+        const dataEntity: AccessoryEntity = AccessoryEntity.Create(jsonObj);
+        dataArray[0].push(dataEntity);
+      });
+
+      // 查看是否有分页,如果有则继续获取
+      const linkInfo: string = data.headers.get('Link');
+      if (linkInfo) {
+        const linkUrl = linkInfo.split('>')[0].split('<')[1];
+        this.requestLinkAllOfConfigAccessoryList(linkUrl, dataArray, subject);
+      } else {
+        subject.next(dataArray);
+        subject.complete();
+      }
+    }, err => {
+      subject.error(err);
+    });
   }
 }

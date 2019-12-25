@@ -17,11 +17,10 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class BatteryDetailComponent implements OnInit, AfterViewInit {
 
   public orderRecord: UpkeepOrderEntity = new UpkeepOrderEntity();
-  public accessoryData: AccessoryEntity = new AccessoryEntity();
 
   private order_id: string; // order_id
 
-  public expect_date = '';
+  public expect_date: any = '';
 
   public isEditExpectDate = false;
   public isEditRemark = false;
@@ -60,7 +59,6 @@ export class BatteryDetailComponent implements OnInit, AfterViewInit {
   private getOrderDetail(): void {
     this.upkeepOrderService.requestOrderDetailData(this.order_id).subscribe(data => {
       this.orderRecord = data;
-      this.accessoryData = data.accessory_info;
       this.isEditExpectDate = false;
       this.isEditRemark = false;
       this.promptLoading.close();
@@ -69,7 +67,6 @@ export class BatteryDetailComponent implements OnInit, AfterViewInit {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 404) {
           this.orderRecord = null;
-          this.accessoryData = null;
           this.globalService.promptBox.open('订单不存在！', null, 2000, null, false);
           return;
         }
@@ -94,6 +91,7 @@ export class BatteryDetailComponent implements OnInit, AfterViewInit {
   public onEditClick(type: number) {
     if (type === 1) {
       this.isEditExpectDate = true;
+      this.expect_date = this.orderRecord.expect_date * 1000 || '';
     } else if (type === 2) {
       this.isEditRemark = true;
     }

@@ -106,7 +106,7 @@
                 </ng-container>
               </div>
             </td>
-            <td>{{order.car_model || '--'}}</td>
+            <td [title]="order.car_model || ''">{{(order.car_model|zMaxLength:6) || '--'}}</td>
             <td>
               <ng-container *ngIf="order.repair_shop_district || order.repair_shop_name">
                 <div class="column-box">
@@ -122,31 +122,32 @@
             <td [title]="order.address || ''">{{order.address? (order.address|zMaxLength:6) : '--'}}</td>
 
             <td>
-              <ng-container *ngIf="order.accessory_info">
-                <div class="img-item">
-                  <div class="img-box">
-                    <ng-container *ngIf="order.accessory_info.accessory_images">
-                      <ng-container
-                        *ngFor="let image_url of order.accessory_info.accessory_images.split(',');let i=index">
-                        <img *ngIf="i===0" src="{{image_url}}" />
+              <ng-container *ngIf="order.accessory_info && order.accessory_info.length>0">
+                <div class="column-box" *ngFor="let accessory of order.accessory_info">
+                  <div class="img-item">
+                    <div class="img-box">
+                      <ng-container *ngIf="accessory.accessory_images">
+                        <ng-container *ngFor="let image_url of accessory.accessory_images.split(',');let i=index">
+                          <img *ngIf="i===0" src="{{image_url}}" />
+                        </ng-container>
                       </ng-container>
-                    </ng-container>
-                    <img *ngIf="!order.accessory_info.accessory_images" src="/assets/images/image_space.png" />
-                  </div>
-                  <div style="text-align: left;padding: 10px 0;">
-                    <span [title]="order.accessory_info.accessory_name ||''"
-                      style="word-break: keep-all;">{{order.accessory_info.accessory_name | zMaxLength:6}}</span>
-                    <div class="match-info">
-                      <img src="/assets/images/icon_match.png">
-                      <!-- <label>已匹配</label> -->
+                      <img *ngIf="!accessory.accessory_images" src="/assets/images/image_space.png" />
+                    </div>
+                    <div style="text-align: left;padding: 10px 0;">
+                      <span [title]="accessory.accessory_name ||''"
+                        style="word-break: keep-all;">{{accessory.accessory_name | zMaxLength:6}}</span>
+                      <div class="match-info" *ngIf="order.is_matched">
+                        <img src="/assets/images/icon_match.png">
+                        <!-- <label>已匹配</label> -->
+                      </div>
                     </div>
                   </div>
                 </div>
               </ng-container>
-              <span *ngIf="!order.accessory_info">--</span>
+              <span *ngIf="!order.accessory_info || order.accessory_info.length===0">--</span>
             </td>
 
-            <td>{{order.buy_num>=0 || '--'}}</td>
+            <td>{{order.buy_num  || 0}}</td>
 
             <td>{{order.real_prepaid_fee | centPriceChange:'元'}}</td>
 
@@ -176,7 +177,7 @@
             <td class="operation">
               <div>
                 <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
-                <a [title]="'人工匹配'" [routerLink]="['../order-detail', order.door_order_id]">人工匹配</a>
+                <a *ngIf="order.order_status===1" [title]="'人工匹配'" (click)="onMatchClick(order)">人工匹配</a>
                 <a *ngIf="(order.order_status===2 || order.order_status===4) && !order.refund_status" [title]="'退款'"
                   (click)="onRefundClick(order)">退款</a>
               </div>
@@ -184,6 +185,113 @@
           </tr>
         </tbody>
       </nz-table>
+    </div>
+  </div>
+</div>
+
+<!-- 人工匹配模态框 -->
+<div class="modal fade " id="matchModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">匹配蓄电池</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #matchForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>配件：</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="matchParams.accessory_id" name="accessory_id"
+                (change)="onChangeAccessory($event)" required>
+                <option value="">请选择</option>
+                <option *ngFor="let accessory of accessoryList" [value]="accessory.accessory_id">
+                  {{accessory.accessory_name}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>规格：</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="matchParams.specification_id" name="specification_id"
+                (change)="onChangeSpecification($event)" required>
+                <option value="">请选择</option>
+                <option *ngFor="let specification of specificationList" [value]="specification.specification_id">
+                  {{specification.battery_model}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 20px;">
+            <label class="control-label">
+              <b>*</b>
+              <span>汽修店：</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="matchParams.repair_shop_id" name="repair_shop_id"
+                (change)="onChangeRepairShop($event)" required>
+                <option value="">请选择</option>
+                <option *ngFor="let repairShop of repairShopList" [value]="repairShop.repair_shop_id">
+                  {{repairShop.repair_shop_name}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!matchForm.form.valid"
+              (appZDebounceClick)="onCheckMatch()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 退款模态框 -->
+<div class="modal fade " id="refundModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">退款</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
+
+          <div class="row" style="margin-bottom: 40px;">
+            <label class="control-label">
+              <b>*</b>
+              <span>退款金额：</span>
+            </label>
+            <div class="control-input">
+              <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundParams.refund_fee" maxlength="8"
+                class="form-control" required appFloatNumber>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
+              (appZDebounceClick)="onRefundCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
