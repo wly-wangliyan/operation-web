@@ -113,6 +113,7 @@ export class SupplyConfigListComponent implements OnInit {
 
   public onSettingClick(data: AccessoryEntity): void {
     this.configParams = new SetSupplyConfigParams();
+    this.configParams.supply_type = data.supply_type || '';
     this.configParams.accessory_ids = data.accessory_id;
     $('#configModal').modal();
   }

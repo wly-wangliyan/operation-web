@@ -127,8 +127,8 @@ export class GarageEditComponent implements OnInit, AfterViewInit {
     this.clear();
     if (this.verification()) {
       this.garageService.requestEditRepairShops(this.repair_shop_id, this.editParams).subscribe(() => {
-        this.onClose();
         this.globalService.promptBox.open('保存成功！', () => {
+          this.onClose();
         });
       }, err => {
         this.errorProcess(err);

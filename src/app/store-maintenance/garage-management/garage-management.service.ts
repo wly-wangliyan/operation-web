@@ -16,7 +16,7 @@ export class SearchParams extends EntityBase {
 
 export class SupplyConfigParams extends EntityBase {
   public accessory_name: string = undefined; // 配件名称
-  public supply_type = ''; // 供货方式 1:门店自供 2:第三方供应商
+  public supply_type = ''; // 供货方式 1:第三方供应商  2:门店自供
   public project_id = ''; // 保养项目ID(机油ID/机油滤清器ID) "xxx"
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
@@ -113,7 +113,7 @@ export class SupplyConfigEntity extends EntityBase {
   public supply_config_id: string = undefined; // 救援配置ID 主键
   public repair_shop: RepairShopEntity = undefined; // 	汽修店 外键
   public accessory: AccessoryEntity = undefined; // 配件
-  public supply_type: number = undefined; // 供货方式 1:门店自供 2:第三方供应商
+  public supply_type: number = undefined; // 供货方式 1:第三方供应商  2:门店自供
   public supplier: any = undefined; // 供应商
   public warehouse: any = undefined;  // 仓库
   public created_time: number = undefined; // 创建时间

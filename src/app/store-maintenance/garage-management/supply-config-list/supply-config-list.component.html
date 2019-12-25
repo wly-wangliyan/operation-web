@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'汽修店管理'" [level2Name]="'汽修店列表'" [level3Name]="'供货配置列表'" [level2RelativePath]="'../../'">
+  <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'供货配置列表'" [level2RelativePath]="'../../'">
   </app-crumb>
 </div>
 <div class="content-flow">
@@ -8,13 +8,14 @@
       <form class="search-form" autocomplete="off">
         <div class="form-group">
           <span>配件名称：</span>
-          <input class="form-control" placeholder="请输入配件名称" maxlength="4" name="vehicle_year_model"
+          <input class="form-control" placeholder="请输入配件名称" maxlength="30" name="accessory_name"
             [(ngModel)]="searchParams.accessory_name" appIgnoreSpace />
         </div>
         <div class="form-group">
           <span>供货方式：</span>
           <select class="form-control" [(ngModel)]="searchParams.supply_type" name="supply_type">
             <option value="">全部</option>
+            <option value="3">空</option>
             <option value="1">第三方供应商</option>
             <option value="2">门店自供</option>
           </select>
@@ -69,7 +70,7 @@
                 </div>
               </div>
             </td>
-            <td [title]="data.accessory_brand || ''">{{data.accessory_brand || '--'}}</td>
+            <td [title]="data.accessory_brand || ''">{{(data.accessory_brand | zMaxLength:6) || '--'}}</td>
             <td>{{data.supply_type?(data.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
             <td>--</td>
             <td>--</td>

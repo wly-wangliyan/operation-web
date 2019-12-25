@@ -33,14 +33,14 @@
 }
 
 .img-box {
-  width: 80px;
+  width: 90px;
   position: relative;
   display: inline-block;
   margin-right: 5px;
 }
 
 .img-box img {
-  width: 80px;
+  width: 90px;
 }
 
 .match-info {

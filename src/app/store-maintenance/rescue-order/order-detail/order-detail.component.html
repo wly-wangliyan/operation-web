@@ -120,7 +120,9 @@
             <th>下单&支付时间</th>
             <th>订单状态</th>
             <th>售后/退款</th>
-            <th *ngIf="prepaidOrderRecord.order_status===2 && !prepaidOrderRecord.refund_fee">操作</th>
+            <th
+              *ngIf="prepaidOrderRecord.order_status===2 && (!prepaidOrderRecord.refund_status || prepaidOrderRecord.refund_status===4)">
+              操作</th>
           </tr>
         </thead>
         <tbody>
@@ -153,7 +155,8 @@
 
             <td>{{prepaidOrderRecord.refund_status?refundStatus[prepaidOrderRecord.refund_status]:refundStatus[0]}}</td>
 
-            <td class="operation" *ngIf="prepaidOrderRecord.order_status===2 && !prepaidOrderRecord.refund_fee">
+            <td class="operation"
+              *ngIf="prepaidOrderRecord.order_status===2 && (!prepaidOrderRecord.refund_status || prepaidOrderRecord.refund_status===4)">
               <a [title]="'退款'" (click)="onRefundClick(1)">退款</a>
             </td>
           </tr>
@@ -174,7 +177,9 @@
             <th>下单&支付时间</th>
             <th>订单状态</th>
             <th>售后/退款</th>
-            <th *ngIf="balanceOrderRecord.order_status===2 && !balanceOrderRecord.refund_fee">操作</th>
+            <th
+              *ngIf="balanceOrderRecord.order_status===2 && (!balanceOrderRecord.refund_status || balanceOrderRecord.refund_status === 4)">
+              操作</th>
           </tr>
         </thead>
         <tbody>
@@ -207,7 +212,8 @@
 
             <td>{{balanceOrderRecord.refund_status?refundStatus[balanceOrderRecord.refund_status]:refundStatus[0]}}</td>
 
-            <td class="operation" *ngIf="balanceOrderRecord.order_status===2 && !balanceOrderRecord.refund_fee">
+            <td class="operation"
+              *ngIf="balanceOrderRecord.order_status===2 && (!balanceOrderRecord.refund_status || balanceOrderRecord.refund_status === 4)">
               <a [title]="'退款'" (click)="onRefundClick(2)">退款</a>
             </td>
           </tr>
