@@ -59,7 +59,9 @@
         </tr>
         <tr>
           <td>地址：</td>
-          <td>{{orderRecord.address || '--'}}</td>
+          <td>
+            {{((orderRecord.region||'')+(orderRecord.address||'')) || '--'}}
+          </td>
 
           <td>期望送达日期：</td>
           <td class="remark-info">
