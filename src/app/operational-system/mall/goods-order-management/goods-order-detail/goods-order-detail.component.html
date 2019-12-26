@@ -139,8 +139,7 @@
         <div style="margin: 20px 0 10px;">
           <div class="card-font">
             <label style="float: left;">联系人：</label>
-            <!-- <span class="con-person">{{orderDetail.contact||'--'}}</span> -->
-            <span class="con-person">{{'啊啊啊啊啊啊啊啊啊啊'||'--'}}</span>
+            <span class="con-person">{{orderDetail.contact||'--'}}</span>
             <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img src="/assets/images/copy.png" /></a>
             <div style="clear: both;"></div>
           </div>
