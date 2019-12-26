@@ -14,9 +14,9 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: GoodsListComponent },
-    { path: 'create', component: GoodsCreateComponent },
-    { path: 'edit/:commodity_id', component: GoodsCreateComponent },
-    { path: 'detail/:commodity_id', component: GoodsDetailComponent },
+    { path: 'list/create', component: GoodsCreateComponent },
+    { path: 'list/edit/:commodity_id', component: GoodsCreateComponent },
+    { path: 'list/detail/:commodity_id', component: GoodsDetailComponent },
     { path: 'classify-list', component: ClassifyManagementComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]

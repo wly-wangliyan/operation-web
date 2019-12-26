@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品列表'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../create']">
+    <li class="big-bg" [routerLink]="['../list/create']">
       <a>新建</a>
     </li>
   </ul>
@@ -91,7 +91,7 @@
                 <div style="display: grid">
                   <a style="word-break: keep-all;text-align: left"
                     [title]="globalService.limitStrLengthTitle(commodity.commodity_name, 15)"
-                    [routerLink]="['../detail', commodity.commodity_id]">
+                    [routerLink]="['../list/detail', commodity.commodity_id]">
                     {{commodity.commodity_name | zMaxLength:15}}
                   </a>
                   <div class="goods-tip">
@@ -114,8 +114,8 @@
                 nzUnCheckedChildren="Off" (ngModelChange)="onChangeCommodityOperationClick(commodity)"></nz-switch>
             </td>
             <td class="operation">
-              <a [title]="'查看'" [routerLink]="['../detail', commodity.commodity_id]">查看</a>
-              <a [title]="'编辑'" [routerLink]="['../edit', commodity.commodity_id]">编辑</a>
+              <a [title]="'查看'" [routerLink]="['../list/detail', commodity.commodity_id]">查看</a>
+              <a [title]="'编辑'" [routerLink]="['../list/edit', commodity.commodity_id]">编辑</a>
               <a [title]="'删除'" (click)="onDeleteCommodityClick(commodity)">删除</a>
             </td>
           </tr>

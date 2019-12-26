@@ -239,7 +239,7 @@
                 src={{commodity.commodity_images[0]}} />
               <div style="display: grid;text-align: left;">
                 <a [title]="commodity.commodity_name"
-                  [routerLink]="['/main/mall/goods-management/detail', commodity.commodity_id]">
+                  [routerLink]="['/main/mall/goods-management/list/detail', commodity.commodity_id]">
                   {{commodity.commodity_name | zMaxLength:8}}</a>
                 <span [title]="commodity.specification_name">
                   {{commodity.specification_name | zMaxLength:8}}</span>

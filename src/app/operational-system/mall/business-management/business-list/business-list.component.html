@@ -1,79 +1,78 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家列表'"></app-crumb>
+  <app-crumb [level1Name]="'商家列表'"></app-crumb>
 </div>
 <div class="content-flow">
-    <div class="search-container">
-        <form class="search-form">
-            <div class="form-group">
-                <span>状态：</span>
-                <select class="form-control" [(ngModel)]="searchParams.status"
-                        name="vehicle_brand_id">
-                    <option value="">全部</option>
-                    <option value="1">营业中</option>
-                    <option value="2">停业休息</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span>商家名称：</span>
-                <input class="form-control" placeholder="请输入商家名称" autocomplete="off" maxlength="50"
-                       name="vehicle_year_model" [(ngModel)]="searchParams.business_name"/>
-                <div class="search-btn-group">
-                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="table-container">
-        <div class="zmy-table">
-            <nz-table [nzData]="businessList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th style="width: 18%;">名称</th>
-                    <th>所属企业</th>
-                    <th>类型</th>
-                    <th>营业状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let data of basicTable.data; let i=index">
-                    <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td>
-                        <div class="img-item">
-                            <div class="img-box">
-                                <ng-container *ngIf="data.images.length > 0">
-                                    <img [src]="data.images[0]"/>
-                                </ng-container>
-                                <ng-container *ngIf="data.images === 0">
-                                    <img src="/assets/images/image_space_3_2.png"/>
-                                </ng-container>
-                            </div>
-                            <div style="display: grid">
-                                <a style="word-break: keep-all;text-align: left" [title]="data.mall_business_name">
-                                    {{data.mall_business_name | zMaxLength:15}}
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                    <td [title]="data.company?.company_name?data.company?.company_name:'--'">
-                        {{data.company?(data.company.company_name|zMaxLength:10):'--'}}
-                    </td>
-                    <td>
-                        {{data.business_type===1?'商城供应商':'--'}}
-                    </td>
-                    <td>
-                        <nz-switch [ngModel]="data.business_status===1" nzCheckedChildren="On" style="height: 10px"
-                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.mall_business_id,$event)"></nz-switch>
-                    </td>
-                    <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../edit', data.mall_business_id]">编辑资料</a>
-                    </td>
-                </tr>
-                </tbody>
-            </nz-table>
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <span>状态：</span>
+        <select class="form-control" [(ngModel)]="searchParams.status" name="vehicle_brand_id">
+          <option value="">全部</option>
+          <option value="1">营业中</option>
+          <option value="2">停业休息</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>商家名称：</span>
+        <input class="form-control" placeholder="请输入商家名称" autocomplete="off" maxlength="50" name="vehicle_year_model"
+          [(ngModel)]="searchParams.business_name" />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+          </button>
         </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table [nzData]="businessList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th style="width: 18%;">名称</th>
+            <th>所属企业</th>
+            <th>类型</th>
+            <th>营业状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <div class="img-item">
+                <div class="img-box">
+                  <ng-container *ngIf="data.images.length > 0">
+                    <img [src]="data.images[0]" />
+                  </ng-container>
+                  <ng-container *ngIf="data.images === 0">
+                    <img src="/assets/images/image_space_3_2.png" />
+                  </ng-container>
+                </div>
+                <div style="display: grid">
+                  <a style="word-break: keep-all;text-align: left" [title]="data.mall_business_name">
+                    {{data.mall_business_name | zMaxLength:15}}
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td [title]="data.company?.company_name?data.company?.company_name:'--'">
+              {{data.company?(data.company.company_name|zMaxLength:10):'--'}}
+            </td>
+            <td>
+              {{data.business_type===1?'商城供应商':'--'}}
+            </td>
+            <td>
+              <nz-switch [ngModel]="data.business_status===1" nzCheckedChildren="On" style="height: 10px"
+                nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.mall_business_id,$event)"></nz-switch>
+            </td>
+            <td class="operation">
+              <a [title]="'编辑'" [routerLink]="['../edit', data.mall_business_id]">编辑资料</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
     </div>
+  </div>
 </div>

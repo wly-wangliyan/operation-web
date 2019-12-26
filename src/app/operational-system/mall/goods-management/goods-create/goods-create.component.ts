@@ -27,7 +27,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public levelTwoName = '新建产品';
 
-  public listRelativePath = '../list';
+  public listRelativePath = '../../list';
 
   public commodityInfo: CommodityEntity = new CommodityEntity();
 
@@ -430,7 +430,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
               this.globalService.promptBox.open('删除产品规格参数错误或无效！', null, 2000, null, false);
             } else if (content.resource === 'specifications' && content.code === 'errors') {
               this.globalService.promptBox.open('产品规格保存失败，请重新编辑保存！', () => {
-                const navigateUrl = this.commodity_id ? `../../edit/${commodity_id}` : `../edit/${commodity_id}`;
+                const navigateUrl = this.commodity_id ? `../../list/edit/${commodity_id}` : `../list/edit/${commodity_id}`;
                 this.router.navigate([navigateUrl], { relativeTo: this.route });
               }, 2000, null, false);
             }
