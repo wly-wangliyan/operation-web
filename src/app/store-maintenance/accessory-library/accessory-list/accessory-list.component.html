@@ -97,14 +97,14 @@
             <td>{{data.project?.project_name||'--'}}</td>
             <td>{{data.accessory_brand?.brand_name||'--'}}</td>
             <td>
-              <span *ngIf='data.min_right_balance!==data.max_right_balance'>
-                {{data.min_right_balance|centPriceChange}}-</span>
-              {{data.max_right_balance|centPriceChange:'元'}}
-            </td>
-            <td>
               <span *ngIf='data.min_real_balance!==data.max_real_balance'>
                 {{data.min_real_balance|centPriceChange}}-</span>
-              {{data.max_real_balance|centPriceChange:'元'}}</td>
+              {{data.max_real_balance|centPriceChange:'元'}}
+            </td>
+            <td>
+              <span *ngIf='data.min_right_balance!==data.max_right_balance'>
+                {{data.min_right_balance|centPriceChange}}-</span>
+              {{data.max_right_balance|centPriceChange:'元'}}</td>
             <td>
               <span *ngIf='data.min_buy_price!==data.max_buy_price'>
                 {{data.min_buy_price|centPriceChange}}-
