@@ -288,7 +288,7 @@ export class AccessoryEditComponent implements OnInit {
                 } else {
                   if (!this.accessory_id) {// 新增
                     this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
-                      this.globalService.promptBox.open('新建配件库成功！');
+                      this.globalService.promptBox.open('创建配件成功！');
                       this.isSaveBtnDisabled = false;
                       timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
                     }, err => {
@@ -297,7 +297,7 @@ export class AccessoryEditComponent implements OnInit {
                     });
                   } else {// 编辑
                     this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
-                      this.globalService.promptBox.open('编辑配件库成功！');
+                      this.globalService.promptBox.open('编辑配件成功！');
                       this.isSaveBtnDisabled = false;
                       timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
                     }, err => {
