@@ -89,10 +89,11 @@ export class UpkeepOrderEntity extends EntityBase {
   public take_order_time: number = undefined; // 接单时间
   public refund_time: number = undefined; // 退款时间
   public refund_fee: number = undefined; // 退款金额
-  public complete_time: number = undefined; // 完成时间
+  public confirm_time: number = undefined; // 完成时间
   public cancel_reason: string = undefined; // 取消原因
   public refund_reason: string = undefined; // 退款原因
-  public refund_status: number = undefined; // 退款状态 1:已部分退款 2:已全额退款
+  public refund_fee_status: number = undefined; // 退款类型 1:部分退款 2:全额退款
+  public refund_status: number = undefined; // 退款状态 0未申请退款 1退款中，2已退款，3退款失败
   public door_refund_order: DoorRefundOrderEntity = undefined; // 退款订单
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间

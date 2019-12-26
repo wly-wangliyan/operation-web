@@ -156,19 +156,19 @@
             <td>{{order.order_status | doorOrderStatus}}</td>
 
             <td>
-              <div class="column-box" *ngIf="order.refund_status>0">
-                <span>{{order.refund_status | doorRefundStatus}}</span>
-                <span *ngIf="order.door_refund_order">
-                  {{'('+(order.door_refund_order.refund_status | doorRefundOrderStatus)+')'}}</span>
+              <div class="column-box" *ngIf="order.refund_fee_status>0">
+                <span>{{order.refund_fee_status | doorRefundStatus}}</span>
+                <span *ngIf="order.refund_status">
+                  {{'('+(order.refund_status | doorRefundOrderStatus)+')'}}</span>
               </div>
-              <span *ngIf="!order.refund_status">--</span>
+              <span *ngIf="!order.refund_fee_status">--</span>
             </td>
 
             <td class="operation">
               <div>
                 <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
                 <a *ngIf="order.order_status===1" [title]="'人工匹配'" (click)="onMatchClick(order)">人工匹配</a>
-                <a *ngIf="(order.order_status===3 || order.order_status===4) && !order.refund_status" [title]="'退款'"
+                <a *ngIf="(order.order_status===3 || order.order_status===4) && order.refund_status !==1 && order.refund_status !==2" [title]="'退款'"
                   (click)="onRefundClick(order)">退款</a>
               </div>
             </td>

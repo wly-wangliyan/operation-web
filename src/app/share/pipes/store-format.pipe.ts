@@ -187,8 +187,8 @@ export class DoorOrderStatusPipe implements PipeTransform {
 
 /** 上门保养订单退款状态 */
 const DoorRefundStatus = {
-  1: '已部分退款',
-  2: '已全额退款'
+  1: '部分退款',
+  2: '全部退款'
 };
 
 @Pipe({
@@ -219,7 +219,7 @@ export class DoorRefundStatusPipe implements PipeTransform {
 const DoorRefundOrderStatus = {
   0: '未申请退款',
   1: '退款中',
-  2: '已退款',
+  2: '退款完成',
   3: '退款失败'
 };
 
