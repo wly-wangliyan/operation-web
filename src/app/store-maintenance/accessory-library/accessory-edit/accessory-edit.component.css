@@ -22,7 +22,11 @@
 }
 
 .pro-input {
-  width: 453px;
+  width: 379px;
+}
+
+.pro-input:disabled {
+  border-color: #d9d9d9;
 }
 
 .pro-name {
