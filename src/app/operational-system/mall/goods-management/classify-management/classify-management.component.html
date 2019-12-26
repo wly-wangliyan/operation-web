@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of classifyTable.data;let i =index">
-          <td>{{i+1}}</td>
+          <td>{{i + (pageIndex - 1) * 15 + 1}}</td>
           <td>{{data.sort_id}}</td>
           <td>{{data.sort_name}}</td>
           <td class="operation">
