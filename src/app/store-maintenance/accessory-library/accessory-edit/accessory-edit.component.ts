@@ -211,11 +211,15 @@ export class AccessoryEditComponent implements OnInit {
     const storeList = this.specificationsList.filter(s => !(s.store || Number(s.store) === 0));
     const specificationsPriceList = this.specificationsList.filter(i =>
       Number(i.sale_fee) > Number(i.original_fee));
+    const modelNameList = this.specificationsList.map(m => m.battery_model);
     if (imageNoneList.length !== 0) {
       this.globalService.promptBox.open(`请选择规格图片后再添加!`, null, 2000, '/assets/images/warning.png');
     } else if (batteryModelList.length !== 0) {
       this.clear();
       this.globalService.promptBox.open(`请填写型号后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (new Set(modelNameList).size !== modelNameList.length) {
+      this.clear();
+      this.globalService.promptBox.open(`型号不可重复!`, null, 2000, '/assets/images/warning.png');
     } else if (originalBalanceFeeList.length !== 0) {
       this.clear();
       this.globalService.promptBox.open(`请填写尾款原价后再添加!`, null, 2000, '/assets/images/warning.png');
@@ -250,10 +254,14 @@ export class AccessoryEditComponent implements OnInit {
     const regPhone = /^(1[3-9])\d{9}$/g;
     const specificationsPriceList = this.accessoryParams.battery_specification.filter(a =>
       Number(a.sale_balance_fee) > Number(a.original_balance_fee));
+    const modelNameList = this.accessoryParams.battery_specification.map(m => m.battery_model);
     if (this.accessoryImgComponent.imageList.length === 0) {
       this.clear();
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传产品图片！';
+    } else if (new Set(modelNameList).size !== modelNameList.length) {
+      this.clear();
+      this.globalService.promptBox.open(`型号不可重复!`, null, 2000, '/assets/images/warning.png');
     } else if (specificationsPriceList.length !== 0) {
       this.clear();
       this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
@@ -317,11 +325,11 @@ export class AccessoryEditComponent implements OnInit {
   private handleParams() {
     this.accessoryParams.battery_specification = this.specificationsList.concat(this.specificationsDelList);
     this.accessoryParams.battery_specification.forEach(p => {
-      p.original_balance_fee = Number(p.original_fee) * 100;
-      p.sale_balance_fee = Number(p.sale_fee) * 100;
+      p.original_balance_fee = Math.round(Number(p.original_fee) * 100);
+      p.sale_balance_fee = Math.round(Number(p.sale_fee) * 100);
     });
-    this.accessoryParams.real_prepaid_fee = Number(this.real_prepaid_fee) * 100;
-    this.accessoryParams.right_prepaid_fee = Number(this.right_prepaid_fee) * 100;
+    this.accessoryParams.real_prepaid_fee = Math.round(Number(this.real_prepaid_fee) * 100);
+    this.accessoryParams.right_prepaid_fee = Math.round(Number(this.right_prepaid_fee) * 100);
     this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
   }
 
