@@ -192,10 +192,10 @@
               <span *ngIf="!balanceOrderRecord.rescue_balance_order_id">--</span>
             </td>
             <td>尾款</td>
-            <td>{{balanceOrderRecord.right_prepaid_fee | centPriceChange:'元'}}</td>
-            <td>{{balanceOrderRecord.prepaid_coupon_discount | centPriceChange:'元'}}</td>
-            <td>{{balanceOrderRecord.prepaid_platform_discount | centPriceChange:'元'}}</td>
-            <td>{{balanceOrderRecord.real_prepaid_fee | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.right_balance_fee | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.balance_coupon_discount | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.balance_platform_discount | centPriceChange:'元'}}</td>
+            <td>{{balanceOrderRecord.real_balance_fee | centPriceChange:'元'}}</td>
             <td>
               <div class="column-box">
                 <span *ngIf="balanceOrderRecord.created_time">
