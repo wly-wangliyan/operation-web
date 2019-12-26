@@ -216,6 +216,7 @@ export class VehicleListComponent implements OnInit {
             this.importViewModel.initImportData();
             $('#importBerthPromptDiv').modal('hide');
             this.searchText$.next();
+            this.searchBrandText$.next();
           }, -1);
         }, err => {
           this.progressModalComponent.openOrClose(false);
