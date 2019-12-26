@@ -51,7 +51,6 @@ export class GoodsOrderDeliveryComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
-    this.searchLogisticsText$.next();
   }
 
   // 键盘按下事件
@@ -74,6 +73,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(orderInfo: GoodsOrderEntity, sureFunc: any, sureName: string = '确定', closeFunc: any = null) {
+    this.searchLogisticsText$.next();
     const openProjectModal = (data?: any) => {
       timer(0).subscribe(() => {
         $(this.projectPromptDiv.nativeElement).modal('show');
