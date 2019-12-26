@@ -31,7 +31,7 @@ export class GoodsOrderRefundComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-    private globalService: GlobalService) {
+              private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -94,6 +94,7 @@ export class GoodsOrderRefundComponent implements OnInit {
           this.requestRefundOrder(res.refund_order_id);
         }, err => {
           this.errorProcess(err);
+          this.isRefundBtnDisabled = false;
         });
       });
 
