@@ -230,7 +230,7 @@ export class VehicleListComponent implements OnInit {
                 } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
                   this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
                 } else if (error.resource === 'FILE' && error.code === 'scale_out') {
-                  this.globalService.promptBox.open('单次最大可导入5000条，请重新上传！', null, 2000, '/assets/images/warning.png');
+                  this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！', null, 2000, '/assets/images/warning.png');
                 } else {
                   this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
                 }
