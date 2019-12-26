@@ -156,6 +156,10 @@ export class AccessoryEditComponent implements OnInit {
     });
   }
 
+  public onCancelBtn() {
+    this.router.navigateByUrl('/store-maintenance/accessory-library');
+  }
+
   // 清空
   public clear() {
     this.errPositionItem.icon.isError = false;

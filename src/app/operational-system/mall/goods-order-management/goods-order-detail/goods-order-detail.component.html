@@ -74,12 +74,14 @@
             </div>
           </div>
         </div>
-        <button *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1" class='goods-btn'
-          nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
-        <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' nz-button nzType="primary"
-          (click)="onConfiemClick(orderDetail)">确认收货</button>
-        <button *ngIf="type==='1'&&orderDetail.delivery_status===2" class='goods-btn' style="margin-right: 10px;"
-          nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
+        <button
+          *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1&&orderDetail.is_refundable"
+          class='goods-btn' nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
+        <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
+          nz-button nzType="primary" (click)="onConfiemClick(orderDetail)">确认收货</button>
+        <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
+          style="margin-right: 10px;" nz-button nzType="primary"
+          (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
       <div nz-card-grid class="leftBootm-card">
         <span class="remark_info" [title]='orderDetail.platform_desc'>
