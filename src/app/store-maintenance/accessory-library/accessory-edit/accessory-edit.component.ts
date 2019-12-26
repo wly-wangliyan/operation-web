@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -67,6 +67,7 @@ export class AccessoryEditComponent implements OnInit {
   public accessoryDetailErrors = '';
   public accessory_image_url: Array<any> = [];
   public specifications_image_num: number;
+  public isSaveBtnDisabled = false;
 
   private searchText$ = new Subject<any>();
 
@@ -75,7 +76,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -170,6 +171,7 @@ export class AccessoryEditComponent implements OnInit {
     this.prepaidOriginPriceErrors = '';
     this.prepaidSalePriceErrors = '';
     this.accessoryDetailErrors = '';
+    this.isSaveBtnDisabled = false;
   }
 
   // 选择图片时校验图片格式
@@ -203,10 +205,10 @@ export class AccessoryEditComponent implements OnInit {
       $('.table-form').scrollTop('400');
     });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
-    const batteryModelList = this.specificationsList.filter(m => !m.battery_model);
+    const batteryModelList = this.specificationsList.filter(m => !(m.battery_model));
     const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_fee);
     const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_fee);
-    const storeList = this.specificationsList.filter(s => !s.store);
+    const storeList = this.specificationsList.filter(s => !(s.store || Number(s.store) === 0));
     const specificationsPriceList = this.specificationsList.filter(i =>
       Number(i.sale_fee) > Number(i.original_fee));
     if (imageNoneList.length !== 0) {
@@ -243,6 +245,7 @@ export class AccessoryEditComponent implements OnInit {
 
   // 保存数据
   public onSaveFormSubmit() {
+    this.isSaveBtnDisabled = true;
     this.handleParams();
     const regPhone = /^(1[3-9])\d{9}$/g;
     const specificationsPriceList = this.accessoryParams.battery_specification.filter(a =>
@@ -265,6 +268,7 @@ export class AccessoryEditComponent implements OnInit {
       this.accessoryDetailErrors = '请输入图文详情！';
     } else {
       this.clear();
+      this.isSaveBtnDisabled = true;
       forkJoin(this.accessoryImgComponent.upload()).subscribe(
         data => {
           this.accessory_image_url = this.accessoryImgComponent.imageList.map(i => i.sourceUrl);
@@ -285,16 +289,20 @@ export class AccessoryEditComponent implements OnInit {
                   if (!this.accessory_id) {// 新增
                     this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
                       this.globalService.promptBox.open('新建配件库成功！');
+                      this.isSaveBtnDisabled = false;
                       timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
+                      this.isSaveBtnDisabled = false;
                     });
                   } else {// 编辑
                     this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
                       this.globalService.promptBox.open('编辑配件库成功！');
+                      this.isSaveBtnDisabled = false;
                       timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
+                      this.isSaveBtnDisabled = false;
                     });
                   }
                 }
