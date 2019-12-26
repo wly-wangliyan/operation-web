@@ -49,9 +49,8 @@
         <span>排量：</span>
         <select class="form-control" [(ngModel)]="searchParams.car_displacement" name="car_displacement">
           <option value="">全部</option>
-          <option *ngFor="let carParam of carParamList" [value]="carParam.car_displacement"
-            [title]="carParam.car_displacement">
-            {{carParam.car_displacement | zMaxLength:15}}
+          <option *ngFor="let carParam of carParamList" [value]="carParam" [title]="carParam">
+            {{carParam | zMaxLength:15}}
           </option>
         </select>
       </div>

@@ -118,8 +118,8 @@ export class AccessoryEditComponent implements OnInit {
 
   // 编辑配置库数据处理
   private getDetailNumData() {
-    this.right_prepaid_fee = this.getFeeData(this.accessoryData.right_prepaid_fee);
     this.real_prepaid_fee = this.getFeeData(this.accessoryData.real_prepaid_fee);
+    this.right_prepaid_fee = this.getFeeData(this.accessoryData.right_prepaid_fee);
   }
 
   // 价钱数据处理
@@ -220,7 +220,7 @@ export class AccessoryEditComponent implements OnInit {
       this.clear();
       this.globalService.promptBox.open(`请填写库存后再添加!`, null, 2000, '/assets/images/warning.png');
     } else if (specificationsPriceList.length !== 0) {
-      this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
+      this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
     } else {
       this.specificationsList.push(new SpecificationEntity());
     }
@@ -249,8 +249,8 @@ export class AccessoryEditComponent implements OnInit {
       this.errPositionItem.icon.errMes = '请上传产品图片！';
     } else if (specificationsPriceList.length !== 0) {
       this.clear();
-      this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
-    } else if (Number(this.accessoryParams.real_prepaid_fee) > Number(this.accessoryParams.right_prepaid_fee)) {
+      this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
+    } else if (Number(this.accessoryParams.right_prepaid_fee) > Number(this.accessoryParams.real_prepaid_fee)) {
       this.clear();
       this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
     } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
@@ -308,8 +308,8 @@ export class AccessoryEditComponent implements OnInit {
       p.original_balance_fee = Number(p.original_fee) * 100;
       p.sale_balance_fee = Number(p.sale_fee) * 100;
     });
-    this.accessoryParams.right_prepaid_fee = Number(this.right_prepaid_fee) * 100;
     this.accessoryParams.real_prepaid_fee = Number(this.real_prepaid_fee) * 100;
+    this.accessoryParams.right_prepaid_fee = Number(this.right_prepaid_fee) * 100;
     this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
   }
 
@@ -323,8 +323,8 @@ export class AccessoryEditComponent implements OnInit {
           const field = content.field === 'project_id' ? '项目名称' : content.field === 'accessory_name' ?
             '产品名称' : content.field === 'accessory_images' ? '图片' : content.field === 'accessory_brand_id' ? '所属品牌'
               : content.field === 'accessory_params' ? '参数' : content.field === 'detail' ? '图文详情'
-                : content.field === 'battery_specification' ? '规格' : content.field === 'right_prepaid_fee' ? '预约原价'
-                  : content.field === 'real_prepaid_fee' ? '预付现价' : content.field === 'operation_telephone' ? '运营手机号' : '';
+                : content.field === 'battery_specification' ? '规格' : content.field === 'real_prepaid_fee' ? '预约原价'
+                  : content.field === 'right_prepaid_fee' ? '预付现价' : content.field === 'operation_telephone' ? '运营手机号' : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;

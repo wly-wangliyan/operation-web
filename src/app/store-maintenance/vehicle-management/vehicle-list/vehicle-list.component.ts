@@ -30,7 +30,7 @@ export class VehicleListComponent implements OnInit {
   public carBrandList: Array<CarBrandEntity> = [];
   public carFactoryList: Array<CarFactoryEntity> = [];
   public carSeriesList: Array<CarSeriesEntity> = [];
-  public carParamList: Array<CarParamEntity> = [];
+  public carParamList: Array<any> = [];
   public importViewModel: FileImportViewModel = new FileImportViewModel();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
@@ -182,7 +182,7 @@ export class VehicleListComponent implements OnInit {
   private requestDisplacementListBySeries(car_series_id: string) {
     this.vehicleManagementService.requestCarParamListData(car_series_id)
       .subscribe(res => {
-        this.carParamList = res.results;
+        this.carParamList = res.body;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

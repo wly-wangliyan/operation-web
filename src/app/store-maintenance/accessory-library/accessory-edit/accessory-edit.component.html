@@ -190,8 +190,8 @@
                     <nz-form-label [nzNoColon]='true'>预付原价</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="originPriceUnit">
-                        <input class="price-input" [(ngModel)]="right_prepaid_fee" nz-input autocomplete="off"
-                          name="right_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                        <input class="price-input" [(ngModel)]="real_prepaid_fee" nz-input autocomplete="off"
+                          name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
                       <div class="text-danger">
@@ -206,8 +206,8 @@
                     <nz-form-control>
                       <div>
                         <nz-input-group [nzSuffix]="salePriceUnit">
-                          <input class="price-input" [(ngModel)]="real_prepaid_fee" nz-input autocomplete="off"
-                            name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                          <input class="price-input" [(ngModel)]="right_prepaid_fee" nz-input autocomplete="off"
+                            name="right_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                         </nz-input-group>
                         <ng-template #salePriceUnit>元</ng-template>
                       </div>

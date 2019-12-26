@@ -189,12 +189,12 @@ export class VehicleManagementHttpService {
   /**
    * 获取排放下拉列表
    * @param car_series_id string 车系ID
-   * @returns Observable<CarParamLinkResponse>
+   * @returns Observable<HttpResponse<any>>
    */
-  public requestCarParamListData(car_series_id: string): Observable<CarParamLinkResponse> {
+  public requestCarParamListData(car_series_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/car_series/${car_series_id}/car_params`;
     return this.httpService.get(httpUrl)
-      .pipe(map(res => new CarParamLinkResponse(res)));
+      .pipe(map(res => res));
   }
 
 
