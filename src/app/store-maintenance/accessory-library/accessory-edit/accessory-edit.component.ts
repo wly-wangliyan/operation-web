@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -59,7 +59,6 @@ export class AccessoryEditComponent implements OnInit {
   public accessoryData = new AccessoryEntity();
   public noResultText = '数据加载中...';
   public accessory_id = '';
-  public sale_balance_fee = '';
   public right_prepaid_fee = '';
   public real_prepaid_fee = '';
   public operationTelErrors = '';
@@ -76,7 +75,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -107,7 +106,11 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
     this.accessoryParams.project_id = this.accessoryData.project ? this.accessoryData.project.project_id : '';
     this.accessoryParams.project_name = this.accessoryData.project ? this.accessoryData.project.project_name : '';
-    this.accessoryData.specification_info.forEach(i => i.imageList = i.image ? i.image.split(',') : []);
+    this.accessoryData.specification_info.forEach(i => {
+      i.imageList = i.image ? i.image.split(',') : [];
+      i.original_fee = this.getFeeData(i.original_balance_fee);
+      i.sale_fee = this.getFeeData(i.sale_balance_fee);
+    });
     this.specificationsList = this.accessoryData.specification_info;
     this.specificationsTempList = this.accessoryData.specification_info;
     this.getProjectInfo();
@@ -197,11 +200,11 @@ export class AccessoryEditComponent implements OnInit {
     });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
     const batteryModelList = this.specificationsList.filter(m => !m.battery_model);
-    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_balance_fee);
-    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_balance_fee);
+    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_fee);
+    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_fee);
     const storeList = this.specificationsList.filter(s => !s.store);
     const specificationsPriceList = this.specificationsList.filter(i =>
-      Number(i.sale_balance_fee) > Number(i.original_balance_fee));
+      Number(i.sale_fee) > Number(i.original_fee));
     if (imageNoneList.length !== 0) {
       this.globalService.promptBox.open(`请选择规格图片后再添加!`, null, 2000, '/assets/images/warning.png');
     } else if (batteryModelList.length !== 0) {
@@ -247,7 +250,7 @@ export class AccessoryEditComponent implements OnInit {
     } else if (specificationsPriceList.length !== 0) {
       this.clear();
       this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
-    } else if (Number(this.accessoryData.real_prepaid_fee) > Number(this.accessoryData.right_prepaid_fee)) {
+    } else if (Number(this.accessoryParams.real_prepaid_fee) > Number(this.accessoryParams.right_prepaid_fee)) {
       this.clear();
       this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
     } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
@@ -301,6 +304,10 @@ export class AccessoryEditComponent implements OnInit {
   // 处理服务配置入参
   private handleParams() {
     this.accessoryParams.battery_specification = this.specificationsList.concat(this.specificationsDelList);
+    this.accessoryParams.battery_specification.forEach(p => {
+      p.original_balance_fee = Number(p.original_fee) * 100;
+      p.sale_balance_fee = Number(p.sale_fee) * 100;
+    });
     this.accessoryParams.right_prepaid_fee = Number(this.right_prepaid_fee) * 100;
     this.accessoryParams.real_prepaid_fee = Number(this.real_prepaid_fee) * 100;
     this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');

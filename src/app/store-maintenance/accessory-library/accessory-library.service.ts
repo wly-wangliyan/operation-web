@@ -19,6 +19,8 @@ export class SpecificationEntity extends EntityBase {
   public original_balance_fee: number = undefined; // float	原价 单位：分
   public buy_fee: number = undefined; // float	结算价 单位：分
   public sale_balance_fee: number = undefined; // float	售价 单位：分
+  public original_fee: string = undefined; // float	原价 单位：分
+  public sale_fee: string = undefined; // float	售价 单位：分
   public store: number = undefined; // integer	库存
   public sale_num: number = undefined; // integer	销量
   public is_deleted = false; // bool	是否删除
