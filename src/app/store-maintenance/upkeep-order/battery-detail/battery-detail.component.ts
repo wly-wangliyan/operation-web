@@ -74,13 +74,42 @@ export class BatteryDetailComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public onResendMessage() {
+  public onResendMessageClick() {
+    this.globalService.confirmationBox.open('提示', '确认重新发送短信给汽修店吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.resendMessage();
+    }, '重新发送');
+  }
+
+  private resendMessage() {
     this.upkeepOrderService.requestResendMessage(this.order_id, 2).subscribe(res => {
       this.globalService.promptBox.open('短信重发成功！');
       this.getOrderDetail();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
-        this.globalService.promptBox.open('短信重发失败，请稍后再试！', null, 2000, null, false);
+        if (err.status === 422) {
+          if (err.error) {
+            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+            for (const content of error.errors) {
+              if (content.code === 'not_found' && content.field === 'order_id') {
+                this.globalService.promptBox.open('订单不存在，请刷新重试！', null, 2000, null, false);
+                return;
+              } else if (content.code === 'not_found' && content.field === 'service_telephone') {
+                this.globalService.promptBox.open('未找到该汽修店的电话，短信重发失败！', null, 2000, null, false);
+                return;
+              } else {
+                this.globalService.promptBox.open('短信重发失败，请稍后再试！', null, 2000, null, false);
+                return;
+              }
+            }
+          } else {
+            this.globalService.promptBox.open('短信重发失败，请稍后再试！', null, 2000, null, false);
+            return;
+          }
+        } else if (err.status === 404) {
+          this.globalService.promptBox.open('订单不存在，请刷新重试！', null, 2000, null, false);
+          return;
+        }
       }
     });
   }

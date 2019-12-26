@@ -155,9 +155,9 @@ export class RescueServiceStatusPipe implements PipeTransform {
 /** 上门保养订单状态 */
 const DoorOrderStatus = {
   1: '待支付',
-  2: '待服务',
-  3: '已取消',
-  4: '已完成',
+  2: '已取消',
+  3: '已完成',
+  4: '待服务',
   5: '已关闭'
 };
 

@@ -130,7 +130,26 @@ export class SupplyConfigListComponent implements OnInit {
       this.globalService.promptBox.open('保存成功');
       this.searchText$.next();
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.field === 'supply_type' && content.code === 'invalid') {
+              this.globalService.promptBox.open('供应方式错误，请重试!', null, 2000, null, false);
+              return;
+            } else if (content.field === 'accessory_ids' && content.code === 'invalid') {
+              this.globalService.promptBox.open('当前配件信息错误，请重试!', null, 2000, null, false);
+              return;
+            } else {
+              this.globalService.promptBox.open('保存失败，请重试!', null, 2000, null, false);
+              return;
+            }
+          }
+        } else if (err.status === 404) {
+          this.globalService.promptBox.open('当前配件不存在，请刷新重试!', null, 2000, null, false);
+          return;
+        }
+      }
     });
   }
 }

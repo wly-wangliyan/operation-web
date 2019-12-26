@@ -30,10 +30,11 @@
               <span>已发送{{orderRecord.repair_message_count||0}}次</span>
               <div>
                 <button *ngIf="orderRecord.repair_message_content" type="button" class="sure-btn resend-btn"
-                  [title]="orderRecord.repair_message_content" [appTxtCopy]='orderRecord.repair_message_content'
-                  nz-button nzType="primary" style="margin-right: 5px !important;">复制</button>
-                <button type="button" class="sure-btn resend-btn" nz-button nzType="primary"
-                  (click)="onResendMessage()">重发</button>
+                  [title]="orderRecord.repair_message_content || '' "
+                  [appTxtCopy]="orderRecord.repair_message_content || ''" nz-button nzType="primary">复制</button>
+                <button *ngIf="orderRecord.order_status===4" type="button" class="sure-btn resend-btn" nz-button
+                  style="margin-left: 10px !important;" [title]="orderRecord.is_matched?'':'未匹配规格型号无法发送短信！'"
+                  nzType="primary" (click)="onResendMessageClick()" [disabled]="!orderRecord.is_matched">重发</button>
               </div>
             </div>
           </td>
@@ -167,7 +168,7 @@
       </table>
     </div>
 
-    <div class="table-item" *ngIf="orderRecord.accessory_info && orderRecord.accessory_info.length>0"
+    <div class="table-item" *ngIf="orderRecord && orderRecord.accessory_info && orderRecord.accessory_info.length>0"
       style="margin-top: 60px;">
       <table class="detail-table">
         <thead>
@@ -176,7 +177,7 @@
             <th>品牌</th>
             <th>规格</th>
             <th>数量</th>
-            <th>供应商</th>
+            <th>供货方式</th>
             <th>配送仓库</th>
             <th>原价</th>
           </tr>
@@ -206,7 +207,7 @@
             <td>{{accessoryData.brand_name || '--'}}</td>
             <td>{{accessoryData.battery_model || '--'}}</td>
             <td>{{accessoryData.buy_num || 0}}</td>
-            <td>{{accessoryData.supplier_name || '--'}}</td>
+            <td>{{accessoryData.supply_type?(accessoryData.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
             <td>{{accessoryData.warehouse_name || '--'}}</td>
             <td>{{accessoryData.original_fee | centPriceChange:'元'}}</td>
           </tr>
