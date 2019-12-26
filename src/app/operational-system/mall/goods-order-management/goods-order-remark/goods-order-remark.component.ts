@@ -26,7 +26,7 @@ export class GoodsOrderRemarkComponent implements OnInit {
   @ViewChild('projectPromptDiv', { static: true }) public projectPromptDiv: ElementRef;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-              private globalService: GlobalService) {
+    private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
@@ -109,7 +109,7 @@ export class GoodsOrderRemarkComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          const field = content.field === 'refund_remark' ? '订单备注' : content.field === 'refund_desc' ? '退款备注' : '';
+          const field = content.field === 'platform_desc' ? '平台备注' : content.field === 'business_desc' ? '商家备注' : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
