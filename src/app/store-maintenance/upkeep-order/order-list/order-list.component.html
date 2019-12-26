@@ -168,8 +168,8 @@
               <div>
                 <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
                 <a *ngIf="order.order_status===1" [title]="'人工匹配'" (click)="onMatchClick(order)">人工匹配</a>
-                <a *ngIf="(order.order_status===3 || order.order_status===4) && order.refund_status !==1 && order.refund_status !==2" [title]="'退款'"
-                  (click)="onRefundClick(order)">退款</a>
+                <a *ngIf="(order.order_status===3 || order.order_status===4) && order.refund_status !==1 && order.refund_status !==2"
+                  [title]="'退款'" (click)="onRefundClick(order)">退款</a>
               </div>
             </td>
           </tr>
@@ -223,7 +223,7 @@
             </div>
           </div>
 
-          <div class="row" style="margin-bottom: 20px;">
+          <div class="row">
             <label class="control-label">
               <b>*</b>
               <span>汽修店：</span>
@@ -236,6 +236,16 @@
                   {{repairShop.repair_shop_name}}
                 </option>
               </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 20px;">
+            <label class="control-label">
+              <b>&nbsp;&nbsp;</b>
+              <span>商品原价：</span>
+            </label>
+            <div class="control-input">
+              <label>{{matchParams.original_fee | centPriceChange:'元'}}</label>
             </div>
           </div>
 
