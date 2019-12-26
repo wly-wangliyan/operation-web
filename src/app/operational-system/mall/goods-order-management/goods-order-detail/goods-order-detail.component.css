@@ -84,12 +84,15 @@
   color: rgba(35, 36, 47, 1);
 }
 
-.bottom-card .card-text {
-  padding-left: 0;
+.card-font {
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(35, 36, 47, 1);
 }
 
-.copy {
-  margin-left: 60px;
+.bottom-card .card-text {
+  padding-left: 0;
 }
 
 .card-title {
@@ -230,6 +233,7 @@
 .remark_info {
   display: inline-block;
   line-height: 22px;
+  width: 75%;
 }
 
 .card-span {
@@ -269,4 +273,12 @@
 
 label {
   width: 80px;
+}
+
+.con-person {
+  width: 43%;
+  display: inline-block;
+  float: left;
+  line-height: 22px;
+  margin-right: 10px;
 }

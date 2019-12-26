@@ -137,11 +137,12 @@
           收货人信息
         </div>
         <div style="margin: 20px 0 10px;">
-          <div class="card-text">
-            <label>联系人：</label>
-            <span>{{orderDetail.contact||'--'}}</span>
-            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img class="copy"
-                src="/assets/images/copy.png" /></a>
+          <div class="card-font">
+            <label style="float: left;">联系人：</label>
+            <!-- <span class="con-person">{{orderDetail.contact||'--'}}</span> -->
+            <span class="con-person">{{'啊啊啊啊啊啊啊啊啊啊'||'--'}}</span>
+            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img src="/assets/images/copy.png" /></a>
+            <div style="clear: both;"></div>
           </div>
           <div class="card-text">
             <label>联系电话：</label>
@@ -152,7 +153,6 @@
             <span class="card-span">{{orderDetail.delivery_region}}{{orderDetail.delivery_address}}</span>
             <span *ngIf='!orderDetail.delivery_region&&!orderDetail.delivery_address'>--</span>
           </div>
-
         </div>
       </div>
       <div nz-card-grid>

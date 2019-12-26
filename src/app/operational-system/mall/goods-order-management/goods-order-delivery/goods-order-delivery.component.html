@@ -33,7 +33,7 @@
             </label>
             <div class=" control-input">
               <select class="form-control select-font" name="shipping_method"
-                [(ngModel)]="currentOrder.delivery_company">
+                [(ngModel)]="currentOrder.delivery_company" required>
                 <option value=''>选择物流公司</option>
                 <option *ngFor='let data of logisticsList' [value]=data.logistics_name>{{data.logistics_name}}</option>
               </select>
