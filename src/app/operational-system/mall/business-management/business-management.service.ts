@@ -15,6 +15,9 @@ export class SearchParams extends EntityBase {
 
 export class CompanyEntity extends EntityBase {
   public company_name = ''; // 企业名称
+  public province: string = undefined; 	// 	string	省
+  public city: string = undefined; 	// 	string	市
+  public district: string = undefined; 	// 	string	区
 }
 
 export class BusinessEntity extends EntityBase {
@@ -24,6 +27,9 @@ export class BusinessEntity extends EntityBase {
   public business_type: number = undefined; // 商家类型 1商城供应商
   public contacts: string = undefined; // 联系人
   public telephone: string = undefined; // 联系电话
+  public province: string = undefined; 	// 	string	省
+  public city: string = undefined; 	// 	string	市
+  public district: string = undefined; 	// 	string	区
   public region_id: string = undefined; // 省市区code
   public address: string = undefined; // 详细地址
   public lon: string = undefined; // 经度
