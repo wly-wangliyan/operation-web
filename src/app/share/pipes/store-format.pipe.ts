@@ -94,8 +94,7 @@ const RescueOrderStatus = {
   1: '待支付',
   2: '已支付',
   3: '已取消',
-  4: '已退款',
-  5: '退款中'
+  4: '已关闭'
 };
 
 @Pipe({
@@ -125,8 +124,10 @@ export class RescueOrderStatusPipe implements PipeTransform {
 const RescueServiceStatus = {
   1: '待接单',
   2: '待服务',
-  3: '已完成',
-  4: '已拒绝'
+  3: '已取消',
+  4: '已完成',
+  5: '已拒绝',
+  6: '无人接单'
 };
 
 @Pipe({
