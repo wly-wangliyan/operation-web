@@ -40,7 +40,7 @@
         <thead>
           <tr>
             <th>序号</th>
-            <th>产品信息</th>
+            <th style="width: 18%;">产品信息</th>
             <th>配件所属品牌</th>
             <th>供货方式</th>
             <th>供应商</th>
@@ -63,7 +63,7 @@
                 </div>
                 <div style="text-align: left;padding: 10px 0;">
                   <span [title]="data.accessory_name ||''"
-                    style="word-break: keep-all;">{{data.accessory_name | zMaxLength:6}}</span>
+                    style="word-break: keep-all;">{{data.accessory_name | zMaxLength:15}}</span>
                   <div class="match-info">
                     <!-- <label>已匹配</label> -->
                   </div>

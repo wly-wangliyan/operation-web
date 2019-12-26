@@ -15,9 +15,9 @@
           <select name="status" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.order_status">
             <option value="">全部</option>
             <option value="1">待支付</option>
-            <option value="2">待服务</option>
-            <option value="3">已取消</option>
-            <option value="4">已完成</option>
+            <option value="2">已取消</option>
+            <option value="3">已完成</option>
+            <option value="4">待服务</option>
             <option value="5">已关闭</option>
           </select>
         </div>
@@ -106,7 +106,7 @@
                 </ng-container>
               </div>
             </td>
-            <td [title]="order.car_model || ''">{{(order.car_model|zMaxLength:6) || '--'}}</td>
+            <td>{{order.car_model || '--'}}</td>
             <td>
               <ng-container *ngIf="order.repair_shop_district || order.repair_shop_name">
                 <div class="column-box">
@@ -178,7 +178,7 @@
               <div>
                 <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
                 <a *ngIf="order.order_status===1" [title]="'人工匹配'" (click)="onMatchClick(order)">人工匹配</a>
-                <a *ngIf="(order.order_status===2 || order.order_status===4) && !order.refund_status" [title]="'退款'"
+                <a *ngIf="(order.order_status===3 || order.order_status===4) && !order.refund_status" [title]="'退款'"
                   (click)="onRefundClick(order)">退款</a>
               </div>
             </td>

@@ -14,7 +14,7 @@ export class RescueOrderSearchParams extends EntityBase {
   public contact_tel: string = undefined; // 手机号
   public contact_name: string = undefined; // 购买人
   public repair_shop_name: string = undefined; // 应援汽修店
-  public order_id: string = undefined; // 订单id
+  public rescue_order_id: string = undefined; // 订单id
   public order_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
   public page_num = 1; // 页码
