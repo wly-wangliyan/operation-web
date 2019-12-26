@@ -174,6 +174,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     const selectAccessory = this.accessoryList.filter(accessory => accessory.accessory_id === this.matchParams.accessory_id);
     this.matchParams.specification_id = '';
     this.matchParams.repair_shop_id = '';
+    this.matchParams.original_fee = null;
     if (event.target.value && selectAccessory.length > 0) {
       this.matchParams.accessory_name = selectAccessory[0].accessory_name;
     } else {
@@ -192,6 +193,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.matchParams.original_fee = selectSpecification[0].original_balance_fee;
     } else {
       this.matchParams.battery_model = null;
+      this.matchParams.original_fee = null;
     }
     this.requestRepairShopList(this.matchParams.accessory_id);
   }
