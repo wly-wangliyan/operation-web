@@ -167,7 +167,8 @@
       </table>
     </div>
 
-    <div class="table-item" *ngIf="accessoryData && accessoryData.accessory_id" style="margin-top: 60px;">
+    <div class="table-item" *ngIf="orderRecord.accessory_info && orderRecord.accessory_info.length>0"
+      style="margin-top: 60px;">
       <table class="detail-table">
         <thead>
           <tr>
@@ -186,7 +187,7 @@
               <div style="text-align: left !important;">蓄电池</div>
             </td>
           </tr>
-          <tr>
+          <tr *ngFor="let accessoryData of orderRecord.accessory_info">
             <td>
               <div class="img-item">
                 <div class="img-box">
@@ -198,12 +199,12 @@
                   <img *ngIf="!accessoryData.accessory_images" src="/assets/images/image_space.png" />
                 </div>
                 <div style="text-align: left;padding: 10px 0;">
-                  <span>{{accessoryData || '--'}}</span>
+                  <span>{{accessoryData.accessory_name || '--'}}</span>
                 </div>
               </div>
             </td>
             <td>{{accessoryData.brand_name || '--'}}</td>
-            <td>{{accessoryData.click_person >= 0 ? click.click_person : '--'}}</td>
+            <td>{{accessoryData.battery_model || '--'}}</td>
             <td>{{accessoryData.buy_num || 0}}</td>
             <td>{{accessoryData.supplier_name || '--'}}</td>
             <td>{{accessoryData.warehouse_name || '--'}}</td>
