@@ -196,10 +196,26 @@ export class AccessoryEditComponent implements OnInit {
       $('.table-form').scrollTop('400');
     });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
+    const batteryModelList = this.specificationsList.filter(m => !m.battery_model);
+    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_balance_fee);
+    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_balance_fee);
+    const storeList = this.specificationsList.filter(s => !s.store);
     const specificationsPriceList = this.specificationsList.filter(i =>
       Number(i.sale_balance_fee) > Number(i.original_balance_fee));
     if (imageNoneList.length !== 0) {
       this.globalService.promptBox.open(`请选择规格图片后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (batteryModelList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写型号后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (originalBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款原价后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (saleBalanceFeeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写尾款现价后再添加!`, null, 2000, '/assets/images/warning.png');
+    } else if (storeList.length !== 0) {
+      this.clear();
+      this.globalService.promptBox.open(`请填写库存后再添加!`, null, 2000, '/assets/images/warning.png');
     } else if (specificationsPriceList.length !== 0) {
       this.globalService.promptBox.open(`规格的尾款现在不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
     } else {

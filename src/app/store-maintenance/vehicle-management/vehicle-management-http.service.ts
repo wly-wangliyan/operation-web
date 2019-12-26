@@ -213,12 +213,12 @@ export class VehicleManagementHttpService {
   /**
    * 导入车型
    * @param type 文件类型
-   * @param myfile FILE
+   * @param type_file FILE
    */
-  public requestImportCarTypesData(type: any, myfile: any) {
+  public requestImportCarTypesData(type: any, type_file: any) {
     const eventEmitter = new EventEmitter();
     const params = {
-      myfile,
+      type_file,
       type
     };
 

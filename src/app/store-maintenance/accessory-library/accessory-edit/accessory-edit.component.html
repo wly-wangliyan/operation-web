@@ -126,8 +126,8 @@
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
                           [limitImgSize]="1" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
-                          [maxLength]="1" file_id="specificationsImg" [imageUrls]="data.imageList" [imageWidth]='30'
-                          [imageHeight]='30' [imageAddHeight]="30"
+                          [maxLength]="1" file_id="specificationsImg-{{data.time}}-{{i}}" [imageUrls]="data.imageList"
+                          [imageWidth]='30' [imageHeight]='30' [imageAddHeight]="30"
                           (selectedImgChange)="onSelectSpecificationsPic($event,i)" [imageDelWidth]='12'
                           [imageDelHeight]='12' [minCropBoxWidth]="100" [minCropBoxHeight]="100">
                         </app-z-photo-select>
