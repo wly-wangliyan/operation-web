@@ -107,19 +107,8 @@
               </div>
             </td>
             <td>{{order.car_model || '--'}}</td>
-            <td>
-              <ng-container *ngIf="order.repair_shop_district || order.repair_shop_name">
-                <div class="column-box">
-                  <span [title]="order.repair_shop_district || ''">{{order.repair_shop_district | zMaxLength:6}}</span>
-                  <span [title]="order.repair_shop_name || ''">
-                    {{order.repair_shop_name ? (order.repair_shop_name|zMaxLength:6) : ''}}</span>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="!order.repair_shop_district && !order.repair_shop_name">
-                <span>--</span>
-              </ng-container>
-            </td>
-            <td [title]="order.address || ''">{{order.address? (order.address|zMaxLength:6) : '--'}}</td>
+            <td [title]="order.repair_shop_name || ''">{{(order.repair_shop_name|zMaxLength:6) || '--'}}</td>
+            <td [title]="order.address || ''">{{(order.address|zMaxLength:6) || '--'}}</td>
 
             <td>
               <ng-container *ngIf="order.accessory_info && order.accessory_info.length>0">
