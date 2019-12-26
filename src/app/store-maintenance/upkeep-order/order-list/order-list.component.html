@@ -71,11 +71,11 @@
           <tr>
             <th>序号</th>
             <th>订单编号</th>
+            <th style="width: 15%">配件</th>
             <th>购买人</th>
             <th style="width: 8%">车型</th>
             <th>汽修店</th>
             <th>配送地址</th>
-            <th style="width: 15%">配件</th>
             <th>数量</th>
             <th>预付实收</th>
             <th>下单&支付时间</th>
@@ -94,22 +94,6 @@
               </span>
               <span *ngIf="!order.door_order_id">--</span>
             </td>
-
-            <td>
-              <div class="column-box">
-                <ng-container *ngIf="order.contact_name || order.contact_tel">
-                  <span [title]="order.contact_name || ''">{{order.contact_name | zMaxLength:6}}</span>
-                  <span>{{order.contact_tel || ''}}</span>
-                </ng-container>
-                <ng-container *ngIf="!order.contact_name && !order.contact_tel">
-                  <span>--</span>
-                </ng-container>
-              </div>
-            </td>
-            <td>{{order.car_model || '--'}}</td>
-            <td [title]="order.repair_shop_name || ''">{{(order.repair_shop_name|zMaxLength:6) || '--'}}</td>
-            <td [title]="(order.region||'')+(order.address||'')">
-              {{(((order.region||'')+(order.address||''))|zMaxLength:6) || '--'}}</td>
 
             <td>
               <ng-container *ngIf="order.accessory_info && order.accessory_info.length>0">
@@ -136,6 +120,22 @@
               </ng-container>
               <span *ngIf="!order.accessory_info || order.accessory_info.length===0">--</span>
             </td>
+
+            <td>
+              <div class="column-box">
+                <ng-container *ngIf="order.contact_name || order.contact_tel">
+                  <span [title]="order.contact_name || ''">{{order.contact_name | zMaxLength:6}}</span>
+                  <span>{{order.contact_tel || ''}}</span>
+                </ng-container>
+                <ng-container *ngIf="!order.contact_name && !order.contact_tel">
+                  <span>--</span>
+                </ng-container>
+              </div>
+            </td>
+            <td>{{order.car_model || '--'}}</td>
+            <td [title]="order.repair_shop_name || ''">{{(order.repair_shop_name|zMaxLength:6) || '--'}}</td>
+            <td [title]="(order.region||'')+(order.address||'')">
+              {{(((order.region||'')+(order.address||''))|zMaxLength:6) || '--'}}</td>
 
             <td>{{order.buy_num  || 0}}</td>
 
