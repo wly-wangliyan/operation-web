@@ -98,12 +98,12 @@
 
           <div class="row" style="margin-bottom: 40px;">
             <label class="control-label">
-              <b>*</b>
-              <span>供应方式：</span>
+              <b>&nbsp;</b>
+              <span>供货方式：</span>
             </label>
             <div class="control-input">
               <select class="form-control" [(ngModel)]="configParams.supply_type" name="supply_type"
-                (change)="onChangeSupplyType($event)" required>
+                (change)="onChangeSupplyType($event)">
                 <option value="">请选择</option>
                 <option value="2">门店自供</option>
               </select>

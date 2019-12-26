@@ -23,7 +23,7 @@ export class SupplyConfigParams extends EntityBase {
 }
 
 export class SetSupplyConfigParams extends EntityBase {
-  public supply_type: any = ''; // 供应方式 1:第三方供应商 2:门店自供
+  public supply_type: any = ''; // 供货方式 1:第三方供应商 2:门店自供
   public accessory_ids: string = undefined; // 配件ID集合 "xxx,xxx"
 }
 
