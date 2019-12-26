@@ -8,7 +8,7 @@ import {
   UpkeepOrderSearchParams,
   UpkeepOrderEntity,
   UpkeepOrderService,
-  DoorRefundParams, DoorRefundOrderEntity, MatchParams
+  DoorRefundParams, MatchParams
 } from '../upkeep-order.service';
 import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../../accessory-library/accessory-library.service';
 import { RepairShopEntity } from '../../garage-management/garage-management.service';
@@ -31,9 +31,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public accessoryList: Array<AccessoryEntity> = []; // 配件列表
   public repairShopList: Array<RepairShopEntity> = []; // 汽修店列表
   public specificationList: Array<SpecificationEntity> = []; // 规格列表
-  public projectList: Array<ProjectEntity> = []; // 项目列表
+  private projectList: Array<ProjectEntity> = []; // 项目列表
 
-  private bettery_project_id: string;
+  private bettery_project_id: string; // 蓄电池项目id
 
   public order_start_time: any = ''; // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
@@ -71,7 +71,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   // 初始化获取订单列表
-  private generateOrderList() {
+  private generateOrderList(): void {
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestOrderList();
@@ -80,8 +80,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   // 请求订单列表
-  private requestOrderList() {
-    this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
+  private requestOrderList(): void {
+    this.requestSubscription = this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
       this.orderList = res.results;
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
@@ -122,6 +122,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.selectOrder = orderItem;
     this.matchParams = new MatchParams();
     this.operationing = false;
+    this.accessoryList = [];
+    this.specificationList = [];
+    this.repairShopList = [];
     if (orderItem.accessory_info && orderItem.accessory_info.length > 0) {
       const matched = orderItem.accessory_info[0].clone();
       if (matched.accessory_id) {
@@ -156,18 +159,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
           }, err => {
             if (!this.globalService.httpErrorProcess(err)) {
               if (err.status === 404) {
-                this.accessoryList = [];
-                this.specificationList = [];
-                this.repairShopList = [];
                 this.requestAccessoryList(this.bettery_project_id);
               }
             }
           });
       }
     } else {
-      this.accessoryList = [];
-      this.specificationList = [];
-      this.repairShopList = [];
       this.requestAccessoryList(this.bettery_project_id);
     }
   }
@@ -306,7 +303,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
             }
           }
         }
-        this.searchText$.next();
       } else {
         $('#refundModal').modal('hide');
       }
@@ -344,11 +340,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.specificationList = res;
     }, err => {
       this.specificationList = [];
-      if (!this.globalService.httpErrorProcess(err)) {
-        if (err.status === 404) {
-          this.globalService.promptBox.open('已选配件不存在，获取规格失败!', null, 2000, null, false);
-        }
-      }
+      this.globalService.httpErrorProcess(err);
+      // if (!this.globalService.httpErrorProcess(err)) {
+      //   if (err.status === 404) {
+      //     this.globalService.promptBox.open('已选配件不存在，获取规格失败!', null, 2000, null, false);
+      //   }
+      // }
     });
   }
 
@@ -358,11 +355,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.repairShopList = res;
     }, err => {
       this.repairShopList = [];
-      if (!this.globalService.httpErrorProcess(err)) {
-        if (err.status === 404) {
-          this.globalService.promptBox.open('已选配件不存在，获取汽修店失败!', null, 2000, null, false);
-        }
-      }
+      this.globalService.httpErrorProcess(err);
+      // if (!this.globalService.httpErrorProcess(err)) {
+      //   if (err.status === 404) {
+      //     this.globalService.promptBox.open('已选配件不存在，获取汽修店失败!', null, 2000, null, false);
+      //   }
+      // }
     });
   }
 

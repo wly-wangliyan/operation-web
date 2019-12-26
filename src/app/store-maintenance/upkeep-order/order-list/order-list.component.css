@@ -79,3 +79,11 @@
   background: #e1f3d8;
   color: #67c23a;
 }
+
+.tab-bar-list {
+  padding: 1px 15px 0 15px !important;
+}
+
+.tab-bar-list .ant-radio-button-wrapper {
+  width: 300px;
+}
