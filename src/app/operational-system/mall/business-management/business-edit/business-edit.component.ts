@@ -76,6 +76,9 @@ export class BusinessEditComponent implements OnInit {
           this.currentBusiness.images = res.images.length > 0 ? res.images : ['/assets/images/image_space.png'];
           this.company_name = res.company ? res.company.company_name : '';
           this.postage_status = res.postage_status === 1 ? true : false;
+          this.currentBusiness.province = this.currentBusiness.company.province;
+          this.currentBusiness.city = this.currentBusiness.company.city;
+          this.currentBusiness.district = this.currentBusiness.company.district;
           const regionObj = new RegionEntity(this.currentBusiness);
           this.proCityDistSelectComponent.regionsObj = regionObj;
           this.proCityDistSelectComponent.initRegions(regionObj);
