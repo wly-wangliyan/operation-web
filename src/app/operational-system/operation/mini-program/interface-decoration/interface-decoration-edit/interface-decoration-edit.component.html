@@ -11,8 +11,7 @@
   <div class="content-space">
     <div class="mould-space">
       <label>自定义模板</label>
-      <div *ngFor="let item of mouldList;let i=index" [class.mould-active]="mouldType===i+1"
-        (click)="onMouldClick(i+1)">
+      <div *ngFor="let item of mouldList;let i=index" [class.mould-active]="currentTemplate.template_type===i+1">
         <i></i>
         <span>
           {{item}}
@@ -22,74 +21,122 @@
     </div>
     <div class="preview-space">
       <img src="/assets/images/interface-decoration/nav_top.png">
-      <div *ngFor="let item of templatesList;let i=index" style="background: #fff">
-        <div *ngIf="item.template_type===1" class="template-1" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(1, i, $event)" id="template_1_{{i}}">
-          <li *ngFor="let img of item.image;let k=index">
-            <img src="/assets/images/interface-decoration/icon_mould_1_empty.png">
-            <span>未定义</span>
-          </li>
-        </div>
-        <div *ngIf="item.template_type===2" class="template_2" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(2, i, $event)" id="template_2_{{i}}">
-          <nz-carousel nzAutoPlay>
-            <div nz-carousel-content *ngFor="let img of item.image">
-              <img src="/assets/images/interface-decoration/icon_mould_2_empty.png">
-            </div>
-          </nz-carousel>
-        </div>
-        <div *ngIf="item.template_type===3" class="template_3" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
-          <li *ngFor="let img of item.image;let k=index">
-            <div>
-              <span>未定义标题</span>
-              <img src="/assets/images/interface-decoration/icon_mould_3_empty.png">
-            </div>
-            <div>
-              <span>未定义标题</span>
-              <img src="/assets/images/interface-decoration/icon_mould_3_empty.png">
-            </div>
-          </li>
-        </div>
-        <div *ngIf="item.template_type===4" class="template_4" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
-          <div>
-            <span>未定义标题</span>
-            <img src="/assets/images/interface-decoration/icon_mould_4_empty.png">
+      <div style="min-height: 517px">
+        <div *ngFor="let item of templatesList;let i=index" style="background: #fff">
+          <div *ngIf="item.template_type==1" class="template-1" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(1, i)" id="template_1_{{i}}"
+               [class.active-count-4]="item.template_content.count===4" [class.active-count-5]="item.template_content.count===5">
+            <li *ngFor="let content of item.template_content.contents;let k=index">
+              <img *ngIf="!content.image||content.image.length===0" src="/assets/images/interface-decoration/icon_mould_1_empty.png">
+              <img *ngIf="content.image&&content.image.length>0" [src]="content.image[0]">
+              <span>{{content.title?content.title:'未定义'}}</span>
+            </li>
           </div>
-          <div>
-            <span>未定义标题</span>
-            <img src="/assets/images/interface-decoration/icon_mould_3_empty.png">
-            <span>未定义标题</span>
-            <img src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+          <div *ngIf="item.template_type==2" class="template_2" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(2, i)" id="template_2_{{i}}">
+            <nz-carousel nzAutoPlay>
+              <div nz-carousel-content *ngFor="let content of item.template_content.contents">
+                <img *ngIf="!content.image||content.image.length===0" src="/assets/images/interface-decoration/icon_mould_2_empty.png">
+                <img *ngIf="content.image&&content.image.length>0" [src]="content.image[0]">
+              </div>
+            </nz-carousel>
           </div>
-        </div>
-        <div *ngIf="item.template_type===5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(5, i)" id="template_5_{{i}}">
-          <label>未定义标题</label>
-          <div id="father">
-            <ul id="box">
-              <li *ngFor="let img of item.image;let k=index">
-                <img src="/assets/images/interface-decoration/icon_mould_5_empty.png">
-                <span>未定义商品名称</span>
-                <span>¥0.00</span>
+          <div *ngIf="item.template_type==3" class="template_3" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
+            <li *ngFor="let content of item.template_content.contents;let k=index">
+              <div>
+                <span>{{content.left_title?content.left_title:'未定义标题'}}</span>
+                <img *ngIf="!content.left_image||content.left_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+                <img *ngIf="content.left_image&&content.left_image.length>0" [src]="content.left_image[0]">
+              </div>
+              <div>
+                <span>{{content.right_title?content.right_title:'未定义标题'}}</span>
+                <img *ngIf="!content.right_image||content.right_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+                <img *ngIf="content.right_image&&content.right_image.length>0" [src]="content.right_image[0]">
+              </div>
+            </li>
+          </div>
+          <div *ngIf="item.template_type==4" class="template_4" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
+            <div>
+              <span>{{item.template_content.left_title?item.template_content.left_title:'未定义标题'}}</span>
+              <img *ngIf="!item.template_content.left_image||item.template_content.left_image.length===0"
+                   style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
+              <img *ngIf="item.template_content.left_image&&item.template_content.left_image.length>0"
+                   [src]="item.template_content.left_image[0]">
+            </div>
+            <div>
+              <span>{{item.template_content.right_top_title?item.template_content.right_top_title:'未定义标题'}}</span>
+              <img *ngIf="!item.template_content.right_top_image||item.template_content.right_top_image.length===0"
+                   src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+              <img *ngIf="item.template_content.right_top_image&&item.template_content.right_top_image.length>0"
+                   [src]="item.template_content.right_top_image[0]">
+              <span>{{item.template_content.right_bottom_title?item.template_content.right_bottom_title:'未定义标题'}}</span>
+              <img *ngIf="!item.template_content.right_bottom_image||item.template_content.right_bottom_image.length===0"
+                   src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+              <img *ngIf="item.template_content.right_bottom_image&&item.template_content.right_bottom_image.length>0"
+                   [src]="item.template_content.right_bottom_image[0]">
+            </div>
+          </div>
+          <div *ngIf="item.template_type==5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [class.active_height]="item.template_content.products[0].product_type!=1">
+            <label>{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            <div id="father{{i}}"  class="father">
+              <ul id="box{{i}}" class="box">
+                <ng-container *ngIf="item.template_content.products[0].product_type==='1'">
+                  <li *ngFor="let product of item.template_content.mallProducts;let k=index">
+                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type!=1)" style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type==1)" src="/assets/images/interface-decoration/icon_mould_5_empty.png">
+                    <img *ngIf="product.commodity_id" [src]="product.commodity_images[0]">
+                    <span>{{product.commodity_name?(product.commodity_name | zMaxLength:9):'未定义商品名称'}}</span>
+                    <div>
+                      <span>{{product.min_unit_sell_price?(product.min_unit_sell_price|centPriceChange):'¥0.00'}}</span>
+                      <span>{{product.min_unit_original_price?(product.min_unit_original_price|centPriceChange):'¥0.00'}}</span>
+                    </div>
+                  </li>
+                </ng-container>
+                <ng-container *ngIf="item.template_content.products[0].product_type!=='1'">
+                  <li *ngFor="let product of item.template_content.ticketProducts;let k=index">
+                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type!=1)" style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type==1)" src="/assets/images/interface-decoration/icon_mould_5_empty.png">
+                    <img *ngIf="product?.product_id" [src]="product.image_urls" style="height: 73px;">
+                    <span>{{product?.product_name?(product.product_name | zMaxLength:9):'未定义商品名称'}}</span>
+                    <div>
+                      <span>{{product?.third_product?.platform_price?(product.third_product.platform_price|centPriceChange):'¥0.00'}}</span>
+                      <span>{{product?.third_product?.market_price?(product.third_product.market_price|centPriceChange):'¥0.00'}}</span>
+                    </div>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </div>
+          <div *ngIf="item.template_type==6" class="template_6" [class.mould-edit-active]="mouldIndex===i"
+               (click)="onMouldEditClick(6, i)" id="template_6_{{i}}">
+            <label>{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            <ul *ngIf="item.template_content.products[0].product_type==='1'">
+              <li *ngFor="let product of item.template_content.mallProducts;let k=index">
+                <img *ngIf="!product.commodity_id" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                <img *ngIf="product.commodity_id&&product.cover_image" [src]="product.cover_image">
+                <img *ngIf="product.commodity_id&&!product.cover_image" [src]="product.commodity_images[0]">
+                <span>{{product.commodity_name?(product.commodity_name | zMaxLength:9):'未定义商品名称'}}</span>
+                <div>
+                  <span>{{product.min_unit_sell_price?(product.min_unit_sell_price|centPriceChange):'¥0.00'}}</span>
+                  <span>{{product.min_unit_original_price?(product.min_unit_original_price|centPriceChange):'¥0.00'}}</span>
+                </div>
+              </li>
+            </ul>
+            <ul *ngIf="item.template_content.products[0].product_type!=='1'">
+              <li *ngFor="let product of item.template_content.ticketProducts;let k=index">
+                <img *ngIf="!product?.product_id" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                <img *ngIf="product?.product_id" [src]="product.image_urls">
+                <span>{{product?.product_name?(product.product_name | zMaxLength:9):'未定义商品名称'}}</span>
+                <div>
+                  <span>{{product?.third_product?.platform_price?(product.third_product.platform_price|centPriceChange):'¥0.00'}}</span>
+                  <span>{{product?.third_product?.market_price?(product.third_product.market_price|centPriceChange):'¥0.00'}}</span>
+                </div>
               </li>
             </ul>
           </div>
-        </div>
-        <div *ngIf="item.template_type===6" class="template_6" [class.mould-edit-active]="mouldIndex===i"
-          (click)="onMouldEditClick(6, i)" id="template_6_{{i}}">
-          <label>未定义标题</label>
-          <ul>
-            <li *ngFor="let img of item.image;let k=index">
-              <img src="/assets/images/interface-decoration/icon_mould_6_empty.png">
-              <span>未定义商品名称</span>
-              <div>
-                <span>¥0.00</span>
-                <span>¥0.00</span>
-              </div>
-            </li>
-          </ul>
         </div>
       </div>
       <div>
@@ -97,12 +144,15 @@
         <img src="/assets/images/interface-decoration/nav_bottom.png">
       </div>
     </div>
-    <div class="form-space" id="form">
+    <div *ngIf="mouldIndex > -1" class="form-space" id="form">
       <img src="/assets/images/interface-decoration/icon_btn_space.png" style="margin: -1.2px 0 0 -38px">
       <ul class="btn-space">
-        <i></i><i></i><i></i><i></i>
+        <i></i>
+        <i (click)="onUpClick()"></i>
+        <i (click)="onDownClick()"></i>
+        <i (click)="onDeleteTemplateClick()"></i>
       </ul>
-      <form *ngIf="mouldType===1" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="currentTemplate.template_type==1" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
         <div class="form-title">
           <span>ICON魔方</span>
           <div></div>
@@ -113,7 +163,7 @@
             <span>模板单行数量</span>
           </label>
           <div class="control-input">
-            <nz-radio-group [(ngModel)]="count" name="count" (change)="onImgNumChange()">
+            <nz-radio-group [(ngModel)]="currentTemplate.template_content.count" name="count" (ngModelChange)="onImgNumChange(currentTemplate)">
               <label nz-radio [nzValue]=3>单行3个</label>
               <label nz-radio [nzValue]=4>单行4个</label>
               <label nz-radio [nzValue]=5>单行5个</label>
@@ -126,55 +176,61 @@
             <span>ICON内容</span>
           </label>
           <div class="control-input">
-            <div *ngFor="let item of templatesList" style="margin-right: 100px">
-              <app-z-photo-select-upload #{{item.template_id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="45" [imageHeight]="45"
-                [imageUrls]="item.image_url" [imageAddWidth]="45" (selectedImgChange)="onSelectedPicture($event)"
-                (uploadFinish)="onUploadFinish($event)">
-              </app-z-photo-select-upload>
-              <span>未定义</span>
+            <div *ngFor="let item of currentTemplate.template_content.contents;let i=index"
+                 style="margin-right: 23px;text-align: center" (click)="onImgClick(i)">
+              <div style="width:65px">
+                <div [class.temp-edit-active]="contentIndex===i" style="width: 47px;margin-left: 8px">
+                  <app-z-photo-select-upload #{{item.image[0]}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                             [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="45"
+                                             [imageHeight]="45" [imageUrls]="item.image" [imageAddWidth]="45"
+                                             (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
+                  </app-z-photo-select-upload>
+                </div>
+              </div>
+              <span>{{item.title?item.title:'未定义'}}</span>
             </div>
           </div>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row" style="margin-bottom: 0">
+        <div class="err-msg" style="margin: -5px 0 0 13px">
+          <span *ngIf="errMsg">{{errMsg}}</span>
+        </div>
+        <div class="row" style="margin-bottom: 0">
           <label class="control-label">
             <b>*</b>
             <span>选定布局区域，在下方配置标题和跳转链接</span>
           </label>
           <div class="control-input">
             <label class="space-label">标题</label>
-            <input class="form-control" placeholder="请输入1-5字标题" [(ngModel)]="bannerParams.title" name="title"
-              maxlength="5" autocomplete="off" required appIgnoreSpace>
+            <input class="form-control" placeholder="请输入1-5字标题"
+                   [(ngModel)]="currentTemplate.template_content.contents[contentIndex].title" name="title"
+                   maxlength="5" autocomplete="off" required appIgnoreSpace>
           </div>
-        </div> -->
-        <!-- <div class="row">
+        </div>
+        <div class="row">
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-              required>
-              <option [value]=''>请选择</option>
-              <option [value]=1>指定商品</option>
-              <option [value]=2>指定商品类别</option>
-              <option [value]=3>指定票务产品</option>
-              <option [value]=4>指定票务产品标签</option>
-              <option [value]=5>小程序原生页</option>
-              <option [value]=6>H5链接</option>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type" required>
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-              maxlength="100" autocomplete="off" required appIgnoreSpace
-              style="width: 193px;border-left: none!important;">
+            <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
+                   maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
-        </div> -->
+        </div>
         <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBannerForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+          <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+                  [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>
-      <form *ngIf="mouldType===2" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="currentTemplate.template_type==2" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
         <div class="form-title">
           <span>单行轮播广告</span>
           <div></div>
@@ -185,62 +241,69 @@
             <span>广告图片</span>
           </label>
           <div class="control-input" style="display: inline-grid">
-            <div *ngFor="let item of templatesList[0].image" style="margin-bottom: 10px">
-              <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="345" [imageHeight]="90"
-                [imageUrls]="item.image_url" [imageAddWidth]="345" (selectedImgChange)="onSelectedPicture($event)"
-                (uploadFinish)="onUploadFinish($event)">
-              </app-z-photo-select-upload>
+            <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" style="margin-bottom: 10px;width: 410px;">
+              <div [class.temp-edit-active]="contentIndex===i" (click)="onImgClick(i)" style="padding: 0 32px;height: 92px">
+                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="345"
+                                           [imageHeight]="90" [imageUrls]="item.image" [imageAddWidth]="345" [aspectRatio]="3.83/1"
+                                           (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
+                </app-z-photo-select-upload>
+                <img *ngIf="i>0" src="/assets/images/interface-decoration/icon_del.png"
+                     class="del-img" style="margin: -190px 0 0 366px" (click)="onDelContentClick(i)">
+              </div>
             </div>
           </div>
         </div>
+        <div class="err-msg" style="margin: -10px 0 0 13px">
+          <span *ngIf="errMsg">{{errMsg}}</span>
+        </div>
         <div class="row">
           <div class="control-input">
-            <button class="add-btn" type="button" nz-button>
-              <img src="/assets/images/interface-decoration/icon_add_hover.png">
+            <button class="add-btn" type="button" nz-button (click)="onAddAdvertClick()"
+                    [class.disabled-color]="!editBannerForm.form.valid||!CheckSaveTempValid"
+                    [disabled]="!editBannerForm.form.valid||currentTemplate.template_content.contents.length>=3||!CheckSaveTempValid">
+              <img *ngIf="!editBannerForm.form.valid||!CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add.png">
+              <img *ngIf="editBannerForm.form.valid&&CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add_hover.png">
               添加广告图
             </button>
           </div>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row" style="margin-bottom: 0">
+        <div class="row" style="margin-bottom: 0">
           <label class="control-label">
             <b>*</b>
             <span>选定布局区域，在下方配置名称和跳转链接</span>
           </label>
           <div class="control-input">
-            <label class="space-label">标题</label>
-            <input class="form-control" placeholder="请输入1-5字标题" [(ngModel)]="bannerParams.title" name="title"
-              maxlength="5" autocomplete="off" required appIgnoreSpace>
+            <label class="space-label">名称</label>
+            <input class="form-control" placeholder="请输入1-20字名称" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].name" name="name"
+                   maxlength="20" autocomplete="off" required appIgnoreSpace>
           </div>
         </div>
         <div class="row">
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-              required>
-              <option [value]=''>请选择</option>
-              <option [value]=1>指定商品</option>
-              <option [value]=2>指定商品类别</option>
-              <option [value]=3>指定票务产品</option>
-              <option [value]=4>指定票务产品标签</option>
-              <option [value]=5>小程序原生页</option>
-              <option [value]=6>H5链接</option>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type" required>
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-              maxlength="100" autocomplete="off" required appIgnoreSpace
-              style="width: 193px;border-left: none!important;">
+            <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
+                   maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
-        </div> -->
+        </div>
         <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBannerForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+          <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+                  [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>
-      <form *ngIf="mouldType===3" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="currentTemplate.template_type==3" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
         <div class="form-title">
           <span>左右布局图文(1)</span>
           <div></div>
@@ -250,35 +313,40 @@
             <b>*</b>
             <span>图文内容</span>
           </label>
-          <!-- Todo -->
-          <!-- <div class="control-input" style="display: inline-grid">
-            <div *ngFor="let item of templatesList[0].image" style="display: inline-flex;margin-bottom: 10px">
-              <div>
-                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link"
-                  name="jump_link" maxlength="10" autocomplete="off" required appIgnoreSpace
-                  style="width: 190px;margin-right: 20px">
-                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                  [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="152" [imageHeight]="75"
-                  [imageUrls]="item.image_url" [imageAddWidth]="152" (selectedImgChange)="onSelectedPicture($event)"
-                  (uploadFinish)="onUploadFinish($event)">
+          <div class="control-input" style="display: inline-grid">
+            <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" class="image-team">
+              <div [class.temp-edit-active]="contentIndex===i&&imgIndex===1" (click)="onImgClick(i, 1)">
+                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="item.left_title" name="left_title{{i+item.time}}"
+                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
+                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [aspectRatio]="2/1"
+                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="190"
+                                           [imageHeight]="75" [imageUrls]="item.left_image" [imageAddWidth]="190"
+                                           (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event, 1)">
                 </app-z-photo-select-upload>
               </div>
-              <div>
-                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link"
-                  name="jump_link" maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
-                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                  [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="item.id" [imageWidth]="152" [imageHeight]="75"
-                  [imageUrls]="item.image_url" [imageAddWidth]="152" (selectedImgChange)="onSelectedPicture($event)"
-                  (uploadFinish)="onUploadFinish($event)">
+              <div [class.temp-edit-active]="contentIndex===i&&imgIndex===2" (click)="onImgClick(i, 2)">
+                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="item.right_title" name="right_title{{i+item.time}}"
+                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [aspectRatio]="2/1"
+                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="190"
+                                           [imageHeight]="75" [imageUrls]="item.right_image" [imageAddWidth]="190"
+                                           (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event, 2)">
                 </app-z-photo-select-upload>
               </div>
+              <img *ngIf="i>0" src="/assets/images/interface-decoration/icon_del.png" class="del-img" (click)="onDelContentClick(i)">
             </div>
-          </div> -->
+          </div>
+        </div>
+        <div class="err-msg" style="margin: -10px 0 0 13px">
+          <span *ngIf="errMsg">{{errMsg}}</span>
         </div>
         <div class="row">
           <div class="control-input">
-            <button class="add-btn" type="button" nz-button>
-              <img src="/assets/images/interface-decoration/icon_add_hover.png">
+            <button class="add-btn" type="button" nz-button (click)="onAddAdvertClick()"
+                    [class.disabled-color]="!editBannerForm.form.valid||!CheckSaveTempValid"
+                    [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid">
+              <img *ngIf="!editBannerForm.form.valid||!CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add.png">
+              <img *ngIf="editBannerForm.form.valid&&CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add_hover.png">
               添加一行
             </button>
           </div>
@@ -289,34 +357,44 @@
             <span>选定布局区域，在下方配置名称和跳转链接</span>
           </label>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row">
+        <div class="row">
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-              required>
-              <option [value]=''>请选择</option>
-              <option [value]=1>指定商品</option>
-              <option [value]=2>指定商品类别</option>
-              <option [value]=3>指定票务产品</option>
-              <option [value]=4>指定票务产品标签</option>
-              <option [value]=5>小程序原生页</option>
-              <option [value]=6>H5链接</option>
+            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="url_type" required
+                    [(ngModel)]="currentTemplate.template_content.contents[contentIndex].left_url_type" >
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-              maxlength="100" autocomplete="off" required appIgnoreSpace
-              style="width: 193px;border-left: none!important;">
+            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="url_type" required
+                    [(ngModel)]="currentTemplate.template_content.contents[contentIndex].right_url_type" >
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
+            </select>
+            <input *ngIf="imgIndex===1" class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].left_url"
+                   maxlength="100" autocomplete="off" name="url" required appIgnoreSpace style="width: 193px;border-left: none!important;">
+            <input *ngIf="imgIndex===2" class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].right_url"
+                   maxlength="100" autocomplete="off" name="url" required appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
-        </div> -->
+        </div>
         <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBannerForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+          <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+                  [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>
-      <form *ngIf="mouldType===4" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="currentTemplate.template_type==4" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
         <div class="form-title">
           <span>左右布局图文(2)</span>
           <div></div>
@@ -326,34 +404,40 @@
             <b>*</b>
             <span>图文内容</span>
           </label>
-          <!-- Todo -->
-          <!-- <div class="control-input">
-            <div>
-              <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
-              <app-z-photo-select-upload #{{bannerParams.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="bannerParams.id" [imageWidth]="190"
-                [imageHeight]="244" [imageUrls]="bannerParams.image_url" [imageAddWidth]="190"
-                (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
+          <div class="control-input">
+            <div style="margin-right: 25px;width: 192px;" [class.temp-edit-active]="imgIndex===1" (click)="onImgClick(0, 1)">
+              <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.left_title" name="left_title"
+                     maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
+              <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                         [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'1'" [imageWidth]="190"
+                                         [imageHeight]="244" [imageUrls]="currentTemplate.template_content.left_image" [imageAddWidth]="190" [aspectRatio]="0.78/1"
+                                         (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 5)">
               </app-z-photo-select-upload>
             </div>
             <div>
-              <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
-              <app-z-photo-select-upload #{{bannerParams.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="bannerParams.id" [imageWidth]="190"
-                [imageHeight]="100" [imageUrls]="bannerParams.image_url" [imageAddWidth]="190"
-                (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
-              </app-z-photo-select-upload>
-              <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-top: 10px">
-              <app-z-photo-select-upload #{{bannerParams.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="bannerParams.id" [imageWidth]="190"
-                [imageHeight]="100" [imageUrls]="bannerParams.image_url" [imageAddWidth]="190"
-                (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
-              </app-z-photo-select-upload>
+              <div [class.temp-edit-active]="imgIndex===2" (click)="onImgClick(0, 2)">
+                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_top_title" name="right_top_title"
+                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'2'" [imageWidth]="190"
+                                           [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_top_image" [imageAddWidth]="190" [aspectRatio]="2/1"
+                                           (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 3)">
+                </app-z-photo-select-upload>
+              </div>
+              <div [class.temp-edit-active]="imgIndex===3" (click)="onImgClick(0, 3)" style="margin-top: 10px">
+                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_bottom_title" name="right_bottom_title"
+                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'3'" [imageWidth]="190"
+                                           [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_bottom_image" [imageAddWidth]="190" [aspectRatio]="2/1"
+                                           (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 4)">
+                </app-z-photo-select-upload>
+              </div>
             </div>
-          </div> -->
+          </div>
+        </div>
+        <div class="err-msg" style="margin-left:13px">
+          <span *ngIf="errMsg">{{errMsg}}</span>
         </div>
         <div class="row" style="margin-bottom: 0">
           <label class="control-label">
@@ -361,44 +445,72 @@
             <span>选定布局区域，在下方配置名称和跳转链接</span>
           </label>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row">
+        <div class="row">
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-              required>
-              <option [value]=''>请选择</option>
-              <option [value]=1>指定商品</option>
-              <option [value]=2>指定票务产品</option>
+            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="left_url_type" required
+                    [(ngModel)]="currentTemplate.template_content.left_url_type">
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-              maxlength="100" autocomplete="off" required appIgnoreSpace
-              style="width: 193px;border-left: none!important;">
+            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="left_url_type" required
+                    [(ngModel)]="currentTemplate.template_content.right_top_url_type">
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
+            </select>
+            <select *ngIf="imgIndex===3" class="form-control" style="width: 147px" name="left_url_type" required
+                    [(ngModel)]="currentTemplate.template_content.right_bottom_url_type">
+              <option value="">请选择</option>
+              <option value="1">指定商品</option>
+              <option value="2">指定商品类别</option>
+              <option value="3">指定票务产品</option>
+              <option value="4">指定票务产品标签</option>
+              <option value="5">小程序原生页</option>
+              <option value="6">H5链接</option>
+            </select>
+            <input *ngIf="imgIndex===1" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.left_url"
+                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
+            <input *ngIf="imgIndex===2" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.right_top_url"
+                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
+            <input *ngIf="imgIndex===3" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.right_bottom_url"
+                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
-        </div> -->
+        </div>
         <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBannerForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+          <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+                  [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>
-      <form *ngIf="mouldType===5||mouldType===6" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="currentTemplate.template_type==5||currentTemplate.template_type==6" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
         <div class="form-title">
-          <span>{{mouldType===5?'单行左右滑动':'商品推荐'}}</span>
+          <span>{{currentTemplate.template_type==5?'单行左右滑动':'商品推荐'}}</span>
           <div></div>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row">
+        <div class="row">
           <div style="width: 190px;margin: 0 -15px 0 -15px">
             <label class="control-label">
               <b>*</b>
               <span>标题名称</span>
             </label>
             <div class="control-input">
-              <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+              <input class="form-control" placeholder="请输入1-10字标题名称" [(ngModel)]="currentTemplate.template_content.title" name="title"
+                     maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
             </div>
           </div>
           <div style="width: 190px;margin: 0 0 0 30px">
@@ -407,49 +519,101 @@
               <span>跳转类型</span>
             </label>
             <div class="control-input">
-              <select class="form-control" style="width: 190px" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-                required>
-                <option [value]=''>请选择</option>
-                <option [value]=1>指定商品</option>
-                <option [value]=2>指定票务产品</option>
+              <select class="form-control" style="width: 190px" name="product_type" required
+                      [(ngModel)]="currentTemplate.template_content.products[0].product_type" (change)="onProductTypeChange()">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定票务产品</option>
               </select>
             </div>
           </div>
-        </div> -->
+        </div>
         <div class="row" style="margin-bottom: 0">
           <label class="control-label">
             <b>*</b>
             <span>跳转内容</span>
           </label>
         </div>
-        <!-- Todo -->
-        <!-- <div class="row">
-                    <label class="control-label"></label>
-                    <div class="control-input">
-                        <label class="space-label">1</label>
-                        <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                               maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 325px">
-                    </div>
-                </div> -->
+        <div class="row">
+          <label class="control-label"></label>
+          <div class="control-input" *ngFor="let item of currentTemplate.template_content.products;let i=index" style="display: unset">
+            <div style="display: inline-flex">
+              <label class="space-label">{{i+1}}</label>
+              <input class="form-control" placeholder="请输入ID" [(ngModel)]="item.product_id"
+                     name="product_id{{i+item.time}}" maxlength="100" (change)="onProductChange(item.product_id, i)"
+                     oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                     autocomplete="off" required appIgnoreSpace style="width: 325px"
+                     [disabled]="!currentTemplate.template_content.products[0].product_type">
+              <img *ngIf="(i>0&&currentTemplate.template_type==6)||(currentTemplate.template_type==5&&i>2)"
+                   src="/assets/images/interface-decoration/icon_del.png" class="del-img" style="margin-left: -12px"
+                   (click)="onDelContentClick(i)">
+            </div>
+            <div class="err-msg">
+              <span *ngIf="item.errMsg">{{item.errMsg}}</span>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="control-input">
-            <button class="add-btn" type="button" nz-button style="width: 395px">
-              <img src="/assets/images/interface-decoration/icon_add_hover.png">
+            <button class="add-btn" type="button" nz-button style="width: 395px"
+                    [class.disabled-color]="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)"
+                    (click)="onAddProductClick()" [disabled]="!editBannerForm.form.valid||currentTemplate.template_content.products.length>4">
+              <img *ngIf="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)"
+                   src="/assets/images/interface-decoration/icon_add.png">
+              <img *ngIf="editBannerForm.form.valid&&((currentTemplate.template_content.products.length<5&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length<20&&currentTemplate.template_type==6))"
+                   src="/assets/images/interface-decoration/icon_add_hover.png">
               添加商品
             </button>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBannerForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+          <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+                  [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>
     </div>
   </div>
   <div class="content-bottom">
-    <button type="button" nz-button (click)="onSaveDraftClick()">保存草稿</button>
-    <button type="button" nz-button (click)="onReleaseClick()">保存并发布</button>
+    <button type="button" nz-button (appZDebounceClick)="onSaveDraftClick()" [disabled]="!CheckSaveDraftValid">保存草稿</button>
+    <button type="button" nz-button (appZDebounceClick)="onReleaseClick()" [disabled]="!CheckSaveDraftValid">保存并发布</button>
+  </div>
+</div>
+
+<!-- 保存名称 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">{{modal_type===1?'保存草稿':'保存并发布'}}</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="onCloseModal()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #noticeForm="ngForm">
+        <div class="row" style="margin-top: 15px">
+          <label class="control-label" style="width: 100px;text-align: center;line-height: 34px">
+            <b>*</b>
+            <span>名称</span>
+          </label>
+          <div class="control-input" style="width: 340px">
+            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="previewData.page_name" name="page_name"
+                   maxlength="10" autocomplete="off" required appIgnoreSpace>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-close-btn" nz-button (click)="onCloseModal()">取消</button>
+          <button class="modal-sure-btn" nz-button nzType="primary" [disabled]="!noticeForm.valid"
+                  (appZDebounceClick)='onSaveTitle()'>
+            保存
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

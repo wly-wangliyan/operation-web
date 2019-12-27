@@ -11,7 +11,6 @@
 }
 
 .content-space {
-    display: inline-flex;
     height: calc(100% - 120px);
     width: 100%;
     overflow-y: auto;
@@ -22,6 +21,7 @@
     height: 383px;
     background: #fff;
     text-align: center;
+    float: left;
 }
 
 .mould-space label {
@@ -126,7 +126,8 @@
 .preview-space {
     background: #fff;
     width: 375px;
-    margin: 20px 0 0 20px;
+    margin: 20px 0 20px 20px;
+    float: left;
 }
 
 .content-bottom {
@@ -170,14 +171,26 @@
     display: inline-grid;
     vertical-align: middle;
     line-height: 35px;
+    width: 65px;
+    text-align: center;
+    margin: 0 20px 0 35px;
 }
 
 .template-1 img {
-    margin: 0 30px 0 45px;
+    width: 45px;
+    height: 45px;
+    margin-left: 10px;
+}
+
+.active-count-4 li {
+    margin: 0 10px 0 16px;
+}
+
+.active-count-5 li {
+    margin: 0 4px 0 5px;
 }
 
 .template-1 span {
-    margin: 0px 27px 0 48px;
     font-size: 11px;
     color: #333333;
     height: 11px;
@@ -189,7 +202,10 @@
 }
 
 .template_2 img {
-    padding: 3px 13px;
+    width: 370px;
+    height: 90px;
+    padding: 0px 13px;
+    margin-top: 3px;
 }
 
 .template_3 {
@@ -202,7 +218,12 @@
     height: 135px;
     list-style: none;
     display: inline-flex;
-    padding: 0 13px;
+    padding: 7px 13px;
+}
+
+.template_3 img, .template_4 img {
+    width: 152px;
+    height: 75px;
 }
 
 .template_3 li > div {
@@ -229,8 +250,8 @@
 
 .template_4 {
     padding: 8px 13px;
-    display: inline-flex;
     border: 2px solid #fff;
+    display: inline-flex;
 }
 
 .template_4 div {
@@ -246,10 +267,13 @@
 
 .template_5 {
     padding: 0px 13px;
-    height: 230px;
     font-size: 13px;
     overflow: hidden;
     border: 2px solid #fff;
+}
+
+.active_height {
+    height: 173px;
 }
 
 .template_5 label, .template_6 label {
@@ -268,19 +292,17 @@
     display: inline-grid;
     margin-right: 10px;
     width: 130px;
-    height: 180px;
+    height: 123px;
 }
 
 .template_5 ul > li > img, .template_6 ul > li > img {
     margin-bottom: 10px;
-}
-
-.template_5 ul > li > span:last-child {
-    color: #FE894F;
-    font-size: 14px;
+    width: 130px;
+    /*height: 73px;*/
 }
 
 .template_6 {
+    height: 304px;
     padding: 0px 13px;
     font-size: 13px;
     border: 2px solid #fff;
@@ -296,13 +318,18 @@
     height: 250px;
 }
 
-.template_6 ul > li > div > span:first-child {
+.template_6 ul > li > img {
+    width: 345px;
+    height: 194px;
+}
+
+.template_6 ul > li > div > span:first-child, .template_5 ul > li > div > span:first-child {
     color: #FE894F;
     font-size: 14px;
     margin-right: 5px;
 }
 
-.template_6 ul > li > div > span:last-child {
+.template_6 ul > li > div > span:last-child, .template_5 ul > li > div > span:last-child {
     font-size:10px;
     font-family:PingFangSC-Medium,PingFang SC;
     color:rgba(153,153,153,1);
@@ -313,12 +340,17 @@
     border: 2px solid #3E71F7;
 }
 
+.temp-edit-active {
+    border: 1px solid #3E71F7;
+}
+
 .form-space {
     background: #fff;
     width: 445px;
-    margin: 85px 0 0 55px;
+    margin: 85px 0 20px 55px;
     border: 1px solid rgba(136,136,136,.5);
     position: relative;
+    float: left;
 }
 
 .close-btn, .sure-btn {
@@ -434,14 +466,14 @@ nz-radio-group label {
     margin-right: 50px;
 }
 
-#father {
+.father {
     width: 1050px;
     height: 180px;
     position: relative;
     left: -350px;
 }
 
-#box {
+.box {
     left: 350px;
     position: absolute;
 }
@@ -461,4 +493,36 @@ nz-radio-group label {
     text-align: center;
     font-size: 12px;
     line-height: 30px;
+}
+
+.image-team {
+    display: inline-flex;
+    margin-bottom: 10px;
+    width: 402px;
+}
+
+.image-team div {
+    width: 192px;
+    margin-right: 28px;
+}
+
+.disabled-color {
+    color: #888888;
+}
+
+.modal-close-btn, .modal-sure-btn {
+    height: 50px;
+    width: 179px;
+}
+
+.del-img {
+    height: 22px;
+    margin: -5px 0 0 -40px;
+}
+
+.err-msg {
+    height: 15px;
+    line-height: 3px;
+    margin-left: 70px;
+    color: rgba(232,32,56,1);
 }

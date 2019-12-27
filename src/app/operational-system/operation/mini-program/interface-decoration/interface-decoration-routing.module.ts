@@ -10,10 +10,11 @@ const routes: Routes = [{
   path: '', component: InterfaceDecorationComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
-    { path: '', redirectTo: 'edit', pathMatch: 'full' },
+    { path: '', redirectTo: 'record-list', pathMatch: 'full' },
     { path: 'record-list', component: RecordListComponent },
     { path: 'edit', component: InterfaceDecorationEditComponent },
-    { path: '**', redirectTo: 'edit', pathMatch: 'full' }
+    { path: 'edit/:page_id', component: InterfaceDecorationEditComponent },
+    { path: '**', redirectTo: 'record-list', pathMatch: 'full' }
   ]
 }];
 

@@ -59,10 +59,10 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu2);
     const subFinanceMenu3 = new SideMenuItem('推送', '/main/operation/mini-program/push-management', systemMenu);
     systemMenu.children.push(subFinanceMenu3);
-   /* const subFinanceMenu4 = new SideMenuItem('界面装修', '/main/operation/mini-program/interface-decoration/edit', systemMenu);
+    const subFinanceMenu4 = new SideMenuItem('界面装修', '/main/operation/mini-program/interface-decoration/edit', systemMenu);
     systemMenu.children.push(subFinanceMenu4);
     const subFinanceMenu5 = new SideMenuItem('草稿/发布记录', '/main/operation/mini-program/interface-decoration/record-list', systemMenu);
-    systemMenu.children.push(subFinanceMenu5);*/
+    systemMenu.children.push(subFinanceMenu5);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

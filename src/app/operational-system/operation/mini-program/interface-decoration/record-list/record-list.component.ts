@@ -4,6 +4,7 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { InterfaceDecorationService, PageEntity, SearchParams } from '../interface-decoration.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-record-list',
@@ -28,14 +29,14 @@ export class RecordListComponent implements OnInit {
 
   constructor(
       private globalService: GlobalService,
+      private route: ActivatedRoute,
       private interfaceDecorationService: InterfaceDecorationService) {
-      this.searchParams.page_type = 1;
+      route.queryParams.subscribe(queryParams => {
+        this.searchParams.page_type = queryParams.page_type ? Number(queryParams.page_type) : 1;
+      });
   }
 
   public ngOnInit() {
-    const arr = [1, 2, 3, 4, 5];
-    const index = 1;
-    arr[index] = arr.splice(index - 1, 1, arr[index])[0];
     this.generatePageList();
   }
 
@@ -64,7 +65,7 @@ export class RecordListComponent implements OnInit {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
       this.interfaceDecorationService.requestDeletePageData(page_id).subscribe(() => {
-        this.globalService.promptBox.open('删除成功');
+        this.globalService.promptBox.open('删除成功！');
         this.searchText$.next();
       }, err => {
         if (!this.globalService.httpErrorProcess(err)) {
@@ -86,6 +87,17 @@ export class RecordListComponent implements OnInit {
 
   // 重新发布
   public onReleaseClick(page_id: string) {
-
+    this.globalService.confirmationBox.open('提示', '重新发布将替换当前，生效的装修效果，确定要发布吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.interfaceDecorationService.requestPageReleaseData(page_id).subscribe(res => {
+        this.globalService.promptBox.open('重新发布成功！');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('重新发布失败，请重试！', null, 2000, null, false);
+          this.searchText$.next();
+        }
+      });
+    });
   }
 }
