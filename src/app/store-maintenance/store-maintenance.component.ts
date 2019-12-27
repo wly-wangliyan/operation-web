@@ -15,7 +15,7 @@ import { IntervalService } from '../operational-system/notice-center/interval.se
 @Component({
     selector: 'app-store-maintenance',
     templateUrl: './store-maintenance.component.html',
-    styleUrls: ['./store-maintenance.component.css']
+    styleUrls: ['./store-maintenance.component.css', '../../assets/less/main-layout.less']
 })
 export class StoreMaintenanceComponent implements AfterViewInit, OnDestroy {
 

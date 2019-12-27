@@ -3,7 +3,7 @@
     <div class="logo">
       <div [routerLink]="'/main'"></div>
     </div>
-    <ul class="main-herder-title">
+    <ul class="main-herder-title not-cursor-title">
       <li [class.header-exemption-active]="menuActive('/exemption', 'exemption')"
         [class.noPermissions]="!authService.checkPermissions(['exemption'])">
       </li>

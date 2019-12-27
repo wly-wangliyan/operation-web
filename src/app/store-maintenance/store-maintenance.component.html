@@ -3,8 +3,8 @@
         <div class="logo">
             <div [routerLink]="'/main'"></div>
         </div>
-        <ul class="main-herder-title">
-            <li [class.herder-active]="menuActive('/store-maintenance', 'store')"
+        <ul class="main-herder-title not-cursor-title">
+            <li [class.herder-store-active]="menuActive('/store-maintenance', 'store')"
                 [class.noPermissions]="!authService.checkPermissions(['store'])">
             </li>
         </ul>
