@@ -41,7 +41,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public errMsg: string;
   public imgReg = /(jpg|jpeg|png|gif)$/;
   public height = 133;
-  public canSave = false;
+  public canSave = true;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;

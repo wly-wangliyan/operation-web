@@ -546,7 +546,7 @@
               <label class="space-label">{{i+1}}</label>
               <input class="form-control" placeholder="请输入ID" [(ngModel)]="item.product_id"
                      name="product_id{{i+item.time}}" maxlength="100" (change)="onProductChange(item.product_id, i)"
-                     oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                     oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')" (input)="canSave=false"
                      autocomplete="off" required appIgnoreSpace style="width: 325px"
                      [disabled]="!currentTemplate.template_content.products[0].product_type">
               <img *ngIf="(i>0&&currentTemplate.template_type==6)||(currentTemplate.template_type==5&&i>2)"
