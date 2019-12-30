@@ -71,7 +71,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   }
 
   public canDeactivate(): boolean {
-    return (this.templatesList.length === 0 || this.template_ids.length === 0);
+    return true;
   }
 
   // 获取详情
@@ -332,23 +332,23 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public onUploadFinish(event: any, type?: number): void {
     if (event) {
       if (this.currentTemplate.template_type < 3) {
-        this.currentTemplate.template_content.contents[event.file_id].image = event.imageList.split(',');
+        this.currentTemplate.template_content.contents[event.file_id].image = event.imageList ? event.imageList.split(',') : [];
       } else {
         switch (type) {
           case 1:
-            this.currentTemplate.template_content.contents[event.file_id].left_image = event.imageList.split(',');
+            this.currentTemplate.template_content.contents[event.file_id].left_image = event.imageList ? event.imageList.split(',') : [];
             break;
           case 2:
-            this.currentTemplate.template_content.contents[event.file_id].right_image = event.imageList.split(',');
+            this.currentTemplate.template_content.contents[event.file_id].right_image = event.imageList ? event.imageList.split(',') : [];
             break;
           case 3:
-            this.currentTemplate.template_content.right_top_image = event.imageList.split(',');
+            this.currentTemplate.template_content.right_top_image = event.imageList ? event.imageList.split(',') : [];
             break;
           case 4:
-            this.currentTemplate.template_content.right_bottom_image = event.imageList.split(',');
+            this.currentTemplate.template_content.right_bottom_image = event.imageList ? event.imageList.split(',') : [];
             break;
           case 5:
-            this.currentTemplate.template_content.left_image = event.imageList.split(',');
+            this.currentTemplate.template_content.left_image = event.imageList ? event.imageList.split(',') : [];
             break;
         }
       }
@@ -572,30 +572,34 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       if (!this.currentTemplate.template_content.left_image || !this.currentTemplate.template_content.right_top_image
        || !this.currentTemplate.template_content.right_bottom_image || this.currentTemplate.template_content.right_bottom_image.length === 0
        || this.currentTemplate.template_content.left_image.length === 0 || this.currentTemplate.template_content.right_top_image.length === 0
-       || !this.currentTemplate.template_content.left_url_type || !this.currentTemplate.template_content.left_url
-          || !this.currentTemplate.template_content.right_top_url_type || !this.currentTemplate.template_content.right_top_url
-          || !this.currentTemplate.template_content.right_bottom_url_type || !this.currentTemplate.template_content.right_bottom_url) {
+          || (!this.currentTemplate.template_content.left_url_type && this.currentTemplate.template_content.left_url)
+          || (this.currentTemplate.template_content.left_url_type && !this.currentTemplate.template_content.left_url)
+          || (!this.currentTemplate.template_content.right_top_url_type && this.currentTemplate.template_content.right_top_url)
+          || (this.currentTemplate.template_content.right_top_url_type && !this.currentTemplate.template_content.right_top_url)
+          || (this.currentTemplate.template_content.right_bottom_url_type && !this.currentTemplate.template_content.right_bottom_url)
+          || (!this.currentTemplate.template_content.right_bottom_url_type && this.currentTemplate.template_content.right_bottom_url)) {
         checkValid = false;
       }
     }
     if (Number(this.currentTemplate.template_type) === 3) {
       this.currentTemplate.template_content.contents.forEach(value => {
         if (!value.left_image || !value.right_image || value.left_image.length === 0 || value.right_image.length === 0
-        || !value.left_url_type || !value.right_url_type || !value.left_url || !value.right_url) {
+        || (!value.left_url_type && value.left_url) || (value.left_url_type && !value.left_url)
+            || (value.right_url_type && !value.right_url) || (!value.right_url_type && value.right_url)) {
           checkValid = false;
         }
       });
     }
     if (Number(this.currentTemplate.template_type) === 2) {
       this.currentTemplate.template_content.contents.forEach(value => {
-        if (!value.image || value.image.length === 0 || !value.name || !value.url_type || !value.url) {
+        if (!value.image || value.image.length === 0 || !value.name || (value.url_type && !value.url) || (!value.url_type && value.url)) {
           checkValid = false;
         }
       });
     }
     if (Number(this.currentTemplate.template_type) === 1) {
       this.currentTemplate.template_content.contents.forEach(value => {
-        if (!value.image || value.image.length === 0 || !value.title || !value.url_type || !value.url) {
+        if (!value.image || value.image.length === 0 || !value.title || (value.url_type && !value.url) || (!value.url_type && value.url)) {
           checkValid = false;
         }
       });
@@ -647,20 +651,27 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private requestCopyPage() {
     const templateList = this.templatesList.map(v => v.template_id);
     const template_id = templateList.filter(key => !this.template_ids.includes(key));
-    const params = {template_ids: template_id.join(',')};
-    this.interfaceService.requestCopyPageData(params).subscribe(res => {
-      const save_template_ids = res.body.new_template_ids.split(',');
-      this.template_ids.forEach(value => {
-        const index = templateList.findIndex(v => v === value);
-        save_template_ids.splice(index, 0, value);
+    if (template_id.length > 0) {
+      const params = {template_ids: template_id.join(',')};
+      this.interfaceService.requestCopyPageData(params).subscribe(res => {
+        const save_template_ids = res.body.new_template_ids.split(',');
+        this.template_ids.forEach(value => {
+          const index = templateList.findIndex(v => v === value);
+          save_template_ids.splice(index, 0, value);
+        });
+        const copyParams = {category: 1,
+          page_name: this.previewData.page_name,
+          page_content: save_template_ids.join(',')};
+        this.requestCreatePage(copyParams);
+      }, error => {
+        this.globalService.httpErrorProcess(error);
       });
+    } else {
       const copyParams = {category: 1,
         page_name: this.previewData.page_name,
-        page_content: save_template_ids.join(',')};
+        page_content: templateList.join(',')};
       this.requestCreatePage(copyParams);
-    }, error => {
-      this.globalService.httpErrorProcess(error);
-    });
+    }
   }
 
   // 创建草稿

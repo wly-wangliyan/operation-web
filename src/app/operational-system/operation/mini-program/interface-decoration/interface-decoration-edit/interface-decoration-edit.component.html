@@ -215,7 +215,7 @@
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type" required>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type">
               <option value="">请选择</option>
               <option value="1">指定商品</option>
               <option value="2">指定商品类别</option>
@@ -225,7 +225,7 @@
               <option value="6">H5链接</option>
             </select>
             <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
-                   maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   maxlength="100" autocomplete="off" appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
         </div>
         <div class="modal-footer">
@@ -288,7 +288,7 @@
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type" required>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type">
               <option value="">请选择</option>
               <option value="1">指定商品</option>
               <option value="2">指定商品类别</option>
@@ -298,7 +298,7 @@
               <option value="6">H5链接</option>
             </select>
             <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
-                   maxlength="100" autocomplete="off" required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   maxlength="100" autocomplete="off" appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
         </div>
         <div class="modal-footer">
@@ -366,7 +366,7 @@
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="url_type" required
+            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="url_type"
                     [(ngModel)]="currentTemplate.template_content.contents[contentIndex].left_url_type" >
               <option value="">请选择</option>
               <option value="1">指定商品</option>
@@ -376,7 +376,7 @@
               <option value="5">小程序原生页</option>
               <option value="6">H5链接</option>
             </select>
-            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="url_type" required
+            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="url_type"
                     [(ngModel)]="currentTemplate.template_content.contents[contentIndex].right_url_type" >
               <option value="">请选择</option>
               <option value="1">指定商品</option>
@@ -387,9 +387,9 @@
               <option value="6">H5链接</option>
             </select>
             <input *ngIf="imgIndex===1" class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].left_url"
-                   maxlength="100" autocomplete="off" name="url" required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   maxlength="100" autocomplete="off" name="url" appIgnoreSpace style="width: 193px;border-left: none!important;">
             <input *ngIf="imgIndex===2" class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].right_url"
-                   maxlength="100" autocomplete="off" name="url" required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   maxlength="100" autocomplete="off" name="url" appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
         </div>
         <div class="modal-footer">
@@ -454,7 +454,7 @@
           <label class="control-label"></label>
           <div class="control-input">
             <label class="space-label">跳转</label>
-            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="left_url_type" required
+            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="left_url_type"
                     [(ngModel)]="currentTemplate.template_content.left_url_type">
               <option value="">请选择</option>
               <option value="1">指定商品</option>
@@ -464,7 +464,7 @@
               <option value="5">小程序原生页</option>
               <option value="6">H5链接</option>
             </select>
-            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="left_url_type" required
+            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="left_url_type"
                     [(ngModel)]="currentTemplate.template_content.right_top_url_type">
               <option value="">请选择</option>
               <option value="1">指定商品</option>
@@ -474,7 +474,7 @@
               <option value="5">小程序原生页</option>
               <option value="6">H5链接</option>
             </select>
-            <select *ngIf="imgIndex===3" class="form-control" style="width: 147px" name="left_url_type" required
+            <select *ngIf="imgIndex===3" class="form-control" style="width: 147px" name="left_url_type"
                     [(ngModel)]="currentTemplate.template_content.right_bottom_url_type">
               <option value="">请选择</option>
               <option value="1">指定商品</option>
@@ -486,13 +486,13 @@
             </select>
             <input *ngIf="imgIndex===1" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
                    [(ngModel)]="currentTemplate.template_content.left_url"
-                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
             <input *ngIf="imgIndex===2" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
                    [(ngModel)]="currentTemplate.template_content.right_top_url"
-                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
             <input *ngIf="imgIndex===3" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
                    [(ngModel)]="currentTemplate.template_content.right_bottom_url"
-                   required appIgnoreSpace style="width: 193px;border-left: none!important;">
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
           </div>
         </div>
         <div class="modal-footer">
