@@ -41,6 +41,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public errMsg: string;
   public imgReg = /(jpg|jpeg|png|gif)$/;
   public height = 133;
+  public canSave = false;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;
@@ -375,14 +376,14 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       this.interfaceService.requestCreateTemplateData(saveData).subscribe(res => {
         this.currentTemplate.template_id = res.body.template_id;
         this.template_ids.push(res.body.template_id);
-        this.onCloseModal();
+        this.onCancelClick();
         this.globalService.promptBox.open('保存成功！');
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
     } else {
       this.interfaceService.requestUpdateTemplateData(saveData, this.currentTemplate.template_id).subscribe(res => {
-        this.onCloseModal();
+        this.onCancelClick();
         this.globalService.promptBox.open('保存成功！');
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -467,6 +468,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       if (res.length === 0) {
         this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id无效！';
       } else {
+        this.canSave = true;
         this.currentTemplate.template_content.mallProducts[index] = res[0];
       }
     }, error => {
@@ -480,6 +482,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       if (!res.product_id) {
         this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id无效！';
       } else {
+        this.canSave = true;
         this.currentTemplate.template_content.ticketProducts[index] = res;
       }
     }, error => {
@@ -552,9 +555,12 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 校验保存按钮
   public get CheckSaveTempValid(): boolean {
     let checkValid = true;
-    if (Number(this.currentTemplate.template_type) > 4 &&
-        this.currentTemplate.template_content.products.findIndex(value => value.errMsg !== '') > -1) {
-      checkValid = false;
+    if (Number(this.currentTemplate.template_type) > 4) {
+      if (!this.canSave) {
+        checkValid = false;
+      } else if (this.currentTemplate.template_content.products.findIndex(value => value.errMsg !== '') > -1) {
+        checkValid = false;
+      }
     }
     if (Number(this.currentTemplate.template_type) === 4) {
       if (!this.currentTemplate.template_content.left_image || !this.currentTemplate.template_content.right_top_image
