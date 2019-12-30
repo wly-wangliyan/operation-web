@@ -234,6 +234,7 @@
     border-radius:5px 0px 0px 5px;
     margin: 1px;
     padding: 0 10px;
+    display: inline-grid;
 }
 
 .template_3 li > div:nth-child(2n), .template_4 div:nth-child(2n) {
