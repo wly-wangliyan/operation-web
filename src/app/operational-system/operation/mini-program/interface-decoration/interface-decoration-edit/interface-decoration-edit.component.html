@@ -66,7 +66,7 @@
               <img *ngIf="!item.template_content.left_image||item.template_content.left_image.length===0"
                    style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
               <img *ngIf="item.template_content.left_image&&item.template_content.left_image.length>0"
-                   [src]="item.template_content.left_image[0]">
+                   style="height: 195px;" [src]="item.template_content.left_image[0]">
             </div>
             <div>
               <span *ngIf="item.template_content.right_top_title">{{item.template_content.right_top_title?item.template_content.right_top_title:'未定义标题'}}</span>
@@ -178,7 +178,7 @@
         <div class="row">
           <label class=" control-label">
             <b>*</b>
-            <span>ICON内容</span>
+            <span>ICON内容 (图片尺寸90*90px，大小2M以内)</span>
           </label>
           <div class="control-input">
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index"
@@ -243,7 +243,7 @@
         <div class="row">
           <label class="control-label">
             <b>*</b>
-            <span>广告图片</span>
+            <span>广告图片 (图片尺寸1439*376px，大小2M以内)</span>
           </label>
           <div class="control-input" style="display: inline-grid">
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" style="margin-bottom: 10px;width: 410px;">
@@ -316,7 +316,7 @@
         <div class="row">
           <label class="control-label">
             <b>*</b>
-            <span>图文内容</span>
+            <span>图文内容 (图片尺寸458*225px，大小2M以内)</span>
           </label>
           <div class="control-input" style="display: inline-grid">
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" class="image-team">
@@ -407,7 +407,7 @@
         <div class="row">
           <label class="control-label">
             <b>*</b>
-            <span>图文内容</span>
+            <span>图文内容 (图片尺寸左:458*585px，右:458*225px，大小2M以内)</span>
           </label>
           <div class="control-input">
             <div style="margin-right: 25px;width: 192px;" [class.temp-edit-active]="imgIndex===1" (click)="onImgClick(0, 1)">

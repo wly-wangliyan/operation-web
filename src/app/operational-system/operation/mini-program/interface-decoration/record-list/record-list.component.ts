@@ -32,7 +32,7 @@ export class RecordListComponent implements OnInit {
       private route: ActivatedRoute,
       private interfaceDecorationService: InterfaceDecorationService) {
       route.queryParams.subscribe(queryParams => {
-        this.searchParams.page_type = queryParams.page_type ? Number(queryParams.page_type) : 1;
+        this.searchParams.page_type = queryParams.page_type ? Number(queryParams.page_type) : 2;
       });
   }
 

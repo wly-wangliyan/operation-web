@@ -18,16 +18,15 @@ export class MenuOperationService {
     this.routeLinkList = [];
     const menusItem: Array<SideMenuItem> = [];
     menusItem.push(this.generateParkingMenu());
-    menusItem.push(this.generateCommentMenu());
     menusItem.push(this.generateMiniProgramMenu());
-    menusItem.push(this.generateOtherOperationConfigMenu());
     menusItem.push(this.generateOperationConfigMenu());
+    menusItem.push(this.generateCommentMenu());
     return menusItem;
   }
 
   // 运营 》美行停车
   private generateParkingMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('美行停车', null);
+    const systemMenu = new SideMenuItem('美行停车App', null);
     systemMenu.icon = '/assets/images/icon_menu_parking.png';
     const subFinanceMenu1 = new SideMenuItem('首页图标', '/main/operation/parking/first-page-icon', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('版本管理', '/main/operation/parking/version-management', systemMenu);
@@ -67,24 +66,16 @@ export class MenuOperationService {
     return systemMenu;
   }
 
-  // 运营 》其他运营配置
-  private generateOtherOperationConfigMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('其他运营配置', null);
-    systemMenu.icon = '/assets/images/menu_other_config.png';
-    const subFinanceMenu1 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
-    systemMenu.children.push(subFinanceMenu1);
-    this.routeLinkList.push(systemMenu);
-    return systemMenu;
-  }
-
   // 运营 》运营配置
   private generateOperationConfigMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('运营配置', null);
     systemMenu.icon = '/assets/images/menu_config.png';
-    const subFinanceMenu1 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('专题活动', '/main/operation/operation-config/thematic-activity', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    const subFinanceMenu2 = new SideMenuItem('专题活动', '/main/operation/operation-config/thematic-activity', systemMenu);
+    const subFinanceMenu2 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
+    const subFinanceMenu3 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
