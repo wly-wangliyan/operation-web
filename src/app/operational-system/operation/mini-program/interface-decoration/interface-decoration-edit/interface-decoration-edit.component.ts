@@ -523,7 +523,6 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 删除模板
   public onDeleteTemplateClick() {
-    debugger;
     this.errMsg = '';
     this.templatesList.splice(this.mouldIndex, 1);
     this.onCancelClick();
