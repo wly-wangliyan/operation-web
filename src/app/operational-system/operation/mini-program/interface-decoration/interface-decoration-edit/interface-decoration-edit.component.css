@@ -270,11 +270,11 @@
     font-size: 13px;
     overflow: hidden;
     border: 2px solid #fff;
-    min-height: 140px;
+    padding: 5px;
 }
 
 .active_height {
-    height: 173px;
+    height: 233px;
 }
 
 .template_5 label, .template_6 label {
@@ -468,7 +468,6 @@ nz-radio-group label {
 
 .father {
     width: 1050px;
-    height: 180px;
     position: relative;
     left: -350px;
 }

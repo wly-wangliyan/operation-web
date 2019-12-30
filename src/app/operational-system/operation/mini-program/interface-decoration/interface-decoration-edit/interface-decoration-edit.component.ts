@@ -19,13 +19,14 @@ import { GlobalService } from '../../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommodityEntity } from '../../../../mall/goods-management/goods-management-http.service';
 import { ProductService, TicketProductEntity } from '../../../../ticket/product-management/product.service';
+import { CanDeactivateComponent } from '../../../../../share/interfaces/can-deactivate-component';
 
 @Component({
   selector: 'app-interface-decoration-edit',
   templateUrl: './interface-decoration-edit.component.html',
   styleUrls: ['./interface-decoration-edit.component.css']
 })
-export class InterfaceDecorationEditComponent implements OnInit {
+export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateComponent {
 
   public mouldList = ['ICON魔方', '单行轮播广告', '左右布局(1)', '左右布局(2)', '单行左右滑动', '商品推荐'];
   public mouldIndex = -1; // 当前选中的模板index
@@ -39,6 +40,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
   public page_id: string;
   public errMsg: string;
   public imgReg = /(jpg|jpeg|png|gif)$/;
+  public height = 133;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;
@@ -66,6 +68,10 @@ export class InterfaceDecorationEditComponent implements OnInit {
     if (this.page_id) {
       this.requestPageDetail();
     }
+  }
+
+  public canDeactivate(): boolean {
+    return (this.templatesList.length === 0);
   }
 
   // 获取详情
@@ -523,9 +529,12 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 删除模板
   public onDeleteTemplateClick() {
-    this.errMsg = '';
-    this.templatesList.splice(this.mouldIndex, 1);
-    this.onCancelClick();
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+      this.globalService.confirmationBox.close();
+      this.errMsg = '';
+      this.templatesList.splice(this.mouldIndex, 1);
+      this.onCancelClick();
+    });
   }
 
   /**
@@ -590,8 +599,11 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 保存并发布
   public onReleaseClick() {
-    this.modal_type = 2;
-    $(this.promptDiv.nativeElement).modal('show');
+    this.globalService.confirmationBox.open('提示', '确认要发布吗？发布后可在发布记录中查看此记录!', () => {
+      this.globalService.confirmationBox.close();
+      this.modal_type = 2;
+      $(this.promptDiv.nativeElement).modal('show');
+    });
   }
 
   // 保存草稿/发布
@@ -669,6 +681,23 @@ export class InterfaceDecorationEditComponent implements OnInit {
     this.router.navigate(['/main/operation/mini-program/interface-decoration/record-list'], {queryParams: {page_type: this.modal_type}});
   }
 
+  // 产品名称改变，高度变化
+  public onProductTitleChange() {
+    if (this.product_type === '1') {
+      if (this.currentTemplate.template_content.title) {
+        this.height = 233;
+      } else {
+        this.height = 193;
+      }
+    } else {
+      if (this.currentTemplate.template_content.title) {
+        this.height = 173;
+      } else {
+        this.height = 133;
+      }
+    }
+  }
+
   // 跳转类型改变
   public onProductTypeChange() {
     this.currentTemplate.template_content.products.forEach(value => {
@@ -677,6 +706,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
       value.product_type = this.currentTemplate.template_content.products[0].product_type;
     });
     this.product_type = this.currentTemplate.template_content.products[0].product_type;
+    this.onProductTitleChange();
     const ticketProducts = [];
     const mallProducts = [];
     this.currentTemplate.template_content.ticketProducts.forEach(value => {

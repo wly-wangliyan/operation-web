@@ -84,10 +84,9 @@
             </div>
           </div>
           <div *ngIf="item.template_type==5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [class.active_height]="item.template_content.products[0].product_type!=1">
+               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [ngStyle]="{height: height + 'px'}">
             <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
-            <label *ngIf="!item.template_content.title">&nbsp;</label>
-            <div id="father{{i}}"  class="father">
+            <div id="father{{i}}" class="father">
               <ul id="box{{i}}" class="box">
                 <ng-container *ngIf="item.template_content.products[0].product_type==='1'">
                   <li *ngFor="let product of item.template_content.mallProducts;let k=index">
@@ -516,7 +515,7 @@
             </label>
             <div class="control-input">
               <input class="form-control" placeholder="请输入1-10字标题名称" [(ngModel)]="currentTemplate.template_content.title" name="title"
-                     maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
+                     maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px" (input)="onProductTitleChange()">
             </div>
           </div>
           <div style="width: 190px;margin: 0 0 0 30px">

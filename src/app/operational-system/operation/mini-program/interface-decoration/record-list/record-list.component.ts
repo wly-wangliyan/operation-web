@@ -78,6 +78,8 @@ export class RecordListComponent implements OnInit {
 
   // tab页切换
   public onTabChange(page_type: number) {
+    this.recordList = [];
+    this.noResultText = '数据加载中...';
     this.searchParams = new SearchParams();
     this.start_time = null;
     this.end_time = null;
