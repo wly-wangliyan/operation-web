@@ -5,8 +5,8 @@
 <div class="content-flow">
     <div class="tab-bar-list">
         <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.page_type">
-            <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">草稿</label>
             <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">发布记录</label>
+            <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">草稿</label>
         </nz-radio-group>
     </div>
     <div class="table-container">

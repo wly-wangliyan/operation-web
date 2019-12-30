@@ -410,7 +410,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 取消编辑模板
   public onCancelClick() {
     this.currentTemplate = new TemplateEntity();
-    if (this.mouldIndex <= this.templatesList.length - 1) {
+    if (this.mouldIndex <= this.templatesList.length - 1 && this.mouldIndex > -1) {
       this.templatesList[this.mouldIndex] = this.currentTemplate_old;
     }
     this.contentIndex = 0;
@@ -540,7 +540,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       this.globalService.confirmationBox.close();
       this.errMsg = '';
       this.templatesList.splice(this.mouldIndex, 1);
-      this.onCancelClick();
+      this.mouldIndex = -1;
     });
   }
 
@@ -745,6 +745,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       this.contentIndex -= 1;
       this.imgIndex = 1;
     } else {
+      this.canSave = true;
       this.currentTemplate.template_content.products.splice(index, 1);
       this.currentTemplate.template_content.mallProducts.splice(index, 1);
       this.currentTemplate.template_content.ticketProducts.splice(index, 1);
