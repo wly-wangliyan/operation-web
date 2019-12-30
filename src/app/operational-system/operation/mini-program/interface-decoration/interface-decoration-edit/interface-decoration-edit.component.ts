@@ -118,21 +118,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     });
     if (mallProduct_ids.length > 0) {
       this.requestMallProductAll(mallProduct_ids.join(','));
-    } else {
-      templatesList.forEach(value1 => {
-        value1.template_content.mallProducts.push(new CommodityEntity());
-        if (Number(value1.template_type) === 5) {
-          value1.template_content.mallProducts.push(new CommodityEntity());
-          value1.template_content.mallProducts.push(new CommodityEntity());
-        }
-      });
     }
     if (ticketProductHttpList.length > 0) {
       this.requestTicketProductAll(ticketProductHttpList);
-    } else {
-      templatesList.forEach(value1 => {
-        value1.template_content.ticketProducts.push(new TicketProductEntity());
-      });
     }
   }
 
@@ -405,12 +393,14 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 选中编辑模板
   public onMouldEditClick(type: number, index: number) {
+    if (this.mouldIndex === index) {
+      return;
+    }
+    this.onCancelClick();
     this.currentTemplate = this.templatesList[index];
     this.currentTemplate_old = JSON.parse(JSON.stringify(this.currentTemplate));
     this.currentTemplate.template_type = type;
     this.mouldIndex = index;
-    this.contentIndex = 0;
-    this.imgIndex = 1;
     this.errMsg = '';
     timer(0).subscribe(() => {
       this.moveForm(type, index);
@@ -560,7 +550,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
    */
   public get CheckSaveDraftValid(): boolean {
     let checkValid = true;
-    if (this.templatesList.findIndex(value => !value.template_id) > -1 || this.templatesList.length === 0) {
+    if (JSON.stringify(this.templatesList_old) === JSON.stringify(this.templatesList) || this.is_saved) {
+      checkValid = false;
+    } else if (this.templatesList.findIndex(value => !value.template_id) > -1 || this.templatesList.length === 0) {
       checkValid = false;
     }
     return checkValid;
@@ -575,8 +567,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       } else if (this.currentTemplate.template_content.products.findIndex(value => value.errMsg !== '') > -1) {
         checkValid = false;
       }
-    }
-    if (Number(this.currentTemplate.template_type) === 4) {
+    } else if (Number(this.currentTemplate.template_type) === 4) {
       if (!this.currentTemplate.template_content.left_image || !this.currentTemplate.template_content.right_top_image
        || !this.currentTemplate.template_content.right_bottom_image || this.currentTemplate.template_content.right_bottom_image.length === 0
        || this.currentTemplate.template_content.left_image.length === 0 || this.currentTemplate.template_content.right_top_image.length === 0
@@ -588,8 +579,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
           || (!this.currentTemplate.template_content.right_bottom_url_type && this.currentTemplate.template_content.right_bottom_url)) {
         checkValid = false;
       }
-    }
-    if (Number(this.currentTemplate.template_type) === 3) {
+    } else if (Number(this.currentTemplate.template_type) === 3) {
       this.currentTemplate.template_content.contents.forEach(value => {
         if (!value.left_image || !value.right_image || value.left_image.length === 0 || value.right_image.length === 0
         || (!value.left_url_type && value.left_url) || (value.left_url_type && !value.left_url)
@@ -597,15 +587,13 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
           checkValid = false;
         }
       });
-    }
-    if (Number(this.currentTemplate.template_type) === 2) {
+    } else if (Number(this.currentTemplate.template_type) === 2) {
       this.currentTemplate.template_content.contents.forEach(value => {
         if (!value.image || value.image.length === 0 || !value.name || (value.url_type && !value.url) || (!value.url_type && value.url)) {
           checkValid = false;
         }
       });
-    }
-    if (Number(this.currentTemplate.template_type) === 1) {
+    } else if (Number(this.currentTemplate.template_type) === 1) {
       this.currentTemplate.template_content.contents.forEach(value => {
         if (!value.image || value.image.length === 0 || !value.title || (value.url_type && !value.url) || (!value.url_type && value.url)) {
           checkValid = false;
@@ -741,10 +729,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.onProductTitleChange();
     const ticketProducts = [];
     const mallProducts = [];
-    this.currentTemplate.template_content.ticketProducts.forEach(value => {
+    this.currentTemplate.template_content.products.forEach(value => {
       ticketProducts.push(new TicketProductEntity());
-    });
-    this.currentTemplate.template_content.mallProducts.forEach(value => {
       mallProducts.push(new CommodityEntity());
     });
     this.currentTemplate.template_content.ticketProducts = ticketProducts;
