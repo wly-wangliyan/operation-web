@@ -16,7 +16,7 @@
     overflow-y: auto;
 }
 
-.mould-space {
+.mould-space, .mould-disable {
     width: 318px;
     height: 383px;
     background: #fff;
@@ -24,12 +24,12 @@
     float: left;
 }
 
-.mould-space label {
+.mould-space label, .mould-disable label {
     width: 318px;
     margin-top: 10px;
 }
 
-.mould-space div {
+.mould-space div, .mould-disable div {
     width: 144px;
     height: 100px;
     background: #F7F8FA;
@@ -40,62 +40,62 @@
     margin: 0 5px 10px 5px;
 }
 
-.mould-space div:nth-child(2) > i {
+.mould-space div:nth-child(2) > i, .mould-disable div:nth-child(2) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_1.png") center no-repeat;
 }
 
-.mould-space div:nth-child(3) > i {
+.mould-space div:nth-child(3) > i, .mould-disable div:nth-child(3) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_2.png") center no-repeat;
 }
 
-.mould-space div:nth-child(4) > i {
+.mould-space div:nth-child(4) > i, .mould-disable div:nth-child(4) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_3.png") center no-repeat;
 }
 
-.mould-space div:nth-child(5) > i {
+.mould-space div:nth-child(5) > i, .mould-disable div:nth-child(5) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_4.png") center no-repeat;
 }
 
-.mould-space div:nth-child(6) > i {
+.mould-space div:nth-child(6) > i, .mould-disable div:nth-child(6) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_5.png") center no-repeat;
 }
 
-.mould-space div:nth-child(7) > i {
+.mould-space div:nth-child(7) > i, .mould-disable div:nth-child(7) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_6.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(2) > i, .mould-active > i {
+.mould-space div:hover:nth-child(2) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_1_hover.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(3) > i, .mould-active > i {
+.mould-space div:hover:nth-child(3) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_2_hover.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(4) > i, .mould-active > i {
+.mould-space div:hover:nth-child(4) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_3_hover.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(5) > i, .mould-active > i {
+.mould-space div:hover:nth-child(5) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_4_hover.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(6) > i, .mould-active > i {
+.mould-space div:hover:nth-child(6) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_5_hover.png") center no-repeat;
 }
 
-.mould-space div:hover:nth-child(7) > i, .mould-active > i {
+.mould-space div:hover:nth-child(7) > i {
     height: 55px;
     background: url("/assets/images/interface-decoration/mould_6_hover.png") center no-repeat;
 }
@@ -111,7 +111,7 @@
     background: url("/assets/images/interface-decoration/icon_add_hover.png") center no-repeat;
 }
 
-.mould-space div > span {
+.mould-space div > span, .mould-disable div > span {
     color: #888888;
     font-size: 14px;
     display: flex;
@@ -270,6 +270,7 @@
     font-size: 13px;
     overflow: hidden;
     border: 2px solid #fff;
+    min-height: 140px;
 }
 
 .active_height {
@@ -302,8 +303,7 @@
 }
 
 .template_6 {
-    height: 304px;
-    padding: 0px 13px;
+    padding: 5px 13px 0 13px;
     font-size: 13px;
     border: 2px solid #fff;
 }

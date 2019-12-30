@@ -9,9 +9,9 @@
     </li>
   </ul>
   <div class="content-space">
-    <div class="mould-space">
+    <div [class.mould-disable]="templatesList.length>=20" [class.mould-space]="templatesList.length<20">
       <label>自定义模板</label>
-      <div *ngFor="let item of mouldList;let i=index" [class.mould-active]="currentTemplate.template_type===i+1">
+      <div *ngFor="let item of mouldList;let i=index">
         <i></i>
         <span>
           {{item}}
@@ -45,12 +45,14 @@
                (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
             <li *ngFor="let content of item.template_content.contents;let k=index">
               <div>
-                <span>{{content.left_title?content.left_title:'未定义标题'}}</span>
+                <span *ngIf="content.left_title">{{content.left_title?content.left_title:'未定义标题'}}</span>
+                <span *ngIf="!content.left_title">&nbsp;</span>
                 <img *ngIf="!content.left_image||content.left_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.left_image&&content.left_image.length>0" [src]="content.left_image[0]">
               </div>
               <div>
-                <span>{{content.right_title?content.right_title:'未定义标题'}}</span>
+                <span *ngIf="content.right_title">{{content.right_title?content.right_title:'未定义标题'}}</span>
+                <span *ngIf="!content.right_title">&nbsp;</span>
                 <img *ngIf="!content.right_image||content.right_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.right_image&&content.right_image.length>0" [src]="content.right_image[0]">
               </div>
@@ -59,19 +61,22 @@
           <div *ngIf="item.template_type==4" class="template_4" [class.mould-edit-active]="mouldIndex===i"
                (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
             <div>
-              <span>{{item.template_content.left_title?item.template_content.left_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.left_title">{{item.template_content.left_title?item.template_content.left_title:'未定义标题'}}</span>
+              <span *ngIf="!item.template_content.left_title">&nbsp;</span>
               <img *ngIf="!item.template_content.left_image||item.template_content.left_image.length===0"
                    style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
               <img *ngIf="item.template_content.left_image&&item.template_content.left_image.length>0"
                    [src]="item.template_content.left_image[0]">
             </div>
             <div>
-              <span>{{item.template_content.right_top_title?item.template_content.right_top_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.right_top_title">{{item.template_content.right_top_title?item.template_content.right_top_title:'未定义标题'}}</span>
+              <span *ngIf="!item.template_content.right_top_title">&nbsp;</span>
               <img *ngIf="!item.template_content.right_top_image||item.template_content.right_top_image.length===0"
                    src="/assets/images/interface-decoration/icon_mould_3_empty.png">
               <img *ngIf="item.template_content.right_top_image&&item.template_content.right_top_image.length>0"
                    [src]="item.template_content.right_top_image[0]">
-              <span>{{item.template_content.right_bottom_title?item.template_content.right_bottom_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.right_bottom_title">{{item.template_content.right_bottom_title?item.template_content.right_bottom_title:'未定义标题'}}</span>
+              <span *ngIf="!item.template_content.right_bottom_title">&nbsp;</span>
               <img *ngIf="!item.template_content.right_bottom_image||item.template_content.right_bottom_image.length===0"
                    src="/assets/images/interface-decoration/icon_mould_3_empty.png">
               <img *ngIf="item.template_content.right_bottom_image&&item.template_content.right_bottom_image.length>0"
@@ -80,7 +85,8 @@
           </div>
           <div *ngIf="item.template_type==5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
                (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [class.active_height]="item.template_content.products[0].product_type!=1">
-            <label>{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            <label *ngIf="!item.template_content.title">&nbsp;</label>
             <div id="father{{i}}"  class="father">
               <ul id="box{{i}}" class="box">
                 <ng-container *ngIf="item.template_content.products[0].product_type==='1'">
@@ -112,7 +118,7 @@
           </div>
           <div *ngIf="item.template_type==6" class="template_6" [class.mould-edit-active]="mouldIndex===i"
                (click)="onMouldEditClick(6, i)" id="template_6_{{i}}">
-            <label>{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
             <ul *ngIf="item.template_content.products[0].product_type==='1'">
               <li *ngFor="let product of item.template_content.mallProducts;let k=index">
                 <img *ngIf="!product.commodity_id" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
@@ -181,8 +187,8 @@
               <div style="width:65px">
                 <div [class.temp-edit-active]="contentIndex===i" style="width: 47px;margin-left: 8px">
                   <app-z-photo-select-upload #{{item.image[0]}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                                             [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="45"
-                                             [imageHeight]="45" [imageUrls]="item.image" [imageAddWidth]="45"
+                                             [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="45"
+                                             [imageHeight]="45" [imageUrls]="item.image" [imageAddWidth]="45" [imgReg]="imgReg"
                                              (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
                   </app-z-photo-select-upload>
                 </div>
@@ -243,8 +249,8 @@
           <div class="control-input" style="display: inline-grid">
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" style="margin-bottom: 10px;width: 410px;">
               <div [class.temp-edit-active]="contentIndex===i" (click)="onImgClick(i)" style="padding: 0 32px;height: 92px">
-                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="345"
+                <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="345"
                                            [imageHeight]="90" [imageUrls]="item.image" [imageAddWidth]="345" [aspectRatio]="3.83/1"
                                            (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
                 </app-z-photo-select-upload>
@@ -317,20 +323,20 @@
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" class="image-team">
               <div [class.temp-edit-active]="contentIndex===i&&imgIndex===1" (click)="onImgClick(i, 1)">
                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="item.left_title" name="left_title{{i+item.time}}"
-                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px;margin-right: 20px">
                 <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [aspectRatio]="2/1"
-                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="190"
-                                           [imageHeight]="75" [imageUrls]="item.left_image" [imageAddWidth]="190"
-                                           (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event, 1)">
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="190"
+                                           [imageHeight]="75" [imageUrls]="item.left_image" [imageAddWidth]="190" [imgReg]="imgReg"
+                                           (selectedImgChange)="onSelectedPicture($event, i, 'left_image')" (uploadFinish)="onUploadFinish($event, 1)">
                 </app-z-photo-select-upload>
               </div>
               <div [class.temp-edit-active]="contentIndex===i&&imgIndex===2" (click)="onImgClick(i, 2)">
                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="item.right_title" name="right_title{{i+item.time}}"
-                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
                 <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [aspectRatio]="2/1"
-                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="i" [imageWidth]="190"
-                                           [imageHeight]="75" [imageUrls]="item.right_image" [imageAddWidth]="190"
-                                           (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event, 2)">
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="190"
+                                           [imageHeight]="75" [imageUrls]="item.right_image" [imageAddWidth]="190" [imgReg]="imgReg"
+                                           (selectedImgChange)="onSelectedPicture($event, i, 'right_image')" (uploadFinish)="onUploadFinish($event, 2)">
                 </app-z-photo-select-upload>
               </div>
               <img *ngIf="i>0" src="/assets/images/interface-decoration/icon_del.png" class="del-img" (click)="onDelContentClick(i)">
@@ -407,9 +413,9 @@
           <div class="control-input">
             <div style="margin-right: 25px;width: 192px;" [class.temp-edit-active]="imgIndex===1" (click)="onImgClick(0, 1)">
               <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.left_title" name="left_title"
-                     maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px;margin-right: 20px">
-              <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                                         [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'1'" [imageWidth]="190"
+                     maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px;margin-right: 20px">
+              <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                         [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'left_image'" [imageWidth]="190"
                                          [imageHeight]="244" [imageUrls]="currentTemplate.template_content.left_image" [imageAddWidth]="190" [aspectRatio]="0.78/1"
                                          (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 5)">
               </app-z-photo-select-upload>
@@ -417,18 +423,18 @@
             <div>
               <div [class.temp-edit-active]="imgIndex===2" (click)="onImgClick(0, 2)">
                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_top_title" name="right_top_title"
-                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
-                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'2'" [imageWidth]="190"
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
+                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'right_top_image'" [imageWidth]="190"
                                            [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_top_image" [imageAddWidth]="190" [aspectRatio]="2/1"
                                            (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 3)">
                 </app-z-photo-select-upload>
               </div>
               <div [class.temp-edit-active]="imgIndex===3" (click)="onImgClick(0, 3)" style="margin-top: 10px">
                 <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_bottom_title" name="right_bottom_title"
-                       maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
-                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true"
-                                           [limitImgSize]="2" [isCutCoverImg]="true" [file_id]="currentTemplate.template_id+'3'" [imageWidth]="190"
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
+                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'right_bottom_image'" [imageWidth]="190"
                                            [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_bottom_image" [imageAddWidth]="190" [aspectRatio]="2/1"
                                            (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 4)">
                 </app-z-photo-select-upload>
@@ -510,7 +516,7 @@
             </label>
             <div class="control-input">
               <input class="form-control" placeholder="请输入1-10字标题名称" [(ngModel)]="currentTemplate.template_content.title" name="title"
-                     maxlength="10" autocomplete="off" required appIgnoreSpace style="width: 190px">
+                     maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
             </div>
           </div>
           <div style="width: 190px;margin: 0 0 0 30px">
@@ -557,13 +563,13 @@
           <div class="control-input">
             <button class="add-btn" type="button" nz-button style="width: 395px"
                     [class.disabled-color]="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
-                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)"
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)||!CheckSaveTempValid"
                     (click)="onAddProductClick()" [disabled]="!editBannerForm.form.valid||currentTemplate.template_content.products.length>4">
               <img *ngIf="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
-                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)"
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)||!CheckSaveTempValid"
                    src="/assets/images/interface-decoration/icon_add.png">
               <img *ngIf="editBannerForm.form.valid&&((currentTemplate.template_content.products.length<5&&currentTemplate.template_type==5)
-                                ||(currentTemplate.template_content.products.length<20&&currentTemplate.template_type==6))"
+                                ||(currentTemplate.template_content.products.length<20&&currentTemplate.template_type==6))&&CheckSaveTempValid"
                    src="/assets/images/interface-decoration/icon_add_hover.png">
               添加商品
             </button>

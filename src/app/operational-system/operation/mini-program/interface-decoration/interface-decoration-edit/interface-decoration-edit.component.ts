@@ -2,36 +2,23 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { forkJoin, fromEvent, Subscription, timer } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
-import { ContentEntity, InterfaceDecorationService, PageEntity, ProductEntity, TemplateEntity } from '../interface-decoration.service';
+import {
+  IconMagicContentEntity,
+  IconMagicEntity,
+  InterfaceDecorationService,
+  LeftAndRightLayout1ContentEntity,
+  LeftAndRightLayout1Entity,
+  LeftAndRightLayout2Entity,
+  PageEntity, SingleLineScrollingEntity,
+  SingleLineScrollingProductEntity,
+  SingleRowBroadcastContentEntity,
+  SingleRowBroadcastEntity,
+  TemplateEntity
+} from '../interface-decoration.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommodityEntity } from '../../../../mall/goods-management/goods-management-http.service';
 import { ProductService, TicketProductEntity } from '../../../../ticket/product-management/product.service';
-
-export class ErrMessageItem {
-  public isError = false;
-  public errMes: string;
-
-  constructor(isError?: boolean, errMes?: string) {
-    if (!isError || isNullOrUndefined(errMes)) {
-      return;
-    }
-    this.isError = isError;
-    this.errMes = errMes;
-  }
-}
-export class ErrPositionItem {
-  icon: ErrMessageItem = new ErrMessageItem();
-  ic_name: ErrMessageItem = new ErrMessageItem();
-
-  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem, corner?: ErrMessageItem) {
-    if (isNullOrUndefined(icon) || isNullOrUndefined(ic_name)) {
-      return;
-    }
-    this.icon = icon;
-    this.ic_name = ic_name;
-  }
-}
 
 @Component({
   selector: 'app-interface-decoration-edit',
@@ -51,12 +38,14 @@ export class InterfaceDecorationEditComponent implements OnInit {
   public modal_type: number; // 弹窗类型
   public page_id: string;
   public errMsg: string;
+  public imgReg = /(jpg|jpeg|png|gif)$/;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;
   private mouseUpSubscription: Subscription;
   private mouseLeaveSubscription: Subscription;
   private template_ids = []; // 发布记录新的模板id集合
+  private currentTemplate_old: TemplateEntity = new TemplateEntity(); // 当前选中的模板备份
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
@@ -89,11 +78,13 @@ export class InterfaceDecorationEditComponent implements OnInit {
         value.template_content.left_image = value.template_content.left_image ? value.template_content.left_image.split(',') : [];
         value.template_content.right_top_image = value.template_content.right_top_image ? value.template_content.right_top_image.split(',') : [];
         value.template_content.right_bottom_image = value.template_content.right_bottom_image ? value.template_content.right_bottom_image.split(',') : [];
-        value.template_content.contents.forEach(value1 => {
-          value1.image = value1.image ? value1.image.split(',') : [];
-          value1.left_image = value1.left_image ? value1.left_image.split(',') : [];
-          value1.right_image = value1.right_image ? value1.right_image.split(',') : [];
-        });
+        if (value.template_content.contents) {
+          value.template_content.contents.forEach(value1 => {
+            value1.image = value1.image ? value1.image.split(',') : [];
+            value1.left_image = value1.left_image ? value1.left_image.split(',') : [];
+            value1.right_image = value1.right_image ? value1.right_image.split(',') : [];
+          });
+        }
       });
     }, error => {
       this.globalService.httpErrorProcess(error);
@@ -141,14 +132,16 @@ export class InterfaceDecorationEditComponent implements OnInit {
     this.interfaceService.requestProductList(params).subscribe(res => {
       const templatesList = this.templatesList.filter(value => value.template_type > 4);
       if (res.length > 0) {
-        templatesList.forEach((value1, index1) => {
+        this.templatesList.forEach((value1, index1) => {
           res.forEach(value => {
-            value1.template_content.products.forEach(value2 => {
-              const product_ids = value1.template_content.ticketProducts.map(v => v.product_id);
-              if (value2.product_type === '1' && value.commodity_id === value2.product_id && !product_ids.includes(value.commodity_id)) {
-                value1.template_content.mallProducts.push(value);
-              }
-            });
+            if (value1.template_content.products) {
+              value1.template_content.products.forEach(value2 => {
+                const product_ids = value1.template_content.ticketProducts.map(v => v.product_id);
+                if (value2.product_type === '1' && value.commodity_id === value2.product_id && !product_ids.includes(value.commodity_id)) {
+                  value1.template_content.mallProducts.push(value);
+                }
+              });
+            }
           });
           if (Number(value1.template_type) === 5) {
             this.drag(index1);
@@ -167,17 +160,18 @@ export class InterfaceDecorationEditComponent implements OnInit {
   // 获取全部票务商品信息
   private requestTicketProductAll(ticketProductHttpList: Array<any>) {
     forkJoin(ticketProductHttpList).subscribe( res => {
-      const templatesList = this.templatesList.filter(value => value.template_type > 4);
-      templatesList.forEach((value1, index1) => {
+      this.templatesList.forEach((value1, index1) => {
         res.forEach(value => {
-          value1.template_content.products.forEach(value2 => {
-            const product_id = value1.template_content.ticketProducts.map(v => v.product_id);
-            if (value2.product_type === '2' && value.product_id === value2.product_id && !product_id.includes(value.product_id)) {
-              value1.template_content.ticketProducts.push(value);
-            }
-          });
+          if (value1.template_content.products) {
+            value1.template_content.products.forEach(value2 => {
+              const product_id = value1.template_content.ticketProducts.map(v => v.product_id);
+              if (value2.product_type === '2' && value.product_id === value2.product_id && !product_id.includes(value.product_id)) {
+                value1.template_content.ticketProducts.push(value);
+              }
+            });
+          }
         });
-        if (res.length === 0) {
+        if (res.length === 0 && Number(value1.template_type) >= 5) {
           value1.template_content.ticketProducts.push(new TicketProductEntity());
         }
         if (Number(value1.template_type) === 5) {
@@ -220,8 +214,31 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 创建模板
   public onCreateMould(type: number) {
+    if (this.templatesList.length >= 20) {
+      return;
+    }
     const template = new TemplateEntity();
     template.template_type = type;
+    switch (template.template_type) {
+      case 1:
+        template.template_content = new IconMagicEntity();
+        break;
+      case 2:
+        template.template_content = new SingleRowBroadcastEntity();
+        break;
+      case 3:
+        template.template_content = new LeftAndRightLayout1Entity();
+        break;
+      case 4:
+        template.template_content = new LeftAndRightLayout2Entity();
+        break;
+      case 5:
+        template.template_content = new SingleLineScrollingEntity();
+        break;
+      case 6:
+        template.template_content = new SingleLineScrollingEntity();
+        break;
+    }
     this.onImgNumChange(template);
     this.templatesList.push(template);
     if (type === 5) {
@@ -231,17 +248,15 @@ export class InterfaceDecorationEditComponent implements OnInit {
     }
   }
 
-  // 单行显示数量change
+  // 单行显示数量change, 创建模板初始化数据
   public onImgNumChange(template: TemplateEntity) {
-    template.template_content.mallProducts = [];
-    template.template_content.ticketProducts = [];
-    const contentsList: Array<ContentEntity> = [];
-    const productsList: Array<ProductEntity> = [];
+    const contentsList = [];
+    const productsList = [];
     if (template.template_type === 1) {
       const count = template.template_content.count - template.template_content.contents.length;
       if (count > 0) {
         for (let i = 0; i < count; i++) {
-          const contents = new ContentEntity();
+          const contents = new IconMagicContentEntity();
           contents.image = [];
           contentsList.push(contents);
           template.template_content.contents.push(contents);
@@ -254,8 +269,10 @@ export class InterfaceDecorationEditComponent implements OnInit {
         }
       }
     } else if (template.template_type === 5) {
+      template.template_content.mallProducts = [];
+      template.template_content.ticketProducts = [];
       for (let i = 0; i < 3; i++) {
-        const product = new ProductEntity();
+        const product = new SingleLineScrollingProductEntity();
         product.product_id = '';
         productsList.push(product);
         template.template_content.mallProducts.push(new CommodityEntity());
@@ -263,14 +280,24 @@ export class InterfaceDecorationEditComponent implements OnInit {
       }
       template.template_content.products = productsList;
     } else if (template.template_type === 6) {
-      const product = new ProductEntity();
+      template.template_content.mallProducts = [];
+      template.template_content.ticketProducts = [];
+      const product = new SingleLineScrollingProductEntity();
       product.product_id = '';
       productsList.push(product);
       template.template_content.mallProducts.push(new CommodityEntity());
       template.template_content.ticketProducts.push(new TicketProductEntity());
       template.template_content.products = productsList;
-    } else {
-      const contents = new ContentEntity();
+    } else if (template.template_type === 2 || template.template_type === 3) {
+      let contents;
+      switch (template.template_type) {
+        case 2:
+          contents = new SingleRowBroadcastContentEntity();
+          break;
+        case 3:
+          contents = new LeftAndRightLayout1ContentEntity();
+          break;
+      }
       contents.image = [];
       contentsList.push(contents);
       template.template_content.contents = contentsList;
@@ -278,14 +305,15 @@ export class InterfaceDecorationEditComponent implements OnInit {
   }
 
   // 选择图片时校验图片格式
-  public onSelectedPicture(event: any, index: number = 0): any {
-    if (event.imageList.length === 0) {
-      this.currentTemplate.template_content.contents[index].image = [];
-      this.currentTemplate.template_content.contents[index].left_image = [];
-      this.currentTemplate.template_content.contents[index].right_image = [];
-      this.currentTemplate.template_content.left_image = [];
-      this.currentTemplate.template_content.right_top_image = [];
-      this.currentTemplate.template_content.right_bottom_image = [];
+  public onSelectedPicture(event: any, index: number = 0, imgPosition?: string): any {
+    if (event.isDeleteImg && (!event.imageList || event.imageList.length === 0)) {
+      if (Number(this.currentTemplate.template_type) === 3 && imgPosition) {
+        this.currentTemplate.template_content.contents[index][imgPosition] = [];
+      } else if (Number(this.currentTemplate.template_type) === 4 && event.file_id) {
+        this.currentTemplate.template_content[event.file_id] = [];
+      } else {
+        this.currentTemplate.template_content.contents[index].image = [];
+      }
     }
     if (event) {
       this.errMsg = event.errMsg;
@@ -322,17 +350,20 @@ export class InterfaceDecorationEditComponent implements OnInit {
   // 模板Form表单提交
   public onEditFormSubmit() {
     const saveData = this.currentTemplate.clone();
-    saveData.template_content.contents.forEach(value => {
-      value.image = value.image && value.image.length > 0 ? value.image[0] : '';
-      value.left_image = value.left_image && value.left_image.length > 0 ? value.left_image[0] : '';
-      value.right_image = value.right_image && value.right_image.length > 0 ? value.right_image[0] : '';
-    });
-    saveData.template_content.left_image = saveData.template_content.left_image && saveData.template_content.left_image.length > 0 ?
-        saveData.template_content.left_image.image[0] : '';
-    saveData.template_content.right_top_image = saveData.template_content.right_top_image && saveData.template_content.right_top_image.length > 0 ?
-        saveData.template_content.right_top_image.image[0] : '';
-    saveData.template_content.right_bottom_image = saveData.template_content.right_bottom_image && saveData.template_content.right_bottom_image.length > 0 ?
-        saveData.template_content.right_bottom_image.image[0] : '';
+    if (saveData.template_type === 4) {
+      saveData.template_content.left_image = saveData.template_content.left_image && saveData.template_content.left_image.length > 0 ?
+          saveData.template_content.left_image[0] : '';
+      saveData.template_content.right_top_image = saveData.template_content.right_top_image && saveData.template_content.right_top_image.length > 0 ?
+          saveData.template_content.right_top_image[0] : '';
+      saveData.template_content.right_bottom_image = saveData.template_content.right_bottom_image && saveData.template_content.right_bottom_image.length > 0 ?
+          saveData.template_content.right_bottom_image[0] : '';
+    } else if (saveData.template_type < 4) {
+      saveData.template_content.contents.forEach(value => {
+        value.image = value.image && value.image.length > 0 ? value.image[0] : '';
+        value.left_image = value.left_image && value.left_image.length > 0 ? value.left_image[0] : '';
+        value.right_image = value.right_image && value.right_image.length > 0 ? value.right_image[0] : '';
+      });
+    }
     saveData.template_content = JSON.stringify(saveData.template_content);
     if (!this.currentTemplate.template_id || this.previewData.page_type === 2) {
       this.interfaceService.requestCreateTemplateData(saveData).subscribe(res => {
@@ -356,6 +387,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
   // 选中编辑模板
   public onMouldEditClick(type: number, index: number) {
     this.currentTemplate = this.templatesList[index];
+    this.currentTemplate_old = this.currentTemplate.clone();
     this.currentTemplate.template_type = type;
     this.mouldIndex = index;
     this.contentIndex = 0;
@@ -367,6 +399,9 @@ export class InterfaceDecorationEditComponent implements OnInit {
   // 取消编辑模板
   public onCancelClick() {
     this.currentTemplate = new TemplateEntity();
+    if (this.mouldIndex < this.templatesList.length - 1) {
+      this.templatesList[this.mouldIndex] = this.currentTemplate_old;
+    }
     this.contentIndex = 0;
     this.imgIndex = 1;
     this.mouldIndex = -1;
@@ -389,11 +424,18 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 添加广告图
   public onAddAdvertClick() {
-    const contents = new ContentEntity();
-    contents.image = [];
-    this.contentIndex += 1;
-    this.imgIndex = 1;
-    this.currentTemplate.template_content.contents.push(contents);
+    if (this.CheckSaveTempValid) {
+      let contents;
+      if (Number(this.currentTemplate.template_type) === 2) {
+        contents = new SingleRowBroadcastContentEntity();
+        contents.image = [];
+      } else if (Number(this.currentTemplate.template_type) === 3) {
+        contents = new LeftAndRightLayout1ContentEntity();
+      }
+      this.contentIndex += 1;
+      this.imgIndex = 1;
+      this.currentTemplate.template_content.contents.push(contents);
+    }
   }
 
   // 产品ID改变, 获取商品信息, 校验重复
@@ -441,11 +483,13 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 添加商品id
   public onAddProductClick() {
-    const product = new ProductEntity();
-    product.product_id = '';
-    this.currentTemplate.template_content.mallProducts.push(new CommodityEntity());
-    this.currentTemplate.template_content.ticketProducts.push(new TicketProductEntity());
-    this.currentTemplate.template_content.products.push(product);
+    if (this.CheckSaveTempValid) {
+      const product = new SingleLineScrollingProductEntity();
+      product.product_id = '';
+      this.currentTemplate.template_content.mallProducts.push(new CommodityEntity());
+      this.currentTemplate.template_content.ticketProducts.push(new TicketProductEntity());
+      this.currentTemplate.template_content.products.push(product);
+    }
   }
 
   // 向上移动
@@ -479,6 +523,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
 
   // 删除模板
   public onDeleteTemplateClick() {
+    debugger;
     this.errMsg = '';
     this.templatesList.splice(this.mouldIndex, 1);
     this.onCancelClick();
@@ -630,6 +675,7 @@ export class InterfaceDecorationEditComponent implements OnInit {
     this.currentTemplate.template_content.products.forEach(value => {
       value.product_id = '';
       value.errMsg = '';
+      value.product_type = this.currentTemplate.template_content.products[0].product_type;
     });
     this.product_type = this.currentTemplate.template_content.products[0].product_type;
     const ticketProducts = [];

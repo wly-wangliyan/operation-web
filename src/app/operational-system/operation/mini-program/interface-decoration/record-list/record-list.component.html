@@ -66,8 +66,8 @@
 
                     <td class="operation">
                         <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
-                        <a [title]="'重新发布'" (appZDebounceClick)="onReleaseClick(data.page_id)">重新发布</a>
-                        <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
+                        <a *ngIf="data.release_status!==1" [title]="'重新发布'" (appZDebounceClick)="onReleaseClick(data.page_id)">重新发布</a>
+                        <a *ngIf="data.release_status!==1" [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>

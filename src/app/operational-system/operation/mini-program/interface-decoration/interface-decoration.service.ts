@@ -15,66 +15,7 @@ export class SearchParams extends EntityBase {
   // public page_size = 45; // 每页条数
 }
 
-export class ContentEntity extends EntityBase {
-  public title = ''; // String 标题
-  public name = ''; // String 广告名称
-  public image = undefined; // String
-  public url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public url = ''; // 跳转链接
-  public left_title = ''; // String 标题
-  public left_image = undefined; // String
-  public left_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public left_url = ''; // 跳转链接
-  public right_title = ''; // String 标题
-  public right_image = undefined; // String
-  public right_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public right_url = ''; // 跳转链接
-  public errMsg = '';
-  public time = new Date().getTime();
-}
-
-export class ProductEntity extends EntityBase {
-  public product_id: string = undefined; // String	产品id
-  public product_type = ''; // 1:指定商品　2:指定票务产品
-  public errMsg = '';
-  public time = new Date().getTime();
-}
-
-export class TemplateContentEntity extends EntityBase {
-  public title: string = undefined; // String 标题
-  public count = 3; // 单行数量 取值范围　3, 4, 5
-  public contents: Array<ContentEntity> = [];
-  public products: Array<ProductEntity> = [];
-  public left_title = ''; // String 标题
-  public left_image = undefined; // String
-  public left_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public left_url = ''; // 跳转链接
-  public right_top_title = ''; // String 标题
-  public right_top_image = undefined; // String
-  public right_top_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public right_top_url = ''; // 跳转链接
-  public right_bottom_title = ''; // String 标题
-  public right_bottom_image = undefined; // String
-  public right_bottom_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
-  public right_bottom_url = ''; // 跳转链接
-  public ticketProducts = [];
-  public mallProducts = [];
-
-  public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'contents') {
-      return ContentEntity;
-    }
-    if (propertyName === 'products') {
-      return ProductEntity;
-    }
-    return null;
-  }
-}
-
-
-
-
-/*export class IconMagicContentEntity extends EntityBase {
+export class IconMagicContentEntity extends EntityBase {
   public title = ''; // String 标题
   public image = undefined; // String
   public url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
@@ -135,7 +76,7 @@ export class LeftAndRightLayout1Entity extends EntityBase {
   }
 }
 
-export class LeftAndRightLayout2ContentEntity extends EntityBase {
+export class LeftAndRightLayout2Entity extends EntityBase {
   public left_title = ''; // String 标题
   public left_image = undefined; // String
   public left_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
@@ -148,17 +89,6 @@ export class LeftAndRightLayout2ContentEntity extends EntityBase {
   public right_bottom_image = undefined; // String
   public right_bottom_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
   public right_bottom_url = ''; // 跳转链接
-}
-
-export class LeftAndRightLayout2Entity extends EntityBase {
-  public contents: Array<LeftAndRightLayout2ContentEntity> = [];
-
-  public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'contents') {
-      return LeftAndRightLayout2ContentEntity;
-    }
-    return null;
-  }
 }
 
 export class SingleLineScrollingProductEntity extends EntityBase {
@@ -180,23 +110,16 @@ export class SingleLineScrollingEntity extends EntityBase {
     }
     return null;
   }
-}*/
+}
 
 export class TemplateEntity extends EntityBase {
   public template_id: string = undefined; // String	模板id
   public template_type: number = undefined; // String 模板类型 1: ICON魔方 2:单行轮播广告 3:左右布局图文一 4:左右布局图文二　5:单行左右滑动 6:商品推荐
-  public template_content: TemplateContentEntity = new TemplateContentEntity; // 模板内容
+  public template_content: any = undefined; // 模板内容
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'template_content') {
-      return TemplateContentEntity;
-    }
-    return null;
-  }
-
-  /*public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'template_content') {
       switch (Number(this.template_type)) {
         case 1:
@@ -221,7 +144,7 @@ export class TemplateEntity extends EntityBase {
       }
     }
     return null;
-  }*/
+  }
 }
 
 export class PageEntity extends EntityBase {

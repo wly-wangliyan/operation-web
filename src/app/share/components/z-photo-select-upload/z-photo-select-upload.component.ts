@@ -70,6 +70,8 @@ export class ZPhotoSelectUploadComponent implements OnInit {
 
   @Input() public minCropBoxHeight = 150; // 最大值400
 
+  @Input()public imgReg = /(jpg|jpeg|png)$/; // 限制图片格式
+
   public get transformLineHeight(): string {
     return (Number(this.imageHeight) - 2).toString();
   }
@@ -319,14 +321,14 @@ export class ZPhotoSelectUploadComponent implements OnInit {
     if (imageList.length > 0) {
       for (const index in imageList) {
         if (imageList.hasOwnProperty(index)) {
-          const imgReg = /(jpg|jpeg|png)$/;
+          // const imgReg = /(jpg|jpeg|png)$/;
           this.isValidImg = true;
 
           if (imageList[index].sourceFile) {
             const file = imageList[index].sourceFile;
             const type = file.type.split('/')[1];
 
-            if (isNullOrUndefined(type) || !imgReg.test(type.toLowerCase())) {
+            if (isNullOrUndefined(type) || !this.imgReg.test(type.toLowerCase())) {
               this.isValidImg = false;
               this.selectedImgChange.emit({ isValidImg: false, file_id: this.file_id, errMsg: '格式错误，请重新上传！' });
               // this.selectedImgChange.emit('type_error');
@@ -352,7 +354,7 @@ export class ZPhotoSelectUploadComponent implements OnInit {
         }
       }
     } else {
-      this.selectedImgChange.emit({ isValidImg: true, file_id: this.file_id, imageList: this.imageList, errMsg: '' });
+      this.selectedImgChange.emit({ isValidImg: true, file_id: this.file_id, imageList: this.imageList, errMsg: '', isDeleteImg: true });
       // this.selectedImgChange.emit('');
     }
   }
