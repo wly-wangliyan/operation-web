@@ -126,9 +126,9 @@ export class EditComponent implements OnInit, AfterViewInit {
       contentItem.elements[1].time = new Date().getTime() + 1;
       contentItem.elements[1].sort_num = this.sort;
       contentItem.elements[1].element_id = `activityItem${this.sort}`;
-      contentItem.elements[1].image_url = item.elements[1].image.split(',');
+      contentItem.elements[1].image_url = !item.elements[1].image || item.elements[1].image.length === 0 ? [] : item.elements[1].image.split(',');
     } else if (item.content_type === 2) {
-      contentItem.elements[0].image_url = item.elements[0].image.split(',');
+      contentItem.elements[0].image_url = !item.elements[0].image || item.elements[0].image.length === 0 ? [] : item.elements[0].image.split(',');
     } else if (item.content_type === 3) {
       const tempContent = item.elements[0].rich.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
       contentItem.elements[0].rich = tempContent;
