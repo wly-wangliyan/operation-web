@@ -118,6 +118,7 @@ export class TemplateEntity extends EntityBase {
   public template_content: any = undefined; // 模板内容
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
+  public height = 130;
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'template_content') {

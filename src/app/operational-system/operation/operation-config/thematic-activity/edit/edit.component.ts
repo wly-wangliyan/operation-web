@@ -34,6 +34,8 @@ export class EditComponent implements OnInit, AfterViewInit {
 
   public titleErrMsg = ''; // 标题错误提示
 
+  public imgReg = /(jpg|jpeg|png|gif)$/;
+
   private space_one = '/assets/images/preview/icon_preview_space_one.png';
 
   private space_two = '/assets/images/preview/icon_preview_space_two.png';

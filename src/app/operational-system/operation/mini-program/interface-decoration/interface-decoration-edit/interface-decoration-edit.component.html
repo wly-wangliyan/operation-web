@@ -84,7 +84,7 @@
             </div>
           </div>
           <div *ngIf="item.template_type==5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [ngStyle]="{height: height + 'px'}">
+               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [ngStyle]="{height: item.template_content.height + 'px'}">
             <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
             <div id="father{{i}}" class="father">
               <ul id="box{{i}}" class="box">

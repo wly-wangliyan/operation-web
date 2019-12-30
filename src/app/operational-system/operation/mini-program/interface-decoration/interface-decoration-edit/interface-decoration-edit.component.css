@@ -271,6 +271,7 @@
     overflow: hidden;
     border: 2px solid #fff;
     padding: 5px;
+    height: 133px;
 }
 
 .active_height {
@@ -468,6 +469,7 @@ nz-radio-group label {
 
 .father {
     width: 1050px;
+    height: 100px;
     position: relative;
     left: -350px;
 }

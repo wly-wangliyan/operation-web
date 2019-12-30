@@ -40,7 +40,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public page_id: string;
   public errMsg: string;
   public imgReg = /(jpg|jpeg|png|gif)$/;
-  public height = 133;
   public canSave = true;
 
   private mouseDownSubscription: Subscription;
@@ -72,7 +71,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   }
 
   public canDeactivate(): boolean {
-    return (this.templatesList.length === 0);
+    return (this.templatesList.length === 0 || this.template_ids.length === 0);
   }
 
   // 获取详情
@@ -146,11 +145,12 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
                 const product_ids = value1.template_content.ticketProducts.map(v => v.product_id);
                 if (value2.product_type === '1' && value.commodity_id === value2.product_id && !product_ids.includes(value.commodity_id)) {
                   value1.template_content.mallProducts.push(value);
+                  this.onProductTitleChange(index1);
                 }
               });
             }
           });
-          if (Number(value1.template_type) === 5) {
+          if (Number(value1.template_type) === 5 && value1.template_content.mallProducts.length > 0) {
             this.drag(index1);
           }
         });
@@ -174,6 +174,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
               const product_id = value1.template_content.ticketProducts.map(v => v.product_id);
               if (value2.product_type === '2' && value.product_id === value2.product_id && !product_id.includes(value.product_id)) {
                 value1.template_content.ticketProducts.push(value);
+                this.onProductTitleChange(index1);
               }
             });
           }
@@ -181,7 +182,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         if (res.length === 0 && Number(value1.template_type) >= 5) {
           value1.template_content.ticketProducts.push(new TicketProductEntity());
         }
-        if (Number(value1.template_type) === 5) {
+        if (Number(value1.template_type) === 5 && value1.template_content.ticketProducts.length > 0) {
           this.drag(index1);
         }
       });
@@ -356,6 +357,11 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 模板Form表单提交
   public onEditFormSubmit() {
+    if (this.currentTemplate.template_type > 4) {
+      this.currentTemplate.template_content.products.forEach(value => {
+        value.product_type = this.currentTemplate.template_content.products[0].product_type;
+      });
+    }
     const saveData = this.currentTemplate.clone();
     if (saveData.template_type === 4) {
       saveData.template_content.left_image = saveData.template_content.left_image && saveData.template_content.left_image.length > 0 ?
@@ -376,14 +382,14 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       this.interfaceService.requestCreateTemplateData(saveData).subscribe(res => {
         this.currentTemplate.template_id = res.body.template_id;
         this.template_ids.push(res.body.template_id);
-        this.onCancelClick();
+        this.mouldIndex = -1;
         this.globalService.promptBox.open('保存成功！');
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
     } else {
       this.interfaceService.requestUpdateTemplateData(saveData, this.currentTemplate.template_id).subscribe(res => {
-        this.onCancelClick();
+        this.mouldIndex = -1;
         this.globalService.promptBox.open('保存成功！');
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -688,18 +694,18 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   }
 
   // 产品名称改变，高度变化
-  public onProductTitleChange() {
-    if (this.product_type === '1') {
-      if (this.currentTemplate.template_content.title) {
-        this.height = 233;
+  public onProductTitleChange(index: number = this.mouldIndex) {
+    if (this.templatesList[index].template_content.products[0].product_type === '1') {
+      if (this.templatesList[index].template_content.title) {
+        this.templatesList[index].template_content.height = 233;
       } else {
-        this.height = 193;
+        this.templatesList[index].template_content.height = 193;
       }
     } else {
-      if (this.currentTemplate.template_content.title) {
-        this.height = 173;
+      if (this.templatesList[index].template_content.title) {
+        this.templatesList[index].template_content.height = 173;
       } else {
-        this.height = 133;
+        this.templatesList[index].template_content.height = 133;
       }
     }
   }

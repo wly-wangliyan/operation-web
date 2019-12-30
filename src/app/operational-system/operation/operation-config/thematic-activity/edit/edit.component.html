@@ -38,7 +38,7 @@
                 <div class="link-picture">
                   <app-z-photo-select-upload #{{element.element_id}} [hasAddPicture]="true" [hasDeletePicture]="true"
                     [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="element.element_id" [imageWidth]="340"
-                    [imageHeight]="220" [imageUrls]="element.image_url" [imageAddWidth]="340"
+                    [imageHeight]="220" [imageUrls]="element.image_url" [imageAddWidth]="340" [imgReg]="imgReg"
                     (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
                   </app-z-photo-select-upload>
                 </div>
@@ -65,7 +65,7 @@
                 <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
                   [hasDeletePicture]="true" [limitImgSize]="2" [isCutCoverImg]="false"
                   [file_id]="content.elements[0].element_id" [imageWidth]="690" [imageHeight]="220"
-                  [imageUrls]="content.elements[0].image_url" [imageAddWidth]="690"
+                  [imageUrls]="content.elements[0].image_url" [imageAddWidth]="690" [imgReg]="imgReg"
                   (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event)">
                 </app-z-photo-select-upload>
               </div>
