@@ -412,7 +412,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.contentIndex = 0;
     this.imgIndex = 1;
     this.errMsg = '';
-    this.moveForm(type, index);
+    timer(0).subscribe(() => {
+      this.moveForm(type, index);
+    });
   }
 
   // 取消编辑模板
