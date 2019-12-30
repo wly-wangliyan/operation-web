@@ -584,8 +584,8 @@
     </div>
   </div>
   <div class="content-bottom">
-    <button type="button" nz-button (appZDebounceClick)="onSaveDraftClick()" [disabled]="!CheckSaveDraftValid">保存草稿</button>
-    <button type="button" nz-button (appZDebounceClick)="onReleaseClick()" [disabled]="!CheckSaveDraftValid">保存并发布</button>
+    <button type="button" nz-button (appZDebounceClick)="onSaveDraftClick()" [disabled]="!CheckSaveDraftValid(1)">保存草稿</button>
+    <button type="button" nz-button (appZDebounceClick)="onReleaseClick()" [disabled]="!CheckSaveDraftValid(2)">保存并发布</button>
   </div>
 </div>
 

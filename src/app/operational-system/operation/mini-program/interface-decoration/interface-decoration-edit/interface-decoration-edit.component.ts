@@ -548,9 +548,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
    * 保存草稿、保存并发布教研
    * @returns boolean
    */
-  public get CheckSaveDraftValid(): boolean {
+  public CheckSaveDraftValid(type: number): boolean {
     let checkValid = true;
-    if (JSON.stringify(this.templatesList_old) === JSON.stringify(this.templatesList) || this.is_saved) {
+    if (JSON.stringify(this.templatesList_old) === JSON.stringify(this.templatesList) && type === 1) {
       checkValid = false;
     } else if (this.templatesList.findIndex(value => !value.template_id) > -1 || this.templatesList.length === 0) {
       checkValid = false;
