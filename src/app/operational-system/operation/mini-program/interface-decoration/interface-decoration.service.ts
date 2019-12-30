@@ -78,15 +78,15 @@ export class LeftAndRightLayout1Entity extends EntityBase {
 
 export class LeftAndRightLayout2Entity extends EntityBase {
   public left_title = ''; // String 标题
-  public left_image = undefined; // String
+  public left_image = []; // String
   public left_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
   public left_url = ''; // 跳转链接
   public right_top_title = ''; // String 标题
-  public right_top_image = undefined; // String
+  public right_top_image = []; // String
   public right_top_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
   public right_top_url = ''; // 跳转链接
   public right_bottom_title = ''; // String 标题
-  public right_bottom_image = undefined; // String
+  public right_bottom_image = []; // String
   public right_bottom_url_type = ''; // 跳转类型　1:指定商品　2:指定商品类别　3:指定票务产品　4:指定票务产品标签　5:小程序原生页　6:H5链接
   public right_bottom_url = ''; // 跳转链接
 }

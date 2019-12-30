@@ -48,6 +48,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private mouseLeaveSubscription: Subscription;
   private template_ids = []; // 发布记录新的模板id集合
   private currentTemplate_old: TemplateEntity = new TemplateEntity(); // 当前选中的模板备份
+  private templatesList_old: Array<TemplateEntity> = []; // 模板List备份
+  private is_saved = false;
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
@@ -70,8 +72,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     }
   }
 
+  // 判断是不是做过修改，如果修改过数据为保存
   public canDeactivate(): boolean {
-    return true;
+    return (JSON.stringify(this.templatesList_old) === JSON.stringify(this.templatesList) || this.is_saved);
   }
 
   // 获取详情
@@ -92,6 +95,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
           });
         }
       });
+      this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
     }, error => {
       this.globalService.httpErrorProcess(error);
     });
@@ -154,6 +158,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
             this.drag(index1);
           }
         });
+        this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
       } else {
         templatesList.forEach(value1 => {
           value1.template_content.mallProducts.push(new CommodityEntity());
@@ -186,6 +191,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
           this.drag(index1);
         }
       });
+      this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
     }, error => {
       this.globalService.httpErrorProcess(error);
     });
@@ -402,6 +408,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.currentTemplate = this.templatesList[index];
     this.currentTemplate_old = this.currentTemplate.clone();
     this.currentTemplate.template_type = type;
+    // this.currentTemplate.template_content.left_image = [];
     this.mouldIndex = index;
     this.contentIndex = 0;
     this.imgIndex = 1;
@@ -699,6 +706,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 成功回调
   private successFunc(tip: string) {
+    this.is_saved = true;
     $(this.promptDiv.nativeElement).modal('hide');
     this.globalService.promptBox.open(tip);
     this.router.navigate(['/main/operation/mini-program/interface-decoration/record-list'], {queryParams: {page_type: this.modal_type}});
