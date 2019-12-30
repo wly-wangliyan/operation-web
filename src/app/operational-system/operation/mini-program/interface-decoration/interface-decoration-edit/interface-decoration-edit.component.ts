@@ -406,9 +406,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 选中编辑模板
   public onMouldEditClick(type: number, index: number) {
     this.currentTemplate = this.templatesList[index];
-    this.currentTemplate_old = this.currentTemplate.clone();
+    this.currentTemplate_old = JSON.parse(JSON.stringify(this.currentTemplate));
     this.currentTemplate.template_type = type;
-    // this.currentTemplate.template_content.left_image = [];
     this.mouldIndex = index;
     this.contentIndex = 0;
     this.imgIndex = 1;
@@ -419,7 +418,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 取消编辑模板
   public onCancelClick() {
     this.currentTemplate = new TemplateEntity();
-    if (this.mouldIndex < this.templatesList.length - 1) {
+    if (this.mouldIndex <= this.templatesList.length - 1) {
       this.templatesList[this.mouldIndex] = this.currentTemplate_old;
     }
     this.contentIndex = 0;
