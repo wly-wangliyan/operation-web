@@ -265,7 +265,7 @@ export class InterfaceDecorationService {
    */
   public requestCreateTemplateData(templateParams: TemplateEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/templates`;
-    return this.httpService.post(httpUrl, templateParams.json());
+    return this.httpService.post(httpUrl, templateParams);
   }
 
   /**

@@ -370,7 +370,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         value.product_type = this.currentTemplate.template_content.products[0].product_type;
       });
     }
-    const saveData = this.currentTemplate ? this.currentTemplate.clone() : new TemplateEntity();
+    const saveData = JSON.parse(JSON.stringify(this.currentTemplate));
+    saveData.template_content.ticketProducts = [];
+    saveData.template_content.mallProducts = [];
     if (saveData.template_type === 4) {
       saveData.template_content.left_image = saveData.template_content.left_image && saveData.template_content.left_image.length > 0 ?
           saveData.template_content.left_image[0] : '';
