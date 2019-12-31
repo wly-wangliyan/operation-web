@@ -139,9 +139,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const params = {commodity_ids: product_id};
     this.interfaceService.requestProductList(params).subscribe(res => {
       const templatesList = this.templatesList.filter(value => value.template_type > 4);
-      const mallProducts = [];
       if (res.length > 0) {
         this.templatesList.forEach((value1, index1) => {
+          const mallProducts = [];
           res.forEach(value => {
             if (value1.template_content.products) {
               value1.template_content.products.forEach(value2 => {
