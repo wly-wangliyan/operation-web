@@ -6,13 +6,14 @@ import { environment } from '../../../../../environments/environment';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { HttpResponse } from '@angular/common/http';
 import { CommodityEntity } from '../../../mall/goods-management/goods-management-http.service';
+import { PushLinkResponse } from '../push-management/push-management.service';
 
 export class SearchParams extends EntityBase {
   public category = 1; // Integer	T	类别	1: 发现　2:　首页
   public page_type: number = undefined; // Integer	T	页面类型	1:　草稿　2: 发布记录
   public release_status = ''; // 	Integer	F	发布状态	0: 未发布　1: 生效　2: 失效
-  // public page_num = 1; // 页码
-  // public page_size = 45; // 每页条数
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
 }
 
 export class IconMagicContentEntity extends EntityBase {
@@ -197,6 +198,15 @@ export class InterfaceDecorationService {
     const httpUrl = `${this.domain}/pages`;
     return this.httpService.get(httpUrl, searchParams.json())
         .pipe(map(res => new PageLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求发布记录列表
+   * @param string url linkUrl
+   * @returns Observable<PushLinkResponse>
+   */
+  public continuePageListData(url: string): Observable<PageLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new PageLinkResponse(res)));
   }
 
   /**

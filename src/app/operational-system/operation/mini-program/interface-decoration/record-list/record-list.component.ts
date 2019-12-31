@@ -6,6 +6,8 @@ import { debounceTime } from 'rxjs/operators';
 import { InterfaceDecorationService, PageEntity, SearchParams } from '../interface-decoration.service';
 import { ActivatedRoute } from '@angular/router';
 
+const PageSize = 15;
+
 @Component({
   selector: 'app-record-list',
   templateUrl: './record-list.component.html',
@@ -23,9 +25,19 @@ export class RecordListComponent implements OnInit {
 
   public end_time: any = '';
 
-  private searchText$ = new Subject<any>();
+  public pageIndex = 1; // 页码
 
+  private searchText$ = new Subject<any>();
   private requestSubscription: Subscription; // 获取数据
+  private linkUrl: string;
+  private continueRequestSubscription: Subscription;
+
+  private get pageCount(): number {
+    if (this.recordList.length % PageSize === 0) {
+      return this.recordList.length / PageSize;
+    }
+    return this.recordList.length / PageSize + 1;
+  }
 
   constructor(
       private globalService: GlobalService,
@@ -53,11 +65,30 @@ export class RecordListComponent implements OnInit {
   private requestPageList(): void {
     this.requestSubscription = this.interfaceDecorationService.requestPageListData(this.searchParams).subscribe(res => {
       this.recordList = res.results;
+      this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
+      this.pageIndex = 1;
     }, err => {
+      this.pageIndex = 1;
       this.noResultText = '暂无数据';
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  // 翻页方法
+  public onNZPageIndexChange(pageIndex: number) {
+    this.pageIndex = pageIndex;
+    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+      // 当存在linkUrl并且快到最后一页了请求数据
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.interfaceDecorationService.continuePageListData(this.linkUrl)
+          .subscribe(res => {
+            this.recordList = this.recordList.concat(res.results);
+            this.linkUrl = res.linkUrl;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    }
   }
 
   // 删除Page

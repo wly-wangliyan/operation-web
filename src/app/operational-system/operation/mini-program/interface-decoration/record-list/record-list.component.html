@@ -12,8 +12,8 @@
     <div class="table-container">
         <div class="zmy-table">
             <nz-table *ngIf="searchParams.page_type===1" #recordTable
-                      [nzData]="recordList" [nzPageSize]="recordList.length"
-                      [nzShowPagination]="false" [nzNoResult]="noResultText">
+                      [nzData]="recordList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
                 <thead>
                 <tr>
                     <th>模块</th>
@@ -39,8 +39,8 @@
                 </tbody>
             </nz-table>
             <nz-table *ngIf="searchParams.page_type===2"
-                      #recordTable1 [nzData]="recordList" [nzPageSize]="recordList.length"
-                      [nzShowPagination]="false" [nzNoResult]="noResultText">
+                      #recordTable1 [nzData]="recordList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
                 <thead>
                 <tr>
                     <th>模块</th>

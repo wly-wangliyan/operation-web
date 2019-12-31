@@ -83,7 +83,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       this.previewData = res;
       this.templatesList = res.templates;
       this.requestProduct();
-      this.templatesList.forEach(value => {
+      this.templatesList.forEach((value, index) => {
         value.template_content.left_image = value.template_content.left_image ? value.template_content.left_image.split(',') : [];
         value.template_content.right_top_image = value.template_content.right_top_image ? value.template_content.right_top_image.split(',') : [];
         value.template_content.right_bottom_image = value.template_content.right_bottom_image ? value.template_content.right_bottom_image.split(',') : [];
@@ -93,6 +93,16 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
             value1.left_image = value1.left_image ? value1.left_image.split(',') : [];
             value1.right_image = value1.right_image ? value1.right_image.split(',') : [];
           });
+        }
+        // 未查询出商品时，生成假数据
+        if (Number(value.template_type) === 5) {
+          for (let i = 0; i < 3; i++) {
+            value.template_content.mallProducts.push(new CommodityEntity());
+            value.template_content.ticketProducts.push(new TicketProductEntity());
+          }
+        } else if (Number(value.template_type) === 6) {
+          value.template_content.mallProducts.push(new CommodityEntity());
+          value.template_content.ticketProducts.push(new TicketProductEntity());
         }
       });
       this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
@@ -129,19 +139,21 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const params = {commodity_ids: product_id};
     this.interfaceService.requestProductList(params).subscribe(res => {
       const templatesList = this.templatesList.filter(value => value.template_type > 4);
+      const mallProducts = [];
       if (res.length > 0) {
         this.templatesList.forEach((value1, index1) => {
           res.forEach(value => {
             if (value1.template_content.products) {
               value1.template_content.products.forEach(value2 => {
-                const product_ids = value1.template_content.ticketProducts.map(v => v.product_id);
+                const product_ids = mallProducts.map(v => v.commodity_id);
                 if (value2.product_type === '1' && value.commodity_id === value2.product_id && !product_ids.includes(value.commodity_id)) {
-                  value1.template_content.mallProducts.push(value);
+                  mallProducts.push(value);
                   this.onProductTitleChange(index1);
                 }
               });
             }
           });
+          value1.template_content.mallProducts = mallProducts;
           if (Number(value1.template_type) === 5 && value1.template_content.mallProducts.length > 0) {
             this.drag(index1);
           }
@@ -161,17 +173,19 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private requestTicketProductAll(ticketProductHttpList: Array<any>) {
     forkJoin(ticketProductHttpList).subscribe( res => {
       this.templatesList.forEach((value1, index1) => {
+        const ticketProducts = [];
         res.forEach(value => {
           if (value1.template_content.products) {
             value1.template_content.products.forEach(value2 => {
-              const product_id = value1.template_content.ticketProducts.map(v => v.product_id);
+              const product_id = ticketProducts.map(v => v.product_id);
               if (value2.product_type === '2' && value.product_id === value2.product_id && !product_id.includes(value.product_id)) {
-                value1.template_content.ticketProducts.push(value);
+                ticketProducts.push(value);
                 this.onProductTitleChange(index1);
               }
             });
           }
         });
+        value1.template_content.ticketProducts = ticketProducts;
         if (res.length === 0 && Number(value1.template_type) >= 5) {
           value1.template_content.ticketProducts.push(new TicketProductEntity());
         }
@@ -372,7 +386,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       });
     }
     saveData.template_content = JSON.stringify(saveData.template_content);
-    if (!this.currentTemplate.template_id || this.previewData.page_type === 2) {
+    if (!this.currentTemplate.template_id || (this.previewData.page_type === 2 && !this.template_ids.includes(this.currentTemplate.template_id))) {
       this.interfaceService.requestCreateTemplateData(saveData).subscribe(res => {
         this.currentTemplate.template_id = res.body.template_id;
         this.template_ids.push(res.body.template_id);
