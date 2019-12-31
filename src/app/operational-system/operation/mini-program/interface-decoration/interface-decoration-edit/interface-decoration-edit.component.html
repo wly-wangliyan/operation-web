@@ -45,13 +45,13 @@
                (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
             <li *ngFor="let content of item.template_content.contents;let k=index">
               <div>
-                <span *ngIf="content.left_title">{{content.left_title?content.left_title:'未定义标题'}}</span>
+                <span *ngIf="content.left_title">{{content.left_title?(content.left_title|zMaxLength:8):'未定义标题'}}</span>
                 <span *ngIf="!content.left_title">&nbsp;</span>
                 <img *ngIf="!content.left_image||content.left_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.left_image&&content.left_image.length>0" [src]="content.left_image[0]">
               </div>
               <div>
-                <span *ngIf="content.right_title">{{content.right_title?content.right_title:'未定义标题'}}</span>
+                <span *ngIf="content.right_title">{{content.right_title?(content.right_title|zMaxLength:8):'未定义标题'}}</span>
                 <span *ngIf="!content.right_title">&nbsp;</span>
                 <img *ngIf="!content.right_image||content.right_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.right_image&&content.right_image.length>0" [src]="content.right_image[0]">
@@ -61,7 +61,8 @@
           <div *ngIf="item.template_type==4" class="template_4" [class.mould-edit-active]="mouldIndex===i"
                (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
             <div>
-              <span *ngIf="item.template_content.left_title">{{item.template_content.left_title?item.template_content.left_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.left_title">
+                {{item.template_content.left_title?(item.template_content.left_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.left_title">&nbsp;</span>
               <img *ngIf="!item.template_content.left_image||item.template_content.left_image.length===0"
                    style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
@@ -69,13 +70,15 @@
                    style="height: 195px;" [src]="item.template_content.left_image[0]">
             </div>
             <div>
-              <span *ngIf="item.template_content.right_top_title">{{item.template_content.right_top_title?item.template_content.right_top_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.right_top_title">
+                {{item.template_content.right_top_title?(item.template_content.right_top_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.right_top_title">&nbsp;</span>
               <img *ngIf="!item.template_content.right_top_image||item.template_content.right_top_image.length===0"
                    src="/assets/images/interface-decoration/icon_mould_3_empty.png">
               <img *ngIf="item.template_content.right_top_image&&item.template_content.right_top_image.length>0"
                    [src]="item.template_content.right_top_image[0]">
-              <span *ngIf="item.template_content.right_bottom_title">{{item.template_content.right_bottom_title?item.template_content.right_bottom_title:'未定义标题'}}</span>
+              <span *ngIf="item.template_content.right_bottom_title">
+                {{item.template_content.right_bottom_title?(item.template_content.right_bottom_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.right_bottom_title">&nbsp;</span>
               <img *ngIf="!item.template_content.right_bottom_image||item.template_content.right_bottom_image.length===0"
                    src="/assets/images/interface-decoration/icon_mould_3_empty.png">
