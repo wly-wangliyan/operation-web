@@ -59,7 +59,7 @@ input[type=file]+label {
 }
 
 .add-pic {
-  background: url('../../../../assets/images/addPic.png') no-repeat center;
+  background: url('../../../../assets/images/add_pic.png') no-repeat center;
 }
 
 .select-wrap {

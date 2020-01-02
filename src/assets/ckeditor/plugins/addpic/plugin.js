@@ -11,7 +11,7 @@
       editor.addCommand (b, a);
       editor.ui.addButton ('addpic', {
         label: '添加图片',
-        icon: this.path + 'addpic.png',
+        icon: this.path + 'add_pic.png',
         command: b,
       });
     },
