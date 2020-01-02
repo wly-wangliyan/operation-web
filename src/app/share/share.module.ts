@@ -29,7 +29,6 @@ import { ProjectDialogComponent } from './components/project-dialog/project-dial
 import { SelectBrandFirmComponent } from './components/select-brand-firm/select-brand-firm.component';
 import { DateClockComponent } from './components/date-clock/date-clock.component';
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
-import { SelectMultiBrandFirmComponent } from './components/select-multi-brand-firm/select-multi-brand-firm.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
 import { MallCommodityTypePipe } from './pipes/mall-format.pipe';
@@ -103,7 +102,6 @@ import { IntNumberDirective } from './directives/int-number.directive';
     ProjectDialogComponent,
     SelectBrandFirmComponent,
     SelectBrandFirmTypeComponent,
-    SelectMultiBrandFirmComponent,
     DateClockComponent,
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,
@@ -191,7 +189,6 @@ import { IntNumberDirective } from './directives/int-number.directive';
     ProjectDialogComponent,
     SelectBrandFirmComponent,
     SelectBrandFirmTypeComponent,
-    SelectMultiBrandFirmComponent,
     DateClockComponent,
     SearchVehicleTypeGroupComponent,
     TxtCopyComponent,

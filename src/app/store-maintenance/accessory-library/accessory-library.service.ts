@@ -99,7 +99,6 @@ export class AccessoryEntity extends EntityBase {
   }
 }
 
-
 export class AccessoryLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<AccessoryEntity> {
     const tempList: Array<AccessoryEntity> = [];
@@ -162,6 +161,7 @@ export class AccessoryLibraryService {
   /**
    * 获取配件库列表
    * @param searchParams 条件检索参数
+   * @returns Observable<AccessoryLinkResponse>
    */
   public requestAccessoryListData(searchParams: SearchParams): Observable<AccessoryLinkResponse> {
     const httpUrl = `${this.domain}/accessories`;
@@ -201,6 +201,7 @@ export class AccessoryLibraryService {
 
   /**
    * 获取项目列表
+   * @returns Observable<ProjectLinkResponse>
    */
   public requestProjectListData(): Observable<ProjectLinkResponse> {
     const httpUrl = `${this.domain}/projects/all`;
@@ -210,6 +211,8 @@ export class AccessoryLibraryService {
 
   /**
    * 获取项目详情--取规格名称
+   * @param project_id string	T	项目ID
+   * @returns Observable<ProjectEntity>
    */
   public requestProjectDetailData(project_id: string): Observable<ProjectEntity> {
     const httpUrl = `${this.domain}/projects/${project_id}`;
@@ -237,7 +240,6 @@ export class AccessoryLibraryService {
     return this.httpService.put(httpUrl, params);
   }
 
-
   /**
    * 删除配件
    * @param accessory_id 配件id
@@ -248,5 +250,15 @@ export class AccessoryLibraryService {
     return this.httpService.delete(httpUrl);
   }
 
+  /**
+   * 推荐设置
+   * @param accessory_id 配件id
+   * @param car_series_ids string 车系
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateRecommendData(car_series_ids: string, accessory_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}/car_series`;
+    return this.httpService.patch(httpUrl, { car_series_ids });
+  }
 }
 

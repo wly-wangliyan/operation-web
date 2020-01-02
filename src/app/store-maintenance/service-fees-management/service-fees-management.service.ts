@@ -30,6 +30,8 @@ export class ServiceFeeEntity extends EntityBase {
   public original_amount: number = undefined; // float	工时费原价 单位:分
   public sale_amount: number = undefined; // float	工时费销售单价 单位:分
   public settlement_amount: number = undefined; // 工时费结算价 单位:分
+  public initial_price: number = undefined; // Integer	原价 单位:分
+  public current_price: number = undefined; // Integer	现价 单位:分
   public balance_initial_price: number = undefined; // Integer	救援费尾款原价 单位:分
   public balance_current_price: number = undefined; // Integer	救援费尾款现价 单位:分
   public prepay_initial_price: number = undefined; // Integer	救援费预付原价 单位:分
@@ -61,6 +63,7 @@ export class ServiceFeesManagementService {
   /**
    * 获取服务费列表
    * @param searchParams 条件检索参数
+   * @returns Observable<ParkingLinkResponse>
    */
   public requestServiceFeeListData(searchParams: SearchParams): Observable<ServiceFeeLinkResponse> {
     const httpUrl = `${this.domain}/service_fees`;
@@ -100,14 +103,14 @@ export class ServiceFeesManagementService {
 
   /**
    * 编辑救援管理
-   * @param parking_id 订单ID
+   * @param service_fee_id string 服务费ID
    * @param params SearchFeeParams 参数
+   * @param fee_type number 救援类型
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateFeeData(params: SearchFeeParams, service_fee_id: string, fee_type: number): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/service_fees/${service_fee_id}`;
     return this.httpService.put(httpUrl, { ...params, fee_type });
   }
-
 }
 

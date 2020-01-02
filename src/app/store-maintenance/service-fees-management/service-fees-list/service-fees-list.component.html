@@ -55,8 +55,8 @@
               <tr *ngFor="let data of basicTable.data; let i=index">
                 <td>{{i+(pageIndex-1)*15+1}}</td>
                 <td>{{data.service_fee_name}}</td>
-                <td>{{(data.balance_initial_price|centPriceChange:'元')}}</td>
-                <td>{{data.balance_current_price|centPriceChange:'元'}}</td>
+                <td>{{data.initial_price|centPriceChange:'元'}}</td>
+                <td>{{data.current_price|centPriceChange:'元'}}</td>
                 <td>{{data.prepay_initial_price|centPriceChange:'元'}}</td>
                 <td>{{data.prepay_current_price|centPriceChange:'元'}}</td>
                 <!-- <td>

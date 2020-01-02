@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
 import {
   ServiceFeeEntity,
@@ -42,9 +42,6 @@ export class ServiceFeesListComponent implements OnInit {
       { key: 1, value: '救援费管理' },
     ];
     this.selectedTabIndex = 0;
-    // const obj = new ServiceFeeEntity();
-    // obj.service_fee_name = '1321223';
-    // this.serviceFeeList.push(obj);
     // 救援费管理列表
     this.searchText$.pipe(
       debounceTime(500),
@@ -52,6 +49,7 @@ export class ServiceFeesListComponent implements OnInit {
         this.feesService.requestServiceFeeListData(this.searchParams))
     ).subscribe(res => {
       this.serviceFeeList = res.results;
+      this.getPriceData();
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -60,12 +58,27 @@ export class ServiceFeesListComponent implements OnInit {
     this.searchText$.next();
   }
 
+  /**
+   * 列表价格数据计算
+   * 原价：尾款原价+预付原价
+   * 现价：尾款现价+预付现价
+   */
+  private getPriceData() {
+    this.serviceFeeList.forEach(i => {
+      i.initial_price = i.balance_initial_price && i.prepay_initial_price
+        ? Number(i.balance_initial_price) + Number(i.prepay_initial_price) : i.balance_initial_price || i.prepay_initial_price
+        || 0;
+      i.current_price = i.balance_current_price && i.prepay_current_price
+        ? Number(i.balance_current_price) + Number(i.prepay_current_price) : i.balance_current_price || i.prepay_current_price
+        || 0;
+    });
+  }
+
   // 查询按钮
   public onSearchBtnClick() {
     this.pageIndex = 1;
     this.searchText$.next();
   }
-
 
   // 分页
   public onNZPageIndexChange(pageIndex: number) {

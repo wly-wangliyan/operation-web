@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
 import {
   UpkeepOrderEntity,
@@ -7,7 +7,6 @@ import {
 } from 'src/app/store-maintenance/order-management/order-management.service';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { SelectMultiBrandFirmComponent } from '../../../share/components/select-multi-brand-firm/select-multi-brand-firm.component';
 
 const PageSize = 15;
 
@@ -40,8 +39,6 @@ export class WorkFeesListComponent implements OnInit {
     }
     return this.orderList.length / PageSize + 1;
   }
-
-  @ViewChild(SelectMultiBrandFirmComponent, { static: true }) public selectMultiBrandFirmComponent: SelectMultiBrandFirmComponent;
 
   constructor(private globalService: GlobalService, private orderService: OrderManagementService) { }
 

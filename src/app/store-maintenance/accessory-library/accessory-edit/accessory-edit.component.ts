@@ -3,7 +3,7 @@ import { ChooseProjectComponent } from './choose-project/choose-project.componen
 import { isUndefined } from 'util';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../core/global.service';
-import { Subject, timer, forkJoin } from 'rxjs/index';
+import { Subject, timer, forkJoin } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import {
   AccessoryLibraryService,
@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -76,7 +76,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -87,7 +87,6 @@ export class AccessoryEditComponent implements OnInit {
       this.accessoryLibraryService.requestAccessoryDetailData(this.accessory_id).subscribe(res => {
         this.accessoryData = res;
         this.getDetailData();
-        this.getDetailNumData();
         this.getEditorData(res.detail);
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -109,23 +108,14 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryParams.project_name = this.accessoryData.project ? this.accessoryData.project.project_name : '';
     this.accessoryData.specification_info.forEach(i => {
       i.imageList = i.image ? i.image.split(',') : [];
-      i.original_fee = this.getFeeData(i.original_balance_fee);
-      i.sale_fee = this.getFeeData(i.sale_balance_fee);
+      i.original_fee = this.getCentPrice(i.original_balance_fee);
+      i.sale_fee = this.getCentPrice(i.sale_balance_fee);
     });
     this.specificationsList = this.accessoryData.specification_info;
     this.specificationsTempList = this.accessoryData.specification_info;
+    this.real_prepaid_fee = this.getCentPrice(this.accessoryData.real_prepaid_fee);
+    this.right_prepaid_fee = this.getCentPrice(this.accessoryData.right_prepaid_fee);
     this.getProjectInfo();
-  }
-
-  // 编辑配置库数据处理
-  private getDetailNumData() {
-    this.real_prepaid_fee = this.getFeeData(this.accessoryData.real_prepaid_fee);
-    this.right_prepaid_fee = this.getFeeData(this.accessoryData.right_prepaid_fee);
-  }
-
-  // 价钱数据处理
-  private getFeeData(fee: number) {
-    return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
   }
 
   // 富文本数据处理
@@ -157,10 +147,6 @@ export class AccessoryEditComponent implements OnInit {
     });
   }
 
-  public onCancelBtn() {
-    this.router.navigateByUrl('/store-maintenance/accessory-library');
-  }
-
   // 清空
   public clear() {
     this.errPositionItem.icon.isError = false;
@@ -174,7 +160,7 @@ export class AccessoryEditComponent implements OnInit {
     this.isSaveBtnDisabled = false;
   }
 
-  // 选择图片时校验图片格式
+  // 产品图片：选择图片时校验图片格式
   public onSelectedPicture(event) {
     this.errPositionItem.icon.isError = false;
     if (event === 'type_error') {
@@ -186,7 +172,7 @@ export class AccessoryEditComponent implements OnInit {
     }
   }
 
-  // 选择图片时校验图片格式
+  // 规格：选择图片时校验图片格式
   public onSelectSpecificationsPic(event: any, i: number) {
     this.errSpecificationsItem.icon.isError = false;
     this.specifications_image_num = i;
@@ -325,12 +311,22 @@ export class AccessoryEditComponent implements OnInit {
   private handleParams() {
     this.accessoryParams.battery_specification = this.specificationsList.concat(this.specificationsDelList);
     this.accessoryParams.battery_specification.forEach(p => {
-      p.original_balance_fee = Math.round(Number(p.original_fee) * 100);
-      p.sale_balance_fee = Math.round(Number(p.sale_fee) * 100);
+      p.original_balance_fee = this.handleCentPrice(p.original_fee);
+      p.sale_balance_fee = this.handleCentPrice(p.sale_fee);
     });
-    this.accessoryParams.real_prepaid_fee = Math.round(Number(this.real_prepaid_fee) * 100);
-    this.accessoryParams.right_prepaid_fee = Math.round(Number(this.right_prepaid_fee) * 100);
+    this.accessoryParams.real_prepaid_fee = this.handleCentPrice(this.real_prepaid_fee);
+    this.accessoryParams.right_prepaid_fee = this.handleCentPrice(this.right_prepaid_fee);
     this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+  }
+
+  // 钱的单位由分转换为元
+  private getCentPrice(fee: number) {
+    return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
+  }
+
+  // 钱的单位由元转换为分
+  private handleCentPrice(fee: string) {
+    return Math.round(Number(fee) * 100);
   }
 
   // 处理错误信息
@@ -358,5 +354,10 @@ export class AccessoryEditComponent implements OnInit {
         }
       }
     }
+  }
+
+  // 取消
+  public onCancelBtn() {
+    this.router.navigateByUrl('/store-maintenance/accessory-library');
   }
 }

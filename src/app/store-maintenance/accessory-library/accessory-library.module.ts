@@ -9,6 +9,7 @@ import { AccessoryListComponent } from './accessory-list/accessory-list.componen
 import { AccessoryEditComponent } from './accessory-edit/accessory-edit.component';
 import { ChooseProjectComponent } from './accessory-edit/choose-project/choose-project.component';
 import { ChooseBrandComponent } from './accessory-edit/choose-brand/choose-brand.component';
+import { SelectMultiBrandFirmComponent } from './accessory-list/select-multi-brand-firm/select-multi-brand-firm.component';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -30,6 +31,7 @@ const uploadToken: UploadConfig = {
     AccessoryEditComponent,
     ChooseProjectComponent,
     ChooseBrandComponent,
+    SelectMultiBrandFirmComponent
   ],
   providers: [{
     provide: UPLOAD_TOKEN,

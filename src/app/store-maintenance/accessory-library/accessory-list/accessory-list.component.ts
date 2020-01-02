@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalService } from '../../../core/global.service';
 import {
   AccessoryLibraryService,
@@ -8,7 +8,7 @@ import {
 } from '../accessory-library.service';
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-
+import { SelectMultiBrandFirmComponent } from './select-multi-brand-firm/select-multi-brand-firm.component';
 
 const PageSize = 15;
 
@@ -43,12 +43,11 @@ export class AccessoryListComponent implements OnInit {
     return this.accessoryList.length / PageSize + 1;
   }
 
+  @ViewChild(SelectMultiBrandFirmComponent, { static: true }) public selectMultiBrandFirmComponent: SelectMultiBrandFirmComponent;
+
   constructor(private globalService: GlobalService, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
-    // const obj = new AccessoryEntity();
-    // obj.accessory_id = '232342';
-    // this.accessoryList.push(obj);
     // 配件库列表
     this.searchText$.pipe(
       debounceTime(500),
@@ -60,7 +59,6 @@ export class AccessoryListComponent implements OnInit {
         ...i,
         accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
       }));
-
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
     }, err => {
@@ -106,6 +104,23 @@ export class AccessoryListComponent implements OnInit {
     });
   }
 
+  // 推荐设置打开所属厂商选择组件
+  public onOpenBrandFirmModal(accessory_id: string): void {
+    this.selectMultiBrandFirmComponent.open(accessory_id);
+    // 项目列表
+    this.searchProjectText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.accessoryLibraryService.requestProjectListData())
+    ).subscribe(res => {
+      this.projectList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    // this.searchProjectText$.next();
+  }
+
+
   /** 删除配件 */
   public onDeleteAccessory(data: AccessoryEntity) {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
@@ -120,13 +135,11 @@ export class AccessoryListComponent implements OnInit {
     });
   }
 
-
   // 分页
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
-      // tslint:disable-next-line:no-unused-expression
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.accessoryLibraryService.continueAccessoryistData(this.linkUrl).subscribe(res => {
         this.accessoryList = this.accessoryList.concat(res.results);

@@ -1,7 +1,7 @@
 <div class="content-header">
   <app-crumb [level1Name]="'配件库'" [level2Name]=""></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" [routerLink]="['../edit','']">
+    <li class="big-bg" [routerLink]="['../creat']">
       <a>创建</a>
     </li>
   </ul>
@@ -118,6 +118,7 @@
             </td>
             <td class="operation">
               <a [title]="'编辑'" [routerLink]="['../edit',data.accessory_id]">编辑</a>
+              <!-- <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data.accessory_id)">推荐设置</a> -->
               <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
             </td>
           </tr>
@@ -126,3 +127,5 @@
     </div>
   </div>
 </div>
+<!-- 设置推荐车系 -->
+<app-select-multi-brand-firm></app-select-multi-brand-firm>
