@@ -197,7 +197,6 @@ export class VehicleManagementHttpService {
       .pipe(map(res => res));
   }
 
-
   /**
    * 修改车型的状态
    * @param car_series_id string 车系ID

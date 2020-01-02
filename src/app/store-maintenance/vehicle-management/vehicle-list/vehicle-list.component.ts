@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { HttpErrorEntity } from '../../../core/http.service';
 import {
   CarBrandEntity,
   CarFactoryEntity,
@@ -138,8 +137,6 @@ export class VehicleListComponent implements OnInit {
 
   // 变更厂商
   public onChangeFactory(event: any) {
-    console.log('2', event.target.value);
-
     this.searchParams.car_series_id = '';
     this.searchParams.car_displacement = '';
     this.carSeriesList = [];
