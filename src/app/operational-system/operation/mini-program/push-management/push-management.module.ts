@@ -6,7 +6,10 @@ import { PushDetailComponent } from './push-detail/push-detail.component';
 import { ShareModule } from '../../../../share/share.module';
 import { PushManagementRoutingModule } from './push-management-routing.module';
 import { PushManagementComponent } from './push-management.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 @NgModule({
   declarations: [
     PushManagementComponent,
@@ -17,7 +20,11 @@ import { PushManagementComponent } from './push-management.component';
   imports: [
     ShareModule,
     CommonModule,
-    PushManagementRoutingModule
+    PushManagementRoutingModule,
+    NzTableModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    NzSwitchModule
   ]
 })
 export class PushManagementModule { }

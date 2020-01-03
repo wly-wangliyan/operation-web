@@ -6,13 +6,24 @@ import { NoticeManagementRoutingModule } from './notice-management-routing.modul
 import { NoticeManagementComponent } from './notice-management.component';
 import { NoticeListComponent } from './notice-list/notice-list.component';
 import { NoticeEditComponent } from './notice-list/notice-edit/notice-edit.component';
-
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 @NgModule({
   declarations: [NoticeManagementComponent, NoticeListComponent, NoticeEditComponent],
   imports: [
     CommonModule,
     NoticeManagementRoutingModule,
     ShareModule,
+    NzFormModule,
+    NzTableModule,
+    NzButtonModule,
+    NzBackTopModule,
+    NzTabsModule,
+    NzSwitchModule
   ]
 })
 export class NoticeManagementModule { }

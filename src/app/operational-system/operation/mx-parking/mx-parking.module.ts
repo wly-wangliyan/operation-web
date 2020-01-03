@@ -13,32 +13,36 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../../core/upload.service';
 import { environment } from '../../../../environments/environment';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 const uploadToken: UploadConfig = {
-    img_config: {
-        reportProcess: true,
-        url: `${environment.STORAGE_DOMAIN}/storages/images`,
-        source: 'park',
-    },
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
 };
 
 @NgModule({
-    imports: [
-        ShareModule,
-        MxParkingRoutingModule,
-        ColorPickerModule,
-        DragDropModule,
-        HttpClientModule,
-    ],
-    declarations: [
-        MxParkingComponent, FirstPageIconComponent, AppListComponent, FirstPageIconEditComponent,
-        VersionListComponent, AppAddComponent, VersionAddComponent
-    ],
-    providers: [{
-        provide: UPLOAD_TOKEN,
-        useValue: uploadToken
-    },
-        UploadService]
+  imports: [
+    ShareModule,
+    MxParkingRoutingModule,
+    ColorPickerModule,
+    DragDropModule,
+    HttpClientModule,
+    NzTableModule,
+    NzButtonModule
+  ],
+  declarations: [
+    MxParkingComponent, FirstPageIconComponent, AppListComponent, FirstPageIconEditComponent,
+    VersionListComponent, AppAddComponent, VersionAddComponent
+  ],
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService]
 })
 export class MxParkingModule {
 }
