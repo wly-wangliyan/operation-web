@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainModule } from '../../operational-system/main/main.module';
 import { OrderParkingMainRoutingModule } from './order-parking-main-routing.module';
@@ -21,7 +20,6 @@ const uploadToken: UploadConfig = {
   declarations: [OrderParkingMainComponent],
   imports: [
     CommonModule,
-    NgZorroAntdModule,
     FormsModule,
     ReactiveFormsModule,
     OrderParkingMainRoutingModule,
