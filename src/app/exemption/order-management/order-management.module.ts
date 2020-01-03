@@ -5,14 +5,20 @@ import { OrderManagementRoutingModule } from './order-management-routing.module'
 import { OrderManagementComponent } from './order-management.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
-
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   declarations: [OrderManagementComponent, OrderListComponent, OrderDetailComponent],
   imports: [
     ShareModule,
     CommonModule,
-    OrderManagementRoutingModule
+    OrderManagementRoutingModule,
+    NzTableModule,
+    NzDatePickerModule,
+    NzSpinModule,
+    NzButtonModule
   ]
 })
 export class OrderManagementModule { }
