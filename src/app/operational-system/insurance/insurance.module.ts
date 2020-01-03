@@ -13,37 +13,42 @@ import { BrokerageCompanyListComponent } from './brokerage-company-management/br
 import { BrokerageCompanyEditComponent } from './brokerage-company-management/brokerage-company-edit/brokerage-company-edit.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MainModule } from '../../operational-system/main/main.module';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 const uploadToken: UploadConfig = {
-    img_config: {
-        reportProcess: true,
-        url: `${environment.STORAGE_DOMAIN}/storages/images`,
-        source: 'park',
-    },
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
 };
 
 @NgModule({
-    imports: [
-        ShareModule,
-        InsuranceRoutingModule,
-        DragDropModule,
-        HttpClientModule,
-        MainModule
-    ],
-    declarations: [
-        InsuranceComponent,
-        InsuranceCompanyManagementComponent,
-        BrokerageCompanyManagementComponent,
-        InsuranceCompanyListComponent,
-        InsuranceCompanyEditComponent,
-        BrokerageCompanyListComponent,
-        BrokerageCompanyEditComponent
-    ],
-    providers: [{
-        provide: UPLOAD_TOKEN,
-        useValue: uploadToken
-    },
-        UploadService]
+  imports: [
+    ShareModule,
+    InsuranceRoutingModule,
+    DragDropModule,
+    HttpClientModule,
+    MainModule,
+    NzTableModule,
+    NzButtonModule,
+    NzSwitchModule
+  ],
+  declarations: [
+    InsuranceComponent,
+    InsuranceCompanyManagementComponent,
+    BrokerageCompanyManagementComponent,
+    InsuranceCompanyListComponent,
+    InsuranceCompanyEditComponent,
+    BrokerageCompanyListComponent,
+    BrokerageCompanyEditComponent
+  ],
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService]
 })
 export class InsuranceModule {
 }
