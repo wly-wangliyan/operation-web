@@ -10,7 +10,11 @@ import { OperationConfigurationDetailComponent } from './operation-configuration
 import { OperationConfigurationEditComponent } from './operation-configuration/operation-configuration-edit/operation-configuration-edit.component';
 import { ChooseAccessoryComponent } from './operation-configuration/operation-configuration-edit/choose-accessory/choose-accessory.component';
 import { CreateAccessoryComponent } from './operation-configuration/operation-configuration-edit/create-accessory/create-accessory.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 @NgModule({
   declarations: [
     BusinessManagementComponent,
@@ -24,7 +28,12 @@ import { CreateAccessoryComponent } from './operation-configuration/operation-co
   imports: [
     ShareModule,
     CommonModule,
-    BusinessManagementRoutingModule
+    BusinessManagementRoutingModule,
+    NzTableModule,
+    NzButtonModule,
+    NzSpinModule,
+    NzSwitchModule,
+    NzEmptyModule
   ]
 })
 export class BusinessManagementModule { }

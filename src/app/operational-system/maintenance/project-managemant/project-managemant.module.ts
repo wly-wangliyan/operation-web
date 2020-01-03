@@ -4,7 +4,8 @@ import { ShareModule } from '../../../share/share.module';
 import { ProjectManagemantRoutingModule } from './project-managemant-routing.module';
 import { ProjectManagemantComponent } from './project-managemant.component';
 import { ProjectListComponent } from './project-list/project-list.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   declarations: [
     ProjectManagemantComponent,
@@ -12,7 +13,9 @@ import { ProjectListComponent } from './project-list/project-list.component';
   imports: [
     ShareModule,
     CommonModule,
-    ProjectManagemantRoutingModule
+    ProjectManagemantRoutingModule,
+    NzTableModule,
+    NzButtonModule,
   ]
 })
 export class ProjectManagemantModule { }

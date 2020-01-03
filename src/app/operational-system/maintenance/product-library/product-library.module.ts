@@ -6,7 +6,8 @@ import { ProductLibraryComponent } from './product-library.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductCreateComponent } from './product-create/product-create.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { ProductCreateComponent } from './product-create/product-create.componen
   imports: [
     ShareModule,
     CommonModule,
-    ProductLibraryRoutingModule
+    ProductLibraryRoutingModule,
+    NzTableModule,
+    NzButtonModule,
   ]
 })
 export class ProductLibraryModule { }
