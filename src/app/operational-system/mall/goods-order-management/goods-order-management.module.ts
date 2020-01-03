@@ -14,12 +14,23 @@ import { GoodsOrderDeliveryComponent } from './goods-order-delivery/goods-order-
 import { GoodsOrderRefundComponent } from './goods-order-refund/goods-order-refund.component';
 import { GoodsOrderRemarkComponent } from './goods-order-remark/goods-order-remark.component';
 import { GoodsWriteOffComponent } from './goods-write-off/goods-write-off.component';
-
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzCardModule } from 'ng-zorro-antd/card';
 @NgModule({
   imports: [
     ShareModule,
     CommonModule,
     GoodsOrderManagementRoutingModule,
+    NzRadioModule,
+    NzTabsModule,
+    NzTableModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    NzCardModule
   ],
   declarations: [
     GoodsOrderManagementComponent,

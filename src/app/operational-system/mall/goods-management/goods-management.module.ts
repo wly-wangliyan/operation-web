@@ -9,11 +9,25 @@ import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
 import { ClassifyManagementComponent } from './classify-management/classify-management.component';
 import { ClassifyEditComponent } from './classify-management/classify-edit/classify-edit.component';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 @NgModule({
   imports: [
     ShareModule,
     CommonModule,
     GoodsManagementRoutingModule,
+    NzTableModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    NzSpinModule,
+    NzSwitchModule,
+    NzFormModule,
+    NzCheckboxModule
   ],
   declarations: [
     GoodsManagementComponent,
