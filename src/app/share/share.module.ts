@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
-
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CrumbComponent } from './components/crumb/crumb.component';
 import { Http403TipComponent } from './components/tips/http403-tip/http403-tip.component';
 import { Http500TipComponent } from './components/tips/http500-tip/http500-tip.component';
@@ -81,7 +83,10 @@ import { IntNumberDirective } from './directives/int-number.directive';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgZorroAntdModule,
+    NzMenuModule,
+    NzSpinModule,
+    NzAnchorModule,
+    NzButtonModule
   ],
   entryComponents: [TxtCopyComponent],
   declarations: [
@@ -171,7 +176,6 @@ import { IntNumberDirective } from './directives/int-number.directive';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgZorroAntdModule,
     CrumbComponent,
     Http403TipComponent,
     Http500TipComponent,
