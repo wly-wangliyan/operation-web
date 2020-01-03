@@ -10,6 +10,14 @@ import { AccessoryEditComponent } from './accessory-edit/accessory-edit.componen
 import { ChooseProjectComponent } from './accessory-edit/choose-project/choose-project.component';
 import { ChooseBrandComponent } from './accessory-edit/choose-brand/choose-brand.component';
 import { SelectMultiBrandFirmComponent } from './accessory-list/select-multi-brand-firm/select-multi-brand-firm.component';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -24,6 +32,14 @@ const uploadToken: UploadConfig = {
     CommonModule,
     ShareModule,
     AccessoryLibraryRoutingModule,
+    NzFormModule,
+    NzTableModule,
+    NzSwitchModule,
+    NzInputModule,
+    NzGridModule,
+    NzAnchorModule,
+    NzTreeModule,
+    NzButtonModule
   ],
   declarations: [
     AccessoryLibraryComponent,
