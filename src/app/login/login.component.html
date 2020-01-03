@@ -1,28 +1,27 @@
 <div class="whole">
-    <div class="content-login" #routerDiv>
-        <div class="left">
-            <div class="logo">
-                <div></div>
-            </div>
-            <form (ngSubmit)="onLogin()">
-                <div class="name-input">
-                    <span class="name-icon"></span>
-                    <input type="text" class="" placeholder="请输入用户名" [(ngModel)]="loginParams.username" name="username"
-                           id="username" maxlength="20" autocomplete="off" #username>
-                </div>
-                <div class="password-input">
-                    <span class="password-icon"></span>
-                    <input class="" type="password" placeholder="请输入密码" [(ngModel)]="loginParams.password"
-                           name="password" id="password" maxlength="20" #password>
-                    <span class="eye-icon-hidden" (click)="onEyeIconClick()" id="eye-icon" #eyeIcon></span>
-                </div>
-                <div class="danger" *ngIf="loginError">
-                    <p>{{errorMsg}}</p>
-                </div>
-                <button class="submit">登 &nbsp;录</button>
-            </form>
+  <div class="content-login" #routerDiv>
+    <div class="left">
+      <div class="logo">
+        <div></div>
+      </div>
+      <form (ngSubmit)="onLogin()">
+        <div class="name-input">
+          <span class="name-icon"></span>
+          <input type="text" class="" placeholder="请输入用户名" [(ngModel)]="loginParams.username" name="username"
+            id="username" maxlength="20" autocomplete="off" #username>
         </div>
-        <div class="right"></div>
+        <div class="password-input">
+          <span class="password-icon"></span>
+          <input class="" type="password" placeholder="请输入密码" [(ngModel)]="loginParams.password" name="password"
+            id="password" maxlength="20" #password>
+          <span class="eye-icon-hidden" (click)="onEyeIconClick()" id="eye-icon" #eyeIcon></span>
+        </div>
+        <div class="danger" *ngIf="loginError">
+          <p>{{errorMsg}}</p>
+        </div>
+        <button class="submit">登 &nbsp;录</button>
+      </form>
     </div>
+    <div class="right"></div>
+  </div>
 </div>
-<app-z-prompt-box></app-z-prompt-box>
