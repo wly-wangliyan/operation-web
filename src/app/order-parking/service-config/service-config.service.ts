@@ -71,7 +71,7 @@ export class ParkingLinkResponse extends LinkResponse {
 })
 export class ServiceConfigService {
 
-  private domain = environment.BOOKING_DOMAIN; // 预约泊车域名
+  private domain = environment.BOOKING_DOMAIN; // 机场停车（预约泊车）域名
 
   constructor(private httpService: HttpService) { }
 
