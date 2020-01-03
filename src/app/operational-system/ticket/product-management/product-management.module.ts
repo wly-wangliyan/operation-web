@@ -18,7 +18,15 @@ import { LabelManagementComponent } from './label-management/label-management.co
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LabelEditComponent } from './label-management/label-edit/label-edit.component';
 import { ChooseLabelComponent } from './product-edit/choose-label/choose-label.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 const uploadToken: UploadConfig = {
   img_config: {
     reportProcess: true,
@@ -46,7 +54,16 @@ const uploadToken: UploadConfig = {
     ShareModule,
     DragDropModule,
     CommonModule,
-    ProductManagementRoutingModule
+    ProductManagementRoutingModule,
+    NzTableModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    NzSpinModule,
+    NzFormModule,
+    NzCalendarModule,
+    NzInputModule,
+    NzTabsModule,
+    NzBackTopModule
   ],
   providers: [{
     provide: UPLOAD_TOKEN,

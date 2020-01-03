@@ -7,7 +7,9 @@ import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
 import { DetailComponent } from './detail/detail.component';
 import { ZPhonePreviewComponent } from './components/z-phone-preview/z-phone-preview.component';
-
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 @NgModule({
   declarations: [
     ThematicActivityComponent,
@@ -18,7 +20,10 @@ import { ZPhonePreviewComponent } from './components/z-phone-preview/z-phone-pre
   imports: [
     ShareModule,
     CommonModule,
-    ThematicActivityRoutingModule
+    ThematicActivityRoutingModule,
+    NzTableModule,
+    NzButtonModule,
+    NzSpinModule,
   ]
 })
 export class ThematicActivityModule { }

@@ -4,7 +4,7 @@ import { registerLocaleData } from '@angular/common';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import { NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { environment } from '../../environments/environment';
 import { ShareModule } from '../share/share.module';
 import { initializer } from '../initializer';
@@ -47,7 +47,6 @@ export class SentryErrorHandler implements ErrorHandler {
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
-    NgZorroAntdModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ShareModule,

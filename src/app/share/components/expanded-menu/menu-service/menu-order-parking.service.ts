@@ -11,7 +11,7 @@ export class MenuOrderParkingService {
 
   constructor() { }
 
-  /* 预约泊车菜单 */
+  /* 机场停车（预约泊车）菜单 */
   public generateMenus_order_parking(): Array<SideMenuItem> {
     this.menu_icon = false;
     this.routeLinkList = [];
