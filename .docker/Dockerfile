@@ -17,7 +17,8 @@ RUN cp src/environments/environment.`echo $version | tr '[A-Z]' '[a-z]'`.ts src/
     && npm run operational-system-build \
     && npm run exemption-build \
     && npm run store-maintenance-build \
-    && npm run order-parking-build
+    && npm run order-parking-build \
+    && npm run topic-build
 
 ### final image
 FROM nginx:alpine
