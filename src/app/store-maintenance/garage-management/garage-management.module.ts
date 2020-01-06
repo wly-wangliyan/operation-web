@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShareModule } from '../../share/share.module';
+import { environment } from '../../../environments/environment';
+import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
 import { GarageManagementRoutingModule } from './garage-management-routing.module';
 import { GarageManagementComponent } from './garage-management.component';
 import { GarageListComponent } from './garage-list/garage-list.component';
@@ -9,6 +11,17 @@ import { SupplyConfigListComponent } from './supply-config-list/supply-config-li
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+
+const uploadToken: UploadConfig = {
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
+};
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +29,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     GarageManagementRoutingModule,
     NzTableModule,
     NzSwitchModule,
-    NzButtonModule
+    NzButtonModule,
+    NzCheckboxModule,
+    NzRadioModule,
+    NzSpinModule
   ],
   declarations: [
     GarageManagementComponent,
@@ -24,7 +40,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     GarageEditComponent,
     SupplyConfigListComponent,
   ],
-  providers: [
-  ]
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService]
 })
 export class GarageManagementModule { }

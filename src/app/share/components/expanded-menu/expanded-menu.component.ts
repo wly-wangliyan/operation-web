@@ -13,6 +13,7 @@ import { MenuTicketService } from './menu-service/menu-ticket.service';
 import { MenuStoreMaintenanceService } from './menu-service/menu-store-maintenance.service';
 import { MenuExemptionService } from './menu-service/menu-exemption.service';
 import { MenuOrderParkingService } from './menu-service/menu-order-parking.service';
+import { MenuTopicService } from './menu-service/menu-topic.service';
 
 /* 左侧菜单栏 */
 
@@ -30,19 +31,19 @@ export class ExpandedMenuComponent implements OnInit {
 
   public menu_icon = true;
 
-  constructor(
-    public router: Router,
-    public routeMonitorService: RouteMonitorService,
-    public authService: AuthService,
-    private operationMenuService: MenuOperationService,
-    private insuranceMenuService: MenuInsuranceService,
-    private maintenanceMenuService: MenuMaintenanceService,
-    private mallMenuService: MenuMallService,
-    private managementMenuService: MenuManagementService,
-    private ticketMenuService: MenuTicketService,
-    private storeManagementMenuService: MenuStoreMaintenanceService,
-    private exemptionService: MenuExemptionService,
-    private orderParkingService: MenuOrderParkingService) {
+  constructor(public router: Router,
+              public routeMonitorService: RouteMonitorService,
+              public authService: AuthService,
+              private operationMenuService: MenuOperationService,
+              private insuranceMenuService: MenuInsuranceService,
+              private maintenanceMenuService: MenuMaintenanceService,
+              private mallMenuService: MenuMallService,
+              private managementMenuService: MenuManagementService,
+              private ticketMenuService: MenuTicketService,
+              private storeManagementMenuService: MenuStoreMaintenanceService,
+              private exemptionService: MenuExemptionService,
+              private orderParkingService: MenuOrderParkingService,
+              private topicService: MenuTopicService) {
     const path = location.pathname;
     this.getMenuItems(path);
   }
@@ -81,6 +82,8 @@ export class ExpandedMenuComponent implements OnInit {
       return this.authService.checkPermissions(['exemption']);
     } else if (path.includes('/order-parking')) {
       return this.authService.checkPermissions(['order-parking']);
+    } else if (path.includes('/topic')) {
+      return this.authService.checkPermissions(['topic']);
     }
     return true;
   }
@@ -123,6 +126,10 @@ export class ExpandedMenuComponent implements OnInit {
       this.menuItems = this.orderParkingService.generateMenus_order_parking();
       this.menu_icon = false;
       this.routeLinkList = this.orderParkingService.routeLinkList;
+    } else if (path.includes('/topic')) {
+      this.menuItems = this.topicService.generateMenus_topic();
+      this.menu_icon = false;
+      this.routeLinkList = this.topicService.routeLinkList;
     }
   }
 

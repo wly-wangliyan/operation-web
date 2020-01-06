@@ -20,7 +20,7 @@ export class ServiceConfigEditComponent implements OnInit {
 
     public parkingDetailData: ParkingEntity = new ParkingEntity();
 
-    public sportTypeStatus: SportTypeStatusItem = new SportTypeStatusItem();
+    public spotTypeStatus: SpotTypeStatusItem = new SpotTypeStatusItem();
 
     public configInfoErrMsg: ConfigInfoErrorMsgItem = new ConfigInfoErrorMsgItem();
 
@@ -28,10 +28,10 @@ export class ServiceConfigEditComponent implements OnInit {
 
     private parking_id: string;
 
-    // 校验费用类型是否有效
-    public get CheckSportTypeValid(): boolean {
-        for (let sportTypeStatusIndex in this.sportTypeStatus) {
-            if (this.sportTypeStatus[sportTypeStatusIndex]) {
+    // 校验支持车位类型是否有效
+    public get CheckSpotTypeValid(): boolean {
+        for (let spotTypeStatusIndex in this.spotTypeStatus) {
+            if (this.spotTypeStatus[spotTypeStatusIndex]) {
                 return true;
             }
         }
@@ -49,7 +49,7 @@ export class ServiceConfigEditComponent implements OnInit {
         this.searchText$.pipe(debounceTime(500)).subscribe(() => {
             this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
                 this.parkingDetailData = new ParkingEntity(res);
-                this.sportTypeStatus = new SportTypeStatusItem(this.parkingDetailData.spot_types);
+                this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
                 this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
             }, err => {
                 this.globalService.httpErrorProcess(err);
@@ -87,32 +87,64 @@ export class ServiceConfigEditComponent implements OnInit {
         this.parkingDetailData.spot_types = [];
         this.configInfoErrMsg = new ConfigInfoErrorMsgItem();
 
-        if (this.sportTypeStatus.isIndoorChecked) {
+        if (this.spotTypeStatus.isIndoorChecked) {
+            if (formatValueType(this.parkingDetailData.indoor_origin_fee) <= 0) {
+                this.configInfoErrMsg.indoorOriginPriceErrors = '原价必须大于0';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.indoor_sale_fee) <= 0) {
+                this.configInfoErrMsg.indoorSalePriceErrors = '售价必须大于0';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.indoor_pre_fee) <= 0) {
+                this.configInfoErrMsg.indoorPrePriceErrors = '预付费必须大于0';
+                return;
+            }
             if (formatValueType(this.parkingDetailData.indoor_sale_fee) > formatValueType(this.parkingDetailData.indoor_origin_fee)) {
                 this.configInfoErrMsg.indoorSalePriceErrors = '售价不得大于原价！';
                 return;
             }
             if (formatValueType(this.parkingDetailData.indoor_pre_fee) > formatValueType(this.parkingDetailData.indoor_sale_fee)) {
-                this.configInfoErrMsg.indoorPrePriceErrors = '预付费用不得大于售价！';
+                this.configInfoErrMsg.indoorPrePriceErrors = '预付费不得大于售价！';
                 return;
             }
             if (formatValueType(this.parkingDetailData.indoor_minus_fee) > formatValueType(this.parkingDetailData.indoor_pre_fee)) {
-                this.configInfoErrMsg.indoorMinusPriceErrors = '下单立减不得大于预付费用！';
+                this.configInfoErrMsg.indoorMinusPriceErrors = '下单立减不得大于预付费！';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.indoor_spot_num_left) <= 0) {
+                this.configInfoErrMsg.indoorSpotNumLeftErrors = '剩余车位数必须大于0';
                 return;
             }
             this.parkingDetailData.spot_types.push('1');
         }
-        if (this.sportTypeStatus.isOutdoorChecked) {
+        if (this.spotTypeStatus.isOutdoorChecked) {
+            if (formatValueType(this.parkingDetailData.origin_fee) <= 0) {
+                this.configInfoErrMsg.originPriceErrors = '原价必须大于0';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.sale_fee) <= 0) {
+                this.configInfoErrMsg.salePriceErrors = '售价必须大于0';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.pre_fee) <= 0) {
+                this.configInfoErrMsg.prePriceErrors = '预付费必须大于0';
+                return;
+            }
             if (formatValueType(this.parkingDetailData.sale_fee) > formatValueType(this.parkingDetailData.origin_fee)) {
                 this.configInfoErrMsg.salePriceErrors = '售价不得大于原价！';
                 return;
             }
             if (formatValueType(this.parkingDetailData.pre_fee) > formatValueType(this.parkingDetailData.sale_fee)) {
-                this.configInfoErrMsg.prePriceErrors = '预付费用不得大于售价！';
+                this.configInfoErrMsg.prePriceErrors = '预付费不得大于售价！';
                 return;
             }
             if (formatValueType(this.parkingDetailData.minus_fee) > formatValueType(this.parkingDetailData.pre_fee)) {
-                this.configInfoErrMsg.minusPriceErrors = '下单立减不得大于预付费用！';
+                this.configInfoErrMsg.minusPriceErrors = '下单立减不得大于预付费！';
+                return;
+            }
+            if (formatValueType(this.parkingDetailData.spot_num_left) <= 0) {
+                this.configInfoErrMsg.spotNumLeftErrors = '剩余车位数必须大于0';
                 return;
             }
             this.parkingDetailData.spot_types.push('2');
@@ -159,8 +191,8 @@ export class ServiceConfigEditComponent implements OnInit {
     private getEditorData(instruction: string, notice: string) {
         CKEDITOR.instances.orderInstructionEditor.destroy(true);
         CKEDITOR.instances.purchaseInstructionEditor.destroy(true);
-        CKEDITOR.replace('orderInstructionEditor', {width: 1200}).setData(instruction);
-        CKEDITOR.replace('purchaseInstructionEditor', {width: 1200}).setData(notice);
+        CKEDITOR.replace('orderInstructionEditor', {width: 1400}).setData(instruction);
+        CKEDITOR.replace('purchaseInstructionEditor', {width: 1400}).setData(notice);
     }
 
     // 处理错误信息
@@ -202,14 +234,20 @@ export class ServiceConfigEditComponent implements OnInit {
                         case 'notice':
                             field = '购买须知';
                             break;
+                        case 'indoor_spot_num_left':
+                        case 'spot_num_left':
+                            field = '剩余车位数';
+                            break;
                     }
                     if (content.code === 'missing_field') {
-                        this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, null, false);
                         return;
                     } else if (content.code === 'invalid') {
-                        this.globalService.promptBox.open(`${field}字段输入错误`, null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open(`${field}字段输入错误`, null, 2000, null, false);
+                    } else if (content.resource === 'fee' && content.code === 'not_allow') {
+                        this.globalService.promptBox.open('金额填写不正确', null, 2000, null, false);
                     } else {
-                        this.globalService.promptBox.open('服务配置保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open('服务配置保存失败,请重试!', null, 2000, null, false);
                     }
                 }
             }
@@ -217,17 +255,17 @@ export class ServiceConfigEditComponent implements OnInit {
     }
 }
 
-// 费用类别
-export class SportTypeStatusItem {
+// 支持车位类型类别
+export class SpotTypeStatusItem {
     public isIndoorChecked: boolean = false;
     public isOutdoorChecked: boolean = false;
 
-    constructor(sportType: Array<string> = []) {
-        sportType.forEach(sportTypeItem => {
+    constructor(spotType: Array<string> = []) {
+        spotType.forEach(spotTypeItem => {
             // '1':室内车位 '2':室外车位
-            if (sportTypeItem === '1') {
+            if (spotTypeItem === '1') {
                 this.isIndoorChecked = true;
-            } else if (sportTypeItem === '2') {
+            } else if (spotTypeItem === '2') {
                 this.isOutdoorChecked = true;
             }
         });
@@ -241,10 +279,12 @@ export class ConfigInfoErrorMsgItem {
     public salePriceErrors: string = ''; // 室外售价错误消息
     public prePriceErrors: string = ''; // 室外预付费错误消息
     public minusPriceErrors: string = ''; // 室外下单立减错误消息
+    public spotNumLeftErrors: string = ''; // 室外剩余车位数错误消息
     public indoorOriginPriceErrors: string = ''; // 室内原价错误消息
     public indoorSalePriceErrors: string = ''; // 室内售价错误消息
     public indoorPrePriceErrors: string = ''; // 室内预付费错误消息
     public indoorMinusPriceErrors: string = ''; // 室内下单立减错误消息
+    public indoorSpotNumLeftErrors: string = ''; // 室内剩余车位数错误消息
     public minDaysErrors: string = ''; // 最低预付错误消息
     public mainTelErrors: string = ''; // 常用电话错误消息
     public standbyTelErrors: string = ''; // 备用电话误消息

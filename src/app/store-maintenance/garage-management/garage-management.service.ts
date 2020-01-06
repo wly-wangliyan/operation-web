@@ -43,6 +43,34 @@ export class EditRepairShopParams extends EntityBase {
   public door_run_end_time: number = null; // 上门服务结束时间 默认:空
   public service_telephone = ''; // T 此为搭电换胎通知手机号
   public battery_telephone = ''; // T 此为换电瓶通知手机号
+  public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
+}
+
+export class WashCarEntity extends EntityBase {
+  public wash_car_id: string = undefined; // 汽修店洗车相关 主键
+  public wash_car_tags: Array<any> = []; // 洗车标签
+  public start_time: number = null; // 汽修店洗车营业开始时间
+  public end_time: number = null; // 汽修店洗车营业结束时间
+  public wash_car_telephone = ''; // 客服电话(汽修店洗车客服电话)
+  public shop_instruction = ''; // 店铺简介
+  public repair_shop: RepairShopEntity = undefined; // 汽修店
+  public service_num: number = undefined; // 已服务次数
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'repair_shop') {
+      // tslint:disable-next-line: no-use-before-declare
+      return RepairShopEntity;
+    }
+    return null;
+  }
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.wash_car_id;
+    delete json.repair_shop;
+    delete json.service_num;
+    return json;
+  }
 }
 
 /*
@@ -70,7 +98,9 @@ export class RepairShopEntity extends EntityBase {
   public battery_telephone: string = undefined; // T 此为换电瓶通知手机号
   public status: number = undefined; // 营业状态 1:营业 2:关闭
   public serve_type: number = undefined; // 服务类型 1:保养服务 2:救援服务
+  public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
   public rescue_config: RescueConfig = undefined; // 救援配置
+  public wash_car: WashCarEntity = undefined; // 洗车相关
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
 
@@ -81,6 +111,9 @@ export class RepairShopEntity extends EntityBase {
     if (propertyName === 'rescue_config') {
       // tslint:disable-next-line: no-use-before-declare
       return RescueConfig;
+    }
+    if (propertyName === 'wash_car') {
+      return WashCarEntity;
     }
     return null;
   }
@@ -266,5 +299,16 @@ export class GarageManagementService {
   public requestSetSupplyConfig(repair_shop_id: string, params: SetSupplyConfigParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/supply_config`;
     return this.httpService.put(httpUrl, params.json());
+  }
+
+  /**
+   * 编辑洗车相关
+   * @param repair_shop_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditWashInfo(repair_shop_id: string, params: WashCarEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/repair_shops/${repair_shop_id}/wash_car_info`;
+    return this.httpService.put(httpUrl, params.toEditJson());
   }
 }
