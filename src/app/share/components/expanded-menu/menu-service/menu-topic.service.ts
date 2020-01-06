@@ -23,8 +23,10 @@ export class MenuTopicService {
 
     // 话题 》话题管理
     private generateTopicManagementMenu() {
-        const systemMenu = new SideMenuItem('话题管理', '/topic/topic-list');
+        const systemMenu = new SideMenuItem('话题管理', null);
         systemMenu.icon = '/assets/images/menu_part.png';
+        const subFinanceMenu1 = new SideMenuItem('话题列表', '/topic/topic-management', systemMenu);
+        systemMenu.children.push(subFinanceMenu1);
         this.routeLinkList.push(systemMenu);
         return systemMenu;
     }

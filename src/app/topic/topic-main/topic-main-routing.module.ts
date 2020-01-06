@@ -11,6 +11,10 @@ const routes: Routes = [{
     canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
     children: [
         {path: 'home', component: HomeComponent},
+        {
+            path: 'topic-management',
+            loadChildren: () => import('../topic-management/topic-management.module').then(m => m.TopicManagementModule),
+        },
         {path: '**', redirectTo: 'home', pathMatch: 'full'},
     ]
 }];
