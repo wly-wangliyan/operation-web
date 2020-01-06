@@ -1,0 +1,73 @@
+<form *ngIf="currentTemplate.template_content&&currentTemplate.template_type==2" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+    <div class="form-title">
+        <span>单行轮播广告</span>
+        <div></div>
+    </div>
+    <div class="row">
+        <label class="control-label">
+            <b>*</b>
+            <span>广告图片 (图片尺寸1439*376px，大小2M以内)</span>
+        </label>
+        <div class="control-input" style="display: inline-grid">
+            <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" style="margin-bottom: 10px;width: 410px;">
+                <div [class.temp-edit-active]="contentIndex===i" (click)="onImgClick(i)" style="padding: 0 32px;height: 92px">
+                    <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                               [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="345"
+                                               [imageHeight]="90" [imageUrls]="item.image" [imageAddWidth]="345" [aspectRatio]="3.83/1"
+                                               (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
+                    </app-z-photo-select-upload>
+                    <img *ngIf="i>0" src="/assets/images/interface-decoration/icon_del.png"
+                         class="del-img" style="margin: -190px 0 0 366px" (click)="onDelContentClick(i)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="err-msg" style="margin: -10px 0 0 13px">
+        <span *ngIf="errMsg">{{errMsg}}</span>
+    </div>
+    <div class="row">
+        <div class="control-input">
+            <button class="add-btn" type="button" nz-button (click)="onAddAdvertClick()"
+                    [class.disabled-color]="!editBannerForm.form.valid||!CheckSaveTempValid"
+                    [disabled]="!editBannerForm.form.valid||currentTemplate.template_content.contents.length>=3||!CheckSaveTempValid">
+                <img *ngIf="!editBannerForm.form.valid||!CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add.png">
+                <img *ngIf="editBannerForm.form.valid&&CheckSaveTempValid" src="/assets/images/interface-decoration/icon_add_hover.png">
+                添加广告图
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 0">
+        <label class="control-label">
+            <b>*</b>
+            <span>选定布局区域，在下方配置名称和跳转链接</span>
+        </label>
+        <div class="control-input">
+            <label class="space-label">名称</label>
+            <input class="form-control" placeholder="请输入1-20字名称" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].name" name="name"
+                   maxlength="20" autocomplete="off" required appIgnoreSpace>
+        </div>
+    </div>
+    <div class="row">
+        <label class="control-label"></label>
+        <div class="control-input">
+            <label class="space-label">跳转</label>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定商品类别</option>
+                <option value="3">指定票务产品</option>
+                <option value="4">指定票务产品标签</option>
+                <option value="5">小程序原生页</option>
+                <option value="6">H5链接</option>
+            </select>
+            <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
+                   maxlength="100" autocomplete="off" appIgnoreSpace style="width: 193px;border-left: none!important;">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+                [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
+        </button>
+    </div>
+</form>

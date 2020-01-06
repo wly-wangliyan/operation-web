@@ -129,6 +129,8 @@
           <div class="card-text">
             <label>付款时间：</label>
             <span>{{orderDetail.pay_time ?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
+            <!-- 支付方式 -->
+            <span *ngIf='orderDetail.pay_time'> ({{orderDetail.pay_time|payType}})</span>
           </div>
         </div>
       </div>

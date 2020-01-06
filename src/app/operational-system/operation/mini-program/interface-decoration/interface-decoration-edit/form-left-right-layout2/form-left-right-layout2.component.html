@@ -1,0 +1,103 @@
+<form *ngIf="currentTemplate.template_content&&currentTemplate.template_type==4" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+    <div class="form-title">
+        <span>左右布局图文(2)</span>
+        <div></div>
+    </div>
+    <div class="row">
+        <label class="control-label">
+            <b>*</b>
+            <span>图文内容 (图片尺寸左:458*585px，右:458*225px，大小2M以内)</span>
+        </label>
+        <div class="control-input">
+            <div style="margin-right: 25px;width: 192px;" [class.temp-edit-active]="imgIndex===1" (click)="onImgClick(0, 1)">
+                <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.left_title" name="left_title"
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px;margin-right: 20px">
+                <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                           [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'left_image'" [imageWidth]="190"
+                                           [imageHeight]="244" [imageUrls]="currentTemplate.template_content.left_image" [imageAddWidth]="190" [aspectRatio]="0.78/1"
+                                           (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 1)">
+                </app-z-photo-select-upload>
+            </div>
+            <div>
+                <div [class.temp-edit-active]="imgIndex===2" (click)="onImgClick(0, 2)">
+                    <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_top_title" name="right_top_title"
+                           maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
+                    <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                               [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'right_top_image'" [imageWidth]="190"
+                                               [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_top_image" [imageAddWidth]="190" [aspectRatio]="2/1"
+                                               (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 2)">
+                    </app-z-photo-select-upload>
+                </div>
+                <div [class.temp-edit-active]="imgIndex===3" (click)="onImgClick(0, 3)" style="margin-top: 10px">
+                    <input class="form-control" placeholder="请输入1-10字标题" [(ngModel)]="currentTemplate.template_content.right_bottom_title" name="right_bottom_title"
+                           maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px">
+                    <app-z-photo-select-upload #{{time.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
+                                               [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="'right_bottom_image'" [imageWidth]="190"
+                                               [imageHeight]="100" [imageUrls]="currentTemplate.template_content.right_bottom_image" [imageAddWidth]="190" [aspectRatio]="2/1"
+                                               (selectedImgChange)="onSelectedPicture($event)" (uploadFinish)="onUploadFinish($event, 3)">
+                    </app-z-photo-select-upload>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="err-msg" style="margin-left:13px">
+        <span *ngIf="errMsg">{{errMsg}}</span>
+    </div>
+    <div class="row" style="margin-bottom: 0">
+        <label class="control-label">
+            <b>&nbsp;</b>
+            <span>选定布局区域，在下方配置名称和跳转链接</span>
+        </label>
+    </div>
+    <div class="row">
+        <label class="control-label"></label>
+        <div class="control-input">
+            <label class="space-label">跳转</label>
+            <select *ngIf="imgIndex===1" class="form-control" style="width: 147px" name="left_url_type"
+                    [(ngModel)]="currentTemplate.template_content.left_url_type">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定商品类别</option>
+                <option value="3">指定票务产品</option>
+                <option value="4">指定票务产品标签</option>
+                <option value="5">小程序原生页</option>
+                <option value="6">H5链接</option>
+            </select>
+            <select *ngIf="imgIndex===2" class="form-control" style="width: 147px" name="left_url_type"
+                    [(ngModel)]="currentTemplate.template_content.right_top_url_type">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定商品类别</option>
+                <option value="3">指定票务产品</option>
+                <option value="4">指定票务产品标签</option>
+                <option value="5">小程序原生页</option>
+                <option value="6">H5链接</option>
+            </select>
+            <select *ngIf="imgIndex===3" class="form-control" style="width: 147px" name="left_url_type"
+                    [(ngModel)]="currentTemplate.template_content.right_bottom_url_type">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定商品类别</option>
+                <option value="3">指定票务产品</option>
+                <option value="4">指定票务产品标签</option>
+                <option value="5">小程序原生页</option>
+                <option value="6">H5链接</option>
+            </select>
+            <input *ngIf="imgIndex===1" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.left_url"
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
+            <input *ngIf="imgIndex===2" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.right_top_url"
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
+            <input *ngIf="imgIndex===3" class="form-control" placeholder="请输入跳转URL" name="left_url" maxlength="100" autocomplete="off"
+                   [(ngModel)]="currentTemplate.template_content.right_bottom_url"
+                   appIgnoreSpace style="width: 193px;border-left: none!important;">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+                [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
+        </button>
+    </div>
+</form>

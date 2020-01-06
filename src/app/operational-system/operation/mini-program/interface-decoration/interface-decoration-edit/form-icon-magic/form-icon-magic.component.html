@@ -1,0 +1,79 @@
+<form autocomplete="off" class="form-horizontal" #editBannerForm="ngForm"
+      *ngIf="currentTemplate.template_content&&currentTemplate.template_type==1">
+    <div class="form-title">
+        <span>ICON魔方</span>
+        <div></div>
+    </div>
+    <div class="row">
+        <label class="control-label">
+            <b>*</b>
+            <span>模板单行数量</span>
+        </label>
+        <div class="control-input">
+            <nz-radio-group [(ngModel)]="currentTemplate.template_content.count" name="count" (ngModelChange)="onImgNumChange(currentTemplate)">
+                <label nz-radio [nzValue]=3>单行3个</label>
+                <label nz-radio [nzValue]=4>单行4个</label>
+                <label nz-radio [nzValue]=5>单行5个</label>
+            </nz-radio-group>
+        </div>
+    </div>
+    <div class="row">
+        <label class="control-label">
+            <b>*</b>
+            <span>ICON内容 (图片尺寸90*90px，大小2M以内)</span>
+        </label>
+        <div class="control-input">
+            <div *ngFor="let item of currentTemplate.template_content.contents;let i=index"
+                 style="margin-right: 23px;text-align: center" (click)="onImgClick(i)">
+                <div style="width:65px">
+                    <div [class.temp-edit-active]="contentIndex===i" style="width: 47px;margin-left: 8px">
+                        <app-z-photo-select-upload #{{item.image[0]}} [hasAddPicture]="true" [hasDeletePicture]="true"
+                                                   [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="45"
+                                                   [imageHeight]="45" [imageUrls]="item.image" [imageAddWidth]="45" [imgReg]="imgReg"
+                                                   (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
+                        </app-z-photo-select-upload>
+                    </div>
+                </div>
+                <span>{{item.title?item.title:'未定义'}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="err-msg" style="margin: -5px 0 0 13px">
+        <span *ngIf="errMsg">{{errMsg}}</span>
+    </div>
+    <div class="row" style="margin-bottom: 0">
+        <label class="control-label">
+            <b>*</b>
+            <span>选定布局区域，在下方配置标题和跳转链接</span>
+        </label>
+        <div class="control-input">
+            <label class="space-label">标题</label>
+            <input class="form-control" placeholder="请输入1-5字标题"
+                   [(ngModel)]="currentTemplate.template_content.contents[contentIndex].title" name="title"
+                   maxlength="5" autocomplete="off" required appIgnoreSpace>
+        </div>
+    </div>
+    <div class="row">
+        <label class="control-label"></label>
+        <div class="control-input">
+            <label class="space-label">跳转</label>
+            <select class="form-control" style="width: 147px" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url_type" name="url_type">
+                <option value="">请选择</option>
+                <option value="1">指定商品</option>
+                <option value="2">指定商品类别</option>
+                <option value="3">指定票务产品</option>
+                <option value="4">指定票务产品标签</option>
+                <option value="5">小程序原生页</option>
+                <option value="6">H5链接</option>
+            </select>
+            <input class="form-control" placeholder="请输入跳转链接内容" [(ngModel)]="currentTemplate.template_content.contents[contentIndex].url" name="url"
+                   maxlength="100" autocomplete="off" appIgnoreSpace style="width: 193px;border-left: none!important;">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+                [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
+        </button>
+    </div>
+</form>

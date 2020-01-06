@@ -9,10 +9,20 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { FormIconMagicComponent } from './interface-decoration-edit/form-icon-magic/form-icon-magic.component';
+import { FormSingleRowBroadcastComponent } from './interface-decoration-edit/form-single-row-broadcast/form-single-row-broadcast.component';
+import { FormLeftRightLayout1Component } from './interface-decoration-edit/form-left-right-layout1/form-left-right-layout1.component';
+import { FormLeftRightLayout2Component } from './interface-decoration-edit/form-left-right-layout2/form-left-right-layout2.component';
+import { FormSingleLineScrollComponent } from './interface-decoration-edit/form-single-line-scroll/form-single-line-scroll.component';
 @NgModule({
   declarations: [InterfaceDecorationComponent,
     RecordListComponent,
-    InterfaceDecorationEditComponent
+    InterfaceDecorationEditComponent,
+    FormIconMagicComponent,
+    FormSingleRowBroadcastComponent,
+    FormLeftRightLayout1Component,
+    FormLeftRightLayout2Component,
+    FormSingleLineScrollComponent
   ],
   imports: [
     ShareModule,
