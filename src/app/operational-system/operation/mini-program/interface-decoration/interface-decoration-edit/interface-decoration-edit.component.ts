@@ -155,9 +155,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
             }
           });
           value1.template_content.mallProducts = mallProducts;
-          if (Number(value1.template_type) === 5 && value1.template_content.mallProducts.length > 0) {
-            this.drag(index1);
-          }
         });
         this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
       } else {
@@ -190,9 +187,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         if (res.length === 0 && Number(value1.template_type) >= 5) {
           value1.template_content.ticketProducts.push(new TicketProductEntity());
         }
-        if (Number(value1.template_type) === 5 && value1.template_content.ticketProducts.length > 0) {
-          this.drag(index1);
-        }
       });
       this.templatesList_old = JSON.parse(JSON.stringify(this.templatesList));
     }, error => {
@@ -216,8 +210,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         oEvent.preventDefault();
         let x = oEvent.clientX - disX;
         // 图形移动的边界判断
-        x = x <= 0 ? 0 : x;
-        x = x >= fa.offsetWidth - box.offsetWidth ? fa.offsetWidth - box.offsetWidth : x;
+        x = x > 350 ? 350 : x;
+        x = x < 720 - box.offsetWidth ? 720 - box.offsetWidth : x;
         box.style.left = x + 'px';
       });
       this.mouseLeaveSubscription = fromEvent(fa, 'mouseleave').subscribe(() => {
@@ -258,11 +252,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     }
     this.onImgNumChange(template);
     this.templatesList.push(template);
-    if (type === 5) {
-      timer(0).subscribe(() => {
-        this.drag(this.templatesList.length - 1);
-      });
-    }
   }
 
   // 创建模板初始化数据

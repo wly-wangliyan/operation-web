@@ -474,6 +474,7 @@ nz-radio-group label {
 .box {
     left: 350px;
     position: absolute;
+    cursor: move;
 }
 
 .add-btn {
