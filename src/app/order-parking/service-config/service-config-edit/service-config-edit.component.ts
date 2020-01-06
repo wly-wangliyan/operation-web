@@ -204,12 +204,14 @@ export class ServiceConfigEditComponent implements OnInit {
                             break;
                     }
                     if (content.code === 'missing_field') {
-                        this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, null, false);
                         return;
                     } else if (content.code === 'invalid') {
-                        this.globalService.promptBox.open(`${field}字段输入错误`, null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open(`${field}字段输入错误`, null, 2000, null, false);
+                    } else if (content.resource === 'fee' && content.code === 'not_allow') {
+                        this.globalService.promptBox.open('金额填写不正确', null, 2000, null, false);
                     } else {
-                        this.globalService.promptBox.open('服务配置保存失败,请重试!', null, 2000, '/assets/images/warning.png');
+                        this.globalService.promptBox.open('服务配置保存失败,请重试!', null, 2000, null, false);
                     }
                 }
             }
