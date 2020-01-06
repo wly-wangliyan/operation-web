@@ -1,10 +1,10 @@
 .row {
   margin-left: 0 !important;
   margin-right: 0 !important;
-  height: 44px;
+  min-height: 44px;
   align-items: center !important;
   margin-bottom: 0 !important;
-  display: block;
+  display: flow-root;
 }
 
 .row b {
@@ -14,10 +14,15 @@
 .control-label {
   margin-left: 20px;
   margin-bottom: 0 !important;
-  width: 150px !important;
+  width: 110px !important;
   padding-right: 10px;
   padding-left: 0 !important;
   float: left;
+  line-height: 34px;
+}
+
+.base-form .control-label {
+  width: 150px !important;
 }
 
 .control-label b {
@@ -39,11 +44,6 @@
   margin-bottom: 0 !important;
 }
 
-.control-input img {
-  width: 100px;
-  height: 100px;
-}
-
 .form-control {
   font-size: 14px !important;
   margin-right: 0 !important;
@@ -58,7 +58,7 @@ nz-range-picker {
 
 .content-flow {
   background: #fff !important;
-  margin-left: 15px;
+  margin-left: 25px;
 }
 
 .common-btn {
@@ -98,8 +98,90 @@ nz-range-picker {
 
 .line {
   margin: 0 8px;
+  color: #495057;
 }
 
 ::ng-deep .z-modal .mes {
   padding: 0 20px !important;
+}
+
+::ng-deep .select-position {
+  color: #495057 !important;
+}
+
+::ng-deep .date-clock-position {
+  color: #495057 !important;
+}
+
+.ant-checkbox-wrapper {
+  color: #495057;
+}
+
+.form-horizontal {
+  margin-top: 0;
+  padding-top: 20px;
+}
+
+.tab-bar-list {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.tab-bar-list .ant-radio-button-wrapper {
+  width: 200px;
+}
+
+.tag-input,
+.control-input div {
+  width: 150px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 34px;
+  float: left;
+  color: #3E71F7;
+  background: rgba(62, 113, 247, 0.22);
+  border: none;
+}
+
+.control-input ul {
+  width: 1100px;
+  margin-bottom: 0px;
+}
+
+.tag-span {
+  width: 34px;
+  height: 34px;
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 34px;
+  background-color: rgba(62, 113, 247, 1);
+  margin-right: 20px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.tag-input::-webkit-input-placeholder {
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: rgba(62, 113, 247, 1);
+}
+
+.tag-input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: rgba(62, 113, 247, 1);
+}
+
+.disabled {
+  cursor: not-allowed;
 }
