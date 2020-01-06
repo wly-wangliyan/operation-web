@@ -46,11 +46,11 @@
                         <div class="params-box">
                             <div nz-row [nzGutter]="24">
                                 <div nz-col [nzSpan]="3">
-                                    <label nz-checkbox [(ngModel)]="sportTypeStatus.isIndoorChecked"
+                                    <label nz-checkbox [(ngModel)]="spotTypeStatus.isIndoorChecked"
                                            name="isIndoorChecked"></label>
                                     <span>室内车位</span>
                                 </div>
-                                <ng-container *ngIf="sportTypeStatus.isIndoorChecked">
+                                <ng-container *ngIf="spotTypeStatus.isIndoorChecked">
                                     <div nz-col [nzSpan]="5">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
@@ -133,11 +133,11 @@
                             </div>
                             <div nz-row [nzGutter]="24">
                                 <div nz-col [nzSpan]="3">
-                                    <label nz-checkbox [(ngModel)]="sportTypeStatus.isOutdoorChecked"
+                                    <label nz-checkbox [(ngModel)]="spotTypeStatus.isOutdoorChecked"
                                            name="isOutdoorChecked"></label>
                                     <span>室外车位</span>
                                 </div>
-                                <ng-container *ngIf="sportTypeStatus.isOutdoorChecked">
+                                <ng-container *ngIf="spotTypeStatus.isOutdoorChecked">
                                     <div nz-col [nzSpan]="5">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
@@ -316,7 +316,7 @@
                 </nz-form-item>
                 <div nz-row style="margin:20px 80px 0;">
                     <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSaveFormSubmit()"
-                            [disabled]="!serviceConfigForm.valid || !CheckSportTypeValid">
+                            [disabled]="!serviceConfigForm.valid || !CheckSpotTypeValid">
                         保存
                     </button>
                     <button class="close-btn" nz-button nzType="default" (click)="onCancelBtn()">

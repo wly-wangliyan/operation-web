@@ -20,7 +20,7 @@ export class ServiceConfigEditComponent implements OnInit {
 
     public parkingDetailData: ParkingEntity = new ParkingEntity();
 
-    public sportTypeStatus: SportTypeStatusItem = new SportTypeStatusItem();
+    public spotTypeStatus: SpotTypeStatusItem = new SpotTypeStatusItem();
 
     public configInfoErrMsg: ConfigInfoErrorMsgItem = new ConfigInfoErrorMsgItem();
 
@@ -29,9 +29,9 @@ export class ServiceConfigEditComponent implements OnInit {
     private parking_id: string;
 
     // 校验费用类型是否有效
-    public get CheckSportTypeValid(): boolean {
-        for (let sportTypeStatusIndex in this.sportTypeStatus) {
-            if (this.sportTypeStatus[sportTypeStatusIndex]) {
+    public get CheckSpotTypeValid(): boolean {
+        for (let spotTypeStatusIndex in this.spotTypeStatus) {
+            if (this.spotTypeStatus[spotTypeStatusIndex]) {
                 return true;
             }
         }
@@ -49,7 +49,7 @@ export class ServiceConfigEditComponent implements OnInit {
         this.searchText$.pipe(debounceTime(500)).subscribe(() => {
             this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
                 this.parkingDetailData = new ParkingEntity(res);
-                this.sportTypeStatus = new SportTypeStatusItem(this.parkingDetailData.spot_types);
+                this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
                 this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
             }, err => {
                 this.globalService.httpErrorProcess(err);
@@ -87,7 +87,7 @@ export class ServiceConfigEditComponent implements OnInit {
         this.parkingDetailData.spot_types = [];
         this.configInfoErrMsg = new ConfigInfoErrorMsgItem();
 
-        if (this.sportTypeStatus.isIndoorChecked) {
+        if (this.spotTypeStatus.isIndoorChecked) {
             if (formatValueType(this.parkingDetailData.indoor_sale_fee) > formatValueType(this.parkingDetailData.indoor_origin_fee)) {
                 this.configInfoErrMsg.indoorSalePriceErrors = '售价不得大于原价！';
                 return;
@@ -102,7 +102,7 @@ export class ServiceConfigEditComponent implements OnInit {
             }
             this.parkingDetailData.spot_types.push('1');
         }
-        if (this.sportTypeStatus.isOutdoorChecked) {
+        if (this.spotTypeStatus.isOutdoorChecked) {
             if (formatValueType(this.parkingDetailData.sale_fee) > formatValueType(this.parkingDetailData.origin_fee)) {
                 this.configInfoErrMsg.salePriceErrors = '售价不得大于原价！';
                 return;
@@ -220,16 +220,16 @@ export class ServiceConfigEditComponent implements OnInit {
 }
 
 // 费用类别
-export class SportTypeStatusItem {
+export class SpotTypeStatusItem {
     public isIndoorChecked: boolean = false;
     public isOutdoorChecked: boolean = false;
 
-    constructor(sportType: Array<string> = []) {
-        sportType.forEach(sportTypeItem => {
+    constructor(spotType: Array<string> = []) {
+        spotType.forEach(spotTypeItem => {
             // '1':室内车位 '2':室外车位
-            if (sportTypeItem === '1') {
+            if (spotTypeItem === '1') {
                 this.isIndoorChecked = true;
-            } else if (sportTypeItem === '2') {
+            } else if (spotTypeItem === '2') {
                 this.isOutdoorChecked = true;
             }
         });
