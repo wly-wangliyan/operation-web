@@ -176,12 +176,12 @@ export class ExpandedMenuComponent implements OnInit {
 
     if (index !== -1) {
       const routeItem = this.routeLinkList[index];
+      this.routeLinkList.forEach(item => {
+        if (item.title !== routeItem.title) {
+          item.reset();
+        }
+      });
       if (childIndex !== -1) {
-        this.routeLinkList.forEach(item => {
-          if (item.title !== routeItem.title) {
-            item.reset();
-          }
-        });
         routeItem.isSelect = true;
         const childRouteItem = this.routeLinkList[index].children[childIndex];
         MenuHelper.Select(index, this.menuItems, childRouteItem, childIndex);

@@ -10,11 +10,22 @@ import { initializer } from '../initializer';
 
 import zh from '@angular/common/locales/zh';
 import { OrderParkingRoutingModule } from './order-parking-routing.module';
-import { OrderParkingEntryComponent } from './order-parking-entry/order-parking-entry.component';
 import { OrderParkingComponent } from './order-parking.component';
 import { SentryErrorHandler } from 'src/utils/sentry-error-handler';
+import { environment } from 'src/environments/environment';
+import { UploadConfig, UploadService, UPLOAD_TOKEN } from '../core/upload.service';
+import { HomeComponent } from '../operational-system/main/home/home.component';
+import { HomeModule } from '../home/home.module';
 
 registerLocaleData(zh);
+
+const uploadToken: UploadConfig = {
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
+};
 
 @NgModule({
   imports: [
@@ -24,17 +35,22 @@ registerLocaleData(zh);
     HttpClientModule,
     BrowserAnimationsModule,
     ShareModule,
+    HomeModule,
     OrderParkingRoutingModule,
   ],
   declarations: [
-    OrderParkingEntryComponent,
-    OrderParkingComponent
+    OrderParkingComponent,
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    {
+      provide: UPLOAD_TOKEN,
+      useValue: uploadToken
+    },
+    UploadService
   ],
-  bootstrap: [OrderParkingEntryComponent]
+  bootstrap: [OrderParkingComponent]
 })
 export class OrderParkingModule { }

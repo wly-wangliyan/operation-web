@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/index';
 import { DateFormatHelper } from '../../utils/date-format-helper';
 import { AuthService } from '../core/auth.service';
@@ -10,6 +9,8 @@ import { ZConfirmationBoxComponent } from '../share/components/tips/z-confirmati
 import { Http403TipComponent } from '../share/components/tips/http403-tip/http403-tip.component';
 import { Http500TipComponent } from '../share/components/tips/http500-tip/http500-tip.component';
 import { IntervalService } from '../operational-system/notice-center/interval.service';
+import { HttpService } from '../core/http.service';
+import { initializer } from '../initializer';
 
 @Component({
   selector: 'app-order-parking',
@@ -37,8 +38,9 @@ export class OrderParkingComponent implements AfterViewInit, OnDestroy {
     public globalService: GlobalService,
     private routeMonitorService: RouteMonitorService,
     private renderer2: Renderer2,
-    private router: Router,
-    private intervalService: IntervalService) {
+    private intervalService: IntervalService, private httpService: HttpService) {
+    authService.authorizeBySecretKey(initializer.user);
+    httpService.setStartTimeStamp(initializer.startTimeStamp);
     DateFormatHelper.NowBlock = () => {
       return new Date(globalService.timeStamp * 1000);
     };
@@ -76,14 +78,5 @@ export class OrderParkingComponent implements AfterViewInit, OnDestroy {
       this.confirmationBox.close();
       this.authService.logout();
     });
-  }
-
-  public menuActive(path: string, menu_name: string): boolean {
-    const url = this.router.routerState.snapshot.url;
-    if ((url.includes(path)) && this.authService.checkPermissions([menu_name])) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
