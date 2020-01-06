@@ -16,6 +16,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzInputModule } from 'ng-zorro-antd/input';
 @NgModule({
   imports: [
     ShareModule,
@@ -27,7 +28,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzSpinModule,
     NzSwitchModule,
     NzFormModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzInputModule
   ],
   declarations: [
     GoodsManagementComponent,

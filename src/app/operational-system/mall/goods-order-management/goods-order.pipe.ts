@@ -254,3 +254,33 @@ export class ConfirmTypePipe implements PipeTransform {
     }
   }
 }
+
+/** 支付方式 */
+const PayType = {
+  1: '物流发货',
+  2: '无需配送',
+};
+
+@Pipe({
+  name: 'payType'
+})
+export class PayTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = PayType[value];
+    } else {
+      result = PayType[value];
+    }
+    if (!result) {
+      result = '';
+    }
+    return result;
+  }
+}
+
