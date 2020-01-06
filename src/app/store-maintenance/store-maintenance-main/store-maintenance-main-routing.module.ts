@@ -52,6 +52,10 @@ const routes: Routes = [{
       path: 'upkeep-order',
       loadChildren: () => import('../upkeep-order/upkeep-order.module').then(m => m.UpkeepOrderModule),
     },
+    {
+      path: 'expense-management',
+      loadChildren: () => import('../expense-management/expense-management.module').then(m => m.ExpenseManagementModule),
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' },
   ]
 }];

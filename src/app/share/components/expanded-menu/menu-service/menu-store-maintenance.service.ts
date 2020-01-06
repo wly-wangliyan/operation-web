@@ -50,11 +50,13 @@ export class MenuStoreMaintenanceService {
     const subFinanceMenu3 = new SideMenuItem('服务费管理', '/store-maintenance/service-fees-management', systemMenu);
     const subFinanceMenu4 = new SideMenuItem('救援订单', '/store-maintenance/rescue-order', systemMenu);
     const subFinanceMenu5 = new SideMenuItem('保养订单', '/store-maintenance/upkeep-order', systemMenu);
+    const subFinanceMenu6 = new SideMenuItem('核销管理', '/store-maintenance/expense-management', systemMenu);
     // systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
     systemMenu.children.push(subFinanceMenu5);
-    systemMenu.children.push(subFinanceMenu3);
     systemMenu.children.push(subFinanceMenu4);
+    systemMenu.children.push(subFinanceMenu6);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
