@@ -36,24 +36,26 @@
                     <td *ngIf='!data.images||data.images.length===0'>
                         <img src="/assets/images/image_space_3_2.png"/>
                     </td>
+                    <td> {{data.parking_name}}</td>
                     <td>
-                        {{data.parking_name}}
-                    </td>
-                    <td>
-              <span *ngFor='let tag of data.tags;let t=index;'>
-                <span>{{tag}}</span><span *ngIf='(t+1)!==data.tags.length'>; </span>
-              </span>
+                        <span *ngFor='let tag of data.tags;let t=index;'>
+                            <span>{{tag}}</span>
+                            <span *ngIf='(t+1)!==data.tags.length'>; </span>
+                        </span>
                     </td>
                     <td nzAlign="center">
                         <div class="tel">
-                            <div>主：{{data.main_tel||'--'}}
-                            </div>
-                            <div>备：{{data.standby_tel||'--'}}
-                            </div>
+                            <div>主：{{data.main_tel||'--'}}</div>
+                            <div>备：{{data.standby_tel||'--'}}</div>
                         </div>
                     </td>
                     <td>
-                        {{data.sale_fee | centPriceChange:'元'}}
+                        <div *ngIf="data.spot_types.indexOf('1') !== -1">
+                            室内车位：{{data.indoor_sale_fee | centPriceChange:'元'}}
+                        </div>
+                        <div *ngIf="data.spot_types.indexOf('2') !== -1">
+                            室外车位：{{data.sale_fee | centPriceChange:'元'}}
+                        </div>
                     </td>
                     <td>
                         {{data.min_days||'--'}}<span *ngIf='data.min_days||data.min_days===0'>天</span>
