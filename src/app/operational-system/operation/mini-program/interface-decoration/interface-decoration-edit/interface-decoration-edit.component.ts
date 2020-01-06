@@ -277,25 +277,17 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         contentsList.push(contents);
         template.template_content.contents.push(contents);
       }
-    } else if (template.template_type === 5) {
+    } else if (template.template_type === 5 || template.template_type === 6) {
       template.template_content.mallProducts = [];
       template.template_content.ticketProducts = [];
-      for (let i = 0; i < 3; i++) {
+      const count = template.template_type === 5 ? 3 : 1;
+      for (let i = 0; i < count; i++) {
         const product = new SingleLineScrollingProductEntity();
         product.product_id = '';
         productsList.push(product);
         template.template_content.mallProducts.push(new CommodityEntity());
         template.template_content.ticketProducts.push(new TicketProductEntity());
       }
-      template.template_content.products = productsList;
-    } else if (template.template_type === 6) {
-      template.template_content.mallProducts = [];
-      template.template_content.ticketProducts = [];
-      const product = new SingleLineScrollingProductEntity();
-      product.product_id = '';
-      productsList.push(product);
-      template.template_content.mallProducts.push(new CommodityEntity());
-      template.template_content.ticketProducts.push(new TicketProductEntity());
       template.template_content.products = productsList;
     } else if (template.template_type === 2 || template.template_type === 3) {
       let contents;
