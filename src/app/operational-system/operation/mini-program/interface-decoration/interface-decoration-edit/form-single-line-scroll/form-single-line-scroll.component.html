@@ -1,0 +1,79 @@
+<form *ngIf="currentTemplate.template_type==5||currentTemplate.template_type==6" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+    <div class="form-title">
+        <span>{{currentTemplate.template_type==5?'单行左右滑动':'商品推荐'}}</span>
+        <div></div>
+    </div>
+    <div class="row">
+        <div style="width: 190px;margin: 0 -15px 0 -15px">
+            <label class="control-label">
+                <b>&nbsp;</b>
+                <span>标题名称</span>
+            </label>
+            <div class="control-input">
+                <input class="form-control" placeholder="请输入1-10字标题名称" [(ngModel)]="currentTemplate.template_content.title" name="title"
+                       maxlength="10" autocomplete="off" appIgnoreSpace style="width: 190px" (input)="onProductTitleChange()">
+            </div>
+        </div>
+        <div style="width: 190px;margin: 0 0 0 30px">
+            <label class="control-label">
+                <b>*</b>
+                <span>跳转类型</span>
+            </label>
+            <div class="control-input">
+                <select class="form-control" style="width: 190px" name="product_type" required
+                        [(ngModel)]="currentTemplate.template_content.products[0].product_type" (change)="onProductTypeChange()">
+                    <option value="">请选择</option>
+                    <option value="1">指定商品</option>
+                    <option value="2">指定票务产品</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 0">
+        <label class="control-label">
+            <b>*</b>
+            <span>跳转内容</span>
+        </label>
+    </div>
+    <div class="row">
+        <label class="control-label"></label>
+        <div class="control-input" *ngFor="let item of currentTemplate.template_content.products;let i=index" style="display: unset">
+            <div style="display: inline-flex">
+                <label class="space-label">{{i+1}}</label>
+                <input class="form-control" placeholder="请输入ID" [(ngModel)]="item.product_id"
+                       name="product_id{{i+item.time}}" maxlength="100" (change)="onProductChange(item.product_id, i)"
+                       oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')" (input)="canSave=false"
+                       autocomplete="off" required appIgnoreSpace style="width: 325px"
+                       [disabled]="!currentTemplate.template_content.products[0].product_type">
+                <img *ngIf="(i>0&&currentTemplate.template_type==6)||(currentTemplate.template_type==5&&i>2)"
+                     src="/assets/images/interface-decoration/icon_del.png" class="del-img" style="margin-left: -12px"
+                     (click)="onDelContentClick(i)">
+            </div>
+            <div class="err-msg">
+                <span *ngIf="item.errMsg">{{item.errMsg}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="control-input">
+            <button class="add-btn" type="button" nz-button style="width: 395px"
+                    [class.disabled-color]="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)||!CheckSaveTempValid"
+                    (click)="onAddProductClick()" [disabled]="!editBannerForm.form.valid||currentTemplate.template_content.products.length>4">
+                <img *ngIf="!editBannerForm.form.valid||(currentTemplate.template_content.products.length>4&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length>19&&currentTemplate.template_type==6)||!CheckSaveTempValid"
+                     src="/assets/images/interface-decoration/icon_add.png">
+                <img *ngIf="editBannerForm.form.valid&&((currentTemplate.template_content.products.length<5&&currentTemplate.template_type==5)
+                                ||(currentTemplate.template_content.products.length<20&&currentTemplate.template_type==6))&&CheckSaveTempValid"
+                     src="/assets/images/interface-decoration/icon_add_hover.png">
+                添加商品
+            </button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="close-btn" type="button" nz-button (click)="onCancelClick()">取消</button>
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+                [disabled]="!editBannerForm.form.valid||!CheckSaveTempValid" (appZDebounceClick)="onEditFormSubmit()">保存
+        </button>
+    </div>
+</form>

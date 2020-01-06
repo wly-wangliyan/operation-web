@@ -1,0 +1,77 @@
+.form-horizontal {
+    margin-top: -155px;
+    margin-left: 5px;
+    font-size: 13px;
+}
+
+.form-title {
+    height: 40px;
+    line-height: 25px;
+    font-size: 14px;
+}
+
+.form-title div {
+    border:1px solid rgba(136,136,136,.3);
+}
+
+.control-label {
+    width: 430px;
+    text-align: left;
+    line-height: 15px;
+}
+
+.control-input {
+    display: inline-flex;
+    width: 410px;
+}
+
+.space-label {
+    width: 70px !important;
+    height: 34px;
+    border: 1px solid rgba(136,136,136,.3);
+    border-right: none;
+    text-align: center;
+    color: #888888;
+    line-height: 34px;
+}
+
+.form-control {
+    height: 34px;
+    width: 340px;
+    border-radius:1px;
+    background: rgba(247,248,250,1);
+    font-size: 13px;
+}
+
+.del-img {
+    height: 22px;
+    margin: -5px 0 0 -40px;
+}
+
+.close-btn, .sure-btn {
+    width: 100px;
+    height: 36px;
+}
+
+.err-msg {
+    height: 15px;
+    line-height: 3px;
+    margin-left: 70px;
+    color: rgba(232,32,56,1);
+}
+
+.add-btn {
+    width:414px;
+    height:36px;
+    color: #3E71F7;
+    border-radius: 1px;
+    border:1px solid rgba(216,216,216,1);
+}
+
+.disabled-color {
+    color: #888888;
+}
+
+.temp-edit-active {
+    border: 1px solid #3E71F7;
+}
