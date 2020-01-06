@@ -41,7 +41,7 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item nzFlex>
-                    <nz-form-label nzRequired [nzNoColon]='true'>费用</nz-form-label>
+                    <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
                     <nz-form-control>
                         <div class="params-box">
                             <div nz-row [nzGutter]="24">
@@ -51,7 +51,7 @@
                                     <span>室内车位</span>
                                 </div>
                                 <ng-container *ngIf="spotTypeStatus.isIndoorChecked">
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
                                             <nz-form-control>
@@ -69,7 +69,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
                                             <nz-form-control>
@@ -88,7 +88,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
                                             <nz-form-control>
@@ -109,7 +109,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="6">
+                                    <div nz-col [nzSpan]="5">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
                                             <nz-form-control>
@@ -129,6 +129,25 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>剩余车位</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group>
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.indoor_spot_num_left"
+                                                               name="indoor_spot_num_left" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                </div>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.indoorSpotNumLeftErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.indoorSpotNumLeftErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </ng-container>
                             </div>
                             <div nz-row [nzGutter]="24">
@@ -138,7 +157,7 @@
                                     <span>室外车位</span>
                                 </div>
                                 <ng-container *ngIf="spotTypeStatus.isOutdoorChecked">
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
                                             <nz-form-control>
@@ -155,7 +174,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
                                             <nz-form-control>
@@ -174,7 +193,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="5">
+                                    <div nz-col [nzSpan]="4">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
                                             <nz-form-control>
@@ -195,7 +214,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
-                                    <div nz-col [nzSpan]="6">
+                                    <div nz-col [nzSpan]="5">
                                         <nz-form-item nzFlex>
                                             <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
                                             <nz-form-control>
@@ -210,6 +229,25 @@
                                                 </div>
                                                 <div class="text-danger" *ngIf="configInfoErrMsg.minusPriceErrors">
                                                     <span class="input-error">{{configInfoErrMsg.minusPriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>剩余车位</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group>
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.spot_num_left"
+                                                               name="spot_num_left" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                </div>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.spotNumLeftErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.spotNumLeftErrors}}</span>
                                                 </div>
                                             </nz-form-control>
                                         </nz-form-item>

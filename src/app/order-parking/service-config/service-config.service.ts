@@ -34,10 +34,12 @@ export class ParkingEntity extends EntityBase {
     public sale_fee: number = undefined; // 室外售价 单位:分
     public pre_fee: number = undefined; // 室外预付 单位:分
     public minus_fee: number = undefined; // 室外下单立减 单位:分
+    public spot_num_left: number = undefined; // 室外剩余车位数
     public indoor_origin_fee: number = undefined; // 室内原价 单位:分
     public indoor_sale_fee: number = undefined; // 室内售价 单位:分
     public indoor_pre_fee: number = undefined; // 室内预付 单位:分
     public indoor_minus_fee: number = undefined; // 室内下单立减 单位:分
+    public indoor_spot_num_left: number = undefined; // 室内剩余车位数
     public min_days: number = undefined; // 最低预定
     public main_tel: string = undefined; // 手机号(主)
     public standby_tel: string = undefined; // 机号(备)
