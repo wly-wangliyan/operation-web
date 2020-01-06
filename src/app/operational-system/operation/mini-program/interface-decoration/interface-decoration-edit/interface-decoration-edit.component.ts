@@ -1,7 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { forkJoin, fromEvent, Subscription, timer } from 'rxjs';
-import { isNullOrUndefined } from 'util';
-import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import {
   IconMagicContentEntity,
   IconMagicEntity,
@@ -20,6 +18,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommodityEntity } from '../../../../mall/goods-management/goods-management-http.service';
 import { ProductService, TicketProductEntity } from '../../../../ticket/product-management/product.service';
 import { CanDeactivateComponent } from '../../../../../share/interfaces/can-deactivate-component';
+import { FormIconMagicComponent } from './form-icon-magic/form-icon-magic.component';
+import { FormSingleRowBroadcastComponent } from './form-single-row-broadcast/form-single-row-broadcast.component';
+import { FormLeftRightLayout1Component } from './form-left-right-layout1/form-left-right-layout1.component';
+import { FormLeftRightLayout2Component } from './form-left-right-layout2/form-left-right-layout2.component';
+import { FormSingleLineScrollComponent } from './form-single-line-scroll/form-single-line-scroll.component';
 
 @Component({
   selector: 'app-interface-decoration-edit',
@@ -33,14 +36,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public previewData: PageEntity = new PageEntity(); // 预览数据
   public templatesList: Array<TemplateEntity> = []; // 模板List
   public currentTemplate: TemplateEntity = new TemplateEntity(); // 当前选中的模板
-  public contentIndex = 0; // 模板内容index
-  public imgIndex = 1; // 模板内容中图片的index
-  public product_type = ''; // 跳转商品类型
   public modal_type: number; // 弹窗类型
   public page_id: string;
-  public errMsg: string;
-  public imgReg = /(jpg|jpeg|png|gif)$/;
-  public canSave = true;
 
   private mouseDownSubscription: Subscription;
   private mouseMoveSubscription: Subscription;
@@ -51,8 +48,12 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private templatesList_old: Array<TemplateEntity> = []; // 模板List备份
   private is_saved = false;
 
-  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
+  @ViewChild(FormIconMagicComponent, { static: true }) public iconMagicComponent: FormIconMagicComponent;
+  @ViewChild(FormSingleRowBroadcastComponent, { static: true }) public singleRowBroadcastComponent: FormSingleRowBroadcastComponent;
+  @ViewChild(FormLeftRightLayout1Component, { static: true }) public leftRightLayout1Component: FormLeftRightLayout1Component;
+  @ViewChild(FormLeftRightLayout2Component, { static: true }) public leftRightLayout2Component: FormLeftRightLayout2Component;
+  @ViewChild(FormSingleLineScrollComponent, { static: true }) public singleLineScrollComponent: FormSingleLineScrollComponent;
 
   constructor(
       private interfaceService: InterfaceDecorationService,
@@ -264,45 +265,28 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     }
   }
 
-  // 单行显示数量change, 创建模板初始化数据
-  public onImgNumChange(template: TemplateEntity) {
+  // 创建模板初始化数据
+  public onImgNumChange(template: TemplateEntity): TemplateEntity {
     const contentsList = [];
     const productsList = [];
     if (template.template_type === 1) {
-      const count = template.template_content.count - template.template_content.contents.length;
-      if (count > 0) {
-        for (let i = 0; i < count; i++) {
-          const contents = new IconMagicContentEntity();
-          contents.image = [];
-          contentsList.push(contents);
-          template.template_content.contents.push(contents);
-        }
-      } else {
-        for (let i = 0; i < -count; i++) {
-          const index = template.template_content.contents.length - 1;
-          template.template_content.contents.splice(index, 1);
-          this.contentIndex = this.contentIndex + 1 > template.template_content.count ? index - 1 : this.contentIndex;
-        }
+      for (let i = 0; i < template.template_content.count; i++) {
+        const contents = new IconMagicContentEntity();
+        contents.image = [];
+        contentsList.push(contents);
+        template.template_content.contents.push(contents);
       }
-    } else if (template.template_type === 5) {
+    } else if (template.template_type === 5 || template.template_type === 6) {
       template.template_content.mallProducts = [];
       template.template_content.ticketProducts = [];
-      for (let i = 0; i < 3; i++) {
+      const count = template.template_type === 5 ? 3 : 1;
+      for (let i = 0; i < count; i++) {
         const product = new SingleLineScrollingProductEntity();
         product.product_id = '';
         productsList.push(product);
         template.template_content.mallProducts.push(new CommodityEntity());
         template.template_content.ticketProducts.push(new TicketProductEntity());
       }
-      template.template_content.products = productsList;
-    } else if (template.template_type === 6) {
-      template.template_content.mallProducts = [];
-      template.template_content.ticketProducts = [];
-      const product = new SingleLineScrollingProductEntity();
-      product.product_id = '';
-      productsList.push(product);
-      template.template_content.mallProducts.push(new CommodityEntity());
-      template.template_content.ticketProducts.push(new TicketProductEntity());
       template.template_content.products = productsList;
     } else if (template.template_type === 2 || template.template_type === 3) {
       let contents;
@@ -317,77 +301,12 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       contents.image = [];
       contentsList.push(contents);
       template.template_content.contents = contentsList;
-    }
-  }
-
-  // 选择图片时校验图片格式
-  public onSelectedPicture(event: any, index: number = 0, imgPosition?: string): any {
-    if (event.isDeleteImg && (!event.imageList || event.imageList.length === 0)) {
-      if (Number(this.currentTemplate.template_type) === 3 && imgPosition) {
-        this.currentTemplate.template_content.contents[index][imgPosition] = [];
-      } else if (Number(this.currentTemplate.template_type) === 4 && event.file_id) {
-        this.currentTemplate.template_content[event.file_id] = [];
-      } else {
-        this.currentTemplate.template_content.contents[index].image = [];
-      }
-    }
-    if (event) {
-      this.errMsg = event.errMsg;
-    }
-  }
-
-  // 上传图片结果
-  public onUploadFinish(event: any, type?: number): void {
-    if (event) {
-      if (this.currentTemplate.template_type < 3) {
-        this.currentTemplate.template_content.contents[event.file_id].image = event.imageList ? event.imageList.split(',') : [];
-      } else {
-        switch (type) {
-          case 1:
-            this.currentTemplate.template_content.contents[event.file_id].left_image = event.imageList ? event.imageList.split(',') : [];
-            break;
-          case 2:
-            this.currentTemplate.template_content.contents[event.file_id].right_image = event.imageList ? event.imageList.split(',') : [];
-            break;
-          case 3:
-            this.currentTemplate.template_content.right_top_image = event.imageList ? event.imageList.split(',') : [];
-            break;
-          case 4:
-            this.currentTemplate.template_content.right_bottom_image = event.imageList ? event.imageList.split(',') : [];
-            break;
-          case 5:
-            this.currentTemplate.template_content.left_image = event.imageList ? event.imageList.split(',') : [];
-            break;
-        }
-      }
+      return template;
     }
   }
 
   // 模板Form表单提交
-  public onEditFormSubmit() {
-    if (this.currentTemplate.template_type > 4) {
-      this.currentTemplate.template_content.products.forEach(value => {
-        value.product_type = this.currentTemplate.template_content.products[0].product_type;
-      });
-    }
-    const saveData = JSON.parse(JSON.stringify(this.currentTemplate));
-    saveData.template_content.ticketProducts = [];
-    saveData.template_content.mallProducts = [];
-    if (saveData.template_type === 4) {
-      saveData.template_content.left_image = saveData.template_content.left_image && saveData.template_content.left_image.length > 0 ?
-          saveData.template_content.left_image[0] : '';
-      saveData.template_content.right_top_image = saveData.template_content.right_top_image && saveData.template_content.right_top_image.length > 0 ?
-          saveData.template_content.right_top_image[0] : '';
-      saveData.template_content.right_bottom_image = saveData.template_content.right_bottom_image && saveData.template_content.right_bottom_image.length > 0 ?
-          saveData.template_content.right_bottom_image[0] : '';
-    } else if (saveData.template_type < 4) {
-      saveData.template_content.contents.forEach(value => {
-        value.image = value.image && value.image.length > 0 ? value.image[0] : '';
-        value.left_image = value.left_image && value.left_image.length > 0 ? value.left_image[0] : '';
-        value.right_image = value.right_image && value.right_image.length > 0 ? value.right_image[0] : '';
-      });
-    }
-    saveData.template_content = JSON.stringify(saveData.template_content);
+  public onEditFormSubmit(saveData: any) {
     if (!this.currentTemplate.template_id || (this.previewData.page_type === 2 && !this.template_ids.includes(this.currentTemplate.template_id))) {
       this.interfaceService.requestCreateTemplateData(saveData).subscribe(res => {
         this.currentTemplate.template_id = res.body.template_id;
@@ -417,7 +336,24 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.currentTemplate_old = JSON.parse(JSON.stringify(this.currentTemplate));
     this.currentTemplate.template_type = type;
     this.mouldIndex = index;
-    this.errMsg = '';
+    switch (type) {
+      case 1:
+        this.iconMagicComponent.initForm(this.currentTemplate);
+        break;
+      case 2:
+        this.singleRowBroadcastComponent.initForm(this.currentTemplate);
+        break;
+      case 3:
+        this.leftRightLayout1Component.initForm(this.currentTemplate);
+        break;
+      case 4:
+        this.leftRightLayout2Component.initForm(this.currentTemplate);
+        break;
+      default:
+        this.drag(index);
+        this.singleLineScrollComponent.initForm(this.currentTemplate);
+        break;
+    }
     timer(0).subscribe(() => {
       this.moveForm(type, index);
     });
@@ -429,8 +365,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     if (this.mouldIndex <= this.templatesList.length - 1 && this.mouldIndex > -1) {
       this.templatesList[this.mouldIndex] = this.currentTemplate_old;
     }
-    this.contentIndex = 0;
-    this.imgIndex = 1;
     this.mouldIndex = -1;
   }
 
@@ -440,84 +374,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const temp = document.getElementById(`template_${type}_${index}`);
     if (form && temp) {
       form.style.top = (temp.offsetTop - 135) + 'px';
-    }
-  }
-
-  // 点击图片，标题联动
-  public onImgClick(index: number, imgIndex?: number) {
-    this.contentIndex = index;
-    this.imgIndex = imgIndex;
-  }
-
-  // 添加广告图
-  public onAddAdvertClick() {
-    if (this.CheckSaveTempValid) {
-      let contents;
-      if (Number(this.currentTemplate.template_type) === 2) {
-        contents = new SingleRowBroadcastContentEntity();
-        contents.image = [];
-      } else if (Number(this.currentTemplate.template_type) === 3) {
-        contents = new LeftAndRightLayout1ContentEntity();
-      }
-      this.contentIndex += 1;
-      this.imgIndex = 1;
-      this.currentTemplate.template_content.contents.push(contents);
-    }
-  }
-
-  // 产品ID改变, 获取商品信息, 校验重复
-  public onProductChange(product_id: string, index: number) {
-    this.currentTemplate.template_content.products[index].errMsg = '';
-    if (product_id) {
-      const product_ids = this.currentTemplate.template_content.products.map(v => v.product_id);
-      const count = product_ids.filter(v => v === product_id);
-      if (count.length > 1) {
-        this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id重复！';
-      } else if (this.currentTemplate.template_content.products[0].product_type === '1') {
-        this.requestProductList(product_id, index);
-      } else {
-        this.requestProductsDetail(product_id, index);
-      }
-    }
-  }
-
-  // 获取商城商品
-  private requestProductList(product_id: string, index: number) {
-    const params = {commodity_ids: product_id};
-    this.interfaceService.requestProductList(params).subscribe(res => {
-      if (res.length === 0) {
-        this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id无效！';
-      } else {
-        this.canSave = true;
-        this.currentTemplate.template_content.mallProducts[index] = res[0];
-      }
-    }, error => {
-      this.globalService.httpErrorProcess(error);
-    });
-  }
-
-  // 获取票务产品详情
-  private requestProductsDetail(product_id: any, index: number) {
-    this.productService.requestProductsDetail(product_id).subscribe(res => {
-      if (!res.product_id) {
-        this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id无效！';
-      } else {
-        this.canSave = true;
-        this.currentTemplate.template_content.ticketProducts[index] = res;
-      }
-    }, error => {
-      this.currentTemplate.template_content.products[index].errMsg = '此跳转内容id无效！';
-    });
-  }
-
-  // 添加商品id
-  public onAddProductClick() {
-    if (this.CheckSaveTempValid) {
-      const product = new SingleLineScrollingProductEntity();
-      product.product_id = '';
-      this.currentTemplate.template_content.mallProducts.push(new CommodityEntity());
-      this.currentTemplate.template_content.ticketProducts.push(new TicketProductEntity());
-      this.currentTemplate.template_content.products.push(product);
     }
   }
 
@@ -554,14 +410,13 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public onDeleteTemplateClick() {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
       this.globalService.confirmationBox.close();
-      this.errMsg = '';
       this.templatesList.splice(this.mouldIndex, 1);
       this.mouldIndex = -1;
     });
   }
 
   /**
-   * 保存草稿、保存并发布教研
+   * 保存草稿、保存并发布校验
    * @returns boolean
    */
   public CheckSaveDraftValid(type: number): boolean {
@@ -570,51 +425,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       checkValid = false;
     } else if (this.templatesList.findIndex(value => !value.template_id) > -1 || this.templatesList.length === 0) {
       checkValid = false;
-    }
-    return checkValid;
-  }
-
-  // 校验保存按钮
-  public get CheckSaveTempValid(): boolean {
-    let checkValid = true;
-    if (Number(this.currentTemplate.template_type) > 4) {
-      if (!this.canSave) {
-        checkValid = false;
-      } else if (this.currentTemplate.template_content.products.findIndex(value => value.errMsg !== '') > -1) {
-        checkValid = false;
-      }
-    } else if (Number(this.currentTemplate.template_type) === 4) {
-      if (!this.currentTemplate.template_content.left_image || !this.currentTemplate.template_content.right_top_image
-       || !this.currentTemplate.template_content.right_bottom_image || this.currentTemplate.template_content.right_bottom_image.length === 0
-       || this.currentTemplate.template_content.left_image.length === 0 || this.currentTemplate.template_content.right_top_image.length === 0
-          || (!this.currentTemplate.template_content.left_url_type && this.currentTemplate.template_content.left_url)
-          || (this.currentTemplate.template_content.left_url_type && !this.currentTemplate.template_content.left_url)
-          || (!this.currentTemplate.template_content.right_top_url_type && this.currentTemplate.template_content.right_top_url)
-          || (this.currentTemplate.template_content.right_top_url_type && !this.currentTemplate.template_content.right_top_url)
-          || (this.currentTemplate.template_content.right_bottom_url_type && !this.currentTemplate.template_content.right_bottom_url)
-          || (!this.currentTemplate.template_content.right_bottom_url_type && this.currentTemplate.template_content.right_bottom_url)) {
-        checkValid = false;
-      }
-    } else if (Number(this.currentTemplate.template_type) === 3) {
-      this.currentTemplate.template_content.contents.forEach(value => {
-        if (!value.left_image || !value.right_image || value.left_image.length === 0 || value.right_image.length === 0
-        || (!value.left_url_type && value.left_url) || (value.left_url_type && !value.left_url)
-            || (value.right_url_type && !value.right_url) || (!value.right_url_type && value.right_url)) {
-          checkValid = false;
-        }
-      });
-    } else if (Number(this.currentTemplate.template_type) === 2) {
-      this.currentTemplate.template_content.contents.forEach(value => {
-        if (!value.image || value.image.length === 0 || !value.name || (value.url_type && !value.url) || (!value.url_type && value.url)) {
-          checkValid = false;
-        }
-      });
-    } else if (Number(this.currentTemplate.template_type) === 1) {
-      this.currentTemplate.template_content.contents.forEach(value => {
-        if (!value.image || value.image.length === 0 || !value.title || (value.url_type && !value.url) || (!value.url_type && value.url)) {
-          checkValid = false;
-        }
-      });
     }
     return checkValid;
   }
@@ -731,40 +541,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       } else {
         this.templatesList[index].template_content.height = 133;
       }
-    }
-  }
-
-  // 跳转类型改变
-  public onProductTypeChange() {
-    this.currentTemplate.template_content.products.forEach(value => {
-      value.product_id = '';
-      value.errMsg = '';
-      value.product_type = this.currentTemplate.template_content.products[0].product_type;
-    });
-    this.product_type = this.currentTemplate.template_content.products[0].product_type;
-    this.onProductTitleChange();
-    const ticketProducts = [];
-    const mallProducts = [];
-    this.currentTemplate.template_content.products.forEach(value => {
-      ticketProducts.push(new TicketProductEntity());
-      mallProducts.push(new CommodityEntity());
-    });
-    this.currentTemplate.template_content.ticketProducts = ticketProducts;
-    this.currentTemplate.template_content.mallProducts = mallProducts;
-  }
-
-  // 删除模板内容信息
-  public onDelContentClick(index: number) {
-    if (this.currentTemplate.template_type < 5) {
-      this.errMsg = '';
-      this.currentTemplate.template_content.contents.splice(index, 1);
-      this.contentIndex -= 1;
-      this.imgIndex = 1;
-    } else {
-      this.canSave = true;
-      this.currentTemplate.template_content.products.splice(index, 1);
-      this.currentTemplate.template_content.mallProducts.splice(index, 1);
-      this.currentTemplate.template_content.ticketProducts.splice(index, 1);
     }
   }
 }
