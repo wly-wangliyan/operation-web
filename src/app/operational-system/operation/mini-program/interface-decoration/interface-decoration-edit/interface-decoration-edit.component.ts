@@ -231,7 +231,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 创建模板
   public onCreateMould(type: number) {
-    debugger;
     if (this.templatesList.length >= 20) {
       return;
     }
@@ -351,6 +350,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
         this.leftRightLayout2Component.initForm(this.currentTemplate);
         break;
       default:
+        this.drag(index);
         this.singleLineScrollComponent.initForm(this.currentTemplate);
         break;
     }
