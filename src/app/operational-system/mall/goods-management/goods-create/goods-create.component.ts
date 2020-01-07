@@ -59,6 +59,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public classifyList: Array<SortEntity> = [];
 
+  public videoUrlList: Array<any> = [];
+
+  public url = '';
+  // public url = 'https://media.w3.org/2010/05/sintel/trailer.mp4';
+
   public aspectRatio = 1.78 / 1; // 截取图片比例
 
   private commodity_id: string;
@@ -157,10 +162,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
-    private globalService: GlobalService,
-    private goodsManagementHttpService: GoodsManagementHttpService,
-    private classifyHttpService: ClassifyManagementHttpService) {
+              private router: Router,
+              private globalService: GlobalService,
+              private goodsManagementHttpService: GoodsManagementHttpService,
+              private classifyHttpService: ClassifyManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -210,6 +215,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       this.imgErrMsgItem.isError = true;
       this.imgErrMsgItem.errMes = '图片大小不得高于2M！';
     }
+  }
+
+  public onSaveVideoUrl(){
+    this.videoUrlList=[];
+    this.videoUrlList.push(this.url);
   }
 
   // 选择视频

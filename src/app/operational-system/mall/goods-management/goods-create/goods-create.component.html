@@ -131,30 +131,23 @@
             </div>
           </div>
         </div>
-        <div class="row control-row">
+        <div class="row control-row" style="margin-bottom: 20px;">
           <label class="control-label special-control-label">
             <span>视频介绍</span>
           </label>
           <div>
             <div>
-              <div style="float: left;">
-                <app-z-video-select [hasAddVideo]="true" [hasDeleteVideo]="true" [videoWidth]="100" [videoHeight]="100"
-                  [videoUrls]="commodityInfo.commodity_videos" (selectedVideoChange)="onSelectedVideo($event)"
-                  file_id="goodsVideo" #goodsVideo></app-z-video-select>
+              <div style="float: left;margin-right:20px;">
+                <img src="/assets/images/default_video.png" *ngIf='videoUrlList.length===0'>
+                <app-z-preview-video-photo *ngIf='videoUrlList.length!==0' [isControls]="true" [previewContainerWidth]='150' [previewWidth]='150' [previewHeight]='150' [playBtnWidth]='46' [playBtnHeight]='46' [isShowThumb]='false' [isChangePlayBtn]='true' [videoAndPhotoUrls]="videoUrlList">
+                </app-z-preview-video-photo>
               </div>
               <div style="float: left;margin-top: 25px;">
                 <p class="cover-hint">注：限MP4格式，大小20M以内</p>
                 <nz-input-group [nzAddOnAfter]="saveUrlBtn">
-                  <input class="url-input" nz-input [(ngModel)]="commodityInfo.subtitle" autocomplete="off"
-                    name="url" />
-                  <ng-template #saveUrlBtn><a style="padding: 10px;">保存</a></ng-template>
+                  <input class="url-input" nz-input [(ngModel)]="url" autocomplete="off" name="url" />
+                  <ng-template #saveUrlBtn><a style="padding: 10px;" (click)='onSaveVideoUrl()'>保存</a></ng-template>
                 </nz-input-group>
-              </div>
-
-            </div>
-            <div class="row row-message special-row-message">
-              <div class="control-input">
-                <span *ngIf="videoErrMsgItem?.isError">{{videoErrMsgItem?.errMes}}</span>
               </div>
             </div>
           </div>
