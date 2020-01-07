@@ -30,6 +30,7 @@ export class BannerEntity extends EntityBase {
   public click_person: number = undefined; 	// 	点击人数
   public click_stats: Array<ClickStatisticsEntity> = []; // 点击统计
   public banner_type: number = undefined; // banner类型 1：首页banner 2:检车banner
+  public page_layout: number = undefined; // int	F	页面　1车辆认证完成页 2实名认证完成页(banner_type为4时必传)
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
@@ -53,13 +54,14 @@ export class SearchParams extends EntityBase {
 // 添加、编辑 banner
 export class BannerParams extends EntityBase {
   public title: string = undefined; // 标题
-  public belong_to = 2; // 跳转类型 1:原生 2: h5
+  public belong_to = 0; // 跳转类型 1:原生 2: h5
   public jump_link: string = undefined; // 跳转路径
   public banner_describe: string = undefined; // 描述
   public offline_status: number = undefined; // 下线类型 1:永不下线 2: 定时下线
   public offline_time: number = undefined; // 下线时间(时间戳)
   public image: string = undefined; // 图片
   public banner_type: number = undefined; // banner类型 1：首页banner 2:检车banner
+  public page_layout: number = undefined; // int	F	页面　1车辆认证完成页 2实名认证完成页(banner_type为4时必传)
 }
 
 export class BannerLinkResponse extends LinkResponse {
