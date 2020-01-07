@@ -4,9 +4,7 @@
       <div [routerLink]="'/main'"></div>
     </div>
     <ul class="main-herder-title">
-      <li [class.header-exemption-active]="menuActive('/exemption', 'exemption')"
-        [class.noPermissions]="!authService.checkPermissions(['exemption'])">
-      </li>
+      <li class="header-exemption-active"></li>
     </ul>
     <div class="user">
       <div class="logout-btn" (click)="onLoginoutClick()">
