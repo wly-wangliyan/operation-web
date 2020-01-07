@@ -13,6 +13,10 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
 
   public currentPreviewIndex = 0;
 
+  public playBtnLeft = 46;
+
+  public playBtnTop = 46;
+
   public previewVideoAndPhotoList: Array<ZPreviewVideoAndPhotoEntity> = [];
 
   public currentPreviewVideo: ZPreviewVideoAndPhotoEntity = new ZPreviewVideoAndPhotoEntity();
@@ -86,6 +90,8 @@ export class ZPreviewVideoPhotoComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.playBtnLeft = Number(this.playBtnWidth) / 2;
+    this.playBtnTop = Number(this.playBtnHeight) / 2;
   }
 
   // 预览缩略图

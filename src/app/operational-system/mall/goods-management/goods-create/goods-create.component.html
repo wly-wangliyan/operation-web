@@ -139,15 +139,24 @@
             <div>
               <div style="float: left;margin-right:20px;">
                 <img src="/assets/images/default_video.png" *ngIf='videoUrlList.length===0'>
-                <app-z-preview-video-photo *ngIf='videoUrlList.length!==0' [isControls]="true" [previewContainerWidth]='150' [previewWidth]='150' [previewHeight]='150' [playBtnWidth]='46' [playBtnHeight]='46' [isShowThumb]='false' [isChangePlayBtn]='true' [videoAndPhotoUrls]="videoUrlList">
+                <app-z-preview-video-photo *ngIf='videoUrlList.length!==0' [isControls]="true"
+                  [previewContainerWidth]='150' [previewWidth]='150' [previewHeight]='150' [playBtnWidth]='46'
+                  [playBtnHeight]='46' [isShowThumb]='false' [isChangePlayBtn]='true'
+                  [videoAndPhotoUrls]="videoUrlList">
                 </app-z-preview-video-photo>
               </div>
               <div style="float: left;margin-top: 25px;">
                 <p class="cover-hint">注：限MP4格式，大小20M以内</p>
                 <nz-input-group [nzAddOnAfter]="saveUrlBtn">
                   <input class="url-input" nz-input [(ngModel)]="url" autocomplete="off" name="url" />
-                  <ng-template #saveUrlBtn><a style="padding: 10px;" (click)='onSaveVideoUrl()'>保存</a></ng-template>
+                  <ng-template #saveUrlBtn><a style="padding: 10px;" (click)='onSaveVideoUrl()'>保存</a>
+                  </ng-template>
                 </nz-input-group>
+                <div class="row row-message special-row-message" style="margin-top: 10px;">
+                  <div class="control-input">
+                    <span *ngIf="videoUrlErrMsgItem?.isError">{{videoUrlErrMsgItem?.errMes}}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

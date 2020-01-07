@@ -10,6 +10,7 @@ import { GoodsManagementHttpService } from './goods-management-http.service';
 import { ClassifyManagementComponent } from './classify-management/classify-management.component';
 import { ClassifyEditComponent } from './classify-management/classify-edit/classify-edit.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -23,6 +24,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     CommonModule,
     GoodsManagementRoutingModule,
     NzTableModule,
+    NzIconModule,
     NzButtonModule,
     NzDatePickerModule,
     NzSpinModule,

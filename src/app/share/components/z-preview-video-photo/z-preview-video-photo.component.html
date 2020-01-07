@@ -10,7 +10,8 @@
         <video id="preview-video" [src]="currentPreviewVideo.sourceUrl" [controls]="isControls" [autoplay]="isAutoPlay"
           (click)="onPlayPreviewVideo()"></video>
         <div class="icon-control" [class.hide]="isHidePlayIcon">
-          <i [ngStyle]="{width: playBtnWidth + 'px',height:playBtnHeight + 'px',marginLeft:-(playBtnWidth/2) + 'px',marginTop:-(playBtnHeight/2) + 'px'}" (click)="onPlayPreviewVideo()"></i>
+          <i [ngStyle]="{width: playBtnWidth + 'px',height:playBtnHeight + 'px',marginLeft:-playBtnLeft + 'px',marginTop:-playBtnTop + 'px'}"
+            (click)="onPlayPreviewVideo()"></i>
         </div>
       </div>
       <img [class.hide]="!isHidePreviewVideo" [src]="currentPreviewPhoto.sourceUrl">

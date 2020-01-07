@@ -39,6 +39,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public videoErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 添加视频错误信息
 
+  public videoUrlErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 添加视频Url错误信息
+
   public specificationErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 产品规格错误信息
 
   public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
@@ -62,7 +64,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   public videoUrlList: Array<any> = [];
 
   public url = '';
-  // public url = 'https://media.w3.org/2010/05/sintel/trailer.mp4';
 
   public aspectRatio = 1.78 / 1; // 截取图片比例
 
@@ -217,9 +218,21 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSaveVideoUrl(){
-    this.videoUrlList=[];
-    this.videoUrlList.push(this.url);
+  // 保存视频地址
+  public onSaveVideoUrl() {
+    const reg = /^(http|https)?.+\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/;
+    if (!this.url) {
+      this.videoUrlErrMsgItem.isError = true;
+      this.videoUrlErrMsgItem.errMes = '请输入视频地址！';
+    } else if (!reg.test(this.url)) {
+      this.videoUrlErrMsgItem.isError = true;
+      this.videoUrlErrMsgItem.errMes = '视频地址格式错误，请重新输入！';
+    } else {
+      this.videoUrlErrMsgItem = new ErrMessageItem();
+      this.videoUrlList = [];
+      this.videoUrlList.push(this.url);
+    }
+
   }
 
   // 选择视频
@@ -233,7 +246,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       this.videoErrMsgItem.errMes = '视频大小不得高于20M！';
     }
   }
-
 
   /**
    * 商品规格数据转换
@@ -332,7 +344,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }, err => {
       this.upLoadErrMsg(err);
     });
-
   }
 
   // 点击取消添加/编辑
