@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../../../core/global.service';
-import { NoticeService } from '../../notice.service';
+import { NotifyEntity, NoticeService } from '../../notice.service';
 import { HttpErrorEntity } from '../../../../../../core/http.service';
 
 @Component({
@@ -11,11 +11,11 @@ import { HttpErrorEntity } from '../../../../../../core/http.service';
 })
 
 export class NoticeEditComponent implements OnInit {
+  public noticeData = new NotifyEntity();
   private sureCallback: any;
   private subscription: Subscription;
 
   @Input() public notice_id: string;
-  @Input() public title: string;
   @Input() public type: number;
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
@@ -31,18 +31,19 @@ export class NoticeEditComponent implements OnInit {
   public onSaveNoticeTitle() {
     // 新建
     if (!this.notice_id) {
-      this.noticeService.requestAddNoticeTitle(this.title, this.type).subscribe(() => {
+      this.noticeService.requestAddNoticeTitle(this.noticeData.title, this.type, this.noticeData.display_place).subscribe(() => {
         this.getSuccessInfo();
       }, err => {
         this.getErrorInfo(err);
       });
     } else {
       // 编辑
-      this.noticeService.requestUpdateNoticeTitle(this.notice_id, this.title, this.type).subscribe(() => {
-        this.getSuccessInfo();
-      }, err => {
-        this.getErrorInfo(err);
-      });
+      this.noticeService.requestUpdateNoticeTitle(this.noticeData.notify_id, this.noticeData.title,
+        this.noticeData.display_place).subscribe(() => {
+          this.getSuccessInfo();
+        }, err => {
+          this.getErrorInfo(err);
+        });
     }
   }
 
@@ -63,7 +64,7 @@ export class NoticeEditComponent implements OnInit {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
           // tslint:disable-next-line:max-line-length
-          const field = content.field === 'title' ? '通知内容' : '';
+          const field = content.field === 'title' ? '通知内容' : content.field === 'display_place' ? '显示位置' : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
@@ -87,22 +88,20 @@ export class NoticeEditComponent implements OnInit {
     if (this.sureCallback) {
       this.sureCallback = null;
     }
-    this.title = '';
+    this.noticeData = new NotifyEntity();
     $(this.promptDiv.nativeElement).modal('hide');
   }
 
   /**
    * 打开确认框
-   * @param notice_id 标签id
-   * @param title 标签名称
+   * @param noticeData NotifyEntity 通知对象
    * @param type 类型
    * @param sureName 确认按钮文本(默认为确定)
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(notice_id = '', title = '', type = 1, sureFunc: any) {
-    this.notice_id = notice_id;
-    this.title = title;
+  public open(data: NotifyEntity, type: number, sureFunc: any) {
+    this.noticeData = Object.assign(data);
     this.type = type;
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {

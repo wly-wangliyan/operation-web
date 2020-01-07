@@ -13,8 +13,18 @@
         <nz-form-item nzFlex style="margin-left: 20px;">
           <nz-form-label nzRequired [nzNoColon]='true'>通知内容</nz-form-label>
           <nz-form-control class="form_control">
-            <textarea class="notice-title" placeholder="最多可输入100字" maxlength="100" [(ngModel)]="title" name="title"
-              required></textarea>
+            <textarea class="notice-title" placeholder="最多可输入100字" maxlength="100" [(ngModel)]="noticeData.title"
+              name="title" required></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex style="margin-left: 20px;" *ngIf='type===2||type===3'>
+          <nz-form-label nzRequired [nzNoColon]='true'>显示位置</nz-form-label>
+          <nz-form-control class="form_control">
+            <nz-radio-group [(ngModel)]="noticeData.display_place" name='display_place'>
+              <label *ngIf='type===2' nz-radio nzValue="'1'">洗车首页</label>
+              <label *ngIf='type===2' nz-radio nzValue="'2'">洗车下单页</label>
+              <label *ngIf='type===3' nz-radio nzValue="'3'">机场停车首页</label>
+            </nz-radio-group>
           </nz-form-control>
         </nz-form-item>
         <div class="modal-footer">
