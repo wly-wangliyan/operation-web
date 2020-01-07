@@ -130,6 +130,10 @@ export class ExpandedMenuComponent implements OnInit {
       this.menuItems = this.topicService.generateMenus_topic();
       this.menu_icon = false;
       this.routeLinkList = this.topicService.routeLinkList;
+    } else {
+      this.routeLinkList.forEach(item => {
+        item.reset();
+      });
     }
   }
 
