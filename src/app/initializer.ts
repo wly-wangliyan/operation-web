@@ -13,7 +13,7 @@ export const initializer: any = {
         xmlhttp.withCredentials = true;
         xmlhttp.onreadystatechange = () => {
           if ((xmlhttp.readyState === 4 && xmlhttp.status === 200) || xmlhttp.status === 403) {
-            initializer.user = JSON.parse(xmlhttp.responseText);
+            initializer.user = xmlhttp.responseText && JSON.parse(xmlhttp.responseText);
             initializer.startTimeStamp = new Date(xmlhttp.getResponseHeader('date')).getTime() / 1000;
             resolve(null);
           } else {

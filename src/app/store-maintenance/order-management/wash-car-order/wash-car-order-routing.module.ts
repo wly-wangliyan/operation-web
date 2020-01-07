@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
-import { WashOrderComponent } from './wash-order.component';
+import { WashOrderComponent } from './wash-car-order.component';
 import { OrderListComponent } from './order-list/order-list.component';
 
 const routes: Routes = [{

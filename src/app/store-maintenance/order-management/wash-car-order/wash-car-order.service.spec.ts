@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WashOrderService } from './wash-order.service';
+import { WashOrderService } from './wash-car-order.service';
 
 describe('WashOrderService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

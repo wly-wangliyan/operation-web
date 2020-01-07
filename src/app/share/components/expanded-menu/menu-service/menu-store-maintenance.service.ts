@@ -51,7 +51,7 @@ export class MenuStoreMaintenanceService {
     const subFinanceMenu4 = new SideMenuItem('救援订单', '/rescue-order', systemMenu);
     const subFinanceMenu5 = new SideMenuItem('保养订单', '/upkeep-order', systemMenu);
     const subFinanceMenu6 = new SideMenuItem('核销管理', '/expense-management', systemMenu);
-    const subFinanceMenu7 = new SideMenuItem('洗车订单', '/order-management/wash-order', systemMenu);
+    const subFinanceMenu7 = new SideMenuItem('洗车订单', '/order-management/wash-car-order', systemMenu);
     // systemMenu.children.push(subFinanceMenu1);
     // systemMenu.children.push(subFinanceMenu2);
     systemMenu.children.push(subFinanceMenu5);
