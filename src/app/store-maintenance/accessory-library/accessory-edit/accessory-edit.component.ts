@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -76,7 +76,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -284,7 +284,7 @@ export class AccessoryEditComponent implements OnInit {
                     this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
                       this.globalService.promptBox.open('创建配件成功！');
                       this.isSaveBtnDisabled = false;
-                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
                       this.isSaveBtnDisabled = false;
@@ -293,7 +293,7 @@ export class AccessoryEditComponent implements OnInit {
                     this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
                       this.globalService.promptBox.open('编辑配件成功！');
                       this.isSaveBtnDisabled = false;
-                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
                       this.isSaveBtnDisabled = false;
@@ -358,6 +358,6 @@ export class AccessoryEditComponent implements OnInit {
 
   // 取消
   public onCancelBtn() {
-    this.router.navigateByUrl('/store-maintenance/accessory-library');
+    this.router.navigateByUrl('/accessory-library');
   }
 }

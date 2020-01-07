@@ -8,10 +8,10 @@ import { NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { ShareModule } from '../share/share.module';
 import { initializer } from '../initializer';
 import { StoreMaintenanceRoutingModule } from './store-maintenance-routing.module';
-import { StoreMaintenanceEntryComponent } from './store-maintenance-entry/store-maintenance-entry.component';
 import { StoreMaintenanceComponent } from './store-maintenance.component';
 import zh from '@angular/common/locales/zh';
 import { SentryErrorHandler } from 'src/utils/sentry-error-handler';
+import { HomeModule } from '../home/home.module';
 
 registerLocaleData(zh);
 
@@ -23,10 +23,10 @@ registerLocaleData(zh);
     HttpClientModule,
     BrowserAnimationsModule,
     ShareModule,
+    HomeModule,
     StoreMaintenanceRoutingModule,
   ],
   declarations: [
-    StoreMaintenanceEntryComponent,
     StoreMaintenanceComponent,
   ],
   providers: [
@@ -34,7 +34,7 @@ registerLocaleData(zh);
     { provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true },
     { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],
-  bootstrap: [StoreMaintenanceEntryComponent]
+  bootstrap: [StoreMaintenanceComponent]
 })
 export class StoreMaintenanceModule {
 }

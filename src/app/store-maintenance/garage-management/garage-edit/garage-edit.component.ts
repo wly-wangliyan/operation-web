@@ -233,7 +233,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
 
   // 取消按钮
   public onClose() {
-    this.router.navigate(['/store-maintenance/garage-management/list']);
+    this.router.navigate(['/garage-management/list']);
   }
 
   // 清空
