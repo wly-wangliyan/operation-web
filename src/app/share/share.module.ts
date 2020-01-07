@@ -76,6 +76,7 @@ import { MaxNumberDirective } from './directives/max-number.directive';
 import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
 import { PromptLoadingComponent } from './components/prompt-loading/prompt-loading.component';
 import { IntNumberDirective } from './directives/int-number.directive';
+import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe';
 
 
 @NgModule({
@@ -161,6 +162,8 @@ import { IntNumberDirective } from './directives/int-number.directive';
     DoorRefundStatusPipe,
     DoorRefundOrderStatusPipe,
     ZDuration3Pipe,
+    RefundTypePipe,
+    CommonRefundStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -246,6 +249,8 @@ import { IntNumberDirective } from './directives/int-number.directive';
     DoorRefundStatusPipe,
     DoorRefundOrderStatusPipe,
     ZDuration3Pipe,
+    RefundTypePipe,
+    CommonRefundStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,

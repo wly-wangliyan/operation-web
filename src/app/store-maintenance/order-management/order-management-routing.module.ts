@@ -14,8 +14,8 @@ const routes: Routes = [{
     { path: 'order-list', component: OrderListComponent },
     { path: 'order-detail/:upkeep_order_id', component: OrderDetailComponent },
     {
-      path: 'wash-order',
-      loadChildren: () => import('./wash-order/wash-order.module').then(m => m.WashOrderModule)
+      path: 'wash-car-order',
+      loadChildren: () => import('./wash-car-order/wash-car-order.module').then(m => m.WashOrderModule)
     }
   ]
 }];
