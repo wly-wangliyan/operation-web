@@ -129,7 +129,7 @@ export class WashOrderService {
    * 获取洗车订单核销列表
    * @param wash_car_order_id 洗车订单id
    */
-  public requestRepairShopData(wash_car_order_id: string): Observable<Array<ExpenseVerifyEntity>> {
+  public requestExpenseVerifyRecordsData(wash_car_order_id: string): Observable<Array<ExpenseVerifyEntity>> {
     const httpUrl = `${this.domain}/admin/wash_car_orders/${wash_car_order_id}/expense_verifies`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       const tempList: Array<ExpenseVerifyEntity> = [];

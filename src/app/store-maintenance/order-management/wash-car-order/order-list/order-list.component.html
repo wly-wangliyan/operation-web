@@ -96,9 +96,7 @@
                   <span
                     *ngIf="record.wash_car_specification.car_type">{{'('+(record.wash_car_specification.car_type)+')'}}</span>
                 </ng-container>
-                <ng-container *ngIf="!order.contact_name && !order.contact_tel">
-                  <span>--</span>
-                </ng-container>
+                <span *ngIf="!record.wash_car_specification">--</span>
               </div>
             </td>
             <td>{{record.original_fee | centPriceChange:'元'}}</td>
