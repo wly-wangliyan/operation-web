@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from 'src/utils/z-entity';
-import { Observable, timer } from 'rxjs/index';
-import { map } from 'rxjs/internal/operators';
+import { Observable } from 'rxjs/index';
+import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { HttpService, LinkResponse, HttpErrorEntity } from '../../core/http.service';
 import { environment } from '../../../environments/environment';

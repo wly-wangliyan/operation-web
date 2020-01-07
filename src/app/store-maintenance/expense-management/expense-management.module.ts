@@ -6,15 +6,18 @@ import { ExpenseManagementComponent } from './expense-management.component';
 import { RecordListComponent } from './record-list/record-list.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { ExpenseStatusPipe } from './pipes/expense-status.pipe';
 
 @NgModule({
-  declarations: [ExpenseManagementComponent, RecordListComponent],
+  declarations: [ExpenseManagementComponent, RecordListComponent, ExpenseStatusPipe],
   imports: [
     CommonModule,
     ExpenseManagementRoutingModule,
     ShareModule,
     NzTableModule,
-    NzButtonModule
+    NzButtonModule,
+    NzDatePickerModule
   ]
 })
 export class ExpenseManagementModule { }
