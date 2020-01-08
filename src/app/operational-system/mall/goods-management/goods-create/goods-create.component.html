@@ -141,8 +141,7 @@
                 <img src="/assets/images/default_video.png" *ngIf='videoUrlList.length===0'>
                 <app-z-preview-video-photo *ngIf='videoUrlList.length!==0' [isControls]="true"
                   [previewContainerWidth]='150' [previewWidth]='150' [previewHeight]='150' [playBtnWidth]='46'
-                  [playBtnHeight]='46' [isShowThumb]='false' [isChangePlayBtn]='true'
-                  [videoAndPhotoUrls]="videoUrlList">
+                  [playBtnHeight]='46' [isShowThumb]='false' [videoAndPhotoUrls]="videoUrlList">
                 </app-z-preview-video-photo>
               </div>
               <div style="float: left;margin-top: 25px;">
