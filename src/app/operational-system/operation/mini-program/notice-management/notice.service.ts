@@ -9,6 +9,7 @@ import { EntityBase } from '../../../../../utils/z-entity';
 // 通知
 export class NotifyEntity extends EntityBase {
   public notify_id: string = undefined; 	// 	String	id
+  public display_place: number = undefined; 	// 	通知位置
   public title: string = undefined; 	// 	标题
   public is_delete: boolean = undefined; 	// 	是否删除 true为删除
   public is_use: boolean = undefined; 	// 是否启用 true为启用
@@ -64,11 +65,12 @@ export class NoticeService {
   /**
    * 新建通知
    * @param title string 标题
-   * @param notify_type number 通知类型 1，检车线
+   * @param notify_type number 通知类型 1，检车线 2洗车 3机场停车
+   * @param display_place number 通知显示位置
    * @returns Observable<HttpResponse<any>>
    */
-  public requestAddNoticeTitle(title: string, notify_type: number): Observable<HttpResponse<any>> {
-    return this.httpService.post(`${this.domain}/admin/notify`, { title, notify_type }
+  public requestAddNoticeTitle(title: string, notify_type: number, display_place: number): Observable<HttpResponse<any>> {
+    return this.httpService.post(`${this.domain}/admin/notify`, { title, notify_type, display_place }
     );
   }
 
@@ -76,11 +78,11 @@ export class NoticeService {
    * 编辑标签
    * @param notify_id string 通知ID
    * @param title string 标题
-   * @param notify_type number 通知类型 1，检车线
+   * @param display_place number 通知显示位置
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateNoticeTitle(notify_id: string, title: string, notify_type: number): Observable<HttpResponse<any>> {
-    return this.httpService.put(`${this.domain}/admin/notify/${notify_id}`, { title, notify_type }
+  public requestUpdateNoticeTitle(notify_id: string, title: string, display_place: number): Observable<HttpResponse<any>> {
+    return this.httpService.put(`${this.domain}/admin/notify/${notify_id}`, { title, display_place }
     );
   }
 

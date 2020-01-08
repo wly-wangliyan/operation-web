@@ -18,7 +18,7 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-              private routerInfo: ActivatedRoute, private router: Router) {
+    private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
@@ -59,7 +59,7 @@ export class RescueFeesEditComponent implements OnInit {
   }
 
   public onCancelBtn() {
-    this.router.navigateByUrl('/store-maintenance/service-fees-management');
+    this.router.navigateByUrl('/service-fees-management');
   }
 
   // 保存数据
@@ -81,7 +81,7 @@ export class RescueFeesEditComponent implements OnInit {
       this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
         this.globalService.promptBox.open('编辑救援费成功！');
         this.searchText$.next();
-        timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/service-fees-management'));
+        timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
       }, err => {
         this.handleErrorFunc(err);
       });

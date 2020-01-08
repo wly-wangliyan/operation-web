@@ -32,18 +32,18 @@ export class ExpandedMenuComponent implements OnInit {
   public menu_icon = true;
 
   constructor(public router: Router,
-              public routeMonitorService: RouteMonitorService,
-              public authService: AuthService,
-              private operationMenuService: MenuOperationService,
-              private insuranceMenuService: MenuInsuranceService,
-              private maintenanceMenuService: MenuMaintenanceService,
-              private mallMenuService: MenuMallService,
-              private managementMenuService: MenuManagementService,
-              private ticketMenuService: MenuTicketService,
-              private storeManagementMenuService: MenuStoreMaintenanceService,
-              private exemptionService: MenuExemptionService,
-              private orderParkingService: MenuOrderParkingService,
-              private topicService: MenuTopicService) {
+    public routeMonitorService: RouteMonitorService,
+    public authService: AuthService,
+    private operationMenuService: MenuOperationService,
+    private insuranceMenuService: MenuInsuranceService,
+    private maintenanceMenuService: MenuMaintenanceService,
+    private mallMenuService: MenuMallService,
+    private managementMenuService: MenuManagementService,
+    private ticketMenuService: MenuTicketService,
+    private storeManagementMenuService: MenuStoreMaintenanceService,
+    private exemptionService: MenuExemptionService,
+    private orderParkingService: MenuOrderParkingService,
+    private topicService: MenuTopicService) {
     const path = location.pathname;
     this.getMenuItems(path);
   }
@@ -130,6 +130,10 @@ export class ExpandedMenuComponent implements OnInit {
       this.menuItems = this.topicService.generateMenus_topic();
       this.menu_icon = false;
       this.routeLinkList = this.topicService.routeLinkList;
+    } else {
+      this.routeLinkList.forEach(item => {
+        item.reset();
+      });
     }
   }
 

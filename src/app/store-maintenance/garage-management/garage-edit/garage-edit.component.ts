@@ -74,6 +74,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   public wash_start_time: TimeItem = new TimeItem(); // 洗车营业开始时间
   public wash_end_time: TimeItem = new TimeItem(); //  洗车营业结束时间
   public regionsObj: RegionEntity = new RegionEntity(); // 门店地址
+  public isShowWashService = false; // 只有基本服务的保存生效后，才显示或隐藏洗车相关
   private repair_shop_id: string;
   private requestSubscription: Subscription;
   private searchText$ = new Subject<any>();
@@ -126,6 +127,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
         this.editParams.service_type = res.service_type ? res.service_type : [];
         // 处理服务类型
         let service_index = 1;
+        this.serviceList = [];
         while (service_index <= 3) {
           const serviceItem = new ServiceItem(service_index, false);
           serviceItem.name = this.serviceNames[service_index];
@@ -135,6 +137,12 @@ export class GarageEditComponent implements OnInit, OnDestroy {
           this.serviceList.push(serviceItem);
           service_index++;
         }
+
+        if (res.service_type.includes(3)) {
+          this.isShowWashService = true;
+        } else {
+          this.isShowWashService = false;
+        }
         this.company_name = res.repair_company ? res.repair_company.repair_company_name : '';
         // 处理门店地址
         this.regionsObj = new RegionEntity(this.currentGarage);
@@ -143,12 +151,18 @@ export class GarageEditComponent implements OnInit, OnDestroy {
         this.loading = false;
       }, err => {
         this.loading = false;
-        this.globalService.httpErrorProcess(err);
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 404) {
+            this.globalService.promptBox.open('汽修店不存在，请刷新重试！', null, 2000, null, false);
+            return;
+          }
+        }
       });
   }
 
   // 初始化洗车相关
   private initWashInfo(): void {
+    this.tag = null;
     this.washInfo = this.currentGarage.wash_car ? this.currentGarage.wash_car.clone() : new WashCarEntity();
     this.tagList = this.washInfo.wash_car_tags ? this.washInfo.wash_car_tags : [];
     this.wash_start_time = this.washInfo.start_time ? DateFormatHelper.getMinuteOrTime(this.washInfo.start_time)
@@ -156,6 +170,11 @@ export class GarageEditComponent implements OnInit, OnDestroy {
     this.wash_end_time = this.washInfo.end_time ? DateFormatHelper.getMinuteOrTime(this.washInfo.end_time)
       : new TimeItem();
     this.tempContent = this.washInfo.shop_instruction.replace('/\r\n/g', '<br>').replace(/\n/g, '');
+    if (this.tab_index === 2) {
+      timer(0).subscribe(() => {
+        CKEDITOR.instances.shairShopEditor.setData(this.tempContent);
+      });
+    }
   }
 
   // 键盘按下事件
@@ -171,9 +190,8 @@ export class GarageEditComponent implements OnInit, OnDestroy {
     this.clear();
     if (this.verification()) {
       this.garageService.requestEditRepairShops(this.repair_shop_id, this.editParams).subscribe(() => {
-        this.globalService.promptBox.open('保存成功！', () => {
-          this.onClose();
-        });
+        this.globalService.promptBox.open('保存成功！');
+        this.searchText$.next();
       }, err => {
         this.errorProcess(err);
       });
@@ -197,12 +215,13 @@ export class GarageEditComponent implements OnInit, OnDestroy {
     const tempContent = CKEDITOR.instances.shairShopEditor.getData();
     if (tempContent) {
       this.washInfo.shop_instruction = tempContent.replace('/\r\n/g', '').replace(/\n/g, '');
+    } else {
+      this.washInfo.shop_instruction = '';
     }
     this.washInfo.wash_car_tags = this.tagList;
     this.garageService.requestEditWashInfo(this.repair_shop_id, this.washInfo).subscribe(() => {
-      this.globalService.promptBox.open('保存成功！', () => {
-        this.onClose();
-      });
+      this.globalService.promptBox.open('保存成功！');
+      this.searchText$.next();
     }, err => {
       this.errorProcess(err);
     });
@@ -233,7 +252,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
 
   // 取消按钮
   public onClose() {
-    this.router.navigate(['/store-maintenance/garage-management/list']);
+    this.router.navigate(['/garage-management/list']);
   }
 
   // 清空
@@ -247,12 +266,17 @@ export class GarageEditComponent implements OnInit, OnDestroy {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'title') {
-            // this.errPositionItem.title.isError = true;
-            // this.errPositionItem.title.errMes = '标题错误或无效！';
+          if (content.resource === 'wash_car_tags' && content.code === 'exceed_the_limit') {
+            this.globalService.promptBox.open('标签个数超过上限！', null, 2000, null, false);
+            return;
+          } else {
+            this.globalService.promptBox.open('数据错误或无效！', null, 2000, null, false);
             return;
           }
         }
+      } else if (err.status === 404) {
+        this.globalService.promptBox.open('汽修店不存在，请刷新重试！', null, 2000, null, false);
+        return;
       }
     }
   }
@@ -310,17 +334,9 @@ export class GarageEditComponent implements OnInit, OnDestroy {
     this.editParams.service_type = result;
   }
 
-  // 切换tab页
+  // 切换tab页时，重新获取数据
   public onTabChange(event: any): void {
-    if (event === 2) {
-      // tag 内容是否需要清除
-      this.tag = null;
-      timer(200).subscribe(() => {
-        CKEDITOR.instances.shairShopEditor.setData(this.tempContent);
-      });
-    } else {
-      this.tempContent = CKEDITOR.instances.shairShopEditor.getData();
-    }
+    this.searchText$.next();
   }
 
   // 添加标签

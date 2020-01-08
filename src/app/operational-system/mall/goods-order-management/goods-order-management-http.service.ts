@@ -21,6 +21,7 @@ export class SearchParams extends EntityBase {
   public commodity_name = ''; // 	string	F	商品名称
   public order_time = ''; // 	string	F	下单时间 12154.0,232645.0
   public pay_time = ''; // 	string	F	支付时间 12154.0,232645.0
+  public pay_type = ''; // 	string	F	支付方式 WX_XCX_SL 微信 other 其他 EC 兑换码支付
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }

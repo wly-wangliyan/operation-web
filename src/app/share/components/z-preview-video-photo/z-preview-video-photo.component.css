@@ -1,113 +1,115 @@
 .hide {
-    display: none !important;
+  display: none !important;
 }
 
-.preview-container, .preview-content {
-    overflow: hidden;
+.preview-container,
+.preview-content {
+  overflow: hidden;
 }
 
-.preview-content, .thumb-nail-container li {
-    position: relative;
+.preview-content,
+.thumb-nail-container li {
+  position: relative;
 }
 
-.preview-wrap, .video-wrap {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+.preview-wrap,
+.video-wrap {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .thumb-nail-container {
-    content: '';
-    display: table;
-    clear: both;
+  content: '';
+  display: table;
+  clear: both;
 }
 
 .thumb-nail-container li {
-    margin: 10px 10px 0 0;
-    float: left;
-    font-size: 0;
-    text-align: center;
-    cursor: pointer;
-    border: none;
-    border-radius: 3px;
-    overflow: hidden;
+  margin: 10px 10px 0 0;
+  float: left;
+  font-size: 0;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
 .thumb-nail-container li:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .thumb-nail-container li.selected-thumb-nail {
-    border: 1px solid #3E71F7;
+  border: 1px solid #3E71F7;
 }
 
-.preview-content video, .preview-content img, .thumb-nail-container li video, .thumb-nail-container li img {
-    max-width: 100%;
-    max-height: 100%;
-    border: none;
-    outline: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.preview-content video,
+.preview-content img,
+.thumb-nail-container li video,
+.thumb-nail-container li img {
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+  outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .icon-control {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, .5);
-    display: block;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .5);
+  display: block;
+  overflow: hidden;
 }
 
 .icon-control i {
-    width: 92px;
-    height: 92px;
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -46px;
-    margin-left: -46px;
-    background: url('../../../../assets/images/preview/icon_play_video.png') no-repeat center;
-    background-size: contain;
-    cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: url('../../../../assets/images/preview/icon_play_video.png') no-repeat center;
+  background-size: contain;
+  cursor: pointer;
 }
 
 .thumb-icon-control i {
-    width: 32px;
-    height: 32px;
-    margin-top: -16px;
-    margin-left: -16px;
-    background: url('../../../../assets/images/preview/icon_thumb_video.png') no-repeat center;
-    background-size: contain;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  margin-left: -16px;
+  background: url('../../../../assets/images/preview/icon_thumb_video.png') no-repeat center;
+  background-size: contain;
 }
 
 .preview-arrow {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
-    cursor: pointer;
-    z-index: 100;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  cursor: pointer;
+  z-index: 100;
 }
 
 .preview-previous {
-    left: 10px;
-    background: url('../../../../assets/images/preview/icon_preview_previous.png') no-repeat center;
-    background-size: contain;
+  left: 10px;
+  background: url('../../../../assets/images/preview/icon_preview_previous.png') no-repeat center;
+  background-size: contain;
 }
 
 .preview-next {
-    right: 10px;
-    background: url('../../../../assets/images/preview/icon_preview_next.png') no-repeat center;
-    background-size: contain;
+  right: 10px;
+  background: url('../../../../assets/images/preview/icon_preview_next.png') no-repeat center;
+  background-size: contain;
 }

@@ -21,7 +21,7 @@
         <tr>
           <td>落地页：</td>
           <td colspan="5">
-            {{bannerRecord.belong_to===2 ? 'H5： ': '小程序原生页： '}}
+            {{bannerRecord.belong_to|landingPageType}}：
             {{bannerRecord.jump_link ? bannerRecord.jump_link : '--'}}</td>
         </tr>
         <tr>

@@ -27,6 +27,8 @@ export class BannerListComponent implements OnInit, OnDestroy {
 
   public end_time: any = '';
 
+  public tabList: Array<any> = [];
+
   private searchText$ = new Subject<any>();
 
   private requestSubscription: Subscription; // 获取数据
@@ -51,6 +53,12 @@ export class BannerListComponent implements OnInit, OnDestroy {
     private bannerService: BannerService) { }
 
   public ngOnInit() {
+    this.tabList = [
+      { key: 1, value: '首页Banner' },
+      { key: 2, value: '检车Banner' },
+      { key: 3, value: '机场停车Banner' },
+      { key: 4, value: '弹窗展位' },
+    ];
     this.generateBannerList();
   }
 
@@ -245,6 +253,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
 
   // tab页切换
   public onTabChange(banner_type: number) {
+    this.bannerList = [];
     this.searchParams = new SearchParams();
     this.start_time = null;
     this.end_time = null;

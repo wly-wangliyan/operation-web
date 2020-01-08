@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExemptionMainComponent } from './exemption-main.component';
+import { OrderDetailComponent } from './order-detail.component';
 
-describe('ExemptionMainComponent', () => {
-  let component: ExemptionMainComponent;
-  let fixture: ComponentFixture<ExemptionMainComponent>;
+describe('OrderDetailComponent', () => {
+  let component: OrderDetailComponent;
+  let fixture: ComponentFixture<OrderDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExemptionMainComponent ]
+      declarations: [ OrderDetailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExemptionMainComponent);
+    fixture = TestBed.createComponent(OrderDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

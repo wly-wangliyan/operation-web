@@ -120,6 +120,10 @@ export class AuthService {
       this._isLoggedIn = false;
       this._user = null;
       location.href = location.origin + '/login';
+    }, err => {
+      this._isLoggedIn = false;
+      this._user = null;
+      location.href = location.origin + '/login';
     });
   }
 

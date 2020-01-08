@@ -103,3 +103,12 @@
 .operation {
   min-width: 68px;
 }
+
+.tab-bar-list {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.tab-bar-list .ant-radio-button-wrapper {
+  width: 200px;
+}

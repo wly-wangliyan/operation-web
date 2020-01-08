@@ -275,3 +275,7 @@
   background: #3E71F7;
   border: none;
 }
+
+:host ::ng-deep .ant-input-group-wrapper {
+  width: auto;
+}

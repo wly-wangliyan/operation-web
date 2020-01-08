@@ -120,7 +120,7 @@ export class RecordListComponent implements OnInit {
 
   // 重新发布
   public onReleaseClick(page_id: string) {
-    this.globalService.confirmationBox.open('提示', '重新发布将替换当前，生效的装修效果，确定要发布吗？', () => {
+    this.globalService.confirmationBox.open('提示', '重新发布将替换当前正在生效的界面，确认发布吗？', () => {
       this.globalService.confirmationBox.close();
       this.interfaceDecorationService.requestPageReleaseData(page_id).subscribe(res => {
         this.globalService.promptBox.open('重新发布成功！');

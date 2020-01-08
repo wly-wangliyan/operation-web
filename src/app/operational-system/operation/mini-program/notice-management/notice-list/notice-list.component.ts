@@ -19,6 +19,7 @@ export class NoticeListComponent implements OnInit {
   public searchParams: SearchParams = new SearchParams();
   public noResultText = '数据加载中...';
   public tabs: Array<any> = [];
+  public tab: number;
   public selectedTabIndex = 0;
 
   private searchText$ = new Subject<any>();
@@ -42,7 +43,9 @@ export class NoticeListComponent implements OnInit {
 
   ngOnInit() {
     this.tabs = [
-      { key: 0, value: '检车通知' },
+      { key: 1, value: '检车通知' },
+      { key: 2, value: '洗车通知' },
+      { key: 3, value: '机场停车通知' },
     ];
     this.selectedTabIndex = 0;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
@@ -60,12 +63,20 @@ export class NoticeListComponent implements OnInit {
     this.searchText$.next();
   }
 
+  // 切换tab
+  public onTabChange(key: number) {
+    this.noticeList = [];
+    this.searchParams = new SearchParams();
+    this.searchParams.notify_type = key;
+    this.searchText$.next();
+  }
+
   // 新建/编辑标签
-  public onEditNotice(notice_id: string, title: string, type: number, status: boolean) {
-    if (notice_id && status) {
+  public onEditNotice(type: number, data?: NotifyEntity) {
+    if (data && data.is_use) {
       this.globalService.promptBox.open('请关闭通知后再进行编辑！', null, 2000, '/assets/images/warning.png');
     } else {
-      this.noticeEdit.open(notice_id, title, type, () => {
+      this.noticeEdit.open(data, type, () => {
         timer(1000).subscribe(() => {
           this.searchText$.next();
         });

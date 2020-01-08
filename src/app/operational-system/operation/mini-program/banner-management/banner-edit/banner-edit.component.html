@@ -9,17 +9,29 @@
         </button>
       </div>
       <form *ngIf="bannerParams" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
-
+        <div class="row" *ngIf='bannerParams.banner_type===4'>
+          <label class="control-label">
+            <b>*</b>
+            <span>页面</span>
+          </label>
+          <div class="control-input">
+            <nz-radio-group [(ngModel)]="bannerParams.page_layout" name='page_layout'>
+              <label nz-radio [nzValue]='1'>车辆认证完成页</label>
+              <label nz-radio [nzValue]='2'>实名认证完成页</label>
+            </nz-radio-group>
+          </div>
+        </div>
         <div class="row">
           <label class=" control-label">
             <b>*</b>
             <span>图片</span>
           </label>
           <div class="control-input">
-            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-              [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg [aspectRatio]="aspectRatio"
-              [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true" [imageShowWidth]="94*aspectRatio">
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+              [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+              [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg
+              [aspectRatio]="aspectRatio" [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true"
+              [imageShowWidth]="94*aspectRatio">
             </app-z-photo-select>
           </div>
         </div>
@@ -29,8 +41,10 @@
             <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
           </div>
         </div>
-        <p *ngIf="bannerParams.banner_type===1" class="cover-hint">注：尺寸1080*282px，格式PNG或JPG，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===2" class="cover-hint">注：尺寸690*360px，格式PNG或JPG，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===1||bannerParams.banner_type===3" class="cover-hint">
+          注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===2" class="cover-hint">注：尺寸690*360px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===4" class="cover-hint">注：尺寸540*146px，格式PNG/JPG/GIF，大小2M以内</p>
         <div class="row">
           <label class="control-label">
             <b>*</b>
@@ -47,7 +61,7 @@
             <span *ngIf="errPositionItem?.title?.isError">{{errPositionItem?.title?.errMes}}</span>
           </div>
         </div>
-        <div *ngIf="bannerParams.banner_type===1" class="row">
+        <!-- <div *ngIf="bannerParams.banner_type===1" class="row">
           <label class=" control-label">
             <b>*</b>
             <span>落地页</span>
@@ -57,27 +71,29 @@
               (change)="onChangeBelongTo($event)" required>
               <option [value]=2>H5</option>
               <option [value]=1>小程序原生页</option>
+              <option [value]=3>视频链接</option>
             </select>
             <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
               maxlength="2000" autocomplete="off" required appIgnoreSpace
               (change)="errPositionItem.jump_link.isError=false" style="border-left: none!important;">
           </div>
-        </div>
-        <div *ngIf="bannerParams.banner_type===2" class="row">
+        </div> -->
+        <div class="row">
           <label class=" control-label">
             <b>&nbsp;</b>
             <span>落地页</span>
           </label>
           <div class="control-input">
             <select class="form-control" [(ngModel)]="bannerParams.belong_to" name="belong_to"
-                    (change)="onChangeBelongTo($event)">
+              (change)="onChangeBelongTo($event)">
               <option [value]=0>请选择</option>
               <option [value]=2>H5</option>
               <option [value]=1>小程序原生页</option>
+              <option [value]=3>视频链接</option>
             </select>
             <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="bannerParams.jump_link" name="jump_link"
-                   maxlength="2000" autocomplete="off" appIgnoreSpace
-                   (change)="errPositionItem.jump_link.isError=false" style="border-left: none!important;">
+              maxlength="2000" autocomplete="off" appIgnoreSpace (change)="errPositionItem.jump_link.isError=false"
+              style="border-left: none!important;">
           </div>
         </div>
         <div class="row row-message">

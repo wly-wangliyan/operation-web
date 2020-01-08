@@ -1,0 +1,136 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'洗车订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+    <div class="table-item order-table" *ngIf="orderRecord && orderRecord.wash_car_order_id">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="5" class="row-title">订单信息</td>
+
+          <td>订单状态：</td>
+          <td>
+            <span *ngIf="orderRecord.order_status>=0"
+              style="color: #E82038;">{{orderRecord.order_status | washCarOrderStatus}}</span>
+            <span *ngIf="!orderRecord.order_status">--</span>
+          </td>
+
+          <td>订单编号：</td>
+          <td>{{orderRecord.wash_car_order_id || '--'}}</td>
+
+          <td>购买产品</td>
+          <td>
+            <ng-container *ngIf="orderRecord.wash_car_specification">
+              <span>{{orderRecord.wash_car_specification.specification_name}}</span>
+              <span
+                *ngIf="orderRecord.wash_car_specification.car_type">{{'('+(orderRecord.wash_car_specification.car_type)+')'}}</span>
+            </ng-container>
+            <span *ngIf="!orderRecord.wash_car_specification">--</span>
+          </td>
+        </tr>
+        <tr>
+          <td>应收：</td>
+          <td>{{orderRecord.original_fee | centPriceChange:'元'}}</td>
+
+          <td>优惠券：</td>
+          <td>--</td>
+
+          <td>平台立减：</td>
+          <td>{{orderRecord.minus_fee | centPriceChange:'元'}}</td>
+        </tr>
+        <tr>
+          <td>实收：</td>
+          <td>{{orderRecord.sale_fee | centPriceChange:'元'}}</td>
+
+          <td></td>
+          <td></td>
+
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>退款时间：</td>
+          <td>
+            {{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+          </td>
+
+          <td>退款金额：</td>
+          <td>
+            {{orderRecord.refund_fee>0?(orderRecord.refund_fee | centPriceChange:'元'):'--'}}
+          </td>
+
+          <td>退款原因</td>
+          <td>{{orderRecord.refund_reason || '--'}}</td>
+        </tr>
+        <tr>
+          <td>备注(平台)</td>
+          <td class="remark-info">
+            <div class="remark-group">
+              <div class="btn-box">
+                <button *ngIf="!isEditRemark" name="sure_btn_1" type="button" class="sure-btn edit-btn" nz-button
+                  nzType="primary" (click)="isEditRemark=true">编辑</button>
+                <ng-container *ngIf="isEditRemark">
+                  <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
+                    [disabled]="!orderRecord.remark" (click)="onSaveClick()">保存</button>
+                  <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
+                    (click)="onCancelClick()">取消</button>
+                </ng-container>
+              </div>
+              <div class="remark-box">
+                <span *ngIf="!isEditRemark">{{orderRecord.remark || '--'}}</span>
+                <textarea *ngIf="isEditRemark" name="order_remarks" class="form-control" placeholder="100字以内..."
+                  [(ngModel)]="orderRecord.remark" maxlength="100"></textarea>
+              </div>
+            </div>
+          </td>
+
+          <td></td>
+          <td></td>
+
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-item" *ngIf="expenseVerifyRecords && expenseVerifyRecords.length>0">
+      <table class="detail-table">
+        <caption>商品劵码</caption>
+        <thead>
+          <tr>
+            <th>核销码</th>
+            <th>券码类型</th>
+            <th>有效期</th>
+            <th>核销时间</th>
+            <th>核销人</th>
+            <th>所属门店</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of expenseVerifyRecords">
+            <td>{{record.expense_verify_code || '--'}}</td>
+            <td>{{(record.service_type|washCarCouponType) || '--'}}</td>
+            <td>
+              <ng-container *ngIf="record.valid_date_start">
+                {{record.valid_date_start* 1000 | date:"y-MM-dd"}}
+                <span *ngIf="record.valid_date_end"> 至
+                  {{record.valid_date_end* 1000 | date:"y-MM-dd"}}</span>
+                <span *ngIf="!record.valid_date_end">起有效</span>
+              </ng-container>
+              <span *ngIf="!record.valid_date_start">--</span>
+            </td>
+            <td>
+              {{(record.verify_time* 1000 | date:"y-MM-dd HH:mm:ss")||'--'}}
+            </td>
+            <td>{{record.verify_person || '--'}}</td>
+            <td>{{record.repair_shop_name || '--'}}</td>
+            <td>{{expenseStatus[record.status] || '--'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-prompt-loading></app-prompt-loading>
+</div>

@@ -39,6 +39,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public videoErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 添加视频错误信息
 
+  public videoUrlErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 添加视频Url错误信息
+
   public specificationErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 产品规格错误信息
 
   public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
@@ -58,6 +60,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   public currentSpecification: SpecificationDateEntity = new SpecificationDateEntity();
 
   public classifyList: Array<SortEntity> = [];
+
+  public videoUrlList: Array<any> = [];
+
+  public url = '';
 
   public aspectRatio = 1.78 / 1; // 截取图片比例
 
@@ -212,6 +218,22 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 保存视频地址
+  public onSaveVideoUrl() {
+    const reg = /^(http|https)?.+\.(mp4)$/;
+    if (!this.url) {
+      this.videoUrlErrMsgItem.isError = true;
+      this.videoUrlErrMsgItem.errMes = '请输入视频地址！';
+    } else if (!reg.test(this.url)) {
+      this.videoUrlErrMsgItem.isError = true;
+      this.videoUrlErrMsgItem.errMes = '请输入MP4格式的视频地址！';
+    } else {
+      this.videoUrlErrMsgItem = new ErrMessageItem();
+      this.videoUrlList = [];
+      this.videoUrlList.push(this.url);
+    }
+  }
+
   // 选择视频
   public onSelectedVideo(event: any) {
     this.videoErrMsgItem.isError = false;
@@ -223,7 +245,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       this.videoErrMsgItem.errMes = '视频大小不得高于20M！';
     }
   }
-
 
   /**
    * 商品规格数据转换
@@ -301,28 +322,23 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
     this.onSubmitSubscription = this.coverImgSelectComponent.upload().subscribe(() => {
       this.goodsImgSelectComponent.upload().subscribe(() => {
-        this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
-          this.commodityInfo.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
-          this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
-          this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
-          this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
-          const commodityInfo = this.commodityInfo.clone();
-          commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
-          if (this.commodity_id) {
-            this.requestEditCommodity(commodityInfo);
-          } else {
-            this.requestCreateCommodity(commodityInfo);
-          }
-        }, err => {
-          this.upLoadErrMsg(err);
-        });
+        this.commodityInfo.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+        this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
+        this.commodityInfo.commodity_videos = this.videoUrlList;
+        this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+        const commodityInfo = this.commodityInfo.clone();
+        commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
+        if (this.commodity_id) {
+          this.requestEditCommodity(commodityInfo);
+        } else {
+          this.requestCreateCommodity(commodityInfo);
+        }
       }, err => {
         this.upLoadErrMsg(err);
       });
     }, err => {
       this.upLoadErrMsg(err);
     });
-
   }
 
   // 点击取消添加/编辑
@@ -355,6 +371,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       if (this.commodityInfo.specifications.length === 0) {
         this.commoditySpecificationList.push(new SpecificationParamsItem());
       }
+      this.videoUrlList = this.commodityInfo.commodity_videos;
+      this.url = this.commodityInfo.commodity_videos.length !== 0 ? this.commodityInfo.commodity_videos[0] : '';
       CKEDITOR.instances.goodsEditor.destroy(true);
       CKEDITOR.replace('goodsEditor', { width: '900px' }).setData(this.commodityInfo.commodity_description);
     }, err => {

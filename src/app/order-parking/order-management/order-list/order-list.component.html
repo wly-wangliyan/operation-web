@@ -1,135 +1,143 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
-  <ul class="header-right">
-    <li>
-      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-              (appZDebounceClick)="onExportClick()">
-        导出
-      </button>
-    </li>
-  </ul>
+    <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    (appZDebounceClick)="onExportClick()">
+                导出
+            </button>
+        </li>
+    </ul>
 </div>
 <div class="content-flow">
-
-  <div class="table-container">
-    <div class="search-container">
-      <form class="search-form" autocomplete="off">
-        <div class="form-group">
-          <span>订单状态：</span>
-          <select name="status" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.order_status">
-            <option value="">全部</option>
-            <option value="1">未支付</option>
-            <option value="2">已支付</option>
-            <option value="3">已退款</option>
-            <option value="4">已入场</option>
-            <option value="5">已取消</option>
-          </select>
+    <div class="table-container">
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>订单状态：</span>
+                    <select name="status" class="form-control" style="width: 130px;"
+                            [(ngModel)]="searchParams.order_status">
+                        <option value="">全部</option>
+                        <option value="1">未支付</option>
+                        <option value="2">已支付</option>
+                        <option value="3">已退款</option>
+                        <option value="4">已入场</option>
+                        <option value="5">已取消</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>手机号：</span>
+                    <input class="form-control" [(ngModel)]="searchParams.buyer_tel" name="telephone"
+                           placeholder="请输入手机号" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"
+                           appIgnoreSpace>
+                </div>
+                <div class="form-group">
+                    <span>购买人：</span>
+                    <input class="form-control" [(ngModel)]="searchParams.buyer_name" name="name" placeholder="请输入预订人"
+                           maxlength="20" appIgnoreSpace/>
+                </div>
+                <div class="form-group">
+                    <span>订单编号：</span>
+                    <input class="form-control" [(ngModel)]="searchParams.order_id" name="exemption_order_id"
+                           placeholder="请输入订单编号" maxlength="32" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
+                           appIgnoreSpace/>
+                </div>
+                <div class="form-group">
+                    <span>下单时间：</span>
+                    <nz-date-picker [(ngModel)]="order_start_time" name='order_start_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledOrderStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                    nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <span class='line'>-</span>
+                    <nz-date-picker [(ngModel)]="order_end_time" name='order_end_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledOrderEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                    nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                </div>
+                <div class="form-group">
+                    <span>支付时间：</span>
+                    <nz-date-picker [(ngModel)]="pay_start_time" name='pay_start_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledStartPayTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                    nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <span class='line'>-</span>
+                    <nz-date-picker [(ngModel)]="pay_end_time"
+                                    name='pay_end_time [nzShowToday]=false [nzDisabledDate]="disabledEndPayTime"'
+                                    [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">
+                            查询
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-          <span>手机号：</span>
-          <input name="telephone" class="form-control" placeholder="请输入手机号" [(ngModel)]="searchParams.buyer_tel"
-            maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" appIgnoreSpace>
+        <div class="zmy-table">
+            <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #ticketOrderTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>订单编号</th>
+                    <th>车牌号</th>
+                    <th>购买人</th>
+                    <th>停车场</th>
+                    <th>实付预付费</th>
+                    <th>预约到场时间</th>
+                    <th>预约时长</th>
+                    <th>下单&支付时间</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let order of ticketOrderTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="order.order_id?order.order_id : '--'">
+                        <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
+                            {{order.order_id|zMaxLength:10}}
+                        </span>
+                        <span *ngIf="!order.order_id">--</span>
+                    </td>
+                    <td>
+                        <div class="column-box">
+                            <span>{{order.car_id}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="column-box">
+                            <span>{{order.buyer_name | zMaxLength:6}}</span>
+                            <span>{{order.buyer_tel}}</span>
+                        </div>
+                    </td>
+                    <td [title]="order.parking_info?order.parking_info.parking_name : '--'">
+                        {{order.parking_info?(order.parking_info.parking_name | zMaxLength:8) : '--'}}
+                    </td>
+                    <td>
+                        {{order.real_pre_fee | centPriceChange:'¥ ':'left'}}
+                    </td>
+                    <td>
+                        <span>{{order.booking_arrive_time ?(order.booking_arrive_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                    </td>
+                    <td>
+                        <span>{{order.booking_days ?(order.booking_days + '天'):'--'}}</span>
+                    </td>
+                    <td>
+                        <div class="column-box">
+                            <span *ngIf="order.order_time">
+                                {{order.order_time ?('下单：'+(order.order_time * 1000 | date:"y-MM-dd HH:mm")) : '--'}}
+                            </span>
+                            <span *ngIf="order.pay_time">
+                                {{order.pay_time ?('支付：'+(order.pay_time * 1000 | date:"y-MM-dd HH:mm")) : '--'}}
+                            </span>
+                            <span *ngIf="!order.order_time && !order.pay_time">--</span>
+                        </div>
+                    </td>
+                    <td>{{order.order_status | bookingOrderStatus}}</td>
+                    <td class="operation">
+                        <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
+                        <a *ngIf="order.order_status===2" [title]="'退款'" (click)="onRefundClick(order)">退款</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
         </div>
-        <div class="form-group">
-          <span>购买人：</span>
-          <input name="name" class="form-control" [(ngModel)]="searchParams.buyer_name" placeholder="请输入预订人"
-            autocomplete="off" maxlength="20" appIgnoreSpace />
-        </div>
-        <div class="form-group">
-          <span>订单编号：</span>
-          <input name="exemption_order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
-            [(ngModel)]="searchParams.order_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')"
-            appIgnoreSpace />
-        </div>
-        <div class="form-group">
-          <span>下单时间：</span>
-          <nz-date-picker [(ngModel)]="order_start_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderStartTime"
-            name='order_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-          <span class='line'>-</span>
-          <nz-date-picker [(ngModel)]="order_end_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderEndTime"
-            name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-        </div>
-        <div class="form-group">
-          <span>支付时间：</span>
-          <nz-date-picker [(ngModel)]="pay_start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartPayTime"
-            name='pay_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-          <span class='line'>-</span>
-          <nz-date-picker [(ngModel)]="pay_end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayTime"
-            name='pay_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-          <div class="search-btn-group">
-            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-            </button>
-          </div>
-        </div>
-      </form>
     </div>
-    <div class="zmy-table">
-      <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #ticketOrderTable>
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>订单编号</th>
-            <th>车牌号</th>
-            <th>购买人</th>
-            <th>停车场</th>
-            <th>实付预付费</th>
-            <th>预约到场时间</th>
-            <th>下单&支付时间</th>
-            <th>订单状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of ticketOrderTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
-
-            <td [title]="order.order_id?order.order_id:''">
-              <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
-                {{order.order_id|zMaxLength:10}}
-              </span>
-              <span *ngIf="!order.order_id">--</span>
-            </td>
-
-            <td>
-              <div class="column-box">
-                <span>{{order.car_id}}</span>
-              </div>
-            </td>
-            <td>
-              <div class="column-box">
-                <span>{{order.buyer_name | zMaxLength:6}}</span>
-                <span>{{order.buyer_tel}}</span>
-              </div>
-            </td>
-            <td [title]="order.parking_info?order.parking_info.parking_name:''">
-              {{order.parking_info?(order.parking_info.parking_name | zMaxLength:8):'--'}}
-            </td>
-            <td>
-              {{order.real_pre_fee  | centPriceChange:'¥ ':'left'}}
-            </td>
-            <td>
-              <span>{{order.booking_arrive_time ?(order.booking_arrive_time* 1000 | date:"y-MM-dd HH:mm"):''}}</span>
-            </td>
-            <td>
-              <div class="column-box">
-                <span *ngIf="order.order_time">
-                  {{order.order_time ?('下单：'+(order.order_time* 1000 | date:"y-MM-dd HH:mm")):''}}
-                </span>
-                <span *ngIf="order.pay_time">
-                  {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm")):''}}
-                </span>
-                <span *ngIf="!order.order_time && !order.pay_time">--</span>
-              </div>
-            </td>
-            <td>{{order.order_status | bookingOrderStatus}}</td>
-            <td class="operation">
-              <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
-              <a *ngIf="order.order_status===2" [title]="'退款'" (click)="onRefundClick(order)">退款</a>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-  </div>
 </div>

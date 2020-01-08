@@ -13,6 +13,10 @@ const routes: Routes = [{
     { path: '', redirectTo: 'order-list', pathMatch: 'full' },
     { path: 'order-list', component: OrderListComponent },
     { path: 'order-detail/:upkeep_order_id', component: OrderDetailComponent },
+    {
+      path: 'wash-car-order',
+      loadChildren: () => import('./wash-car-order/wash-car-order.module').then(m => m.WashOrderModule)
+    }
   ]
 }];
 

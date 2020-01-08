@@ -108,7 +108,7 @@
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id'>
           <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
           <nz-form-control>
-            <div class="table-form">
+            <div class="table-form" id='table-container'>
               <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
                 [nzNoResult]="noResultText" #basicTable>
                 <thead>
@@ -127,7 +127,7 @@
                     <td>
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
-                          [limitImgSize]="1" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
+                          [limitImgSize]="2" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
                           [maxLength]="1" file_id="specificationsImg-{{data.time}}-{{i}}" [imageUrls]="data.imageList"
                           [imageWidth]='30' [imageHeight]='30' [imageAddHeight]="30"
                           (selectedImgChange)="onSelectSpecificationsPic($event,i)" [imageDelWidth]='12'

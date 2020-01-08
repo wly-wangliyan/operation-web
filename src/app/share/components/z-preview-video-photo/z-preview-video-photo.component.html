@@ -1,37 +1,38 @@
 <div class="preview-container" [ngStyle]="{width: previewContainerWidth + 'px'}"
-     *ngIf="isShowPreviewComponent && (previewVideoAndPhotoList.length > 0)">
-    <div class="preview-content" [ngStyle]="{width: previewWidth + 'px', height: previewHeight + 'px'}">
-        <!-- 上一张 -->
-        <div class="preview-arrow preview-previous" (click)="onPreviewThumbNail(currentPreviewIndex - 1)"
-             [class.hide]="(currentPreviewIndex===0) || (previewVideoAndPhotoList.length < 1)"></div>
-        <!-- 缩略视频/图预览 -->
-        <div class="preview-wrap">
-            <div class="video-wrap" [class.hide]="isHidePreviewVideo">
-                <video id="preview-video" [src]="currentPreviewVideo.sourceUrl" [controls]="isControls"
-                       [autoplay]="isAutoPlay" (click)="onPlayPreviewVideo()"></video>
-                <div class="icon-control" [class.hide]="isHidePlayIcon">
-                    <i (click)="onPlayPreviewVideo()"></i>
-                </div>
-            </div>
-            <img [class.hide]="!isHidePreviewVideo" [src]="currentPreviewPhoto.sourceUrl">
+  *ngIf="isShowPreviewComponent && (previewVideoAndPhotoList.length > 0)">
+  <div class="preview-content" [ngStyle]="{width: previewWidth + 'px', height: previewHeight + 'px'}">
+    <!-- 上一张 -->
+    <div class="preview-arrow preview-previous" (click)="onPreviewThumbNail(currentPreviewIndex - 1)"
+      [class.hide]="(currentPreviewIndex===0) || (previewVideoAndPhotoList.length < 1)"></div>
+    <!-- 缩略视频/图预览 -->
+    <div class="preview-wrap">
+      <div class="video-wrap" [class.hide]="isHidePreviewVideo">
+        <video id="preview-video" [src]="currentPreviewVideo.sourceUrl" [controls]="isControls" [autoplay]="isAutoPlay"
+          (click)="onPlayPreviewVideo()"></video>
+        <div class="icon-control" [class.hide]="isHidePlayIcon">
+          <i [ngStyle]="{width: playBtnWidth + 'px',height:playBtnHeight + 'px',marginLeft:-playBtnLeft + 'px',marginTop:-playBtnTop + 'px'}"
+            (click)="onPlayPreviewVideo()"></i>
         </div>
-        <!-- 下一张 -->
-        <div class="preview-arrow preview-next" (click)="onPreviewThumbNail(currentPreviewIndex + 1)"
-             [class.hide]="currentPreviewIndex === (previewVideoAndPhotoList.length - 1)"></div>
+      </div>
+      <img [class.hide]="!isHidePreviewVideo" [src]="currentPreviewPhoto.sourceUrl">
     </div>
-    <ul class="thumb-nail-container">
-        <li *ngFor="let previewVideoAndPhoto of previewVideoAndPhotoList; let previewIndex = index"
-            [ngStyle]="{width: thumbNailWidth + 'px', height: thumbNailHeight + 'px'}"
-            (mouseenter)="onPreviewThumbNail(previewIndex)" (click)="onPreviewThumbNail(previewIndex)">
-            <ng-container *ngIf="previewVideoAndPhoto.isVideo">
-                <video [src]="previewVideoAndPhoto.sourceUrl"></video>
-                <div class="icon-control thumb-icon-control">
-                    <i></i>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="!previewVideoAndPhoto.isVideo">
-                <img [src]="previewVideoAndPhoto.sourceUrl">
-            </ng-container>
-        </li>
-    </ul>
+    <!-- 下一张 -->
+    <div class="preview-arrow preview-next" (click)="onPreviewThumbNail(currentPreviewIndex + 1)"
+      [class.hide]="currentPreviewIndex === (previewVideoAndPhotoList.length - 1)"></div>
+  </div>
+  <ul class="thumb-nail-container" *ngIf='isShowThumb'>
+    <li *ngFor="let previewVideoAndPhoto of previewVideoAndPhotoList; let previewIndex = index"
+      [ngStyle]="{width: thumbNailWidth + 'px', height: thumbNailHeight + 'px'}"
+      (mouseenter)="onPreviewThumbNail(previewIndex)" (click)="onPreviewThumbNail(previewIndex)">
+      <ng-container *ngIf="previewVideoAndPhoto.isVideo">
+        <video [src]="previewVideoAndPhoto.sourceUrl"></video>
+        <div class="icon-control thumb-icon-control">
+          <i></i>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!previewVideoAndPhoto.isVideo">
+        <img [src]="previewVideoAndPhoto.sourceUrl">
+      </ng-container>
+    </li>
+  </ul>
 </div>
