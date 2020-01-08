@@ -30,7 +30,7 @@ export class NoticeEditComponent implements OnInit {
   // 保存数据
   public onSaveNoticeTitle() {
     // 新建
-    if (!this.notice_id) {
+    if (!this.noticeData.notify_id) {
       this.noticeService.requestAddNoticeTitle(this.noticeData.title, this.type, this.noticeData.display_place).subscribe(() => {
         this.getSuccessInfo();
       }, err => {
@@ -101,7 +101,7 @@ export class NoticeEditComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(data: NotifyEntity, type: number, sureFunc: any) {
-    this.noticeData = Object.assign(data);
+    this.noticeData = JSON.parse(JSON.stringify(data));
     this.type = type;
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {

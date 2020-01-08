@@ -65,13 +65,14 @@ export class NoticeListComponent implements OnInit {
 
   // 切换tab
   public onTabChange(key: number) {
+    this.noticeList = [];
     this.searchParams = new SearchParams();
     this.searchParams.notify_type = key;
     this.searchText$.next();
   }
 
   // 新建/编辑标签
-  public onEditNotice(data: NotifyEntity, type: number) {
+  public onEditNotice(type: number, data: any) {
     if (data && data.is_use) {
       this.globalService.promptBox.open('请关闭通知后再进行编辑！', null, 2000, '/assets/images/warning.png');
     } else {
