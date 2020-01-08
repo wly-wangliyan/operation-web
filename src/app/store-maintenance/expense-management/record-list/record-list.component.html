@@ -23,8 +23,7 @@
           <span>车型：</span>
           <select name="car_type" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.car_type">
             <option value="">全部</option>
-            <option value=1>5座小型车</option>
-            <option value=2>SUV/MPV</option>
+            <option *ngFor="let item of carTypes" [value]="item">{{item | washCarType}}</option>
           </select>
         </div>
 

@@ -16,6 +16,7 @@ export class RecordListComponent implements OnInit {
   public expenseVerifyRecords: Array<ExpenseVerifyEntity> = []; // 核销记录列表
   public searchParams: ExpenseSearchParams = new ExpenseSearchParams();
   public couponTypes = [1, 2]; // 劵码类型
+  public carTypes = [1, 2]; // 车型
 
   public expense_start_time: any = ''; // 核销开始时间
   public expense_end_time: any = ''; // 核销结束时间
