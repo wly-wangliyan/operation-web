@@ -9,8 +9,8 @@ import { HttpResponse } from '@angular/common/http';
 // banner点击统计
 export class ClickStatisticsEntity extends EntityBase {
   public date: number = undefined; // 时间
-  public click_num: string = undefined; // 点击数
-  public click_person: string = undefined; // 点击人数
+  public click_num: number = undefined; // 点击数
+  public click_person: number = undefined; // 点击人数
 }
 
 // banner

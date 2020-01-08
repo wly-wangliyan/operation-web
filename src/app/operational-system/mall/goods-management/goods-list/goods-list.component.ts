@@ -60,7 +60,7 @@ export class GoodsListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.requestClassifyList();
+    // this.requestClassifyList();
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       // 获取商品列表
@@ -85,13 +85,13 @@ export class GoodsListComponent implements OnInit, OnDestroy {
   }
 
   // 获取所属分类列表
-  private requestClassifyList() {
-    this.classifyHttpService.requestClassifyAllListData().subscribe(res => {
-      this.classifyList = res.results;
-    }, err => {
-      this.globalService.httpErrorProcess(err);
-    });
-  }
+  // private requestClassifyList() {
+  //   this.classifyHttpService.requestClassifyAllListData().subscribe(res => {
+  //     this.classifyList = res.results;
+  //   }, err => {
+  //     this.globalService.httpErrorProcess(err);
+  //   });
+  // }
 
   // 修改销售状态
   public onChangeSalesStatus(event: any) {

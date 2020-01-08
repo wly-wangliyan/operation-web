@@ -12,10 +12,11 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { PageLayoutPipe } from './banner-management.pipe';
+import { PageLayoutPipe, LandingPageTypePipe } from './banner-management.pipe';
 
 @NgModule({
-  declarations: [BannerManagementComponent, BannerListComponent, BannerEditComponent, BannerDetailComponent, PageLayoutPipe],
+  declarations: [BannerManagementComponent, BannerListComponent, BannerEditComponent, BannerDetailComponent,
+    PageLayoutPipe, LandingPageTypePipe],
   imports: [
     CommonModule,
     BannerManagementRoutingModule,

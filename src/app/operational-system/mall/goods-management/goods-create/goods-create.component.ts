@@ -163,10 +163,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private globalService: GlobalService,
-              private goodsManagementHttpService: GoodsManagementHttpService,
-              private classifyHttpService: ClassifyManagementHttpService) {
+    private router: Router,
+    private globalService: GlobalService,
+    private goodsManagementHttpService: GoodsManagementHttpService,
+    private classifyHttpService: ClassifyManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -220,19 +220,18 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   // 保存视频地址
   public onSaveVideoUrl() {
-    const reg = /^(http|https)?.+\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/;
+    const reg = /^(http|https)?.+\.(mp4)$/;
     if (!this.url) {
       this.videoUrlErrMsgItem.isError = true;
       this.videoUrlErrMsgItem.errMes = '请输入视频地址！';
     } else if (!reg.test(this.url)) {
       this.videoUrlErrMsgItem.isError = true;
-      this.videoUrlErrMsgItem.errMes = '视频地址格式错误，请重新输入！';
+      this.videoUrlErrMsgItem.errMes = '请输入MP4格式的视频地址！';
     } else {
       this.videoUrlErrMsgItem = new ErrMessageItem();
       this.videoUrlList = [];
       this.videoUrlList.push(this.url);
     }
-
   }
 
   // 选择视频
@@ -323,21 +322,17 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
     this.onSubmitSubscription = this.coverImgSelectComponent.upload().subscribe(() => {
       this.goodsImgSelectComponent.upload().subscribe(() => {
-        this.goodsVideoSelectComponent.uploadVideo().subscribe(() => {
-          this.commodityInfo.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
-          this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
-          this.commodityInfo.commodity_videos = this.goodsVideoSelectComponent.videoList.map(i => i.sourceUrl);
-          this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
-          const commodityInfo = this.commodityInfo.clone();
-          commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
-          if (this.commodity_id) {
-            this.requestEditCommodity(commodityInfo);
-          } else {
-            this.requestCreateCommodity(commodityInfo);
-          }
-        }, err => {
-          this.upLoadErrMsg(err);
-        });
+        this.commodityInfo.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+        this.commodityInfo.commodity_images = this.goodsImgSelectComponent.imageList.map(i => i.sourceUrl);
+        this.commodityInfo.commodity_videos = this.videoUrlList;
+        this.commodityInfo.commodity_description = CKEDITOR.instances.goodsEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+        const commodityInfo = this.commodityInfo.clone();
+        commodityInfo.buy_max_num = this.commodityInfo.buy_max_num ? this.commodityInfo.buy_max_num : -1;
+        if (this.commodity_id) {
+          this.requestEditCommodity(commodityInfo);
+        } else {
+          this.requestCreateCommodity(commodityInfo);
+        }
       }, err => {
         this.upLoadErrMsg(err);
       });
@@ -376,6 +371,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       if (this.commodityInfo.specifications.length === 0) {
         this.commoditySpecificationList.push(new SpecificationParamsItem());
       }
+      this.videoUrlList = this.commodityInfo.commodity_videos;
+      this.url = this.commodityInfo.commodity_videos.length !== 0 ? this.commodityInfo.commodity_videos[0] : '';
       CKEDITOR.instances.goodsEditor.destroy(true);
       CKEDITOR.replace('goodsEditor', { width: '900px' }).setData(this.commodityInfo.commodity_description);
     }, err => {
