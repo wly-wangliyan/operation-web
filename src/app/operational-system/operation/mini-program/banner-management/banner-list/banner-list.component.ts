@@ -253,6 +253,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
 
   // tab页切换
   public onTabChange(banner_type: number) {
+    this.bannerList = [];
     this.searchParams = new SearchParams();
     this.start_time = null;
     this.end_time = null;
