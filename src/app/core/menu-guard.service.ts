@@ -54,6 +54,12 @@ export class MenuGuardService implements CanActivate, CanLoad, CanActivateChild 
       window.open(`${location.protocol}//${location.host}/exemption`);
       return false;
     } else if (url.includes('/exemption') && !this.authService.checkPermissions(['exemption'])) {
+      window.open(`${location.protocol}//${location.host}/order-parking`);
+      return false;
+    } else if (url.includes('/order-parking') && !this.authService.checkPermissions(['order-parking'])) {
+      window.open(`${location.protocol}//${location.host}/topic`);
+      return false;
+    } else if (url.includes('/topic') && !this.authService.checkPermissions(['topic'])) {
       return false;
     }
     return true;
