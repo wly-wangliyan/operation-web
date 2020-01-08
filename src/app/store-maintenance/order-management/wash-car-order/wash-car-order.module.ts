@@ -9,6 +9,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { StoreShareModule } from '../../share/store-share.module';
 
 @NgModule({
   declarations: [WashOrderComponent, OrderListComponent, WashCarOrderStatusPipe, OrderDetailComponent],
@@ -18,7 +19,8 @@ import { OrderDetailComponent } from './order-detail/order-detail.component';
     ShareModule,
     NzTableModule,
     NzDatePickerModule,
-    NzButtonModule
+    NzButtonModule,
+    StoreShareModule
   ]
 })
 export class WashOrderModule { }

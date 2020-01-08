@@ -47,8 +47,7 @@
           <span>车型：</span>
           <select name="car_type" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.car_type">
             <option value="">全部</option>
-            <option value=1>5座小型车</option>
-            <option value=2>SUV/MPV</option>
+            <option *ngFor="let item of carTypes" [value]="item">{{item | washCarType}}</option>
           </select>
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
@@ -81,9 +80,9 @@
           <tr *ngFor="let record of washCarOrderTable.data; let i = index">
             <td>{{ i + (pageIndex - 1) * 15 + 1 }}</td>
 
-            <td>
+            <td [title]="record.wash_car_order_id || ''">
               <span *ngIf="record.wash_car_order_id" [appTxtCopy]="record.wash_car_order_id">
-                {{ record.wash_car_order_id }}
+                {{ record.wash_car_order_id | zMaxLength:10 }}
               </span>
               <span *ngIf="!record.wash_car_order_id">--</span>
             </td>
@@ -92,9 +91,9 @@
               <div class="column-box">
                 <ng-container *ngIf="record.wash_car_specification">
                   <span
-                    [title]="record.wash_car_specification.specification_name || ''">{{record.wash_car_specification.specification_name | zMaxLength:6}}</span>
+                    [title]="record.wash_car_specification.specification_name || ''">{{record.wash_car_specification.specification_name | zMaxLength:10}}</span>
                   <span
-                    *ngIf="record.wash_car_specification.car_type">{{'('+(record.wash_car_specification.car_type)+')'}}</span>
+                    *ngIf="record.wash_car_specification.car_type">{{'('+(record.wash_car_specification.car_type|washCarType)+')'}}</span>
                 </ng-container>
                 <span *ngIf="!record.wash_car_specification">--</span>
               </div>
@@ -105,22 +104,22 @@
             <td>{{record.sale_fee | centPriceChange:'元'}}</td>
             <td>{{record.buy_fee | centPriceChange:'元'}}</td>
 
-            <td>{{record.created_time? (order.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
+            <td>{{record.created_time? (record.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
-            <td>{{record.pay_time? (order.pay_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
+            <td>{{record.pay_time? (record.pay_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
             <td>{{record.order_status | washCarOrderStatus }}</td>
             <td>
               <div class="column-box" *ngIf="record.refund_fee>0">
                 <span>{{record.sale_fee | refundType:record.refund_fee}}</span>
-                <span *ngIf="order.refund_status">
+                <span *ngIf="record.refund_status">
                   {{'('+(record.refund_status | commonRefundStatus)+')'}}</span>
               </div>
               <span *ngIf="!record.refund_fee">--</span>
             </td>
             <td class="operation">
               <div>
-                <a [title]="'查看'" [routerLink]="['../bettery-detail', order.door_order_id]">查看</a>
+                <a [title]="'查看'" [routerLink]="['../detail', record.wash_car_order_id]">查看</a>
                 <a *ngIf="(record.order_status===3 || record.order_status===4) && record.refund_status !==1 && record.refund_status !==2"
                   [title]="'退款'" (click)="onRefundClick(record)">退款</a>
               </div>

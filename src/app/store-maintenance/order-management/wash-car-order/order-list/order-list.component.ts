@@ -17,7 +17,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public searchParams: WashCarSearchParams = new WashCarSearchParams(); // 洗车订单
   public refundParams: WashCarRefundParams = new WashCarRefundParams(); // 退款
   public orderStatus = [1, 2, 3, 4, 5, 6];
-
+  public carTypes = [1, 2]; // 车型
   public order_start_time: any = ''; // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
   public pay_start_time: any = ''; // 支付开始时间

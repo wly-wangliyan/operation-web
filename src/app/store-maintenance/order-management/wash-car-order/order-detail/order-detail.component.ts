@@ -69,6 +69,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   public onSaveClick(): void {
     this.orderService.requestEditRemark(this.wash_car_order_id, this.orderRecord.remark).subscribe(() => {
       this.globalService.promptBox.open('保存成功');
+      this.isEditRemark = false;
       this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
@@ -86,5 +87,11 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  // 取消编辑
+  public onCancelClick(): void {
+    this.isEditRemark = false;
+    this.searchText$.next();
   }
 }

@@ -22,8 +22,7 @@
           <td>购买产品</td>
           <td>
             <ng-container *ngIf="orderRecord.wash_car_specification">
-              <span
-                [title]="orderRecord.wash_car_specification.specification_name || ''">{{orderRecord.wash_car_specification.specification_name | zMaxLength:6}}</span>
+              <span>{{orderRecord.wash_car_specification.specification_name}}</span>
               <span
                 *ngIf="orderRecord.wash_car_specification.car_type">{{'('+(orderRecord.wash_car_specification.car_type)+')'}}</span>
             </ng-container>
@@ -76,7 +75,7 @@
                   <button name="sure_btn_2" type="button" class="sure-btn edit-btn" nz-button nzType="primary"
                     [disabled]="!orderRecord.remark" (click)="onSaveClick()">保存</button>
                   <button name="close-btn-1" class="close-btn edit-btn" type="button" nz-button
-                    (click)="searchText$.next()">取消</button>
+                    (click)="onCancelClick()">取消</button>
                 </ng-container>
               </div>
               <div class="remark-box">
@@ -95,8 +94,7 @@
         </tr>
       </table>
     </div>
-    <!-- *ngIf="expenseVerifyRecords && expenseVerifyRecords.length>0" -->
-    <div class="table-item">
+    <div class="table-item" *ngIf="expenseVerifyRecords && expenseVerifyRecords.length>0">
       <table class="detail-table">
         <caption>商品劵码</caption>
         <thead>
@@ -113,7 +111,7 @@
         <tbody>
           <tr *ngFor="let record of expenseVerifyRecords">
             <td>{{record.expense_verify_code || '--'}}</td>
-            <td>{{record.service_type || '--'}}</td>
+            <td>{{(record.service_type|washCarCouponType) || '--'}}</td>
             <td>
               <ng-container *ngIf="record.valid_date_start">
                 {{record.valid_date_start* 1000 | date:"y-MM-dd"}}
