@@ -10,6 +10,7 @@ import {
   ViewpointsEntity
 } from '../topic-management-http.service';
 import { timer } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-edit-topic',
@@ -23,6 +24,7 @@ export class EditTopicComponent implements OnInit {
   public editTopic = new EditTopicParams();
   public viewpointsSearchParams = new ViewpointsSearchParams();
   public viewPointsList: Array<ViewpointsListEntity> = [];
+  public editorErrMsgItem: ErrMessageItem = new ErrMessageItem(); // 编辑器错误信息
 
   private tempContent = ''; // 活动描述富文本框内容
   private isInstanceReady = false; // 标记富文本编辑器是否加载完成;
@@ -145,4 +147,20 @@ export class EditTopicComponent implements OnInit {
     });
   }
 
+}
+
+/**
+ * 错误信息
+ */
+export class ErrMessageItem {
+  public isError = false;
+  public errMes: string;
+
+  constructor(isError?: boolean, errMes?: string) {
+    if (!isError || isNullOrUndefined(errMes)) {
+      return;
+    }
+    this.isError = isError;
+    this.errMes = errMes;
+  }
 }
