@@ -115,7 +115,7 @@
             <td>
               <ng-container *ngIf="record.valid_date_start">
                 {{record.valid_date_start* 1000 | date:"y-MM-dd"}}
-                <span *ngIf="record.valid_date_end"> -
+                <span *ngIf="record.valid_date_end"> 至
                   {{record.valid_date_end* 1000 | date:"y-MM-dd"}}</span>
                 <span *ngIf="!record.valid_date_end">起有效</span>
               </ng-container>

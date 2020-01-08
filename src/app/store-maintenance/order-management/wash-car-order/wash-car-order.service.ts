@@ -37,7 +37,7 @@ export class WashCarOrderEntity extends EntityBase {
   public refund_reason: string = undefined; // 退款原因
   public refund_fee: number = undefined; // 退款金额
   public pay_expire_time: number = undefined; // 支付订单失效时间
-
+  public verify_use_num: number = undefined; // 核销凭证使用个数
   public qr_code: string = undefined; // 二维码
   public apollo_status: number = undefined; // 通知apollo状态 1：待支付 2：已取消 3：待核销 4：已完成 5:已关闭
   public valid_date_start: number = undefined; // 有效期开始日期

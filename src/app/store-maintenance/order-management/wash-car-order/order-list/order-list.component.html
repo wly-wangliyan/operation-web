@@ -108,7 +108,13 @@
 
             <td>{{record.pay_time? (record.pay_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
-            <td>{{record.order_status | washCarOrderStatus }}</td>
+            <td>
+              <div class="column-box">
+                <span>{{record.order_status | washCarOrderStatus }}</span>
+                <span
+                  *ngIf="record.order_status===3&&record.verify_use_num">{{'(已使用'+record.verify_use_num+'张)'}}</span>
+              </div>
+            </td>
             <td>
               <div class="column-box" *ngIf="record.refund_fee>0">
                 <span>{{record.sale_fee | refundType:record.refund_fee}}</span>
