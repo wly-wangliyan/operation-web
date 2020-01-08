@@ -12,6 +12,8 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +24,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzTableModule,
     NzGridModule,
     NzInputModule,
-    NzButtonModule
+    NzButtonModule,
+    NzRadioModule,
+    NzSwitchModule
   ],
   declarations: [
     ServiceFeesManagementComponent,
