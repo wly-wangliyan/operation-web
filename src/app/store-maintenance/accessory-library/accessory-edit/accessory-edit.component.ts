@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-    corner?: ErrMessageItem) {
+              corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -76,7 +76,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -187,9 +187,6 @@ export class AccessoryEditComponent implements OnInit {
 
   // 添加规格
   public onAddSpecifications() {
-    timer(0).subscribe(() => {
-      $('.table-form').scrollTop('400');
-    });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
     const batteryModelList = this.specificationsList.filter(m => !(m.battery_model));
     const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_fee);
@@ -218,8 +215,21 @@ export class AccessoryEditComponent implements OnInit {
     } else if (specificationsPriceList.length !== 0) {
       this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
     } else {
-      this.specificationsList.push(new SpecificationEntity());
+      timer(0).subscribe(() => {
+        this.specificationsList.push(new SpecificationEntity());
+      });
+      const ele = document.getElementById('table-container');
+      if (ele.scrollHeight >= ele.clientHeight) {
+        timer(0).subscribe(() => {
+          // 设置滚动条到最底部
+          ele.scrollTop = ele.scrollHeight;
+        });
+      }
     }
+
+
+    // const scrollHeight = $('.table-form').prop('scrollHeight');
+    // $('.table-form').scrollTop(scrollHeight - 2);
   }
 
   // 删除规格

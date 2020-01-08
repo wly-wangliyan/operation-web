@@ -79,10 +79,11 @@
   width: 900px;
   max-height: 400px;
   overflow-y: auto;
+  border: 1px solid #e0dfdf;
 }
 
 :host ::ng-deep .table-form .ant-table {
-  border: 1px solid #e0dfdf;
+  border: none;
   padding: 0 20px 10px;
   background: rgba(247, 248, 250, 1);
 }
