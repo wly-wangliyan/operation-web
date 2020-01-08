@@ -9,7 +9,7 @@
   <div class="tab-bar-list">
     <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tab_index" (ngModelChange)="onTabChange($event)">
       <label nz-radio-button [nzValue]=1>基本信息</label>
-      <label nz-radio-button [nzValue]=2 *ngIf="editParams.service_type.includes(3)">洗车相关</label>
+      <label nz-radio-button [nzValue]=2 *ngIf="isShowWashService">洗车相关</label>
     </nz-radio-group>
   </div>
   <div class="content-main">
@@ -153,7 +153,8 @@
               </span>
             </li>
             <li *ngIf="tagList.length < 5">
-              <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="tag" maxlength="10">
+              <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="bind-tag" maxlength="10"
+                appIgnoreSpace>
               <span class="tag-span" [class.disabled]="!tag" [title]="!tag?'标签内容不能为空':''" (click)="onAddTagClick()">
                 <img src="/assets/images/tag_add.png">
               </span>
@@ -196,8 +197,7 @@
 
       <div style="margin-top: 40px;margin-bottom: 40px">
         <button class="sure-btn" type="button" nz-button nzType="primary"
-          [disabled]="!washForm.form.valid || !isAlreadyFill() || tagList.length===0"
-          (appZDebounceClick)="onWashFormSubmit()">保存
+          [disabled]="!washForm.form.valid || tagList.length===0" (appZDebounceClick)="onWashFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
