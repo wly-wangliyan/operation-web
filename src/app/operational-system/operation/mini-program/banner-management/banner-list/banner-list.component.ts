@@ -57,6 +57,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
       { key: 1, value: '首页Banner' },
       { key: 2, value: '检车Banner' },
       { key: 3, value: '机场停车Banner' },
+      { key: 5, value: '洗车Banner' },
       { key: 4, value: '弹窗展位' },
     ];
     this.generateBannerList();
@@ -139,9 +140,16 @@ export class BannerListComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 开启开关状态改变
+  public onSwitchChange(event: boolean) {
+    timer(2000).subscribe(() => {
+      return event;
+    });
+  }
+
   // 修改启停状态
-  public onSwitchChange(banner_id: string, event: any) {
-    const swith = event;
+  public onSwitchClick(banner_id: string, status: boolean) {
+    const swith = !status;
     let sucessMsg = '开启成功!';
     let errMsg = '开启失败,请重试!';
     if (!swith) {
@@ -154,13 +162,14 @@ export class BannerListComponent implements OnInit, OnDestroy {
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
-
           const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
           for (const content of error.errors) {
             if (content.resource === 'offline_status' && content.code === 'offline') {
               this.globalService.promptBox.open('当前时间已超出下线时间，无法开启!', null, 2000, null, false);
             } else if (content.resource === 'online_status' && content.code === 'limit') {
               this.globalService.promptBox.open('最大可同时显示5个Banner图，无法开启!', null, 2000, null, false);
+            } else if (content.resource === 'banner' && content.code === 'popup exists') {
+              this.globalService.promptBox.open('该页面已开启弹窗，请关闭后在试!', null, 2000, null, false);
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
             }

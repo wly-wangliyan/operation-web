@@ -4,6 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 const PageLayout = {
   1: '车辆认证完成页',
   2: '实名认证完成页',
+  // 3: '路外扫码缴费完成页',
 };
 
 @Pipe({
