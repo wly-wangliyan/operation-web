@@ -9,4 +9,5 @@ export const environment = {
   STORE_DOMAIN: '//mdby-server-y.parkone.cn',
   BOOKING_DOMAIN: '//booking-server-y.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage-t.uucin.com',
+  TOPIC_DOMAIN: 'https://social-topic-server-y.parkone.cn'
 };

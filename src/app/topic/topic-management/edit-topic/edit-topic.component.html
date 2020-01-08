@@ -1,0 +1,74 @@
+<div class="content-header">
+    <app-crumb *ngIf="topic_id" [level1Name]="'话题管理'" [level2Name]="'话题列表'" [level3Name]="'编辑话题'"
+        [level2RelativePath]="'../../topic-list'">
+    </app-crumb>
+    <app-crumb *ngIf="!topic_id" [level1Name]="'话题管理'" [level2Name]="'话题列表'" [level3Name]="'创建话题'"
+        [level2RelativePath]="'../topic-list'">
+    </app-crumb>
+</div>
+
+<div class="content-flow">
+    <div class='content-container'>
+        <form class="form-horizontal" #topicForm="ngForm" autocomplete="off">
+            <div class="card_content">
+                <div class="row control-row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>话题标题</span>
+                    </label>
+                    <div class="control-input">
+                        <input type="text" class="form-control" [(ngModel)]="editTopic.title" name="title"
+                            placeholder="输入1-20个字话题标题" minlength="1" maxlength="20" required>
+                    </div>
+                </div>
+
+                <div class="row control-row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>投票持方</span>
+                    </label>
+                    <div class="control-input">
+                        <div *ngFor="let data of editTopic.viewpoints;let i=index" class="viewContainer">
+                            <span>
+                                <label class="view-point">持方{{i+1}}</label>
+                                <input type="text" class="form-control" [name]="'viewPoint_'+i" placeholder="输入1-10个字"
+                                    minlength="1" maxlength="10" [(ngModel)]="data.name" style="width: 400px;"
+                                    (keyup)='enterViewPoint($event,data,i)' required>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row control-row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>正文</span>
+                    </label>
+                    <div class="control-input description-input">
+                        <app-z-text-ckeditor ckEditorId="topicEditor" #topicEditor></app-z-text-ckeditor>
+                    </div>
+                </div>
+                <div class="row control-row">
+                    <label class="control-label"></label>
+                    <div class="control-input special-control-input" style="margin-bottom: 10px;">
+                        <div class="row row-message">
+                            <div class="control-input">
+                                <span *ngIf="editorErrMsgItem?.isError">{{editorErrMsgItem?.errMes}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+                        (appZDebounceClick)="onAddOrEditCommoditySubmit()"
+                        [disabled]="!topicForm.form.valid || !CheckEditorValid">
+                        保存
+                    </button>
+                    <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

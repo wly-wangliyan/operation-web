@@ -1,0 +1,23 @@
+.control-row {
+    align-items: flex-start !important;
+}
+
+.separate {
+    margin: 0 15px;
+}
+
+.view-point {
+    width: 80px;
+    font-size: 14px;
+    background-color: #efefef;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: 0.5px solid rgba(136, 136, 136, 0.3);
+    text-align: center;
+    border-bottom: none;
+    margin-bottom: 0px;
+}
+
+.viewContainer {
+    margin-right: 15px;
+}
