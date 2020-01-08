@@ -101,7 +101,7 @@ export class NoticeEditComponent implements OnInit {
    * @param closeFunc 取消回调
    */
   public open(data: NotifyEntity, type: number, sureFunc: any) {
-    this.noticeData = JSON.parse(JSON.stringify(data));
+    this.noticeData = data ? JSON.parse(JSON.stringify(data)) : new NotifyEntity();
     this.type = type;
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {

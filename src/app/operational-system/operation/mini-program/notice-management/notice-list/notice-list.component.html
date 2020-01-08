@@ -1,8 +1,11 @@
 <div class="content-header">
   <app-crumb [level1Name]="'小程序'" [level2Name]="'通知管理'"></app-crumb>
   <ul class="header-right">
-    <li class="big-bg" (click)="onEditNotice( searchParams.notify_type,{})">
-      <a>新建</a>
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        (appZDebounceClick)="onEditNotice( searchParams.notify_type)">
+        新建
+      </button>
     </li>
   </ul>
 </div>

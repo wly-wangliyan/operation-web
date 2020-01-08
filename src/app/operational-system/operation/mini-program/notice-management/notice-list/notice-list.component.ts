@@ -72,7 +72,7 @@ export class NoticeListComponent implements OnInit {
   }
 
   // 新建/编辑标签
-  public onEditNotice(type: number, data: any) {
+  public onEditNotice(type: number, data?: NotifyEntity) {
     if (data && data.is_use) {
       this.globalService.promptBox.open('请关闭通知后再进行编辑！', null, 2000, '/assets/images/warning.png');
     } else {
