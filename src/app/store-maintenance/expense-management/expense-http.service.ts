@@ -21,7 +21,7 @@ export class ExpenseVerifyEntity extends EntityBase {
   public wash_car_order: string = undefined; // 洗车订单对象 WashCarOrder
   public expense_verify_code: string = undefined; // 消费凭证码
   public service_type: string = undefined; // 服务类型 1:1次标准洗车 2：1次标准洗车+1次打蜡
-  public car_type: string = undefined; // 车型 1: 5座小型车 2：SUV/MPV
+  public car_type: number = undefined; // 车型 1: 5座小型车 2：SUV/MPV
   public repair_shop_name: string = undefined; // 所属汽修店名称
   public repair_shop_id: string = undefined; // 所属汽修店ID
   public verify_person: string = undefined; // 核销人
