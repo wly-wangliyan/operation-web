@@ -9,5 +9,5 @@ export const environment = {
   BOOKING_DOMAIN: '//booking-server-pre.parkone.cn',
   EXEMPTION_DOMAIN: '//exemption-server-pre.parkone.cn',
   STORAGE_DOMAIN: 'https://uustorage.uucin.com',
-  TOPIC_DOMAIN: 'https://social-topic-server-pre.parkone.cn'
+  TOPIC_DOMAIN: '//social-topic-server-pre.parkone.cn'
 };
