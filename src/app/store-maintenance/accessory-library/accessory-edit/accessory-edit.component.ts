@@ -226,10 +226,6 @@ export class AccessoryEditComponent implements OnInit {
         });
       }
     }
-
-
-    // const scrollHeight = $('.table-form').prop('scrollHeight');
-    // $('.table-form').scrollTop(scrollHeight - 2);
   }
 
   // 删除规格

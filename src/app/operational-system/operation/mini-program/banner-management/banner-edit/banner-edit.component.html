@@ -27,9 +27,9 @@
             <span>图片</span>
           </label>
           <div class="control-input">
-            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-              [imageWidth]="94*aspectRatio" [imgReg]="imgReg" [imageHeight]="94" [imageUrls]="cover_url" #coverImg
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+              [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+              [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg
               [aspectRatio]="aspectRatio" [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true"
               [imageShowWidth]="94*aspectRatio">
             </app-z-photo-select>
@@ -43,8 +43,8 @@
         </div>
         <p *ngIf="bannerParams.banner_type===1||bannerParams.banner_type===3" class="cover-hint">
           注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===2" class="cover-hint">注：尺寸690*180px，格式PNG/JPG/GIF，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===4" class="cover-hint">注：尺寸540*540px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===2" class="cover-hint">注：尺寸690*360px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===4" class="cover-hint">注：尺寸540*146px，格式PNG/JPG/GIF，大小2M以内</p>
         <div class="row">
           <label class="control-label">
             <b>*</b>
