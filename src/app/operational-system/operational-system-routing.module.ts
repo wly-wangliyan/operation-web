@@ -10,7 +10,7 @@ const routes: Routes = [{
         {path: '', redirectTo: 'main', pathMatch: 'full'},
         {
             path: 'main',
-            loadChildren: './main/main.module#MainModule',
+            loadChildren: () => import('./main/main.module').then(m => m.MainModule),
             canActivate: [AuthGuardService, RouteMonitorService]
         },
         {path: '**', redirectTo: 'main', pathMatch: 'full'}
