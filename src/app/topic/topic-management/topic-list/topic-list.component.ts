@@ -5,6 +5,7 @@ import { GlobalService } from 'src/app/core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { HttpErrorEntity } from 'src/app/core/http.service';
+import { DisabledTimeHelper } from '../../../../utils/disabled-time-helper';
 
 const PageSize = 15;
 @Component({
@@ -111,28 +112,12 @@ export class TopicListComponent implements OnInit, OnDestroy {
 
   // 开始时间的禁用部分
   public disabledTopicStartTime = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.topic_end_time) {
-      return false;
-    } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.topic_end_time).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
+    return DisabledTimeHelper.disabledStartTime(startValue, this.topic_end_time);
   }
 
-  // 结束时间的禁用部分
+  // 下单结束时间的禁用部分
   public disabledTopicEndTime = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
-      return true;
-    } else if (!endValue || !this.topic_start_time) {
-      return false;
-    } else if (new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.topic_start_time).setHours(0, 0, 0, 0)) {
-      return true;
-    } else {
-      return false;
-    }
+    return DisabledTimeHelper.disabledEndTime(endValue, this.topic_start_time);
   }
 
   // 生成并检查参数有效性
@@ -141,7 +126,10 @@ export class TopicListComponent implements OnInit, OnDestroy {
       new Date(this.topic_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.topic_end_time ? (new Date(this.topic_end_time).setHours(new Date(this.topic_end_time).getHours(),
       new Date(this.topic_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
-
+    if (sTimestamp > eTimeStamp) {
+      this.globalService.promptBox.open('创建开始时间不能大于结束时间！', null, 2000, null, false);
+      return false;
+    }
     if (this.topic_start_time || this.topic_end_time) {
       this.searchParams.section = `${sTimestamp},${eTimeStamp}`;
     } else {
