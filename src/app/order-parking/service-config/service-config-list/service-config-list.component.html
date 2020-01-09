@@ -64,6 +64,14 @@
                         <a [title]="'服务配置'" [routerLink]="['../service-config-edit',data.parking_id]">服务配置</a>
                         <a [title]="'查看详情'" [routerLink]="['../service-config-detail',data.parking_id]">查看详情</a>
                         <a [title]="'删除'" (appZDebounceClick)='onDeleteProduct(data)'>删除</a>
+                        <a [title]="'取消推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 1">
+                            取消推荐
+                        </a>
+                        <a [title]="'设为推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 2">
+                            设为推荐
+                        </a>
                     </td>
                 </tr>
                 </tbody>
