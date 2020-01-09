@@ -195,11 +195,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   // 支付开始时间的禁用部分
   public disabledStartPayTime = (startValue: Date): boolean => {
-    return DisabledTimeHelper.disabledStartTime(startValue, this.pay_start_time);
+    return DisabledTimeHelper.disabledStartTime(startValue, this.pay_end_time);
   }
 
   // 支付结束时间的禁用部分
   public disabledEndPayTime = (endValue: Date): boolean => {
-    return DisabledTimeHelper.disabledStartTime(endValue, this.pay_end_time);
+    return DisabledTimeHelper.disabledEndTime(endValue, this.pay_start_time);
   }
 }

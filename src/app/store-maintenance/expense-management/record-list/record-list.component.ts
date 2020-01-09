@@ -90,11 +90,13 @@ export class RecordListComponent implements OnInit {
 
   // 导出url
   private exportSearchUrl() {
-    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car/expense_verifies/export?status=
-      ${this.searchParams.status || ''}&expense_verify_code=${this.searchParams.expense_verify_code || ''}
-      &repair_shop_name=${this.searchParams.repair_shop_name || ''}&expense_section=
-      ${this.searchParams.expense_section || ''}&car_type=${this.searchParams.car_type || ''}
-      &service_type=${this.searchParams.service_type || ''}`;
+    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car/expense_verifies/export?default=1`;
+    const params = this.searchParams.json();
+    for (const key in params) {
+      if (params[key]) {
+        this.searchUrl += `&${key}=${params[key]}`;
+      }
+    }
   }
 
   /* 生成并检查参数有效性 */
