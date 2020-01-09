@@ -33,15 +33,18 @@ export class ViewTopicComponent implements OnInit {
 
   public positivePageIndex = 1; // 当前页码
   public negativePageIndex = 1; // 当前页码
-  public noResultText = '数据加载中...';
 
   private requestSubscription: Subscription; // 获取数据
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
-  private linkUrl: string; // 分页url
+  private positiveLinkUrl: string; // 分页url
+  private negativeLinkUrl: string; // 分页url
 
-  private get pageCount(): number {
-    return Math.ceil(this.commentList.length / PageSize);
+  private get ppageCount(): number {
+    return Math.ceil(this.positiveList.length / PageSize);
+  }
+  private get npageCount(): number {
+    return Math.ceil(this.negativeList.length / PageSize);
   }
 
   constructor(
@@ -80,62 +83,61 @@ export class ViewTopicComponent implements OnInit {
       this.commentSearchParams.work_id = '462edd5031ea11eaa7570242ac130019';
     }
 
-    this.service.requestCommentList(this.commentSearchParams).subscribe(res => {
-      this.commentList = res.results;
-      this.linkUrl = res.linkUrl;
+    this.getPositiveList();
+    this.getNegativeList();
 
-      this.formatArray();
-      // this.negativeList.push(this.commentList.find(item => item.standpoint === this.viewPointList[1].viewpoint_id));
-      // this.positiveList.push(this.commentList.find(item => item.standpoint === this.viewPointList[0].viewpoint_id));
-      console.log('this.negativeList1', this.negativeList);
-      console.log('this.positiveList1', this.positiveList);
+  }
+
+  /** 获取正方评论 */
+  private getPositiveList() {
+    this.commentSearchParams.standpoint = this.viewPointList[0].viewpoint_id;
+    this.service.requestCommentList(this.commentSearchParams).subscribe(res => {
+      this.positiveList = res.results;
+      this.positiveLinkUrl = res.linkUrl;
+      this.positivePageIndex = 1;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
   }
 
-  /** 组装数据 */
-  private formatArray(): void {
-    this.commentList.map(item => {
-      if (item.standpoint === this.viewPointList[0].viewpoint_id) {
-        this.positiveList.push(item);
-      }
-    });
-    this.commentList.map(item => {
-      if (item.standpoint === this.viewPointList[1].viewpoint_id) {
-        this.negativeList.push(item);
-      }
+  /** 获取反方评论 */
+  private getNegativeList() {
+    this.commentSearchParams.standpoint = this.viewPointList[1].viewpoint_id;
+    this.service.requestCommentList(this.commentSearchParams).subscribe(res => {
+      this.negativeList = res.results;
+      this.negativeLinkUrl = res.linkUrl;
+      this.negativePageIndex = 1;
+
+      console.log('this.negativeList', this.negativeList);
+      console.log('this.positiveList', this.positiveList);
+    }, err => {
+      this.globalService.httpErrorProcess(err);
     });
   }
 
-  // 翻页方法
+
   public onPositiveNZPageIndexChange(pageIndex: number) {
     this.positivePageIndex = pageIndex;
-    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+    if (pageIndex + 1 >= this.ppageCount && this.positiveLinkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.linkUrl).subscribe(res => {
-        this.commentList = [...this.commentList, ...res.results];
-        this.linkUrl = res.linkUrl;
-        this.formatArray();
-
+      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.positiveLinkUrl).subscribe(res => {
+        this.positiveList = [...this.positiveList, ...res.results];
+        this.positiveLinkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
     }
   }
 
-  // 翻页方法
-  public onNegativePositiveNZPageIndexChange(pageIndex: number) {
+  public onNegativeNZPageIndexChange(pageIndex: number) {
     this.negativePageIndex = pageIndex;
-    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+    if (pageIndex + 1 >= this.npageCount && this.negativeLinkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.linkUrl).subscribe(res => {
-        this.commentList = [...this.commentList, ...res.results];
-        this.formatArray();
-
-        this.linkUrl = res.linkUrl;
+      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.negativeLinkUrl).subscribe(res => {
+        this.negativeList = [...this.negativeList, ...res.results];
+        this.negativeLinkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });
@@ -148,6 +150,7 @@ export class ViewTopicComponent implements OnInit {
     this.service.requestViewpointList(this.viewPointSearchParams).subscribe(res => {
       this.viewPointList = res.results;
       console.log(this.viewPointList);
+
       this.getCommentList();
 
     }, err => {

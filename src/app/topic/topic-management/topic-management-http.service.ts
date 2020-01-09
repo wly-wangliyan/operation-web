@@ -82,6 +82,7 @@ export class CommentSearchParams extends EntityBase {
     section = '';	// F 操作时间戳区间(小, 大) 例: "1560415182.165, 1560415182.265"
     page_size = 45;	// F 每页限制
     page_num = 1; // F页码
+    standpoint = '';
 }
 
 export class CommentEntity extends EntityBase {

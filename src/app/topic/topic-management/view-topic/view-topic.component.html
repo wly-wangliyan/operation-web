@@ -90,7 +90,7 @@
                 </ul> -->
                 <div *ngIf="negativeList.length>0">
                     <nz-table [nzData]="negativeList" [nzShowPagination]="true" [nzPageSize]="'15'"
-                        (nzPageIndexChange)="onNegativePositiveNZPageIndexChange($event)" [nzBordered]='false'
+                        (nzPageIndexChange)="onNegativeNZPageIndexChange($event)" [nzBordered]='false'
                         [(nzPageIndex)]="negativePageIndex" #negativeTable [nzHideOnSinglePage]='true'>
                         <tbody>
                             <tr *ngFor="let negative of negativeTable.data; let i=index" style="text-align: left;">
