@@ -6,6 +6,7 @@ import { ServiceFeesManagementComponent } from './service-fees-management.compon
 import { ServiceFeesListComponent } from './service-fees-list/service-fees-list.component';
 import { ServiceFeesManagementService } from './service-fees-management.service';
 import { RescueFeesEditComponent } from './rescue-fees-edit/rescue-fees-edit.component';
+import { WashCarServiceEditComponent } from './wash-car-service-edit/wash-car-service-edit.component';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -14,6 +15,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { StoreShareModule } from '../share/store-share.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,12 +29,15 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
     NzInputModule,
     NzButtonModule,
     NzRadioModule,
-    NzSwitchModule
+    NzSwitchModule,
+    NzSpinModule,
+    StoreShareModule
   ],
   declarations: [
     ServiceFeesManagementComponent,
     ServiceFeesListComponent,
     RescueFeesEditComponent,
+    WashCarServiceEditComponent,
   ],
   providers: [
     ServiceFeesManagementService,

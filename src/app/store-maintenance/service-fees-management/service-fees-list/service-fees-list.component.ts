@@ -33,8 +33,8 @@ export class ServiceFeesListComponent implements OnInit {
   public pageIndex = 1;
   public searchParams = new SearchParams();
   public noResultText = '数据加载中...';
-  public tabs: Array<TabItem> = [{ key: 1, value: '救援服务' }, { key: 2, value: '洗车服务' }];
-  public washTabs: Array<TabItem> = [{ key: 1, value: '五座小型车' }, { key: 2, value: 'SUV/MPV' }]; // 洗车服务下tab
+  public tabs: Array<TabItem> = [{ key: 1, value: '救援服务' }]; // , { key: 2, value: '洗车服务' }
+  public washTabs: Array<TabItem> = [{ key: 1, value: '5座小型车' }, { key: 2, value: 'SUV/MPV' }]; // 洗车服务下tab
   public washServiceConfig: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 洗车服务配置
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
   public basePrice: Array<BasePriceEntity> = []; // 基础价格

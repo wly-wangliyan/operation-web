@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from 'src/app/core/global.service';
 import { timer } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-view-topic',
@@ -42,9 +43,6 @@ export class ViewTopicComponent implements OnInit {
   ngOnInit() {
     this.getTopicInfo();
     this.getViewPoints();
-    timer(0).subscribe(() => {
-      this.getCommentList();
-    });
   }
 
   /** 获取话题信息 */
@@ -59,7 +57,15 @@ export class ViewTopicComponent implements OnInit {
   /** 获取评论列表 */
   private getCommentList() {
     this.commentSearchParams.object_id = this.topic_id;
-    this.commentSearchParams.work_id = 'e9b51d9c2dc411eab0d60242ac120006';
+
+    if (environment.version === 'd' || environment.version === 'develop') {
+      // D版work_id
+      this.commentSearchParams.work_id = 'e9b51d9c2dc411eab0d60242ac120006';
+    } else if (environment.version === 'r') {
+      // R版work_id
+      this.commentSearchParams.work_id = '462edd5031ea11eaa7570242ac130019';
+    }
+
     this.service.requestCommentList(this.commentSearchParams).subscribe(res => {
       this.commentList = res.results;
 
@@ -89,6 +95,9 @@ export class ViewTopicComponent implements OnInit {
     this.service.requestViewpointList(this.viewPointSearchParams).subscribe(res => {
       this.viewPointList = res.results;
       console.log(this.viewPointList);
+
+      this.getCommentList();
+
     }, err => {
       this.globalService.httpErrorProcess(err);
     });

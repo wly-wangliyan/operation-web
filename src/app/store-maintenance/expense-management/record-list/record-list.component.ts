@@ -90,7 +90,7 @@ export class RecordListComponent implements OnInit {
 
   // 导出url
   private exportSearchUrl() {
-    this.searchUrl = `${environment.STORE_DOMAIN}admin/wash_car/expense_verifies/export?status=
+    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car/expense_verifies/export?status=
       ${this.searchParams.status || ''}&expense_verify_code=${this.searchParams.expense_verify_code || ''}
       &repair_shop_name=${this.searchParams.repair_shop_name || ''}&expense_section=
       ${this.searchParams.expense_section || ''}&car_type=${this.searchParams.car_type || ''}

@@ -46,7 +46,6 @@ export class EditTopicComponent implements OnInit {
       this.getTopicInfo();
       this.getViewpointsList();
     } else {
-      this.isInstanceReady = false;
       timer(500).subscribe(() => {
         CKEDITOR.instances.topicEditor.destroy(true);
         CKEDITOR.replace('topicEditor', { width: 1130 });

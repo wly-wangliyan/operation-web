@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'服务费管理'" [level2Name]=""></app-crumb>
+  <app-crumb [level1Name]="'服务管理'" [level2Name]=""></app-crumb>
 </div>
 <div class="content-flow">
   <div class="tab-bar-list">
@@ -66,7 +66,7 @@
           <li *ngFor="let tab of washTabs;" [class.active]="selectedCarTypeTabIndex===tab.key"
             (click)="onChangeWashTabClick(tab)">{{tab.value}}</li>
         </ul>
-        <button class="tab-btn">编辑</button>
+        <button class="tab-btn" [routerLink]="['../wash-car-service-edit']">编辑</button>
       </div>
     </div>
     <div class="zmy-table">
@@ -97,7 +97,7 @@
                 <span *ngIf="data.valid_period_unit==='month'">个</span>{{valid_unit[data.valid_period_unit]}}内</span>
               <ng-container *ngIf="data.valid_date_type===2 && data.valid_date_start">
                 <span *ngIf="data.valid_date_start">{{data.valid_date_start * 1000 | date: "yyyy-MM-dd"}}</span>
-                <span *ngIf="data.valid_date_end"> - {{data.valid_date_end * 1000 | date: "yyyy-MM-dd"}}</span>
+                <span *ngIf="data.valid_date_end"> 至 {{data.valid_date_end * 1000 | date: "yyyy-MM-dd"}}</span>
                 <span *ngIf="!data.valid_date_end">起有效</span>
               </ng-container>
               <span *ngIf="data.valid_date_type===2 && !data.valid_date_start">--</span>

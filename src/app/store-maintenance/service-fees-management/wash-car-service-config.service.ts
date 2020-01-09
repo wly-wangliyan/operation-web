@@ -5,6 +5,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
+import { RepairShopEntity } from '../garage-management/garage-management.service';
 
 // 洗车服务配置
 export class WashCarServiceConfigEntity extends EntityBase {
@@ -66,6 +67,7 @@ export class WashCarSpecificationEntity extends EntityBase {
   public valid_period_unit: string = undefined; // 有效期单位---1：下单日期起有效 day:天 month：月 year：年
   public status: number = undefined; // 规格开关 1:开启 2:关闭
   public is_deleted: boolean = undefined; // 是否删除
+  public time: number = undefined; // 时间戳
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 
@@ -108,5 +110,19 @@ export class WashCarServiceConfigService {
       status
     };
     return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 获取洗车服务通用店铺列表
+   */
+  public requestRepairShopData(): Observable<Array<RepairShopEntity>> {
+    const httpUrl = `${this.domain}/admin/repair_shops/wash_car`;
+    return this.httpService.get(httpUrl).pipe(map(result => {
+      const tempList: Array<RepairShopEntity> = [];
+      result.body.forEach(res => {
+        tempList.push(RepairShopEntity.Create(res));
+      });
+      return tempList;
+    }));
   }
 }

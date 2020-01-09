@@ -5,6 +5,7 @@ import { RouteMonitorService } from '../../core/route-monitor.service';
 import { ServiceFeesManagementComponent } from './service-fees-management.component';
 import { ServiceFeesListComponent } from './service-fees-list/service-fees-list.component';
 import { RescueFeesEditComponent } from './rescue-fees-edit/rescue-fees-edit.component';
+import { WashCarServiceEditComponent } from './wash-car-service-edit/wash-car-service-edit.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: ServiceFeesListComponent },
       { path: 'edit/:service_fee_id', component: RescueFeesEditComponent },
+      { path: 'wash-car-service-edit', component: WashCarServiceEditComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }
