@@ -493,9 +493,9 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格未填写！`;
         return false;
       }
-      if (!ValidateHelper.Length(specificationItemParams.specification_name, 1, 10)) {
+      if (!ValidateHelper.Length(specificationItemParams.specification_name, 1, 20)) {
         this.specificationErrMsgItem.isError = true;
-        this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格名称格式错误，请输入1-10字规格名称！`;
+        this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格名称格式错误，请输入1-20字规格名称！`;
         return false;
       }
       for (const specificationItemIndex in this.FormatCommoditySpecificationList) {
