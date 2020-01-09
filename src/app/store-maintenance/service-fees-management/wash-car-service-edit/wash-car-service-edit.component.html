@@ -4,7 +4,7 @@
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
   <nz-spin nzSimple></nz-spin>
 </div>
-<div class="content-flow">
+<div class="content-flow" [hidden]="loading">
 
   <div class="content-container">
     <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
@@ -34,16 +34,16 @@
                 <td>
                   <div class="price-group">
                     <input name="original_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.original_unit_fee"
-                      placeholder="0-99999" (blur)="onPriceChange()" [appMaxNumber]='99999' maxlength='8'
-                      class="form-control" appFloatNumber required />
+                      placeholder="0-99999" (change)="basePriceErrMsg=''" (blur)="onPriceChange()"
+                      [appMaxNumber]='99999' maxlength='8' class="form-control" appFloatNumber required />
                     <label class="one-word-lable">元</label>
                   </div>
                 </td>
                 <td>
                   <div class="price-group">
                     <input name="buy_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.buy_unit_fee"
-                      class="form-control" placeholder="0-99999" appFloatNumber [appMaxNumber]='99999' maxlength='8'
-                      required />
+                      (change)="basePriceErrMsg=''" class="form-control" placeholder="0-99999" appFloatNumber
+                      [appMaxNumber]='99999' maxlength='8' required />
                     <label class="one-word-lable">元</label>
                   </div>
                 </td>
@@ -60,8 +60,8 @@
                 <td>
                   <div class="price-group">
                     <input name="original_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.original_unit_fee"
-                      placeholder="0-99999" (blur)="onPriceChange()" class="form-control" appFloatNumber
-                      [appMaxNumber]='99999' maxlength='8' required />
+                      (change)="basePriceErrMsg=''" placeholder="0-99999" (blur)="onPriceChange()" class="form-control"
+                      appFloatNumber [appMaxNumber]='99999' maxlength='8' required />
                     <label class="one-word-lable">元</label>
                   </div>
                 </td>
@@ -69,13 +69,16 @@
                   <div class="price-group">
                     <input name="buy_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.buy_unit_fee"
                       class="form-control" placeholder="0-99999" appFloatNumber [appMaxNumber]='99999' maxlength='8'
-                      required />
+                      (change)="basePriceErrMsg=''" required />
                     <label class="one-word-lable">元</label>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="control-input err-message" style="height: 20px;">
+            <span>{{basePriceErrMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -90,72 +93,125 @@
               <label *ngFor="let tab of tabs;let i=index" nz-radio-button [nzValue]="tab.key">{{tab.value}}</label>
             </nz-radio-group>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>规格名称</th>
-                <th>规格配置</th>
-                <th>原价</th>
-                <th>售价</th>
-                <th>库存</th>
-                <th>有效期</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of specificationList;let j=index">
-                <td>
-                  <input name="specification_name_{{data.time}}" placeholder="输入1-20字规格名称"
-                    [(ngModel)]="data.specification_name" class="form-control" maxlength="20" appIgnoreSpace required />
-                </td>
-                <td>
-                  <div class="column-box">
-                    <div class="price-group">
-                      <label class="eight-word-lable">标准洗车</label>
-                      <input name="base_num_{{data.time}}" [(ngModel)]="data.base_num" (blur)="onPriceChange()"
-                        class="form-control" [appMaxNumber]='99999' appIntNumber="true" required />
-                      <label class="one-word-lable">次</label>
-                    </div>
-                    <div class="price-group">
-                      <label class="eight-word-lable">标准洗车+打蜡</label>
-                      <input name="base_wax_num_{{data.time}}" [(ngModel)]="data.base_wax_num" (blur)="onPriceChange()"
-                        class="form-control" [appMaxNumber]='99999' appIntNumber="true" required />
-                      <label class="one-word-lable">次</label>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="price-group">
-                    <input name="original_fee_{{data.time}}" [(ngModel)]="data.original_fee" class="form-control"
-                      maxlength="8" appFloatNumber [appMaxNumber]='99999' required disabled />
-                    <label class="one-word-lable disabled-word">元</label>
-                  </div>
-                </td>
-                <td>
-                  <div class="price-group">
-                    <input name="sale_fee_{{data.time}}" [(ngModel)]="data.sale_fee" class="form-control" appFloatNumber
-                      placeholder="0-99999" [appMaxNumber]='99999' maxlength='8' required />
-                    <label class="one-word-lable">元</label>
-                  </div>
-                </td>
-                <td>
-                  <div class="price-group">
-                    <input name="store_{{data.time}}" [(ngModel)]="data.store" class="form-control" appIntNumber="true"
-                      maxlength='8' required />
-                  </div>
-                </td>
-                <td></td>
-                <td>
-                  <div class="button-group">
-                    <button class="add-btn" type="button" (click)="onAddClick()"
-                      *ngIf="specificationList.length===(j+1)" [disabled]="specificationList.length>=5">添加</button>
-                    <button *ngIf="specificationList.length>1 || j > 0" class="remove-btn" type="button"
-                      (click)="onDeleteClick(data,j)">移除</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-scroll" style="min-width: 900px;overflow-x: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="min-width: 200px;">规格名称</th>
+                  <th>规格配置</th>
+                  <th>原价</th>
+                  <th>售价</th>
+                  <th>库存</th>
+                  <th style="min-width: 120px;"></th>
+                  <th style="width: 350px;max-width: 350px;">有效期</th>
+                  <th style="min-width: 100px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let data of specificationList;let j=index">
+                  <tr *ngIf="data.car_type===selectedTabIndex">
+                    <td>
+                      <input name="specification_name_{{data.time}}" placeholder="输入1-20字规格名称"
+                        [(ngModel)]="data.specification_name" (change)="specificationErrMsg=''" class="form-control"
+                        maxlength="20" appIgnoreSpace required />
+                    </td>
+                    <td>
+                      <div class="column-box">
+                        <div class="price-group">
+                          <label class="eight-word-lable">标准洗车</label>
+                          <input name="base_num_{{data.time}}" [(ngModel)]="data.base_num" (blur)="onPriceChange()"
+                            (change)="specificationErrMsg=''" class="form-control five-number" placeholder="0-99999"
+                            maxlength="5" appIntNumber="true" />
+                          <label class="one-word-lable">次</label>
+                        </div>
+                        <div class="price-group">
+                          <label class="eight-word-lable">标准洗车+打蜡</label>
+                          <input name="base_wax_num_{{data.time}}" [(ngModel)]="data.base_wax_num"
+                            (change)="specificationErrMsg=''" (blur)="onPriceChange()" class="form-control five-number"
+                            placeholder="0-99999" maxlength="5" appIntNumber="true" />
+                          <label class="one-word-lable">次</label>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="price-group">
+                        <input name="original_fee_{{data.time}}" [(ngModel)]="data.original_fee" class="form-control"
+                          (change)="specificationErrMsg=''" maxlength="8" appFloatNumber [appMaxNumber]='99999' required
+                          disabled />
+                        <label class="one-word-lable disabled-word">元</label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="price-group">
+                        <input name="sale_fee_{{data.time}}" [(ngModel)]="data.sale_fee" class="form-control"
+                          (change)="specificationErrMsg=''" appFloatNumber placeholder="0-99999" [appMaxNumber]='99999'
+                          maxlength='8' required />
+                        <label class="one-word-lable">元</label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="price-group">
+                        <input name="store_{{data.time}}" [(ngModel)]="data.store" class="form-control five-number"
+                          (change)="specificationErrMsg=''" placeholder="0-99999" [appMaxNumber]='99999'
+                          appIntNumber="true" maxlength='5' required />
+                      </div>
+                    </td>
+                    <td><span style="font-size: 12px; color: #888;">已售：{{data.sale_num || 0}}</span></td>
+                    <td>
+                      <div class="column-box">
+                        <div class="tab-btn-group">
+                          <a name="select_firm_btn_1_{{data.time}}" class="tab-btn-item"
+                            [class.active-btn]="data.valid_date_type===1"
+                            (click)="onChangeValidDateType(data,1)">下单日期起有效</a>
+                          <a name="select_firm_btn_2_{{data.time}}" class="tab-btn-item"
+                            [class.active-btn]="data.valid_date_type===2" (click)="onChangeValidDateType(data,2)"
+                            style="margin-right: 5px">固定日期内有效</a>
+                        </div>
+                        <div class="row-box" *ngIf="data.valid_date_type===1">
+                          <span>有效期：</span>
+                          <input name="valid_period_{{data.time}}" class="form-control five-number"
+                            style="margin-right: 5px;" appIntNumber="true" placeholder="1-99999"
+                            [(ngModel)]="data.valid_period" (change)="specificationErrMsg=''" maxlength="5" required />
+                          <span *ngIf="data.valid_period_unit==='month'" style="margin-right: 10px;">个</span>
+                          <select name="valid_period_unit" class="form-control" style="width: 100px;"
+                            [(ngModel)]="data.valid_period_unit" (change)="specificationErrMsg=''">
+                            <option value="day">日</option>
+                            <option value="month">月</option>
+                            <option value="year">年</option>
+                          </select>
+                        </div>
+                        <div class="row-box" *ngIf="data.valid_date_type===2">
+                          <span>有效期：</span>
+                          <nz-date-picker [(ngModel)]="data.valid_date_start" [nzShowToday]=false
+                            (nzOnOpenChange)="onOpenChange($event,data)" nzPlaceHolder="开始日期"
+                            (ngModelChange)="onValidStartChange($event,data)" [nzDisabledDate]="disabledValidStartTime"
+                            name='bind_valid_date_start_{{data.time}}'>
+                          </nz-date-picker>
+                          <span class='partition'>-</span>
+                          <nz-date-picker [(ngModel)]="data.valid_date_end" [nzShowToday]=false
+                            (nzOnOpenChange)="onOpenChange($event,data)" (ngModelChange)="onValidEndChange($event,data)"
+                            nzPlaceHolder="结束日期" [nzDisabledDate]="disabledValidEndTime"
+                            name='bind_valid_date_end_{{data.time}}'>
+                          </nz-date-picker>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="button-group">
+                        <button class="add-btn" type="button" (click)="onAddClick()"
+                          *ngIf="specificationList.length===(j+1)" [disabled]="specificationList.length>=5">添加</button>
+                        <button *ngIf="specificationList.length>1 || j > 0" class="remove-btn" type="button"
+                          (click)="onDeleteClick(data,j)">移除</button>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div class="control-input err-message" style="height: 20px;">
+            <span>{{specificationErrMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -164,7 +220,10 @@
           <span>通用店铺</span>
         </label>
         <div class="control-input shop-box">
-          <span *ngFor="let shop of repairShopList">{{shop.repair_shop_name}}</span>
+          <ng-container *ngIf="repairShopList && repairShopList.length>0">
+            <span class="shop-item" *ngFor="let shop of repairShopList">{{shop.repair_shop_name}}</span>
+          </ng-container>
+          <span *ngIf="!repairShopList || repairShopList.length===0" style="font-size: 14px;color: #666;">暂无店铺</span>
         </div>
       </div>
       <div class="row">
@@ -173,9 +232,8 @@
           <span>服务说明</span>
         </label>
         <div class="control-input">
-          <textarea name="service_introduce" [(ngModel)]="washServiceConfig.service_introduce" class="form-control"
-            placeholder="输入0-200字" maxlength="200">
-
+          <textarea name="service_introduce" rows="5" [(ngModel)]="washServiceConfig.service_introduce"
+            class="form-control" placeholder="输入0-200字" maxlength="200" required>
           </textarea>
         </div>
       </div>

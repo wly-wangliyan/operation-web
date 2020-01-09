@@ -17,6 +17,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StoreShareModule } from '../share/store-share.module';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +32,8 @@ import { StoreShareModule } from '../share/store-share.module';
     NzRadioModule,
     NzSwitchModule,
     NzSpinModule,
-    StoreShareModule
+    StoreShareModule,
+    NzDatePickerModule
   ],
   declarations: [
     ServiceFeesManagementComponent,

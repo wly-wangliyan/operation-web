@@ -46,6 +46,13 @@ export class BasePriceEntity extends EntityBase {
     }
     return null;
   }
+
+  public toEditJson() {
+    const json = this.json();
+    json.original_unit_fee = json.original_unit_fee * 100;
+    json.buy_unit_fee = json.buy_unit_fee * 100;
+    return json;
+  }
 }
 
 // 洗车规格
@@ -61,8 +68,8 @@ export class WashCarSpecificationEntity extends EntityBase {
   public store: number = undefined; // 库存
   public sale_num: number = undefined; // 销量
   public valid_date_type: number = undefined; // 有效期类型 1：下单日期起有效 2：固定日期有效
-  public valid_date_start: number = undefined; // 有效期开始日期---2：固定日期有效
-  public valid_date_end: number = undefined; // 有效期结束日期---2：固定日期有效
+  public valid_date_start: any = undefined; // 有效期开始日期---2：固定日期有效
+  public valid_date_end: any = undefined; // 有效期结束日期---2：固定日期有效
   public valid_period: number = undefined; // 有效期---1：下单日期起有效
   public valid_period_unit: string = undefined; // 有效期单位---1：下单日期起有效 day:天 month：月 year：年
   public status: number = undefined; // 规格开关 1:开启 2:关闭
@@ -76,6 +83,14 @@ export class WashCarSpecificationEntity extends EntityBase {
       return WashCarServiceConfigEntity;
     }
     return null;
+  }
+
+  public toEditJson() {
+    const json = this.json();
+    json.sale_fee = json.sale_fee * 100;
+    json.valid_date_start = json.valid_date_start ? json.valid_date_start / 1000 : '';
+    json.valid_date_end = json.valid_date_end ? json.valid_date_end / 1000 : '';
+    return json;
   }
 }
 
