@@ -38,7 +38,7 @@ export class ServiceFeesListComponent implements OnInit {
   public washServiceConfig: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 洗车服务配置
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
   public basePrice: Array<BasePriceEntity> = []; // 基础价格
-  public valid_unit = { day: '天', month: '月', year: '年' };
+  public valid_unit = { day: '日', month: '月', year: '年' };
   public selectedCarTypeTabIndex = 1;
   public selectedTabIndex = 1;
 
