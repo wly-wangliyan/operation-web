@@ -96,6 +96,7 @@ b {
   align-items: center;
   border: 0.5px solid rgba(136, 136, 136, 0.3);
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .shop-item {

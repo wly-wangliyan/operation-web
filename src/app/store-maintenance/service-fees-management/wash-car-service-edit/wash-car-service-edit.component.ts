@@ -58,7 +58,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.washServiceConfig.specification_info = res[0].specification_info ? res[0].specification_info : [];
         this.calculateSpecificationPrice(this.washServiceConfig.specification_info, true);
         this.initSpecification();
-        // this.repairShopList = res[1];
+        this.repairShopList = res[1];
         this.loading = false;
       }, err => {
         this.loading = false;
@@ -249,6 +249,8 @@ export class WashCarServiceEditComponent implements OnInit {
 
   public onFormSubmit(): void {
     if (this.generateAndCheckParamsValid()) {
+      this.basePriceErrMsg = '';
+      this.specificationErrMsg = '';
       this.washCarService.requestEditWashCarServiceConfigData(this.editParams).subscribe(() => {
         this.globalService.promptBox.open('保存成功', () => {
           this.onCancelClick();

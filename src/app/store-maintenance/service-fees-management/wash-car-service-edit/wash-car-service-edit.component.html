@@ -168,7 +168,7 @@
                             style="margin-right: 5px">固定日期内有效</a>
                         </div>
                         <div class="row-box" *ngIf="data.valid_date_type===1">
-                          <span>有效期：</span>
+                          <span style="word-break: keep-all;">有效期：</span>
                           <input name="valid_period_{{data.time}}" class="form-control five-number"
                             style="margin-right: 5px;" appIntNumber="true" placeholder="1-99999"
                             [(ngModel)]="data.valid_period" (change)="specificationErrMsg=''" maxlength="5" required />
@@ -181,7 +181,7 @@
                           </select>
                         </div>
                         <div class="row-box" *ngIf="data.valid_date_type===2">
-                          <span>有效期：</span>
+                          <span style="word-break: keep-all;">有效期：</span>
                           <nz-date-picker [(ngModel)]="data.valid_date_start" [nzShowToday]=false
                             (nzOnOpenChange)="onOpenChange($event,data)" nzPlaceHolder="开始日期"
                             (ngModelChange)="onValidStartChange($event,data)" [nzDisabledDate]="disabledValidStartTime"
@@ -231,7 +231,7 @@
           <b>*</b>
           <span>服务说明</span>
         </label>
-        <div class="control-input">
+        <div class="control-input" style="width: 900px;">
           <textarea name="service_introduce" rows="5" [(ngModel)]="washServiceConfig.service_introduce"
             class="form-control" placeholder="输入0-200字" maxlength="200" required>
           </textarea>
