@@ -162,8 +162,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
     }
     this.service.changeTopicStatus(topic_id, swith).subscribe(() => {
       this.globalService.promptBox.open(sucessMsg);
-      this.onNZPageIndexChange(this.pageIndex);
-      // this.searchText$.next();
+      this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
