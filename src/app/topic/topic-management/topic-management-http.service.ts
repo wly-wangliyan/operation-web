@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class TopicSearchParams extends EntityBase {
     section = '';	 // F	话题创建时间范围。`[start]:[end]`，开、闭区间，start、end是一个double类型的时间戳，都可以不传
     // category: string = undefined;	// F	话题分类, 不传默认所有 例: 'PK'
-    page_size = 15;	// F	每页条数 默认：15
+    page_size = 45;	// F	每页条数 默认：15
     page_num = 1;	// F	页码 默认: 1
     title = '';	// F	话题标题 模糊查询
 }

@@ -60,7 +60,9 @@ export class EditTopicComponent implements OnInit {
    */
   public get CheckEditorValid(): boolean {
     if (this.isInstanceReady) {
-      return CKEDITOR.instances.topicEditor.getData() ? true : false;
+      if (CKEDITOR.instances.topicEditor) {
+        return CKEDITOR.instances.topicEditor.getData() ? true : false;
+      }
     } else {
       return false;
     }
@@ -126,10 +128,12 @@ export class EditTopicComponent implements OnInit {
 
   // 富文本数据处理
   public getEditorData() {
-    CKEDITOR.instances.topicEditor.destroy(true);
-    this.tempContent = this.editTopic.content.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
-    CKEDITOR.replace('topicEditor', { width: 1130 }).setData(this.tempContent);
-    this.isInstanceReady = true;
+    timer(500).subscribe(() => {
+      CKEDITOR.instances.topicEditor.destroy(true);
+      this.tempContent = this.editTopic.content.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
+      CKEDITOR.replace('topicEditor', { width: 1130 }).setData(this.tempContent);
+      this.isInstanceReady = true;
+    });
   }
 
   /** 获取话题信息 */
@@ -142,6 +146,7 @@ export class EditTopicComponent implements OnInit {
       this.getEditorData();
 
     }, err => {
+      this.getEditorData();
       this.globalService.httpErrorProcess(err);
     });
   }
