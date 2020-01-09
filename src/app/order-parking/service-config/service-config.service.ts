@@ -151,6 +151,13 @@ export class ParkingLinkResponse extends LinkResponse {
     }
 }
 
+/**
+ * 添加停车场参数
+ */
+export class AddParkingParams extends EntityBase {
+    public beian_parking_ids: string = undefined;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -192,12 +199,13 @@ export class ServiceConfigService {
 
     /**
      * 添加停车场
-     * @param park_ids 停车场ids
-     * @returns Observable<HttpResponse<any>>
+     * @param {AddParkingParams} addParkingParams
+     * @returns {Observable<HttpResponse<any>>}
      */
-    public requestAddParkingIds(park_ids: string): Observable<HttpResponse<any>> {
+    public requestAddParkingIds(addParkingParams: AddParkingParams): Observable<HttpResponse<any>> {
         const httpUrl = `${this.domain}/admin/parkings`;
-        return this.httpService.post(httpUrl, {park_ids});
+        const body = addParkingParams.json();
+        return this.httpService.post(httpUrl, body);
     }
 
     /**
