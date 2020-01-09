@@ -73,7 +73,7 @@
 .positive {
     width: 750px;
     height: 499px;
-    background: rgba(62, 113, 247, 0.1);
+    background: rgba(232, 32, 56, 0.1);
     border-radius: 20px;
     padding: 20px;
     overflow-y: auto;
@@ -82,7 +82,7 @@
 .negative {
     width: 750px;
     height: 499px;
-    background: rgba(232, 32, 56, 0.1);
+    background: rgba(62, 113, 247, 0.1);
     border-radius: 20px;
     padding: 20px;
     overflow-y: auto;

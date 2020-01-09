@@ -43,9 +43,6 @@ export class ViewTopicComponent implements OnInit {
   ngOnInit() {
     this.getTopicInfo();
     this.getViewPoints();
-    timer(0).subscribe(() => {
-      this.getCommentList();
-    });
   }
 
   /** 获取话题信息 */
@@ -61,7 +58,7 @@ export class ViewTopicComponent implements OnInit {
   private getCommentList() {
     this.commentSearchParams.object_id = this.topic_id;
 
-    if (environment.version === 'd') {
+    if (environment.version === 'd' || environment.version === 'develop') {
       // D版work_id
       this.commentSearchParams.work_id = 'e9b51d9c2dc411eab0d60242ac120006';
     } else if (environment.version === 'r') {
@@ -98,6 +95,9 @@ export class ViewTopicComponent implements OnInit {
     this.service.requestViewpointList(this.viewPointSearchParams).subscribe(res => {
       this.viewPointList = res.results;
       console.log(this.viewPointList);
+
+      this.getCommentList();
+
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
