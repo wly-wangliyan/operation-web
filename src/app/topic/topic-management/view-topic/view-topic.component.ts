@@ -121,7 +121,7 @@ export class ViewTopicComponent implements OnInit {
     if (pageIndex + 1 >= this.ppageCount && this.positiveLinkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.positiveLinkUrl).subscribe(res => {
+      this.continueRequestSubscription = this.service.continueRequestCommentListData(this.positiveLinkUrl).subscribe(res => {
         this.positiveList = [...this.positiveList, ...res.results];
         this.positiveLinkUrl = res.linkUrl;
       }, err => {
@@ -135,7 +135,7 @@ export class ViewTopicComponent implements OnInit {
     if (pageIndex + 1 >= this.npageCount && this.negativeLinkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.negativeLinkUrl).subscribe(res => {
+      this.continueRequestSubscription = this.service.continueRequestCommentListData(this.negativeLinkUrl).subscribe(res => {
         this.negativeList = [...this.negativeList, ...res.results];
         this.negativeLinkUrl = res.linkUrl;
       }, err => {
