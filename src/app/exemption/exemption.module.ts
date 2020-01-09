@@ -17,6 +17,7 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../core/upload.servic
 import { HomeModule } from '../home/home.module';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 registerLocaleData(zh);
 
@@ -39,7 +40,8 @@ const uploadToken: UploadConfig = {
     HomeModule,
     ExemptionRoutingModule,
     NzSpinModule,
-    NzSwitchModule
+    NzSwitchModule,
+    NzButtonModule
   ],
   declarations: [
     ExemptionComponent,

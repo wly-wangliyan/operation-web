@@ -12,6 +12,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   imports: [
     NzFormModule,
@@ -21,6 +22,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     CommonModule,
     ShareModule,
     WorkFeesManagementRoutingModule,
+    NzButtonModule
   ],
   declarations: [
     WorkFeesManagementComponent,
