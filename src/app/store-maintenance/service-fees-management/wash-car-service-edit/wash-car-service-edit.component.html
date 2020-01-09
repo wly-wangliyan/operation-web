@@ -173,7 +173,7 @@
                             style="margin-right: 5px;" appIntNumber="true" placeholder="1-99999"
                             [(ngModel)]="data.valid_period" (change)="specificationErrMsg=''" maxlength="5" required />
                           <span *ngIf="data.valid_period_unit==='month'" style="margin-right: 10px;">个</span>
-                          <select name="valid_period_unit" class="form-control" style="width: 100px;"
+                          <select name="valid_period_unit_{{data.time}}" class="form-control" style="width: 100px;"
                             [(ngModel)]="data.valid_period_unit" (change)="specificationErrMsg=''">
                             <option value="day">日</option>
                             <option value="month">月</option>
