@@ -13,6 +13,7 @@ import { OperationalSystemComponent } from './operational-system.component';
 import zh from '@angular/common/locales/zh';
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { SentryErrorHandler } from 'src/utils/sentry-error-handler';
 registerLocaleData(zh);
 
@@ -25,7 +26,8 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     ShareModule,
     OperationalSystemRoutingModule,
-    NzBadgeModule
+    NzBadgeModule,
+    NzButtonModule
   ],
   declarations: [
     EntryComponent,
