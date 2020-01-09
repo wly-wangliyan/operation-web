@@ -50,7 +50,7 @@
                     <tr *ngFor="let data of topicTable.data; let i=index">
                         <td>{{i+(pageIndex-1)*15+1}}</td>
                         <td>{{data.title||'--'}}</td>
-                        <td>{{data.created_time*1000|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{data.created_time*1000|date:'yyyy-MM-dd HH:mm'}}</td>
                         <td>{{data.statistic?.visit_num||'--'}}</td>
                         <td>{{data.statistic?.visitors_num||'--'}}</td>
                         <td>{{data.statistic?.participants_num||'--'}}</td>
