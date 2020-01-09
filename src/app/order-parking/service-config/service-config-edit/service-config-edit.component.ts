@@ -24,8 +24,6 @@ export class ServiceConfigEditComponent implements OnInit {
 
     public configInfoErrMsg: ConfigInfoErrorMsgItem = new ConfigInfoErrorMsgItem();
 
-    private searchText$ = new Subject<any>();
-
     private parking_id: string;
 
     // 校验支持车位类型是否有效
@@ -48,16 +46,11 @@ export class ServiceConfigEditComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-            this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
-                this.parkingDetailData = new ParkingEntity(res);
-                this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
-                this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
-        });
-        this.searchText$.next();
+        if (this.parking_id) {
+            this.requestParkingDetail();
+        } else {
+            this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
+        }
     }
 
     // 添加标签
@@ -176,9 +169,8 @@ export class ServiceConfigEditComponent implements OnInit {
         this.parkingDetailData.notice = CKEDITOR.instances.purchaseInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
 
         this.serviceConfigService.requestUpdateServiceConfigData(this.parkingDetailData, this.parking_id).subscribe(() => {
-            this.searchText$.next();
             this.globalService.promptBox.open('服务配置保存成功！', () => {
-                this.router.navigate(['../../service-config-list'], { relativeTo: this.route });
+                this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
             });
         }, err => {
             this.handleErrorFunc(err);
@@ -187,7 +179,18 @@ export class ServiceConfigEditComponent implements OnInit {
 
     // 点击取消按钮取消编辑
     public onCancelBtn() {
-        this.router.navigate(['../../service-config-list'], { relativeTo: this.route });
+        this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
+    }
+
+    // 获取产品配置详情
+    private requestParkingDetail() {
+        this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
+            this.parkingDetailData = new ParkingEntity(res);
+            this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
+            this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
     // 富文本数据处理

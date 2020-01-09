@@ -74,10 +74,12 @@ export class ParkingEntity extends EntityBase {
             this.sale_fee = source.sale_fee ? (source.sale_fee / 100) : source.sale_fee;
             this.pre_fee = source.pre_fee ? (source.pre_fee / 100) : source.pre_fee;
             this.minus_fee = source.minus_fee ? (source.minus_fee / 100) : source.minus_fee;
+            this.spot_num_left = source.spot_num_left;
             this.indoor_origin_fee = source.indoor_origin_fee ? (source.indoor_origin_fee / 100) : source.indoor_origin_fee;
             this.indoor_sale_fee = source.indoor_sale_fee ? (source.indoor_sale_fee / 100) : source.indoor_sale_fee;
             this.indoor_pre_fee = source.indoor_pre_fee ? (source.indoor_pre_fee / 100) : source.indoor_pre_fee;
             this.indoor_minus_fee = source.indoor_minus_fee ? (source.indoor_minus_fee / 100) : source.indoor_minus_fee;
+            this.indoor_spot_num_left = source.indoor_spot_num_left;
             this.min_days = source.min_days;
             this.main_tel = source.main_tel;
             this.standby_tel = source.standby_tel;
