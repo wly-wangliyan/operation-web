@@ -205,7 +205,7 @@ b {
   opacity: 0.8;
 }
 
-::ng-deep .ant-calendar-picker {
+.specification-table ::ng-deep .ant-calendar-picker {
   width: 120px !important;
 }
 
