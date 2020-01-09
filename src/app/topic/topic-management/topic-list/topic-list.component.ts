@@ -76,6 +76,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.service.continueRequestTopicListData(this.linkUrl).subscribe(res => {
         this.topicList = [...this.topicList, ...res.results];
+        console.log('this.topicList ', this.topicList);
         this.linkUrl = res.linkUrl;
       }, err => {
         this.globalService.httpErrorProcess(err);
@@ -162,7 +163,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
     }
     this.service.changeTopicStatus(topic_id, swith).subscribe(() => {
       this.globalService.promptBox.open(sucessMsg);
-      this.searchText$.next();
+      this.onNZPageIndexChange(this.pageIndex);
+      // this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
