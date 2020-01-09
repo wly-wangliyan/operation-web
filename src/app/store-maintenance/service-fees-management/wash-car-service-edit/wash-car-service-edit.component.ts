@@ -20,7 +20,6 @@ export class WashCarServiceEditComponent implements OnInit {
   public loading = true; // 标记loading
   public washServiceConfig: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 洗车服务配置
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
-  public basePrice: Array<BasePriceEntity> = []; // 基础价格
   public basePrice_1: Array<BasePriceEntity> = []; // 标准洗车1次 基础价格
   public basePrice_2: Array<BasePriceEntity> = []; // 标准洗车1次+打蜡1次 基础价格
   public repairShopList: Array<RepairShopEntity> = []; // 通用门店列表
@@ -31,11 +30,11 @@ export class WashCarServiceEditComponent implements OnInit {
   public specificationErrMsg = '';
   public tempSpecificationList_1: Array<WashCarSpecificationEntity> = []; // 临时存储5座小型车规格
   public tempSpecificationList_2: Array<WashCarSpecificationEntity> = []; // 临时存储SUV/MPV规格
-  private tempSpecificationNameList: Array<any> = []; // 临时存储规格名称
-  private selectedSpecification: WashCarSpecificationEntity = new WashCarSpecificationEntity();
-  private editParams: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 保存参数
-  private sort = 0;
+  private selectedSpecification: WashCarSpecificationEntity = new WashCarSpecificationEntity(); // 当前操作规格
+  private editParams: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 编辑配置参数
+  private sort = 0; // 防重复标记
   private searchText$ = new Subject<any>();
+  private operationing = false;
   constructor(private globalService: GlobalService, private washCarService: WashCarServiceConfigService) { }
 
   public ngOnInit() {
@@ -49,6 +48,7 @@ export class WashCarServiceEditComponent implements OnInit {
     this.selectedSpecification.valid_date_end = '';
   }
 
+  // 获取配置详情及通用店铺列表
   private getDetailData() {
     forkJoin(this.washCarService.requestWashCarServiceConfigData(),
       this.washCarService.requestRepairShopData()).subscribe(res => {
@@ -70,6 +70,7 @@ export class WashCarServiceEditComponent implements OnInit {
       });
   }
 
+  // 初始化基础价格
   private initBasePrice() {
     this.washServiceConfig.base_price_info.forEach(price => {
       price.original_unit_fee = Number((price.original_unit_fee / 100).toFixed(2)) || null;
@@ -83,7 +84,7 @@ export class WashCarServiceEditComponent implements OnInit {
    * 列表规格原价数据计算
    * 原价= 标准洗车原价×标准洗车次数 +（标准洗车+打蜡次数原价）×（标准洗车+打蜡次数）
    */
-  public calculateSpecificationPrice(specification_info: Array<WashCarSpecificationEntity>, valid_fomat = false) {
+  public calculateSpecificationPrice(specification_info: Array<WashCarSpecificationEntity>, valid_date_format = false) {
     specification_info.forEach(item => {
       this.sort++;
       item.time = this.sort;
@@ -103,7 +104,7 @@ export class WashCarServiceEditComponent implements OnInit {
       } else {
         item.original_fee = Number(item.original_fee.toFixed(2));
       }
-      if (valid_fomat && item.valid_date_type === 2) {
+      if (valid_date_format && item.valid_date_type === 2) {
         item.valid_date_start = item.valid_date_start * 1000;
         item.valid_date_end = item.valid_date_end * 1000;
       }
@@ -190,6 +191,7 @@ export class WashCarServiceEditComponent implements OnInit {
 
   // 原价数据联动
   public onPriceChange() {
+    this.specificationErrMsg = '';
     this.calculateSpecificationPrice(this.specificationList);
   }
 
@@ -248,14 +250,20 @@ export class WashCarServiceEditComponent implements OnInit {
   }
 
   public onFormSubmit(): void {
+    if (this.operationing) {
+      return;
+    }
     if (this.generateAndCheckParamsValid()) {
+      this.operationing = true;
       this.basePriceErrMsg = '';
       this.specificationErrMsg = '';
       this.washCarService.requestEditWashCarServiceConfigData(this.editParams).subscribe(() => {
         this.globalService.promptBox.open('保存成功', () => {
           this.onCancelClick();
         });
+        this.operationing = false;
       }, err => {
+        this.operationing = false;
         if (!this.globalService.httpErrorProcess(err)) {
           if (err.status === 422) {
             const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
@@ -280,6 +288,7 @@ export class WashCarServiceEditComponent implements OnInit {
     }
   }
 
+  // 校验及格式化数据
   private generateAndCheckParamsValid(): boolean {
     this.editParams = new WashCarServiceConfigEntity();
     this.editParams.service_introduce = this.washServiceConfig.service_introduce;
@@ -332,15 +341,15 @@ export class WashCarServiceEditComponent implements OnInit {
     this.removeList.forEach(removeItem => {
       this.editParams.specification_info.push(removeItem.toEditJson());
     });
-    this.tempSpecificationNameList = [];
     return result;
   }
 
+  // 校验规格信息
   private validSpecificationInfo(car_name: string, validSpecification: Array<WashCarSpecificationEntity>): boolean {
     let result = true;
-    this.tempSpecificationNameList = [];
+    const tempSpecificationNameList = [];
     validSpecification.forEach((specification, index) => {
-      if (this.tempSpecificationNameList.includes(specification.specification_name)) {
+      if (tempSpecificationNameList.includes(specification.specification_name)) {
         this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-规格名称重复！`;
         result = false;
         return;
@@ -378,7 +387,7 @@ export class WashCarServiceEditComponent implements OnInit {
         }
       }
       if (result) {
-        this.tempSpecificationNameList.push(specification.specification_name);
+        tempSpecificationNameList.push(specification.specification_name);
       }
       this.editParams.specification_info.push(specification.toEditJson());
     });

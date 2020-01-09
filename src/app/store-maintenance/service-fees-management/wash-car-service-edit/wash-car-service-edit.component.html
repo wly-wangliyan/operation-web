@@ -199,7 +199,7 @@
                     <td>
                       <div class="button-group">
                         <button class="add-btn" type="button" (click)="onAddClick()"
-                          *ngIf="specificationList.length===(j+1)" [disabled]="specificationList.length>=5">添加</button>
+                          *ngIf="specificationList.length===(j+1) && specificationList.length<5">添加</button>
                         <button *ngIf="specificationList.length>1 || j > 0" class="remove-btn" type="button"
                           (click)="onDeleteClick(data,j)">移除</button>
                       </div>
