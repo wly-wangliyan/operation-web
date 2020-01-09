@@ -1,11 +1,24 @@
 .image {
-  float: left;
-  width: 100px;
-  margin: 10px;
+    float: left;
+    width: 100px;
+    margin: 10px;
 }
 
 .tel {
-  width: 120px;
-  display: inline-block;
-  text-align: left;
+    width: 120px;
+    display: inline-block;
+    text-align: left;
+}
+
+.recommend {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background-color: #08D5B1;
+    color: #fff;
+    right: 0px;
+    bottom: 0;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 22px;
 }
