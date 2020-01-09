@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { Subject, timer } from 'rxjs/index';
+import { Subject } from 'rxjs/index';
 import { debounceTime } from 'rxjs/internal/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
 import { GlobalService } from '../../../core/global.service';
@@ -24,8 +24,6 @@ export class ServiceConfigEditComponent implements OnInit {
 
     public configInfoErrMsg: ConfigInfoErrorMsgItem = new ConfigInfoErrorMsgItem();
 
-    private searchText$ = new Subject<any>();
-
     private parking_id: string;
 
     // 校验支持车位类型是否有效
@@ -38,24 +36,21 @@ export class ServiceConfigEditComponent implements OnInit {
         return false;
     }
 
-    constructor(private globalService: GlobalService, private serviceConfigService: ServiceConfigService,
-                private routerInfo: ActivatedRoute, private router: Router) {
-        this.routerInfo.params.subscribe((params: Params) => {
+    constructor(private route: ActivatedRoute,
+                private router: Router,
+                private globalService: GlobalService,
+                private serviceConfigService: ServiceConfigService) {
+        this.route.params.subscribe((params: Params) => {
             this.parking_id = params.parking_id;
         });
     }
 
     public ngOnInit() {
-        this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-            this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
-                this.parkingDetailData = new ParkingEntity(res);
-                this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
-                this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
-        });
-        this.searchText$.next();
+        if (this.parking_id) {
+            this.requestParkingDetail();
+        } else {
+            this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
+        }
     }
 
     // 添加标签
@@ -174,9 +169,9 @@ export class ServiceConfigEditComponent implements OnInit {
         this.parkingDetailData.notice = CKEDITOR.instances.purchaseInstructionEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
 
         this.serviceConfigService.requestUpdateServiceConfigData(this.parkingDetailData, this.parking_id).subscribe(() => {
-            this.globalService.promptBox.open('服务配置保存成功！');
-            this.searchText$.next();
-            timer(2000).subscribe(() => this.router.navigateByUrl('/order-parking/service-config'));
+            this.globalService.promptBox.open('服务配置保存成功！', () => {
+                this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
+            });
         }, err => {
             this.handleErrorFunc(err);
         });
@@ -184,7 +179,18 @@ export class ServiceConfigEditComponent implements OnInit {
 
     // 点击取消按钮取消编辑
     public onCancelBtn() {
-        this.router.navigateByUrl('/order-parking/service-config');
+        this.router.navigate(['../../service-config-list'], {relativeTo: this.route});
+    }
+
+    // 获取产品配置详情
+    private requestParkingDetail() {
+        this.serviceConfigService.requestParkingDetailData(this.parking_id).subscribe(res => {
+            this.parkingDetailData = new ParkingEntity(res);
+            this.spotTypeStatus = new SpotTypeStatusItem(this.parkingDetailData.spot_types);
+            this.getEditorData(this.parkingDetailData.instruction, this.parkingDetailData.notice);
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
     // 富文本数据处理

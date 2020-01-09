@@ -46,6 +46,7 @@ export class ParkingEntity extends EntityBase {
     public instruction: string = undefined; // 预约说明
     public notice: string = undefined; // 购买须知
     public sign_name: string = undefined; // 标志位名称
+    public is_recommended: number = undefined; // 1:被推荐 2:取消推荐
     public is_deleted: boolean = undefined; // 逻辑删除 默认: False
     public updated_time: number = undefined; // 更新时间
     public created_time: number = undefined; // 下单时间
@@ -74,16 +75,19 @@ export class ParkingEntity extends EntityBase {
             this.sale_fee = source.sale_fee ? (source.sale_fee / 100) : source.sale_fee;
             this.pre_fee = source.pre_fee ? (source.pre_fee / 100) : source.pre_fee;
             this.minus_fee = source.minus_fee ? (source.minus_fee / 100) : source.minus_fee;
+            this.spot_num_left = source.spot_num_left;
             this.indoor_origin_fee = source.indoor_origin_fee ? (source.indoor_origin_fee / 100) : source.indoor_origin_fee;
             this.indoor_sale_fee = source.indoor_sale_fee ? (source.indoor_sale_fee / 100) : source.indoor_sale_fee;
             this.indoor_pre_fee = source.indoor_pre_fee ? (source.indoor_pre_fee / 100) : source.indoor_pre_fee;
             this.indoor_minus_fee = source.indoor_minus_fee ? (source.indoor_minus_fee / 100) : source.indoor_minus_fee;
+            this.indoor_spot_num_left = source.indoor_spot_num_left;
             this.min_days = source.min_days;
             this.main_tel = source.main_tel;
             this.standby_tel = source.standby_tel;
             this.instruction = source.instruction;
             this.notice = source.notice;
             this.sign_name = source.sign_name;
+            this.is_recommended = source.is_recommended;
             this.is_deleted = source.is_deleted;
             this.updated_time = source.updated_time;
             this.created_time = source.created_time;
@@ -107,8 +111,7 @@ export class ParkingEntity extends EntityBase {
         delete json.lon;
         delete json.lat;
         delete json.location;
-        delete json.created_time;
-        delete json.created_time;
+        delete json.is_recommended;
         delete json.is_deleted;
         delete json.updated_time;
         delete json.created_time;
@@ -147,6 +150,20 @@ export class ParkingLinkResponse extends LinkResponse {
         });
         return tempList;
     }
+}
+
+/**
+ * 添加停车场参数
+ */
+export class AddParkingParams extends EntityBase {
+    public beian_parking_ids: string = undefined;
+}
+
+/**
+ * 推荐状态参数
+ */
+export class RecommendStatusParams extends EntityBase {
+    public recommend_status: number = undefined; // int	T	1:被推荐 2:取消推荐
 }
 
 @Injectable({
@@ -189,13 +206,26 @@ export class ServiceConfigService {
     }
 
     /**
-     * 添加停车场
-     * @param park_ids 停车场ids
-     * @returns Observable<HttpResponse<any>>
+     * 修改停车场被推荐状态
+     * @param {string} parking_id
+     * @param {RecommendStatusParams} recommendStatusParams
+     * @returns {Observable<HttpResponse<any>>}
      */
-    public requestAddParkingIds(park_ids: string): Observable<HttpResponse<any>> {
+    public requestChangeRecommendStatusData(parking_id: string, recommendStatusParams: RecommendStatusParams): Observable<HttpResponse<any>> {
+        const httpUrl = `${this.domain}/admin/parkings/${parking_id}/recommend_status`;
+        const body = recommendStatusParams.json();
+        return this.httpService.patch(httpUrl, body);
+    }
+
+    /**
+     * 添加停车场
+     * @param {AddParkingParams} addParkingParams
+     * @returns {Observable<HttpResponse<any>>}
+     */
+    public requestAddParkingIds(addParkingParams: AddParkingParams): Observable<HttpResponse<any>> {
         const httpUrl = `${this.domain}/admin/parkings`;
-        return this.httpService.post(httpUrl, {park_ids});
+        const body = addParkingParams.json();
+        return this.httpService.post(httpUrl, body);
     }
 
     /**

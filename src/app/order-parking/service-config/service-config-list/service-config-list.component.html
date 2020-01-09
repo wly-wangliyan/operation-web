@@ -28,13 +28,18 @@
                 <tbody>
                 <tr *ngFor="let data of productConfigTable.data; let i=index">
                     <td>{{ i+ (pageIndex - 1) * 15 + 1}}</td>
-                    <td *ngIf='data.images&&data.images.length!==0'>
-                        <div *ngFor='let img of data.images;let t=index;'>
-                            <img *ngIf='t===0' [src]="img" width="100">
+                    <td>
+                        <div class="parking-img-container">
+                            <ng-container *ngIf='!data.images||data.images.length===0'>
+                                <img src="/assets/images/image_space_3_2.png"/>
+                            </ng-container>
+                            <ng-container *ngIf='data.images&&data.images.length!==0'>
+                                <div *ngFor='let img of data.images;let t=index;'>
+                                    <img *ngIf='t===0' [src]="img" width="100">
+                                </div>
+                            </ng-container>
+                            <i class="recommend" *ngIf="data.is_recommended === 1">荐</i>
                         </div>
-                    </td>
-                    <td *ngIf='!data.images||data.images.length===0'>
-                        <img src="/assets/images/image_space_3_2.png"/>
                     </td>
                     <td> {{data.parking_name}}</td>
                     <td>
@@ -64,6 +69,14 @@
                         <a [title]="'服务配置'" [routerLink]="['../service-config-edit',data.parking_id]">服务配置</a>
                         <a [title]="'查看详情'" [routerLink]="['../service-config-detail',data.parking_id]">查看详情</a>
                         <a [title]="'删除'" (appZDebounceClick)='onDeleteProduct(data)'>删除</a>
+                        <a [title]="'取消推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 1">
+                            取消推荐
+                        </a>
+                        <a [title]="'设为推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 2">
+                            设为推荐
+                        </a>
                     </td>
                 </tr>
                 </tbody>
