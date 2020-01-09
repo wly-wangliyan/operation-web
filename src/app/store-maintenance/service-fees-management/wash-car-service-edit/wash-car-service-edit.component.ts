@@ -124,6 +124,7 @@ export class WashCarServiceEditComponent implements OnInit {
       const specificationList = this.washServiceConfig.specification_info
         .filter(specification => specification.car_type === 1);
       specificationList.forEach(specification => {
+        specification.sale_fee = Number((specification.sale_fee / 100).toFixed(2)) || null;
         this.specificationList.push(specification.clone());
       });
     }
@@ -137,6 +138,7 @@ export class WashCarServiceEditComponent implements OnInit {
       const specificationList_2 = this.washServiceConfig.specification_info
         .filter(specification => specification.car_type === 2);
       specificationList_2.forEach(specification => {
+        specification.sale_fee = Number((specification.sale_fee / 100).toFixed(2)) || null;
         this.tempSpecificationList_2.push(specification.clone());
       });
     }
@@ -247,12 +249,39 @@ export class WashCarServiceEditComponent implements OnInit {
 
   public onFormSubmit(): void {
     if (this.generateAndCheckParamsValid()) {
-      console.log('8888');
+      this.washCarService.requestEditWashCarServiceConfigData(this.editParams).subscribe(() => {
+        this.globalService.promptBox.open('保存成功', () => {
+          this.onCancelClick();
+        });
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+            for (const content of error.errors) {
+              if (content.resource === 'specification_info' && content.code === 'count_beyond') {
+                this.globalService.promptBox.open('不同车型最多五个规格!', null, 2000, null, false);
+                return;
+              } else if (content.resource === 'specification_info' && content.code === 'specification_name_repeat') {
+                this.globalService.promptBox.open('规格名称不可重复!', null, 2000, null, false);
+                return;
+              } else {
+                this.globalService.promptBox.open('保存失败，请重试!', null, 2000, null, false);
+                return;
+              }
+            }
+          } else if (err.status === 422) {
+            this.globalService.promptBox.open('配置不存在!', null, 2000, null, false);
+            return;
+          }
+        }
+      });
     }
   }
 
   private generateAndCheckParamsValid(): boolean {
     this.editParams = new WashCarServiceConfigEntity();
+    this.editParams.service_introduce = this.washServiceConfig.service_introduce;
+    this.editParams.wash_car_service_config_id = this.washServiceConfig.wash_car_service_config_id;
     // 校验基础价格
     let result = true;
     this.basePrice_1.forEach((price, index) => {
@@ -270,7 +299,6 @@ export class WashCarServiceEditComponent implements OnInit {
     if (!result) {
       return false;
     }
-    console.log(2, this.basePrice_2);
     this.basePrice_2.forEach((price, index) => {
       if (price.original_unit_fee < price.buy_unit_fee) {
         if (price.car_type === 1) {
@@ -283,62 +311,31 @@ export class WashCarServiceEditComponent implements OnInit {
       }
       this.editParams.base_price_info.push(price.toEditJson());
     });
-    console.log(this.editParams);
     if (!result) {
       return false;
     }
     let car_name = this.selectedTabIndex === 1 ? '5座小型车' : 'SUV/MPV';
-    const validSpecification = this.selectedTabIndex === 1 ? this.tempSpecificationList_2 : this.tempSpecificationList_1;
+
     // 校验规格设置
-    this.tempSpecificationNameList = [];
-    this.specificationList.forEach((specification, index) => {
-      if (this.tempSpecificationNameList.includes(specification.specification_name)) {
-        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-规格名称重复！`;
-        result = false;
-        return;
-      } else if (!specification.base_num && !specification.base_wax_num) {
-        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-规格配置之和至少等于1！`;
-        result = false;
-        return;
-      } else if (!specification.sale_fee) {
-        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-售价应大于0！`;
-        result = false;
-        return;
-      } else if (specification.original_fee < specification.sale_fee) {
-        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-售价应小于等于原价！`;
-        result = false;
-        return;
-      } else if (!specification.valid_date_type) {
-        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请选择有效期类型！`;
-        result = false;
-        return;
-      } else {
-        if (specification.valid_date_type === 1 && !specification.valid_period) {
-          this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-有效期时长应大于0！`;
-          result = false;
-          return;
-        } else if (specification.valid_date_type === 2) {
-          if (!specification.valid_date_start) {
-            this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请选择有效期开始日期！`;
-            result = false;
-            return;
-          } else if (!specification.valid_date_end) {
-            this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请选择有效期结束日期！`;
-            result = false;
-            return;
-          }
-        }
-      }
-      if (result) {
-        this.tempSpecificationNameList.push(specification.specification_name);
-      }
-    });
-    if (!result) {
+    if (!this.validSpecificationInfo(car_name, this.specificationList)) {
       return false;
     }
     car_name = this.selectedTabIndex === 1 ? 'SUV/MPV' : '5座小型车';
-
+    const validSpecification = this.selectedTabIndex === 1 ? this.tempSpecificationList_2 : this.tempSpecificationList_1;
     // 校验规格设置
+    if (!this.validSpecificationInfo(car_name, validSpecification)) {
+      return false;
+    }
+
+    this.removeList.forEach(removeItem => {
+      this.editParams.specification_info.push(removeItem.toEditJson());
+    });
+    this.tempSpecificationNameList = [];
+    return result;
+  }
+
+  private validSpecificationInfo(car_name: string, validSpecification: Array<WashCarSpecificationEntity>): boolean {
+    let result = true;
     this.tempSpecificationNameList = [];
     validSpecification.forEach((specification, index) => {
       if (this.tempSpecificationNameList.includes(specification.specification_name)) {
@@ -381,8 +378,8 @@ export class WashCarServiceEditComponent implements OnInit {
       if (result) {
         this.tempSpecificationNameList.push(specification.specification_name);
       }
+      this.editParams.specification_info.push(specification.toEditJson());
     });
-    this.tempSpecificationNameList = [];
     return result;
   }
 }

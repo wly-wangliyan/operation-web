@@ -48,9 +48,9 @@ export class BasePriceEntity extends EntityBase {
   }
 
   public toEditJson() {
-    const json = this.json();
-    json.original_unit_fee = json.original_unit_fee * 100;
-    json.buy_unit_fee = json.buy_unit_fee * 100;
+    const json = this.clone().json();
+    json.original_unit_fee = Math.ceil(json.original_unit_fee * 100);
+    json.buy_unit_fee = Math.ceil(json.buy_unit_fee * 100);
     return json;
   }
 }
@@ -73,7 +73,7 @@ export class WashCarSpecificationEntity extends EntityBase {
   public valid_period: number = undefined; // 有效期---1：下单日期起有效
   public valid_period_unit: string = undefined; // 有效期单位---1：下单日期起有效 day:天 month：月 year：年
   public status: number = undefined; // 规格开关 1:开启 2:关闭
-  public is_deleted: boolean = undefined; // 是否删除
+  public is_deleted = false; // 是否删除
   public time: number = undefined; // 时间戳
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
@@ -86,8 +86,8 @@ export class WashCarSpecificationEntity extends EntityBase {
   }
 
   public toEditJson() {
-    const json = this.json();
-    json.sale_fee = json.sale_fee * 100;
+    const json = this.clone().json();
+    json.sale_fee = Math.ceil(json.sale_fee * 100);
     json.valid_date_start = json.valid_date_start ? json.valid_date_start / 1000 : '';
     json.valid_date_end = json.valid_date_end ? json.valid_date_end / 1000 : '';
     return json;
@@ -111,6 +111,16 @@ export class WashCarServiceConfigService {
   public requestWashCarServiceConfigData(): Observable<WashCarServiceConfigEntity> {
     const httpUrl = `${this.domain}/admin/wash_car_service_config`;
     return this.httpService.get(httpUrl).pipe(map(res => WashCarServiceConfigEntity.Create(res.body)));
+  }
+
+  /**
+   * 编辑洗车服务配置
+   * @param editParams WashCarServiceConfigEntity
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditWashCarServiceConfigData(editParams: WashCarServiceConfigEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/wash_car_service_config`;
+    return this.httpService.put(httpUrl, editParams);
   }
 
   /**
