@@ -200,6 +200,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const box = document.getElementById('box' + index);
     const fa = document.getElementById('father' + index);
     // 图片移动效果
+    this.mouseDownSubscription && this.mouseDownSubscription.unsubscribe();
     this.mouseDownSubscription = fromEvent(box, 'mousedown').subscribe((e: any) => {
       let oEvent = e;
       // 浏览器有一些图片的默认事件,这里要阻止
