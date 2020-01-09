@@ -1,0 +1,190 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'服务管理'" [level1RelativePath]="'../'" [level2Name]="'洗车服务配置'"></app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow">
+
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>基础价格</span>
+        </label>
+        <div class="table-item base-table">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>车型</th>
+                <th>单价</th>
+                <th>结算价</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="height: 10px;">
+                <td style="height: 10px" colspan="4"></td>
+              </tr>
+              <tr *ngFor="let data of basePrice_1;let i=index">
+                <td [attr.rowspan]="basePrice_1.length" *ngIf="basePrice_1.length&&i === 0">
+                  {{data.service_type|washCarCouponType}}</td>
+                <td>{{data.car_type|washCarType}}</td>
+                <td>
+                  <div class="price-group">
+                    <input name="original_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.original_unit_fee"
+                      placeholder="0-99999" (blur)="onPriceChange()" [appMaxNumber]='99999' maxlength='8'
+                      class="form-control" appFloatNumber required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="buy_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.buy_unit_fee"
+                      class="form-control" placeholder="0-99999" appFloatNumber [appMaxNumber]='99999' maxlength='8'
+                      required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+              </tr>
+              <tr style="height: 10px;">
+                <td style="height: 10px;padding: 0;" colspan="4">
+                  <div class="table-line"></div>
+                </td>
+              </tr>
+              <tr *ngFor="let data of basePrice_2;let j=index">
+                <td [attr.rowspan]="basePrice_2.length" *ngIf="basePrice_2.length&&j === 0">
+                  {{data.service_type|washCarCouponType}}</td>
+                <td>{{data.car_type|washCarType}}</td>
+                <td>
+                  <div class="price-group">
+                    <input name="original_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.original_unit_fee"
+                      placeholder="0-99999" (blur)="onPriceChange()" class="form-control" appFloatNumber
+                      [appMaxNumber]='99999' maxlength='8' required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="buy_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.buy_unit_fee"
+                      class="form-control" placeholder="0-99999" appFloatNumber [appMaxNumber]='99999' maxlength='8'
+                      required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>规格设置</span>
+        </label>
+        <div class="table-item specification-table">
+          <div class="tab-bar-list">
+            <nz-radio-group name="tab-radio" [nzButtonStyle]="'solid'" [(ngModel)]="selectedTabIndex"
+              (ngModelChange)="onTabChange($event)">
+              <label *ngFor="let tab of tabs;let i=index" nz-radio-button [nzValue]="tab.key">{{tab.value}}</label>
+            </nz-radio-group>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>规格名称</th>
+                <th>规格配置</th>
+                <th>原价</th>
+                <th>售价</th>
+                <th>库存</th>
+                <th>有效期</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of specificationList;let j=index">
+                <td>
+                  <input name="specification_name_{{data.time}}" placeholder="输入1-20字规格名称"
+                    [(ngModel)]="data.specification_name" class="form-control" maxlength="20" appIgnoreSpace required />
+                </td>
+                <td>
+                  <div class="column-box">
+                    <div class="price-group">
+                      <label class="eight-word-lable">标准洗车</label>
+                      <input name="base_num_{{data.time}}" [(ngModel)]="data.base_num" (blur)="onPriceChange()"
+                        class="form-control" [appMaxNumber]='99999' appIntNumber="true" required />
+                      <label class="one-word-lable">次</label>
+                    </div>
+                    <div class="price-group">
+                      <label class="eight-word-lable">标准洗车+打蜡</label>
+                      <input name="base_wax_num_{{data.time}}" [(ngModel)]="data.base_wax_num" (blur)="onPriceChange()"
+                        class="form-control" [appMaxNumber]='99999' appIntNumber="true" required />
+                      <label class="one-word-lable">次</label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="original_fee_{{data.time}}" [(ngModel)]="data.original_fee" class="form-control"
+                      maxlength="8" appFloatNumber [appMaxNumber]='99999' required disabled />
+                    <label class="one-word-lable disabled-word">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="sale_fee_{{data.time}}" [(ngModel)]="data.sale_fee" class="form-control" appFloatNumber
+                      placeholder="0-99999" [appMaxNumber]='99999' maxlength='8' required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="store_{{data.time}}" [(ngModel)]="data.store" class="form-control" appIntNumber="true"
+                      maxlength='8' required />
+                  </div>
+                </td>
+                <td></td>
+                <td>
+                  <div class="button-group">
+                    <button class="add-btn" type="button" (click)="onAddClick()"
+                      *ngIf="specificationList.length===(j+1)" [disabled]="specificationList.length>=5">添加</button>
+                    <button *ngIf="specificationList.length>1 || j > 0" class="remove-btn" type="button"
+                      (click)="onDeleteClick(data,j)">移除</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;&nbsp;</b>
+          <span>通用店铺</span>
+        </label>
+        <div class="control-input shop-box">
+          <span *ngFor="let shop of repairShopList">{{shop.repair_shop_name}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>服务说明</span>
+        </label>
+        <div class="control-input">
+          <textarea name="service_introduce" [(ngModel)]="washServiceConfig.service_introduce" class="form-control"
+            placeholder="输入0-200字" maxlength="200">
+
+          </textarea>
+        </div>
+      </div>
+      <div style="margin-top: 40px;margin-bottom: 40px">
+        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid"
+          (appZDebounceClick)="onFormSubmit()">保存
+        </button>
+        <button class="close-btn" nz-button (click)="onClose()">取消</button>
+      </div>
+    </form>
+  </div>
+</div>
