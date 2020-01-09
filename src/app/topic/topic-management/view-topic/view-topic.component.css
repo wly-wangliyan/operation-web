@@ -76,7 +76,7 @@
     background: rgba(62, 113, 247, 0.1);
     border-radius: 20px;
     padding: 20px;
-
+    overflow-y: auto;
 }
 
 .negative {
@@ -85,7 +85,7 @@
     background: rgba(232, 32, 56, 0.1);
     border-radius: 20px;
     padding: 20px;
-
+    overflow-y: auto;
 }
 
 ul {
