@@ -2,9 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription, Subject, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../core/global.service';
-import { ServiceConfigService, ParkingEntity, ParkingSearchParams } from '../service-config.service';
+import { HttpErrorEntity } from '../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { AddCarParkingComponent } from './add-car-parking/add-car-parking.component';
+import {
+    ServiceConfigService,
+    ParkingEntity,
+    ParkingSearchParams,
+    RecommendStatusParams
+} from '../service-config.service';
 
 const PageSize = 15;
 
@@ -28,8 +34,6 @@ export class ServiceConfigListComponent implements OnInit {
     private linkUrl: string; // 分页url
 
     private searchText$ = new Subject<any>();
-
-    private requestSubscription: Subscription; // 获取数据
 
     private continueRequestSubscription: Subscription; // 分页获取数据
 
@@ -84,6 +88,36 @@ export class ServiceConfigListComponent implements OnInit {
             }, err => {
                 this.globalService.httpErrorProcess(err);
             });
+        });
+    }
+
+    // 修改停车场被推荐状态
+    public requestChangeRecommendStatus(data: ParkingEntity) {
+        const msg = (data.is_recommended === 1) ? '取消推荐' : '设为推荐';
+        const recommendStatusParams = new RecommendStatusParams();
+        recommendStatusParams.recommend_status = (data.is_recommended === 1) ? 2 : 1;
+
+        this.serviceConfigService.requestChangeRecommendStatusData(data.parking_id, recommendStatusParams).subscribe(() => {
+            this.globalService.promptBox.open(msg + '成功', () => {
+                this.searchText$.next();
+            });
+        }, err => {
+            if (!this.globalService.httpErrorProcess(err)) {
+                let errMsg = '操作失败，请重试！';
+
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                    for (const content of error.errors) {
+                        if (content.field === 'recommend_status' && content.code === 'missing_field') {
+                            errMsg = '推荐状态参数缺失！';
+                        } else if (content.field === 'recommend_status' && content.code === 'invalid') {
+                            errMsg = '推荐状态参数错误或无效！';
+                        }
+                    }
+                }
+                this.globalService.promptBox.open(errMsg, null, 2000, null, false);
+            }
         });
     }
 

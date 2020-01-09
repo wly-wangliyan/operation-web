@@ -37,10 +37,6 @@
   padding: 0 !important;
 }
 
-.search_row div {
-  float: left;
-}
-
 .search_row select {
   width: 140px;
   line-height: 34px;
@@ -52,6 +48,7 @@
 }
 
 .search_row .search_time {
+  float: left;
   margin-right: 25px;
 }
 
