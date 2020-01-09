@@ -9,9 +9,10 @@ import {
 } from '../topic-management-http.service';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from 'src/app/core/global.service';
-import { timer } from 'rxjs';
+import { timer, Subscription, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+const PageSize = 15;
 @Component({
   selector: 'app-view-topic',
   templateUrl: './view-topic.component.html',
@@ -29,6 +30,19 @@ export class ViewTopicComponent implements OnInit {
   public isMore = false;
   public positiveList: Array<CommentEntity> = [];
   public negativeList: Array<CommentEntity> = [];
+
+  public positivePageIndex = 1; // 当前页码
+  public negativePageIndex = 1; // 当前页码
+  public noResultText = '数据加载中...';
+
+  private requestSubscription: Subscription; // 获取数据
+  private searchText$ = new Subject<any>();
+  private continueRequestSubscription: Subscription; // 分页获取数据
+  private linkUrl: string; // 分页url
+
+  private get pageCount(): number {
+    return Math.ceil(this.commentList.length / PageSize);
+  }
 
   constructor(
     private service: TopicManagementHttpService,
@@ -68,25 +82,64 @@ export class ViewTopicComponent implements OnInit {
 
     this.service.requestCommentList(this.commentSearchParams).subscribe(res => {
       this.commentList = res.results;
+      this.linkUrl = res.linkUrl;
 
-      this.commentList.map(item => {
-        if (item.standpoint === this.viewPointList[0].viewpoint_id) {
-          this.positiveList.push(item);
-        }
-      });
-      this.commentList.map(item => {
-        if (item.standpoint === this.viewPointList[1].viewpoint_id) {
-          this.negativeList.push(item);
-        }
-      });
-
+      this.formatArray();
       // this.negativeList.push(this.commentList.find(item => item.standpoint === this.viewPointList[1].viewpoint_id));
       // this.positiveList.push(this.commentList.find(item => item.standpoint === this.viewPointList[0].viewpoint_id));
-      console.log('this.negativeList', this.negativeList);
-      console.log('this.positiveList', this.positiveList);
+      console.log('this.negativeList1', this.negativeList);
+      console.log('this.positiveList1', this.positiveList);
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  /** 组装数据 */
+  private formatArray(): void {
+    this.commentList.map(item => {
+      if (item.standpoint === this.viewPointList[0].viewpoint_id) {
+        this.positiveList.push(item);
+      }
+    });
+    this.commentList.map(item => {
+      if (item.standpoint === this.viewPointList[1].viewpoint_id) {
+        this.negativeList.push(item);
+      }
+    });
+  }
+
+  // 翻页方法
+  public onPositiveNZPageIndexChange(pageIndex: number) {
+    this.positivePageIndex = pageIndex;
+    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+      // 当存在linkUrl并且快到最后一页了请求数据
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.linkUrl).subscribe(res => {
+        this.commentList = [...this.commentList, ...res.results];
+        this.linkUrl = res.linkUrl;
+        this.formatArray();
+
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }
+  }
+
+  // 翻页方法
+  public onNegativePositiveNZPageIndexChange(pageIndex: number) {
+    this.negativePageIndex = pageIndex;
+    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+      // 当存在linkUrl并且快到最后一页了请求数据
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.service.continueRequestTopicListData(this.linkUrl).subscribe(res => {
+        this.commentList = [...this.commentList, ...res.results];
+        this.formatArray();
+
+        this.linkUrl = res.linkUrl;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+    }
   }
 
   /** 获取观点列表 */
@@ -95,7 +148,6 @@ export class ViewTopicComponent implements OnInit {
     this.service.requestViewpointList(this.viewPointSearchParams).subscribe(res => {
       this.viewPointList = res.results;
       console.log(this.viewPointList);
-
       this.getCommentList();
 
     }, err => {

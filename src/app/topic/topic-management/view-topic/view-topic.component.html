@@ -40,7 +40,7 @@
         </div>
         <div class="viewpoint-list">
             <div class="positive">
-                <ul *ngIf="positiveList.length>0">
+                <!-- <ul *ngIf="positiveList.length>0">
                     <li *ngFor="let positive of positiveList">
                         <span class="avatar">
                             <img [src]="positive.avatar">
@@ -51,11 +51,32 @@
                             <div class="time">{{positive.created_time*1000|date:'yyyy-MM-dd HH:mm:ss'}}</div>
                         </span>
                     </li>
-                </ul>
+                </ul> -->
+                <div *ngIf="positiveList.length>0">
+                    <nz-table [nzData]="positiveList" [nzShowPagination]="true" [nzPageSize]="'15'"
+                        (nzPageIndexChange)="onPositiveNZPageIndexChange($event)" [(nzPageIndex)]="positivePageIndex"
+                        #positiveTable [nzHideOnSinglePage]='true'>
+                        <tbody>
+                            <tr *ngFor="let positive of positiveTable.data; let i=index" style="text-align: left;">
+                                <td [nzAlign]='left' style="display: flex;">
+                                    <span class="avatar">
+                                        <img [src]="positive.avatar">
+                                    </span>
+                                    <span class="point-info">
+                                        <div>{{positive.nickname}}</div>
+                                        <div class="comment">{{positive.comment_content}}</div>
+                                        <div class="time">{{positive.created_time*1000|date:'yyyy-MM-dd HH:mm'}}
+                                        </div>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
                 <span *ngIf="positiveList.length===0">暂无评论</span>
             </div>
             <div class="negative">
-                <ul *ngIf="negativeList.length>0">
+                <!-- <ul *ngIf="negativeList.length>0">
                     <li *ngFor="let negative of negativeList">
                         <span class="avatar">
                             <img [src]="negative.avatar">
@@ -66,7 +87,28 @@
                             <div class="time">{{negative.created_time*1000|date:'yyyy-MM-dd HH:mm:ss'}}</div>
                         </span>
                     </li>
-                </ul>
+                </ul> -->
+                <div *ngIf="negativeList.length>0">
+                    <nz-table [nzData]="negativeList" [nzShowPagination]="true" [nzPageSize]="'15'"
+                        (nzPageIndexChange)="onNegativePositiveNZPageIndexChange($event)" [nzBordered]='false'
+                        [(nzPageIndex)]="negativePageIndex" #negativeTable [nzHideOnSinglePage]='true'>
+                        <tbody>
+                            <tr *ngFor="let negative of negativeTable.data; let i=index" style="text-align: left;">
+                                <td [nzAlign]='left' style="display: flex;">
+                                    <span class="avatar">
+                                        <img [src]="negative.avatar">
+                                    </span>
+                                    <span class="point-info">
+                                        <div>{{negative.nickname}}</div>
+                                        <div class="comment">{{negative.comment_content}}</div>
+                                        <div class="time">{{negative.created_time*1000|date:'yyyy-MM-dd HH:mm'}}
+                                        </div>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
                 <span *ngIf="negativeList.length===0">暂无评论</span>
             </div>
         </div>
