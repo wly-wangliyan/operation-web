@@ -1,0 +1,275 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'运营配置'" [level2Name]="'幸运抽奖'" [level3Name]="'编辑抽奖活动'" [level2RelativePath]="'../'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="content-container">
+        <div class="tab-bar-list">
+            <ul>
+                <li [class.tab-active]="tabIndex===1" (click)="onTabChange(1)">
+                    <i></i>1. 活动设置</li>
+                <img src="/assets/images/icon_go_right.png">
+                <li [class.tab-active]="tabIndex===2" (click)="onTabChange(2)">
+                    <i></i>2. 奖项设置</li>
+            </ul>
+        </div>
+        <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" #editPushModal="ngForm">
+            <div *ngIf="tabIndex===1" style="margin-bottom: 10px">
+                <div class="break-line">
+                    <span>基本设置</span>
+                    <div></div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>活动名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.push_plan_name"
+                               name="push_plan_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>活动时间</span>
+                    </label>
+                    <div class="control-input">
+                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                        name='online_start_time' nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                        <span style="margin: 0 5px">至</span>
+                        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+                                        name='online_start_time' nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    </div>
+                </div>
+                <div class="row row-message" style="height: 20px">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.push_plan_rank?.isError">{{errPositionItem?.push_plan_rank?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>参与用户身份</span>
+                    </label>
+                    <nz-radio-group [(ngModel)]="pushParams.push_range" name="push_range">
+                        <label nz-radio nzValue=1>所有用户</label>
+                    </nz-radio-group>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>参与次数</span>
+                    </label>
+                    <div class="push-rate">
+                        <span>每隔</span>
+                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="0-999"
+                               maxlength="3" autocomplete="off" required appIntNumber="true">
+                        <label>日</label>
+                        <span>可参与，每日可参与上限</span>
+                        <input class="form-control" [(ngModel)]="pushParams.push_num_everyday" name="push_num_everyday"
+                               placeholder="1-999" maxlength="3" (change)="errPositionItem.push_speed.isError=false" autocomplete="off"
+                               oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
+                        <label>次</label>
+                        <span>，最大可参与上限</span>
+                        <input class="form-control" [(ngModel)]="pushParams.push_num" name="push_num" placeholder="1-999"
+                               maxlength="3" (change)="errPositionItem.push_speed.isError=false" autocomplete="off"
+                               oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
+                        <label>次</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;</b>
+                        <span>分享设置</span>
+                    </label>
+                    <label nz-checkbox [(ngModel)]="pushParams.push_speed_type" name="push_speed_type">每人首次分享后额外参与1次</label>
+                </div>
+            </div>
+            <div *ngIf="tabIndex===1">
+                <div class="break-line">
+                    <span>活动展示效果</span>
+                    <div></div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>活动封面图</span>
+                    </label>
+                    <div class="control-input">
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+                                            [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                            [imageWidth]="203" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="2.03/1"
+                                            [minCropBoxWidth]="300" [minCropBoxHeight]="148" [resizable]="true">
+                        </app-z-photo-select>
+                        <div class="message">
+                            <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                            <span class="cover-hint">注：尺寸750 × 370px，格式PNG/JPG/GIF，大小2M以内</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>活动规则</span>
+                    </label>
+                    <div class="control-input">
+                        <textarea class="form-control" rows="4" placeholder="请输入活动规则" [(ngModel)]="pushParams.description"
+                            name="description" maxlength="100">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>微信好友分享标题</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.description"
+                                  name="description" maxlength="20">
+                    </div>
+                </div>
+                <div>
+                    <div class="row row-image">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>微信好友分享图</span>
+                        </label>
+                        <div class="control-input" style="width: 435px">
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg1"
+                                                [imageWidth]="125" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1.25/1"
+                                                [minCropBoxWidth]="270" [minCropBoxHeight]="216" [resizable]="true" [imageAddHeight]="100">
+                            </app-z-photo-select>
+                            <div class="message">
+                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                <span class="cover-hint">注：尺寸135 × 108px，格式PNG或JPG，大小2M以内</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-image">
+                        <label class=" control-label">
+                            <b>&nbsp;</b>
+                            <span>微信朋友圈分享海报</span>
+                        </label>
+                        <div class="control-input"  style="width: 435px">
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg2"
+                                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
+                                                [minCropBoxWidth]="300" [minCropBoxHeight]="300" [resizable]="true">
+                            </app-z-photo-select>
+                            <div class="message">
+                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer" style="width: 70%">
+                    <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" type="button" nz-button nzType="primary"
+                            [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="tabIndex===2">
+                <div class="prize-title">
+                    <span>所奖品的中奖概率相加不可大于100%，100% - 奖项概率之和 = 未中奖概率，最多可添加7个奖项</span>
+                    <button nz-button nzType="primary" (click)="onAddPrizeClick()">
+                        <img src="/assets/images/tag_add.png">添加奖品
+                    </button>
+                </div>
+                <nz-table [nzData]="prizeList" [nzPageSize]="prizeList.length" nzBordered
+                          [nzShowPagination]="false" [nzNoResult]="noResultText" #configTable>
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>奖品</th>
+                        <th>图片</th>
+                        <th>总数</th>
+                        <th>已发放</th>
+                        <th>剩余数量</th>
+                        <th>中奖概率</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of configTable.data; let i=index">
+                        <td [title]="data.promotion_name?data.promotion_name:''">
+                            {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
+                        <td>
+                        <td [title]="data.promotion_name?data.promotion_name:''">
+                            {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
+                        <td>
+                        <td>
+                            <img *ngIf='!data.image' style="width: 150px;" src="/assets/images/space_config.png">
+                            <img *ngIf='data.image' style="width: 150px;" [src]="data.image">
+                        </td>
+                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td class="operation">
+                            <a [title]="'编辑'">编辑</a>
+                            <a [title]="'删除'">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b style="color: red">*</b>
+                            未中奖设置
+                        </td>
+                        <td [colSpan]="6">
+                            <div class="row no-prize-setting">
+                                <label class="control-label">
+                                    <span>名称</span>
+                                </label>
+                                <div class="control-input">
+                                    <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="pushParams.push_plan_name"
+                                           name="push_plan_name" maxlength="6" autocomplete="off" required appIgnoreSpace>
+                                </div>
+                                <label class="control-label" style="margin-left: 50px">
+                                    <span>提示语</span>
+                                </label>
+                                <div class="control-input">
+                                    <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.push_plan_name"
+                                           name="push_plan_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="control-label" style="width: 60px!important;">
+                                    <span>图片</span>
+                                </label>
+                                <div class="control-input">
+                                    <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                        [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                                        [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
+                                                        [minCropBoxWidth]="160" [minCropBoxHeight]="160" [resizable]="true">
+                                    </app-z-photo-select>
+                                    <div class="message">
+                                        <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                        <span class="cover-hint">注：尺寸160 × 160px，格式PNG或JPG，大小2M以内</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="operation">
+                            <button type="button" nz-button nzType="primary"
+                                    [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </nz-table>
+               <!-- <div class="footer">
+                    <button class="close-btn" type="button" nz-button (click)="onClose()">上一步</button>
+                    <button class="sure-btn" type="button" nz-button nzType="primary"
+                            [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                </div>-->
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--创建、编辑奖品-->
+<app-prize-create></app-prize-create>

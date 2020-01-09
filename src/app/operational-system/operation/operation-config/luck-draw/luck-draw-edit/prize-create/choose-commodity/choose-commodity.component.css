@@ -1,0 +1,73 @@
+.modal-dialog, .modal-content {
+    height: 510px;
+    width: 800px;
+    min-width: 800px;
+    min-height: 500px;
+    margin-top: 90px;
+}
+
+.modal-dialog-specification, .modal-content-specification {
+    height: 360px;
+    width: 600px!important;
+    min-width: 600px;
+    min-height: 360px;
+    margin-top: 150px;
+}
+
+.search-container {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+    padding: 0;
+}
+
+.search-btn-group {
+    margin-top: -1px !important;
+}
+
+.content-flow {
+    overflow-y: hidden;
+    margin-top: 10px;
+    background-color: #fff!important;
+}
+
+.button-container {
+    position: relative;
+    top: -64px;
+}
+
+.button-container button {
+    width: 100px;
+    height: 34px;
+    margin-left: 15px;
+}
+
+.img-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.img-box {
+    width: 90px;
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.img-box img {
+    width: 70px;
+}
+
+:host ::ng-deep.ant-radio-input {
+    width: 15px;
+    height: 15px;
+}
+
+.choose-specification-active {
+    color: #3E71F7;
+}
+
+.zmy-table nz-table {
+    background-color: #fff;
+}

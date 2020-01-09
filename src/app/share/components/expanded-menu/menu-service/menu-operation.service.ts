@@ -74,8 +74,10 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('优惠券跳转页', '/main/operation/other-operation-config/coupon-jump', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
-    const subFinanceMenu3 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('幸运抽奖', '/main/operation/operation-config/luck-draw', systemMenu);
     systemMenu.children.push(subFinanceMenu3);
+    const subFinanceMenu4 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
+    systemMenu.children.push(subFinanceMenu4);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

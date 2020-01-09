@@ -1,0 +1,79 @@
+.search-container, .statistics-space {
+    margin-left: 15px;
+    width: calc(100% - 30px);
+    padding: 0;
+}
+
+.statistics-space {
+    display: inline-flex;
+    border: 1px solid #888888;
+    border-bottom: none;
+    height: 120px;
+}
+
+.statistics-space div {
+    display: grid;
+    text-align: center;
+    font-size: 14px;
+    line-height: 60px;
+}
+
+.statistics-space-prize {
+    width: 25%;
+}
+
+.statistics-space-prize div {
+    display: inline-flex;
+}
+
+.statistics-space-prize div > span:last-child {
+    font-size: 24px;
+    font-weight: 500;
+    color: #23242F!important;
+    margin-left: 20px;
+}
+
+.statistics-space div:first-child > span:first-child {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.statistics-space div:first-child > span:last-child {
+    color:rgba(102,102,102,1);
+}
+
+.statistics-space-prize > div:first-child > label {
+    width: 10px;
+    height: 10px;
+    background: #F5A623;
+    margin: 25px 10px;
+    border-radius: 10px;
+}
+
+.statistics-space-prize > div:nth-child(2) > label {
+    width: 10px;
+    height: 10px;
+    background: #67C23A;
+    margin: 25px 10px;
+    border-radius: 10px;
+}
+
+.tip-color div:first-child > label {
+    background: #E82038;
+}
+
+.tip-color div:last-child > label {
+    background: #3E71F7;
+}
+
+.search-btn-group {
+    margin-top: -1px !important;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper {
+    width: 190px!important;
+}
+
+.line {
+    margin: 0 5px;
+}

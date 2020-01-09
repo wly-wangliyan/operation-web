@@ -1,0 +1,50 @@
+.modal {
+    z-index: 1000;
+}
+
+.row-message {
+    margin-top: -6px !important;
+    height: 14px !important;
+}
+
+.row-message .err-message {
+    margin-top: -12px !important;
+}
+
+.form-control {
+    background: #f8f9fb ;
+}
+
+select {
+    width: 130px !important;
+    background: #fff !important;
+}
+
+.message {
+    display: inline-grid;
+    margin-top: 60px;
+}
+
+.message span:first-child {
+    color: #E82038;
+    text-align: left;
+}
+
+.cover-hint {
+    font-size:14px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    color: #23242F!important;
+}
+
+.unit input {
+    width: 100px;
+}
+
+.unit label {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    border: 1px solid rgba(136, 136, 136, 0.3);
+    border-left: none;
+}

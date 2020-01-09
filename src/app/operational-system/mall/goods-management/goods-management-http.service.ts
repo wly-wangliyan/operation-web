@@ -94,7 +94,7 @@ export class CommodityEntity extends EntityBase {
   public cover_image = ''; // 封面图片
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'specification') {
+    if (propertyName === 'specifications') {
       return SpecificationEntity;
     }
     return null;

@@ -1,0 +1,129 @@
+<!--选择商品-->
+<div class="modal fade" id="addCommodityModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #addCommodityPromptDiv>
+    <div class="modal-dialog modal-dialog-common" role="document">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">选择商品</span>
+                <button type="button" class="close" (click)="onClose()">&times;
+                </button>
+            </div>
+            <div class="content-flow">
+                <div class="search-container">
+                    <form class="search-form">
+                        <div>
+                            <div class="form-group">
+                                <span>名称：</span>
+                                <input class="form-control" placeholder="请输入名称" autocomplete="off" name="commodity_name"
+                                       [(ngModel)]="searchParams.commodity_name" maxlength="50" appIgnoreSpace />
+                                <div class="search-btn-group">
+                                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <div class="zmy-table">
+                        <nz-table [nzData]="commodityList" [nzShowPagination]="true" [nzNoResult]="noResultText"
+                                  [nzPageSize]="'15'" (nzPageIndexChange)="onNZPageIndexChange($event)"
+                                  [(nzPageIndex)]="pageIndex" #basicTable [nzScroll]="{ y: '240px' }">
+                            <thead>
+                            <tr>
+                                <th nzWidth="3%" nzAlign="center">&nbsp;</th>
+                                <th nzWidth="35%">奖品</th>
+                                <th nzWidth="30%">规格</th>
+                                <th nzWidth="17%">所属分类</th>
+                                <th nzWidth="15%">库存</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let commodity of basicTable.data; let i=index">
+                                    <td>
+                                        <label nz-radio style="width:5px;margin:0" (ngModelChange)="onCommodityRadioChange(commodity)"
+                                               [(ngModel)]="commodity.isChoose" name="commodity_id{{i}}"></label>
+                                    </td>
+                                    <td>
+                                        <div class="img-item">
+                                            <div class="img-box">
+                                                <ng-container *ngIf="commodity.source.commodity_images.length > 0">
+                                                    <img [src]="commodity.source.commodity_images[0]" />
+                                                </ng-container>
+                                                <ng-container *ngIf="commodity.source.commodity_images === 0">
+                                                    <img src="/assets/images/image_space_3_2.png" />
+                                                </ng-container>
+                                            </div>
+                                            <div style="display: grid">
+                                                <a style="word-break: keep-all;text-align: left"
+                                                   [title]="globalService.limitStrLengthTitle(commodity.source.commodity_name, 10)">
+                                                    {{commodity.source.commodity_name | zMaxLength:10}}
+                                                </a>
+                                                <span *ngIf="commodity.specification" style="text-align:left;color: #E82038">
+                                                    {{commodity.specification.unit_sell_price|centPriceChange:'¥ ':'left'}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td [class.choose-specification-active]="commodity.isChoose"
+                                        (click)="onChooseSpecificationClick(commodity)">
+                                        {{commodity.specification?'已选:'+commodity.specification.specification_name:commodity.isChoose?'选择规格':'--'}}
+                                        <img *ngIf="commodity.isChoose" src="/assets/images/icon_add_small.png">
+                                    </td>
+                                    <td>{{commodity.source.sort_name}}</td>
+                                    <td>{{commodity.specification?.stock?commodity.specification?.stock:'--'}}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+                <div class="button-container" *ngIf="commodityList.length > 0">
+                    <button class="sure-btn" nz-button nzType="primary" (click)="onAddCommodityClick()"
+                    [disabled]="!currentCommodity || !currentCommodity.specification">保存</button>
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--选择商品规格-->
+<div class="modal fade" id="addSpecificationModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #addSpecificationPromptDiv>
+    <div class="modal-dialog modal-dialog-common modal-dialog-specification" role="document">
+        <div class="modal-content modal-content-common modal-content-specification">
+            <div class="modal-header">
+                <span class="modal-title">选择规格</span>
+                <button type="button" class="close" data-dismiss="modal">&times;
+                </button>
+            </div>
+            <div class="content-flow">
+                <div class="table-container">
+                    <div class="zmy-table">
+                        <nz-table [nzData]="specificationList" [nzShowPagination]="false" [nzPageSize]="specificationList.length"
+                                  #specificationTable [nzScroll]="{ y: '220px' }">
+                            <thead>
+                            <tr>
+                                <th nzWidth="5%" nzAlign="center">&nbsp;</th>
+                                <th nzWidth="45%">规格名称</th>
+                                <th nzWidth="30%">售价</th>
+                                <th nzWidth="20%">库存</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let specification of specificationTable.data; let i=index">
+                                <td>
+                                    <label nz-radio style="width:5px;margin:0" (ngModelChange)="onSpecificationRadioChange(specification.source)"
+                                           [(ngModel)]="specification.isChoose" name="specification{{i}}" [nzDisabled]="specification.source.stock<=0"></label>
+                                </td>
+                                <td>{{specification.source.specification_name}}</td>
+                                <td>{{specification.source.unit_sell_price|centPriceChange:'¥ ':'left'}}</td>
+                                <td>{{specification.source.stock}}</td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

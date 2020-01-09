@@ -1,0 +1,197 @@
+.content-container {
+    margin-left: 15px;
+    padding: 10px 50px 50px 50px;
+}
+
+.row-message {
+    margin-top: -8px !important;
+}
+
+.row-message .err-message {
+    margin-top: -12px !important;
+}
+
+.message {
+    display: inline-grid;
+    margin-top: 60px;
+}
+
+.message span:first-child {
+    color: #E82038;
+    text-align: left;
+}
+
+.cover-hint {
+    font-size:14px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    color: #23242F!important;
+}
+
+.form-control {
+    background: #f8f9fb ;
+}
+
+.control-input {
+    margin-bottom: 0;
+    width: 50%;
+}
+
+.control-label {
+    margin-bottom: 0!important;
+    height: 45px!important;
+    line-height: 45px;
+    width: 153px!important;
+}
+
+.push-rate {
+    display: inline-flex;
+    line-height: 34px;
+    margin-top: 10px;
+}
+
+.push-rate label {
+    height: 34px;
+    width: 34px;
+    text-align: center;
+    line-height: 34px;
+    border: 0.5px solid rgba(136,136,136,.4);
+    background: #f8f9fb;
+    margin-right: 5px;
+    margin-left: -34px;
+}
+
+.push-rate label:last-child {
+    margin-right: 0;
+}
+
+.push-rate input {
+    width: 100px;
+    margin-left: 5px;
+}
+
+.push-rate select {
+    margin-right: 5px;
+}
+
+.push-rate span {
+    font-size: 14px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    color:rgba(8,17,32,1);
+}
+
+:host ::ng-deep.ant-calendar-picker {
+    width: 182px!important;
+}
+
+.break-line {
+    margin: 10px 0 0 -30px;
+}
+
+.break-line div {
+    width: 95%;
+    margin: 10px 0 15px 0 !important;
+    height:1px;
+    border:1px solid rgba(136,136,136,.5);
+}
+
+.footer {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.sure-btn {
+    margin-left: 50px;
+}
+
+:host ::ng-deep.ant-table-placeholder {
+    padding: 0;
+}
+
+.no-prize-setting > .control-input {
+  width: 230px;
+}
+
+.no-prize-setting > .control-label {
+    width: 60px!important;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper {
+    width: 190px!important;
+}
+
+.tab-bar-list {
+    width: 440px;
+    height: 64px;
+    padding: 0 32%;
+}
+
+.tab-bar-list ul {
+    margin-bottom: 0;
+    background-color: #F7F8FA;
+    display: inline-flex;
+    line-height: 64px;
+}
+
+.tab-bar-list ul > li {
+    text-align: center;
+    width: 220px;
+}
+
+.tab-bar-list ul > img {
+    height: 29px;
+    width: 14px;
+    margin-top: 18px;
+}
+
+.tab-active {
+    color: #3E71F7;
+}
+
+.tab-bar-list ul > li:first-child > i {
+    padding: 20px;
+    background: url("/assets/images/icon_active.png") center no-repeat;
+}
+
+.tab-bar-list ul > li:last-child > i {
+    padding: 20px;
+    background: url("/assets/images/icon_prize.png") center no-repeat;
+}
+
+.tab-bar-list ul > .tab-active:first-child > i {
+    padding: 20px;
+    background: url("/assets/images/icon_active_hover.png") center no-repeat!important;
+}
+
+.tab-bar-list ul > .tab-active:last-child > i {
+    padding: 20px;
+    background: url("/assets/images/icon_prize_hover.png") center no-repeat!important;
+}
+
+.row-image {
+    display: inline-flex;
+}
+
+.prize-title {
+    margin-bottom: 10px;
+    height: 32px;
+}
+
+.prize-title span {
+    color: #888888;
+    font-size: 12px;
+    line-height: 32px;
+}
+
+.prize-title button {
+    border-radius: 1px;
+    float: right;
+}
+
+.prize-title img {
+   margin-right: 5px;
+}
+
+.operation button {
+    outline: none;
+    border: none;
+}
