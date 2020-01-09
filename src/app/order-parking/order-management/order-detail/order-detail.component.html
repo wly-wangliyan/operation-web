@@ -72,10 +72,12 @@
           <td>预约停车场：</td>
           <td>{{orderRecord.parking_info?.parking_name ? orderRecord.parking_info.parking_name : '--'}}</td>
 
-          <td>车位类型</td>
-          <td *ngIf="orderRecord.spot_type === 1">室内车位</td>
-          <td *ngIf="orderRecord.spot_type === 2">室外车位</td>
-          <td *ngIf="orderRecord.spot_type !== 1 && orderRecord.spot_type !== 2">--</td>
+          <td>车位类型：</td>
+          <td>
+            <ng-container *ngIf="orderRecord.spot_type === 1">室内车位</ng-container>
+            <ng-container *ngIf="orderRecord.spot_type === 2">室外车位</ng-container>
+            <ng-container *ngIf="orderRecord.spot_type !== 1 && orderRecord.spot_type !== 2">--</ng-container>
+          </td>
 
           <td>地址：</td>
           <td>{{orderRecord.parking_info?.address ? orderRecord.parking_info.province+
