@@ -24,7 +24,7 @@
             <ng-container *ngIf="orderRecord.wash_car_specification">
               <span>{{orderRecord.wash_car_specification.specification_name}}</span>
               <span
-                *ngIf="orderRecord.wash_car_specification.car_type">{{'('+(orderRecord.wash_car_specification.car_type)+')'}}</span>
+                *ngIf="orderRecord.wash_car_specification.car_type">{{'('+(orderRecord.wash_car_specification.car_type|washCarType)+')'}}</span>
             </ng-container>
             <span *ngIf="!orderRecord.wash_car_specification">--</span>
           </td>
