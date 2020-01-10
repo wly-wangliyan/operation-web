@@ -194,9 +194,11 @@
                   *ngFor="let formatCommoditySpecification of FormatCommoditySpecificationList; let specificationIndex=index;">
                   <td>
                     <div class="td-content">
+                      <div *ngIf='specificationNameIndex===specificationIndex&&isTooltipShow'>此商品已作为赠品，请慎重修改规格内容！</div>
                       <input type="text" class="form-control"
                         [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
                         [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
+                        (focus)='onFocusSpecificationName(specificationIndex)' (blur)='isTooltipShow=false'
                         placeholder="输入1-20字规格名称" minlength="1" maxlength="20" appIgnoreSpace>
                     </div>
                   </td>
@@ -286,6 +288,15 @@
               [(ngModel)]="commodityInfo.buy_max_num" name="buy_max_num" placeholder="不输则为不限制" maxlength="2"
               oninput="if(value>59){value=59}else{value=value.replace(/[^0-9]/ig,'')}" appIgnoreSpace>
             <label class="one-word-lable">件</label>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <span>赠品设置</span>
+          </label>
+          <div class="control-input" style="width: 275px">
+            <label class="check-box" nz-checkbox [(ngModel)]="giveaway_settings" name='giveaway_settings'
+              (ngModelChange)='onCheckBoxSetting()'>此商品可使用兑换码兑换</label>
           </div>
         </div>
         <div class="row control-row">

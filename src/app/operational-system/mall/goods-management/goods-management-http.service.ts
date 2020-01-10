@@ -76,6 +76,7 @@ export class CommodityEntity extends EntityBase {
   public sales_status: number = undefined; // 1销售中,2已下架
   public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
   public specifications: Array<SpecificationEntity> = []; // 规格对象列表
+  public giveaway_settings: number = undefined; // 0未设置 1兑换码兑换
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
   // 用于页面展示
@@ -175,6 +176,38 @@ export class SpecificationEntity extends EntityBase {
     }
   }
 }
+
+/**
+ * 商品兑换记录
+ */
+export class ExchangeRecordEntity extends EntityBase {
+  public exchange_record_id: string = undefined; // 兑换记录id
+  public order_id: string = undefined; // 订单id
+  public htcode: string = undefined; // 用户id
+  public exchange_code: string = undefined; // 兑换码
+  public commodity_id: string = undefined; // 商品id
+  public specification_id: number = undefined; // 规格id
+  public exchange_status: string = undefined; // 兑换状态 1未兑换 2已兑换
+  public start_time: number = undefined; // float	开始时间
+  public end_time: number = undefined; // float	结束时间
+  public exchange_time: number = undefined; // float	兑换时间
+  public callback_url: string = undefined; // 回调url
+  public callback_status: boolean = undefined; // bool	回调状态 true 回调成功 false回调失败
+  public callback_info: string = undefined; // 回调信息
+  public created_time: number = undefined; // 创建时间
+  public updated_time: number = undefined; // 更新时间
+}
+
+export class ExchangeRecordLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<ExchangeRecordEntity> {
+    const tempList: Array<ExchangeRecordEntity> = [];
+    results.forEach(res => {
+      tempList.push(ExchangeRecordEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -290,6 +323,16 @@ export class GoodsManagementHttpService {
     return this.httpService.get(url).pipe(map(res => {
       return res.body;
     }));
+  }
+
+  /**
+   * 获取兑换记录列表
+   * @param commodity_id string
+   * @returns {Observable<ExchangeRecordLinkResponse>}
+   */
+  public requestExchangeRecordListData(commodity_id: string): Observable<ExchangeRecordLinkResponse> {
+    const url = this.domain + `/admin/commodities/${commodity_id}/exchange_records`;
+    return this.httpService.get(url).pipe(map(res => new ExchangeRecordLinkResponse(res)));
   }
 
   /**

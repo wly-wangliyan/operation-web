@@ -17,6 +17,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 @NgModule({
   imports: [
     ShareModule,
@@ -29,7 +31,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzSwitchModule,
     NzFormModule,
     NzCheckboxModule,
-    NzInputModule
+    NzInputModule,
+    NzRadioModule,
+    NzToolTipModule
   ],
   declarations: [
     GoodsManagementComponent,

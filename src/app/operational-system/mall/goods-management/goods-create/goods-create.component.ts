@@ -47,6 +47,12 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   public end_time = null; // 价格日历结束时间
 
+  public giveaway_settings = false;
+
+  public isTooltipShow = false;
+
+  public specificationNameIndex: number;
+
   public weekList = [];
 
   public businessList: Array<BusinessEntity> = []; // 商家列表
@@ -157,10 +163,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
-    private globalService: GlobalService,
-    private goodsManagementHttpService: GoodsManagementHttpService,
-    private classifyHttpService: ClassifyManagementHttpService) {
+              private router: Router,
+              private globalService: GlobalService,
+              private goodsManagementHttpService: GoodsManagementHttpService,
+              private classifyHttpService: ClassifyManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -224,6 +230,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 勾选赠品
+  public onCheckBoxSetting() {
+    this.commodityInfo.giveaway_settings = this.giveaway_settings ? 1 : 0;
+  }
 
   /**
    * 商品规格数据转换
@@ -252,6 +262,15 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onFocusSpecificationName(i: number) {
+    if (this.giveaway_settings) {
+      this.specificationNameIndex = i;
+      this.isTooltipShow = true;
+    } else {
+      this.isTooltipShow = false;
+    }
+  }
+
   // 点击添加商品规格
   public onAddCommoditySpecification() {
     if (this.checkCommodityParamsValid(false)) {
@@ -270,6 +289,18 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
   // 点击移除商品规格
   public onDeleteCommoditySpecification(specificationIndex: number) {
+    if (this.giveaway_settings) {
+      this.globalService.confirmationBox.open('删除', '此商品已作为赠品，确定要移除此规格吗？', () => {
+        this.globalService.confirmationBox.close();
+        this.delCommoditySpecification(specificationIndex);
+      });
+    } else {
+      this.delCommoditySpecification(specificationIndex);
+    }
+  }
+
+  // 删除商品规格
+  private delCommoditySpecification(specificationIndex: number) {
     const deleteCommoditySpecificationItem = this.commoditySpecificationList[specificationIndex];
     deleteCommoditySpecificationItem.is_delete = true;
 
@@ -339,6 +370,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       this.commodityInfo = data;
       this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
       this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
+      this.giveaway_settings = this.commodityInfo.giveaway_settings === 1 ? true : false;
       this.commodityInfo.specifications.forEach(specificationItem => {
         const tempSpecificationItem = new SpecificationParamsItem();
         tempSpecificationItem.specification_params = new SpecificationEntity(specificationItem);
