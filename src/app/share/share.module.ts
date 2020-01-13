@@ -33,7 +33,6 @@ import { DateClockComponent } from './components/date-clock/date-clock.component
 import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 import { ZCompleteNumberPipe } from './pipes/z-complete-number.pipe';
 import { SearchVehicleTypeGroupComponent } from './components/search-vehicle-type-group/search-vehicle-type-group.component';
-import { MallCommodityTypePipe } from './pipes/mall-format.pipe';
 import {
   TicketFormatPipe,
   ThirdSaleStatusPipe,
@@ -152,7 +151,6 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
-    MallCommodityTypePipe,
     BookingOrderStatusPipe,
     DiyRangeTypePipe,
     RescueOrderStatusPipe,
@@ -239,7 +237,6 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
-    MallCommodityTypePipe,
     BookingOrderStatusPipe,
     DiyRangeTypePipe,
     RescueOrderStatusPipe,

@@ -8,7 +8,7 @@ import { GoodsOrderListComponent } from './goods-order-list/goods-order-list.com
 import { GoodsOrderDetailComponent } from './goods-order-detail/goods-order-detail.component';
 import {
   ConfirmTypePipe, DeliveryStatusPipe, PayStatusPipe, RealGoodsDeliveryStatusPipe, DeliveryMethodPipe,
-  RefundTypePipe, RefundStatusPipe, WriteOffStatusPipe, OrderStatusFormatPipe, PayTypePipe
+  RefundTypePipe, RefundStatusPipe, WriteOffStatusPipe, OrderStatusFormatPipe, PayTypePipe, MallCommodityTypePipe
 } from '../mall.pipe';
 import { GoodsOrderDeliveryComponent } from './goods-order-delivery/goods-order-delivery.component';
 import { GoodsOrderRefundComponent } from './goods-order-refund/goods-order-refund.component';
@@ -45,6 +45,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     RefundStatusPipe,
     WriteOffStatusPipe,
     OrderStatusFormatPipe,
+    MallCommodityTypePipe,
     PayTypePipe,
     GoodsOrderDeliveryComponent,
     GoodsOrderRefundComponent,
