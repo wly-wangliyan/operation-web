@@ -194,8 +194,13 @@
                 <tr
                   *ngFor="let formatCommoditySpecification of FormatCommoditySpecificationList; let specificationIndex=index;">
                   <td>
-                    <div class="td-content">
-                      <div *ngIf='specificationNameIndex===specificationIndex&&isTooltipShow'>此商品已作为赠品，请慎重修改规格内容！</div>
+                    <div class="td-content name-content">
+                      <div class="specification-prompt"
+                        *ngIf='specificationNameIndex===specificationIndex&&isTooltipShow'>
+                        <img src="/assets/images/prompt_icon.png">
+                        <span>此商品已作为赠品，请慎重修改规格内容！</span>
+                        <img src="/assets/images/close_prompt.png" (click)='isTooltipShow=false'>
+                      </div>
                       <input type="text" class="form-control"
                         [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
                         [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
@@ -256,7 +261,7 @@
                       <span>已售：{{formatCommoditySpecification.specification_params.sold_amount}}</span>
                     </div>
                   </td>
-                  <td>
+                  <td style="height: 57px;">
                     <div class="td-content operation-container">
                       <a class="remove-a" [title]="'移除'" *ngIf="FormatCommoditySpecificationList.length > 1"
                         (click)="onDeleteCommoditySpecification(specificationIndex)"> 移除
@@ -292,7 +297,7 @@
           </div>
         </div>
         <div class="row control-row">
-          <label class="control-label">
+          <label class="control-label special-control-label">
             <span>赠品设置</span>
           </label>
           <div class="control-input" style="width: 275px">

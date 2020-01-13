@@ -8,6 +8,8 @@
 .content-container .control-input,
 .table-container .row-message {
   width: 900px;
+  padding-bottom: 24px;
+  padding-top: 10px;
 }
 
 .table-container {
@@ -284,4 +286,39 @@
 
 :host ::ng-deep .ant-input-group-wrapper {
   width: auto;
+}
+
+.name-content {
+  position: relative;
+}
+
+.specification-prompt {
+  width: 340px;
+  background: #C6E2FF;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(136, 136, 136, 1);
+  padding: 2px;
+  position: absolute;
+  top: 36px;
+  left: 30px;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 16px 0 32px;
+  border-radius: 4px;
+  z-index: 100;
+}
+
+.specification-prompt img {
+  margin-top: -2px;
+}
+
+.specification-prompt img:first-child {
+  margin-right: 16px;
+}
+
+.specification-prompt img:last-child {
+  margin-left: 16px;
+  cursor: pointer;
 }

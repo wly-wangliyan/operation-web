@@ -257,8 +257,8 @@ export class ConfirmTypePipe implements PipeTransform {
 
 /** 支付方式 */
 const PayType = {
-  1: '物流发货',
-  2: '无需配送',
+  WX_XCX_SL: '微信支付',
+  EC: '兑换码支付',
 };
 
 @Pipe({
@@ -268,7 +268,7 @@ export class PayTypePipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
     let result = '';
-    if (value === null || value === undefined || value === '') {
+    if (value === null || value === undefined || value === '' || value === 'other') {
       return result;
     }
     if (value && (typeof value === 'string')) {

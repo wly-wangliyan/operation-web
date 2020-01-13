@@ -186,6 +186,7 @@ export class ExchangeRecordEntity extends EntityBase {
   public htcode: string = undefined; // 用户id
   public exchange_code: string = undefined; // 兑换码
   public commodity_id: string = undefined; // 商品id
+  public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品
   public specification_id: number = undefined; // 规格id
   public exchange_status: string = undefined; // 兑换状态 1未兑换 2已兑换
   public start_time: number = undefined; // float	开始时间
