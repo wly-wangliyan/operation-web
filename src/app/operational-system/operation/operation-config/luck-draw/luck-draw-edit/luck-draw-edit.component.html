@@ -183,7 +183,7 @@
                 <div class="prize-title">
                     <span>所奖品的中奖概率相加不可大于100%，100% - 奖项概率之和 = 未中奖概率，最多可添加7个奖项</span>
                     <button nz-button nzType="primary" (click)="onEditPrizeClick(-1)" [disabled]="prizeList.length>=7">
-                        <img src="/assets/images/tag_add.png">添加奖品
+                        <img *ngIf="prizeList.length<7" src="/assets/images/tag_add.png">添加奖品
                     </button>
                 </div>
                 <nz-table [nzData]="prizeList" [nzPageSize]="prizeList.length" nzBordered

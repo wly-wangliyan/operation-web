@@ -138,6 +138,7 @@ export class ChooseCommodityComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.searchText$ = new Subject<any>();
+    this.searchParams = new CommoditySearchParams();
     this.rquestCommodityList();
     openCommodityModal();
   }
