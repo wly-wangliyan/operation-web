@@ -1,73 +1,78 @@
 :host ::ng-deep .ant-form-item label {
-  width: 80px;
-  text-align: left;
+    width: 90px;
+    text-align: left;
 }
 
-.des_card {
-  height: auto;
-  padding: 20px;
-  background: #fff;
-  margin-bottom: 10px;
+:host ::ng-deep .ant-form-item label.ant-checkbox-wrapper {
+    width: auto;
+    margin-right: 5px;
 }
 
 .params-box {
-  width: 900px;
-  padding: 12px 20px 0 10px;
-  background: rgba(247, 248, 250, 1);
-  border: 1px solid #e0dfdf;
+    width: 1400px;
+    padding: 12px 10px 0 10px;
+    background: rgba(247, 248, 250, 1);
+    border: 1px solid #e0dfdf;
+}
+
+.des_card {
+    height: auto;
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 10px;
 }
 
 .tag-input,
 .control-input div {
-  width: 150px;
-  height: 34px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 34px;
-  float: left;
-  color: #3E71F7;
-  margin-top: 10px;
-  background: rgba(62, 113, 247, 0.22);
-  border: none;
+    width: 150px;
+    height: 34px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 34px;
+    float: left;
+    color: #3E71F7;
+    margin-top: 10px;
+    background: rgba(62, 113, 247, 0.22);
+    border: none;
 }
 
 .control-input ul {
-  width: 1100px;
-  margin-top: -20px;
+    width: 1100px;
+    margin-top: -20px;
 }
 
 .tag-span {
-  width: 34px;
-  height: 34px;
-  float: left;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 34px;
-  margin-top: 10px;
-  background-color: rgba(62, 113, 247, 1);
-  margin-right: 20px;
-  cursor: pointer;
+    width: 34px;
+    height: 34px;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 34px;
+    margin-top: 10px;
+    background-color: rgba(62, 113, 247, 1);
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 .tag-input::-webkit-input-placeholder {
-  color: rgba(62, 113, 247, 1);
+    color: rgba(62, 113, 247, 1);
 }
 
 .tag-input::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-  color: rgba(62, 113, 247, 1);
+    /* Mozilla Firefox 19+ */
+    color: rgba(62, 113, 247, 1);
 }
 
 .tag-input::-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-  color: rgba(62, 113, 247, 1);
+    /* Mozilla Firefox 4 to 18 */
+    color: rgba(62, 113, 247, 1);
 }
 
 .tag-input:-ms-input-placeholder {
-  /* Internet Explorer 10-11 */
-  color: rgba(62, 113, 247, 1);
+    /* Internet Explorer 10-11 */
+    color: rgba(62, 113, 247, 1);
 }
 
 .sure-btn {
-  margin-right: 20px;
+    margin-right: 20px;
 }

@@ -1,71 +1,88 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品配置'"></app-crumb>
-  <ul class="header-right">
-    <li class="big-bg" (click)='onAddCarParking()'>
-      <a>添加停车场</a>
-    </li>
-  </ul>
+    <app-crumb [level1Name]="'产品配置'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg" (click)='onAddCarParking()'>
+            <a>添加停车场</a>
+        </li>
+    </ul>
 </div>
-<div class="content-flow">
-  <div class="table-container">
-    <div class="zmy-table">
-      <nz-table [nzData]="productConfigList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #productConfigTable>
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>图片</th>
-            <th>停车场</th>
-            <th>标签</th>
-            <th>联系电话</th>
-            <th>泊车售价/天</th>
-            <th>最低起订</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of productConfigTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td *ngIf='data.images&&data.images.length!==0'>
-              <div *ngFor='let img of data.images;let t=index;'>
-                <img *ngIf='t===0' [src]="img" width="100">
-              </div>
-            </td>
-            <td *ngIf='!data.images||data.images.length===0'>
-              <img src="/assets/images/image_space_3_2.png" />
-            </td>
-            <td>
-              {{data.parking_name}}
-            </td>
-            <td>
-              <span *ngFor='let tag of data.tags;let t=index;'>
-                <span>{{tag}}</span><span *ngIf='(t+1)!==data.tags.length'>; </span>
-              </span>
-            </td>
-            <td nzAlign="center">
-              <div class="tel">
-                <div>主：{{data.main_tel||'--'}}
-                </div>
-                <div>备：{{data.standby_tel||'--'}}
-                </div>
-              </div>
 
-            </td>
-            <td>
-              {{data.sale_fee  | centPriceChange:'元'}}
-            </td>
-            <td>
-              {{data.min_days||'--'}}<span *ngIf='data.min_days||data.min_days===0'>天</span>
-            </td>
-            <td class="operation">
-              <a [title]="'服务配置'" [routerLink]="['../service-config-edit',data.parking_id]">服务配置</a>
-              <a [title]="'查看详情'" [routerLink]="['../service-config-detail',data.parking_id]">查看详情</a>
-              <a [title]="'删除'" (appZDebounceClick)='onDeleteProduct(data)'>删除</a>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table [nzData]="productConfigList" [nzShowPagination]="true" [nzNoResult]="noResultText"
+                      [nzPageSize]="'15'" (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex"
+                      #productConfigTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>停车场</th>
+                    <th>标签</th>
+                    <th>联系电话</th>
+                    <th>泊车售价/天</th>
+                    <th>最低起订</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of productConfigTable.data; let i=index">
+                    <td>{{ i+ (pageIndex - 1) * 15 + 1}}</td>
+                    <td>
+                        <div class="parking-img-container">
+                            <ng-container *ngIf='!data.images||data.images.length===0'>
+                                <img src="/assets/images/image_space_3_2.png"/>
+                            </ng-container>
+                            <ng-container *ngIf='data.images&&data.images.length!==0'>
+                                <div *ngFor='let img of data.images;let t=index;'>
+                                    <img *ngIf='t===0' [src]="img" width="100">
+                                </div>
+                            </ng-container>
+                            <i class="recommend" *ngIf="data.is_recommended === 1">荐</i>
+                        </div>
+                    </td>
+                    <td> {{data.parking_name}}</td>
+                    <td>
+                        <span *ngFor='let tag of data.tags;let t=index;'>
+                            <span>{{tag}}</span>
+                            <span *ngIf='(t+1)!==data.tags.length'>; </span>
+                        </span>
+                    </td>
+                    <td nzAlign="center">
+                        <div class="tel">
+                            <div>主：{{data.main_tel||'--'}}</div>
+                            <div>备：{{data.standby_tel||'--'}}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="data.spot_types.indexOf('1') !== -1">
+                            室内车位：{{data.indoor_sale_fee | centPriceChange:'元'}}
+                        </div>
+                        <div *ngIf="data.spot_types.indexOf('2') !== -1">
+                            室外车位：{{data.sale_fee | centPriceChange:'元'}}
+                        </div>
+                    </td>
+                    <td>
+                        {{data.min_days||'--'}}<span *ngIf='data.min_days||data.min_days===0'>天</span>
+                    </td>
+                    <td class="operation">
+                        <a [title]="'服务配置'" [routerLink]="['../service-config-edit',data.parking_id]">服务配置</a>
+                        <a [title]="'查看详情'" [routerLink]="['../service-config-detail',data.parking_id]">查看详情</a>
+                        <a [title]="'删除'" (appZDebounceClick)='onDeleteProduct(data)'>删除</a>
+                        <a [title]="'取消推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 1">
+                            取消推荐
+                        </a>
+                        <a [title]="'设为推荐'" (appZDebounceClick)="requestChangeRecommendStatus(data)"
+                           *ngIf="data.is_recommended === 2">
+                            设为推荐
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
     </div>
-  </div>
 </div>
+
 <app-add-car-parking #addCarParking></app-add-car-parking>

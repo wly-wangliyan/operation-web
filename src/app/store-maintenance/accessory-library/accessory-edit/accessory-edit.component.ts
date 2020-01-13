@@ -187,9 +187,6 @@ export class AccessoryEditComponent implements OnInit {
 
   // 添加规格
   public onAddSpecifications() {
-    timer(0).subscribe(() => {
-      $('.table-form').scrollTop('400');
-    });
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
     const batteryModelList = this.specificationsList.filter(m => !(m.battery_model));
     const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_fee);
@@ -218,7 +215,16 @@ export class AccessoryEditComponent implements OnInit {
     } else if (specificationsPriceList.length !== 0) {
       this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
     } else {
-      this.specificationsList.push(new SpecificationEntity());
+      timer(0).subscribe(() => {
+        this.specificationsList.push(new SpecificationEntity());
+      });
+      const ele = document.getElementById('table-container');
+      if (ele.scrollHeight >= ele.clientHeight) {
+        timer(0).subscribe(() => {
+          // 设置滚动条到最底部
+          ele.scrollTop = ele.scrollHeight;
+        });
+      }
     }
   }
 
@@ -284,7 +290,7 @@ export class AccessoryEditComponent implements OnInit {
                     this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
                       this.globalService.promptBox.open('创建配件成功！');
                       this.isSaveBtnDisabled = false;
-                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
                       this.isSaveBtnDisabled = false;
@@ -293,7 +299,7 @@ export class AccessoryEditComponent implements OnInit {
                     this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
                       this.globalService.promptBox.open('编辑配件成功！');
                       this.isSaveBtnDisabled = false;
-                      timer(2000).subscribe(() => this.router.navigateByUrl('/store-maintenance/accessory-library'));
+                      timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
                     }, err => {
                       this.handleErrorFunc(err, 1);
                       this.isSaveBtnDisabled = false;
@@ -358,6 +364,6 @@ export class AccessoryEditComponent implements OnInit {
 
   // 取消
   public onCancelBtn() {
-    this.router.navigateByUrl('/store-maintenance/accessory-library');
+    this.router.navigateByUrl('/accessory-library');
   }
 }

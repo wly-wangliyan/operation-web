@@ -1,0 +1,141 @@
+.seperate {
+    margin: 0 15px;
+}
+
+.seperate-line {
+    margin: 0 8px;
+}
+
+.view {
+    height: 96px;
+    width: 846px;
+    margin: 0 auto;
+}
+
+.pk_bgm {
+    height: 96px;
+    width: 846px;
+    display: -webkit-box;
+    display: flex;
+    justify-content: space-around;
+    background: url('../../../../assets/images/PK_Bgm.png') no-repeat;
+}
+
+.pk_bgm>div {
+    padding-top: 15px;
+    text-align: center;
+    color: #fff;
+}
+
+.pk_bgm div span {
+    font-size: 14px;
+    font-family: AlibabaPuHuiTiR;
+    color: rgba(255, 255, 255, 1);
+}
+
+.topic-info span {
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(136, 136, 136, 1);
+}
+
+.topic-info span img {
+    margin-top: -1px;
+}
+
+.title {
+    color: #3E71F7;
+    font-size: 18px;
+    font-family: AlibabaPuHuiTiM;
+}
+
+.content-warp {
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(35, 36, 47, 1);
+    margin: 13px 0;
+}
+
+.more {
+    color: #3E71F7;
+    cursor: pointer;
+    float: right;
+}
+
+.viewpoint-list {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 35px;
+}
+
+.positive {
+    width: 750px;
+    /* height: 499px; */
+    min-height: 400px;
+    height: 100%;
+    background: rgba(232, 32, 56, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.negative {
+    width: 750px;
+    min-height: 400px;
+    height: 100%;
+    /* height: 499px; */
+    background: rgba(62, 113, 247, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+ul {
+    height: 100%;
+    overflow-y: auto;
+}
+
+ul>li {
+    display: -webkit-box;
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+.avatar img {
+    width: 50px;
+    height: 50px;
+}
+
+.point-info {
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    width: 600px;
+    display: inline-block;
+}
+
+.time {
+    color: #888888;
+}
+
+.comment {
+    word-break: break-all;
+}
+
+:host ::ng-deep .ant-table {
+    border: none !important;
+}
+
+:host ::ng-deep .ant-table-tbody>tr:nth-child(odd) {
+    background: none;
+}
+:host ::ng-deep .ant-table-tbody>tr:nth-child(even) {
+    background: none;
+}

@@ -8,6 +8,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   declarations: [
     VehicleTypeManagementComponent,
@@ -20,6 +21,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzEmptyModule,
     NzSwitchModule,
     NzSpinModule,
+    NzButtonModule
   ]
 })
 export class VehicleTypeManagementModule { }

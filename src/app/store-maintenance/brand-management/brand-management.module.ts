@@ -7,6 +7,7 @@ import { BrandListComponent } from './brand-list/brand-list.component';
 import { BrandManagementHttpService } from './brand-management-http.service';
 import { BrandEditComponent } from './brand-list/brand-edit/brand-edit.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     CommonModule,
     ShareModule,
     BrandManagementRoutingModule,
+    NzButtonModule
   ],
   declarations: [
     BrandManagementComponent,

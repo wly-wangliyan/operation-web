@@ -1,35 +1,32 @@
 <div class="main-layout">
-    <div class="main-header-layout">
-        <div class="logo">
-            <div [routerLink]="'/main'"></div>
-        </div>
-        <ul class="main-herder-title">
-            <li [class.herder-store-active]="menuActive('/store-maintenance', 'store')"
-                [class.noPermissions]="!authService.checkPermissions(['store'])">
-            </li>
-        </ul>
-        <div class="user">
-            <div class="logout-btn" (click)="onLoginoutClick()">
-                <i class="main-header-logout"></i>退出
-            </div>
-        </div>
+  <div class="main-header-layout">
+    <div class="logo">
+      <div [routerLink]="'/home'"></div>
     </div>
-    <div class="main-left-layout" [class.main-left-layout-none]="!authService.isShowExpandMenu">
-        <app-expanded-menu></app-expanded-menu>
+    <ul class="main-herder-title">
+      <li class="herder-store-active">
+      </li>
+    </ul>
+    <div class="user">
+      <div class="logout-btn" (click)="onLoginoutClick()">
+        <i class="main-header-logout"></i>退出
+      </div>
     </div>
-    <div class="main-right-layout" [class.main-right-layout-all]="!authService.isShowExpandMenu">
-        <div class="content-router-outlet" #routerDiv>
-            <router-outlet></router-outlet>
-            <router-outlet name="popup"></router-outlet>
-        </div>
-        <!--无权限403-->
-        <app-http403-tip (displayStateChanged)="displayStateChanged()"></app-http403-tip>
+  </div>
+  <div class="main-left-layout" [class.main-left-layout-none]="!authService.isShowExpandMenu">
+    <app-expanded-menu></app-expanded-menu>
+  </div>
+  <div class="main-right-layout" [class.main-right-layout-all]="!authService.isShowExpandMenu">
+    <div class="content-router-outlet" #routerDiv>
+      <router-outlet></router-outlet>
+      <router-outlet name="popup"></router-outlet>
+    </div>
 
-        <!--服务器500-->
-        <app-http500-tip (displayStateChanged)="displayStateChanged()"></app-http500-tip>
+    <!--服务器500-->
+    <app-http500-tip (displayStateChanged)="displayStateChanged()"></app-http500-tip>
 
-        <!-- 模态框 -->
-        <app-z-prompt-box></app-z-prompt-box>
-        <app-z-confirmation-box></app-z-confirmation-box>
-    </div>
+    <!-- 模态框 -->
+    <app-z-prompt-box></app-z-prompt-box>
+    <app-z-confirmation-box></app-z-confirmation-box>
+  </div>
 </div>

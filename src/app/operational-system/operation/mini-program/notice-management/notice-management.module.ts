@@ -12,8 +12,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { DisplayPlacePipe } from './notice-management.pipe';
 @NgModule({
-  declarations: [NoticeManagementComponent, NoticeListComponent, NoticeEditComponent],
+  declarations: [NoticeManagementComponent, NoticeListComponent, NoticeEditComponent, DisplayPlacePipe],
   imports: [
     CommonModule,
     NoticeManagementRoutingModule,
@@ -23,7 +25,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
     NzButtonModule,
     NzBackTopModule,
     NzTabsModule,
-    NzSwitchModule
+    NzSwitchModule,
+    NzRadioModule
   ]
 })
 export class NoticeManagementModule { }

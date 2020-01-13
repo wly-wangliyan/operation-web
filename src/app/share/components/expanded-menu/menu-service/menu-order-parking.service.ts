@@ -23,7 +23,7 @@ export class MenuOrderParkingService {
 
   // 产品配置
   private generateServiceConfigMenu() {
-    const systemMenu = new SideMenuItem('产品配置', '/order-parking/service-config');
+    const systemMenu = new SideMenuItem('产品配置', '/service-config');
     systemMenu.icon = '/assets/images/menu_part.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;
@@ -31,7 +31,7 @@ export class MenuOrderParkingService {
 
   // 订单管理
   private generateOrderMenu() {
-    const systemMenu = new SideMenuItem('订单管理', '/order-parking/order-management');
+    const systemMenu = new SideMenuItem('订单管理', '/order-management');
     systemMenu.icon = '/assets/images/menu/menu_order.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;

@@ -12,7 +12,8 @@
     "operational-system-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build operational-system --prod",
     "store-maintenance-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build store-maintenance --prod",
     "exemption-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build exemption --prod",
-    "order-parking-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build order-parking --prod"
+    "order-parking-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build order-parking --prod",
+    "topic-build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build topic --prod"
   },
   "private": true,
   "dependencies": {

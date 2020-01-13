@@ -2,20 +2,22 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../core/auth-guard.service';
 import { RouteMonitorService } from '../core/route-monitor.service';
-import { OrderParkingComponent } from './order-parking.component';
+import { HomeComponent } from '../operational-system/main/home/home.component';
+import { MenuGuardService } from '../core/menu-guard.service';
 
-const routes: Routes = [{
-  path: '', component: OrderParkingComponent,
-  children: [
-    { path: '', redirectTo: 'order-parking', pathMatch: 'full' },
-    {
-      path: 'order-parking',
-      loadChildren: () => import('./order-parking-main/order-parking-main.module').then(m => m.OrderParkingMainModule),
-      canActivate: [AuthGuardService, RouteMonitorService]
-    },
-    { path: '**', redirectTo: 'order-parking', pathMatch: 'full' }
-  ]
-}];
+const routes: Routes = [
+  {
+    path: 'service-config',
+    loadChildren: () => import('./service-config/service-config.module').then(m => m.ServiceConfigModule),
+    canLoad: [AuthGuardService, MenuGuardService]
+  },
+  {
+    path: 'order-management',
+    loadChildren: () => import('./order-management/order-management.module').then(m => m.OrderManagementModule),
+    canLoad: [AuthGuardService, MenuGuardService]
+  },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -52,6 +52,7 @@ export class BannerEditComponent implements OnInit {
   public cover_url = [];
   public offline_time: any = ''; // 下线时间
   public aspectRatio = 3.83 / 1; // 截取图片比例
+  public imgReg = /(jpg|jpeg|png|gif)$/;
 
   private sureCallback: any;
   private closeCallback: any;
@@ -95,7 +96,7 @@ export class BannerEditComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     // 首页banner与检车banner设置不同图片剪裁比例
-    this.aspectRatio = banner_type === 2 ? 1.917 / 1 : 3.83 / 1;
+    this.aspectRatio = banner_type === 4 ? 3.699 / 1 : banner_type === 2 ? 1.917 / 1 : 3.83 / 1;
     this.clear();
     this.is_save = false;
     this.offline_time = '';
@@ -103,7 +104,7 @@ export class BannerEditComponent implements OnInit {
       this.bannerParams = new BannerParams();
       this.bannerParams.banner_type = banner_type;
       // 首页banner与检车banner设置不同落地页类型默认值
-      this.bannerParams.belong_to = banner_type === 2 ? 0 : this.bannerParams.belong_to;
+      // this.bannerParams.belong_to = banner_type === 2 ? 0 : this.bannerParams.belong_to;
       this.cover_url = [];
     } else {
       this.rquestBannerDetail();
@@ -196,6 +197,15 @@ export class BannerEditComponent implements OnInit {
       this.errPositionItem.jump_link.isError = true;
       this.errPositionItem.jump_link.errMes = '请输入跳转URL！';
       cisCheck = false;
+    }
+
+    if (this.bannerParams.belong_to && this.bannerParams.belong_to === 3) {
+      const reg = /^(http|https)?.+\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/;
+      if (this.bannerParams.jump_link && !reg.test(this.bannerParams.jump_link)) {
+        this.errPositionItem.jump_link.isError = true;
+        this.errPositionItem.jump_link.errMes = '请输入正确的视频链接！';
+        cisCheck = false;
+      }
     }
 
     if (this.bannerParams.offline_status === 2) {

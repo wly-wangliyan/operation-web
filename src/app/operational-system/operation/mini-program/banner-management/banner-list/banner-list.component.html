@@ -13,8 +13,8 @@
 <div class="content-flow">
   <div class="tab-bar-list">
     <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.banner_type">
-      <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">首页Banner</label>
-      <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">检车Banner</label>
+      <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'
+        (click)="onTabChange(tab.key)">{{tab.value}}</label>
     </nz-radio-group>
   </div>
   <div class="search-container">
@@ -45,9 +45,10 @@
         (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
         <thead>
           <tr>
-            <th>显示顺序</th>
+            <th>{{searchParams.banner_type===4?'序号':'显示顺序'}}</th>
             <th>图片</th>
             <th>标题</th>
+            <th *ngIf='searchParams.banner_type===4'>页面</th>
             <th>上线时间</th>
             <th>下线时间</th>
             <th>累计点击量</th>
@@ -59,29 +60,28 @@
         <tbody cdkDropList (cdkDropListDropped)="drop($event, bannerTable.data)">
           <tr *ngFor="let data of bannerTable.data; let i=index" cdkDrag>
             <td>{{i+(pageIndex-1)*15+1}}</td>
-
             <td>
-              <img *ngIf='!data.image&&data.banner_type===1' style="width: 270px;margin: auto 20px;" src="/assets/images/space_banner.png">
-              <img *ngIf='data.image&&data.banner_type===1' style="width: 270px;margin: auto 20px;" [src]="data.image">
-              <img *ngIf='!data.image&&data.banner_type===2' style="width: 130px;margin: auto 20px;" src="/assets/images/space_banner.png">
-              <img *ngIf='data.image&&data.banner_type===2' style="width: 130px;margin: auto 20px;" [src]="data.image">
+              <img *ngIf='!data.image&&data.banner_type!==2' style="width: 270px;height:70px;margin: auto 20px;"
+                src="/assets/images/space_banner.png">
+              <img *ngIf='data.image&&data.banner_type!==2' style="width: 270px;height:70px;margin: auto 20px;"
+                [src]="data.image">
+              <img *ngIf='!data.image&&data.banner_type===2' style="width: 130px;height:68px;margin: auto 20px;"
+                src="/assets/images/space_banner.png">
+              <img *ngIf='data.image&&data.banner_type===2' style="width: 130px;height:68px;margin: auto 20px;"
+                [src]="data.image">
             </td>
-
             <td>{{data.title}}</td>
-
+            <td *ngIf='searchParams.banner_type===4'>{{data.page_layout|pageLayout}}</td>
             <td>{{data.online_time ?(data.online_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-
             <td *ngIf="data.offline_status===1">永不下线</td>
             <td *ngIf="data.offline_status!==1">
               {{data.offline_time ?(data.offline_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-
             <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
-
             <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
-
             <td>
-              <nz-switch [ngModel]="data.is_use" nzCheckedChildren="On" style="height: 10px" nzUnCheckedChildren="Off"
-                (ngModelChange)="onSwitchChange(data.banner_id,$event)"></nz-switch>
+              <nz-switch [ngModel]="data.is_use" nzCheckedChildren="On" [nzControl]=true style="height: 10px"
+                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.banner_id,data.is_use)"
+                (ngModelChange)="onSwitchChange($event)"></nz-switch>
             </td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>

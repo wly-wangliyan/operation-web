@@ -1,0 +1,117 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'话题管理'" [level2Name]="'话题列表'" [level3Name]="'查看话题'"
+    [level2RelativePath]="'../../topic-list'">
+  </app-crumb>
+</div>
+
+<div class="content-flow">
+  <div class='content-container'>
+    <div class='title'>{{topicInfo.title||'--'}}</div>
+    <div class="topic-info">
+      <span><img src="../../../../assets/images/visit_num.png">
+        访问量：{{topicInfo.statistic?.visit_num||'--'}}次</span>
+      <span class="seperate"></span>
+      <span> <img src="../../../../assets/images/participants_num.png">
+        参与人数：{{topicInfo.statistic?.participants_num||'--'}}人</span>
+      <span class="seperate"></span>
+      <span><img src="../../../../assets/images/create_time.png">
+        创建时间：{{topicInfo.created_time*1000|date:'yyyy-MM-dd HH:mm'}}</span>
+    </div>
+    <div class="content-warp">
+      <span *ngIf="!isMore" [innerHtml]='topicInfo.content|zMaxLength:200'>
+      </span>
+      <span *ngIf="isMore" [innerHtml]='topicInfo.content'>
+      </span>
+      <span class="more" *ngIf="!isMore && topicInfo.content?.length>200" (click)="isMore=true">展开全部</span>
+      <span class="more" *ngIf="isMore && topicInfo.content?.length>200" (click)="isMore=false">收起全部</span>
+    </div>
+
+    <div class="view">
+      <div class="pk_bgm">
+        <div *ngFor="let data of viewPointList;let index=index">
+          <div>{{data.name}}</div>
+          <div>
+            <span>{{data.viewpoint_id}}</span>
+            <span class="seperate-line">/</span>
+            <span>{{data.sum}}人站队</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="viewpoint-list">
+      <div class="positive">
+        <!-- <ul *ngIf="positiveList.length>0">
+                    <li *ngFor="let positive of positiveList">
+                        <span class="avatar">
+                            <img [src]="positive.avatar">
+                        </span>
+                        <span class="point-info">
+                            <div>{{positive.nickname}}</div>
+                            <div class="comment">{{positive.comment_content}}</div>
+                            <div class="time">{{positive.created_time*1000|date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                        </span>
+                    </li>
+                </ul> -->
+        <div *ngIf="positiveList.length>0">
+          <nz-table [nzData]="positiveList" [nzShowPagination]="true" [nzPageSize]="'15'"
+            (nzPageIndexChange)="onPositiveNZPageIndexChange($event)" [(nzPageIndex)]="positivePageIndex" #positiveTable
+            [nzHideOnSinglePage]='true'>
+            <tbody>
+              <tr *ngFor="let positive of positiveTable.data; let i=index" style="text-align: left;">
+                <td [nzAlign]="'left'" style="display: flex;">
+                  <span class="avatar">
+                    <img [src]="positive.avatar">
+                  </span>
+                  <span class="point-info">
+                    <div>{{positive.nickname}}</div>
+                    <div class="comment">{{positive.comment_content}}</div>
+                    <div class="time">{{positive.created_time*1000|date:'yyyy-MM-dd HH:mm'}}
+                    </div>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <span *ngIf="positiveList.length===0">暂无评论</span>
+      </div>
+      <div class="negative">
+        <!-- <ul *ngIf="negativeList.length>0">
+                    <li *ngFor="let negative of negativeList">
+                        <span class="avatar">
+                            <img [src]="negative.avatar">
+                        </span>
+                        <span class="point-info">
+                            <div>{{negative.nickname}}</div>
+                            <div class="comment">{{negative.comment_content}}</div>
+                            <div class="time">{{negative.created_time*1000|date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                        </span>
+                    </li>
+                </ul> -->
+        <div *ngIf="negativeList.length>0">
+          <nz-table [nzData]="negativeList" [nzShowPagination]="true" [nzPageSize]="'15'"
+            (nzPageIndexChange)="onNegativeNZPageIndexChange($event)" [nzBordered]='false'
+            [(nzPageIndex)]="negativePageIndex" #negativeTable [nzHideOnSinglePage]='true'>
+            <tbody>
+              <tr *ngFor="let negative of negativeTable.data; let i=index" style="text-align: left;">
+                <td [nzAlign]="'left'" style="display: flex;">
+                  <span class="avatar">
+                    <img [src]="negative.avatar">
+                  </span>
+                  <span class="point-info">
+                    <div>{{negative.nickname}}</div>
+                    <div class="comment">{{negative.comment_content}}</div>
+                    <div class="time">{{negative.created_time*1000|date:'yyyy-MM-dd HH:mm'}}
+                    </div>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <span *ngIf="negativeList.length===0">暂无评论</span>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -2,9 +2,19 @@
   <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'编辑'" [level2RelativePath]="'../../list'">
   </app-crumb>
 </div>
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+  <div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tab_index" (ngModelChange)="onTabChange($event)">
+      <label nz-radio-button [nzValue]=1>基本信息</label>
+      <label nz-radio-button [nzValue]=2 *ngIf="isShowWashService">洗车相关</label>
+    </nz-radio-group>
+  </div>
   <div class="content-main">
-    <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm" autocomplete="off">
+    <form (keydown)="onKeydownEvent($event)" class="form-horizontal base-form" #editForm="ngForm" autocomplete="off"
+      *ngIf="tab_index===1">
       <div class="row">
         <label class="control-label">
           <b>*</b>
@@ -21,6 +31,16 @@
         </label>
         <div class="control-input">
           <input class="form-control" [(ngModel)]="currentGarage.repair_shop_name" name="repair_shop_name" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;&nbsp;</b>
+          <span>服务类型</span>
+        </label>
+        <div class="control-input">
+          <label *ngFor="let service of serviceList;let i=index" name="service_{{i}}" nz-checkbox
+            [(ngModel)]="service.isChecked" (ngModelChange)="onChangeService(service)">{{service.name}}</label>
         </div>
       </div>
       <div class="row" style="height: 110px">
@@ -58,7 +78,8 @@
           <span>门店地址</span>
         </label>
         <div class="control-input" style="width: 540px!important;">
-          <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
+          <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj" #projectInfoPro>
+          </app-pro-city-dist-select>
           <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentGarage.address"
             [title]="currentGarage.address" name="address" disabled>
         </div>
@@ -81,14 +102,14 @@
         <div class="control-input">
           <app-date-clock [has24]="false" [(hour)]="door_start_time.hour" [(minute)]="door_start_time.minute">
           </app-date-clock>
-          <span class="line"> - </span>
+          <span class="line"> 至 </span>
           <app-date-clock [has24]="true" [(hour)]="door_end_time.hour" [(minute)]="door_end_time.minute">
           </app-date-clock>
         </div>
       </div>
       <div class="row">
         <label class="control-label">
-          <b>&nbsp;</b>
+          <b>&nbsp;&nbsp;</b>
           <span>客服电话</span>
         </label>
         <div class="control-input ">
@@ -110,14 +131,78 @@
           *ngIf="errPositionItem.service_telephone?.isError">{{errPositionItem?.service_telephone?.errMes}}</span>
       </div>
       <div style="margin-top: 40px;margin-bottom: 40px">
-        <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editForm.form.valid"
           (appZDebounceClick)="onEditFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
     </form>
+
+    <form class="form-horizontal" autocomplete="off" #washForm="ngForm" *ngIf="tab_index===2">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>洗车标签</span>
+        </label>
+        <div class="control-input">
+          <ul>
+            <li *ngFor="let tag of tagList; let i=index">
+              <div>{{tag}}</div>
+              <span class="tag-span" (click)="tagList.splice(i, 1)">
+                <img src="/assets/images/tag_delete.png">
+              </span>
+            </li>
+            <li *ngIf="tagList.length < 5">
+              <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="bind-tag" maxlength="10"
+                appIgnoreSpace>
+              <span class="tag-span" [class.disabled]="!tag" [title]="!tag?'标签内容不能为空':''" (click)="onAddTagClick()">
+                <img src="/assets/images/tag_add.png">
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>营业时间</span>
+        </label>
+        <div class="control-input">
+          <app-date-clock [has24]="false" [(hour)]="wash_start_time.hour" [(minute)]="wash_start_time.minute">
+          </app-date-clock>
+          <span class="line"> 至 </span>
+          <app-date-clock [has24]="true" [(hour)]="wash_end_time.hour" [(minute)]="wash_end_time.minute">
+          </app-date-clock>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>客服电话</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="washInfo.wash_car_telephone" placeholder="请输入手机号" name="telephone"
+            maxlength="11" appIntNumber required>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>&nbsp;&nbsp;</b>
+          <span>店铺简介</span>
+        </label>
+        <div style="display: inline-block;">
+          <app-z-text-ckeditor ckEditorId='shairShopEditor' #shairShopEditor></app-z-text-ckeditor>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px;margin-bottom: 40px">
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+          [disabled]="!washForm.form.valid || tagList.length===0" (appZDebounceClick)="onWashFormSubmit()">保存
+        </button>
+        <button class="close-btn" nz-button (click)="onClose()">取消</button>
+      </div>
+    </form>
   </div>
-  <app-prompt-loading></app-prompt-loading>
 </div>
 
 <!-- 地图组件 -->

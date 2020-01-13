@@ -7,14 +7,15 @@ import { ProjectEditComponent } from './project-edit/project-edit.component';
 import { VehicleManagementRoutingModule } from './project-management-routing.module';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   imports: [
     NzTableModule,
     NzSwitchModule,
     CommonModule,
     ShareModule,
-    VehicleManagementRoutingModule
+    VehicleManagementRoutingModule,
+    NzButtonModule
   ],
   declarations: [
     ProjectManagementComponent,

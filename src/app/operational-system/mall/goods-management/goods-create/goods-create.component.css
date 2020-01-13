@@ -280,3 +280,8 @@
   color: #23242F;
   font-size: 13px;
 }
+
+
+:host ::ng-deep .ant-input-group-wrapper {
+  width: auto;
+}

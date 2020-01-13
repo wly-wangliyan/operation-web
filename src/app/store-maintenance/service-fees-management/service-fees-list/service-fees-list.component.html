@@ -1,78 +1,115 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'服务费管理'" [level2Name]=""></app-crumb>
+  <app-crumb [level1Name]="'服务管理'" [level2Name]=""></app-crumb>
 </div>
 <div class="content-flow">
-  <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [nzTabBarGutter]=0 [(nzSelectedIndex)]='selectedTabIndex'>
-    <nz-tab *ngFor="let tab of tabs;" [nzTitle]="tab.value">
-      <div class="table-container">
-        <div class="search-container">
-          <form nz-form class="search-form">
-            <div nz-row class="search_row">
-              <!-- <div>
-                <nz-form-item nzFlex>
-                  <nz-form-label>状态</nz-form-label>
-                  <nz-form-control class="form_control">
-                    <select class="form-control" name="pay_status" [(ngModel)]="searchParams.pay_status">
-                      <option value="">全部</option>
-                      <option value="1">销售中</option>
-                      <option value="2">未上架</option>
-                    </select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div> -->
-              <div>
-                <nz-form-item nzFlex>
-                  <nz-form-label>救援费名称</nz-form-label>
-                  <nz-form-control>
-                    <input class="form-control" placeholder="请输入救援费名称" autocomplete="off"
-                      [(ngModel)]="searchParams.service_fee_name" name="service_fee_name" appIgnoreSpace />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div class='search_btn'>
-                <button nz-button nzType="primary" (click)="onSearchBtnClick()">
-                  查询</button>
-              </div>
-            </div>
-          </form>
+  <div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="selectedTabIndex" (ngModelChange)="onTabChange($event)">
+      <label *ngFor="let tab of tabs;" nz-radio-button [nzValue]="tab.key">{{tab.value}}</label>
+    </nz-radio-group>
+  </div>
+  <div class="table-container" *ngIf="selectedTabIndex===1">
+    <div class="search-container">
+      <form nz-form class="search-form">
+        <div nz-row class="search_row">
+          <div>
+            <nz-form-item nzFlex>
+              <nz-form-label>救援费名称</nz-form-label>
+              <nz-form-control>
+                <input class="form-control" placeholder="请输入救援费名称" autocomplete="off"
+                  [(ngModel)]="searchParams.service_fee_name" name="service_fee_name" appIgnoreSpace />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class='search_btn'>
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">
+              查询</button>
+          </div>
         </div>
-        <div class="zmy-table">
-          <nz-table [nzData]="serviceFeeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-            (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
-            <thead>
-              <tr>
-                <th>序号</th>
-                <th>救援费名称</th>
-                <th>原价</th>
-                <th>售价</th>
-                <th>预付原价</th>
-                <th>预付现价</th>
-                <!-- <th>状态</th> -->
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of basicTable.data; let i=index">
-                <td>{{i+(pageIndex-1)*15+1}}</td>
-                <td>{{data.service_fee_name}}</td>
-                <td>{{data.initial_price|centPriceChange:'元'}}</td>
-                <td>{{data.current_price|centPriceChange:'元'}}</td>
-                <td>{{data.prepay_initial_price|centPriceChange:'元'}}</td>
-                <td>{{data.prepay_current_price|centPriceChange:'元'}}</td>
-                <!-- <td>
-                  <nz-switch [ngModel]="data.status===1?true:false"
-                    (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"
-                    nzUnCheckedChildren="Off" (click)="onSwitchClick(data.carline_id,data.status)">
-                  </nz-switch>
-                </td> -->
-                <td class="operation">
-                  <a [title]="'编辑'" [routerLink]="['../edit',data.service_fee_id]">编辑</a>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </div>
+      </form>
+    </div>
+    <div class="zmy-table">
+      <nz-table [nzData]="serviceFeeList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>救援费名称</th>
+            <th>原价</th>
+            <th>售价</th>
+            <th>预付原价</th>
+            <th>预付现价</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>{{data.service_fee_name}}</td>
+            <td>{{data.initial_price|centPriceChange:'元'}}</td>
+            <td>{{data.current_price|centPriceChange:'元'}}</td>
+            <td>{{data.prepay_initial_price|centPriceChange:'元'}}</td>
+            <td>{{data.prepay_current_price|centPriceChange:'元'}}</td>
+            <td class="operation">
+              <a [title]="'编辑'" [routerLink]="['../edit',data.service_fee_id]">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+
+  <div class="table-container" *ngIf="selectedTabIndex===2">
+    <div class="search-container">
+      <div class="tab-bar">
+        <ul>
+          <li *ngFor="let tab of washTabs;" [class.active]="selectedCarTypeTabIndex===tab.key"
+            (click)="onChangeWashTabClick(tab)">{{tab.value}}</li>
+        </ul>
+        <button class="tab-btn" [routerLink]="['../wash-car-service-edit']">编辑</button>
       </div>
-    </nz-tab>
-  </nz-tabset>
+    </div>
+    <div class="zmy-table">
+      <nz-table [nzData]="specificationList" [nzFrontPagination]='false' [nzNoResult]="noResultText"
+        #specificationTable>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>规格名称</th>
+            <th>原价</th>
+            <th>售价</th>
+            <th>库存</th>
+            <th>销量</th>
+            <th>有效期</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of specificationTable.data; let i=index">
+            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>{{data.specification_name || '--'}}</td>
+            <td>{{data.original_fee|centPriceChange:'元'}}</td>
+            <td>{{data.sale_fee|centPriceChange:'元'}}</td>
+            <td>{{data.store || 0}}</td>
+            <td>{{data.sale_num||0}}</td>
+            <td>
+              <span *ngIf="data.valid_date_type===1">下单后 {{data.valid_period}}
+                <span *ngIf="data.valid_period_unit==='month'">个</span>{{valid_unit[data.valid_period_unit]}}内</span>
+              <ng-container *ngIf="data.valid_date_type===2 && data.valid_date_start">
+                <span *ngIf="data.valid_date_start">{{data.valid_date_start * 1000 | date: "yyyy-MM-dd"}}</span>
+                <span *ngIf="data.valid_date_end"> 至 {{data.valid_date_end * 1000 | date: "yyyy-MM-dd"}}</span>
+                <span *ngIf="!data.valid_date_end">起有效</span>
+              </ng-container>
+              <span *ngIf="data.valid_date_type===2 && !data.valid_date_start">--</span>
+            </td>
+            <td>
+              <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="On" style="height: 10px"
+                nzUnCheckedChildren="Off"
+                (ngModelChange)="onChangeSpecificationStatus(data.wash_car_specification_id,$event)"></nz-switch>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
 </div>

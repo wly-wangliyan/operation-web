@@ -1,0 +1,139 @@
+.content-flow {
+  position: relative;
+  background: #fff !important;
+}
+
+.content-container {
+  padding-top: 0;
+  padding-bottom: 30px;
+  margin-right: 10px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.table-item {
+  width: 100%;
+  min-width: 900px;
+  margin-top: 20px;
+}
+
+.order-table table tr>td {
+  text-align: left;
+}
+
+.table-item table {
+  border: 1px solid #d4d4d4;
+  text-align: center;
+  word-break: break-all;
+  width: 100%;
+  margin: 0;
+}
+
+.table-item table tr {
+  height: 40px;
+}
+
+.table-item table tr>td,
+.table-item table>thead tr>th,
+.table-item table>tbody tr>td {
+  height: 40px;
+  box-sizing: border-box;
+  color: #23242f;
+  font-size: 12px;
+  vertical-align: middle;
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  border-top: 1px solid #d4d4d4;
+  cursor: default;
+  padding: 4px 20px;
+}
+
+.table-item table>thead tr>th {
+  background-color: #f7f8fa;
+}
+
+.order-table table tr:first-child>td:nth-child(even),
+.order-table table tr>td:nth-child(odd) {
+  min-width: 118px;
+  background: #F7F8FA;
+}
+
+.order-table table tr>td:nth-child(even) {
+  max-width: 300px;
+}
+
+@media screen and (max-width: 1355px) {
+  .order-table table tr>td:nth-child(even) {
+    max-width: 150px;
+  }
+}
+
+.order-table table tr:first-child>td:nth-child(odd) {
+  background: #fff;
+}
+
+.detail-table {
+  width: 100%;
+}
+
+.detail-table caption {
+  caption-side: top;
+  font-size: 18px;
+  color: #23242F;
+  font-weight: 500;
+  text-indent: 10px;
+}
+
+.row-title {
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.column-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.remark-info {
+  max-width: 300px;
+}
+
+.remark-group {
+  height: 100%;
+}
+
+.remark-box {
+  margin: 8px 0 5px 0;
+  white-space: pre-line;
+}
+
+.remark-box .form-control {
+  font-size: 12px;
+}
+
+.btn-box {
+  text-align: right;
+}
+
+.sure-btn {
+  margin: 0 !important;
+}
+
+.btn-box .edit-btn {
+  width: 60px;
+  height: 27px;
+  margin-left: 8px;
+}
+
+.btn-box .edit-btn {
+  width: 60px;
+  height: 27px;
+  margin-left: 8px;
+}
+
+.edit-btn:disabled {
+  background-color: #cacaca;
+  color: #fff;
+}

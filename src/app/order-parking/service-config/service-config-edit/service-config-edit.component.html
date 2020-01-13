@@ -1,194 +1,367 @@
 <div class="content-header">
-  <div class="header-left">
-    <i></i>
-    <a [routerLink]="['../../']">产品配置</a>
-    <span> >><span class='second-crumb'>服务配置</span></span>
-  </div>
+    <div class="header-left">
+        <i></i>
+        <a [routerLink]="['../../']">产品配置</a>
+        <span> >><span class='second-crumb'>服务配置</span></span>
+    </div>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
-  <nz-spin nzSimple></nz-spin>
+    <nz-spin nzSimple></nz-spin>
 </div>
+
 <div class="content-flow" [hidden]="loading">
-  <div class='des_card'>
-    <form nz-form class="content-layout" #serviceConfigForm="ngForm">
-      <div class="card_content">
-        <nz-form-item nzFlex>
-          <nz-form-label [nzNoColon]='true'>
-            <span style="padding-left:10px">标签</span></nz-form-label>
-          <nz-form-control>
-            <div class="control-input">
-              <ul>
-                <li *ngFor="let tag of checkLabelNamesList; let i=index">
-                  <div>{{tag}}</div>
-                  <span class="tag-span" (click)="checkLabelNamesList.splice(i, 1)">
-                    <img src="/assets/images/tag_delete.png">
-                  </span>
-                </li>
-                <li *ngIf="checkLabelNamesList.length < 5">
-                  <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="tag" maxlength="10">
-                  <span class="tag-span" [class.disabled]="!tag" (click)="onAddTagClick()">
-                    <img src="/assets/images/tag_add.png">
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div style="clear: both;"></div>
-            <div *ngIf="tagNameErrors" class="text-danger">
-              <span class="input-error">{{tagNameErrors}}</span>
-            </div>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>费用</nz-form-label>
-          <nz-form-control>
-            <div class="params-box">
-              <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
+    <div class='des_card'>
+        <form nz-form class="content-layout" #serviceConfigForm="ngForm" autocomplete="off">
+            <div class="card_content">
+                <nz-form-item nzFlex>
+                    <nz-form-label [nzNoColon]='true'>
+                        <span style="padding-left:10px">标签</span></nz-form-label>
                     <nz-form-control>
-                      <nz-input-group [nzSuffix]="originPriceUnit">
-                        <input class="price-input" [(ngModel)]="origin_fee" nz-input autocomplete="off"
-                          name="origin_price" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
-                      </nz-input-group>
-                      <ng-template #originPriceUnit>元</ng-template>
-                      <!-- *ngIf="originPriceErrors" -->
-                      <div class="text-danger">
-                        <span class="input-error">{{originPriceErrors}}</span>
-                      </div>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
-                    <nz-form-control>
-                      <div>
-                        <nz-input-group [nzSuffix]="salePriceUnit">
-                          <input class="price-input" [(ngModel)]="sale_fee" nz-input autocomplete="off"
-                            name="sale_price" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
-                        </nz-input-group>
-                        <ng-template #salePriceUnit>元</ng-template>
-                      </div>
-                      <div *ngIf="salePriceErrors" class="text-danger">
-                        <span class="input-error">{{salePriceErrors}}</span>
-                      </div>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
-                    <nz-form-control>
-                      <div>
-                        <nz-input-group style="margin-left: -30px;" [nzSuffix]="prePriceUnit">
-                          <input class="price-input" [(ngModel)]="pre_fee" nz-input autocomplete="off" name="pre_price"
-                            maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
-                        </nz-input-group>
-                        <ng-template #prePriceUnit>元</ng-template>
-                        <div *ngIf="prePriceErrors" class="text-danger" style="margin-left: -30px;">
-                          <span class="input-error">{{prePriceErrors}}</span>
+                        <div class="control-input">
+                            <ul>
+                                <li *ngFor="let tagItem of parkingDetailData.tags; let i=index">
+                                    <div>{{tagItem}}</div>
+                                    <span class="tag-span" (click)="parkingDetailData.tags.splice(i, 1)">
+                                        <img src="/assets/images/tag_delete.png">
+                                    </span>
+                                </li>
+                                <li *ngIf="parkingDetailData.tags?.length < 5">
+                                    <input class="tag-input" [(ngModel)]="tag" name="tag" placeholder="请输入1-10字标签"
+                                           appIgnoreSpace minlength="1" maxlength="10">
+                                    <span class="tag-span" (click)="onAddTagClick()">
+                                        <img src="/assets/images/tag_add.png">
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                      </div>
+                        <div style="clear: both;"></div>
+                        <div class="text-danger" *ngIf="configInfoErrMsg.tagNameErrors">
+                            <span class="input-error">{{configInfoErrMsg.tagNameErrors}}</span>
+                        </div>
                     </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-              <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
+                </nz-form-item>
+                <nz-form-item nzFlex>
+                    <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
                     <nz-form-control>
-                      <div>
-                        <nz-input-group [nzSuffix]="minusPriceUnit">
-                          <input class="price-input" [(ngModel)]="minus_fee" nz-input autocomplete="off" maxlength='8'
-                            name="minus_price" appFloatNumber [appMaxNumber]='99999.99' required />
-                        </nz-input-group>
-                        <ng-template #minusPriceUnit>元</ng-template>
-                      </div>
-                      <div *ngIf="minusPriceErrors" class="text-danger">
-                        <span class="input-error">{{minusPriceErrors}}</span>
-                      </div>
+                        <div class="params-box">
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col [nzSpan]="3">
+                                    <label nz-checkbox [(ngModel)]="spotTypeStatus.isIndoorChecked"
+                                           name="isIndoorChecked"></label>
+                                    <span>室内车位</span>
+                                </div>
+                                <ng-container *ngIf="spotTypeStatus.isIndoorChecked">
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
+                                            <nz-form-control>
+                                                <nz-input-group [nzSuffix]="originPriceUnit">
+                                                    <input class="price-input"
+                                                           [(ngModel)]="parkingDetailData.indoor_origin_fee"
+                                                           name="indoor_origin_fee" nz-input appFloatNumber
+                                                           [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                </nz-input-group>
+                                                <ng-template #originPriceUnit>元</ng-template>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.indoorOriginPriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.indoorOriginPriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group [nzSuffix]="salePriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.indoor_sale_fee"
+                                                               name="indoor_sale_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #salePriceUnit>元</ng-template>
+                                                </div>
+                                                <div class="text-danger" *ngIf="configInfoErrMsg.indoorSalePriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.indoorSalePriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group style="margin-left: -30px;"
+                                                                    [nzSuffix]="prePriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.indoor_pre_fee"
+                                                               name="indoor_pre_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #prePriceUnit>元</ng-template>
+                                                    <div class="text-danger" style="margin-left: -30px;"
+                                                         *ngIf="configInfoErrMsg.indoorPrePriceErrors">
+                                                        <span class="input-error">{{configInfoErrMsg.indoorPrePriceErrors}}</span>
+                                                    </div>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="5">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group [nzSuffix]="minusPriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.indoor_minus_fee"
+                                                               name="indoor_minus_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #minusPriceUnit>元</ng-template>
+                                                </div>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.indoorMinusPriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.indoorMinusPriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>剩余车位</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group>
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.indoor_spot_num_left"
+                                                               name="indoor_spot_num_left" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                </div>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.indoorSpotNumLeftErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.indoorSpotNumLeftErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col [nzSpan]="3">
+                                    <label nz-checkbox [(ngModel)]="spotTypeStatus.isOutdoorChecked"
+                                           name="isOutdoorChecked"></label>
+                                    <span>室外车位</span>
+                                </div>
+                                <ng-container *ngIf="spotTypeStatus.isOutdoorChecked">
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>原价/日</nz-form-label>
+                                            <nz-form-control>
+                                                <nz-input-group [nzSuffix]="originPriceUnit">
+                                                    <input class="price-input"
+                                                           [(ngModel)]="parkingDetailData.origin_fee"
+                                                           name="origin_fee" nz-input appFloatNumber
+                                                           [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                </nz-input-group>
+                                                <ng-template #originPriceUnit>元</ng-template>
+                                                <div class="text-danger" *ngIf="configInfoErrMsg.originPriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.originPriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>售价/日</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group [nzSuffix]="salePriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.sale_fee"
+                                                               name="sale_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #salePriceUnit>元</ng-template>
+                                                </div>
+                                                <div class="text-danger" *ngIf="configInfoErrMsg.salePriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.salePriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>预付费</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group style="margin-left: -30px;"
+                                                                    [nzSuffix]="prePriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.pre_fee"
+                                                               name="pre_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #prePriceUnit>元</ng-template>
+                                                    <div class="text-danger" style="margin-left: -30px;"
+                                                         *ngIf="configInfoErrMsg.prePriceErrors">
+                                                        <span class="input-error">{{configInfoErrMsg.prePriceErrors}}</span>
+                                                    </div>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="5">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>下单立减</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group [nzSuffix]="minusPriceUnit">
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.minus_fee"
+                                                               name="minus_fee" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                    <ng-template #minusPriceUnit>元</ng-template>
+                                                </div>
+                                                <div class="text-danger" *ngIf="configInfoErrMsg.minusPriceErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.minusPriceErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <nz-form-item nzFlex>
+                                            <nz-form-label [nzNoColon]='true'>剩余车位</nz-form-label>
+                                            <nz-form-control>
+                                                <div>
+                                                    <nz-input-group>
+                                                        <input class="price-input"
+                                                               [(ngModel)]="parkingDetailData.spot_num_left"
+                                                               name="spot_num_left" nz-input appFloatNumber
+                                                               [appMaxNumber]='99999.99' maxlength='8' required/>
+                                                    </nz-input-group>
+                                                </div>
+                                                <div class="text-danger"
+                                                     *ngIf="configInfoErrMsg.spotNumLeftErrors">
+                                                    <span class="input-error">{{configInfoErrMsg.spotNumLeftErrors}}</span>
+                                                </div>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
                     </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>最低预付</nz-form-label>
+                </nz-form-item>
+                <nz-form-item nzFlex>
+                    <nz-form-label nzRequired [nzNoColon]='true'>最低预定日</nz-form-label>
                     <nz-form-control>
-                      <nz-input-group [nzSuffix]="minDaysUnit">
-                        <input class="price-input" [(ngModel)]="configParams.min_days" nz-input autocomplete="off"
-                          maxlength='8' name="min_days" required appFloatNumber [appMaxNumber]='99999' />
-                      </nz-input-group>
-                      <ng-template #minDaysUnit>日</ng-template>
-                      <div *ngIf="minDaysErrors" class="text-danger">
-                        <span class="input-error">{{minDaysErrors}}</span>
-                      </div>
+                        <div class="params-box">
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col [nzSpan]="8">
+                                    <nz-form-item nzFlex>
+                                        <nz-form-label [nzNoColon]='true'>最低预付</nz-form-label>
+                                        <nz-form-control>
+                                            <nz-input-group [nzSuffix]="minDaysUnit">
+                                                <input class="price-input" [(ngModel)]="parkingDetailData.min_days"
+                                                       name="min_days" nz-input appFloatNumber [appMaxNumber]='99999'
+                                                       maxlength='8' equired/>
+                                            </nz-input-group>
+                                            <ng-template #minDaysUnit>日</ng-template>
+                                            <div class="text-danger" *ngIf="configInfoErrMsg.minDaysErrors">
+                                                <span class="input-error">{{configInfoErrMsg.minDaysErrors}}</span>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </div>
                     </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </div>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>联系电话</nz-form-label>
-          <nz-form-control>
-            <div class="params-box">
-              <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>常用</nz-form-label>
+                </nz-form-item>
+                <nz-form-item nzFlex>
+                    <nz-form-label nzRequired [nzNoColon]='true'>联系电话</nz-form-label>
                     <nz-form-control>
-                      <input class="params" [(ngModel)]="configParams.main_tel" nz-input autocomplete="off"
-                        name="main_tel" required maxlength='11' />
-                      <div *ngIf="mainTelErrors" class="text-danger">
-                        <span class="input-error">{{mainTelErrors}}</span>
-                      </div>
+                        <div class="params-box">
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col [nzSpan]="8">
+                                    <nz-form-item nzFlex>
+                                        <nz-form-label [nzNoColon]='true'>常用</nz-form-label>
+                                        <nz-form-control>
+                                            <input class="params" [(ngModel)]="parkingDetailData.main_tel"
+                                                   name="main_tel" nz-input maxlength='11' required/>
+                                            <div class="text-danger" *ngIf="configInfoErrMsg.mainTelErrors">
+                                                <span class="input-error">{{configInfoErrMsg.mainTelErrors}}</span>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col [nzSpan]="8">
+                                    <nz-form-item nzFlex>
+                                        <nz-form-label [nzNoColon]='true'>备用</nz-form-label>
+                                        <nz-form-control>
+                                            <input class="params" [(ngModel)]="parkingDetailData.standby_tel"
+                                                   name="standby_tel" nz-input maxlength='12' required/>
+                                            <div class="text-danger" *ngIf="configInfoErrMsg.standbyTelErrors">
+                                                <span class="input-error">{{configInfoErrMsg.standbyTelErrors}}</span>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </div>
                     </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="8">
-                  <nz-form-item nzFlex>
-                    <nz-form-label [nzNoColon]='true'>备用</nz-form-label>
+                </nz-form-item>
+                <nz-form-item nzFlex>
+                    <nz-form-label [nzNoColon]='true'>标志位名称</nz-form-label>
                     <nz-form-control>
-                      <input class="params" [(ngModel)]="configParams.standby_tel" nz-input autocomplete="off"
-                        name="standby_tel" required maxlength='12' />
-                      <div *ngIf="standbyTelErrors" class="text-danger">
-                        <span class="input-error">{{standbyTelErrors}}</span>
-                      </div>
+                        <div class="params-box">
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col [nzSpan]="8">
+                                    <nz-form-item nzFlex>
+                                        <nz-form-control>
+                                            <input nz-input [(ngModel)]="parkingDetailData.sign_name" name="sign_name"
+                                                   placeholder="请输入1-20字" minlength="1" maxlength="20" appIgnoreSpace>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </div>
                     </nz-form-control>
-                  </nz-form-item>
+                </nz-form-item>
+                <nz-form-item nzFlex style="margin-bottom: 10px;">
+                    <nz-form-label nzRequired [nzNoColon]='true'>预约说明</nz-form-label>
+                    <nz-form-control>
+                        <app-z-text-ckeditor ckEditorId='orderInstructionEditor' [replaceWidth]="1000"
+                                             #orderInstructionEditor></app-z-text-ckeditor>
+                        <div class="text-danger" *ngIf="configInfoErrMsg.instructionErrors">
+                            <span class="input-error">{{configInfoErrMsg.instructionErrors}}</span>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item nzFlex style="margin-bottom: 10px;">
+                    <nz-form-label nzRequired [nzNoColon]='true'>购买须知</nz-form-label>
+                    <nz-form-control>
+                        <app-z-text-ckeditor ckEditorId='purchaseInstructionEditor' [replaceWidth]="1000"
+                                             #purchaseInstructionEditor></app-z-text-ckeditor>
+                        <div class="text-danger" *ngIf="configInfoErrMsg.noticeErrors">
+                            <span class="input-error">{{configInfoErrMsg.noticeErrors}}</span>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+                <div nz-row style="margin:20px 80px 0;">
+                    <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSaveFormSubmit()"
+                            [disabled]="!serviceConfigForm.valid || !CheckSpotTypeValid">
+                        保存
+                    </button>
+                    <button class="close-btn" nz-button nzType="default" (click)="onCancelBtn()">
+                        取消
+                    </button>
                 </div>
-              </div>
             </div>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex style="margin-bottom: 10px;">
-          <nz-form-label nzRequired [nzNoColon]='true'>预约说明</nz-form-label>
-          <nz-form-control>
-            <app-z-text-ckeditor ckEditorId='orderInstructionEditor' #orderInstructionEditor></app-z-text-ckeditor>
-            <div *ngIf="instructionErrors" class="text-danger">
-              <span class="input-error">{{instructionErrors}}</span>
-            </div>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item nzFlex style="margin-bottom: 10px;">
-          <nz-form-label nzRequired [nzNoColon]='true'>购买须知</nz-form-label>
-          <nz-form-control>
-            <app-z-text-ckeditor ckEditorId='purchaseInstructionEditor' #purchaseInstructionEditor>
-            </app-z-text-ckeditor>
-            <div *ngIf="noticeErrors" class="text-danger">
-              <span class="input-error">{{noticeErrors}}</span>
-            </div>
-          </nz-form-control>
-        </nz-form-item>
-        <div nz-row style="margin:20px 80px 0;">
-          <button class="sure-btn" nz-button nzType="primary" [disabled]='!serviceConfigForm.valid'
-            (appZDebounceClick)="onSaveFormSubmit()">保存</button>
-          <button class="close-btn" nz-button nzType="default" (click)="onCancelBtn()">取消</button>
-        </div>
-      </div>
-    </form>
-  </div>
+        </form>
+    </div>
 </div>

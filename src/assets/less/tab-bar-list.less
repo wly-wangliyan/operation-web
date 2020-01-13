@@ -1,5 +1,6 @@
 .tab-bar-list {
   padding: 14px 15px 0 15px;
+  background-color: #f7f8fa;
 }
 
 .tab-bar-list ::ng-deep .ant-radio-group {
@@ -31,4 +32,97 @@
 
 .tab-bar-list ::ng-deep .ant-radio-button-wrapper:last-child {
   border-top-right-radius: 4px;
+}
+
+.tab-bar {
+  margin: 0 15px;
+  height: 30px;
+  overflow: hidden;
+
+  &>ul {
+    width: auto;
+    height: 30px;
+    overflow: hidden;
+    display: inline-flex;
+
+    &>li {
+      font-size: 14px;
+      min-width: 80px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      cursor: pointer;
+      outline: none;
+      margin-right: 50px;
+
+      &:hover {
+        color: #3E71F7;
+      }
+
+      &.active {
+        color: #3E71F7;
+        border-bottom: 2px solid #3E71F7;
+      }
+    }
+  }
+
+  .tab-btn {
+    float: right;
+    width: 100px;
+    height: 30px;
+    background: #3E71F7;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    outline: none !important;
+    padding: 0 10px;
+
+    &:hover {
+      background: #315AC5;
+      cursor: pointer;
+    }
+
+    &:disabled {
+      background: #D0D0D0;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.tab-btn-group {
+  display: flex;
+  align-items: center;
+
+  .tab-btn-item {
+    font-size: 13px;
+    width: 100px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #888;
+    border: 0;
+    background: #F7F8FA;
+    outline: none;
+    word-break: keep-all;
+
+    &:hover {
+      color: #fff !important;
+      background: #315AC5;
+    }
+  }
+
+  .tab-btn-item:first-child:not(:last-child) {
+    border-right: 1px solid rgba(136, 136, 136, 0.3);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .tab-btn-item:last-child:not(:first-child) {
+    border-radius: 0 2px 2px 0;
+  }
+
+  .active-btn {
+    color: #fff !important;
+    background: #3E71F7;
+  }
 }

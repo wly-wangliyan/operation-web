@@ -59,6 +59,7 @@
   background-size: contain;
   margin-left: 15px;
   display: flex;
+  cursor: pointer;
 }
 
 .logo div:first-child {
@@ -99,7 +100,8 @@
   background-size: contain;
 }
 
-:host ::ng-deep .ant-badge-count, .ant-badge-dot {
+:host ::ng-deep .ant-badge-count,
+.ant-badge-dot {
   box-shadow: none;
 }
 
@@ -129,4 +131,9 @@
 .header-order-parking-active {
   width: 200px !important;
   background: url('/assets/images/icon_airport_parking.png') no-repeat center;
+}
+
+.header-topic-active {
+  width: 200px !important;
+  background: url('/assets/images/icon_topic.png') no-repeat center;
 }

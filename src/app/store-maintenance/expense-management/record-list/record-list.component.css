@@ -1,0 +1,11 @@
+.search-btn-group {
+  margin-top: -1px !important;
+}
+
+::ng-deep .z-modal .mes {
+  padding: 0 20px !important;
+}
+
+.operation a {
+  margin: auto 5px;
+}

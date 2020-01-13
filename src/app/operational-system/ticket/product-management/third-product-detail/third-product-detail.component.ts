@@ -14,7 +14,7 @@ import { CalendarDetailComponent } from '../product-detail/calendar-detail/calen
 export class ThirdProductDetailComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private productService: ProductService,
-              private route: ActivatedRoute, private router: Router) { }
+    private route: ActivatedRoute, private router: Router) { }
 
   public thirdProductData: ThirdProductEntity = new ThirdProductEntity();
   public thirdProductInfoList: Array<any> = [];
@@ -128,7 +128,7 @@ export class ThirdProductDetailComponent implements OnInit {
         });
       }, err => {
         this.globalService.httpErrorProcess(err);
-        this.globalService.promptBox.open('选用失败，请重试！');
+        this.globalService.promptBox.open('选用失败，请重试！', null, 2000, null, false);
       });
     });
   }
