@@ -60,7 +60,7 @@ export class ChooseCommodityComponent implements OnInit {
     return this.commodityList.length / PageSize + 1;
   }
 
-  constructor(private globalService: GlobalService,
+  constructor(public globalService: GlobalService,
               private luckDrawService: LuckDrawService,
               private goodsHttpService: GoodsManagementHttpService) { }
 
