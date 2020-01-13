@@ -284,3 +284,32 @@ export class PayTypePipe implements PipeTransform {
   }
 }
 
+/** 使用状态 */
+const ExchangeStatus = {
+  1: '未使用',
+  2: '已使用',
+};
+
+@Pipe({
+  name: 'exchangeStatus'
+})
+export class ExchangeStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = ExchangeStatus[value];
+    } else {
+      result = ExchangeStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+

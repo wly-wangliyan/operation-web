@@ -9,6 +9,7 @@ import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
 import { ClassifyManagementComponent } from './classify-management/classify-management.component';
 import { ClassifyEditComponent } from './classify-management/classify-edit/classify-edit.component';
+import { ExchangeStatusPipe } from '../mall.pipe';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -43,7 +44,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     GoodsCreateComponent,
     GoodsDetailComponent,
     ClassifyManagementComponent,
-    ClassifyEditComponent
+    ClassifyEditComponent,
+    ExchangeStatusPipe
   ],
   providers: [
     GoodsManagementHttpService,

@@ -101,7 +101,7 @@
               </td>
               <td>{{record.htcode}}</td>
               <td>{{record.specification_id}}</td>
-              <td>{{record.exchange_status}}</td>
+              <td>{{record.exchange_status|exchangeStatus}}</td>
               <td>
                 {{record.start_time?(record.start_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
                 至{{record.end_time?(record.end_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
