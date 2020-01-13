@@ -210,8 +210,8 @@
                             <span>{{data.prize_type===1?data.prize_info.name:data.prize_type===2?data.prize_info.coupon_id:'再参与1次'}}</span>
                         </td>
                         <td>
-                            <img *ngIf='!data.prize_image' style="width: 80px;" src="/assets/images/space_config.png">
-                            <img *ngIf='data.prize_image' style="width: 80px;" [src]="data.prize_image">
+                            <img *ngIf='!data.prize_image' style="width: 60px;" src="/assets/images/space_config.png">
+                            <img *ngIf='data.prize_image' style="width: 60px;" [src]="data.prize_image">
                         </td>
                         <td>{{data.prize_num||0}}</td>
                         <td>{{(data.prize_num-data.remaining_amount)||0}}</td>
