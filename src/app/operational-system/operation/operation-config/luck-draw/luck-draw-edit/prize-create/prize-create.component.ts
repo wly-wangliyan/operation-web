@@ -1,12 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { BannerParams, BannerService } from '../../../../mini-program/banner-management/banner.service';
 import { Subscription, timer } from 'rxjs';
 import { ZPhotoSelectComponent } from '../../../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../../../core/http.service';
 import { isUndefined } from 'util';
-import { CommodityEntity } from '../../../../../mall/goods-management/goods-management-http.service';
 import { ChooseCommodityComponent } from './choose-commodity/choose-commodity.component';
+import { LuckDrawService, PrizeEntity, PrizeInfoEntity } from '../../luck-draw.service';
 
 export class ErrMessageItem {
   public isError = false;
@@ -23,23 +22,21 @@ export class ErrMessageItem {
 
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
-  title: ErrMessageItem = new ErrMessageItem();
+  prize_name: ErrMessageItem = new ErrMessageItem();
   jump_link: ErrMessageItem = new ErrMessageItem();
   offline_time: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, jump_link?: ErrMessageItem, offline_time?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(title) || isUndefined(jump_link)
+  constructor(icon?: ErrMessageItem, prize_name?: ErrMessageItem, jump_link?: ErrMessageItem, offline_time?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(prize_name) || isUndefined(jump_link)
         || isUndefined(offline_time)) {
       return;
     }
     this.icon = icon;
-    this.title = title;
+    this.prize_name = prize_name;
     this.jump_link = jump_link;
     this.offline_time = offline_time;
   }
 }
-
-const PageSize = 15;
 
 @Component({
   selector: 'app-prize-create',
@@ -47,21 +44,16 @@ const PageSize = 15;
   styleUrls: ['./prize-create.component.css']
 })
 export class PrizeCreateComponent implements OnInit {
-
-  public isCreatePrize = true;
-  public prizeParams: BannerParams = new BannerParams();
+  public prizeParams: PrizeEntity = new PrizeEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
-  public commodityList: Array<CommodityEntity> = []; // 商品列表
-  public noResultText = '数据加载中...';
-  public pageIndex = 1; // 页码
 
   private sureCallback: any;
   private closeCallback: any;
   private requestSubscription: Subscription;
-  private banner_id: string;
   private is_save = false; // 防止连续出发保存事件
-  private commodity: any;
+  private lottery_activity_id: string; // 活动id
+  private prizeList: Array<PrizeEntity> = [];
 
   @Input() public data: any;
   @Input() public sureName = '保存';
@@ -69,14 +61,8 @@ export class PrizeCreateComponent implements OnInit {
   @ViewChild(ChooseCommodityComponent, { static: false }) public chooseCommodityComponent: ChooseCommodityComponent;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  private get pageCount(): number {
-    if (this.commodityList.length % PageSize === 0) {
-      return this.commodityList.length / PageSize;
-    }
-    return this.commodityList.length / PageSize + 1;
-  }
-
-  constructor(private globalService: GlobalService, private bannerService: BannerService) { }
+  constructor(private globalService: GlobalService,
+              private luckDrawService: LuckDrawService) { }
 
   public ngOnInit() {
   }
@@ -85,48 +71,36 @@ export class PrizeCreateComponent implements OnInit {
   public onClose() {
     this.clear();
     this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.prizeParams = new BannerParams();
+    this.prizeParams = new PrizeEntity();
     $(this.prizePromptDiv.nativeElement).modal('hide');
   }
 
   /**
-   * 打开确认框
+   * 打开创建、编辑奖品确认框
    * @param sureName 确认按钮文本(默认为确定)
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(banner_id: string, sureFunc: any, closeFunc: any = null) {
-    const openBannerModal = () => {
+  public open(lottery_activity_id: string, prizeList: Array<PrizeEntity>, index: number, sureFunc: any, closeFunc: any = null) {
+    const openPrizeModal = () => {
       timer(0).subscribe(() => {
         $(this.prizePromptDiv.nativeElement).modal('show');
       });
     };
-    this.isCreatePrize = banner_id ? false : true;
-    this.banner_id = banner_id;
+    this.lottery_activity_id = lottery_activity_id;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
-    // 首页banner与检车banner设置不同图片剪裁比例
     this.clear();
     this.is_save = false;
-    if (this.isCreatePrize) {
-      this.prizeParams = new BannerParams();
+    this.prizeList = prizeList;
+    if (index < 0) {
+      this.prizeParams = new PrizeEntity();
       this.cover_url = [];
     } else {
-      this.rquestBannerDetail();
+      this.prizeParams = prizeList[index].clone();
+      this.cover_url = prizeList[index].prize_image.split(',');
     }
-    openBannerModal();
-  }
-
-  // 获取详情
-  private rquestBannerDetail(): void {
-    this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.requestSubscription = this.bannerService.requestBannerDetail(this.banner_id).subscribe(res => {
-      this.prizeParams = res;
-      this.cover_url = this.prizeParams.image ? this.prizeParams.image.split(',') : [];
-      this.prizeParams.belong_to = !res.belong_to ? 0 : res.belong_to;
-    }, err => {
-      this.globalService.httpErrorProcess(err);
-    });
+    openPrizeModal();
   }
 
   // form提交
@@ -136,16 +110,13 @@ export class PrizeCreateComponent implements OnInit {
     }
     this.clear();
     this.is_save = true;
-    // const params = this.prizeParams.clone();
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.prizeParams.image = imageUrl.join(',');
-      this.prizeParams.belong_to = this.prizeParams.belong_to === 0 ? null : this.prizeParams.belong_to;
+      this.prizeParams.prize_image = imageUrl.join(',');
       if (this.verification()) {
-        // params.image = this.prizeParams.image;
-        if (this.isCreatePrize) {
-          // 添加banner
-          this.bannerService.requestAddBannerData(this.prizeParams).subscribe(() => {
+        if (!this.prizeParams.prize_id) {
+          // 添加奖品
+          this.luckDrawService.requestAddPrizeData(this.lottery_activity_id, this.prizeParams).subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('添加成功！', () => {
               this.sureCallbackInfo();
@@ -155,8 +126,9 @@ export class PrizeCreateComponent implements OnInit {
             this.errorProcess(err);
           });
         } else {
-          // 编辑banner
-          this.bannerService.requestUpdateBannerData(this.banner_id, this.prizeParams).subscribe(() => {
+          // 编辑奖品
+          this.luckDrawService.requestUpdatePrizeData(this.lottery_activity_id, this.prizeParams.prize_id, this.prizeParams)
+              .subscribe(() => {
             this.onClose();
             this.globalService.promptBox.open('修改成功！', () => {
               this.sureCallbackInfo();
@@ -178,16 +150,9 @@ export class PrizeCreateComponent implements OnInit {
   // 表单提交校验
   private verification(): boolean {
     let cisCheck = true;
-
-    if (!this.prizeParams.image) {
+    if (!this.prizeParams.prize_image) {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请重新上传图片！';
-      cisCheck = false;
-    }
-
-    if (!this.prizeParams.jump_link && this.prizeParams.belong_to) {
-      this.errPositionItem.jump_link.isError = true;
-      this.errPositionItem.jump_link.errMes = '请输入跳转URL！';
       cisCheck = false;
     }
     return cisCheck;
@@ -196,7 +161,7 @@ export class PrizeCreateComponent implements OnInit {
   // 清空
   public clear(): void {
     this.errPositionItem.icon.isError = false;
-    this.errPositionItem.title.isError = false;
+    this.errPositionItem.prize_name.isError = false;
     this.errPositionItem.jump_link.isError = false;
     this.errPositionItem.offline_time.isError = false;
   }
@@ -217,9 +182,9 @@ export class PrizeCreateComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'title') {
-            this.errPositionItem.title.isError = true;
-            this.errPositionItem.title.errMes = '标题错误或无效！';
+          if (content.code === 'invalid' && content.field === 'prize_name') {
+            this.errPositionItem.prize_name.isError = true;
+            this.errPositionItem.prize_name.errMes = '标题错误或无效！';
             return;
           }
         }
@@ -256,15 +221,17 @@ export class PrizeCreateComponent implements OnInit {
   }
 
   // 选择商品
-  public onAddCommodityClick() {
-    this.chooseCommodityComponent.open('111', () => {
+  public onAddCommodityClick(prize_info: PrizeInfoEntity) {
+    this.chooseCommodityComponent.open(prize_info, () => {
       timer(0).subscribe(() => {
-        this.commodity = this.chooseCommodityComponent.currentCommodity;
-        console.log(this.commodity);
-        // this.searchText$.next();
+        const specification_name = this.chooseCommodityComponent.currentCommodity.specification.specification_name;
+        const commodity_name = this.chooseCommodityComponent.currentCommodity.source.commodity_name;
+        this.prizeParams.prize_info.commodity_id = this.chooseCommodityComponent.currentCommodity.source.commodity_id;
+        this.prizeParams.prize_info.specification_id = this.chooseCommodityComponent.currentCommodity.specification.specification_id;
+        this.prizeParams.prize_info.stock = this.chooseCommodityComponent.currentCommodity.specification.stock;
+        this.prizeParams.prize_info.unit_sell_price = this.chooseCommodityComponent.currentCommodity.specification.unit_sell_price;
+        this.prizeParams.prize_info.name = `${commodity_name}(${specification_name})`;
       });
-    }, () => {
-      // this.bannerEdit.clear();
     });
   }
 }

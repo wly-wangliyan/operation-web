@@ -6,7 +6,7 @@ import {
 } from '../../../../../../mall/goods-management/goods-management-http.service';
 import { GlobalService } from '../../../../../../../core/global.service';
 import { debounceTime } from 'rxjs/internal/operators';
-import { CommoditySearchParams, LuckDrawService } from '../../../luck-draw.service';
+import { CommoditySearchParams, LuckDrawService, PrizeInfoEntity } from '../../../luck-draw.service';
 
 const PageSize = 15;
 
@@ -47,6 +47,7 @@ export class ChooseCommodityComponent implements OnInit {
   private sureCallback: any;
   private closeCallback: any;
   private searchText$ = new Subject<any>();
+  private prize_info: PrizeInfoEntity = new PrizeInfoEntity();
 
   @ViewChild('addCommodityPromptDiv', { static: false }) public addCommodityPromptDiv: ElementRef;
   @ViewChild('addSpecificationPromptDiv', { static: false }) public addSpecificationPromptDiv: ElementRef;
@@ -72,7 +73,17 @@ export class ChooseCommodityComponent implements OnInit {
       this.luckDrawService.requestCommodityListData(this.searchParams).subscribe(res => {
         this.commodityList = [];
         res.results.forEach(value => {
-          this.commodityList.push(new CommodityItem(value));
+          const commodity = new CommodityItem(value);
+          if (value.commodity_id === this.prize_info.commodity_id) {
+            commodity.isChoose = true;
+            value.specifications.forEach(value1 => {
+              if (value1.specification_id === this.prize_info.specification_id) {
+                commodity.specification = value1;
+              }
+            });
+            this.currentCommodity = commodity;
+          }
+          this.commodityList.push(commodity);
         });
         this.pageIndex = 1;
         this.noResultText = '暂无数据';
@@ -112,12 +123,13 @@ export class ChooseCommodityComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(banner_id: string, sureFunc: any, closeFunc: any = null) {
+  public open(prize_info: PrizeInfoEntity, sureFunc: any, closeFunc: any = null) {
     const openCommodityModal = () => {
       timer(0).subscribe(() => {
         $(this.addCommodityPromptDiv.nativeElement).modal('show');
       });
     };
+    this.prize_info = prize_info;
     this.commodityList = [];
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;

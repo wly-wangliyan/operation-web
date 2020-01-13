@@ -1,5 +1,5 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'运营配置'" [level2Name]="'幸运抽奖'" [level3Name]="'编辑抽奖活动'" [level2RelativePath]="'../'"></app-crumb>
+    <app-crumb [level1Name]="'运营配置'" [level2Name]="'幸运抽奖'" [level3Name]="levelName" [level2RelativePath]="'../'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="content-container">
@@ -12,7 +12,7 @@
                     <i></i>2. 奖项设置</li>
             </ul>
         </div>
-        <form *ngIf="pushParams" autocomplete="off" class="form-horizontal" #editPushModal="ngForm">
+        <form *ngIf="activityParams" autocomplete="off" class="form-horizontal" #editActivityModal="ngForm">
             <div *ngIf="tabIndex===1" style="margin-bottom: 10px">
                 <div class="break-line">
                     <span>基本设置</span>
@@ -24,8 +24,8 @@
                         <span>活动名称</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.push_plan_name"
-                               name="push_plan_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
+                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="activityParams.lottery_activity_name"
+                               name="lottery_activity_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
                     </div>
                 </div>
                 <div class="row">
@@ -35,16 +35,18 @@
                     </label>
                     <div class="control-input">
                         <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
-                                        name='online_start_time' nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                        [nzShowTime]="true" name='start_time' nzFormat="yyyy-MM-dd HH:mm" required
+                                        (ngModelChange)="errPositionItem.end_time.isError=false"></nz-date-picker>
                         <span style="margin: 0 5px">至</span>
                         <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
-                                        name='online_start_time' nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                        [nzShowTime]="true" name='end_time' nzFormat="yyyy-MM-dd HH:mm" required
+                                        (ngModelChange)="errPositionItem.end_time.isError=false"></nz-date-picker>
                     </div>
                 </div>
                 <div class="row row-message" style="height: 20px">
                     <label class="control-label"></label>
                     <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.push_plan_rank?.isError">{{errPositionItem?.push_plan_rank?.errMes}}</span>
+                        <span *ngIf="errPositionItem?.end_time?.isError">{{errPositionItem?.end_time?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -52,8 +54,8 @@
                         <b>*</b>
                         <span>参与用户身份</span>
                     </label>
-                    <nz-radio-group [(ngModel)]="pushParams.push_range" name="push_range">
-                        <label nz-radio nzValue=1>所有用户</label>
+                    <nz-radio-group [(ngModel)]="activityParams.user_limit" name="user_limit" required>
+                        <label nz-radio [nzValue]=1>所有用户</label>
                     </nz-radio-group>
                 </div>
                 <div class="row">
@@ -63,19 +65,25 @@
                     </label>
                     <div class="push-rate">
                         <span>每隔</span>
-                        <input class="form-control" [(ngModel)]="pushParams.push_interval" name="push_interval" placeholder="0-999"
+                        <input class="form-control" [(ngModel)]="activityParams.interval_days" name="interval_days" placeholder="0-999"
                                maxlength="3" autocomplete="off" required appIntNumber="true">
                         <label>日</label>
                         <span>可参与，每日可参与上限</span>
-                        <input class="form-control" [(ngModel)]="pushParams.push_num_everyday" name="push_num_everyday"
-                               placeholder="1-999" maxlength="3" (change)="errPositionItem.push_speed.isError=false" autocomplete="off"
+                        <input class="form-control" [(ngModel)]="activityParams.daily_participation_limit" name="daily_participation_limit"
+                               placeholder="1-999" maxlength="3" (change)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off"
                                oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
                         <label>次</label>
                         <span>，最大可参与上限</span>
-                        <input class="form-control" [(ngModel)]="pushParams.push_num" name="push_num" placeholder="1-999"
-                               maxlength="3" (change)="errPositionItem.push_speed.isError=false" autocomplete="off"
+                        <input class="form-control" [(ngModel)]="activityParams.max_participation_limit" name="max_participation_limit"
+                               maxlength="3" (change)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off" placeholder="1-999"
                                oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
                         <label>次</label>
+                    </div>
+                </div>
+                <div class="row row-message" style="height: 20px">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.daily_participation_limit?.isError">{{errPositionItem?.daily_participation_limit?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -83,7 +91,7 @@
                         <b>&nbsp;</b>
                         <span>分享设置</span>
                     </label>
-                    <label nz-checkbox [(ngModel)]="pushParams.push_speed_type" name="push_speed_type">每人首次分享后额外参与1次</label>
+                    <label nz-checkbox [(ngModel)]="extra_times" name="extra_times">每人首次分享后额外参与1次</label>
                 </div>
             </div>
             <div *ngIf="tabIndex===1">
@@ -98,12 +106,12 @@
                     </label>
                     <div class="control-input">
                         <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
-                                            [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                            [imageWidth]="203" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="2.03/1"
+                                            [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event, 'cover_image')" file_id="coverImg"
+                                            [imageWidth]="203" [imageHeight]="100" [imageUrls]="cover_image" #coverImg [aspectRatio]="2.03/1"
                                             [minCropBoxWidth]="300" [minCropBoxHeight]="148" [resizable]="true">
                         </app-z-photo-select>
                         <div class="message">
-                            <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                            <span *ngIf="errPositionItem?.cover_image?.isError">{{errPositionItem?.cover_image?.errMes}}</span>
                             <span class="cover-hint">注：尺寸750 × 370px，格式PNG/JPG/GIF，大小2M以内</span>
                         </div>
                     </div>
@@ -114,8 +122,8 @@
                         <span>活动规则</span>
                     </label>
                     <div class="control-input">
-                        <textarea class="form-control" rows="4" placeholder="请输入活动规则" [(ngModel)]="pushParams.description"
-                            name="description" maxlength="100">
+                        <textarea class="form-control" rows="4" placeholder="请输入活动规则" [(ngModel)]="activityParams.lottery_activity_rules"
+                            name="lottery_activity_rules" maxlength="500" required>
                         </textarea>
                     </div>
                 </div>
@@ -125,8 +133,8 @@
                         <span>微信好友分享标题</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.description"
-                                  name="description" maxlength="20">
+                        <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="activityParams.wx_share_title"
+                                  name="wx_share_title" maxlength="20" required>
                     </div>
                 </div>
                 <div>
@@ -137,12 +145,12 @@
                         </label>
                         <div class="control-input" style="width: 435px">
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg1"
-                                                [imageWidth]="125" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1.25/1"
+                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event, 'wx_share_image')" file_id="coverImg1"
+                                                [imageWidth]="125" [imageHeight]="100" [imageUrls]="wx_share_image" #wxShareImg [aspectRatio]="1.25/1"
                                                 [minCropBoxWidth]="270" [minCropBoxHeight]="216" [resizable]="true" [imageAddHeight]="100">
                             </app-z-photo-select>
                             <div class="message">
-                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                <span *ngIf="errPositionItem?.wx_share_image?.isError">{{errPositionItem?.wx_share_image?.errMes}}</span>
                                 <span class="cover-hint">注：尺寸135 × 108px，格式PNG或JPG，大小2M以内</span>
                             </div>
                         </div>
@@ -154,32 +162,32 @@
                         </label>
                         <div class="control-input"  style="width: 435px">
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg2"
-                                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
+                                                [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event, 'wx_share_poster')" file_id="coverImg2"
+                                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="wx_share_poster" #wxPosterImg [aspectRatio]="1/1"
                                                 [minCropBoxWidth]="300" [minCropBoxHeight]="300" [resizable]="true">
                             </app-z-photo-select>
                             <div class="message">
-                                <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                <span *ngIf="errPositionItem?.wx_share_poster?.isError">{{errPositionItem?.wx_share_poster?.errMes}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="footer" style="width: 70%">
                     <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
-                    <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                    <button class="sure-btn" type="button" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()"
+                            [disabled]="!editActivityModal.form.valid||coverImg.imageList.length===0||wxShareImg.imageList.length===0">保存
                     </button>
                 </div>
             </div>
             <div *ngIf="tabIndex===2">
                 <div class="prize-title">
                     <span>所奖品的中奖概率相加不可大于100%，100% - 奖项概率之和 = 未中奖概率，最多可添加7个奖项</span>
-                    <button nz-button nzType="primary" (click)="onAddPrizeClick()">
+                    <button nz-button nzType="primary" (click)="onEditPrizeClick(-1)" [disabled]="prizeList.length>=7">
                         <img src="/assets/images/tag_add.png">添加奖品
                     </button>
                 </div>
                 <nz-table [nzData]="prizeList" [nzPageSize]="prizeList.length" nzBordered
-                          [nzShowPagination]="false" [nzNoResult]="noResultText" #configTable>
+                          [nzShowPagination]="false" [nzNoResult]="noResultText" #prizeTable>
                     <thead>
                     <tr>
                         <th>名称</th>
@@ -193,23 +201,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of configTable.data; let i=index">
-                        <td [title]="data.promotion_name?data.promotion_name:''">
-                            {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
+                    <tr *ngFor="let data of prizeTable.data; let i=index">
+                        <td [title]="data.prize_name?data.prize_name:''">
+                            {{data.prize_name?(data.prize_name|zMaxLength:10):'--'}}</td>
                         <td>
-                        <td [title]="data.promotion_name?data.promotion_name:''">
-                            {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
-                        <td>
-                        <td>
-                            <img *ngIf='!data.image' style="width: 150px;" src="/assets/images/space_config.png">
-                            <img *ngIf='data.image' style="width: 150px;" [src]="data.image">
+                            <label class="tip" *ngIf="data.prize_type===1">商城商品</label>
+                            <label class="tip tip-coupon" *ngIf="data.prize_type===2">平台优惠券</label>
+                            <span>{{data.prize_type===1?data.prize_info.name:data.prize_type===2?data.prize_info.coupon_id:'再参与1次'}}</span>
                         </td>
-                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-                        <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>
+                            <img *ngIf='!data.prize_image' style="width: 80px;" src="/assets/images/space_config.png">
+                            <img *ngIf='data.prize_image' style="width: 80px;" [src]="data.prize_image">
+                        </td>
+                        <td>{{data.prize_num||0}}</td>
+                        <td>{{(data.prize_num-data.remaining_amount)||0}}</td>
+                        <td>{{data.remaining_amount||0}}</td>
+                        <td>{{data.win_probability+'%'}}</td>
                         <td class="operation">
-                            <a [title]="'编辑'">编辑</a>
+                            <a [title]="'编辑'" (click)="onEditPrizeClick(i)">编辑</a>
                             <a [title]="'删除'">删除</a>
                         </td>
                     </tr>
@@ -224,15 +233,15 @@
                                     <span>名称</span>
                                 </label>
                                 <div class="control-input">
-                                    <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="pushParams.push_plan_name"
-                                           name="push_plan_name" maxlength="6" autocomplete="off" required appIgnoreSpace>
+                                    <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="noPrizeParams.missed_name"
+                                           name="missed_name" maxlength="6" autocomplete="off" required appIgnoreSpace>
                                 </div>
                                 <label class="control-label" style="margin-left: 50px">
                                     <span>提示语</span>
                                 </label>
                                 <div class="control-input">
-                                    <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="pushParams.push_plan_name"
-                                           name="push_plan_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
+                                    <input class="form-control" placeholder="请输入1-20字" [(ngModel)]="noPrizeParams.missed_hint"
+                                           name="missed_hint" maxlength="20" autocomplete="off" required appIgnoreSpace>
                                 </div>
                             </div>
                             <div class="row">
@@ -241,12 +250,12 @@
                                 </label>
                                 <div class="control-input">
                                     <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                        [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-                                                        [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
+                                                        [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event, 'missed_image')" file_id="coverImg"
+                                                        [imageWidth]="100" [imageHeight]="100" [imageUrls]="missed_image" #missedImg [aspectRatio]="1/1"
                                                         [minCropBoxWidth]="160" [minCropBoxHeight]="160" [resizable]="true">
                                     </app-z-photo-select>
                                     <div class="message">
-                                        <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                        <span *ngIf="errPositionItem?.missed_image?.isError">{{errPositionItem?.missed_image?.errMes}}</span>
                                         <span class="cover-hint">注：尺寸160 × 160px，格式PNG或JPG，大小2M以内</span>
                                     </div>
                                 </div>
@@ -254,18 +263,12 @@
                         </td>
                         <td class="operation">
                             <button type="button" nz-button nzType="primary"
-                                    [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                                    [disabled]="!editActivityModal.form.valid||missedImg.imageList.length===0" (appZDebounceClick)="onEditNoPrizeSubmit()">保存
                             </button>
                         </td>
                     </tr>
                     </tbody>
                 </nz-table>
-               <!-- <div class="footer">
-                    <button class="close-btn" type="button" nz-button (click)="onClose()">上一步</button>
-                    <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editPushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
-                    </button>
-                </div>-->
             </div>
         </form>
     </div>

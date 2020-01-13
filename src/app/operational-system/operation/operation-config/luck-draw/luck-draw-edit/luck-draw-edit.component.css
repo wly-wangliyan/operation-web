@@ -195,3 +195,16 @@
     outline: none;
     border: none;
 }
+
+.tip {
+    background: #E1F3D8;
+    padding: 1px 7px;
+    color: #67C23A;
+    margin-right: 5px;
+    border-radius:4px;
+}
+
+.tip-coupon {
+    background: #C6E2FF;
+    color: #409DFD;
+}

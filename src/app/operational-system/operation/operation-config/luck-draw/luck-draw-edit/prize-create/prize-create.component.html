@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-common" role="document">
         <div class="modal-content modal-content-common">
             <div class="modal-header">
-                <span class="modal-title">{{isCreatePrize ? '添加奖品' : '编辑奖品'}}</span>
+                <span class="modal-title">{{prizeParams&&prizeParams.prize_id ? '编辑奖品' : '添加奖品'}}</span>
                 <button type="button" class="close" data-dismiss="modal">&times;
                 </button>
             </div>
@@ -15,14 +15,14 @@
                         <span>名称</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="prizeParams.title" name="title"
-                               maxlength="5" autocomplete="off" required appIgnoreSpace (change)="errPositionItem.title.isError=false">
+                        <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="prizeParams.prize_name" name="prize_name"
+                               maxlength="6" autocomplete="off" required appIgnoreSpace (change)="errPositionItem.prize_name.isError=false">
                     </div>
                 </div>
                 <div class="row row-message">
                     <label class="control-label"></label>
                     <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.title?.isError">{{errPositionItem?.title?.errMes}}</span>
+                        <span *ngIf="errPositionItem?.prize_name?.isError">{{errPositionItem?.prize_name?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -34,7 +34,7 @@
                         <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                             [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg0"
                                             [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg [aspectRatio]="1/1"
-                                            [minCropBoxWidth]="100" [minCropBoxHeight]="100" [resizable]="true" [imageShowWidth]="100">
+                                            [minCropBoxWidth]="160" [minCropBoxHeight]="160" [resizable]="true" [imageShowWidth]="100">
                         </app-z-photo-select>
                         <div class="message">
                             <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
@@ -48,30 +48,30 @@
                         <span>奖品</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group [(ngModel)]="prizeParams.offline_status" name="offline_status">
-                            <label nz-radio nzValue=1>商城商品</label>
-                            <label nz-radio nzValue=2>平台优惠券</label>
-                            <label nz-radio nzValue=3>再参与1次</label>
+                        <nz-radio-group [(ngModel)]="prizeParams.prize_type" name="prize_type" required>
+                            <label nz-radio [nzValue]=1>商城商品</label>
+                            <label nz-radio [nzValue]=2>平台优惠券</label>
+                            <label nz-radio [nzValue]=3>再参与1次</label>
                         </nz-radio-group>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="prizeParams.prize_type===1">
                     <label class=" control-label"></label>
                     <div class="control-input unit">
-                        <input class="form-control" style="width: 360px" [(ngModel)]="prizeParams.title"
-                               name="title" maxlength="5" autocomplete="off" required appIgnoreSpace disabled>
-                        <label style="width: 66px" (click)="onAddCommodityClick()">选择</label>
+                        <input class="form-control" style="width: 360px" [(ngModel)]="prizeParams.prize_info.name"
+                               name="name" autocomplete="off" readonly required appIgnoreSpace>
+                        <label style="width: 66px" (click)="onAddCommodityClick(prizeParams.prize_info)">选择</label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="prizeParams.prize_type===2">
                     <label class=" control-label"></label>
                     <div class="control-input">
-                        <select class="form-control" [(ngModel)]="prizeParams.belong_to" name="belong_to" required>
-                            <option [value]=2>优惠券模板</option>
-                            <option [value]=1>优惠券组</option>
+                        <select class="form-control" [(ngModel)]="prizeParams.prize_info.coupon_type" name="coupon_type" required>
+                            <option [value]=1>优惠券模板</option>
+                            <option [value]=2>优惠券组</option>
                         </select>
-                        <input class="form-control" placeholder="请输入ID" [(ngModel)]="prizeParams.jump_link" name="jump_link"
-                               oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                        <input class="form-control" placeholder="请输入ID" [(ngModel)]="prizeParams.prize_info.coupon_id"
+                               name="coupon_id" oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
                                maxlength="32" autocomplete="off" required appIgnoreSpace style="border-left: none!important;">
                     </div>
                 </div>
@@ -81,8 +81,8 @@
                         <span>数量</span>
                     </label>
                     <div class="control-input unit">
-                        <input class="form-control" placeholder="0-999999" [(ngModel)]="prizeParams.title" name="title"
-                               maxlength="6" autocomplete="off" required appIntNumber="true" appIgnoreSpace (change)="errPositionItem.title.isError=false">
+                        <input class="form-control" placeholder="0-999999" [(ngModel)]="prizeParams.prize_num" name="prize_num"
+                               maxlength="6" autocomplete="off" required appIntNumber="true" appIgnoreSpace>
                         <label>件</label>
                     </div>
                 </div>
@@ -92,8 +92,8 @@
                         <span>中奖概率</span>
                     </label>
                     <div class="control-input unit">
-                        <input class="form-control" placeholder="0.001-100" [(ngModel)]="prizeParams.title" name="title" appFloatNumber="3"
-                               maxlength="5" autocomplete="off" required appIgnoreSpace (change)="errPositionItem.title.isError=false"
+                        <input class="form-control" placeholder="0.001-100" [(ngModel)]="prizeParams.win_probability"
+                               name="win_probability" appFloatNumber="3" maxlength="5" autocomplete="off" required appIgnoreSpace
                                oninput="if(value>100){value=100}" onChange="if(value<0.001){value=0.001}">
                         <label>%</label>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="modal-footer">
                     <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary"
-                            [disabled]="!editPrizeForm.form.valid || coverImg.imageList.length===0 || !prizeParams.offline_status || prizeParams.offline_status === 2 && !offline_time"
+                            [disabled]="!editPrizeForm.form.valid||coverImg.imageList.length===0"
                             (appZDebounceClick)="onEditFormSubmit()">保存
                     </button>
                 </div>

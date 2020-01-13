@@ -13,12 +13,12 @@
             <div class="form-group">
                 <span>名称：</span>
                 <input name="promotion_name" class="form-control" placeholder="请输入名称" maxlength="20"
-                       [(ngModel)]="searchParams.promotion_name" appIgnoreSpace />
+                       [(ngModel)]="searchParams.lottery_activity_name" appIgnoreSpace />
             </div>
             <div class="form-group">
                 <span>ID：</span>
                 <input name="promotion_id" class="form-control" placeholder="请输入ID" maxlength="32"
-                       [(ngModel)]="searchParams.promotion_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
+                       [(ngModel)]="searchParams.lottery_activity_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
                     </button>
@@ -28,8 +28,8 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="configList" [nzNoResult]="noResultText" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" #configTable>
+            <nz-table [nzData]="activityList" [nzNoResult]="noResultText" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" #activityTable>
                 <thead>
                 <tr>
                     <th>序号</th>
@@ -47,21 +47,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of configTable.data; let i=index">
+                <tr *ngFor="let data of activityTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
                     <td>
-                        <img *ngIf='!data.image' style="width: 150px;" src="/assets/images/space_config.png">
-                        <img *ngIf='data.image' style="width: 150px;" [src]="data.image">
+                        <img *ngIf='!data.cover_image' style="width: 75px;" src="/assets/images/space_config.png">
+                        <img *ngIf='data.cover_image' style="width: 75px;" [src]="data.cover_image">
                     </td>
-                    <td [title]="data.promotion_id?data.promotion_id:''">
-                        <span *ngIf="data.promotion_id">
-                            {{data.promotion_id|zMaxLength:15}}
+                    <td [title]="data.lottery_activity_id?data.lottery_activity_id:''">
+                        <span>
+                            {{data.lottery_activity_id?(data.lottery_activity_id|zMaxLength:15):'--'}}
                         </span>
-                        <span *ngIf="!data.promotion_id">--</span>
                     </td>
-
-                    <td [title]="data.promotion_name?data.promotion_name:''">
-                        {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
+                    <td [title]="data.lottery_activity_name?data.lottery_activity_name:''">
+                        {{data.lottery_activity_name?(data.lottery_activity_name|zMaxLength:10):'--'}}</td>
 
                     <td>
                         <div class="td-time">
@@ -75,24 +73,26 @@
                         </div>
                     </td>
 
-                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>
+                        <span *ngFor="let item of data.prizes">{{item.prize_name+';'}}</span>
+                    </td>
 
-                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>{{data.lottery_num||0}}</td>
 
-                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>{{data.lottery_people_num||0}}</td>
 
-                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>{{data.win_num||0}}</td>
 
-                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                    <td>{{data.win_people_num||0}}</td>
 
                     <td>
                         <nz-switch [ngModel]="data.status===1?true:false" nzCheckedChildren="On" style="height: 10px"
-                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.promotion_id,$event)"></nz-switch>
+                                   nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(data.lottery_activity_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'数据'" (click)="onDataClick(data.promotion_id)">数据</a>
-                        <a [title]="'编辑'" (click)="onEditClick(data.promotion_id)">编辑</a>
-                        <a [title]="'删除'" (click)="onEditClick(data.promotion_id)">删除</a>
+                        <a [title]="'数据'" (click)="onDataClick(data.lottery_activity_id)">数据</a>
+                        <a [title]="'编辑'" (click)="onEditClick(data.lottery_activity_id)">编辑</a>
+                        <a [title]="'删除'" (click)="onDeleteClick(data.lottery_activity_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>

@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { PushManagementService, PushParams } from '../../../mini-program/push-management/push-management.service';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +6,9 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { isUndefined } from 'util';
 import { PrizeCreateComponent } from './prize-create/prize-create.component';
-import { timer } from 'rxjs';
+import { forkJoin, Subject, timer } from 'rxjs';
+import { ActivityParams, LuckDrawService, NoPrizeParams, PrizeEntity } from '../luck-draw.service';
+import { debounceTime } from 'rxjs/internal/operators';
 
 export class ErrMessageItem {
   public isError = false;
@@ -23,19 +24,27 @@ export class ErrMessageItem {
 }
 
 export class ErrPositionItem {
-  icon: ErrMessageItem = new ErrMessageItem();
-  offline_time: ErrMessageItem = new ErrMessageItem();
+  cover_image: ErrMessageItem = new ErrMessageItem();
+  wx_share_image: ErrMessageItem = new ErrMessageItem();
+  wx_share_poster: ErrMessageItem = new ErrMessageItem();
+  missed_image: ErrMessageItem = new ErrMessageItem();
+  end_time: ErrMessageItem = new ErrMessageItem();
   push_plan_rank: ErrMessageItem = new ErrMessageItem();
-  push_speed: ErrMessageItem = new ErrMessageItem();
+  daily_participation_limit: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem, push_speed?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank) || isUndefined(push_speed)) {
+  constructor(cover_image?: ErrMessageItem, wx_share_poster?: ErrMessageItem, wx_share_image?: ErrMessageItem,
+              missed_image?: ErrMessageItem, end_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem, daily_participation_limit?: ErrMessageItem) {
+    if (isUndefined(cover_image) || isUndefined(wx_share_image) || isUndefined(wx_share_poster) || isUndefined(missed_image)
+        || isUndefined(end_time) || isUndefined(push_plan_rank) || isUndefined(daily_participation_limit)) {
       return;
     }
-    this.icon = icon;
-    this.offline_time = offline_time;
+    this.cover_image = cover_image;
+    this.wx_share_image = wx_share_image;
+    this.wx_share_poster = wx_share_poster;
+    this.missed_image = missed_image;
+    this.end_time = end_time;
     this.push_plan_rank = push_plan_rank;
-    this.push_speed = push_speed;
+    this.daily_participation_limit = daily_participation_limit;
   }
 }
 
@@ -44,61 +53,72 @@ export class ErrPositionItem {
   templateUrl: './luck-draw-edit.component.html',
   styleUrls: ['./luck-draw-edit.component.css']
 })
-export class LuckDrawEditComponent implements OnInit {
+export class LuckDrawEditComponent implements OnInit, OnDestroy {
 
-  public pushParams: PushParams = new PushParams();
+  public activityParams: ActivityParams = new ActivityParams();
+  public noPrizeParams: NoPrizeParams = new NoPrizeParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
-  public cover_url = [];
-  public coupon_service = ['停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
-  public offline_status = null;
   public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
-  public levelName = '新建';
-  public start_time: any = '';
-  public end_time: any = '';
-  public prizeList = [];
+  public levelName = '新建抽奖活动';
+  public prizeList: Array<PrizeEntity> = [];  // 奖品列表
   public noResultText = ' ';
   public tabIndex = 1;
+  public cover_image = []; // 活动封面图
+  public wx_share_image = []; // 微信分享图
+  public wx_share_poster = []; // 微信海报图
+  public missed_image = []; // 未中奖图
+  public start_time = null; // 活动开始时间
+  public end_time = null; // 活动开始时间
+  public extra_times: boolean; // 每人首次分享后额外参与
 
-  private push_id: string;
+  private lottery_activity_id: string;
   private is_save = false; // 防止连续出发保存事件
+  private searchText$ = new Subject<any>();
 
   @Input() public data: any;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('wxShareImg', { static: false }) public wxShareImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('wxPosterImg', { static: false }) public wxPosterImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('missedImg', { static: false }) public missedImgSelectComponent: ZPhotoSelectComponent;
   @ViewChild(PrizeCreateComponent, { static: false }) public prizeCreateComponent: PrizeCreateComponent;
 
   constructor(
       private globalService: GlobalService,
-      private pushService: PushManagementService,
+      private luckDrawService: LuckDrawService,
       private route: ActivatedRoute,
       private router: Router) {
-    this.route.paramMap.subscribe(map => {
-      this.push_id = map.get('push_plan_id');
+    route.queryParams.subscribe(queryParams => {
+      this.lottery_activity_id = queryParams.lottery_activity_id;
     });
   }
 
   public ngOnInit() {
-    this.levelName = this.push_id ? '编辑' : '新建';
-    if (this.push_id) {
-      this.getPushDetail();
-    } else {
-      this.pushParams.url_type = '';
-      this.pushParams.free_range_type = 1;
+    this.levelName = this.lottery_activity_id ? '编辑抽奖活动' : '新建抽奖活动';
+    if (this.lottery_activity_id) {
+      this.searchText$.pipe(debounceTime(100)).subscribe(() => {
+        this.getActivityDetail();
+      });
+      this.searchText$.next();
     }
   }
 
+  public ngOnDestroy() {
+    this.searchText$ && this.searchText$.unsubscribe();
+  }
+
   // 获取详情
-  private getPushDetail(): void {
-    this.pushService.requestPushDetail(this.push_id).subscribe(data => {
-      this.pushParams = new PushParams(data);
-      if (data.end_time === 9999999999) {
-        this.offline_status = 1;
-      } else {
-        this.offline_status = 2;
-        this.pushParams.end_time = data.end_time * 1000;
-      }
-      this.pushParams.url_type = this.pushParams.url_type ? this.pushParams.url_type : '';
-      this.pushParams.free_range_type = this.pushParams.free_range_type ? this.pushParams.free_range_type : 1;
-      this.cover_url = this.pushParams.push_image ? this.pushParams.push_image.split(',') : [];
+  private getActivityDetail(): void {
+    this.luckDrawService.requestActivityDetail(this.lottery_activity_id).subscribe(data => {
+      this.activityParams = data;
+      this.noPrizeParams = data;
+      this.prizeList = data.prizes;
+      this.cover_image = this.activityParams.cover_image ? this.activityParams.cover_image.split(',') : [];
+      this.wx_share_image = this.activityParams.wx_share_image ? this.activityParams.wx_share_image.split(',') : [];
+      this.wx_share_poster = this.activityParams.wx_share_poster ? this.activityParams.wx_share_poster.split(',') : [];
+      this.missed_image = this.noPrizeParams.missed_image ? this.noPrizeParams.missed_image.split(',') : [];
+      this.extra_times = this.activityParams.extra_times === 0 ? false : true;
+      this.start_time = this.activityParams.start_time ? new Date(this.activityParams.start_time * 1000) : '';
+      this.end_time = this.activityParams.end_time ? new Date(this.activityParams.end_time * 1000) : '';
     }, err => {
       if (err.status === 404) {
         this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
@@ -112,7 +132,7 @@ export class LuckDrawEditComponent implements OnInit {
   public onClose() {
     this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
       this.globalService.confirmationBox.close();
-      this.router.navigate(['/main/operation/mini-program/push-management/push-list'], { relativeTo: this.route });
+      this.router.navigate(['/main/operation/operation-config/luck-draw/list'], { relativeTo: this.route });
     });
   }
 
@@ -123,31 +143,32 @@ export class LuckDrawEditComponent implements OnInit {
     }
     this.clear();
     this.is_save = true;
-    this.coverImgSelectComponent.upload().subscribe(() => {
-      const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.pushParams.push_image = imageUrl.join(',');
-      const saveParams = this.pushParams.clone();
-      if (this.offline_status === 1) {
-        saveParams.end_time = 9999999999;
-      } else {
-        saveParams.end_time = new Date(this.pushParams.end_time).getTime() / 1000;
-      }
+    const httpList = [this.coverImgSelectComponent.upload(),
+                      this.wxShareImgSelectComponent.upload()];
+    if (this.wxPosterImgSelectComponent.imageList.length > 0) {
+      httpList.push(this.wxPosterImgSelectComponent.upload());
+    }
+    forkJoin(httpList).subscribe(() => {
+      this.activityParams.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+      this.activityParams.wx_share_image = this.wxShareImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+      this.activityParams.wx_share_poster = this.wxPosterImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+      this.activityParams.extra_times = this.extra_times ? 1 : 0;
       if (this.verification()) {
-        if (!this.push_id) {
-          // 添加推送
-          this.pushService.requestAddPushData(saveParams).subscribe(() => {
-            this.globalService.promptBox.open('添加成功！', () => {
-              this.router.navigate(['../push_list'], { relativeTo: this.route });
-            });
-          }, err => {
-            this.is_save = false;
-            this.errorProcess(err);
-          });
+        if (!this.lottery_activity_id) {
+          // 添加抽奖活动
+           this.luckDrawService.requestAddActivityData(this.activityParams).subscribe(() => {
+             this.globalService.promptBox.open('添加成功！', () => {
+               this.tabIndex = 2;
+             });
+           }, err => {
+             this.is_save = false;
+             this.errorProcess(err);
+           });
         } else {
-          // 编辑推送
-          this.pushService.requestUpdatePushData(this.push_id, saveParams).subscribe(() => {
+          // 编辑抽奖活动
+          this.luckDrawService.requestUpdateActivityData(this.lottery_activity_id, this.activityParams).subscribe(() => {
             this.globalService.promptBox.open('修改成功！', () => {
-              this.router.navigate(['../../push_list'], { relativeTo: this.route });
+              this.tabIndex = 2;
             });
           }, err => {
             this.is_save = false;
@@ -163,51 +184,92 @@ export class LuckDrawEditComponent implements OnInit {
     });
   }
 
-  // 表单提交校验
+  // 保存未中奖设置信息
+  public onEditNoPrizeSubmit() {
+    this.missedImgSelectComponent.upload().subscribe(() => {
+      this.noPrizeParams.missed_image = this.missedImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+      if (this.noPrizeVerification()) {
+        this.luckDrawService.requestSaveNoPrizeData(this.lottery_activity_id, this.noPrizeParams).subscribe(() => {
+          this.globalService.promptBox.open('保存成功！');
+        }, err => {
+          this.is_save = false;
+          this.errorProcess(err);
+        });
+      }
+    }, err => {
+      this.upLoadErrMsg(err);
+    });
+  }
+
+  // 保存活动信息表单提交校验
   private verification(): boolean {
     let cisCheck = true;
-    if (!this.pushParams.push_image) {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '请重新上传图片！';
+    if (!this.activityParams.cover_image) {
+      this.errPositionItem.cover_image.isError = true;
+      this.errPositionItem.cover_image.errMes = '请重新上传活动封面图！';
+      cisCheck = false;
+    }
+    if (!this.activityParams.wx_share_image) {
+      this.errPositionItem.wx_share_image.isError = true;
+      this.errPositionItem.wx_share_image.errMes = '请重新上传微信好友分享图！';
+      cisCheck = false;
+    }
+    if (this.wxPosterImgSelectComponent.imageList.length > 0 && !this.activityParams.wx_share_image) {
+      this.errPositionItem.wx_share_image.isError = true;
+      this.errPositionItem.wx_share_image.errMes = '请重新上传微信朋友圈分享海报！';
+      cisCheck = false;
+    }
+    if (Number(this.activityParams.daily_participation_limit) > Number(this.activityParams.max_participation_limit)) {
+      this.errPositionItem.daily_participation_limit.isError = true;
+      this.errPositionItem.daily_participation_limit.errMes = '每日可参与上限不能大于最大可参与上限！';
       cisCheck = false;
     }
 
-    if (Number(this.pushParams.push_num_everyday) > Number(this.pushParams.push_num)) {
-      this.errPositionItem.push_speed.isError = true;
-      this.errPositionItem.push_speed.errMes = '每日推送次数不能大于最大推送次数！';
+    const startTimestamp = new Date(this.start_time).setHours(new Date(this.start_time).getHours(),
+        new Date(this.start_time).getMinutes(), 0, 0) / 1000;
+    const endTimestamp = new Date(this.end_time).setHours(new Date(this.end_time).getHours(),
+        new Date(this.end_time).getMinutes(), 0, 0) / 1000;
+    const currentTimeStamp = new Date().getTime() / 1000;
+    if (startTimestamp > endTimestamp) {
+      this.errPositionItem.end_time.isError = true;
+      this.errPositionItem.end_time.errMes = '活动开始时间不能大于活动结束时间！';
       cisCheck = false;
-    }
-
-    if (this.offline_status === 2) {
-      if (!this.pushParams.end_time) {
-        this.errPositionItem.offline_time.isError = true;
-        this.errPositionItem.offline_time.errMes = '请选择下线时间！';
-        cisCheck = false;
-      } else {
-        const offlineTimestamp = new Date(this.pushParams.end_time).setHours(new Date(this.pushParams.end_time).getHours(),
-            new Date(this.pushParams.end_time).getMinutes(), 0, 0) / 1000;
-        const currentTimeStamp = new Date().getTime() / 1000;
-        if (offlineTimestamp - currentTimeStamp <= 0) {
-          this.errPositionItem.offline_time.isError = true;
-          this.errPositionItem.offline_time.errMes = '下线时间应大于当前时间！';
-          cisCheck = false;
-        }
-      }
+    } else if (endTimestamp - currentTimeStamp <= 0) {
+      this.errPositionItem.end_time.isError = true;
+      this.errPositionItem.end_time.errMes = '活动结束时间应大于当前时间！';
+      cisCheck = false;
+    } else {
+      this.activityParams.start_time = startTimestamp;
+      this.activityParams.end_time = endTimestamp;
     }
     return cisCheck;
   }
 
+  // 设置未中奖表单提交校验
+  private noPrizeVerification(): boolean {
+     let cisCheck = true;
+     if (!this.noPrizeParams.missed_image) {
+       this.errPositionItem.missed_image.isError = true;
+       this.errPositionItem.missed_image.errMes = '请重新上传未中奖图片！';
+       cisCheck = false;
+     }
+     return cisCheck;
+  }
+
   // 清空
   public clear(): void {
-    this.errPositionItem.icon.isError = false;
-    this.errPositionItem.offline_time.isError = false;
+    this.errPositionItem.cover_image.isError = false;
+    this.errPositionItem.wx_share_image.isError = false;
+    this.errPositionItem.wx_share_poster.isError = false;
+    this.errPositionItem.missed_image.isError = false;
+    this.errPositionItem.end_time.isError = false;
     this.errPositionItem.push_plan_rank.isError = false;
   }
 
   // 接口错误状态
   private errorProcess(err: any): any {
     if (!this.globalService.httpErrorProcess(err)) {
-      if (this.push_id && err.status === 404) {
+      if (this.lottery_activity_id && err.status === 404) {
         this.globalService.promptBox.open('该条数据已删除，请刷新后重试!', null, 2000, null, false);
       } else if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
@@ -226,35 +288,33 @@ export class LuckDrawEditComponent implements OnInit {
   private upLoadErrMsg(err: any) {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
-        this.errPositionItem.icon.isError = true;
-        this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
+        this.errPositionItem.wx_share_poster.isError = true;
+        this.errPositionItem.wx_share_poster.errMes = '参数错误，可能文件格式错误！';
       } else if (err.status === 413) {
-        this.errPositionItem.icon.isError = true;
-        this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
+        this.errPositionItem.wx_share_poster.isError = true;
+        this.errPositionItem.wx_share_poster.errMes = '上传资源文件太大，服务器无法保存！';
       } else {
-        this.errPositionItem.icon.isError = true;
-        this.errPositionItem.icon.errMes = '上传失败，请重试！';
+        this.errPositionItem.wx_share_poster.isError = true;
+        this.errPositionItem.wx_share_poster.errMes = '上传失败，请重试！';
       }
     }
   }
 
   // 选择图片时校验图片格式
-  public onSelectedPicture(event: any): any {
-    this.errPositionItem.icon.isError = false;
+  public onSelectedPicture(event: any, type: string): any {
+    this.errPositionItem[type].isError = false;
     if (event === 'type_error') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '格式错误，请重新上传！';
+      this.errPositionItem[type].isError = true;
+      this.errPositionItem[type].errMes = '格式错误，请重新上传！';
     } else if (event === 'size_over') {
-      this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
+      this.errPositionItem[type].isError = true;
+      this.errPositionItem[type].errMes = '图片大小不得高于2M！';
     }
   }
 
   // 上架开始时间的禁用部分
   public disabledStartTime = (startValue: Date): boolean => {
-    if (differenceInCalendarDays(startValue, new Date()) > 0) {
-      return true;
-    } else if (!startValue || !this.end_time) {
+    if (!startValue || !this.end_time) {
       return false;
     } else if (new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.end_time).setHours(0, 0, 0, 0)) {
       return true;
@@ -265,7 +325,7 @@ export class LuckDrawEditComponent implements OnInit {
 
   // 上架结束时间的禁用部分
   public disabledEndTime = (endValue: Date): boolean => {
-    if (differenceInCalendarDays(endValue, new Date()) > 0) {
+    if (differenceInCalendarDays(endValue, new Date()) < 0) {
       return true;
     } else if (!endValue || !this.start_time) {
       return false;
@@ -282,13 +342,13 @@ export class LuckDrawEditComponent implements OnInit {
   }
 
   // 添加、编辑奖品
-  public onAddPrizeClick() {
-    this.prizeCreateComponent.open('', () => {
+  public onEditPrizeClick(index: number) {
+    this.prizeCreateComponent.open(this.lottery_activity_id, this.prizeList, index,() => {
       timer(0).subscribe(() => {
-        // this.searchText$.next();
+        this.searchText$.next();
       });
     }, () => {
-      // this.bannerEdit.clear();
+      this.prizeCreateComponent.clear();
     });
   }
 }
