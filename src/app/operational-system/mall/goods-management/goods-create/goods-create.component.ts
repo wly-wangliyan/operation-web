@@ -284,6 +284,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 规格名称得到焦点时如果勾选了赠品给出提示
   public onFocusSpecificationName(i: number) {
     if (this.giveaway_settings) {
       this.specificationNameIndex = i;
@@ -398,7 +399,6 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
               (tempSpecificationItem.specification_params.stock_json.unit_sell_price_day / 100) :
               tempSpecificationItem.specification_params.stock_json.unit_sell_price_day;
         }
-
         this.commoditySpecificationList.push(tempSpecificationItem);
       });
       if (this.commodityInfo.specifications.length === 0) {

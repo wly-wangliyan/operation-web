@@ -55,8 +55,8 @@ export class GoodsListComponent implements OnInit, OnDestroy {
   }
 
   constructor(public globalService: GlobalService,
-    private goodsManagementHttpService: GoodsManagementHttpService,
-    private classifyHttpService: ClassifyManagementHttpService) {
+              private goodsManagementHttpService: GoodsManagementHttpService,
+              private classifyHttpService: ClassifyManagementHttpService) {
   }
 
   public ngOnInit() {
@@ -158,7 +158,6 @@ export class GoodsListComponent implements OnInit, OnDestroy {
       successMsg = '下架成功';
       failMsg = '下架失败';
     }
-
     this.goodsManagementHttpService.requestCommodityOperationData(data.commodity_id, commodityOperationParams).subscribe(() => {
       this.globalService.promptBox.open(successMsg, () => {
         this.searchText$.next();

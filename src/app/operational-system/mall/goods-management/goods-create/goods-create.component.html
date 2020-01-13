@@ -1,7 +1,6 @@
 <div class="content-header">
   <app-crumb [level1Name]="'产品管理'" [level2Name]="levelTwoName" [level1RelativePath]="listRelativePath"></app-crumb>
 </div>
-
 <div class="content-flow">
   <div class='content-container'>
     <form class="form-horizontal" #commodityForm="ngForm" autocomplete="off">
@@ -76,7 +75,6 @@
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
               placeholder="输入0-80个字副标题" maxlength="80" appIgnoreSpace>
-
           </div>
         </div>
         <div class="row control-row">
@@ -365,7 +363,6 @@
               (ngModelChange)="onDateChange()" nzFormat="yyyy-MM-dd"></nz-date-picker>
           </div>
         </div>
-
         <div class="row">
           <label class="control-label">
             <b>*</b>
