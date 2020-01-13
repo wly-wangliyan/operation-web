@@ -96,7 +96,7 @@ export class BannerEditComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     // 首页banner与检车banner设置不同图片剪裁比例
-    this.aspectRatio = banner_type === 4 ? 3.699 / 1 : banner_type === 2 ? 1.917 / 1 : 3.83 / 1;
+    this.aspectRatio = banner_type === 4 ? 3.699 / 1 : banner_type === 1 ? 3.83 / 1 : 1.917 / 1;
     this.clear();
     this.is_save = false;
     this.offline_time = '';
