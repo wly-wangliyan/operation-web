@@ -54,7 +54,7 @@ export class PaySettingComponent implements OnInit {
       this.searchText$.next();
       this.globalService.promptBox.open('保存成功');
     }, err => {
-      this.globalService.promptBox.open('保存失败，请重试！');
+      this.globalService.promptBox.open('保存失败，请重试！', null, 2000, null, false);
     });
   }
 

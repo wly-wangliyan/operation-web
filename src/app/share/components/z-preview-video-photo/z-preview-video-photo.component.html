@@ -25,10 +25,13 @@
       [ngStyle]="{width: thumbNailWidth + 'px', height: thumbNailHeight + 'px'}"
       (mouseenter)="onPreviewThumbNail(previewIndex)" (click)="onPreviewThumbNail(previewIndex)">
       <ng-container *ngIf="previewVideoAndPhoto.isVideo">
-        <video [src]="previewVideoAndPhoto.sourceUrl"></video>
-        <div class="icon-control thumb-icon-control">
-          <i></i>
+        <div class="video-wrap">
+          <video [src]="previewVideoAndPhoto.sourceUrl"></video>
+          <div class="icon-control thumb-icon-control">
+            <i></i>
+          </div>
         </div>
+
       </ng-container>
       <ng-container *ngIf="!previewVideoAndPhoto.isVideo">
         <img [src]="previewVideoAndPhoto.sourceUrl">

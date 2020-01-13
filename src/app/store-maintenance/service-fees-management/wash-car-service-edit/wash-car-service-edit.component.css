@@ -39,23 +39,29 @@ b {
 
 .base-table,
 .specification-table {
-  background-color: #F7F8FA;
   padding-bottom: 10px;
 }
 
 .base-table table tbody tr:nth-child(2)>td:nth-child(1),
 .base-table table tbody tr:nth-child(5)>td:nth-child(1) {
   text-align: left;
+  padding: 5px 20px;
+}
+
+.table-scroll {
+  min-width: 900px;
+  overflow-x: auto;
 }
 
 .price-group {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .price-group .eight-word-lable {
   text-align: left;
-  width: 120px;
+  width: 115px;
   padding-left: 8px;
   border: .5px solid #d9d9d9;
   border-right: 0;
@@ -66,10 +72,16 @@ b {
 .price-group .one-word-lable {
   border-left: none;
   margin-bottom: 0;
+  width: 30px !important;
+  margin-left: -30px !important;
 }
 
 .price-group input {
   width: 120px;
+}
+
+.five-number {
+  width: 100px !important;
 }
 
 .disabled-word {
@@ -77,12 +89,27 @@ b {
 }
 
 .shop-box {
+  min-width: 900px;
   padding: 10px;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
   border: 0.5px solid rgba(136, 136, 136, 0.3);
   margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.shop-item {
+  height: 32px;
+  color: #666;
+  margin: 12px;
+  line-height: 32px;
+  font-size: 12px;
+  padding: 0 12px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #3E71F7;
+  cursor: default;
 }
 
 .table-line {
@@ -95,10 +122,6 @@ b {
 .table-item {
   border: 0px solid rgba(136, 136, 136, 1);
   min-width: 900px;
-}
-
-.specification-table {
-  min-width: 1130px;
 }
 
 .specification-table table>tbody>tr:not(:last-child) {
@@ -122,14 +145,18 @@ b {
   height: 40px;
   box-sizing: border-box;
   color: #23242f;
-  font-size: 12px;
+  font-size: 14px;
   vertical-align: middle;
   cursor: default;
-  padding: 4px 20px;
+  padding: 5px;
 }
 
 .table-item table>thead tr>th {
   background-color: #F1F1F1;
+}
+
+.table-item table>tbody tr>td {
+  background-color: #F7F8FA;
 }
 
 .column-box {
@@ -137,6 +164,13 @@ b {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.row-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
 }
 
 .column-box .price-group {
@@ -152,7 +186,7 @@ b {
 .add-btn,
 .remove-btn {
   height: 34px;
-  width: 60px;
+  width: 40px;
   box-shadow: none !important;
   text-shadow: none;
   outline: none;
@@ -169,4 +203,17 @@ b {
 .add-btn:hover,
 .remove-btn:hover {
   opacity: 0.8;
+}
+
+.specification-table ::ng-deep .ant-calendar-picker {
+  width: 120px !important;
+}
+
+.tab-btn-item {
+  border: 1px solid rgba(62, 113, 247, 1) !important;
+  color: #3E71F7 !important;
+}
+
+.active-btn {
+  color: #3E71F7 !important;
 }

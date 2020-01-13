@@ -72,7 +72,9 @@
 
 .positive {
     width: 750px;
-    height: 499px;
+    /* height: 499px; */
+    min-height: 400px;
+    height: 100%;
     background: rgba(232, 32, 56, 0.1);
     border-radius: 20px;
     padding: 20px;
@@ -80,7 +82,9 @@
 
 .negative {
     width: 750px;
-    height: 499px;
+    min-height: 400px;
+    height: 100%;
+    /* height: 499px; */
     background: rgba(62, 113, 247, 0.1);
     border-radius: 20px;
     padding: 20px;
@@ -123,4 +127,15 @@ ul>li {
 
 .comment {
     word-break: break-all;
+}
+
+:host ::ng-deep .ant-table {
+    border: none !important;
+}
+
+:host ::ng-deep .ant-table-tbody>tr:nth-child(odd) {
+    background: none;
+}
+:host ::ng-deep .ant-table-tbody>tr:nth-child(even) {
+    background: none;
 }

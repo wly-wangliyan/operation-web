@@ -10,6 +10,11 @@
     text-align: left;
 }
 
+.parking-img-container {
+    width: 100px;
+    position: relative;
+}
+
 .recommend {
     position: absolute;
     width: 22px;

@@ -20,11 +20,12 @@
         </div>
         <div class="commodity-subtitle" *ngIf="commodityInfo.subtitle">{{commodityInfo.subtitle}}</div>
         <div class="commodity-table">
-          <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false" [nzNoResult]="noResultInfoText"
-            nzBordered #specificationTable>
+          <nz-table [nzData]="commodityInfo.specifications" [nzShowPagination]="false" [nzFrontPagination]='false'
+            [nzNoResult]="noResultInfoText" nzBordered #specificationTable>
             <thead>
               <tr>
                 <th>规格名称</th>
+                <th style="width: 300px;">规格ID</th>
                 <th>原价</th>
                 <th>售价</th>
                 <th>库存</th>
@@ -34,6 +35,7 @@
             <tbody>
               <tr *ngFor="let specificationData of specificationTable.data; let i=index">
                 <td>{{specificationData.specification_name}}</td>
+                <td>{{specificationData.specification_id}}</td>
                 <td>{{specificationData.unit_original_price?specificationData.unit_original_price+'元':'--'}}</td>
                 <td>{{specificationData.unit_sell_price?specificationData.unit_sell_price+'元':'--'}}</td>
                 <td>{{specificationData.stock}}</td>
@@ -59,8 +61,13 @@
       </div>
     </div>
     <div class="commodity-footer">
-      <div class='description-name'>产品描述</div>
-      <form nz-form class="description-container">
+      <div class="tab-bar-list" style="margin-bottom:20px">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="radioType">
+          <label nz-radio-button [nzValue]=1>产品描述</label>
+          <label nz-radio-button [nzValue]=2>兑换记录</label>
+        </nz-radio-group>
+      </div>
+      <form nz-form class="description-container" *ngIf='radioType===1'>
         <div class="description-content">
           <nz-form-item nzFlex>
             <nz-form-control>
@@ -71,6 +78,42 @@
           </nz-form-item>
         </div>
       </form>
+      <div class="commodity-table" *ngIf='radioType===2'>
+        <nz-table [nzData]="exchangeRecordList" [nzShowPagination]="false" [nzFrontPagination]='false'
+          [nzNoResult]="noResultInfoText" nzBordered #exchangeRecordTable>
+          <thead>
+            <tr>
+              <th>兑换码</th>
+              <th>创建时间</th>
+              <th>持有人</th>
+              <th>规格ID</th>
+              <th>使用状态</th>
+              <th>有效期</th>
+              <th>使用时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of exchangeRecordTable.data; let i=index">
+              <td>{{record.exchange_code}}</td>
+              <td>
+                {{record.created_time?(record.created_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
+              </td>
+              <td>{{record.htcode}}</td>
+              <td>{{record.specification_id}}</td>
+              <td>{{record.exchange_status|exchangeStatus}}</td>
+              <td>
+                {{record.start_time?(record.start_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
+                至{{record.end_time?(record.end_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
+              </td>
+              <td>{{record.exchange_time?(record.exchange_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}</td>
+              <td class="operation">
+                <a [title]="'查看'" [routerLink]="['../list/detail', record.order_id]">查看订单</a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
     </div>
   </div>
 </div>

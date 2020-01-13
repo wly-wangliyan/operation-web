@@ -115,7 +115,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // 编辑
   public onEditProduct(status: number, product_id: string) {
     if (status === 1) {
-      this.globalService.promptBox.open('请下架后再进行编辑！');
+      this.globalService.promptBox.open('请下架后再进行编辑！', null, 2000, null, false);
     } else {
       this.router.navigateByUrl(`/main/ticket/product-management/edit/${product_id}`);
     }
@@ -171,7 +171,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
           if (err.status === 422) {
             this.globalService.promptBox.open('产品已被第三方停售，无法上架！', () => {
               this.searchText$.next();
-            });
+            }, 2000, null, false);
           }
         }
       });
@@ -225,7 +225,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
 
     if (sTimestamp > eTimeStamp) {
-      this.globalService.promptBox.open('上架开始时间不能大于结束时间！');
+      this.globalService.promptBox.open('上架开始时间不能大于结束时间！', null, 2000, null, false);
       return false;
     }
 

@@ -107,7 +107,7 @@ export class RecordListComponent implements OnInit {
       new Date(this.expense_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
 
     if (sTimestamp > eTimeStamp) {
-      this.globalService.promptBox.open('核销开始时间不能大于结束时间！');
+      this.globalService.promptBox.open('核销开始时间不能大于结束时间！', null, 2000, null, false);
       return false;
     }
 

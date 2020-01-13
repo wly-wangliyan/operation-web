@@ -10,7 +10,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   declarations: [OrderManagementComponent, OrderListComponent, OrderDetailComponent],
   imports: [
@@ -21,7 +21,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzSpinModule,
     ShareModule,
     CommonModule,
-    OrderManagementRoutingModule
+    OrderManagementRoutingModule,
+    NzButtonModule
   ]
 })
 export class OrderManagementModule { }

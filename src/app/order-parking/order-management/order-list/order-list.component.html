@@ -79,6 +79,7 @@
                     <th>车牌号</th>
                     <th>购买人</th>
                     <th>停车场</th>
+                    <th>车位类型</th>
                     <th>实付预付费</th>
                     <th>预约到场时间</th>
                     <th>预约时长</th>
@@ -111,8 +112,11 @@
                         {{order.parking_info?(order.parking_info.parking_name | zMaxLength:8) : '--'}}
                     </td>
                     <td>
-                        {{order.real_pre_fee | centPriceChange:'¥ ':'left'}}
+                        <ng-container *ngIf="order.spot_type === 1">室内车位</ng-container>
+                        <ng-container *ngIf="order.spot_type === 2">室外车位</ng-container>
+                        <ng-container *ngIf="order.spot_type !== 1 && order.spot_type !== 2">--</ng-container>
                     </td>
+                    <td>{{order.real_pre_fee | centPriceChange:'¥ ':'left'}}</td>
                     <td>
                         <span>{{order.booking_arrive_time ?(order.booking_arrive_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
                     </td>

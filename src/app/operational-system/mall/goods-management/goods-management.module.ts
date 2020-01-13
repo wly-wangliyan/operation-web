@@ -9,6 +9,7 @@ import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { GoodsManagementHttpService } from './goods-management-http.service';
 import { ClassifyManagementComponent } from './classify-management/classify-management.component';
 import { ClassifyEditComponent } from './classify-management/classify-edit/classify-edit.component';
+import { ExchangeStatusPipe } from '../mall.pipe';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -18,6 +19,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 @NgModule({
   imports: [
     ShareModule,
@@ -31,7 +34,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzSwitchModule,
     NzFormModule,
     NzCheckboxModule,
-    NzInputModule
+    NzInputModule,
+    NzRadioModule,
+    NzToolTipModule
   ],
   declarations: [
     GoodsManagementComponent,
@@ -39,7 +44,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     GoodsCreateComponent,
     GoodsDetailComponent,
     ClassifyManagementComponent,
-    ClassifyEditComponent
+    ClassifyEditComponent,
+    ExchangeStatusPipe
   ],
   providers: [
     GoodsManagementHttpService,

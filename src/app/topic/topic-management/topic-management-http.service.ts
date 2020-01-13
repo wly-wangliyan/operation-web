@@ -70,7 +70,7 @@ export class ViewpointsListEntity extends EntityBase {
 export class ViewpointsSearchParams extends EntityBase {
     topic_id = '';	// F	话题id
     section = ''; // F	观点创建时间范围。`[start]:[end]`，开、闭区间，start、end是一个double类型的时间戳，都可以不传
-    page_size = 15;	// F	每页条数 默认：15
+    page_size = 45;	// F	每页条数 默认：15
     page_num = 1;	// F	页码 默认: 1
 }
 
@@ -80,8 +80,9 @@ export class CommentSearchParams extends EntityBase {
     object_name = '';	// F	object_name
     object_id: string = undefined;	// F	object_id
     section = '';	// F 操作时间戳区间(小, 大) 例: "1560415182.165, 1560415182.265"
-    page_size = 15;	// F 每页限制
+    page_size = 45;	// F 每页限制
     page_num = 1; // F页码
+    standpoint = '';
 }
 
 export class CommentEntity extends EntityBase {
@@ -177,6 +178,10 @@ export class TopicManagementHttpService {
     public requestCommentList(searchParams: CommentSearchParams): Observable<CommentLinkResponse> {
         const url = `${this.commentDomain}/comments`;
         return this.service.get(url, searchParams).pipe(map(res => new CommentLinkResponse(res)));
+    }
+
+    public continueRequestCommentListData(url: string): Observable<CommentLinkResponse> {
+        return this.service.get(url).pipe(map(res => new CommentLinkResponse(res)));
     }
 }
 
