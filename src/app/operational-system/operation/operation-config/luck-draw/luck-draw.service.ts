@@ -12,6 +12,7 @@ import { HttpResponse } from '@angular/common/http';
  */
 export class CommoditySearchParams extends EntityBase {
   public sales_status = 1; // 销售状态 1销售中,2已下架
+  public commodity_name: string = undefined; // 商品名称
   public giveaway_settings = 1; // int	F	0未设置 1兑换码兑换
   public page_size = 45; // 每页数量 默认15
   public page_num = 1; // 第几页 默认1
@@ -23,6 +24,28 @@ export class CommoditySearchParams extends EntityBase {
 export class ActivitySearchParams extends EntityBase {
   public lottery_activity_name: string = undefined; // string(30)	F	活动名称
   public lottery_activity_id: string = undefined; // string(32)	F	活动id
+  public page_size = 45; // 每页数量 默认15
+  public page_num = 1; // 第几页 默认1
+}
+
+/**
+ * 抽奖记录列表请求参数
+ */
+export class DrawSearchParams extends EntityBase {
+  public is_prize = ''; // int	F	是否中奖 0为未中奖， 1为中奖
+  public wx_nickname: string = undefined; // string(32)	F	微信昵称
+  public htcode: string = undefined; // string(32)	F	用户id
+  public phone_num: string = undefined; // string(32)	F	手机号
+  public page_size = 45; // 每页数量 默认15
+  public page_num = 1; // 第几页 默认1
+}
+
+/**
+ * 浏览量列表请求参数
+ */
+export class LotteryActivityClickSearchParams extends EntityBase {
+  public start_time: number = undefined; // float	F	开始时间时间戳
+  public end_time: number = undefined; // float	F	结束时间时间戳
   public page_size = 45; // 每页数量 默认15
   public page_num = 1; // 第几页 默认1
 }
@@ -118,11 +141,64 @@ export class PrizeInfoEntity extends EntityBase {
   public created_time: number = undefined; // 创建时间
 }
 
+export class WinnerRecordEntity extends EntityBase {
+  public winner_record_id: string = undefined; // string	中奖记录id
+  public lottery_activity_id: string = undefined; // string	活动id
+  public lottery_activity_name: number = undefined; // int	活动名称
+  public is_prize = undefined; // bool	是否中奖 False为未中奖， True为中奖
+  public prize_info: PrizeEntity = undefined; // Prize对象	奖品信息
+  public htcode: string = undefined; // string	用户
+  public phone_num: string = undefined; // string	用户手机号
+  public wx_nickname: string = undefined; // string	微信昵称
+  public exchange_status: number = undefined; // int	是否兑换 1: 未兑换， 2：已兑换
+  public exchange_code: string = undefined; // string	兑换码
+  public exchange_time: string = undefined; // string	兑换时间(时间戳)
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 创建时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'prize_info') {
+      return PrizeEntity;
+    }
+    return null;
+  }
+}
+
+export class LotteryActivityClickEntity extends EntityBase {
+  public click_data_id: string = undefined; // string(32)	点击数据id
+  public lottery_activity_id: string = undefined; // string(32)	活动id
+  public date: number = undefined; // float	日期
+  public click_num: number = undefined; // int	点击数
+  public click_person: number = undefined; // int	点击人数
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 创建时间
+}
+
 export class ActivityLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<ActivityEntity> {
     const tempList: Array<ActivityEntity> = [];
     results.forEach(res => {
       tempList.push(ActivityEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class WinnerRecordLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<WinnerRecordEntity> {
+    const tempList: Array<WinnerRecordEntity> = [];
+    results.forEach(res => {
+      tempList.push(WinnerRecordEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class LotteryActivityClickResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<LotteryActivityClickEntity> {
+    const tempList: Array<LotteryActivityClickEntity> = [];
+    results.forEach(res => {
+      tempList.push(LotteryActivityClickEntity.Create(res));
     });
     return tempList;
   }
@@ -249,5 +325,58 @@ export class LuckDrawService {
   public requestSaveNoPrizeData(lottery_activity_id: string, noPrizeParams: NoPrizeParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/lottery_activities/${lottery_activity_id}/missed_settings`;
     return this.httpService.put(httpUrl, noPrizeParams.json());
+  }
+
+  /**
+   * 删除奖品
+   * * @param lottery_activity_id 抽奖活动ID
+   * @param prize_id 奖品ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeletePrizeData(lottery_activity_id: string, prize_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/lottery_activities/${lottery_activity_id}/prizes/${prize_id}`;
+    return this.httpService.delete(httpUrl);
+  }
+
+  /**
+   * 获取抽奖记录列表
+   * @param {DrawSearchParams} searchParams
+   * @param lottery_activity_id 活动ID
+   * @returns {Observable<WinnerRecordLinkResponse>}
+   */
+  public requestWinnerRecordsListData(lottery_activity_id: string, searchParams: DrawSearchParams): Observable<WinnerRecordLinkResponse> {
+    const url = this.domain + `/admin/lottery_activities/${lottery_activity_id}/winner_records`;
+    const params = this.httpService.generateURLSearchParams(searchParams);
+    return this.httpService.get(url, params).pipe(map(res => new WinnerRecordLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求抽奖记录列表
+   * @param string url linkUrl
+   * @returns Observable<WinnerRecordLinkResponse>
+   */
+  public continueWinnerRecordsListData(url: string): Observable<WinnerRecordLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new WinnerRecordLinkResponse(res)));
+  }
+
+  /**
+   * 获取浏览量列表
+   * @param {DrawSearchParams} searchParams
+   * @param lottery_activity_id 活动ID
+   * @returns {Observable<WinnerRecordLinkResponse>}
+   */
+  public requestClicksListData(lottery_activity_id: string, searchParams: DrawSearchParams): Observable<LotteryActivityClickResponse> {
+    const url = this.domain + `/admin/lottery_activities/${lottery_activity_id}/click_datas`;
+    const params = this.httpService.generateURLSearchParams(searchParams);
+    return this.httpService.get(url, params).pipe(map(res => new LotteryActivityClickResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求浏览量列表
+   * @param string url linkUrl
+   * @returns Observable<WinnerRecordLinkResponse>
+   */
+  public continueClicksListData(url: string): Observable<LotteryActivityClickResponse> {
+    return this.httpService.get(url).pipe(map(res => new LotteryActivityClickResponse(res)));
   }
 }

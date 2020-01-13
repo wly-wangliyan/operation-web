@@ -23,18 +23,19 @@ export class ErrMessageItem {
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   prize_name: ErrMessageItem = new ErrMessageItem();
-  jump_link: ErrMessageItem = new ErrMessageItem();
-  offline_time: ErrMessageItem = new ErrMessageItem();
+  prize_info: ErrMessageItem = new ErrMessageItem();
+  prize_num: ErrMessageItem = new ErrMessageItem();
+  win_probability: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, prize_name?: ErrMessageItem, jump_link?: ErrMessageItem, offline_time?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(prize_name) || isUndefined(jump_link)
-        || isUndefined(offline_time)) {
+  constructor(icon?: ErrMessageItem, prize_name?: ErrMessageItem, prize_info?: ErrMessageItem, prize_num?: ErrMessageItem, win_probability?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(prize_name) || isUndefined(prize_info) || isUndefined(win_probability) || isUndefined(prize_num)) {
       return;
     }
     this.icon = icon;
     this.prize_name = prize_name;
-    this.jump_link = jump_link;
-    this.offline_time = offline_time;
+    this.prize_info = prize_info;
+    this.prize_num = prize_num;
+    this.win_probability = win_probability;
   }
 }
 
@@ -47,6 +48,7 @@ export class PrizeCreateComponent implements OnInit {
   public prizeParams: PrizeEntity = new PrizeEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
+  public prize_type_disabled = false;
 
   private sureCallback: any;
   private closeCallback: any;
@@ -100,6 +102,8 @@ export class PrizeCreateComponent implements OnInit {
       this.prizeParams = prizeList[index].clone();
       this.cover_url = prizeList[index].prize_image.split(',');
     }
+    const findIndex = prizeList.findIndex(value => value.prize_type === 3);
+    this.prize_type_disabled = findIndex > -1 ? true : false;
     openPrizeModal();
   }
 
@@ -155,6 +159,32 @@ export class PrizeCreateComponent implements OnInit {
       this.errPositionItem.icon.errMes = '请重新上传图片！';
       cisCheck = false;
     }
+    if (this.prizeParams.prize_type === 1 && this.prizeParams.prize_num > this.prizeParams.prize_info.stock) {
+      this.errPositionItem.prize_num.isError = true;
+      this.errPositionItem.prize_num.errMes = '奖品数量不可大于商品库存！';
+      cisCheck = false;
+    }
+    this.prizeList.forEach(value => {
+      if (value.prize_name === this.prizeParams.prize_name && value.prize_id !== this.prizeParams.prize_id) {
+        this.errPositionItem.prize_name.isError = true;
+        this.errPositionItem.prize_name.errMes = '奖品名称已经存在！';
+        cisCheck = false;
+      }
+      if (this.prizeParams.prize_type === 2 && value.prize_id !== this.prizeParams.prize_id
+           && value.prize_info.coupon_id === this.prizeParams.prize_info.coupon_id
+          && value.prize_info.coupon_type === Number(this.prizeParams.prize_info.coupon_type) ) {
+        this.errPositionItem.prize_info.isError = true;
+        this.errPositionItem.prize_info.errMes = '此ID与已添加的ID重复！';
+        cisCheck = false;
+      }
+      if (this.prizeParams.prize_type === 1 && value.prize_id !== this.prizeParams.prize_id
+          && value.prize_info.commodity_id === this.prizeParams.prize_info.commodity_id
+          && value.prize_info.specification_id === this.prizeParams.prize_info.specification_id) {
+        this.errPositionItem.prize_info.isError = true;
+        this.errPositionItem.prize_info.errMes = '同一商品规格不可重复添加！';
+        cisCheck = false;
+      }
+    });
     return cisCheck;
   }
 
@@ -162,8 +192,9 @@ export class PrizeCreateComponent implements OnInit {
   public clear(): void {
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.prize_name.isError = false;
-    this.errPositionItem.jump_link.isError = false;
-    this.errPositionItem.offline_time.isError = false;
+    this.errPositionItem.prize_info.isError = false;
+    this.errPositionItem.prize_num.isError = false;
+    this.errPositionItem.win_probability.isError = false;
   }
 
   // 确定按钮回调
@@ -184,7 +215,27 @@ export class PrizeCreateComponent implements OnInit {
         for (const content of error.errors) {
           if (content.code === 'invalid' && content.field === 'prize_name') {
             this.errPositionItem.prize_name.isError = true;
-            this.errPositionItem.prize_name.errMes = '标题错误或无效！';
+            this.errPositionItem.prize_name.errMes = '名称错误或无效！';
+            return;
+          }
+          if (content.code === 'beyond_limit' && content.resource === 'win_probability') {
+            this.errPositionItem.win_probability.isError = true;
+            this.errPositionItem.win_probability.errMes = '所有奖项的概率之和不可大于100%！';
+            return;
+          }
+          if (content.code === 'already_exist' && content.resource === 'prize_name') {
+            this.errPositionItem.prize_name.isError = true;
+            this.errPositionItem.prize_name.errMes = '奖品名称已经存在！';
+            return;
+          }
+          if (content.code === 'already_exist' && content.resource === 'specification_id') {
+            this.errPositionItem.prize_info.isError = true;
+            this.errPositionItem.prize_info.errMes = '同一商品规格不可重复添加！';
+            return;
+          }
+          if (content.code === 'already_exist' && content.resource === 'coupon_id') {
+            this.errPositionItem.prize_info.isError = true;
+            this.errPositionItem.prize_info.errMes = '此ID与已添加的ID重复！';
             return;
           }
         }
@@ -231,6 +282,8 @@ export class PrizeCreateComponent implements OnInit {
         this.prizeParams.prize_info.stock = this.chooseCommodityComponent.currentCommodity.specification.stock;
         this.prizeParams.prize_info.unit_sell_price = this.chooseCommodityComponent.currentCommodity.specification.unit_sell_price;
         this.prizeParams.prize_info.name = `${commodity_name}(${specification_name})`;
+        this.errPositionItem.prize_info.isError = false;
+        this.errPositionItem.prize_num.isError = false;
       });
     });
   }

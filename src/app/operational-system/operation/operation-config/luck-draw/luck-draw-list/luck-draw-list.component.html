@@ -37,7 +37,7 @@
                     <th>ID</th>
                     <th>活动名称</th>
                     <th>有效期</th>
-                    <th>奖品</th>
+                    <th nzWidth="15%">奖品</th>
                     <th>抽奖次数</th>
                     <th>抽奖人数</th>
                     <th>中奖次数</th>
@@ -74,7 +74,7 @@
                     </td>
 
                     <td>
-                        <span *ngFor="let item of data.prizes">{{item.prize_name+';'}}</span>
+                        <span *ngFor="let item of data.prizes">{{item.prize_name+'；'}}</span>
                     </td>
 
                     <td>{{data.lottery_num||0}}</td>

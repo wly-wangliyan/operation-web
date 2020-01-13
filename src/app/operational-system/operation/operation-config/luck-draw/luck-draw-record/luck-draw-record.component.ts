@@ -4,6 +4,15 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
+import { ActivatedRoute } from '@angular/router';
+import {
+  ActivityEntity,
+  DrawSearchParams,
+  LotteryActivityClickEntity,
+  LotteryActivityClickSearchParams,
+  LuckDrawService,
+  WinnerRecordEntity
+} from '../luck-draw.service';
 
 
 const PageSize = 15;
@@ -15,59 +24,67 @@ const PageSize = 15;
 })
 export class LuckDrawRecordComponent implements OnInit, OnDestroy {
 
-  public searchParams: SearchParams = new SearchParams(); // 条件筛选参数
-
-  public bannerList: Array<BannerEntity> = []; // banner列表
-
+  public searchParams: DrawSearchParams = new DrawSearchParams(); // 条件筛选参数
+  public clickSearchParams: LotteryActivityClickSearchParams = new LotteryActivityClickSearchParams(); // 条件筛选参数
+  public drawList: Array<WinnerRecordEntity> = []; // 抽奖记录列表
+  public clicksList: Array<LotteryActivityClickEntity> = []; // 点击量列表
+  public activityData: ActivityEntity = new ActivityEntity();
   public noResultText = '数据加载中...';
-
   public start_time: any = '';
-
   public end_time: any = '';
-
-  private searchText$ = new Subject<any>();
-
-  private requestSubscription: Subscription; // 获取数据
-
   public pageIndex = 1; // 页码
+  public tabIndex = 1; // tab index
 
   private linkUrl: string;
-
+  private linkUrlClick: string;
   private continueRequestSubscription: Subscription;
+  private lottery_activity_id: string;
+  private searchText$ = new Subject<any>();
+  private searchClickText$ = new Subject<any>();
 
   private get pageCount(): number {
-    if (this.bannerList.length % PageSize === 0) {
-      return this.bannerList.length / PageSize;
+    if (this.drawList.length % PageSize === 0) {
+      return this.drawList.length / PageSize;
     }
-    return this.bannerList.length / PageSize + 1;
+    return this.drawList.length / PageSize + 1;
   }
 
   constructor(
       private globalService: GlobalService,
-      private bannerService: BannerService) { }
+      private bannerService: BannerService,
+      private luckDrawService: LuckDrawService,
+      private route: ActivatedRoute) {
+    route.queryParams.subscribe(queryParams => {
+      this.lottery_activity_id = queryParams.lottery_activity_id;
+    });
+  }
 
   public ngOnInit() {
-    this.generateBannerList();
+    this.generateDrawList();
   }
 
   public ngOnDestroy() {
-    this.requestSubscription && this.requestSubscription.unsubscribe();
     this.searchText$ && this.searchText$.unsubscribe();
   }
 
-  // 初始化获取banner列表
-  private generateBannerList(): void {
+  // 初始化获取抽奖记录列表
+  private generateDrawList(): void {
+    this.requestActivityData();
     // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestBannerList();
+      this.requestDrawList();
     });
     this.searchText$.next();
+    this.searchClickText$.pipe().subscribe(() => {
+      this.requestClickList();
+    });
+    this.searchClickText$.next();
   }
 
-  // 请求banner列表
-  private requestBannerList(): void {
-    this.requestSubscription = this.bannerService.requestBannerListData(this.searchParams).subscribe(res => {
-      this.bannerList = res.results;
+  // 请求抽奖记录列表
+  private requestDrawList(): void {
+    this.luckDrawService.requestWinnerRecordsListData(this.lottery_activity_id, this.searchParams).subscribe(res => {
+      this.drawList = res.results;
       this.linkUrl = res.linkUrl;
       this.noResultText = '暂无数据';
       this.pageIndex = 1;
@@ -78,15 +95,38 @@ export class LuckDrawRecordComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 请求访问量列表
+  private requestClickList(): void {
+    this.luckDrawService.requestClicksListData(this.lottery_activity_id, this.searchParams).subscribe(res => {
+      this.clicksList = res.results;
+      this.linkUrlClick = res.linkUrl;
+      this.noResultText = '暂无数据';
+      this.pageIndex = 1;
+    }, err => {
+      this.noResultText = '暂无数据';
+      this.pageIndex = 1;
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 请求活动数据
+  private requestActivityData(): void {
+    this.luckDrawService.requestActivityDetail(this.lottery_activity_id).subscribe(res => {
+      this.activityData = res;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
   // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.bannerService.continueBannerListData(this.linkUrl)
+      this.continueRequestSubscription = this.luckDrawService.continueWinnerRecordsListData(this.linkUrl)
           .subscribe(res => {
-            this.bannerList = this.bannerList.concat(res.results);
+            this.drawList = this.drawList.concat(res.results);
             this.linkUrl = res.linkUrl;
           }, err => {
             this.globalService.httpErrorProcess(err);
@@ -94,10 +134,30 @@ export class LuckDrawRecordComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 搜索
+  public onClickNZPageIndexChange(pageIndex: number) {
+    this.pageIndex = pageIndex;
+    if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
+      // 当存在linkUrl并且快到最后一页了请求数据
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.luckDrawService.continueClicksListData(this.linkUrl)
+          .subscribe(res => {
+            this.clicksList = this.clicksList.concat(res.results);
+            this.linkUrlClick = res.linkUrl;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+    }
+  }
+
+  // 搜索抽奖记录
   public onSearchBtnClick(): void {
+    this.searchText$.next();
+  }
+
+  // 搜索浏览量
+  public onClickSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
-      this.searchText$.next();
+      this.searchClickText$.next();
     }
   }
 
@@ -127,34 +187,15 @@ export class LuckDrawRecordComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 删除Banner
-  public onDeleteClick(banner_id: string): void {
-    this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
-      this.globalService.confirmationBox.close();
-      this.bannerService.requestDeleteBannerData(banner_id).subscribe(() => {
-        this.globalService.promptBox.open('删除成功');
-        this.searchText$.next();
-      }, err => {
-        if (!this.globalService.httpErrorProcess(err)) {
-          this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
-          this.searchText$.next();
-        }
-      });
-    });
-  }
-
   // 校验数据
   private generateAndCheckParamsValid(): boolean {
-    const sTimestamp = this.start_time ? (new Date(this.start_time).setHours(new Date(this.start_time).getHours(),
-        new Date(this.start_time).getMinutes(), 0, 0) / 1000).toString() : null;
-    const eTimeStamp = this.end_time ? (new Date(this.end_time).setHours(new Date(this.end_time).getHours(),
-        new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : null;
-    this.searchParams.start_time = sTimestamp;
-    this.searchParams.end_time = eTimeStamp;
-
+    const sTimestamp = this.start_time ? new Date(this.start_time).setHours(0, 0, 0, 0) / 1000 : null;
+    const eTimeStamp = this.end_time ? new Date(this.end_time).setHours(23, 59, 59, 59) / 1000 : null;
+    this.clickSearchParams.start_time = sTimestamp;
+    this.clickSearchParams.end_time = eTimeStamp;
     if (sTimestamp && eTimeStamp) {
       if (sTimestamp > eTimeStamp) {
-        this.globalService.promptBox.open('上线开始时间不能大于结束时间！', null, 2000, null, false);
+        this.globalService.promptBox.open('开始日期不能大于结束日期！', null, 2000, null, false);
         return false;
       }
     }
@@ -162,11 +203,16 @@ export class LuckDrawRecordComponent implements OnInit, OnDestroy {
   }
 
   // tab页切换
-  public onTabChange(banner_type: number) {
-    this.searchParams = new SearchParams();
-    this.start_time = null;
-    this.end_time = null;
-    this.searchParams.banner_type = banner_type;
-    this.searchText$.next();
+  public onTabChange(tabIndex: number) {
+    this.tabIndex = tabIndex;
+    if (tabIndex === 1) {
+      this.searchParams = new DrawSearchParams();
+      this.searchText$.next();
+    } else {
+      this.clickSearchParams = new LotteryActivityClickSearchParams();
+      this.start_time = null;
+      this.end_time = null;
+      this.searchClickText$.next();
+    }
   }
 }

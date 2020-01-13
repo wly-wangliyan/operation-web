@@ -16,7 +16,7 @@
                     </label>
                     <div class="control-input">
                         <input class="form-control" placeholder="请输入1-6字" [(ngModel)]="prizeParams.prize_name" name="prize_name"
-                               maxlength="6" autocomplete="off" required appIgnoreSpace (change)="errPositionItem.prize_name.isError=false">
+                               maxlength="6" autocomplete="off" required appIgnoreSpace (input)="errPositionItem.prize_name.isError=false">
                     </div>
                 </div>
                 <div class="row row-message">
@@ -48,10 +48,11 @@
                         <span>奖品</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group [(ngModel)]="prizeParams.prize_type" name="prize_type" required>
+                        <nz-radio-group [(ngModel)]="prizeParams.prize_type" name="prize_type" required
+                        (ngModelChange)="errPositionItem.prize_info.isError=false;errPositionItem.prize_num.isError=false">
                             <label nz-radio [nzValue]=1>商城商品</label>
                             <label nz-radio [nzValue]=2>平台优惠券</label>
-                            <label nz-radio [nzValue]=3>再参与1次</label>
+                            <label nz-radio [nzValue]=3 [nzDisabled]="prize_type_disabled">再参与1次</label>
                         </nz-radio-group>
                     </div>
                 </div>
@@ -66,13 +67,21 @@
                 <div class="row" *ngIf="prizeParams.prize_type===2">
                     <label class=" control-label"></label>
                     <div class="control-input">
-                        <select class="form-control" [(ngModel)]="prizeParams.prize_info.coupon_type" name="coupon_type" required>
+                        <select class="form-control" [(ngModel)]="prizeParams.prize_info.coupon_type" name="coupon_type"
+                                required (change)="errPositionItem.prize_info.isError=false">
                             <option [value]=1>优惠券模板</option>
                             <option [value]=2>优惠券组</option>
                         </select>
                         <input class="form-control" placeholder="请输入ID" [(ngModel)]="prizeParams.prize_info.coupon_id"
                                name="coupon_id" oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
+                               (input)="errPositionItem.prize_info.isError=false"
                                maxlength="32" autocomplete="off" required appIgnoreSpace style="border-left: none!important;">
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.prize_info?.isError">{{errPositionItem?.prize_info?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -82,8 +91,15 @@
                     </label>
                     <div class="control-input unit">
                         <input class="form-control" placeholder="0-999999" [(ngModel)]="prizeParams.prize_num" name="prize_num"
-                               maxlength="6" autocomplete="off" required appIntNumber="true" appIgnoreSpace>
+                               maxlength="6" autocomplete="off" required appIntNumber="true" appIgnoreSpace
+                                (input)="errPositionItem.prize_num.isError=false">
                         <label>件</label>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.prize_num?.isError">{{errPositionItem?.prize_num?.errMes}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -94,8 +110,15 @@
                     <div class="control-input unit">
                         <input class="form-control" placeholder="0.001-100" [(ngModel)]="prizeParams.win_probability"
                                name="win_probability" appFloatNumber="3" maxlength="5" autocomplete="off" required appIgnoreSpace
-                               oninput="if(value>100){value=100}" onChange="if(value<0.001){value=0.001}">
+                               oninput="if(value>100){value=100}" onChange="if(value<0.001){value=0.001}"
+                               (input)="errPositionItem.win_probability.isError=false">
                         <label>%</label>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.win_probability?.isError">{{errPositionItem?.win_probability?.errMes}}</span>
                     </div>
                 </div>
                 <div class="modal-footer">

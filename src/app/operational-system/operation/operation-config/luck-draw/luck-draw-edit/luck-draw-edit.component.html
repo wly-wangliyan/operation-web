@@ -55,7 +55,7 @@
                         <span>参与用户身份</span>
                     </label>
                     <nz-radio-group [(ngModel)]="activityParams.user_limit" name="user_limit" required>
-                        <label nz-radio [nzValue]=1>所有用户</label>
+                        <label class="font-style" nz-radio [nzValue]=1>所有用户</label>
                     </nz-radio-group>
                 </div>
                 <div class="row">
@@ -70,12 +70,12 @@
                         <label>日</label>
                         <span>可参与，每日可参与上限</span>
                         <input class="form-control" [(ngModel)]="activityParams.daily_participation_limit" name="daily_participation_limit"
-                               placeholder="1-999" maxlength="3" (change)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off"
+                               placeholder="1-999" maxlength="3" (input)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off"
                                oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
                         <label>次</label>
                         <span>，最大可参与上限</span>
                         <input class="form-control" [(ngModel)]="activityParams.max_participation_limit" name="max_participation_limit"
-                               maxlength="3" (change)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off" placeholder="1-999"
+                               maxlength="3" (input)="errPositionItem.daily_participation_limit.isError=false" autocomplete="off" placeholder="1-999"
                                oninput="if(value&&value==0){value=1}else{value=value.replace(/[^0-9]/ig,'')}" required appIgnoreSpace>
                         <label>次</label>
                     </div>
@@ -91,7 +91,7 @@
                         <b>&nbsp;</b>
                         <span>分享设置</span>
                     </label>
-                    <label nz-checkbox [(ngModel)]="extra_times" name="extra_times">每人首次分享后额外参与1次</label>
+                    <label class="font-style" nz-checkbox [(ngModel)]="extra_times" name="extra_times">每人首次分享后额外参与1次</label>
                 </div>
             </div>
             <div *ngIf="tabIndex===1">
@@ -219,7 +219,7 @@
                         <td>{{data.win_probability+'%'}}</td>
                         <td class="operation">
                             <a [title]="'编辑'" (click)="onEditPrizeClick(i)">编辑</a>
-                            <a [title]="'删除'">删除</a>
+                            <a [title]="'删除'" (click)="onDelPrizeClick(data.prize_id)">删除</a>
                         </td>
                     </tr>
                     <tr>

@@ -120,6 +120,8 @@ export class LuckDrawListComponent implements OnInit, OnDestroy {
               this.globalService.promptBox.open('此活动不允许开启!', null, 2000, null, false);
             } else if (content.resource === 'missed_settings' && content.code === 'not_set') {
               this.globalService.promptBox.open('没有设置未中奖设置，无法开启!', null, 2000, null, false);
+            } else if (content.resource === 'prize' && content.code === 'no_prizes') {
+              this.globalService.promptBox.open('未添加奖品，无法开启!', null, 2000, null, false);
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
             }
@@ -157,5 +159,4 @@ export class LuckDrawListComponent implements OnInit, OnDestroy {
       });
     });
   }
-
 }

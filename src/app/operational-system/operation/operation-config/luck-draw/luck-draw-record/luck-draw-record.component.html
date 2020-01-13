@@ -3,39 +3,40 @@
 </div>
 <div class="content-flow">
     <div class="tab-bar-list">
-        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.banner_type">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tabIndex">
             <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">抽奖记录</label>
             <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">访问量</label>
         </nz-radio-group>
     </div>
-    <div *ngIf="searchParams.banner_type===1">
+    <div *ngIf="tabIndex===1">
         <div class="statistics-space">
             <div style="width: 30%">
-                <span>啥的都的风格上的人啥的都的风格上的人的人</span>
-                <span>2019.02.12</span>
+                <span>{{activityData.lottery_activity_name}}</span>
+                <span>{{(activityData.start_time * 1000 | date:"y-MM-dd HH:mm") + '-' +
+                    (activityData.end_time * 1000 | date:"y-MM-dd HH:mm")}}</span>
             </div>
             <div class="statistics-space-prize">
                 <div>
                     <label></label>
                     <span>累计参与抽奖次数</span>
-                    <span>111</span>
+                    <span>{{activityData.lottery_num||0}}</span>
                 </div>
                 <div>
                     <label></label>
                     <span>累计参与抽奖人数</span>
-                    <span>111</span>
+                    <span>{{activityData.lottery_people_num||0}}</span>
                 </div>
             </div>
             <div class="statistics-space-prize tip-color">
                 <div>
                     <label></label>
                     <span>累计中奖次数</span>
-                    <span>111</span>
+                    <span>{{activityData.win_num||0}}</span>
                 </div>
                 <div>
                     <label></label>
                     <span>累计中奖人数</span>
-                    <span>111</span>
+                    <span>{{activityData.win_people_num||0}}</span>
                 </div>
             </div>
         </div>
@@ -43,20 +44,25 @@
             <form class="search-form" autocomplete="off">
                 <div class="form-group">
                     <span>中奖状态：</span>
-                    <select name="promotion_type" class="form-control" [(ngModel)]="searchParams.banner_type">
+                    <select name="is_prize" class="form-control" [(ngModel)]="searchParams.is_prize">
                         <option value=''>全部</option>
                         <option value=1>中奖</option>
-                        <option value=2>未中奖</option>
+                        <option value=0>未中奖</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <span>微信昵称：</span>
-                    <input class="form-control" placeholder="请输入微信昵称" maxlength="20" name="title" [(ngModel)]="searchParams.title" />
+                    <input class="form-control" placeholder="请输入微信昵称" maxlength="20" name="wx_nickname" [(ngModel)]="searchParams.wx_nickname" />
+                </div>
+                <div class="form-group">
+                    <span>ID：</span>
+                    <input name="htcode" class="form-control" placeholder="请输入ID" maxlength="32"
+                           [(ngModel)]="searchParams.htcode" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
                 </div>
                 <div class="form-group">
                     <span>手机号：</span>
-                    <input name="promotion_id" class="form-control" placeholder="请输入手机号" maxlength="11"
-                           [(ngModel)]="searchParams.banner_type" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
+                    <input name="phone_num" class="form-control" placeholder="请输入手机号" maxlength="11"
+                           [(ngModel)]="searchParams.phone_num" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
                         </button>
@@ -66,7 +72,7 @@
         </div>
         <div class="table-container">
             <div class="zmy-table">
-                <nz-table #bannerTable [nzData]="bannerList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                <nz-table #drawTable [nzData]="drawList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
                           (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
                     <thead>
                     <tr>
@@ -79,40 +85,41 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of bannerTable.data; let i=index">
-                        <td>{{data.title}}</td>
+                    <tr *ngFor="let data of drawTable.data; let i=index">
+                        <td [title]="data.htcode">{{data.htcode|zMaxLength:16}}</td>
 
-                        <td>{{data.title}}</td>
+                        <td [title]="data.wx_nickname">{{data.wx_nickname|zMaxLength: 10}}</td>
 
-                        <td>{{data.title}}</td>
+                        <td>{{data.phone_num?data.phone_num:'--'}}</td>
 
-                        <td>{{data.title}}</td>
+                        <td>{{data.prize_info?.prize_name?data.prize_info?.prize_name:'--'}}</td>
 
-                        <td>{{data.title}}</td>
+                        <td>{{data.exchange_status===1?'未兑换':data.exchange_status===2?'已兑换':'--'}}</td>
 
-                        <td>{{data.online_time ?(data.online_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}</td>
                     </tr>
                     </tbody>
                 </nz-table>
             </div>
         </div>
     </div>
-    <div *ngIf="searchParams.banner_type===2">
+    <div *ngIf="tabIndex===2">
         <div class="statistics-space">
             <div style="width: 30%">
-                <span>啥的都的风格上的人啥的都的风格上的人的人</span>
-                <span>2019.02.12</span>
+                <span>{{activityData.lottery_activity_name}}</span>
+                <span>{{(activityData.start_time * 1000 | date:"y-MM-dd HH:mm") + '-' +
+                (activityData.end_time * 1000 | date:"y-MM-dd HH:mm")}}</span>
             </div>
             <div class="statistics-space-prize">
                 <div>
                     <label></label>
                     <span>累计访问量</span>
-                    <span>111</span>
+                    <span>{{activityData.click_num||0}}</span>
                 </div>
                 <div>
                     <label></label>
                     <span>累计访问人数</span>
-                    <span>111</span>
+                    <span>{{activityData.click_person||0}}</span>
                 </div>
             </div>
         </div>
@@ -126,7 +133,7 @@
                     <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
                                     [nzShowTime]="false" name='online_start_time' nzFormat="yyyy-MM-dd"></nz-date-picker>
                     <div class="search-btn-group">
-                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                        <button nz-button nzType="primary" (click)="onClickSearchBtnClick()">查询
                         </button>
                     </div>
                 </div>
@@ -134,8 +141,8 @@
         </div>
         <div class="table-container">
             <div class="zmy-table">
-                <nz-table #bannerTable [nzData]="bannerList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
-                          (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+                <nz-table #clickTable [nzData]="clicksList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                          (nzPageIndexChange)="onClickNZPageIndexChange($event)" [nzNoResult]="noResultText">
                     <thead>
                     <tr>
                         <th>日期</th>
@@ -144,12 +151,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of bannerTable.data; let i=index" cdkDrag>
-                        <td>{{data.title}}</td>
+                    <tr *ngFor="let data of clickTable.data; let i=index">
+                        <td>{{data.date?(data.date * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
-                        <td>{{data.click_num >=0 ? data.click_num : '--'}}</td>
+                        <td>{{data.click_num||0}}</td>
 
-                        <td>{{data.click_person >=0 ? data.click_person: '--'}}</td>
+                        <td>{{data.click_person||0}}</td>
                     </tr>
                     </tbody>
                 </nz-table>

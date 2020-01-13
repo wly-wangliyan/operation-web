@@ -351,4 +351,20 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.prizeCreateComponent.clear();
     });
   }
+
+  // 删除奖品
+  public onDelPrizeClick(prize_id: string) {
+    this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.luckDrawService.requestDeletePrizeData(this.lottery_activity_id, prize_id).subscribe(() => {
+        this.globalService.promptBox.open('删除成功');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
+          this.searchText$.next();
+        }
+      });
+    });
+  }
 }

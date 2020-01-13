@@ -74,6 +74,10 @@ export class ChooseCommodityComponent implements OnInit {
         this.commodityList = [];
         res.results.forEach(value => {
           const commodity = new CommodityItem(value);
+           // 单规格的商品默认显示规格售价、库存、名称
+          if (commodity.source.specifications.length === 1) {
+            commodity.specification = commodity.source.specifications[0];
+          }
           if (value.commodity_id === this.prize_info.commodity_id) {
             commodity.isChoose = true;
             value.specifications.forEach(value1 => {

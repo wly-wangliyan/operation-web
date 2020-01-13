@@ -73,7 +73,7 @@
     margin-right: 5px;
 }
 
-.push-rate span {
+.push-rate span, .font-style {
     font-size: 14px;
     font-family:PingFangSC-Regular,PingFang SC;
     color:rgba(8,17,32,1);

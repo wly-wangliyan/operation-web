@@ -23,6 +23,8 @@ export class OrderDetailComponent implements OnInit {
 
   public isEditOrderRemark = false; // 标记是否编辑订单备注
 
+  public remark: string; // 备注
+
   private order_id: string; // 订单id
 
   private searchText$ = new Subject<any>();
@@ -61,6 +63,7 @@ export class OrderDetailComponent implements OnInit {
   /**编辑
    */
   public onEditClick() {
+    this.remark = this.orderRecord.remark;
     this.isEditOrderRemark = true;
   }
 
@@ -73,8 +76,8 @@ export class OrderDetailComponent implements OnInit {
   /**取消编辑
    */
   public onCancleClick() {
+    this.orderRecord.remark = this.remark;
     this.isEditOrderRemark = false;
-    this.searchText$.next();
   }
 
   /** 修改订单详情
@@ -83,7 +86,7 @@ export class OrderDetailComponent implements OnInit {
   private requestUpdateOrderDetail(): void {
     this.orderService.requestUpdateOrderDetailData({remark: this.orderRecord.remark}, this.order_id).subscribe(() => {
       this.globalService.promptBox.open('保存成功');
-      this.onCancleClick();
+      this.isEditOrderRemark = false;
       this.searchText$.next();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
