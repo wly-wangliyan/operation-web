@@ -183,7 +183,7 @@
                   <th style="width: 125px;">原价</th>
                   <th *ngIf="commodityInfo.validity_type!==2" style="width: 125px;">售价</th>
                   <th style="width: 125px;">结算价</th>
-                  <th>库存</th>
+                  <th style="width: 100px;">库存</th>
                   <th></th>
                   <th style="width: 15%;"></th>
                 </tr>
@@ -204,12 +204,13 @@
                         [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
                         (focus)='onFocusSpecificationName(specificationIndex)' (blur)='isTooltipShow=false'
                         placeholder="输入1-20字规格名称" minlength="1" maxlength="20" appIgnoreSpace>
-                        <div class="row row-message text-error" *ngIf='specificationIndex===FormatCommoditySpecificationList.length-1'>
-                          <div class="control-input">
-                            <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
-                          </div>
+                      <div class="row row-message text-error"
+                        *ngIf='specificationIndex===FormatCommoditySpecificationList.length-1'>
+                        <div class="control-input">
+                          <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
                         </div>
-                    </div>     
+                      </div>
+                    </div>
                   </td>
                   <td style="width: 125px;">
                     <div class="td-content special-td-content">
