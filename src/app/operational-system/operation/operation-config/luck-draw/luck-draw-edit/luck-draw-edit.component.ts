@@ -55,8 +55,8 @@ export class ErrPositionItem {
 })
 export class LuckDrawEditComponent implements OnInit, OnDestroy {
 
-  public activityParams: ActivityParams = new ActivityParams();
-  public noPrizeParams: NoPrizeParams = new NoPrizeParams();
+  public activityParams: ActivityParams = new ActivityParams(); // 抽奖活动信息
+  public noPrizeParams: NoPrizeParams = new NoPrizeParams(); // 未中奖设置信息
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
   public levelName = '新建抽奖活动';
@@ -74,6 +74,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
 
   private is_save = false; // 防止连续出发保存事件
   private searchText$ = new Subject<any>();
+  private noPrizeTemp: NoPrizeParams = new NoPrizeParams(); // 未中奖设置信息备份，用于未保存时切换tab还原数据
 
   @Input() public data: any;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
@@ -112,6 +113,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.activityParams = data;
       this.noPrizeParams = data;
       this.prizeList = data.prizes;
+      this.noPrizeTemp = data.clone();
       this.cover_image = this.activityParams.cover_image ? this.activityParams.cover_image.split(',') : [];
       this.wx_share_image = this.activityParams.wx_share_image ? this.activityParams.wx_share_image.split(',') : [];
       this.wx_share_poster = this.activityParams.wx_share_poster ? this.activityParams.wx_share_poster.split(',') : [];
@@ -192,6 +194,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       if (this.noPrizeVerification()) {
         this.luckDrawService.requestSaveNoPrizeData(this.lottery_activity_id, this.noPrizeParams).subscribe(() => {
           this.globalService.promptBox.open('保存成功！');
+          this.noPrizeTemp = this.noPrizeParams.clone();
         }, err => {
           this.is_save = false;
           this.errorProcess(err);
@@ -341,6 +344,14 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
   public onTabChange(tabIndex: number) {
     if (this.lottery_activity_id) {
       this.tabIndex = tabIndex;
+      if (tabIndex === 1) {
+        this.cover_image = this.activityParams.cover_image ? this.activityParams.cover_image.split(',') : [];
+        this.wx_share_image = this.activityParams.wx_share_image ? this.activityParams.wx_share_image.split(',') : [];
+        this.wx_share_poster = this.activityParams.wx_share_poster ? this.activityParams.wx_share_poster.split(',') : [];
+      } else {
+        this.noPrizeParams = this.noPrizeTemp.clone();
+        this.missed_image = this.noPrizeParams.missed_image ? this.noPrizeParams.missed_image.split(',') : [];
+      }
     }
   }
 
