@@ -45,17 +45,25 @@
 
         <tr>
           <td>应收</td>
-          <td>{{orderRecord.right_fee | centPriceChange:'元'}}</td>
+          <td>
+            {{((orderRecord.rescue_prepaid_order?.right_prepaid_fee||0)+(orderRecord.right_balance_fee||0)) | centPriceChange:'元'}}
+          </td>
 
           <td>优惠</td>
-          <td>{{orderRecord.coupon_discount | centPriceChange:'元'}}</td>
+          <td>
+            {{((orderRecord.rescue_prepaid_order?.prepaid_coupon_discount || 0)+(orderRecord.balance_coupon_discount||0)) | centPriceChange:'元'}}
+          </td>
 
           <td>立减</td>
-          <td>{{orderRecord.platform_discount | centPriceChange:'元'}}</td>
+          <td>
+            {{((orderRecord.rescue_prepaid_order?.prepaid_platform_discount||0)+(orderRecord.balance_platform_discount||0)) | centPriceChange:'元'}}
+          </td>
         </tr>
         <tr>
           <td>实收</td>
-          <td>{{orderRecord.real_fee | centPriceChange:'元'}}</td>
+          <td>
+            {{((orderRecord.rescue_prepaid_order?.real_prepaid_fee||0)+(orderRecord.real_balance_fee||0)) | centPriceChange:'元'}}
+          </td>
 
           <td></td>
           <td></td>

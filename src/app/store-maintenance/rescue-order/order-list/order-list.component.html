@@ -129,17 +129,20 @@
             <td [title]="order.repair_shop_name || ''">{{(order.repair_shop_name|zMaxLength:6) || '--'}}</td>
             <td>{{order.rescue_project_type === 1? '搭电' : '换胎'}}</td>
 
-            <td>{{order.right_fee | centPriceChange:'元'}}</td>
+            <td>
+              {{((order.rescue_prepaid_order?.right_prepaid_fee||0)+(order.right_balance_fee||0)) | centPriceChange:'元'}}
+            </td>
 
             <td>
               <div class="column-box">
-                <span><span>平台立减：</span>{{(order.platform_discount || 0) | centPriceChange:'元'}}</span>
-                <span><span>优惠券：</span>{{(order.coupon_discount || 0) | centPriceChange:'元'}}</span>
+                <span><span>平台立减：</span>{{((order.rescue_prepaid_order?.prepaid_platform_discount||0)+(order.balance_platform_discount||0)) | centPriceChange:'元'}}</span>
+                <span><span>优惠券：</span>{{((order.rescue_prepaid_order?.prepaid_coupon_discount || 0)+(order.balance_coupon_discount||0)) | centPriceChange:'元'}}</span>
               </div>
-
             </td>
 
-            <td>{{order.real_fee | centPriceChange:'元'}}</td>
+            <td>
+              {{((order.rescue_prepaid_order?.real_prepaid_fee||0)+(order.real_balance_fee||0)) | centPriceChange:'元'}}
+            </td>
 
             <td>{{order.created_time ?(order.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}</td>
 
