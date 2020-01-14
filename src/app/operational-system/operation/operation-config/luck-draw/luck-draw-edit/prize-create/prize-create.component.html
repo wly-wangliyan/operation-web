@@ -48,7 +48,7 @@
                         <span>奖品</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group [(ngModel)]="prizeParams.prize_type" name="prize_type" required
+                        <nz-radio-group [(ngModel)]="prizeParams.prize_type" name="prize_type" required [nzDisabled]="prizeParams.prize_id"
                         (ngModelChange)="errPositionItem.prize_info.isError=false;errPositionItem.prize_num.isError=false">
                             <label nz-radio [nzValue]=1>商城商品</label>
                             <label nz-radio [nzValue]=2>平台优惠券</label>
@@ -61,20 +61,22 @@
                     <div class="control-input unit">
                         <input class="form-control" style="width: 360px" [(ngModel)]="prizeParams.prize_info.name"
                                name="name" autocomplete="off" readonly required appIgnoreSpace>
-                        <label style="width: 66px;cursor: pointer" (click)="onAddCommodityClick(prizeParams.prize_info)">选择</label>
+                        <label *ngIf="prizeParams.prize_id" style="width: 66px;cursor: not-allowed">选择</label>
+                        <label *ngIf="!prizeParams.prize_id" style="width: 66px;cursor: pointer"
+                               (click)="onAddCommodityClick(prizeParams.prize_info)">选择</label>
                     </div>
                 </div>
                 <div class="row" *ngIf="prizeParams.prize_type===2">
                     <label class=" control-label"></label>
                     <div class="control-input">
                         <select class="form-control" [(ngModel)]="prizeParams.prize_info.coupon_type" name="coupon_type"
-                                required (change)="errPositionItem.prize_info.isError=false">
+                                required (change)="errPositionItem.prize_info.isError=false" [disabled]="prizeParams.prize_id">
                             <option [value]=1>优惠券模板</option>
                             <option [value]=2>优惠券组</option>
                         </select>
                         <input class="form-control" placeholder="请输入ID" [(ngModel)]="prizeParams.prize_info.coupon_id"
                                name="coupon_id" oninput="value=value.replace(/[\u4e00-\u9fa5-\u0020]/ig,'')"
-                               (input)="errPositionItem.prize_info.isError=false"
+                               (input)="errPositionItem.prize_info.isError=false" [disabled]="prizeParams.prize_id"
                                maxlength="32" autocomplete="off" required appIgnoreSpace style="border-left: none!important;">
                     </div>
                 </div>
