@@ -108,9 +108,9 @@
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id'>
           <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
           <nz-form-control>
-            <div class="table-form" id='table-container'>
+            <div class="table-form">
               <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
-                [nzNoResult]="noResultText" #basicTable [nzScroll]="{ y: '240px' }">
+                [nzNoResult]="noResultText" #basicTable [nzScroll]="{ y: '400px' }">
                 <thead>
                   <tr>
                     <th style="width: 55px;">图片</th>

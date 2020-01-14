@@ -77,8 +77,6 @@
 
 .table-form {
   width: 900px;
-  max-height: 400px;
-  overflow-y: auto;
   border: 1px solid #e0dfdf;
 }
 
@@ -91,6 +89,8 @@
 :host ::ng-deep .ant-table-fixed-header>.ant-table-content>.ant-table-scroll>.ant-table-body {
   background-color: rgba(247, 248, 250, 1);
   padding-right: 20px;
+  overflow-y: auto !important;
+  max-height: 400px;
 }
 
 :host ::ng-deep .table-form .ant-table-thead>tr>th {

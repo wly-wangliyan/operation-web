@@ -216,13 +216,10 @@ export class AccessoryEditComponent implements OnInit {
       timer(0).subscribe(() => {
         this.specificationsList.push(new SpecificationEntity());
       });
-      const ele = document.getElementById('table-container');
-      if (ele.scrollHeight >= ele.clientHeight) {
-        timer(0).subscribe(() => {
-          // 设置滚动条到最底部
-          ele.scrollTop = ele.scrollHeight;
-        });
-      }
+      timer(0).subscribe(() => {
+        $('.ant-table-body').scrollTop($('.ant-table-body')[0].scrollHeight);
+
+      });
     }
   }
 
