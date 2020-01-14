@@ -111,7 +111,7 @@
               </td>
               <td class="operation">
                 <a [title]="'查看'" *ngIf='record.exchange_status===2'
-                  [routerLink]="['/main/mall/goods-order/detail', 'f43548cc27c111ea870e0242ac150003', '1']">查看订单</a>
+                  [routerLink]="['/main/mall/goods-order/detail', record.order_id, record.commodity_type]">查看订单</a>
                 <span *ngIf='record.exchange_status!==2'>--</span>
               </td>
             </tr>
