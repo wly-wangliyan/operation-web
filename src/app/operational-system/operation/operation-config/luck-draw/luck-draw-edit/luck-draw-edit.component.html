@@ -219,7 +219,8 @@
                         <td>{{data.win_probability+'%'}}</td>
                         <td class="operation">
                             <a [title]="'编辑'" (click)="onEditPrizeClick(i)">编辑</a>
-                            <a [title]="'删除'" (click)="onDelPrizeClick(data.prize_id)">删除</a>
+                            <a *ngIf="prizeList.length>1" [title]="'删除'" (click)="onDelPrizeClick(data.prize_id)">删除</a>
+                            <a class="delete-disable" *ngIf="prizeList.length===1" [title]="'删除'">删除</a>
                         </td>
                     </tr>
                     <tr>
