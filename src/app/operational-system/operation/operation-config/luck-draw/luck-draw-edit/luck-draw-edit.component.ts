@@ -145,10 +145,15 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
     }
     this.clear();
     this.is_save = true;
-    const httpList = [this.coverImgSelectComponent.upload(),
-                      this.wxShareImgSelectComponent.upload()];
+    const httpList = [];
     if (this.wxPosterImgSelectComponent.imageList.length > 0) {
       httpList.push(this.wxPosterImgSelectComponent.upload());
+    }
+    if (this.wxShareImgSelectComponent.imageList.length > 0) {
+      httpList.push(this.wxShareImgSelectComponent.upload());
+    }
+    if (this.coverImgSelectComponent.imageList.length > 0) {
+      httpList.push(this.coverImgSelectComponent.upload());
     }
     forkJoin(httpList).subscribe(() => {
       this.activityParams.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
@@ -162,6 +167,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
              this.globalService.promptBox.open('添加成功！', () => {
                this.lottery_activity_id = res.body.lottery_activity_id;
                this.tabIndex = 2;
+               this.is_save = false;
              });
            }, err => {
              this.is_save = false;
@@ -172,6 +178,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
           this.luckDrawService.requestUpdateActivityData(this.lottery_activity_id, this.activityParams).subscribe(() => {
             this.globalService.promptBox.open('修改成功！', () => {
               this.tabIndex = 2;
+              this.is_save = false;
             });
           }, err => {
             this.is_save = false;
