@@ -70,8 +70,8 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
   public start_time = null; // 活动开始时间
   public end_time = null; // 活动开始时间
   public extra_times: boolean; // 每人首次分享后额外参与
+  public lottery_activity_id: string;
 
-  private lottery_activity_id: string;
   private is_save = false; // 防止连续出发保存事件
   private searchText$ = new Subject<any>();
 
@@ -339,7 +339,9 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
 
   // tab页切换
   public onTabChange(tabIndex: number) {
-    this.tabIndex = tabIndex;
+    if (this.lottery_activity_id) {
+      this.tabIndex = tabIndex;
+    }
   }
 
   // 添加、编辑奖品

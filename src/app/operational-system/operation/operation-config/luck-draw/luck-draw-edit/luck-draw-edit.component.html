@@ -8,7 +8,8 @@
                 <li [class.tab-active]="tabIndex===1" (click)="onTabChange(1)">
                     <i></i>1. 活动设置</li>
                 <img src="/assets/images/icon_go_right.png">
-                <li [class.tab-active]="tabIndex===2" (click)="onTabChange(2)">
+                <li [class.tab-active]="tabIndex===2" (click)="onTabChange(2)"
+                    [class.tab-disable]="!lottery_activity_id">
                     <i></i>2. 奖项设置</li>
             </ul>
         </div>

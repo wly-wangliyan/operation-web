@@ -134,6 +134,7 @@
 
 .tab-bar-list ul > li {
     text-align: center;
+    cursor: pointer;
     width: 220px;
 }
 
@@ -145,6 +146,10 @@
 
 .tab-active {
     color: #3E71F7;
+}
+
+.tab-disable {
+    cursor: not-allowed!important;
 }
 
 .tab-bar-list ul > li:first-child > i {
