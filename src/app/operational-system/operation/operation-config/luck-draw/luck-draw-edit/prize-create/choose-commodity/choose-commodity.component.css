@@ -66,6 +66,7 @@
 
 .choose-specification-active {
     color: #3E71F7;
+    cursor: pointer
 }
 
 .zmy-table nz-table {
