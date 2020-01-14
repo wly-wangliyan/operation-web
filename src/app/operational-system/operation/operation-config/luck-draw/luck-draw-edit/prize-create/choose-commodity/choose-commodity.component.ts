@@ -139,6 +139,7 @@ export class ChooseCommodityComponent implements OnInit {
     this.closeCallback = closeFunc;
     this.searchText$ = new Subject<any>();
     this.searchParams = new CommoditySearchParams();
+    this.currentCommodity = new CommodityItem();
     this.rquestCommodityList();
     openCommodityModal();
   }

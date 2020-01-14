@@ -54,7 +54,7 @@
                         <img *ngIf='data.cover_image' style="width: 75px;" [src]="data.cover_image">
                     </td>
                     <td [title]="data.lottery_activity_id?data.lottery_activity_id:''">
-                        <span>
+                        <span [appTxtCopy]="data.lottery_activity_id">
                             {{data.lottery_activity_id?(data.lottery_activity_id|zMaxLength:15):'--'}}
                         </span>
                     </td>
