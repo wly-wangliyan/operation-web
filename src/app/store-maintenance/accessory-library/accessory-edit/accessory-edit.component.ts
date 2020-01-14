@@ -33,7 +33,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -62,7 +62,6 @@ export class AccessoryEditComponent implements OnInit {
   public right_prepaid_fee = '';
   public real_prepaid_fee = '';
   public operationTelErrors = '';
-  public prepaidOriginPriceErrors = '';
   public prepaidSalePriceErrors = '';
   public accessoryDetailErrors = '';
   public accessory_image_url: Array<any> = [];
@@ -76,7 +75,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -154,7 +153,6 @@ export class AccessoryEditComponent implements OnInit {
     this.errSpecificationsItem.icon.isError = false;
     this.errSpecificationsItem.ic_name.isError = false;
     this.operationTelErrors = '';
-    this.prepaidOriginPriceErrors = '';
     this.prepaidSalePriceErrors = '';
     this.accessoryDetailErrors = '';
     this.isSaveBtnDisabled = false;

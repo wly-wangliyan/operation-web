@@ -110,21 +110,21 @@
           <nz-form-control>
             <div class="table-form" id='table-container'>
               <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
-                [nzNoResult]="noResultText" #basicTable>
+                [nzNoResult]="noResultText" #basicTable [nzScroll]="{ y: '240px' }">
                 <thead>
                   <tr>
-                    <th>图片</th>
-                    <th>{{projectInfo?.specification?.name}}</th>
-                    <th>尾款原价</th>
-                    <th>尾款现价</th>
-                    <th>库存</th>
+                    <th style="width: 55px;">图片</th>
+                    <th style="width: 70px;">{{projectInfo?.specification?.name}}</th>
+                    <th style="width: 70px;">尾款原价</th>
+                    <th style="width: 75px;">尾款现价</th>
+                    <th style="width: 80px;">库存</th>
                     <th></th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of specificationsList; let i=index">
-                    <td>
+                    <td style="width: 60px;">
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
                           [limitImgSize]="2" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
@@ -139,30 +139,27 @@
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td style="width: 150px;">
                       <nz-input-group>
                         <input class="price-input" [(ngModel)]="data.battery_model" nz-input autocomplete="off"
                           name="accessory-model-{{data.time}}-{{i}}" maxlength='50' required />
                       </nz-input-group>
                     </td>
-                    <td>
+                    <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
                           name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
-                    <td>
+                    <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
                           name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
-                      <div class="text-danger">
-                        <span class="input-error">{{prepaidOriginPriceErrors}}</span>
-                      </div>
                     </td>
-                    <td>
+                    <td style="width: 100px;">
                       <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
                         name="store-{{data.time}}-{{i}}" required maxlength='5' />
                     </td>
@@ -196,9 +193,6 @@
                           name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
-                      <div class="text-danger">
-                        <span class="input-error">{{prepaidOriginPriceErrors}}</span>
-                      </div>
                     </nz-form-control>
                   </nz-form-item>
                 </div>

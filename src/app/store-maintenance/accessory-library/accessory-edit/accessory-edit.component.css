@@ -84,8 +84,13 @@
 
 :host ::ng-deep .table-form .ant-table {
   border: none;
-  padding: 0 20px 10px;
+  padding: 0 0 10px 20px;
   background: rgba(247, 248, 250, 1);
+}
+
+:host ::ng-deep .ant-table-fixed-header>.ant-table-content>.ant-table-scroll>.ant-table-body {
+  background-color: rgba(247, 248, 250, 1);
+  padding-right: 20px;
 }
 
 :host ::ng-deep .table-form .ant-table-thead>tr>th {
