@@ -65,7 +65,7 @@
                                         </div>
                                     </td>
                                     <td [class.choose-specification-active]="commodity.isChoose"
-                                        (click)="onChooseSpecificationClick(commodity)" style="cursor: pointer">
+                                        (click)="onChooseSpecificationClick(commodity)">
                                         {{commodity.specification?'已选:'+commodity.specification.specification_name:commodity.isChoose?'选择规格':'--'}}
                                         <img *ngIf="commodity.isChoose" src="/assets/images/icon_add_small.png">
                                     </td>
