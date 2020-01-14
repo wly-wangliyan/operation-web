@@ -156,8 +156,9 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       if (this.verification()) {
         if (!this.lottery_activity_id) {
           // 添加抽奖活动
-           this.luckDrawService.requestAddActivityData(this.activityParams).subscribe(() => {
+           this.luckDrawService.requestAddActivityData(this.activityParams).subscribe(res => {
              this.globalService.promptBox.open('添加成功！', () => {
+               this.lottery_activity_id = res.body.lottery_activity_id;
                this.tabIndex = 2;
              });
            }, err => {
@@ -345,7 +346,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
   public onEditPrizeClick(index: number) {
     this.prizeCreateComponent.open(this.lottery_activity_id, this.prizeList, index,() => {
       timer(0).subscribe(() => {
-        this.searchText$.next();
+        this.getActivityDetail();
       });
     }, () => {
       this.prizeCreateComponent.clear();
@@ -358,11 +359,11 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.globalService.confirmationBox.close();
       this.luckDrawService.requestDeletePrizeData(this.lottery_activity_id, prize_id).subscribe(() => {
         this.globalService.promptBox.open('删除成功');
-        this.searchText$.next();
+        this.getActivityDetail();
       }, err => {
         if (!this.globalService.httpErrorProcess(err)) {
           this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
-          this.searchText$.next();
+          this.getActivityDetail();
         }
       });
     });
