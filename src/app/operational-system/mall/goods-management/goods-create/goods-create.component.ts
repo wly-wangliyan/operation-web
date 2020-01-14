@@ -169,10 +169,10 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private globalService: GlobalService,
-              private goodsManagementHttpService: GoodsManagementHttpService,
-              private classifyHttpService: ClassifyManagementHttpService) {
+    private router: Router,
+    private globalService: GlobalService,
+    private goodsManagementHttpService: GoodsManagementHttpService,
+    private classifyHttpService: ClassifyManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -301,7 +301,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         this.commoditySpecificationList.push(new SpecificationParamsItem());
       });
     }
-    const ele = document.getElementById('table-container');
+    const ele = document.getElementById('table-tbody');
     if (ele.scrollHeight >= ele.clientHeight) {
       timer(0).subscribe(() => {
         // 设置滚动条到最底部

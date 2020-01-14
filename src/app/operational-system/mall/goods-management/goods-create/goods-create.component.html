@@ -175,23 +175,23 @@
             <b>*</b>
             <span>产品规格</span>
           </label>
-          <div class="control-input table-container" id='table-container' style="padding: 10px 0 24px;">
+          <div class="control-input table-container" id='table-container' style="padding-top: 10px;">
             <table class="table">
               <thead>
                 <tr>
-                  <th>规格名称</th>
-                  <th>原价</th>
-                  <th *ngIf="commodityInfo.validity_type!==2">售价</th>
-                  <th>结算价</th>
+                  <th style="width: 160px;">规格名称</th>
+                  <th style="width: 125px;">原价</th>
+                  <th *ngIf="commodityInfo.validity_type!==2" style="width: 125px;">售价</th>
+                  <th style="width: 125px;">结算价</th>
                   <th>库存</th>
                   <th></th>
                   <th style="width: 15%;"></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id='table-tbody'>
                 <tr
                   *ngFor="let formatCommoditySpecification of FormatCommoditySpecificationList; let specificationIndex=index;">
-                  <td>
+                  <td style="width: 160px;">
                     <div class="td-content name-content">
                       <div class="specification-prompt"
                         *ngIf='specificationNameIndex===specificationIndex&&isTooltipShow'>
@@ -204,9 +204,14 @@
                         [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
                         (focus)='onFocusSpecificationName(specificationIndex)' (blur)='isTooltipShow=false'
                         placeholder="输入1-20字规格名称" minlength="1" maxlength="20" appIgnoreSpace>
-                    </div>
+                        <div class="row row-message text-error" *ngIf='specificationIndex===FormatCommoditySpecificationList.length-1'>
+                          <div class="control-input">
+                            <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
+                          </div>
+                        </div>
+                    </div>     
                   </td>
-                  <td>
+                  <td style="width: 125px;">
                     <div class="td-content special-td-content">
                       <input type="text" class="form-control"
                         [id]="'unit_original_price_' + formatCommoditySpecification.idCount"
@@ -217,7 +222,7 @@
                       <label class="one-word-lable">元</label>
                     </div>
                   </td>
-                  <td *ngIf="commodityInfo.validity_type!==2">
+                  <td *ngIf="commodityInfo.validity_type!==2" style="width: 125px;">
                     <div class="td-content special-td-content">
                       <input type="text" class="form-control"
                         [id]="'unit_sell_price_' + formatCommoditySpecification.idCount"
@@ -228,7 +233,7 @@
                       <label class="one-word-lable">元</label>
                     </div>
                   </td>
-                  <td>
+                  <td style="width: 125px;">
                     <div class="td-content special-td-content">
                       <input type="text" class="form-control"
                         [id]="'settlement_price_' + formatCommoditySpecification.idCount"
@@ -274,11 +279,6 @@
                 </tr>
               </tbody>
             </table>
-            <div class="row row-message">
-              <div class="control-input">
-                <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
-              </div>
-            </div>
           </div>
         </div>
         <div class="row control-row">
