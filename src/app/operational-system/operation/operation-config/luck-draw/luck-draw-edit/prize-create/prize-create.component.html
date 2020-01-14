@@ -61,7 +61,7 @@
                     <div class="control-input unit">
                         <input class="form-control" style="width: 360px" [(ngModel)]="prizeParams.prize_info.name"
                                name="name" autocomplete="off" readonly required appIgnoreSpace>
-                        <label style="width: 66px" (click)="onAddCommodityClick(prizeParams.prize_info)">选择</label>
+                        <label style="width: 66px;cursor: pointer" (click)="onAddCommodityClick(prizeParams.prize_info)">选择</label>
                     </div>
                 </div>
                 <div class="row" *ngIf="prizeParams.prize_type===2">
