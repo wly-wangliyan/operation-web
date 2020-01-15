@@ -5,7 +5,7 @@
     <li class="big-bg" *ngIf="type==='2'&&orderDetail.delivery_status===2">
       <a (click)="onWriteOff(orderDetail)">核销券码</a>
     </li>
-    <li class="big-bg">
+    <li class="big-bg" *ngIf="orderDetail.pay_type!=='EC'">
       <a (click)="onEditRefundClick(orderDetail)">退款</a>
     </li>
   </ul>

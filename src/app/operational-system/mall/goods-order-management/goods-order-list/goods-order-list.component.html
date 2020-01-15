@@ -172,7 +172,8 @@
                     <a *ngIf="order.detail[0]?.commodity_type===2&&order.delivery_status===2&&order.is_refundable"
                       [title]="'核销'" (click)="onWriteOff(order)">核销</a>
                     <!-- 根据是否可以退款状态区分是否显示退款按钮 -->
-                    <a *ngIf="order.is_refundable" [title]="'退款'" (click)="onEditRefundClick(order)">退款</a>
+                    <a *ngIf="order.is_refundable&&order.pay_type!=='EC'" [title]="'退款'"
+                      (click)="onEditRefundClick(order)">退款</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1&&order.is_refundable"
                       [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2&&order.is_refundable"
