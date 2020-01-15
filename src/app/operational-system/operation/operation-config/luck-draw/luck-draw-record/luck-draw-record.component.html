@@ -94,7 +94,7 @@
 
                         <td>{{data.prize_info?.prize_name?data.prize_info?.prize_name:'谢谢参与'}}</td>
 
-                        <td>{{data.exchange_status===1?'未领取':data.exchange_status===2?'已领取':'--'}}</td>
+                        <td>{{data.prize_info?.prize_type===1?(data.exchange_status===2?'已领取':data.exchange_status===1&&data.prize_info?.prize_name?'未领取':'--'):'--'}}</td>
 
                         <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}</td>
                     </tr>
