@@ -152,7 +152,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let data of clickTable.data; let i=index">
-                        <td>{{data.date?(data.date * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.date?(data.date * 1000 | date:"y-MM-dd"):'--'}}</td>
 
                         <td>{{data.click_num||0}}</td>
 
