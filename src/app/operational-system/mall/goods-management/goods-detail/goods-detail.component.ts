@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { timer } from 'rxjs/index';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { CommodityEntity, ExchangeRecordEntity, GoodsManagementHttpService } from '../goods-management-http.service';
@@ -27,9 +28,9 @@ export class GoodsDetailComponent implements OnInit {
   private commodity_id: string;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private globalService: GlobalService,
-              private goodsManagementHttpService: GoodsManagementHttpService) {
+    private router: Router,
+    private globalService: GlobalService,
+    private goodsManagementHttpService: GoodsManagementHttpService) {
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
     });
@@ -60,6 +61,7 @@ export class GoodsDetailComponent implements OnInit {
     }, err => {
       if (err.status === 404) {
         this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
+        timer(2000).subscribe(() => this.router.navigateByUrl('/main/mall/goods-order/list'));
       } else {
         this.globalService.httpErrorProcess(err);
       }
