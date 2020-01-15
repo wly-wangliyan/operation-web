@@ -58,7 +58,11 @@ export class GoodsDetailComponent implements OnInit {
       });
       this.videoAndImgList = this.commodityInfo.commodity_videos.concat(this.commodityInfo.commodity_images);
     }, err => {
-      this.globalService.httpErrorProcess(err);
+      if (err.status === 404) {
+        this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);
+      } else {
+        this.globalService.httpErrorProcess(err);
+      }
     });
   }
 
