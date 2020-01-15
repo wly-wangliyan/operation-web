@@ -47,11 +47,11 @@ export class SpecificationParams extends EntityBase {
   public toEditJson(): any {
     const json = this;
     json.specification_objs.forEach(specificationObj => {
-      specificationObj.unit_original_price = specificationObj.unit_original_price * 100;
-      specificationObj.unit_sell_price = specificationObj.unit_sell_price ? specificationObj.unit_sell_price * 100 : specificationObj.unit_sell_price;
-      specificationObj.settlement_price = specificationObj.settlement_price * 100;
+      specificationObj.unit_original_price = Math.round(specificationObj.unit_original_price * 100);
+      specificationObj.unit_sell_price = specificationObj.unit_sell_price ? Math.round(specificationObj.unit_sell_price * 100) : specificationObj.unit_sell_price;
+      specificationObj.settlement_price = Math.round(specificationObj.settlement_price * 100);
       if (specificationObj.stock_json) {
-        specificationObj.stock_json.unit_sell_price_day = specificationObj.stock_json.unit_sell_price_day * 100;
+        specificationObj.stock_json.unit_sell_price_day = Math.round(specificationObj.stock_json.unit_sell_price_day * 100);
         specificationObj.stock_json = JSON.stringify(specificationObj.stock_json);
       }
     });

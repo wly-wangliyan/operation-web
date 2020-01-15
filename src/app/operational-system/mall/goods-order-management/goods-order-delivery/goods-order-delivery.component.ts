@@ -102,7 +102,7 @@ export class GoodsOrderDeliveryComponent implements OnInit {
       this.errMes = '邮费金额应小于10000元！';
       return;
     } else {
-      this.currentOrder.postage = this.postage_status === 1 ? this.postage * 100 : 0;
+      this.currentOrder.postage = this.postage_status === 1 ? Math.round(this.postage * 100) : 0;
       // 修改邮费信息
       this.orderHttpService.requestModifyOrderDelivery(this.order_id, this.currentOrder).subscribe(() => {
         this.onClose();

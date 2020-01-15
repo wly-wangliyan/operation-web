@@ -256,7 +256,7 @@ export class GoodsOrderManagementHttpService {
     const httpUrl = `${this.domain}/admin/refund_orders`;
     return this.httpService.post(httpUrl, {
       order_id,
-      refund_fee: Number(refund_fee) * 100,
+      refund_fee: Math.round(Number(refund_fee) * 100),
       refund_remark,
     }).pipe(map(res => RefundOrderEntity.Create(res.body)));
   }

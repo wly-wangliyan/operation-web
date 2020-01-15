@@ -82,7 +82,7 @@ export class GoodsOrderRefundComponent implements OnInit {
 
   // form提交
   public onEditFormSubmit() {
-    if (Number(this.refund_price) * 100 > Number(this.realPrice)) {
+    if (Math.round(Number(this.refund_price) * 100) > Number(this.realPrice)) {
       this.isShowErrMes = true;
     } else {
       this.isShowErrMes = false;
