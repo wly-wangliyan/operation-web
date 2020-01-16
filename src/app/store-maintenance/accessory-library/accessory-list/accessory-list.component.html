@@ -69,8 +69,11 @@
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]='data.accessory_id'>{{(data.accessory_id|zMaxLength:5)||'--'}}</td>
-            <!-- 配件信息 -->
+            <td [title]="data.accessory_id||''">
+              <span [appTxtCopy]="data.accessory_id">
+                {{(data.accessory_id|zMaxLength:8)||'--'}}
+              </span>
+            </td>
             <td>
               <div class="img-item">
                 <div class="img-box">
