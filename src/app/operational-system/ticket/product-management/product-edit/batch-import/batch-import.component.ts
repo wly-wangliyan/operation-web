@@ -170,7 +170,7 @@ export class BatchImportComponent implements OnInit {
   // 保存数据
   public onSaveBatchImport() {
     if (this.batchImportParams.type === 1) {// 录入方式：全部统一价
-      this.batchImportParams.platform_price = Number(this.platform_price) * 100;
+      this.batchImportParams.platform_price = Math.round(Number(this.platform_price) * 100);
       this.batchImportParams.date_settings = null;
       const reg = /^\d+(\.\d+)?$/;
       const buyPriceList = this.priceCalendarList.map(i => i.buy_price);
@@ -180,14 +180,14 @@ export class BatchImportComponent implements OnInit {
         this.globalService.promptBox.open('请输入统一售价！', null, 2000, '/assets/images/warning.png');
       } else if (!reg.test(this.platform_price)) {
         this.globalService.promptBox.open('请输入正确的售价！', null, 2000, '/assets/images/warning.png');
-      } else if ((Number(this.platform_price) * 100) < (Number(minBuyPrice) / 0.94)) {
+      } else if (Math.round(Number(this.platform_price) * 100) < (Number(minBuyPrice) / 0.94)) {
         this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
           this.globalService.confirmationBox.close();
           this.requestBatchImport();
         }, '确认保存', () => {
           this.platform_price = '';
         });
-      } else if ((Number(this.platform_price) * 100) > Number(market_price)) {
+      } else if (Math.round(Number(this.platform_price) * 100) > Number(market_price)) {
         this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
       } else {
         this.requestBatchImport();
@@ -196,7 +196,7 @@ export class BatchImportComponent implements OnInit {
       this.dateSettingsList = this.datePriceList.map(i => ({
         start_date: i.startTime ? this.formatDate(i.startTime) : null,
         end_date: i.startTime ? this.formatDate(i.endTime) : null,
-        platform_price: i.price ? Number(i.price) * 100 : '',
+        platform_price: i.price ? Math.round(Number(i.price) * 100) : '',
       }));
       this.batchImportParams.date_settings = JSON.stringify(this.dateSettingsList);
       this.batchImportParams.platform_price = null;

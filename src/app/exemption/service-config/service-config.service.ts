@@ -32,10 +32,10 @@ export class ConfigEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
-    json.total_amount = json.total_amount * 100;
-    json.real_amount = json.real_amount * 100;
-    json.sale_amount = json.sale_amount * 100;
-    json.logistics_fee = json.logistics_fee * 100;
+    json.total_amount = Math.round(json.total_amount * 100);
+    json.real_amount = Math.round(json.real_amount * 100);
+    json.sale_amount = Math.round(json.sale_amount * 100);
+    json.logistics_fee = Math.round(json.logistics_fee * 100);
     delete json.sold;
     delete json.created_time;
     delete json.updated_time;

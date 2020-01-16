@@ -18,7 +18,7 @@ import { HttpErrorEntity } from '../../../core/http.service';
 export class RescueFeesEditComponent implements OnInit {
 
   constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-    private routerInfo: ActivatedRoute, private router: Router) {
+              private routerInfo: ActivatedRoute, private router: Router) {
   }
 
   public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
@@ -74,10 +74,10 @@ export class RescueFeesEditComponent implements OnInit {
     } else {
       this.balanceCurrentPriceErrors = '';
       this.prepayCurrentPriceErrors = '';
-      this.searchFeeParams.balance_initial_price = Number(this.balance_initial_price) * 100;
-      this.searchFeeParams.balance_current_price = Number(this.balance_current_price) * 100;
-      this.searchFeeParams.prepay_initial_price = Number(this.prepay_initial_price) * 100;
-      this.searchFeeParams.prepay_current_price = Number(this.prepay_current_price) * 100;
+      this.searchFeeParams.balance_initial_price = Math.round(Number(this.balance_initial_price) * 100);
+      this.searchFeeParams.balance_current_price = Math.round(Number(this.balance_current_price) * 100);
+      this.searchFeeParams.prepay_initial_price = Math.round(Number(this.prepay_initial_price) * 100);
+      this.searchFeeParams.prepay_current_price = Math.round(Number(this.prepay_current_price) * 100);
       this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
         this.globalService.promptBox.open('编辑救援费成功！');
         this.searchText$.next();

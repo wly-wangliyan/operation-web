@@ -196,14 +196,14 @@ export class ProductCalendarComponent implements OnInit {
     if (value.platform_price !== null && value.platform_price !== undefined && value.platform_price !== '') {
       if (!reg.test(value.platform_price)) {
         this.globalService.promptBox.open('请输入正确的平台售价！', null, 2000, '/assets/images/warning.png');
-      } else if ((Number(value.platform_price) * 100) < (Number(value.buy_price) / 0.94)) {
+      } else if (Math.round(Number(value.platform_price) * 100) < (Number(value.buy_price) / 0.94)) {
         this.globalService.confirmationBox.open('提示', '你设置的售价可能会造成亏损，确定要设置吗？\n计算公式：售价 ≥ 结算价 / 0.94', () => {
           this.globalService.confirmationBox.close();
           this.submitPlatformPrice(value);
         }, '确认保存', () => {
           this.searchText$.next();
         });
-      } else if ((Number(value.platform_price) * 100) > Number(value.ticket.market_price)) {
+      } else if (Math.round(Number(value.platform_price) * 100) > Number(value.ticket.market_price)) {
         this.globalService.promptBox.open('平台售价不得大于市场价！', null, 2000, '/assets/images/warning.png');
       } else {
         this.submitPlatformPrice(value);

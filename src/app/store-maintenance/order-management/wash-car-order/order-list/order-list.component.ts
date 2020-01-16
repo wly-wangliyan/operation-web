@@ -142,7 +142,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (Number(this.selectOrder.sale_fee) < Number(this.refundParams.refund_fee) * 100) {
+    if (Number(this.selectOrder.sale_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
     }

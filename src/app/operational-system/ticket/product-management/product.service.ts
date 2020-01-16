@@ -539,7 +539,7 @@ export class ProductService {
   public requestSetPlatformPrice(product_id: string, ticket_id: string, value: any): Observable<HttpResponse<any>> {
     return this.httpService.patch(
       `${this.domain}/products/${product_id}/tickets/${ticket_id}/price_calendars/${value.price_id}/platform_price`, {
-      platform_price: Number(value.platform_price) * 100,
+      platform_price: Math.round(Number(value.platform_price) * 100),
     }
     );
   }

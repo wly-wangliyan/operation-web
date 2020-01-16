@@ -98,13 +98,13 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
       return;
     }
     if (this.refundOrderType === 1) {
-      if (Number(this.prepaidOrderRecord.real_prepaid_fee) < Number(this.refundParams.refund_fee) * 100) {
+      if (Number(this.prepaidOrderRecord.real_prepaid_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
         this.globalService.promptBox.open(`退款金额应小于等于预付实收金额！`, null, 2000, null, false);
         return;
       }
 
     } else if (this.refundOrderType === 2) {
-      if (Number(this.balanceOrderRecord.real_balance_fee) < Number(this.refundParams.refund_fee) * 100) {
+      if (Number(this.balanceOrderRecord.real_balance_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
         this.globalService.promptBox.open(`退款金额应小于等于尾款实收金额！`, null, 2000, null, false);
         return;
       }

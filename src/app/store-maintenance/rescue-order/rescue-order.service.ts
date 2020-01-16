@@ -128,7 +128,7 @@ export class RefundParams extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
-    json.refund_fee = json.refund_fee * 100;
+    json.refund_fee = Math.round(json.refund_fee * 100);
     return json;
   }
 }

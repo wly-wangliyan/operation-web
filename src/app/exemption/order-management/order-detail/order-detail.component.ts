@@ -232,7 +232,7 @@ export class OrderDetailComponent implements OnInit {
       this.globalService.promptBox.open('邮费应大于0！', null, 2000, null, false);
       return;
     }
-    this.editParams.logistics_fee = this.logistics_fee * 100;
+    this.editParams.logistics_fee = Math.round(this.logistics_fee * 100);
     this.editParams.reject_type = null;
     this.requestUpdateOrderDetail(4);
   }
@@ -258,7 +258,7 @@ export class OrderDetailComponent implements OnInit {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-    const refund_fee = Number(this.refund_fee) * 100;
+    const refund_fee = Math.round(Number(this.refund_fee) * 100);
     if (refund_fee - (this.orderRecord.real_amount) > 0) {
       this.globalService.promptBox.open('退款金额应小于等于实付金额！', null, 2000, null, false);
       return;
