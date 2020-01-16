@@ -40,7 +40,7 @@ export class GoodsWriteOffComponent implements OnInit {
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   constructor(private orderHttpService: GoodsOrderManagementHttpService,
-    private globalService: GlobalService) {
+              private globalService: GlobalService) {
   }
 
   ngOnInit() {
@@ -157,7 +157,7 @@ export class GoodsWriteOffComponent implements OnInit {
             this.globalService.promptBox.open(`商家不存在或已下线!`, null, 2000, '/assets/images/warning.png');
             return;
           } else if (content.code === 'do_not_write_of') {
-            this.globalService.promptBox.open(`含有无法核销的核销码!`, null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open(`券码不在有效期内，无法核销!`, null, 2000, '/assets/images/warning.png');
           } else {
             this.globalService.promptBox.open('保存失败,请重试!', null, 2000, '/assets/images/warning.png');
           }
