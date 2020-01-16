@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ServiceConfigComponent } from './service-config/service-config.component';
 import { AuthGuardService } from '../core/auth-guard.service';
-import { RouteMonitorService } from '../core/route-monitor.service';
-import { HomeComponent } from '../operational-system/main/home/home.component';
 import { MenuGuardService } from '../core/menu-guard.service';
 
 const routes: Routes = [
   {
-    path: 'service-config', component: ServiceConfigComponent,
+    path: 'service-config',
+    loadChildren: () => import('./service-config/service-config.module').then(m => m.ServiceConfigModule),
     canLoad: [AuthGuardService, MenuGuardService]
   },
   {

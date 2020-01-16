@@ -13,7 +13,7 @@ export class OrderSearchParams extends EntityBase {
   public phone: string = undefined; // 车主信息：手机号
   public name: string = undefined; // 车主信息：购买人
   public exemption_order_id: string = undefined; // 订单id
-  public order_section: string = undefined; // 下单时间
+  public created_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数

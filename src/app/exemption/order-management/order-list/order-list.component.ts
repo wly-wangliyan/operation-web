@@ -155,16 +155,16 @@ export class OrderListComponent implements OnInit, OnDestroy {
     const ePayTimeStamp = this.pay_end_time ? (new Date(this.pay_end_time).setHours(new Date(this.pay_end_time).getHours(),
       new Date(this.pay_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
     if (sTimestamp > eTimeStamp) {
-      this.globalService.promptBox.open('下单开始时间不能大于结束时间！');
+      this.globalService.promptBox.open('下单开始时间不能大于结束时间！', null, 2000, null, false);
       return false;
     } else if (sPayTimestamp > ePayTimeStamp) {
-      this.globalService.promptBox.open('支付开始时间不能大于结束时间！');
+      this.globalService.promptBox.open('支付开始时间不能大于结束时间！', null, 2000, null, false);
       return false;
     }
     if (this.order_start_time || this.order_end_time) {
-      this.searchParams.order_section = `${sTimestamp},${eTimeStamp}`;
+      this.searchParams.created_section = `${sTimestamp},${eTimeStamp}`;
     } else {
-      this.searchParams.order_section = null;
+      this.searchParams.created_section = null;
     }
 
     if (this.pay_start_time || this.pay_end_time) {

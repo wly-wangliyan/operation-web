@@ -54,7 +54,7 @@ export class GlobalService {
     if (err.status === 403) {
       this.promptBox.open(this.permissionErrorMessage, () => {
         this.authService.kickOut();
-      });
+      }, 2000, null, false);
       return true;
     } else if (err.status === 500) {
       this.http500Tip.http500Flag = true;

@@ -1,0 +1,106 @@
+.content-flow {
+  position: relative;
+}
+
+.spin-loading {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.row .control-label {
+  width: 120px;
+}
+
+.cover-hint {
+  font-size: 14px;
+}
+
+.price-container {
+  min-width: 902px;
+  display: flex;
+  flex-direction: row;
+  background: #F7F8FA;
+  padding: 10px;
+  border: 0.2px solid rgba(136, 136, 136, 0.3);
+  margin-bottom: 20px;
+}
+
+.price-item input {
+  width: 275px;
+  background: #fff !important;
+}
+
+.price-item select {
+  width: 125px;
+  padding-left: 4px !important;
+  padding-right: 14px;
+  background: #fff !important;
+}
+
+.price-item {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+}
+
+.button-group button {
+  margin: 0 5px;
+}
+
+.line {
+  border-bottom: 1px solid #888;
+}
+
+.price-item div {
+  display: flex;
+  flex-direction: row;
+}
+
+.price-item button {
+  height: 34px;
+  width: 80px;
+}
+
+.price-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.price-title div {
+  flex: 1;
+  text-align: center;
+}
+
+.price-item .item-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.item-group .price-title {
+  font-size: 12px;
+  line-height: 12px;
+  color: #23242F;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.sale-group {
+  font-size: 12px;
+  line-height: 34px;
+  color: #888;
+}
+
+.small-group {
+  width: 195px !important;
+  padding: 0 10px;
+}
+
+.form-control:not(:disabled) {
+  background: #fff !important;
+}
+
+.sure-btn {
+  margin: 0 31px 0 120px;
+}

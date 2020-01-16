@@ -10,14 +10,10 @@ import { initializer } from '../initializer';
 import zh from '@angular/common/locales/zh';
 import { ExemptionRoutingModule } from './exemption-routing.module';
 import { ExemptionComponent } from './exemption.component';
-import { ServiceConfigComponent } from './service-config/service-config.component';
 import { SentryErrorHandler } from 'src/utils/sentry-error-handler';
 import { environment } from 'src/environments/environment';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../core/upload.service';
 import { HomeModule } from '../home/home.module';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzButtonModule } from 'ng-zorro-antd/button';
 
 registerLocaleData(zh);
 
@@ -38,14 +34,10 @@ const uploadToken: UploadConfig = {
     BrowserAnimationsModule,
     ShareModule,
     HomeModule,
-    ExemptionRoutingModule,
-    NzSpinModule,
-    NzSwitchModule,
-    NzButtonModule
+    ExemptionRoutingModule
   ],
   declarations: [
-    ExemptionComponent,
-    ServiceConfigComponent
+    ExemptionComponent
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
