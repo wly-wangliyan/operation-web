@@ -21,6 +21,7 @@
   line-height: 34px;
 }
 
+.upkeep-form .control-label,
 .base-form .control-label {
   width: 150px !important;
 }

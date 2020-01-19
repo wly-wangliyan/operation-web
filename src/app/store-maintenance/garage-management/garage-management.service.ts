@@ -46,6 +46,7 @@ export class EditRepairShopParams extends EntityBase {
   public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
 }
 
+// 洗车服务
 export class WashCarEntity extends EntityBase {
   public wash_car_id: string = undefined; // 汽修店洗车相关 主键
   public wash_car_tags: Array<any> = []; // 洗车标签
@@ -67,6 +68,34 @@ export class WashCarEntity extends EntityBase {
   public toEditJson(): any {
     const json = this.json();
     delete json.wash_car_id;
+    delete json.repair_shop;
+    delete json.service_num;
+    return json;
+  }
+}
+
+// 到店保养服务
+export class UpkeepServiceEntity extends EntityBase {
+  public upkeep_id: string = undefined; // 汽修店洗车相关 主键
+  public upkeep_tags: Array<any> = []; // 洗车标签
+  public start_time: number = null; // 汽修店洗车营业开始时间
+  public end_time: number = null; // 汽修店洗车营业结束时间
+  public upkeep_telephone = ''; // 客服电话(汽修店洗车客服电话)
+  public shop_instruction = ''; // 店铺简介
+  public repair_shop: RepairShopEntity = undefined; // 汽修店
+  public service_num: number = undefined; // 已服务次数
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'repair_shop') {
+      // tslint:disable-next-line: no-use-before-declare
+      return RepairShopEntity;
+    }
+    return null;
+  }
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.upkeep_id;
     delete json.repair_shop;
     delete json.service_num;
     return json;
@@ -308,6 +337,17 @@ export class GarageManagementService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestEditWashInfo(repair_shop_id: string, params: WashCarEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/repair_shops/${repair_shop_id}/wash_car_info`;
+    return this.httpService.put(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 编辑到店保养服务
+   * @param repair_shop_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditUpkeepInfo(repair_shop_id: string, params: UpkeepServiceEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/repair_shops/${repair_shop_id}/wash_car_info`;
     return this.httpService.put(httpUrl, params.toEditJson());
   }
