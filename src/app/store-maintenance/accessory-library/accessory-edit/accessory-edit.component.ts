@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { ChooseProjectComponent } from './choose-project/choose-project.component';
+import { ChooseBrandComponent } from './choose-brand/choose-brand.component';
 import { isUndefined } from 'util';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { GlobalService } from '../../../core/global.service';
@@ -71,6 +72,7 @@ export class AccessoryEditComponent implements OnInit {
   private searchText$ = new Subject<any>();
 
   @ViewChild('chooseProject', { static: true }) public chooseProject: ChooseProjectComponent;
+  @ViewChild('chooseBrand', { static: true }) public chooseBrand: ChooseBrandComponent;
   @ViewChild('accessoryImg', { static: true }) public accessoryImgComponent: ZPhotoSelectComponent;
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
@@ -136,6 +138,15 @@ export class AccessoryEditComponent implements OnInit {
       this.getProjectInfo();
     }
   }
+
+  // 选择所属品牌回调函数
+  public onSelectedBrand(event: any): void {
+    if (event) {
+      this.accessoryParams.project_id = event.project.project_id;
+      this.accessoryParams.project_name = event.project.project_name;
+    }
+  }
+
 
   // 获取项目信息
   private getProjectInfo() {

@@ -35,7 +35,7 @@
 }
 
 .params {
-  width: 120px;
+  width: 150px;
 }
 
 .price-input {
@@ -69,14 +69,14 @@
 }
 
 .params-box {
-  width: 900px;
+  width: 1000px;
   padding-top: 12px;
   background: rgba(247, 248, 250, 1);
   border: 1px solid #e0dfdf;
 }
 
 .table-form {
-  width: 900px;
+  width: 1000px;
   border: 1px solid #e0dfdf;
 }
 

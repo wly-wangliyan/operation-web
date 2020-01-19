@@ -205,7 +205,9 @@ export class SelectMultiBrandFirmComponent implements OnInit {
         }
       });
     }
-    if (seriesList.length !== 0) {
+    if (seriesList.length === 0) {
+      this.globalService.promptBox.open(`请勾选车系后再保存!`, null, 2000, '/assets/images/warning.png');
+    } else {
       const newList = seriesList.flat();
       const seriesIds = newList.map(item => item.car_series_id).join(',');
       this.setRecommendData(seriesIds);

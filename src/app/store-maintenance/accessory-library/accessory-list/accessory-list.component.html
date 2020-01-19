@@ -25,6 +25,18 @@
           </div>
           <div>
             <nz-form-item nzFlex>
+              <nz-form-label>配件品牌</nz-form-label>
+              <nz-form-control class="form_control">
+                <select class="form-control" name="project_id" [(ngModel)]="searchParams.project_id">
+                  <option value="">请选择</option>
+                  <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                  </option>
+                </select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
               <nz-form-label>配件名称</nz-form-label>
               <nz-form-control>
                 <input class="form-control" placeholder="请输入配件名称" autocomplete="off"
@@ -88,10 +100,10 @@
                   <a style="word-break: keep-all;text-align: left" [title]="data.accessory_name">
                     {{data.accessory_name | zMaxLength:15}}
                   </a>
-                  <div class="goods-tip">
-                    <label *ngIf="data.commodity_type">{{data.commodity_type===1?'实物商品':'虚拟商品'}}</label>
-                    <label
-                      *ngIf="data.shipping_method">{{data.shipping_method===1?'平台自营':'由'+data.mall_business_name+'供应'}}</label>
+                  <div class="accessory-tip">
+                    <label>全合成</label>
+                    <label>5W-40</label>
+                    <label>SN</label>
                   </div>
                 </div>
               </div>
@@ -121,7 +133,7 @@
             </td>
             <td class="operation">
               <a [title]="'编辑'" [routerLink]="['../edit',data.accessory_id]">编辑</a>
-              <!-- <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data.accessory_id)">推荐设置</a> -->
+              <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data.accessory_id)">推荐设置</a>
               <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
             </td>
           </tr>

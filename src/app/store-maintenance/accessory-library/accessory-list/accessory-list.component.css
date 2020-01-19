@@ -117,3 +117,33 @@
 .img-box img {
   width: 90px;
 }
+
+.accessory-tip {
+  text-align: left;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.accessory-tip label {
+  min-width: 70px;
+  min-height: 20px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.accessory-tip label:nth-child(3n+1) {
+  background: #C6E2FF;
+  color: #409DFD;
+}
+
+.accessory-tip label:nth-child(3n+2) {
+  background: #E1F3D8;
+  color: #67C23A;
+}
+
+.accessory-tip label:nth-child(3n+3) {
+  background: #FAECD8;
+  color: #E6A23C;
+}

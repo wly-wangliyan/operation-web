@@ -15,11 +15,11 @@ export class ChooseBrandComponent implements OnInit {
 
   @Input() private selectedCategory: string; // 已选中的项目类别
 
-  @Input() private selectedProjectid: string; // 已选中的配件/服务Id
+  @Input() private selectedBrandid: string; // 已选中的品牌Id
 
-  public projectList: Array<ProjectEntity> = []; // 项目列表
+  public brandList: Array<ProjectEntity> = []; // 项目列表
 
-  public currentProjectList: Array<ProjectEntity> = []; // 所选项目类别对应的保养项目列表
+  public currentbrandList: Array<ProjectEntity> = []; // 所选项目类别对应的保养项目列表
 
   public currentProject: ProjectEntity = new ProjectEntity(); // 所选配件/服务
 
@@ -28,6 +28,8 @@ export class ChooseBrandComponent implements OnInit {
   public currentCategory: string;
 
   public tipMsg = ''; // 提示信息
+
+  public currentBrandId: string;
 
   private searchText$ = new Subject<any>();
 
@@ -45,7 +47,7 @@ export class ChooseBrandComponent implements OnInit {
       switchMap(() =>
         this.accessoryLibraryService.requestProjectListData())
     ).subscribe(res => {
-      this.projectList = res.results;
+      this.brandList = res.results;
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
@@ -57,19 +59,13 @@ export class ChooseBrandComponent implements OnInit {
   public open() {
     const obj = new ProjectEntity();
     obj.project_id = '1';
-    obj.project_name = '机油';
-    this.projectList.push(obj);
+    obj.project_name = '风帆';
+    this.brandList.push(obj);
     const obj1 = new ProjectEntity();
     obj1.project_id = '2';
-    obj1.project_name = '机油滤清器';
-    this.projectList.push(obj1);
+    obj1.project_name = '美孚';
+    this.brandList.push(obj1);
     const obj2 = new ProjectEntity();
-    obj2.project_id = '3';
-    obj2.project_name = '蓄电池';
-    this.projectList.push(obj2);
-    console.log('1', this.projectList);
-
-    // this.searchText$.next();
     setTimeout(() => {
       this.initModal();
       $('#chooseBrandModal').modal();
@@ -79,12 +75,10 @@ export class ChooseBrandComponent implements OnInit {
   // 初始化
   private initModal() {
     this.tipMsg = '';
-    this.currentCategory = null;
-    this.projectList = [];
-    this.currentProjectList = [];
-    this.currentProject = new ProjectEntity();
-    if (this.selectedCategory) {
-      this.currentCategory = this.selectedCategory;
+    this.currentBrandId = '';
+    this.brandList = [];
+    if (this.selectedBrandid) {
+      this.currentBrandId = this.selectedBrandid;
     }
   }
 
@@ -93,16 +87,16 @@ export class ChooseBrandComponent implements OnInit {
    */
   public close() {
     this.requestSubscription && this.requestSubscription.unsubscribe();
-    $('#selectProjectModal').modal('hide');
+    $('#chooseBrandModal').modal('hide');
   }
 
   public onCategoryClick(category: string) {
     this.tipMsg = '';
-    this.currentProjectList = [];
+    this.currentbrandList = [];
     this.currentProject = new ProjectEntity();
     this.currentCategory = category;
-    if (this.projectList) {
-      this.currentProjectList = this.projectList.filter(value => value.project_id === category);
+    if (this.brandList) {
+      this.currentbrandList = this.brandList.filter(value => value.project_id === category);
     }
   }
 
@@ -120,7 +114,7 @@ export class ChooseBrandComponent implements OnInit {
           category: this.currentCategory,
           project: this.currentProject
         });
-      $('#selectProjectModal').modal('hide');
+      $('#chooseBrandModal').modal('hide');
     } else {
       this.tipMsg = '请选择配件/服务';
     }

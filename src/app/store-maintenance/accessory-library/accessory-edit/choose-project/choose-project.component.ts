@@ -36,6 +36,12 @@ export class ChooseProjectComponent implements OnInit {
   @Output('selectedProject') public selectedProject = new EventEmitter();
 
   public ngOnInit() {
+    const obj = new ProjectEntity();
+    obj.project_id = '123';
+    obj.project_name = '机油';
+    const obj1 = new ProjectEntity();
+    obj1.project_id = '456';
+    obj1.project_name = '机滤';
     // 项目列表
     this.searchText$.pipe(
       debounceTime(500),
@@ -43,6 +49,8 @@ export class ChooseProjectComponent implements OnInit {
         this.accessoryLibraryService.requestProjectListData())
     ).subscribe(res => {
       this.projectList = res.results;
+      this.projectList.push(obj);
+      this.projectList.push(obj1);
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
