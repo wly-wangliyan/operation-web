@@ -11,6 +11,10 @@ import {
   WashCarSpecificationEntity,
   BasePriceEntity,
 } from '../wash-car-service-config.service';
+import {
+  WorkFeesManagementService,
+  SearchWorkFeesParams,
+} from '../work-fees-management.service';
 import { Subject, Subscription } from 'rxjs/index';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
@@ -32,15 +36,16 @@ export class ServiceFeesListComponent implements OnInit {
   public serviceFeeList: Array<ServiceFeeEntity> = [];
   public pageIndex = 1;
   public searchParams = new SearchParams();
+  public searchWorkFeesParams = new SearchWorkFeesParams();
   public noResultText = '数据加载中...';
-  public tabs: Array<TabItem> = [{ key: 1, value: '救援服务' }, { key: 2, value: '洗车服务' }];
+  public tabs: Array<TabItem> = [{ key: 0, value: '保养服务费' }, { key: 1, value: '救援服务' }, { key: 2, value: '洗车服务' }];
   public washTabs: Array<TabItem> = [{ key: 1, value: '5座小型车' }, { key: 2, value: 'SUV/MPV' }]; // 洗车服务下tab
   public washServiceConfig: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 洗车服务配置
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
   public basePrice: Array<BasePriceEntity> = []; // 基础价格
   public valid_unit = { day: '日', month: '月', year: '年' };
-  public selectedCarTypeTabIndex = 1;
-  public selectedTabIndex = 1;
+  public selectedCarTypeTabIndex = 0;
+  public selectedTabIndex = 0;
 
   private searchText$ = new Subject<any>();
   private searchWashCarText$ = new Subject<any>();
@@ -80,7 +85,7 @@ export class ServiceFeesListComponent implements OnInit {
         this.specificationList = this.washServiceConfig.specification_info.filter(specification => specification.car_type === 1);
       });
     });
-    this.searchText$.next();
+    // this.searchText$.next();
   }
 
   /**
@@ -146,9 +151,11 @@ export class ServiceFeesListComponent implements OnInit {
   // 切换服务tab
   public onTabChange(event: any): void {
     this.searchParams = new SearchParams();
-    this.selectedCarTypeTabIndex = 1;
+    this.selectedCarTypeTabIndex = 0;
     this.noResultText = '数据加载中...';
-    if (event === 1) {
+    if (event === 0) {
+      this.searchText$.next();
+    } else if (event === 1) {
       this.searchText$.next();
     } else {
       this.searchWashCarText$.next();

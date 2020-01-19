@@ -6,20 +6,20 @@
     <form nz-form class="content-layout" #workFeesForm="ngForm">
       <div class="card_content">
         <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>工时费名称</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]='true'>服务费名称</nz-form-label>
           <nz-form-control>
             <input class="fee-name" placeholder="输入1-20字名称" nz-input autocomplete="off" name="main-title" required
               maxlength='20' />
-            <!-- <div *ngIf="productNameErrors" class="text-danger">
-              <span class="input-error">{{productNameErrors}}</span>
-            </div> -->
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
           <nz-form-label [nzNoColon]='true'>所属项目</nz-form-label>
           <nz-form-control>
-            <input class="pro-input" nz-input autocomplete="off" name="project" disabled />
-            <a class="choose" (click)='onOpenProjectModal()'>选择</a>
+            <nz-input-group [nzAddOnAfter]="chooseBtn">
+              <input class="pro-input" [(ngModel)]="workFeesParams.project_name" nz-input autocomplete="off"
+                name="project" disabled />
+              <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
+            </nz-input-group>
           </nz-form-control>
         </nz-form-item>
         <div nz-row [nzGutter]="24">
@@ -69,4 +69,5 @@
   </div>
 </div>
 <!-- 选择保养项目 -->
-<app-choose-project #chooseProject></app-choose-project>
+<app-choose-project #chooseProject [selectedProjectid]="workFeesParams.project_id"
+  (selectedProject)="onSelectedProject($event)"></app-choose-project>

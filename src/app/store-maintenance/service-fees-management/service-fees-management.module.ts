@@ -6,7 +6,9 @@ import { ServiceFeesManagementComponent } from './service-fees-management.compon
 import { ServiceFeesListComponent } from './service-fees-list/service-fees-list.component';
 import { ServiceFeesManagementService } from './service-fees-management.service';
 import { RescueFeesEditComponent } from './rescue-fees-edit/rescue-fees-edit.component';
+import { WorkFeesEditComponent } from './work-fees-edit/work-fees-edit.component';
 import { WashCarServiceEditComponent } from './wash-car-service-edit/wash-car-service-edit.component';
+import { ChooseProjectComponent } from './work-fees-edit/choose-project/choose-project.component';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -39,6 +41,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     ServiceFeesManagementComponent,
     ServiceFeesListComponent,
     RescueFeesEditComponent,
+    WorkFeesEditComponent,
+    ChooseProjectComponent,
     WashCarServiceEditComponent,
   ],
   providers: [

@@ -24,8 +24,12 @@
           <tr *ngFor="let data of basicTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td [title]='data.upkeep_order_id'>{{(data.upkeep_order_id|zMaxLength:5)||'--'}}</td>
-            <td [title]='data.payer_name'>{{(data.payer_name|zMaxLength:3)||'--'}}</td>
-            <td>{{data.payer_phone||'--'}}</td>
+            <td>
+              <img *ngIf='!data.image' style="width: 100px;height:100px;margin: auto 20px;"
+                src="/assets/images/image_space.png">
+              <img *ngIf='data.image' style="width: 100px;height:100px;margin: auto 20px;" [src]="data.image">
+            </td>
+            <td [title]='data.payer_name'>{{(data.payer_name|zMaxLength:8)||'--'}}</td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
               <a [title]="'删除'" (click)="onDeleteBrand(data)">删除</a>
