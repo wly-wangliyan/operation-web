@@ -9,6 +9,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { StoreShareModule } from '../share/store-share.module';
 @NgModule({
   declarations: [UpkeepOrderComponent, OrderListComponent, BatteryDetailComponent],
   imports: [
@@ -18,7 +19,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzRadioModule,
     NzDatePickerModule,
     NzTableModule,
-    NzButtonModule
+    NzButtonModule,
+    StoreShareModule
   ]
 })
 export class UpkeepOrderModule { }

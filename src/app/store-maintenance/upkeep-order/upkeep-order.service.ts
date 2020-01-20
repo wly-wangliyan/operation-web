@@ -9,17 +9,25 @@ import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../accessor
 import { RepairShopEntity } from '../garage-management/garage-management.service';
 
 export class UpkeepOrderSearchParams extends EntityBase {
-  public order_status = ''; // 1：待支付 2：已支付 3：已取消 4：已退款
+  // 到店保养订单
+  public user_order_status = ''; // 订单状态 1：待支付 2:待收货(配送中) 3:待服务(已到达) 4：已取消 5：已完成
+  public buyer_tel: string = undefined; // 手机号
+  public buyer_name: string = undefined; // 购买人
+  public arrival_order_id: string = undefined; // 订单id
+  // 上门保养订单
+  public order_status = ''; // 订单状态 1：待支付 2：已支付 3：已取消 4：已退款
   public contact_tel: string = undefined; // 手机号
   public contact_name: string = undefined; // 购买人
-  public repair_shop_name: string = undefined; // 汽修店
   public order_id: string = undefined; // 订单id
+  // 公共参数
+  public repair_shop_name: string = undefined; // 汽修店
   public order_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
 
+// 人工匹配
 export class MatchParams extends EntityBase {
   public repair_shop_id = ''; // 汽修店id
   public repair_shop_name: string = undefined; // 汽修店
@@ -30,6 +38,7 @@ export class MatchParams extends EntityBase {
   public original_fee: number = undefined; // 商品价格
 }
 
+// 配件信息
 export class AccessoryInfoEntity extends AccessoryEntity {
   public battery_model: string = undefined; // 配件型号
   public brand_name: string = undefined; // 品牌
@@ -38,6 +47,14 @@ export class AccessoryInfoEntity extends AccessoryEntity {
   public supplier_name: string = undefined; // 供应商
   public warehouse_name: string = undefined; // 仓库
   public specification_id: string = undefined; // 规格id
+  project: ProjectEntity = undefined; // 所属项目
+}
+
+// 配件信息
+export class SpecificationInfoEntity extends SpecificationEntity {
+  public project: ProjectEntity = undefined; // 所属项目
+  public accessory_model: string = undefined; // string	配件型号
+  public num: number = undefined; // 数量
 }
 
 // 保养订单退款订单实体
@@ -123,6 +140,63 @@ export class UpkeepOrderLinkResponse extends LinkResponse {
     const tempList: Array<UpkeepOrderEntity> = [];
     results.forEach(res => {
       tempList.push(UpkeepOrderEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+// 到店保养订单
+export class ArrivalOrderEntity extends EntityBase {
+  public order_id: string = undefined; // 订单id-主键
+  public user_id: string = undefined; // 用户id
+  public client_id: string = undefined; // client_id 区分平台
+  public buyer_name: string = undefined; // 购买人
+  public buyer_tel: string = undefined; // 购买人手机号
+  public repair_shop_name: string = undefined; // 汽修店名称
+  public repair_shop_id: string = undefined; // 汽修店id
+  // public accessory_info: Array<AccessoryInfoEntity> = []; // 配件信息
+  public accessory_info: Array<SpecificationInfoEntity> = []; // 规格信息
+  public original_fee: number = undefined; // 应付(原价)配件费 单位：分
+  public sale_fee: number = undefined; // 实付(售价)配件费 单位：分
+  public minus_fee: number = undefined; // 平台立减(原价-售价)配件费 单位：分
+  public original_work_fee: number = undefined; // 应付(原价)工时费 单位：分
+  public sale_work_fee: number = undefined; // 实付(售价)工时费 单位：分
+  public minus_work_fee: number = undefined; // 平台立减(原价-售价)工时费 单位：分
+  public sale_total_fee: number = undefined; // 合计实收(总售价) 单位：分
+  public order_time: number = undefined; // 下单时间
+  public pay_time: number = undefined; // 支付时间
+  public user_status: number = undefined; // C端用户订单状态 1：待支付 2:待收货(配送中) 3:待服务(已到达 ) 4：已取消 5：已完成
+  public repair_shop_status: number = undefined; // B端汽修店订单状态 1:待收货(待收件) 2:待服务 3：已完成
+  public supplier_status: number = undefined; // B端供应商订单状态 1:待收货(待发货) 2:已完成
+  public car_id: string = undefined; // 车牌号
+  public car_mileage: number = undefined; // 行驶公里数
+  public car_model: string = undefined; // 车型
+  public repair_shop_address: string = undefined; // 汽修店地址
+  public send_time: number = undefined; // 配送时间
+  public aog_time: number = undefined; // 货物到达时间
+  public check_time: number = undefined; // 货物到达时间
+  public check_images: string = undefined; // 验货图片 "xxx,xxx,..."
+  public complete_time: number = undefined; // 货物到达时间
+  public code: string = undefined; // 二维码
+  public trade_num: string = undefined; // 交易单号
+  public is_checked: number = undefined; // 是否需要验货 1:需要 2:不需要
+  public warehouse_ids: string = undefined; // 仓库ids 多个逗号分隔
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'accessory_info') {
+      return SpecificationInfoEntity;
+    }
+    return null;
+  }
+}
+
+export class ArrivalOrderLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<ArrivalOrderEntity> {
+    const tempList: Array<ArrivalOrderEntity> = [];
+    results.forEach(res => {
+      tempList.push(ArrivalOrderEntity.Create(res));
     });
     return tempList;
   }
@@ -309,5 +383,47 @@ export class UpkeepOrderService {
     }, err => {
       subject.error(err);
     });
+  }
+
+  /**
+   * 获取到店保养订单列表
+   * @param searchParams 条件检索参数
+   */
+  public requestArrivalOrderListData(searchParams: UpkeepOrderSearchParams): Observable<ArrivalOrderLinkResponse> {
+    const httpUrl = `${this.domain}/admin/arrival_orders`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new ArrivalOrderLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求订单列表
+   * @param string url linkUrl
+   * @returns Observable<ArrivalOrderLinkResponse>
+   */
+  public continueArrivalOrderListData(url: string): Observable<ArrivalOrderLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new ArrivalOrderLinkResponse(res)));
+  }
+
+  /**
+   * 获取到店保养订单详情
+   * @param arrival_order_id 订单ID
+   * @returns Observable<ArrivalOrderEntity>
+   */
+  public requestArrivalOrderDetailData(arrival_order_id: string): Observable<ArrivalOrderEntity> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => ArrivalOrderEntity.Create(res.body)));
+  }
+
+  /**
+   * 完成服务
+   * @param arrival_order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestFinishDate(arrival_order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}`;
+    const body = {
+      status: 5
+    };
+    return this.httpService.patch(httpUrl, body);
   }
 }

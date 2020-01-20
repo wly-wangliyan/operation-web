@@ -8,13 +8,12 @@ import {
   UpkeepOrderSearchParams,
   UpkeepOrderEntity,
   UpkeepOrderService,
-  DoorRefundParams, MatchParams
+  DoorRefundParams, MatchParams, ArrivalOrderEntity
 } from '../upkeep-order.service';
 import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../../accessory-library/accessory-library.service';
 import { RepairShopEntity } from '../../garage-management/garage-management.service';
 
 const PageSize = 15;
-
 
 @Component({
   selector: 'app-order-list',
@@ -22,28 +21,31 @@ const PageSize = 15;
   styleUrls: ['./order-list.component.css', '../../../../assets/less/tab-bar-list.less']
 })
 export class OrderListComponent implements OnInit, OnDestroy {
-
-  public searchParams: UpkeepOrderSearchParams = new UpkeepOrderSearchParams();
+  public tabs = [{ key: 1, value: '到店保养' }, { key: 2, value: '上门保养' }]; // tab列表
+  public tab_index = 1; // 标记当前tab索引
+  public searchParams: UpkeepOrderSearchParams = new UpkeepOrderSearchParams(); // 条件筛选
+  public order_start_time: any = ''; // 搜索-下单开始时间
+  public order_end_time: any = ''; // 搜索-下单结束时间
+  public pay_start_time: any = ''; // 搜索-支付开始时间
+  public pay_end_time: any = ''; // 搜索-支付结束时间
+  public arrivalOrderStatus = [1, 2, 3, 4, 5]; // 到店保养订单状态
+  public orderStatus = [1, 2, 3, 4, 5]; // 上门保养订单状态
   public refundParams: DoorRefundParams = new DoorRefundParams(); // 退款参数
-  public orderList: Array<UpkeepOrderEntity> = []; // 救援订单列表
-  public matchParams: MatchParams = new MatchParams(); // 人工匹配
-
-  public accessoryList: Array<AccessoryEntity> = []; // 配件列表
-  public repairShopList: Array<RepairShopEntity> = []; // 汽修店列表
-  public specificationList: Array<SpecificationEntity> = []; // 规格列表
-  private projectList: Array<ProjectEntity> = []; // 项目列表
-
-  private bettery_project_id: string; // 蓄电池项目id
-
-  public order_start_time: any = ''; // 下单开始时间
-  public order_end_time: any = ''; // 下单结束时间
-  public pay_start_time: any = ''; // 支付开始时间
-  public pay_end_time: any = ''; // 支付结束时间
-
+  public arrivalOrderList: Array<ArrivalOrderEntity> = []; // 到店保养订单列表
+  public orderList: Array<UpkeepOrderEntity> = []; // 上门保养订单列表
   public pageIndex = 1; // 当前页码
   public noResultText = '数据加载中...';
 
-  private requestSubscription: Subscription; // 获取数据
+  public matchParams: MatchParams = new MatchParams(); // 上门保养-人工匹配
+  public accessoryList: Array<AccessoryEntity> = []; // 人工匹配-配件列表
+  public repairShopList: Array<RepairShopEntity> = []; // 人工匹配-汽修店列表
+  public specificationList: Array<SpecificationEntity> = []; // 人工匹配-规格列表
+
+  private projectList: Array<ProjectEntity> = []; // 项目列表
+  private bettery_project_id: string; // 蓄电池项目id，用于人工匹配
+  private requestArrivalOrderSubscription: Subscription; // 订阅到店保养订单数据
+  private requestOrderSubscription: Subscription; // 订阅上门保养订单数据
+  private searchArrivalOrderText$ = new Subject<any>();
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
@@ -51,38 +53,74 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private operationing = false;
 
   private get pageCount(): number {
-    if (this.orderList.length % PageSize === 0) {
-      return this.orderList.length / PageSize;
+    const pageList = this.tab_index === 1 ? this.arrivalOrderList : this.orderList;
+    if (pageList.length % PageSize === 0) {
+      return pageList.length / PageSize;
     }
-    return this.orderList.length / PageSize + 1;
+    return pageList.length / PageSize + 1;
   }
   constructor(
     private globalService: GlobalService,
     private orderService: UpkeepOrderService) { }
 
   public ngOnInit() {
-    this.generateOrderList();
-    this.requestProjectList();
-  }
+    this.searchArrivalOrderText$.pipe(debounceTime(500)).subscribe(() => {
+      this.requestArrivalOrderList();
+    });
 
-  public ngOnDestroy() {
-    this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-  }
-
-  // 初始化获取订单列表
-  private generateOrderList(): void {
-    // 定义查询延迟时间
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestOrderList();
     });
+
     this.searchText$.next();
   }
 
-  // 请求订单列表
+  public ngOnDestroy() {
+    this.requestArrivalOrderSubscription && this.requestArrivalOrderSubscription.unsubscribe();
+    this.requestOrderSubscription && this.requestOrderSubscription.unsubscribe();
+    this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+  }
+
+  // 切换tab页时，重新获取数据
+  public onTabChange(event: any): void {
+    this.searchParams = new UpkeepOrderSearchParams();
+    this.order_start_time = '';
+    this.order_end_time = '';
+    this.pay_start_time = '';
+    this.pay_end_time = '';
+    this.linkUrl = null;
+    this.noResultText = '数据加载中...';
+    this.arrivalOrderList = [];
+    this.orderList = [];
+    if (event === 1) {
+      this.searchText$.next();
+      // this.searchArrivalOrderText$.next();
+    } else if (event === 2) {
+      this.searchText$.next();
+      this.requestProjectList();
+    }
+  }
+
+  // 请求到店保养订单列表
+  private requestArrivalOrderList(): void {
+    this.requestArrivalOrderSubscription = this.orderService.requestArrivalOrderListData(this.searchParams).subscribe(res => {
+      this.arrivalOrderList = res.results;
+      this.linkUrl = res.linkUrl;
+      this.pageIndex = 1;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.pageIndex = 1;
+      this.noResultText = '暂无数据';
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 请求上门订单列表
   private requestOrderList(): void {
-    this.requestSubscription = this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
+    this.requestOrderSubscription = this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
       this.orderList = res.results;
+      // this.orderList[0].accessory_info.push(this.orderList[0].accessory_info[0]);
+      // this.orderList[0].accessory_info = [];
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
@@ -99,14 +137,23 @@ export class OrderListComponent implements OnInit, OnDestroy {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.orderService.continueOrderListData(this.linkUrl)
-        .subscribe(res => {
-          const results = res.results;
-          this.orderList = this.orderList.concat(results);
-          this.linkUrl = res.linkUrl;
-        }, err => {
-          this.globalService.httpErrorProcess(err);
-        });
+      if (this.tab_index === 1) {
+        this.continueRequestSubscription = this.orderService.continueArrivalOrderListData(this.linkUrl)
+          .subscribe(res => {
+            this.arrivalOrderList = this.arrivalOrderList.concat(res.results);
+            this.linkUrl = res.linkUrl;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+      } else if (this.tab_index === 2) {
+        this.continueRequestSubscription = this.orderService.continueOrderListData(this.linkUrl)
+          .subscribe(res => {
+            this.orderList = this.orderList.concat(res.results);
+            this.linkUrl = res.linkUrl;
+          }, err => {
+            this.globalService.httpErrorProcess(err);
+          });
+      }
     }
   }
 
@@ -169,7 +216,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 变更配件
+  // 人工匹配-变更配件
   public onChangeAccessory(event: any): void {
     const selectAccessory = this.accessoryList.filter(accessory => accessory.accessory_id === this.matchParams.accessory_id);
     this.matchParams.specification_id = '';
@@ -183,7 +230,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.requestSpecificationList(this.matchParams.accessory_id);
   }
 
-  // 变更规格
+  // 人工匹配-变更规格
   public onChangeSpecification(event: any): void {
     const selectSpecification = this.specificationList
       .filter(specification => specification.specification_id === this.matchParams.specification_id);
@@ -198,7 +245,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.requestRepairShopList(this.matchParams.accessory_id);
   }
 
-  // 变更汽修店
+  // 人工匹配-变更汽修店
   public onChangeRepairShop(event: any): void {
     const selectRepairShop = this.repairShopList
       .filter(repairShop => repairShop.repair_shop_id === this.matchParams.repair_shop_id);
@@ -210,7 +257,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 确认匹配
+  // 人工匹配-确认匹配
   public onCheckMatch(): void {
     if (this.operationing) {
       return;
@@ -343,11 +390,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }, err => {
       this.specificationList = [];
       this.globalService.httpErrorProcess(err);
-      // if (!this.globalService.httpErrorProcess(err)) {
-      //   if (err.status === 404) {
-      //     this.globalService.promptBox.open('已选配件不存在，获取规格失败!', null, 2000, null, false);
-      //   }
-      // }
     });
   }
 
@@ -358,11 +400,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }, err => {
       this.repairShopList = [];
       this.globalService.httpErrorProcess(err);
-      // if (!this.globalService.httpErrorProcess(err)) {
-      //   if (err.status === 404) {
-      //     this.globalService.promptBox.open('已选配件不存在，获取汽修店失败!', null, 2000, null, false);
-      //   }
-      // }
     });
   }
 
