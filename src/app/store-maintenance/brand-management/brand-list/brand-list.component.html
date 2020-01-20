@@ -9,7 +9,7 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+      <nz-table [nzData]="accessoryBrandList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
         <thead>
           <tr>
@@ -23,13 +23,13 @@
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]='data.upkeep_order_id'>{{(data.upkeep_order_id|zMaxLength:5)||'--'}}</td>
+            <td>{{data.brand_name||'--'}}</td>
             <td>
               <img *ngIf='!data.image' style="width: 100px;height:100px;margin: auto 20px;"
                 src="/assets/images/image_space.png">
-              <img *ngIf='data.image' style="width: 100px;height:100px;margin: auto 20px;" [src]="data.image">
+              <img *ngIf='data.image' style="width: 100px;height:100px;margin: auto 20px;" [src]="data.sign_image">
             </td>
-            <td [title]='data.payer_name'>{{(data.payer_name|zMaxLength:8)||'--'}}</td>
+            <td [title]='data.introduce'>{{(data.introduce|zMaxLength:20)||'--'}}</td>
             <td class="operation">
               <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
               <a [title]="'删除'" (click)="onDeleteBrand(data)">删除</a>

@@ -1,31 +1,31 @@
-<!--新增/编辑Banner-->
+<!--新增/编辑配件品牌-->
 <div class="modal fade" id="editBannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel" aria-hidden="true" #bannerPromptDiv>
   <div class="modal-dialog modal-dialog-common" role="document">
     <div class="modal-content modal-content-common">
       <div class="modal-header">
-        <span class="modal-title">{{isCreateBanner ? '新建' : '编辑'}}</span>
+        <span class="modal-title">{{accessory_brand_id ? '编辑' : '新建'}}</span>
         <button type="button" class="close" data-dismiss="modal">&times;
         </button>
       </div>
-      <form *ngIf="bannerParams" autocomplete="off" class="form-horizontal" #editBannerForm="ngForm">
+      <form *ngIf="searchBrandParams" autocomplete="off" class="form-horizontal" #editBrandForm="ngForm">
         <div class="row">
           <label class="control-label">
             <b>*</b>
             <span>品牌名称</span>
           </label>
           <div class="control-input">
-            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="bannerParams.title" name="title"
-              maxlength="10" autocomplete="off" required appIgnoreSpace (change)="errPositionItem.title.isError=false">
+            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="searchBrandParams.brand_name"
+              name="brand_name" maxlength="10" autocomplete="off" required appIgnoreSpace>
           </div>
         </div>
         <div class="row">
           <label class=" control-label">
             <b>*</b>
-            <span>图片</span>
+            <span>品牌标志</span>
           </label>
           <div class="control-input">
-            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="1"
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
               [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
               [imageWidth]="110" [imageHeight]="110" [imageUrls]="cover_url" #coverImg [aspectRatio]="aspectRatio"
               [minCropBoxWidth]="200" [minCropBoxHeight]="200">
@@ -39,28 +39,21 @@
             <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
           </div>
         </div>
-        <div class="row row-message">
-          <label class="control-label"></label>
-          <div class="control-input err-message">
-            <span *ngIf="errPositionItem?.title?.isError">{{errPositionItem?.title?.errMes}}</span>
-          </div>
-        </div>
         <div class="row">
           <label class="control-label">
             <b>&nbsp;&nbsp;</b>
             <span>简介</span>
           </label>
           <div class="control-input">
-            <textarea class="form-control" rows="4" placeholder="输入0-200字描述" [(ngModel)]="bannerParams.banner_describe"
+            <textarea class="form-control" rows="4" placeholder="输入0-200字描述" [(ngModel)]="searchBrandParams.introduce"
               name="banner_describe" maxlength="200">
             </textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary"
-            [disabled]="!editBannerForm.form.valid || coverImg.imageList.length===0 || !bannerParams.offline_status || bannerParams.offline_status === 2 && !offline_time"
-            (appZDebounceClick)="onEditFormSubmit()">{{sureName}}
+          <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editBrandForm.form.valid"
+            (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
         </div>
       </form>

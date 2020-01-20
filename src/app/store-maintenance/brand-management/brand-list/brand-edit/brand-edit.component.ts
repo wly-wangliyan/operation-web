@@ -3,10 +3,12 @@ import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import { isUndefined } from 'util';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { HttpErrorEntity } from '../../../../core/http.service';
-import { BannerService, SearchParams, BannerEntity, BannerParams } from 'src/app/operational-system/operation/mini-program/banner-management/banner.service';
-import { differenceInCalendarDays } from 'date-fns';
+import {
+  AccessoryBrandEntity,
+  BrandManagementHttpService,
+  SearchBrandParams,
+} from '../../brand-management-http.service';
 
 export class ErrMessageItem {
   public isError = false;
@@ -23,19 +25,11 @@ export class ErrMessageItem {
 
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
-  title: ErrMessageItem = new ErrMessageItem();
-  jump_link: ErrMessageItem = new ErrMessageItem();
-  offline_time: ErrMessageItem = new ErrMessageItem();
-
-  constructor(icon?: ErrMessageItem, title?: ErrMessageItem, jump_link?: ErrMessageItem, offline_time?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(title) || isUndefined(jump_link)
-      || isUndefined(offline_time)) {
+  constructor(icon?: ErrMessageItem) {
+    if (isUndefined(icon)) {
       return;
     }
     this.icon = icon;
-    this.title = title;
-    this.jump_link = jump_link;
-    this.offline_time = offline_time;
   }
 }
 
@@ -46,11 +40,11 @@ export class ErrPositionItem {
 })
 export class BrandEditComponent implements OnInit {
 
-  public isCreateBanner = true;
-  public bannerParams: BannerParams = new BannerParams();
+  constructor(private globalService: GlobalService, private brandManagementService: BrandManagementHttpService) { }
+
+  public searchBrandParams: SearchBrandParams = new SearchBrandParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
-  public offline_time: any = ''; // 下线时间
   public aspectRatio = 1 / 1; // 截取图片比例
 
   private sureCallback: any;
@@ -60,12 +54,9 @@ export class BrandEditComponent implements OnInit {
 
   private is_save = false; // 防止连续出发保存事件
 
-  @Input() public data: any;
-  @Input() public sureName = '保存';
+  @Input() public accessory_brand_id: string;
   @ViewChild('bannerPromptDiv', { static: false }) public bannerPromptDiv: ElementRef;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
-
-  constructor(private globalService: GlobalService, private bannerService: BannerService) { }
 
   public ngOnInit() {
   }
@@ -74,7 +65,7 @@ export class BrandEditComponent implements OnInit {
   public onClose() {
     this.clear();
     this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.bannerParams = new BannerParams();
+    this.searchBrandParams = new SearchBrandParams();
     $(this.bannerPromptDiv.nativeElement).modal('hide');
   }
 
@@ -84,52 +75,19 @@ export class BrandEditComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(banner_id: string, sureFunc: any, closeFunc: any = null) {
+  public open(data: AccessoryBrandEntity, sureFunc: any, closeFunc: any = null) {
     const openBannerModal = () => {
       timer(0).subscribe(() => {
         $(this.bannerPromptDiv.nativeElement).modal('show');
       });
     };
-    this.isCreateBanner = banner_id ? false : true;
-    this.banner_id = banner_id;
+    this.accessory_brand_id = data ? data.accessory_brand_id : '';
+    this.searchBrandParams = data ? JSON.parse(JSON.stringify(data)) : new SearchBrandParams();
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
     this.is_save = false;
-    this.offline_time = '';
-    if (this.isCreateBanner) {
-      this.bannerParams = new BannerParams();
-      // 首页banner与检车banner设置不同落地页类型默认值
-      this.cover_url = [];
-    } else {
-      this.rquestBannerDetail();
-    }
     openBannerModal();
-  }
-
-  // 获取详情
-  private rquestBannerDetail(): void {
-    this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.requestSubscription = this.bannerService.requestBannerDetail(this.banner_id).subscribe(res => {
-      this.bannerParams = res;
-      this.cover_url = this.bannerParams.image ? this.bannerParams.image.split(',') : [];
-      this.bannerParams.belong_to = !res.belong_to ? 0 : res.belong_to;
-      if (res.offline_status === 2) {
-        this.offline_time = res.offline_time ? new Date(res.offline_time * 1000) : '';
-      }
-    }, err => {
-      this.globalService.httpErrorProcess(err);
-    });
-  }
-
-  // 切换下线方式
-  public onChangeOfflineStatus(offline_status: number): void {
-    this.errPositionItem.offline_time.isError = true;
-    this.errPositionItem.offline_time.errMes = '';
-    if (offline_status === 1) {
-      this.offline_time = '';
-    }
-    this.bannerParams.offline_status = offline_status;
   }
 
   // form提交
@@ -139,34 +97,31 @@ export class BrandEditComponent implements OnInit {
     }
     this.clear();
     this.is_save = true;
-    // const params = this.bannerParams.clone();
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.bannerParams.image = imageUrl.join(',');
-      this.bannerParams.belong_to = this.bannerParams.belong_to === 0 ? null : this.bannerParams.belong_to;
+      this.searchBrandParams.sign_image = imageUrl.join(',');
       if (this.verification()) {
-        // params.image = this.bannerParams.image;
-        if (this.isCreateBanner) {
-          // 添加banner
-          this.bannerService.requestAddBannerData(this.bannerParams).subscribe(() => {
+        if (this.accessory_brand_id) {
+          // 添加配件品牌
+          this.brandManagementService.requestAddAccessoryData(this.searchBrandParams).subscribe(() => {
             this.onClose();
-            this.globalService.promptBox.open('添加成功！', () => {
+            this.globalService.promptBox.open('新建成功！', () => {
               this.sureCallbackInfo();
             });
           }, err => {
             this.is_save = false;
-            this.errorProcess(err);
+            this.errorProcess(err, 1);
           });
         } else {
-          // 编辑banner
-          this.bannerService.requestUpdateBannerData(this.banner_id, this.bannerParams).subscribe(() => {
+          // 编辑配件品牌
+          this.brandManagementService.requestUpdateAccessoryData(this.accessory_brand_id, this.searchBrandParams).subscribe(() => {
             this.onClose();
-            this.globalService.promptBox.open('修改成功！', () => {
+            this.globalService.promptBox.open('编辑成功！', () => {
               this.sureCallbackInfo();
             });
           }, err => {
             this.is_save = false;
-            this.errorProcess(err);
+            this.errorProcess(err, 2);
           });
         }
       } else {
@@ -182,7 +137,7 @@ export class BrandEditComponent implements OnInit {
   private verification(): boolean {
     let cisCheck = true;
 
-    if (!this.bannerParams.image) {
+    if (!this.searchBrandParams.sign_image) {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请重新上传图片！';
       cisCheck = false;
@@ -193,9 +148,6 @@ export class BrandEditComponent implements OnInit {
   // 清空
   public clear(): void {
     this.errPositionItem.icon.isError = false;
-    this.errPositionItem.title.isError = false;
-    this.errPositionItem.jump_link.isError = false;
-    this.errPositionItem.offline_time.isError = false;
   }
 
   // 确定按钮回调
@@ -209,15 +161,23 @@ export class BrandEditComponent implements OnInit {
   }
 
   // 接口错误状态
-  private errorProcess(err: any): any {
+  private errorProcess(err: any, type: number) {
+    const text = type === 1 ? '新建' : '编辑';
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          if (content.code === 'invalid' && content.field === 'title') {
-            this.errPositionItem.title.isError = true;
-            this.errPositionItem.title.errMes = '标题错误或无效！';
+          const field = content.field === 'brand_name' ? '品牌名称' : content.field === 'sign_image' ?
+            '品牌标志' : content.field === 'introduce' ? '简介' : '';
+          if (content.code === 'missing_field') {
+            this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
             return;
+          } else if (content.code === 'invalid') {
+            this.globalService.promptBox.open(`${field}字段输入错误!`, null, 2000, '/assets/images/warning.png');
+          } else if (content.code === 'already_existed') {
+            this.globalService.promptBox.open(`配件品牌已经存在!`, null, 2000, '/assets/images/warning.png');
+          } else {
+            this.globalService.promptBox.open(`${text}配件品牌失败,请重试!`, null, 2000, '/assets/images/warning.png');
           }
         }
       }
@@ -241,7 +201,7 @@ export class BrandEditComponent implements OnInit {
   }
 
   // 选择图片时校验图片格式
-  public onSelectedPicture(event: any): any {
+  public onSelectedPicture(event: any) {
     this.errPositionItem.icon.isError = false;
     if (event === 'type_error') {
       this.errPositionItem.icon.isError = true;
