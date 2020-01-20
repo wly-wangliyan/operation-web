@@ -16,7 +16,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: ServiceFeesListComponent },
       { path: 'edit/:service_fee_id', component: RescueFeesEditComponent },
-      { path: 'work-fees-edit', component: WorkFeesEditComponent },
+      { path: 'work-fees-edit/:service_fee_id', component: WorkFeesEditComponent },
       { path: 'wash-car-service-edit', component: WashCarServiceEditComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]

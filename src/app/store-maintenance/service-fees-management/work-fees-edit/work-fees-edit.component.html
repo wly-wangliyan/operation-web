@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'工时费管理'" [level1RelativePath]="'../'" [level2Name]="'工时费配置'"></app-crumb>
+  <app-crumb [level1Name]="'保养服务费'" [level1RelativePath]="'../'" [level2Name]="'服务费配置'"></app-crumb>
 </div>
 <div class="content-flow">
   <div class='des_card'>
@@ -8,16 +8,16 @@
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>服务费名称</nz-form-label>
           <nz-form-control>
-            <input class="fee-name" placeholder="输入1-20字名称" nz-input autocomplete="off" name="main-title" required
-              maxlength='20' />
+            <input class="fee-name" [(ngModel)]="searchWorkFeesParams.service_fee_name" placeholder="输入1-20字名称" nz-input
+              autocomplete="off" name="service_fee_name" required maxlength='20' />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
           <nz-form-label [nzNoColon]='true'>所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
-              <input class="pro-input" [(ngModel)]="workFeesParams.project_name" nz-input autocomplete="off"
-                name="project" disabled />
+              <input class="pro-input" [(ngModel)]="project_name" nz-input autocomplete="off" name="project_name"
+                disabled />
               <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
             </nz-input-group>
           </nz-form-control>
@@ -27,8 +27,11 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>原价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                <span class="unit">元</span>
+                <nz-input-group [nzSuffix]="'元'">
+                  <input class="price-input" [(ngModel)]="searchWorkFeesParams.original_amount" nz-input
+                    autocomplete="off" name="original_amount" required maxlength='8' appFloatNumber
+                    [appMaxNumber]='99999.99' />
+                </nz-input-group>
                 <!-- <div *ngIf="productNameErrors" class="text-danger">
                   <span class="input-error">{{productNameErrors}}</span>
                 </div> -->
@@ -39,8 +42,10 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>销售单价</nz-form-label>
               <nz-form-control>
-                <input class="price-input" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                <span class="unit">元</span>
+                <nz-input-group [nzSuffix]="'元'">
+                  <input class="price-input" [(ngModel)]="searchWorkFeesParams.sale_amount" nz-input autocomplete="off"
+                    name="sale_amount" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                </nz-input-group>
                 <!-- <div *ngIf="productNameErrors" class="text-danger">
                   <span class="input-error">{{productNameErrors}}</span>
                 </div> -->
@@ -51,8 +56,11 @@
             <nz-form-item nzFlex>
               <nz-form-label nzRequired [nzNoColon]='true'>结算价</nz-form-label>
               <nz-form-control class="ml_10">
-                <input class="price-input" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                <span class="unit">元</span>
+                <nz-input-group [nzSuffix]="'元'">
+                  <input class="price-input" [(ngModel)]="searchWorkFeesParams.settlement_amount" nz-input
+                    autocomplete="off" name="settlement_amount" required maxlength='8' appFloatNumber
+                    [appMaxNumber]='99999.99' />
+                </nz-input-group>
                 <!-- <div *ngIf="productNameErrors" class="text-danger">
                   <span class="input-error">{{productNameErrors}}</span>
                 </div> -->
@@ -62,12 +70,12 @@
         </div>
         <div style="margin-top: 40px;margin-bottom: 40px">
           <button class="sure-btn" nz-button nzType="primary" [disabled]="!workFeesForm.form.valid">保存</button>
-          <button class="close-btn" nz-button>取消</button>
+          <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>
       </div>
     </form>
   </div>
 </div>
 <!-- 选择保养项目 -->
-<app-choose-project #chooseProject [selectedProjectid]="workFeesParams.project_id"
+<app-choose-project #chooseProject [selectedProjectid]="searchWorkFeesParams.project_id"
   (selectedProject)="onSelectedProject($event)"></app-choose-project>

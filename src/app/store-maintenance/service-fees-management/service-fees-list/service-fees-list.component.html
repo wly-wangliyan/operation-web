@@ -1,5 +1,13 @@
 <div class="content-header">
   <app-crumb [level1Name]="'服务管理'" [level2Name]=""></app-crumb>
+  <ul class="header-right" *ngIf='selectedTabIndex===0'>
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        [routerLink]="['../work-fees-edit']">
+        新建
+      </button>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="tab-bar-list">
@@ -15,10 +23,10 @@
             <nz-form-item nzFlex>
               <nz-form-label>状态</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="pay_status" [(ngModel)]="searchWorkFeesParams.status">
+                <select class="form-control" name="pay_status" [(ngModel)]="searchParams.status">
                   <option value="">全部</option>
-                  <option value="1">销售中</option>
-                  <option value="2">未上架</option>
+                  <option [value]="'1'">销售中</option>
+                  <option [value]="'2'">未上架</option>
                 </select>
               </nz-form-control>
             </nz-form-item>
@@ -28,7 +36,7 @@
               <nz-form-label>工时费名称</nz-form-label>
               <nz-form-control>
                 <input class="form-control" placeholder="请输入工时费名称" autocomplete="off"
-                  [(ngModel)]="searchWorkFeesParams.service_fee_name" name="payer_phone" />
+                  [(ngModel)]="searchParams.service_fee_name" name="service_fee_name" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -57,16 +65,19 @@
         <tbody>
           <tr *ngFor="let data of workFeesTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]='data.upkeep_order_id'>{{(data.upkeep_order_id|zMaxLength:5)||'--'}}</td>
-            <td [title]='data.payer_name'>{{(data.payer_name|zMaxLength:3)||'--'}}</td>
-            <td>{{data.payer_phone||'--'}}</td>
-            <td>{{data.vehicle_brand_name||'--'}}</td>
-            <td>{{(data.total_real_amount | zCompleteNumber)||0}} 元</td>
+            <td>{{data.service_fee_name||'--'}}</td>
+            <td>{{data.project?.project_name||'--'}}</td>
+            <td>{{data.original_amount | centPriceChange:'元'}}</td>
+            <td>{{data.sale_amount | centPriceChange:'元'}}</td>
+            <td>{{data.settlement_amount | centPriceChange:'元'}}</td>
             <td>
-              {{(data.total_real_amount | zCompleteNumber)||0}} 元
+              <nz-switch [ngModel]="data.status===1?true:false"
+                (ngModelChange)="onSwitchChange(data.sale_status, $event)" [nzControl]=true nzCheckedChildren="On"
+                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.accessory_id,data.sale_status)">
+              </nz-switch>
             </td>
             <td class="operation">
-              <a [title]="'编辑'" [routerLink]="['../work-fees-edit']">编辑</a>
+              <a [title]="'编辑'" [routerLink]="['../work-fees-edit',data.service_fee_id]">编辑</a>
             </td>
           </tr>
         </tbody>

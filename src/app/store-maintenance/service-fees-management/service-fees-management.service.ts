@@ -6,10 +6,19 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 
+export class SearchWorkFeesParams extends EntityBase {
+  public fee_type = 1; // integer	F	费用类型 1工时费 2救援费
+  public service_fee_name: string = undefined; // string	F	服务费名称
+  public project_id: string = undefined; // integer	F	状态 1: 开启 2: 关闭
+  public original_amount: number = undefined; // float	T	原价 单位: 分
+  public sale_amount: number = undefined; // float	T	销售单价 单位: 分
+  public settlement_amount: number = undefined; // float	T	结算价 单位: 分
+}
+
 export class SearchParams extends EntityBase {
-  public status: number; // integer	F	状态 1: 开启 2: 关闭
-  public fee_type: number; // integer	F	费用类型 1工时费 2救援费
-  public service_fee_name: string; // string	F	服务费名称
+  public status = ''; // integer	F	状态 1: 开启 2: 关闭
+  public fee_type: number = undefined; // integer	F	费用类型 1工时费 2救援费
+  public service_fee_name = ''; // string	F	服务费名称
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -99,6 +108,27 @@ export class ServiceFeesManagementService {
   public requestServiceFeeDetailData(service_fee_id: string): Observable<ServiceFeeEntity> {
     const httpUrl = `${this.domain}/service_fees/${service_fee_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => ServiceFeeEntity.Create(res.body)));
+  }
+
+  /**
+   * 新建保养服务费管理
+   * @param params SearchWorkFeesParams 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestAddWorkFeeData(params: SearchWorkFeesParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/service_fees`;
+    return this.httpService.post(httpUrl, { ...params });
+  }
+
+  /**
+   * 编辑保养服务费管理
+   * @param service_fee_id string 服务费ID
+   * @param params SearchWorkFeesParams 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateWorkFeeData(params: SearchWorkFeesParams, service_fee_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/service_fees/${service_fee_id}`;
+    return this.httpService.put(httpUrl, { ...params });
   }
 
   /**
