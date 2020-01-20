@@ -209,12 +209,11 @@
                 <thead>
                   <tr>
                     <th style="width: 55px;">图片</th>
-                    <th style="width: 70px;">{{projectInfo?.specification?.name}}</th>
+                    <th style="width: 70px;">净含量</th>
                     <th style="width: 70px;">原价</th>
                     <th style="width: 75px;">结算价</th>
                     <th style="width: 75px;">售价</th>
                     <th style="width: 80px;">库存</th>
-                    <th></th>
                     <th></th>
                   </tr>
                 </thead>
@@ -236,8 +235,8 @@
                       </div>
                     </td>
                     <td style="width: 150px;">
-                      <nz-input-group>
-                        <input class="price-input" [(ngModel)]="data.battery_model" nz-input autocomplete="off"
+                      <nz-input-group [nzSuffix]="'L'">
+                        <input class="price-input" [(ngModel)]="data.content" nz-input autocomplete="off"
                           name="accessory-model-{{data.time}}-{{i}}" maxlength='50' required />
                       </nz-input-group>
                     </td>
@@ -250,7 +249,7 @@
                     </td>
                     <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="data.buy_fee" nz-input autocomplete="off"
                           name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
@@ -268,13 +267,6 @@
                     </td>
                     <td>
                       <span class='volume'>已售：{{data.sale_num||0}}</span>
-                    </td>
-                    <td class="operation">
-                      <a [title]="'移除'" class="del-btn" *ngIf="specificationsList.length>1"
-                        (click)="onDelSpecifications(data,i)">移除</a>
-                      <a [title]="'添加'" class="add-btn"
-                        *ngIf="specificationsList.length<50&&i===specificationsList.length-1"
-                        (click)="onAddSpecifications()">添加</a>
                     </td>
                   </tr>
                 </tbody>
@@ -327,9 +319,8 @@
                     <!-- 容量 -->
                     <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'AH'">
-                        <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
-                          name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
-                          [appMaxNumber]='99999.99' />
+                        <input class="price-input" [(ngModel)]="data.content" nz-input autocomplete="off"
+                          name="original-fee-{{data.time}}-{{i}}" required maxlength='8' />
                       </nz-input-group>
                     </td>
                     <td style="width: 125px;">

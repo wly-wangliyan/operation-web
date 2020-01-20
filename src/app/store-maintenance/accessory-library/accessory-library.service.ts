@@ -6,27 +6,35 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 
-
 // 规格实体
 export class SpecificationEntity extends EntityBase {
   public specification_id: string = undefined; // string	规格id-主键
   public name: string = undefined; // string	名称
-  public accessory: string = undefined; // object	配件对象 Accessory
+  public accessory: AccessoryEntity = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片
   public imageList = []; // arr	图片数组
   public battery_model: string = undefined; // string	配件型号
-  public content: string = undefined; // string	净含量
+  public accessory_model: string = undefined; // string	型号(蓄电池)
+  public content: string = undefined; // string	容量(蓄电池)/净含量(机油)
   public original_balance_fee: number = undefined; // float	原价 单位：分
-  public buy_fee: number = undefined; // float	结算价 单位：分
+  public buy_fee: number = undefined; // float	结算价(机滤、机油) 单位：分
   public sale_balance_fee: number = undefined; // float	售价 单位：分
-  public original_fee: string = undefined; // float	原价 单位：分
-  public sale_fee: string = undefined; // float	售价 单位：分
+  public original_fee: string = undefined; // float	尾款原价(蓄电池)/原价(机滤、机油) 单位：分
+  public sale_fee: string = undefined; // float	尾款售价(蓄电池)/售价(机滤、机油) 单位：分
   public store: number = undefined; // integer	库存
   public sale_num: number = undefined; // integer	销量
   public is_deleted = false; // bool	是否删除
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
   public time = new Date().getTime();
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'accessory') {
+      // tslint:disable-next-line: no-use-before-declare
+      return AccessoryEntity;
+    }
+    return null;
+  }
 }
 
 // 项目实体
@@ -58,6 +66,23 @@ export class AccessoryBrandEntity extends EntityBase {
   public updated_time: number = undefined; // 更新时间
 }
 
+// 机油参数实体
+export class AccessoryParamsEntity extends EntityBase {
+  public oil_num: string = undefined; // string	机油标号
+  public oil_type: number = undefined; // int 机油类别 1：全合成 2：半合成 3：矿物质
+  public oil_api: string = undefined; // string	api等级
+  public oil_place: string = undefined; // string	商品产地
+  public oil_expire: string = undefined; // string	保质期
+}
+
+// 机滤参数实体
+export class PriceInfoEntity extends EntityBase {
+  public original_fee: number = undefined; // float	机滤原价
+  public settlement_fee: number = undefined; // float 机滤结算价
+  public sale_fee: number = undefined; // float	机滤售价
+  public store: number = undefined; // float	机滤库存
+}
+
 // 配件实体
 export class AccessoryEntity extends EntityBase {
   public accessory_id: string = undefined; // string	配件id - 主键
@@ -68,8 +93,8 @@ export class AccessoryEntity extends EntityBase {
   public project: ProjectEntity = undefined; // 项目对象 Project
   public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
   public specification_info: Array<SpecificationEntity> = []; // object	规格 Specification
-  public accessory_params: {} = undefined; // json	参数
-  // { 'oil_num': 'xxx', 'oil_type': 1, 'oil_api': 'xxx', 'oil_place': 'xxx', 'oil_expire': 'xxx' } 1：全合成 2：半合成 3：矿物质
+  public accessory_params: AccessoryParamsEntity = undefined; // json	机油参数
+  public price_info: PriceInfoEntity = undefined; // json	机滤参数
   public detail: string = undefined; // string	图文详情
   public car_series: number = undefined; // object	车系对象 多对多
   public real_prepaid_fee: number = undefined; // float	实际预付价 单位：分
@@ -94,6 +119,10 @@ export class AccessoryEntity extends EntityBase {
       return AccessoryBrandEntity;
     } else if (propertyName === 'specification_info') {
       return SpecificationEntity;
+    } else if (propertyName === 'accessory_params') {
+      return AccessoryParamsEntity;
+    } else if (propertyName === 'price_info') {
+      return PriceInfoEntity;
     }
     return null;
   }
