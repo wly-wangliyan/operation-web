@@ -53,27 +53,15 @@
 }
 
 .order-table table tr:first-child>td:nth-child(even),
+.order-table table tr:nth-child(4)>td:nth-child(even),
 .order-table table tr>td:nth-child(odd) {
   min-width: 118px;
   background: #F7F8FA;
 }
 
-.order-table table tr>td:nth-child(even) {
-  max-width: 300px;
-}
-
-@media screen and (max-width: 1355px) {
-  .order-table table tr>td:nth-child(even) {
-    max-width: 150px;
-  }
-}
-
-.order-table table tr:first-child>td:nth-child(odd) {
+.order-table table tr:first-child>td:nth-child(odd),
+.order-table table tr:nth-child(4)>td:nth-child(odd) {
   background: #fff;
-}
-
-.detail-table {
-  width: 100%;
 }
 
 .detail-table caption {
@@ -87,59 +75,6 @@
 .row-title {
   padding: 0 !important;
   text-align: center !important;
-}
-
-.sure-btn {
-  margin: 0 !important;
-}
-
-.resend-btn {
-  height: 27px;
-  width: 60px;
-  margin: 0 !important;
-}
-
-.edit-btn:disabled,
-.resend-btn:disabled {
-  background-color: #cacaca;
-  color: #fff;
-}
-
-.remark-info {
-  max-width: 300px;
-}
-
-.remark-group {
-  height: 100%;
-}
-
-.remark-box {
-  margin: 8px 0 5px 0;
-  white-space: pre-line;
-}
-
-.remark-box .form-control {
-  font-size: 12px;
-}
-
-.btn-box {
-  text-align: right;
-}
-
-.btn-box .edit-btn {
-  width: 60px;
-  height: 27px;
-  margin-left: 8px;
-}
-
-:host ::ng-deep .z-modal .mes {
-  padding: 0 20px !important;
-}
-
-@media screen and (max-width: 1355px) {
-  .remark-info {
-    max-width: 150px;
-  }
 }
 
 .img-item {
@@ -158,8 +93,4 @@
 
 .img-box img {
   width: 80px;
-}
-
-.remark-box ::ng-deep .ant-calendar-picker-input {
-  font-size: 12px !important;
 }

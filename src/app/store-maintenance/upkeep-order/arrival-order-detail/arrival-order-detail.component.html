@@ -1,0 +1,158 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'保养订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="content-container">
+    <div class="table-item order-table" *ngIf="orderRecord && orderRecord.order_id">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="3" class="row-title">车主信息</td>
+          <td>车牌号</td>
+          <td>{{ orderRecord.car_id || '--'}}</td>
+          <td>订单状态</td>
+          <!-- 此处文档缺字段 -->
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>购买人</td>
+          <td>{{ orderRecord.buyer_name || '--' }}</td>
+          <td>手机号</td>
+          <td>{{ orderRecord.buyer_tel || '--' }}</td>
+          <td>车型</td>
+          <td>{{ orderRecord.car_model || '--' }}</td>
+        </tr>
+        <tr>
+          <td>行驶公里数</td>
+          <td>{{orderRecord.car_mileage>=0?(orderRecord.car_mileage+'km') : '--'}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="7" class="row-title">订单信息</td>
+          <td>配件费</td>
+          <td>
+            <span>应收：</span>{{ orderRecord.original_fee | centPriceChange: '元' }}
+            <span>，实收：</span>{{ orderRecord.sale_fee | centPriceChange: '元' }}
+          </td>
+          <td>服务费</td>
+          <td>
+            <span>应收：</span>{{ orderRecord.original_work_fee | centPriceChange: '元' }}
+            <span>，实收：</span>{{ orderRecord.sale_work_fee | centPriceChange: '元' }}
+          </td>
+          <td>立减</td>
+          <td>
+            <span>配件：</span>{{ orderRecord.minus_fee | centPriceChange: '元' }}
+            <span>，服务：</span>{{ orderRecord.minus_work_fee | centPriceChange: '元' }}
+          </td>
+        </tr>
+        <tr>
+          <td>优惠券</td>
+          <td>
+            <!-- 此处文档缺字段 -->
+            <span>配件：</span>{{ orderRecord.minus_fee | centPriceChange: '元' }}
+            <span>，服务：</span>{{ orderRecord.minus_work_fee | centPriceChange: '元' }}
+          </td>
+          <td>合计实收</td>
+          <td colspan="3">{{ orderRecord.sale_total_fee | centPriceChange: '元' }}</td>
+        </tr>
+        <tr>
+          <td>汽修店</td>
+          <td>{{orderRecord.repair_shop_name || '--'}}</td>
+          <td>汽修店地址</td>
+          <td colspan="3">{{orderRecord.repair_shop_address || '--'}}</td>
+        </tr>
+        <tr>
+          <td>订单编号</td>
+          <td>{{orderRecord.order_id || '--'}}</td>
+          <td>下单时间</td>
+          <td>{{ orderRecord.order_time ? (orderRecord.order_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
+          <td>支付时间</td>
+          <td>{{orderRecord.pay_time ? (orderRecord.pay_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
+        </tr>
+
+        <tr>
+          <td>到货时间</td>
+          <td>{{orderRecord.aog_time ? (orderRecord.aog_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
+          <td>验货时间</td>
+          <td>{{ orderRecord.check_time ? (orderRecord.check_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--' }}</td>
+          <td>验货照片</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>完成时间</td>
+          <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>订单备注</td>
+          <td colspan="5">{{orderRecord.remark || '--'}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item" *ngIf="orderRecord && orderRecord.accessory_info && orderRecord.accessory_info.length > 0"
+      style="margin-top: 60px;">
+      <table class="detail-table">
+        <caption>明细</caption>
+        <thead>
+          <tr>
+            <th>配件</th>
+            <th>品牌</th>
+            <th>规格</th>
+            <th>数量</th>
+            <th>供货方式</th>
+            <th>配送仓库</th>
+            <th>应付</th>
+            <th>立减</th>
+            <th>实收</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let project of projectIds">
+            <ng-container *ngIf="mapOfAccessory[project]">
+              <tr>
+                <td colspan="9" style="background-color: #f1f1f1;">
+                  <div style="text-align: left !important;">{{project|projectName}}</div>
+                </td>
+              </tr>
+              <tr *ngFor="let accessoryData of mapOfAccessory[project]">
+                <td>
+                  <div class="img-item">
+                    <div class="img-box">
+                      <ng-container *ngIf="accessoryData.accessory && accessoryData.accessory.accessory_images">
+                        <ng-container
+                          *ngFor="let image_url of accessoryData.accessory.accessory_images.split(',');let i=index">
+                          <img *ngIf="i===0" src="{{image_url}}" />
+                        </ng-container>
+                      </ng-container>
+                      <img *ngIf="!accessoryData.accessory.accessory_images" src="/assets/images/image_space.png" />
+                    </div>
+                    <div style="text-align: left;padding: 10px 0;">
+                      <span>{{accessoryData.accessory.accessory_name || '--'}}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{accessoryData.accessory.brand_name || '--'}}</td>
+                <td>{{accessoryData.accessory_model>=0?(accessoryData.accessory_model+'L') : '--'}}</td>
+                <td>{{accessoryData.buy_num || 0}}</td>
+                <td>{{accessoryData.accessory.supply_type?(accessoryData.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
+                <td>{{accessoryData.accessory.warehouse_name || '--'}}</td>
+                <td>{{accessoryData.original_balance_fee | centPriceChange:'元'}}</td>
+                <td>{{accessoryData.original_balance_fee | centPriceChange:'元'}}</td>
+                <td>{{accessoryData.original_balance_fee | centPriceChange:'元'}}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

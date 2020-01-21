@@ -47,7 +47,6 @@ export class AccessoryInfoEntity extends AccessoryEntity {
   public supplier_name: string = undefined; // 供应商
   public warehouse_name: string = undefined; // 仓库
   public specification_id: string = undefined; // 规格id
-  project: ProjectEntity = undefined; // 所属项目
 }
 
 // 配件信息
@@ -55,6 +54,13 @@ export class SpecificationInfoEntity extends SpecificationEntity {
   public project: ProjectEntity = undefined; // 所属项目
   public accessory_model: string = undefined; // string	配件型号
   public num: number = undefined; // 数量
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'project') {
+      return ProjectEntity;
+    }
+    return null;
+  }
 }
 
 // 保养订单退款订单实体
@@ -154,8 +160,7 @@ export class ArrivalOrderEntity extends EntityBase {
   public buyer_tel: string = undefined; // 购买人手机号
   public repair_shop_name: string = undefined; // 汽修店名称
   public repair_shop_id: string = undefined; // 汽修店id
-  // public accessory_info: Array<AccessoryInfoEntity> = []; // 配件信息
-  public accessory_info: Array<SpecificationInfoEntity> = []; // 规格信息
+  public accessory_info: Array<SpecificationInfoEntity> = []; // 配件信息
   public original_fee: number = undefined; // 应付(原价)配件费 单位：分
   public sale_fee: number = undefined; // 实付(售价)配件费 单位：分
   public minus_fee: number = undefined; // 平台立减(原价-售价)配件费 单位：分
@@ -174,13 +179,14 @@ export class ArrivalOrderEntity extends EntityBase {
   public repair_shop_address: string = undefined; // 汽修店地址
   public send_time: number = undefined; // 配送时间
   public aog_time: number = undefined; // 货物到达时间
-  public check_time: number = undefined; // 货物到达时间
+  public check_time: number = undefined; // 验货时间
   public check_images: string = undefined; // 验货图片 "xxx,xxx,..."
-  public complete_time: number = undefined; // 货物到达时间
+  public complete_time: number = undefined; // 完成时间
   public code: string = undefined; // 二维码
   public trade_num: string = undefined; // 交易单号
   public is_checked: number = undefined; // 是否需要验货 1:需要 2:不需要
   public warehouse_ids: string = undefined; // 仓库ids 多个逗号分隔
+  public remark: string = undefined; // 订单备注
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 
