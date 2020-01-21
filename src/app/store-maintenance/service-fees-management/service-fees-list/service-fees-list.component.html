@@ -1,11 +1,8 @@
 <div class="content-header">
   <app-crumb [level1Name]="'服务管理'" [level2Name]=""></app-crumb>
   <ul class="header-right" *ngIf='selectedTabIndex===0'>
-    <li>
-      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-        [routerLink]="['../work-fees-edit']">
-        新建
-      </button>
+    <li class="big-bg" [routerLink]="['../work-fees-add']">
+      <a>新建</a>
     </li>
   </ul>
 </div>

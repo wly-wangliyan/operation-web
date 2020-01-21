@@ -70,6 +70,16 @@ export class BrandManagementHttpService {
   }
 
   /**
+   * 获取配件品牌全部数据
+   * @returns Observable<AccessoryBrandLinkResponse>
+   */
+  public requestAccessoryBrandAllListData(): Observable<AccessoryBrandLinkResponse> {
+    const httpUrl = `${this.domain}/admin/accessory_brands/all`;
+    return this.httpService.get(httpUrl)
+      .pipe(map(res => new AccessoryBrandLinkResponse(res)));
+  }
+
+  /**
    * 获取配置库详情
    * @param accessory_brand_id string	T	配件品牌ID
    * @returns Observable<AccessoryBrandEntity>

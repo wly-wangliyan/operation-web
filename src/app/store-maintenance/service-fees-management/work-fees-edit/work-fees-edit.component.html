@@ -13,11 +13,11 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
-          <nz-form-label [nzNoColon]='true'>所属项目</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]='true'>所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
               <input class="pro-input" [(ngModel)]="project_name" nz-input autocomplete="off" name="project_name"
-                disabled />
+                required disabled />
               <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
             </nz-input-group>
           </nz-form-control>
@@ -32,9 +32,6 @@
                     autocomplete="off" name="original_amount" required maxlength='8' appFloatNumber
                     [appMaxNumber]='99999.99' />
                 </nz-input-group>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                  <span class="input-error">{{productNameErrors}}</span>
-                </div> -->
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -46,9 +43,9 @@
                   <input class="price-input" [(ngModel)]="searchWorkFeesParams.sale_amount" nz-input autocomplete="off"
                     name="sale_amount" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                 </nz-input-group>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                  <span class="input-error">{{productNameErrors}}</span>
-                </div> -->
+                <div class="text-danger">
+                  <span class="input-error">{{saleAmountPriceErrors}}</span>
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -61,15 +58,16 @@
                     autocomplete="off" name="settlement_amount" required maxlength='8' appFloatNumber
                     [appMaxNumber]='99999.99' />
                 </nz-input-group>
-                <!-- <div *ngIf="productNameErrors" class="text-danger">
-                  <span class="input-error">{{productNameErrors}}</span>
-                </div> -->
+                <div class="text-danger">
+                  <span class="input-error">{{settlementAmountPriceErrors}}</span>
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
         <div style="margin-top: 40px;margin-bottom: 40px">
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!workFeesForm.form.valid">保存</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!workFeesForm.form.valid"
+            (appZDebounceClick)='onSaveFormSubmit()'>保存</button>
           <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>
       </div>

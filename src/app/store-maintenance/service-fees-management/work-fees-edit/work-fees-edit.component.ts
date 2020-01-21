@@ -33,10 +33,8 @@ export class WorkFeesEditComponent implements OnInit {
   public original_amount = '';
   public sale_amount = '';
   public settlement_amount = '';
-
-  public balanceCurrentPriceErrors = '';
-  public prepayCurrentPriceErrors = '';
-
+  public saleAmountPriceErrors = '';
+  public settlementAmountPriceErrors = '';
   private searchText$ = new Subject<any>();
 
   ngOnInit() {
@@ -66,36 +64,42 @@ export class WorkFeesEditComponent implements OnInit {
     this.router.navigateByUrl('/service-fees-management');
   }
 
+  private clear() {
+    this.settlementAmountPriceErrors = '';
+    this.saleAmountPriceErrors = '';
+  }
+
   // 保存数据
   public onSaveFormSubmit() {
-    // if (Number(this.original_amount) > Number(this.balance_initial_price)) {
-    //   this.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
-    //   this.prepayCurrentPriceErrors = '';
-    // } else if (Number(this.prepay_current_price) > Number(this.prepay_initial_price)) {
-    //   this.prepayCurrentPriceErrors = '预付现价不得大于预付原价！';
-    //   this.balanceCurrentPriceErrors = '';
-    // } else {
-    this.searchWorkFeesParams.original_amount = Math.round(Number(this.original_amount) * 100);
-    this.searchWorkFeesParams.sale_amount = Math.round(Number(this.sale_amount) * 100);
-    this.searchWorkFeesParams.settlement_amount = Math.round(Number(this.settlement_amount) * 100);
-    if (this.service_fee_id) {
-      this.feesService.requestAddWorkFeeData(this.searchWorkFeesParams).subscribe(() => {
-        this.globalService.promptBox.open('新建保养服务费成功！');
-        this.searchText$.next();
-        timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
-      }, err => {
-        this.handleErrorFunc(err, 1);
-      });
+    if (Number(this.sale_amount) > Number(this.original_amount)) {
+      this.clear();
+      this.saleAmountPriceErrors = '销售单价不得大于原价！';
+    } else if (Number(this.settlement_amount) > Number(this.sale_amount)) {
+      this.clear();
+      this.settlementAmountPriceErrors = '结算价不得大于销售单价！';
     } else {
-      this.feesService.requestUpdateWorkFeeData(this.searchWorkFeesParams, this.service_fee_id).subscribe(() => {
-        this.globalService.promptBox.open('编辑保养服务费成功！');
-        this.searchText$.next();
-        timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
-      }, err => {
-        this.handleErrorFunc(err, 2);
-      });
+      this.clear();
+      this.searchWorkFeesParams.original_amount = Math.round(Number(this.original_amount) * 100);
+      this.searchWorkFeesParams.sale_amount = Math.round(Number(this.sale_amount) * 100);
+      this.searchWorkFeesParams.settlement_amount = Math.round(Number(this.settlement_amount) * 100);
+      if (this.service_fee_id) {
+        this.feesService.requestAddWorkFeeData(this.searchWorkFeesParams).subscribe(() => {
+          this.globalService.promptBox.open('新建保养服务费成功！');
+          this.searchText$.next();
+          timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
+        }, err => {
+          this.handleErrorFunc(err, 1);
+        });
+      } else {
+        this.feesService.requestUpdateWorkFeeData(this.searchWorkFeesParams, this.service_fee_id).subscribe(() => {
+          this.globalService.promptBox.open('编辑保养服务费成功！');
+          this.searchText$.next();
+          timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
+        }, err => {
+          this.handleErrorFunc(err, 2);
+        });
+      }
     }
-    // }
   }
 
   // 处理错误信息
