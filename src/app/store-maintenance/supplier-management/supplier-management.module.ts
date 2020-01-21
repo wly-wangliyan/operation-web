@@ -6,15 +6,20 @@ import { WarehouseListComponent } from './warehouse-list/warehouse-list.componen
 import { WarehouseEditComponent } from './warehouse-edit/warehouse-edit.component';
 import { ShareModule } from '../../share/share.module';
 import { SupplierManagementRoutingModule } from './supplier-management-routing.module';
+import { NzSwitchModule, NzTableModule } from 'ng-zorro-antd';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ShareModule,
-    SupplierManagementRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        ShareModule,
+        SupplierManagementRoutingModule,
+        NzTableModule,
+        NzSwitchModule,
+        NzButtonModule,
+    ],
   declarations: [
     SupplierManagementComponent,
     SupplierListComponent,

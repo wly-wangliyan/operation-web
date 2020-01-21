@@ -1,1 +1,68 @@
-<p>warehouse-list works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'供应商列表'" [level2RelativePath]="'../'" [level3Name]="'线下仓库列表'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form">
+            <div class="form-group">
+                <span>线下仓库名称：</span>
+                <input [(ngModel)]="searchParams.warehouse_name" autocomplete="off" class="form-control" maxlength="50" name="supplier_name"
+                       placeholder="请输入线下仓库名称" />
+                <div class="search-btn-group">
+                    <button (click)="onSearchBtnClick()" nz-button nzType="primary">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #basicTable (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" [nzData]="warehouseList"
+                      [nzNoResult]="noResultText" [nzPageSize]="'15'" [nzShowPagination]="true">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>仓库名称</th>
+                    <th>所属供应商</th>
+                    <th>地址</th>
+                    <th>联系电话</th>
+                    <th>短信通知手机号</th>
+                    <th>营业时间</th>
+                    <th>营业状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of basicTable.data; let i=index">
+                    <td>{{i+(pageIndex-1)*15+1}}</td>
+                    <td [title]="data.warehouse_name ||''">
+                        {{data.warehouse_name | zMaxLength:10}}
+                    </td>
+                    <td [title]="data.supplier?.supplier_name?data.supplier?.supplier_name:''">
+                        {{data.supplier?.supplier_name?(data.supplier?.supplier_name|zMaxLength:10):'--'}}
+                    </td>
+                    <td [title]="data.province + data.city + data.district + data.address">
+                        {{(data.province + data.city + data.district + data.address) | zMaxLength: 15}}
+                    </td>
+                    <td>{{data.telephone||'--'}}</td>
+                    <td>{{data.sms_telephone||'--'}}</td>
+                    <td>
+                        <div class="column-box">
+                            <ng-container *ngIf="data.run_start_time || data.run_end_time">
+                                <span>{{(data.run_start_time || 0) | zDuration3}}-{{(data.run_end_time || 0)|zDuration3}}</span>
+                            </ng-container>
+                        </div>
+                        <span *ngIf="!data.run_start_time && !data.run_end_time">--</span>
+                    </td>
+                    <td>
+                        <nz-switch (ngModelChange)="onSwitchChange(data.warehouse_id,$event)" [ngModel]="data.status===1" nzCheckedChildren="On"
+                                   nzUnCheckedChildren="Off" style="height: 10px"></nz-switch>
+                    </td>
+                    <td class="operation">
+                        <a [title]="'编辑'" (click)="onEditClick(data)">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

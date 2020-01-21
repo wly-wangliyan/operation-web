@@ -1,1 +1,117 @@
-<p>warehouse-edit works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'供应商列表'" [level3Name]="'线下仓库列表'" [level4Name]="'编辑线下仓库'"
+               [level2RelativePath]="'../../../list'"  [level3RelativePath]="'../../warehouse-list'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="content-main">
+        <form (keydown)="onKeydownEvent($event)" class="form-horizontal" #editForm="ngForm">
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>仓库名称</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentWarehouse.warehouse_name" name="warehouse_name" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>类型</span>
+                </label>
+                <div class="control-input">
+                    <select class="form-control" disabled>
+                        <option value="">汽修供应商线下仓库</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>所属供应商</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentWarehouse.supplier.supplier_name" name="supplier_name" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系人</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentWarehouse.contacts" name="contacts" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>联系电话</span>
+                </label>
+                <div class="control-input">
+                    <input class="form-control" [(ngModel)]="currentWarehouse.telephone" name="telephone" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class=" control-label">
+                    <b>*</b>
+                    <span>门店地址</span>
+                </label>
+                <div class="control-input" style="width: 540px!important;">
+                    <app-pro-city-dist-select [isEdit]="false" #projectInfoPro></app-pro-city-dist-select>
+                    <input class="form-control" style="margin-left: 10px" placeholder="详细地址" [(ngModel)]="currentWarehouse.address"
+                           [title]="currentWarehouse.address||''" name="address" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>营业时间</span>
+                </label>
+                <div class="control-input">
+                    <app-date-clock [has24]="false" [(hour)]="run_start_time.hour" [(minute)]="run_start_time.minute"
+                                    (change)="errPositionItem.run_time.isError=false"></app-date-clock>
+                    <span class="line"> 至 </span>
+                    <app-date-clock [has24]="true" [(hour)]="run_end_time.hour" [(minute)]="run_end_time.minute"
+                                    (change)="errPositionItem.run_time.isError=false"></app-date-clock>
+                </div>
+            </div>
+            <div style="margin: -20px 0 0 140px;height: 23px;width: 400px" *ngIf="errPositionItem.run_time?.isError">
+                <span class="msg-tip" *ngIf="errPositionItem.run_time?.isError">{{errPositionItem.run_time?.errMes}}</span>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>&nbsp;</b>
+                    <span>短信通知</span>
+                </label>
+                <div>
+                    <nz-switch [ngModel]="currentWarehouse.st_status===1" name="st_status" nzCheckedChildren="On"
+                               style="display: inline-flex;margin-right: 10px" nzUnCheckedChildren="Off"></nz-switch>
+                    <label class="msg-span">开启后此手机号将收到发货和退货的短信通知，同一门店仅可以开启2个短信通知手机号</label>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>&nbsp;</b>
+                    <span>&nbsp;</span>
+                </label>
+                <div class="control-input" *ngFor="let item of sms_telephone;let i=index" [class.tel-input]="i!==0">
+                    <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" maxlength="11"
+                           (input)="errPositionItem.sms_telephone.isError=false"
+                           [(ngModel)]="item.tel" placeholder="请输入手机号" appIgnoreSpace appIntNumber>
+                    <button class="common-btn" nz-button (click)="onAddTelClick()" *ngIf="is_add_tel">添加</button>
+                    <button class="common-btn" nz-button (click)="onDelTelClick(i)" *ngIf="!is_add_tel">移除</button>
+                </div>
+            </div>
+            <div style="margin: -20px 0 0 140px;height: 15px;width: 400px" *ngIf="errPositionItem.sms_telephone?.isError">
+                <span class="msg-tip" *ngIf="errPositionItem.sms_telephone?.isError">{{errPositionItem?.sms_telephone?.errMes}}</span>
+            </div>
+            <div style="margin-top: 60px;margin-bottom: 40px">
+                <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+                        (appZDebounceClick)="onEditFormSubmit()">保存
+                </button>
+                <button class="close-btn" nz-button (click)="onClose()">取消</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -4,6 +4,9 @@
     <li class="big-bg big-white-btn">
       <a (click)="onImportClick('vehicle')">导入车型</a>
     </li>
+    <li class="big-bg big-white-btn">
+      <a (click)="onImportClick('param')">导入原厂参数</a>
+    </li>
     <li class="big-bg">
       <a href="/assets/download/car_info.xlsx" download="vehicle_info.xlsx" style="color: #fff">下载模板</a>
     </li>
@@ -78,6 +81,7 @@
             <th>发动机排量</th>
             <th>生产年份</th>
             <th>启停</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -92,6 +96,9 @@
               <nz-switch [ngModel]="data.status" (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true
                 nzCheckedChildren="On" nzUnCheckedChildren="Off" (click)="onSwitchClick(data,data.status)">
               </nz-switch>
+            </td>
+            <td class="operation">
+              <a [title]="'查看'" (click)="onDetailClick(data)">查看</a>
             </td>
           </tr>
         </tbody>
@@ -114,6 +121,16 @@
         <div class="form-group">
           <span>使用Excel编辑批量操作文件模板时，请确认输入的内容为文本格式，保存的内容和输入的内容保持一致</span>
         </div>
+        <div class="form-group" *ngIf="importType === 'param'">
+          <span>导入数据所属项目</span>
+          <select class="form-control" [(ngModel)]="importParams.project_num" name="project_num"
+                  style="margin-left: 15px;width: 403px" >
+            <option value="">全部</option>
+            <option *ngFor="let project of projectList" [value]="project.project_number" [title]="project.project_name">
+              {{project.project_name | zMaxLength:30}}
+            </option>
+          </select>
+        </div>
         <div class="form-group">
           <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
             placeholder="请选择文件" disabled>
@@ -130,7 +147,8 @@
         </div>
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()">上传</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()"
+          [disabled]="!importParams.project_num && importType === 'param'">上传</button>
         </div>
       </form>
     </div>

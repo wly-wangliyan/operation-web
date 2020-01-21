@@ -32,10 +32,10 @@ export class MenuStoreMaintenanceService {
     systemMenu.icon = '/assets/images/menu_part.png';
     const subFinanceMenu1 = new SideMenuItem('配件库', '/accessory-library', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('配件品牌管理', '/brand-management', systemMenu);
-    // const subFinanceMenu3 = new SideMenuItem('保养项目管理', '/store-maintenance/project-management', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('保养项目管理', '/project-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     systemMenu.children.push(subFinanceMenu2);
-    // systemMenu.children.push(subFinanceMenu3);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
@@ -68,7 +68,7 @@ export class MenuStoreMaintenanceService {
     const subFinanceMenu1 = new SideMenuItem('汽修店管理', '/garage-management', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('供应商管理', '/supplier-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    // systemMenu.children.push(subFinanceMenu2);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

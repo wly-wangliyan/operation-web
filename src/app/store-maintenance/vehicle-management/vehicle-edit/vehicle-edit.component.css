@@ -38,6 +38,9 @@
 
 .param-list ul{
     width: 200px;
+    height: 38px;
+    line-height: 38px;
+    margin-bottom: 0;
     background-color: #fff!important;
     border: 1px solid rgba(136,136,136,.5);
     border-bottom: none;

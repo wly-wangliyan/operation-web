@@ -48,21 +48,15 @@
                     <select class="form-control" [(ngModel)]="currentInsurance.details_link" style="width: 100px" name="vehicle_series_id" disabled>
                         <option value="">数值</option>
                     </select>
-                    <label class="control-label">
-                        <b>&nbsp;</b>
-                        <span>规格名称</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" style="width: 100px" placeholder="规格名称" [(ngModel)]="currentInsurance.details_link" name="details_link"
-                               maxlength="10" autocomplete="off" required>
+                    <div class="control-input specification">
+                        <label>规格名称</label>
+                        <input class="form-control" style="width: 118px" placeholder="输入1-10字" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="10" autocomplete="off" required appIgnoreSpace>
                     </div>
-                    <label class="control-label">
-                        <b>&nbsp;</b>
-                        <span>规格单位</span>
-                    </label>
-                    <div class="control-input">
-                        <input class="form-control" style="width: 100px" placeholder="规格单位" [(ngModel)]="currentInsurance.details_link" name="details_link"
-                               maxlength="10" autocomplete="off" required>
+                    <div class="control-input specification">
+                        <label>规格单位</label>
+                        <input class="form-control" style="width: 118px" placeholder="输入1-10字" [(ngModel)]="currentInsurance.details_link" name="details_link"
+                               maxlength="10" autocomplete="off" required appIgnoreSpace>
                     </div>
                 </div>
                 <div class="row">
@@ -118,12 +112,10 @@
                             <td [title]="param.broker_company_name">{{param.broker_company_name|zMaxLength:40}}</td>
                             <td>{{param.account}}</td>
                             <td>
-                                <nz-switch [ngModel]="!param.discontinue_use" nzCheckedChildren="On" style="height: 10px" name="discontinue_use+{{i}}"
-                                           nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(param.broker_company_id,$event)"></nz-switch>
+                                {{param.discontinue_use?'是':'否'}}
                             </td>
                             <td>
-                                <nz-switch [ngModel]="!param.discontinue_use" nzCheckedChildren="On" style="height: 10px" name="discontinue+{{i}}"
-                                           nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange(param.broker_company_id,$event)"></nz-switch>
+                                {{param.discontinue_use?'是':'否'}}
                             </td>
                             <td class="operation">
                                 <a [title]="'编辑'" (click)="onEditParamClick(param)">编辑</a>
@@ -169,7 +161,7 @@
                                maxlength="100" autocomplete="off" disabled>
                     </div>
                 </div>
-                <div class="row" style="overflow-y: auto;height: 200px">
+                <div class="row" style="overflow-y: auto;height: 215px">
                     <label class="control-label">
                         <b>&nbsp;</b>
                         <span>&nbsp;</span>
@@ -186,6 +178,13 @@
                             </li>
                         </ul>
                     </div>
+                </div>
+                <div class="modal-footer modal-footer-param">
+                    <button class="close-btn" nz-button (click)="onClose()">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!editForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
+                        {{sureName}}
+                    </button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { BrokerageEntity } from '../../../operational-system/insurance/insurance.service';
-import { NzInputDirective } from 'ng-zorro-antd';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CarParamEntity, CarPartEntity, VehicleManagementHttpService } from '../vehicle-management-http.service';
+import { GlobalService } from '../../../core/global.service';
 
 @Component({
   selector: 'app-vehicle-edit',
@@ -9,30 +10,35 @@ import { NzInputDirective } from 'ng-zorro-antd';
 })
 export class VehicleEditComponent implements OnInit {
 
-  public paramList: Array<any> = [];
+  public paramList: Array<CarPartEntity> = [];
+  public carInfo: CarParamEntity = new CarParamEntity();
   public pageIndex = 1;
   public noResultText = '数据加载中...';
-  public num = 10;
-  public editId: string | null;
 
-  @ViewChild(NzInputDirective, { static: false, read: ElementRef }) inputElement: ElementRef;
+  private car_param_id: string;
+  private car_series_id: string;
 
-  @HostListener('window:click', ['$event'])
-  handleClick(e: MouseEvent): void {
-    if (this.editId && this.inputElement && this.inputElement.nativeElement !== e.target) {
-      this.editId = null;
-    }
+  constructor(private route: ActivatedRoute,
+              private globalService: GlobalService,
+              private vehicleService: VehicleManagementHttpService) {
+    route.queryParams.subscribe(queryParams => {
+      this.car_param_id = queryParams.car_param_id;
+      this.car_series_id = queryParams.car_series_id;
+    });
   }
-
-  constructor() { }
 
   ngOnInit() {
-    this.paramList.push({a: 'a', id: 111}, {name: 'b', id: 222});
+    this.requestCarDetail();
   }
 
-  public startEdit(id: string, event: MouseEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.editId = id;
+  private requestCarDetail() {
+    this.vehicleService.requestCarDetail(this.car_series_id, this.car_param_id).subscribe(res => {
+      this.paramList.push(res);
+      this.carInfo = res.car_param;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.noResultText = '暂无数据';
+      this.globalService.httpErrorProcess(err);
+    });
   }
 }

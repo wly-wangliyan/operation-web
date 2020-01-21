@@ -4,7 +4,7 @@
 <div class="content-flow">
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="brokerageList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+            <nz-table [nzData]="projectList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
                       (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
                 <thead>
                 <tr>
@@ -20,10 +20,10 @@
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
-                    <td>{{data.account}}</td>
-                    <td>{{data.telephone}}</td>
-                    <td [title]="data.address">{{data.address|zMaxLength:20}}</td>
+                    <td>{{data.project_number}}</td>
+                    <td [title]="data.project_name">{{data.project_name|zMaxLength: 10}}</td>
+                    <td [title]="data.related_project_name">{{data.related_project_name|zMaxLength: 10}}</td>
+                    <td>{{data.specification?.unit?data.specification?.unit:'--'}}</td>
                     <td>
                         {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
                     </td>

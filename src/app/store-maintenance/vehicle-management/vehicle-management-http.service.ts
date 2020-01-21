@@ -73,6 +73,25 @@ export class CarParamEntity extends EntityBase {
   }
 }
 
+// 原厂配件
+export class CarPartEntity extends EntityBase {
+  public car_part_id: string = undefined; // string	id
+  public project_num: string = undefined; // string	项目id
+  public project_name: string = undefined; // string	项目名称
+  public part_param = undefined; // json	配件参数{}
+  public reference_amount: number = undefined; // float	参考用量
+  public unit: string = undefined; // string	单位
+  public car_param: CarParamEntity = undefined; // object	车型参数
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'car_param') {
+      return CarParamEntity;
+    }
+    return null;
+  }
+}
+
 export class CarParamLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<CarParamEntity> {
     const tempList: Array<CarParamEntity> = [];
@@ -122,6 +141,13 @@ export class SearchParams extends EntityBase {
   public car_year_num = ''; // 	String	F	生产年份
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
+}
+
+// 上传原厂参数
+export class ImportParams extends EntityBase {
+  public param_file = undefined; // file	T	上传文件
+  public project_name: string = undefined; // string	T	项目名称 例如：机油
+  public project_num: string = undefined; // string	T	项目id 例如：10
 }
 
 @Injectable({
@@ -230,4 +256,35 @@ export class VehicleManagementHttpService {
     return eventEmitter;
   }
 
+  /**
+   * 导入原厂参数
+   * @param type 文件类型
+   * @param param_file FILE
+   */
+  public requestImportCarParamData(importParams: ImportParams, type: any, param_file: any) {
+    const eventEmitter = new EventEmitter();
+    const params = {
+      param_file,
+      type
+    };
+
+    const url = `/car_params`;
+    file_import(params, url, data => {
+      eventEmitter.next(data);
+    }, err => {
+      eventEmitter.error(err);
+    }, this.domain);
+    return eventEmitter;
+  }
+
+  /**
+   * 获取车型详情
+   * @param string car_series_id 编号
+   * @param car_param_id id
+   * @returns Observable<CarParamEntity>
+   */
+  public requestCarDetail(car_series_id: string, car_param_id: string): Observable<CarPartEntity> {
+    return this.httpService.get(this.domain + `/car_series/${car_series_id}/car_params/${car_param_id}`
+    ).pipe(map(res => CarPartEntity.Create(res.body)));
+  }
 }

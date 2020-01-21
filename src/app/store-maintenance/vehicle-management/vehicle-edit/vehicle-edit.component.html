@@ -1,25 +1,25 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'车型原厂参数'" [level2Name]="'编辑'" [level1RelativePath]="'../'"></app-crumb>
+    <app-crumb [level1Name]="'车型原厂参数'" [level2Name]="'详情'" [level1RelativePath]="'../'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="content-main">
         <div class="vehicle-title">
             <img src="/assets/images/manual/icon_vehicle.png">
-            <div class="vehicle-space">
+            <div class="vehicle-space" *ngIf="carInfo && carInfo.car_param_id">
                 <div>
-                    <span>宝马</span>
+                    <span>{{carInfo.car_brand.car_brand_name}}</span>
                 </div>
                 <div>
-                    <span>Audi Sport</span>
+                    <span>{{carInfo.car_factory.car_factory_name}}</span>
                 </div>
                 <div>
-                    <span>奥迪A3</span>
+                    <span>{{carInfo.car_series.car_series_name}}</span>
                 </div>
                 <div>
-                    <span>2.0L</span>
+                    <span>{{carInfo.car_displacement}}</span>
                 </div>
                 <div>
-                    <span>2018</span>
+                    <span>{{carInfo.car_year_num}}</span>
                 </div>
             </div>
         </div>
@@ -43,31 +43,16 @@
                         <th>机油类别</th>
                         <th>参考用量</th>
                         <th>单位</th>
-                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of basicTable.data; let i=index" class="editable-row">
-                        <td>{{i+(pageIndex-1)*15+1}}</td>
-                        <td [title]="data.broker_company_name">{{data.broker_company_name|zMaxLength:40}}</td>
+                    <tr *ngFor="let data of basicTable.data; let i=index">
+                        <td>{{data.project_num}}</td>
+                        <td [title]="data.project_name">{{data.project_name|zMaxLength:10}}</td>
                         <td>{{data.account}}</td>
                         <td>{{data.telephone}}</td>
-                        <td  style="width: 18%">
-                            <div class="editable-cell" *ngIf="editId !== data.id; else editTpl">
-                                <div class="editable-cell-value-wrap" (click)="startEdit(data.id, $event)">
-                                    {{ data.name }}
-                                </div>
-                            </div>
-                            <ng-template #editTpl>
-                                <input type="text" nz-input [(ngModel)]="data.name"/>
-                            </ng-template>
-                        </td>
-                        <td>
-                            {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
-                        </td>
-                        <td class="operation">
-                            <button nz-button nzType="primary" [title]="'保存'" [routerLink]="'../edit'">保存</button>
-                        </td>
+                        <td>{{data.reference_amount?data.reference_amount:'--'}}</td>
+                        <td>{{data.unit?data.unit:'--'}}</td>
                     </tr>
                     </tbody>
                 </nz-table>

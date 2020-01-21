@@ -12,11 +12,11 @@ const routes: Routes = [
     path: '', component: SupplierManagementComponent,
     canActivateChild: [AuthGuardService, RouteMonitorService],
     children: [
-      {path: '', redirectTo: 'list', pathMatch: 'full'},
-      {path: 'list', component: SupplierListComponent},
-      {path: 'warehouse-list', component: WarehouseListComponent},
-      {path: 'warehouse-edit', component: WarehouseEditComponent},
-      {path: '**', redirectTo: 'list', pathMatch: 'full'}
+      {path: '', redirectTo: 'supplier-list', pathMatch: 'full'},
+      {path: 'supplier-list', component: SupplierListComponent},
+      {path: 'supplier-list/:supplier_id/warehouse-list', component: WarehouseListComponent},
+      {path: 'supplier-list/:supplier_id/warehouse-edit/:warehouse_id', component: WarehouseEditComponent},
+      {path: '**', redirectTo: 'supplier-list', pathMatch: 'full'}
     ]
   }
 ];

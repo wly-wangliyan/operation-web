@@ -8,10 +8,12 @@ import {
   CarSeriesEntity,
   CarParamEntity,
   SearchParams,
-  VehicleManagementHttpService
+  VehicleManagementHttpService, ImportParams
 } from '../vehicle-management-http.service';
 import { FileImportViewModel } from '../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../share/components/progress-modal/progress-modal.component';
+import { Router } from '@angular/router';
+import { ProjectEntity, ProjectManagementHttpService } from '../../project-management/project-management-http.service';
 
 const PageSize = 15;
 
@@ -31,6 +33,9 @@ export class VehicleListComponent implements OnInit {
   public carSeriesList: Array<CarSeriesEntity> = [];
   public carParamList: Array<any> = [];
   public importViewModel: FileImportViewModel = new FileImportViewModel();
+  public importType: string;
+  public projectList: Array<ProjectEntity> = [];
+  public importParams: ImportParams = new ImportParams();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
@@ -38,7 +43,7 @@ export class VehicleListComponent implements OnInit {
   private searchBrandText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
-  private importSpotSubscription: Subscription;
+  private importSubscription: Subscription;
 
   private get pageCount(): number {
     if (this.carTypeList.length % PageSize === 0) {
@@ -49,6 +54,8 @@ export class VehicleListComponent implements OnInit {
 
   constructor(
     private globalService: GlobalService,
+    private router: Router,
+    private projectHttpService: ProjectManagementHttpService,
     private vehicleManagementService: VehicleManagementHttpService,
   ) {
   }
@@ -185,10 +192,25 @@ export class VehicleListComponent implements OnInit {
       });
   }
 
+  // 获取全部项目信息
+  private requestProjectListAll() {
+    this.projectHttpService.requestProjectListAll().subscribe(res => {
+      this.projectList = res.results;
+    }, error => {
+      this.globalService.httpErrorProcess(error);
+    });
+  }
+
   // 导入车型信息
-  public onImportClick(data: string) {
-    $('#importBerthPromptDiv').modal('show');
-    this.importViewModel.initImportData();
+  public onImportClick(type: string) {
+    this.importType = type;
+    if (type === 'param') {
+      this.requestProjectListAll();
+    }
+    timer(0).subscribe(() => {
+      $('#importBerthPromptDiv').modal('show');
+      this.importViewModel.initImportData();
+    });
   }
 
   /* 导入数据 */
@@ -202,52 +224,85 @@ export class VehicleListComponent implements OnInit {
         return;
       }
     }
+
+    const successFun = res => {
+      this.progressModalComponent.openOrClose(false);
+      $('#dataImportModal').modal('hide');
+      const date = JSON.parse(res.response);
+      this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+        this.importViewModel.initImportData();
+        $('#importBerthPromptDiv').modal('hide');
+        this.searchText$.next();
+        this.searchBrandText$.next();
+      }, -1);
+    };
+
+    const failFun = err => {
+      this.progressModalComponent.openOrClose(false);
+      timer(300).subscribe(() => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const tempErr = JSON.parse(err.responseText);
+            const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+            if (error.field === 'FILE' && error.code === 'invalid') {
+              this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
+            } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+              this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
+            } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+              this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      });
+    };
+
     if (this.importViewModel.checkFormDataValid()) {
       this.progressModalComponent.openOrClose(true);
-      this.importSpotSubscription = this.vehicleManagementService.requestImportCarTypesData(
-        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
-          this.progressModalComponent.openOrClose(false);
-          $('#dataImportModal').modal('hide');
-          const date = JSON.parse(res.response);
-          this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
-            this.importViewModel.initImportData();
-            $('#importBerthPromptDiv').modal('hide');
-            this.searchText$.next();
-            this.searchBrandText$.next();
-          }, -1);
-        }, err => {
-          this.progressModalComponent.openOrClose(false);
-          timer(300).subscribe(() => {
-            if (!this.globalService.httpErrorProcess(err)) {
-              if (err.status === 422) {
-                const tempErr = JSON.parse(err.responseText);
-                const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
-                if (error.field === 'FILE' && error.code === 'invalid') {
-                  this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
-                } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
-                  this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
-                } else if (error.resource === 'FILE' && error.code === 'scale_out') {
-                  this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！', null, 2000, '/assets/images/warning.png');
-                } else {
-                  this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
-                }
-              }
-            }
-          });
-        });
+      if (this.importType === 'vehicle') {
+        this.importCarType(successFun, failFun);
+      } else {
+        this.importCarParam(successFun, failFun);
+      }
     } else {
       this.globalService.promptBox.open('文件地址不能为空，请选择！', null, 2000, null, false);
     }
   }
 
+  private importCarType(successFun: any, failFun: any) {
+    this.importSubscription = this.vehicleManagementService.requestImportCarTypesData(
+        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+      successFun(res);
+    }, err => {
+      failFun(err);
+    });
+  }
+
+  private importCarParam(successFun: any, failFun: any) {
+    this.importParams.project_name = this.projectList.filter(v => v.project_number === this.importParams.project_num)[0].project_name;
+    this.importSubscription = this.vehicleManagementService.requestImportCarParamData(this.importParams,
+        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+      successFun(res);
+    }, err => {
+      failFun(err);
+    });
+  }
+
   // 解订阅
   public onCloseUnsubscribe() {
-    this.importSpotSubscription && this.importSpotSubscription.unsubscribe();
+    this.importSubscription && this.importSubscription.unsubscribe();
   }
 
   public onCancelData() {
     this.onCloseUnsubscribe();
     this.importViewModel.initImportData();
     $('#importBerthPromptDiv').modal('hide');
+  }
+
+  // 查看详情
+  public onDetailClick(data: CarParamEntity) {
+    this.router.navigate(['/vehicle-management/edit'],
+        {queryParams: {car_param_id: data.car_param_id, car_series_id: data.car_series.car_series_id}});
   }
 }
