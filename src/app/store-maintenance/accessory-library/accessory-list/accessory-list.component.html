@@ -15,9 +15,9 @@
             <nz-form-item nzFlex>
               <nz-form-label>所属项目</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="project_id" [(ngModel)]="searchParams.project_id">
+                <select class="form-control" name="accessory_brand_id" [(ngModel)]="searchParams.accessory_brand_id">
                   <option value="">请选择</option>
-                  <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                  <option *ngFor='let data of brandList' [value]=data.accessory_brand_id>{{data.brand_name}}
                   </option>
                 </select>
               </nz-form-control>
@@ -100,10 +100,14 @@
                   <a style="word-break: keep-all;text-align: left" [title]="data.accessory_name">
                     {{data.accessory_name | zMaxLength:15}}
                   </a>
-                  <div class="accessory-tip">
-                    <label>全合成</label>
-                    <label>5W-40</label>
-                    <label>SN</label>
+                  <div class="accessory-tip" *ngIf='data.accessory_params'>
+                    <label *ngIf='data.accessory_params.oil_num'>{{data.accessory_params.oil_num}}</label>
+                    <label *ngIf='data.accessory_params.oil_type'>{{data.accessory_params.oil_type|oilType}}</label>
+                    <label *ngIf='data.accessory_params.oil_api'>{{data.accessory_params.oil_api}}</label>
+                    <label *ngIf='data.accessory_params.oil_place'
+                      [title]="data.accessory_params.oil_place">{{data.accessory_params.oil_place| zMaxLength:12}}</label>
+                    <label *ngIf='data.accessory_params.oil_expire'
+                      [title]="data.accessory_params.oil_expire">{{data.accessory_params.oil_expire| zMaxLength:12}}</label>
                   </div>
                 </div>
               </div>

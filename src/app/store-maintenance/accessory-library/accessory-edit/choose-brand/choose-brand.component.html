@@ -9,8 +9,8 @@
           <div class="content-list">
             <ul>
               <li *ngFor="let category of brandList" (click)="onCategoryClick(category)"
-                [class.active]="category.project_id === currentCategory">
-                {{category.project_name}}
+                [class.active]="category.accessory_brand_id === currentCategory">
+                {{category.brand_name}}
               </li>
             </ul>
           </div>

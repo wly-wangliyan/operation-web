@@ -151,6 +151,7 @@ export class ProjectLinkResponse extends LinkResponse {
 // 查询参数
 export class SearchParams extends EntityBase {
   public project_id = ''; // string	F	所属项目
+  public accessory_brand_id = ''; // string	F	配件品牌
   public accessory_name: string = undefined; // string	F	配件名称
   public accessory_id: string = undefined; // string	F	配件id
   public page_num = 1; // 页码
@@ -167,12 +168,17 @@ export class SearchAccessoryParams extends EntityBase {
   public accessory_brand_id: string = undefined; // string	F	配件品牌id
   public real_prepaid_fee: number = undefined; // float	F	实际预付费 单位：分
   public right_prepaid_fee: number = undefined; // float	F	应付预付费 单位：分
-  public accessory_params: {}; // json	F	参数
+  public accessory_params: AccessoryParamsEntity = undefined; // json	机油参数
+  public price_info: PriceInfoEntity = undefined; // json	机滤参数
   public battery_specification: Array<SpecificationEntity> = []; // object	规格 Specification
   public detail: string = undefined; // string	T	图文详情 无：''
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'battery_specification') {
       return SpecificationEntity;
+    } else if (propertyName === 'accessory_params') {
+      return AccessoryParamsEntity;
+    } else if (propertyName === 'price_info') {
+      return PriceInfoEntity;
     }
     return null;
   }

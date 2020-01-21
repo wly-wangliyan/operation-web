@@ -56,10 +56,13 @@
                   <nz-form-item nzFlex>
                     <nz-form-label nzRequired [nzNoColon]='true'>机油标号</nz-form-label>
                     <nz-form-control>
-                      <input class="params" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
+                      <select class="form-control" name="oil_num"
+                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_num"
+                        required>
+                        <option value="">请选择</option>
+                        <!-- <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                        </option> -->
+                      </select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -67,10 +70,14 @@
                   <nz-form-item nzFlex>
                     <nz-form-label nzRequired [nzNoColon]='true'>机油类别</nz-form-label>
                     <nz-form-control>
-                      <input class="params" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
+                      <select class="form-control" name="oil_type"
+                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_type"
+                        required>
+                        <option value="">请选择</option>
+                        <option [value]="'1'">全合成</option>
+                        <option [value]="'2'">半合成</option>
+                        <option [value]="'3'">矿物质</option>
+                      </select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -78,10 +85,12 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>API等级</nz-form-label>
                     <nz-form-control class="ml_10">
-                      <input class="params" nz-input autocomplete="off" name="main-title" maxlength='20' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
+                      <select class="form-control" name="oil_api"
+                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_api">
+                        <option value="">请选择</option>
+                        <!-- <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                        </option> -->
+                      </select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -91,11 +100,9 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>商品产地</nz-form-label>
                     <nz-form-control>
-                      <input class="params" placeholder="输入0-50字" nz-input autocomplete="off" name="main-title" required
-                        maxlength='50' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
+                      <input class="params"
+                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_place"
+                        placeholder="输入0-50字" nz-input autocomplete="off" name="oil_place" maxlength='50' />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -103,11 +110,9 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>保质期</nz-form-label>
                     <nz-form-control>
-                      <input class="params" placeholder="输入0-50字" nz-input autocomplete="off" name="main-title" required
-                        maxlength='50' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
+                      <input class="params" placeholder="输入0-20字"
+                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_expire"
+                        nz-input autocomplete="off" name="oil_expire" maxlength='20' />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -115,13 +120,12 @@
             </div>
           </nz-form-control>
         </nz-form-item>
-        <!-- 价格 -->
+        <!-- 机滤价格 -->
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="机滤"'>
           <nz-form-label nzRequired [nzNoColon]='true'>价格</nz-form-label>
           <nz-form-control>
             <div class="table-form">
-              <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
-                [nzNoResult]="noResultText" #basicTable>
+              <nz-table [nzShowPagination]="false" [nzFrontPagination]='false' [nzNoResult]="noResultText" #basicTable>
                 <thead>
                   <tr>
                     <th>原价</th>
@@ -132,34 +136,31 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let data of specificationsList; let i=index">
+                  <tr>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
-                          name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
-                          [appMaxNumber]='99999.99' />
+                        <input class="price-input" [(ngModel)]="oil_filter_original_fee" nz-input autocomplete="off"
+                          name="info_original_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
-                          name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
-                          [appMaxNumber]='99999.99' />
+                        <input class="price-input" [(ngModel)]="oil_filter_settlement_fee" nz-input autocomplete="off"
+                          name="settlement_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
-                          name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
-                          [appMaxNumber]='99999.99' />
+                        <input class="price-input" [(ngModel)]="oil_filter_sale_fee" nz-input autocomplete="off"
+                          name="info_sale_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
-                      <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
-                        name="store-{{data.time}}-{{i}}" required maxlength='5' />
+                      <input class="price-input" [(ngModel)]="accessoryParams.price_info.store" nz-input
+                        autocomplete="off" name="info_store" required maxlength='5' />
                     </td>
                     <td>
-                      <span class='volume'>已售：{{data.sale_num||0}}</span>
+                      <span class='volume'>已售：{{0}}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -168,7 +169,7 @@
           </nz-form-control>
         </nz-form-item>
         <!-- 蓄电池参数 -->
-        <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="蓄电池"'>
+        <!-- <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="蓄电池"'>
           <nz-form-label [nzNoColon]='true'>参数</nz-form-label>
           <nz-form-control>
             <div class="params-box">
@@ -178,9 +179,6 @@
                     <nz-form-label nzRequired [nzNoColon]='true'>额定电压</nz-form-label>
                     <nz-form-control>
                       <input class="params" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -189,16 +187,13 @@
                     <nz-form-label [nzNoColon]='true'>保质期</nz-form-label>
                     <nz-form-control>
                       <input class="params" nz-input autocomplete="off" name="main-title" required maxlength='20' />
-                      <!-- <div *ngIf="productNameErrors" class="text-danger">
-                          <span class="input-error">{{productNameErrors}}</span>
-                        </div> -->
                     </nz-form-control>
                   </nz-form-item>
                 </div>
               </div>
             </div>
           </nz-form-control>
-        </nz-form-item>
+        </nz-form-item> -->
         <!-- 机油规格 -->
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name=="机油"'>
           <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
@@ -237,7 +232,8 @@
                     <td style="width: 150px;">
                       <nz-input-group [nzSuffix]="'L'">
                         <input class="price-input" [(ngModel)]="data.content" nz-input autocomplete="off"
-                          name="accessory-model-{{data.time}}-{{i}}" maxlength='50' required />
+                          name="content-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
+                          [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td style="width: 125px;">
@@ -285,7 +281,7 @@
                   <tr>
                     <th style="width: 50px;">图片</th>
                     <th style="width: 80px;">{{projectInfo?.specification?.name}}</th>
-                    <th style="width: 80px;">容量</th>
+                    <!-- <th style="width: 80px;">容量</th> -->
                     <th style="width: 70px;">尾款原价</th>
                     <th style="width: 70px;">尾款现价</th>
                     <th style="width: 60px;">库存</th>
@@ -317,12 +313,12 @@
                       </nz-input-group>
                     </td>
                     <!-- 容量 -->
-                    <td style="width: 125px;">
+                    <!-- <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'AH'">
                         <input class="price-input" [(ngModel)]="data.content" nz-input autocomplete="off"
                           name="original-fee-{{data.time}}-{{i}}" required maxlength='8' />
                       </nz-input-group>
-                    </td>
+                    </td> -->
                     <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"

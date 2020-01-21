@@ -6,6 +6,10 @@ import {
   ProjectEntity,
   AccessoryEntity
 } from '../accessory-library.service';
+import {
+  AccessoryBrandEntity,
+  BrandManagementHttpService,
+} from '../../brand-management/brand-management-http.service';
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SelectMultiBrandFirmComponent } from './select-multi-brand-firm/select-multi-brand-firm.component';
@@ -20,6 +24,7 @@ const PageSize = 15;
 export class AccessoryListComponent implements OnInit {
 
   public projectList: Array<ProjectEntity> = [];
+  public brandList: Array<AccessoryBrandEntity> = [];
   public accessoryList: Array<AccessoryEntity> = [];
   public accessoryNewList: Array<any> = [];
   public pageIndex = 1;
@@ -33,6 +38,7 @@ export class AccessoryListComponent implements OnInit {
 
   private searchText$ = new Subject<any>();
   private searchProjectText$ = new Subject<any>();
+  private searchBrandText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
 
@@ -45,7 +51,7 @@ export class AccessoryListComponent implements OnInit {
 
   @ViewChild(SelectMultiBrandFirmComponent, { static: true }) public selectMultiBrandFirmComponent: SelectMultiBrandFirmComponent;
 
-  constructor(private globalService: GlobalService, private accessoryLibraryService: AccessoryLibraryService) { }
+  constructor(private globalService: GlobalService, private accessoryLibraryService: AccessoryLibraryService, private brandManagementService: BrandManagementHttpService) { }
 
   ngOnInit() {
     // 配件库列表
@@ -77,6 +83,18 @@ export class AccessoryListComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchProjectText$.next();
+
+    // 配件品牌列表
+    this.searchBrandText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.brandManagementService.requestAccessoryBrandAllListData())
+    ).subscribe(res => {
+      this.brandList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+    this.searchBrandText$.next();
   }
 
   // 查询按钮
