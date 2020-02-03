@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from 'src/utils/z-entity';
 import { Observable, Subject } from 'rxjs/index';
-import { map } from 'rxjs/internal/operators';
+import { map } from 'rxjs/operators';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { HttpService, LinkResponse, HttpErrorEntity } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
-import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../accessory-library/accessory-library.service';
+import { AccessoryEntity, SpecificationEntity, ProjectEntity, AccessoryParamsEntity } from '../accessory-library/accessory-library.service';
 import { RepairShopEntity } from '../garage-management/garage-management.service';
 
 export class UpkeepOrderSearchParams extends EntityBase {
@@ -150,6 +150,22 @@ export class UpkeepOrderLinkResponse extends LinkResponse {
     return tempList;
   }
 }
+// 到店保养订单-配件
+export class AccessoryItem extends EntityBase {
+  public accessory_name: string = undefined; // 配件名称
+  public accessory_params: AccessoryParamsEntity = undefined; // 配件参数
+  public number: number = undefined; // 数量
+  public content: string = undefined; // 规格
+  public image: string = undefined; // 规格图片
+  public sale_fee: number = undefined; // 单价
+}
+// 到店保养订单-服务
+export class ServiceItem extends EntityBase {
+  public service_fee_id: string = undefined; // 服务id
+  public service_fee_name: string = undefined; // 服务费名称
+  public sale_amount: string = undefined; // 单价
+  public number = 1; // 数量
+}
 
 // 到店保养订单
 export class ArrivalOrderEntity extends EntityBase {
@@ -160,7 +176,8 @@ export class ArrivalOrderEntity extends EntityBase {
   public buyer_tel: string = undefined; // 购买人手机号
   public repair_shop_name: string = undefined; // 汽修店名称
   public repair_shop_id: string = undefined; // 汽修店id
-  public accessory_info: Array<SpecificationInfoEntity> = []; // 配件信息
+  public accessory_info: Array<AccessoryItem> = []; // 配件信息
+  public service_info: Array<ServiceItem> = []; // 服务信息
   public original_fee: number = undefined; // 应付(原价)配件费 单位：分
   public sale_fee: number = undefined; // 实付(售价)配件费 单位：分
   public minus_fee: number = undefined; // 平台立减(原价-售价)配件费 单位：分
@@ -192,7 +209,10 @@ export class ArrivalOrderEntity extends EntityBase {
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'accessory_info') {
-      return SpecificationInfoEntity;
+      return AccessoryItem;
+    }
+    if (propertyName === 'service_info') {
+      return ServiceItem;
     }
     return null;
   }

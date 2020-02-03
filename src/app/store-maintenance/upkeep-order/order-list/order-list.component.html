@@ -133,31 +133,54 @@
                         <div style="text-align: left;padding: 10px 0;">
                           <span [title]="accessory.accessory_name ||''"
                             style="word-break: keep-all;">{{accessory.accessory_name | zMaxLength:6}}</span>
-                          <div class="match-info" *ngIf="order.accessory_info.accessory?.accessory_params"
-                            style="min-width: 150px;">
+                          <div class="match-info" *ngIf="accessory.accessory_params" style="min-width: 150px;">
                             <label
-                              *ngIf="order.accessory_info.accessory.accessory_params.oil_num">{{order.accessory_info.accessory.accessory_params.oil_num}}</label>
+                              *ngIf="accessory.accessory_params.oil_num">{{accessory.accessory_params.oil_num}}</label>
                             <label
-                              *ngIf="order.accessory_info.accessory.accessory_params.oil_type">{{order.accessory_info.accessory.accessory_params.oil_type}}</label>
+                              *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type}}</label>
                             <label
-                              *ngIf="order.accessory_info.accessory.accessory_params.oil_api">{{order.accessory_info.accessory.accessory_params.oil_api}}</label>
-                            <label *ngIf="order.accessory_info.accessory.accessory_params.oil_place"
-                              [title]="order.accessory_info.accessory.accessory_params.oil_place">{{order.accessory_info.accessory.accessory_params.oil_place|zMaxLength:4}}</label>
-                            <label *ngIf="order.accessory_info.accessory.accessory_params.oil_expire"
-                              [title]="order.accessory_info.accessory.accessory_params.oil_expire">{{order.accessory_info.accessory.accessory_params.oil_expire|zMaxLength:4}}</label>
+                              *ngIf="accessory.accessory_params.oil_api">{{accessory.accessory_params.oil_api}}</label>
+                            <label *ngIf="accessory.accessory_params.oil_place"
+                              [title]="accessory.accessory_params.oil_place">{{accessory.accessory_params.oil_place|zMaxLength:4}}</label>
+                            <label *ngIf="accessory.accessory_params.oil_expire"
+                              [title]="accessory.accessory_params.oil_expire">{{accessory.accessory_params.oil_expire|zMaxLength:4}}</label>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div>
-                      <span>{{accessory.name || '--'}}</span>
+                      <span>{{accessory.content || '--'}}</span>
                     </div>
                     <div><span>{{accessory.num || 0}}</span></div>
-                    <div><span>{{accessory.original_fee  | centPriceChange:'¥ ':'left' }}</span></div>
+                    <div><span>{{accessory.sale_fee | centPriceChange:'¥ ':'left' }}</span></div>
                   </div>
                 </div>
               </ng-container>
-              <div *ngIf="!order.accessory_info || order.accessory_info.length===0" class="row-group">
+              <ng-container *ngFor="let service of order.service_info">
+                <div class="column-box repeat-box">
+                  <div class="row-group">
+                    <div>
+                      <div class="img-item">
+                        <div class="img-box">
+                          <img src="/assets/images/image_space.png" />
+                        </div>
+                        <div style="text-align: left;padding: 10px 0;">
+                          <span [title]="service.service_fee_name ||''"
+                            style="word-break: keep-all;">{{service.service_fee_name | zMaxLength:6}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <span>--</span>
+                    </div>
+                    <div><span>{{service.number || 0}}</span></div>
+                    <div><span>{{service.sale_amount  | centPriceChange:'¥ ':'left' }}</span></div>
+                  </div>
+                </div>
+              </ng-container>
+              <div
+                *ngIf="(!order.accessory_info || order.accessory_info.length===0)&&(!order.service_info || order.service_info.length===0)"
+                class="row-group">
                 <div>--</div>
                 <div>--</div>
                 <div>--</div>
@@ -179,12 +202,18 @@
               </div>
             </td>
 
-            <td>{{order.order_status | arrivalOrderStatus}}</td>
+            <td>
+              <div class="column-box">
+                <span>{{order.user_status | arrivalOrderStatus}}</span>
+                <span *ngIf="order.is_checked && order.user_status===3 && !order.check_images" style="color:#E82038">
+                  (待车主验货)</span>
+              </div>
+            </td>
 
             <td class="operation">
               <div>
                 <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.door_order_id]">查看</a>
-                <a [title]="'服务完成'" (click)="onFinishClick(order)">服务完成</a>
+                <a [title]="'服务完成'">服务完成</a>
               </div>
             </td>
           </tr>

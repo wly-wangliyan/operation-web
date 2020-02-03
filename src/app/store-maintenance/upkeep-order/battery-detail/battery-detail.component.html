@@ -209,7 +209,7 @@
             <td>{{accessoryData.brand_name || '--'}}</td>
             <td>{{accessoryData.battery_model || '--'}}</td>
             <td>{{accessoryData.buy_num || 0}}</td>
-            <td>{{accessoryData.supply_type?(accessoryData.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
+            <td>{{accessoryData.supply_type|supplyType}}</td>
             <td>{{accessoryData.warehouse_name || '--'}}</td>
             <td>{{accessoryData.original_fee | centPriceChange:'元'}}</td>
           </tr>

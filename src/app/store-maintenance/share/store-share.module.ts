@@ -6,6 +6,7 @@ import { OilTypePipe } from './pipes/oil-type.pipe';
 import { WashCarCouponTypePipe } from './pipes/wash-car-coupon-type.pipe';
 import { ArrivalOrderStatusPipe } from './pipes/arrival-order-status.pipe';
 import { ProjectNamePipe } from './pipes/project-name.pipe';
+import { SupplyTypePipe } from './pipes/supply-type.pipe';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ProjectNamePipe } from './pipes/project-name.pipe';
     OilTypePipe,
     WashCarCouponTypePipe,
     ArrivalOrderStatusPipe,
-    ProjectNamePipe
+    ProjectNamePipe,
+    SupplyTypePipe
   ],
   exports: [
     WashCarTypePipe,
@@ -22,7 +24,8 @@ import { ProjectNamePipe } from './pipes/project-name.pipe';
     OilTypePipe,
     WashCarCouponTypePipe,
     ArrivalOrderStatusPipe,
-    ProjectNamePipe
+    ProjectNamePipe,
+    SupplyTypePipe
   ],
   imports: [
     CommonModule
