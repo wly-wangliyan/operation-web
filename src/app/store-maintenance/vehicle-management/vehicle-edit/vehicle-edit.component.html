@@ -7,13 +7,13 @@
             <img src="/assets/images/manual/icon_vehicle.png">
             <div class="vehicle-space" *ngIf="carInfo && carInfo.car_param_id">
                 <div>
-                    <span>{{carInfo.car_brand.car_brand_name}}</span>
+                    <span>{{carInfo.car_brand_name}}</span>
                 </div>
                 <div>
-                    <span>{{carInfo.car_factory.car_factory_name}}</span>
+                    <span>{{carInfo.car_factory_name}}</span>
                 </div>
                 <div>
-                    <span>{{carInfo.car_series.car_series_name}}</span>
+                    <span>{{carInfo.car_series_name}}</span>
                 </div>
                 <div>
                     <span>{{carInfo.car_displacement}}</span>
@@ -47,10 +47,10 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let data of basicTable.data; let i=index">
-                        <td>{{data.project_num}}</td>
+                        <td>{{data.project_id}}</td>
                         <td [title]="data.project_name">{{data.project_name|zMaxLength:10}}</td>
-                        <td>{{data.account}}</td>
-                        <td>{{data.telephone}}</td>
+                        <td>{{data.part_param?.jy_ShuXin}}</td>
+                        <td>{{data.part_param?.jy_ShuXing2}}</td>
                         <td>{{data.reference_amount?data.reference_amount:'--'}}</td>
                         <td>{{data.unit?data.unit:'--'}}</td>
                     </tr>

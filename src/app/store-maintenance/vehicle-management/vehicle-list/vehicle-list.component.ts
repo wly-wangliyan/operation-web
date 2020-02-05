@@ -280,7 +280,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   private importCarParam(successFun: any, failFun: any) {
-    this.importParams.project_name = this.projectList.filter(v => v.project_number === this.importParams.project_num)[0].project_name;
+    this.importParams.project_name = this.projectList.filter(v => v.project_num === this.importParams.project_num)[0].project_name;
     this.importSubscription = this.vehicleManagementService.requestImportCarParamData(this.importParams,
         this.importViewModel.type, this.importViewModel.file).subscribe(res => {
       successFun(res);

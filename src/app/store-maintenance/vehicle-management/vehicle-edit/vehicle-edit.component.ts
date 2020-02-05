@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CarParamEntity, CarPartEntity, VehicleManagementHttpService } from '../vehicle-management-http.service';
+import { CarPartEntity, CarPartParamEntity, VehicleManagementHttpService } from '../vehicle-management-http.service';
 import { GlobalService } from '../../../core/global.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { GlobalService } from '../../../core/global.service';
 export class VehicleEditComponent implements OnInit {
 
   public paramList: Array<CarPartEntity> = [];
-  public carInfo: CarParamEntity = new CarParamEntity();
+  public carInfo: CarPartParamEntity = new CarPartParamEntity();
   public pageIndex = 1;
   public noResultText = '数据加载中...';
 
@@ -33,8 +33,8 @@ export class VehicleEditComponent implements OnInit {
 
   private requestCarDetail() {
     this.vehicleService.requestCarDetail(this.car_series_id, this.car_param_id).subscribe(res => {
-      this.paramList.push(res);
-      this.carInfo = res.car_param;
+      this.paramList = res;
+      this.carInfo = res[0].car_param;
       this.noResultText = '暂无数据';
     }, err => {
       this.noResultText = '暂无数据';

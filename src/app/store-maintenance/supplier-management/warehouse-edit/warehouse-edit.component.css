@@ -56,7 +56,6 @@
     font-size: 14px!important;
     margin-right: 0!important;
     height: 34px!important;
-    /*background:rgba(246,246,246,1);*/
     border-radius:1px;
 }
 
@@ -65,10 +64,6 @@
     font-family:STHeitiSC-Medium;
     font-weight:500;
     color:rgba(232,32,56,1);
-}
-
-nz-range-picker {
-    margin: 0 8px 12px 0;
 }
 
 .content-flow {
@@ -101,17 +96,6 @@ nz-range-picker {
 
 .msg-tip {
     color: #E82038;
-}
-
-.brand-list {
-    margin: 0 0 10px 140px;
-    width: 600px;
-    overflow-y: auto;
-    height: 300px;
-}
-
-:host::ng-deep .ant-table {
-    border: 1px solid #D8D8D8;
 }
 
 .tel-input {

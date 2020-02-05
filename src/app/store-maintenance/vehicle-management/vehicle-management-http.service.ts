@@ -74,19 +74,35 @@ export class CarParamEntity extends EntityBase {
 }
 
 // 原厂配件
+export class CarPartParamEntity extends EntityBase {
+  public car_brand_id: string = undefined; // string	id - 主键
+  public car_brand_name: string = undefined; // string	品牌名称
+  public car_factory_id: string = undefined; // string	id - 主键
+  public car_factory_name: string = undefined; // string	厂商名称
+  public car_param_id: string = undefined; // string	id - 主键
+  public car_series_id: string = undefined; // string	id - 主键
+  public car_series_name: string = undefined; // string	车系名称
+  public car_displacement: string = undefined; // string	发动机排量
+  public car_year_num: string = undefined; // string	生产年份
+  public status: boolean = undefined; // boolean	启停状态
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+}
+
+// 原厂配件
 export class CarPartEntity extends EntityBase {
   public car_part_id: string = undefined; // string	id
-  public project_num: string = undefined; // string	项目id
+  public project_id: string = undefined; // string	项目id
   public project_name: string = undefined; // string	项目名称
   public part_param = undefined; // json	配件参数{}
   public reference_amount: number = undefined; // float	参考用量
   public unit: string = undefined; // string	单位
-  public car_param: CarParamEntity = undefined; // object	车型参数
+  public car_param: CarPartParamEntity = undefined; // object	车型参数
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'car_param') {
-      return CarParamEntity;
+      return CarPartParamEntity;
     }
     return null;
   }
@@ -265,7 +281,9 @@ export class VehicleManagementHttpService {
     const eventEmitter = new EventEmitter();
     const params = {
       param_file,
-      type
+      type,
+      project_name: importParams.project_name,
+      project_num: importParams.project_num
     };
 
     const url = `/car_params`;
@@ -283,8 +301,14 @@ export class VehicleManagementHttpService {
    * @param car_param_id id
    * @returns Observable<CarParamEntity>
    */
-  public requestCarDetail(car_series_id: string, car_param_id: string): Observable<CarPartEntity> {
+  public requestCarDetail(car_series_id: string, car_param_id: string): Observable<Array<CarPartEntity>> {
     return this.httpService.get(this.domain + `/car_series/${car_series_id}/car_params/${car_param_id}`
-    ).pipe(map(res => CarPartEntity.Create(res.body)));
+    ).pipe(map(res => {
+      const tempList: Array<CarPartEntity> = [];
+      res.body.forEach(res1 => {
+        tempList.push(CarPartEntity.Create(res1));
+      });
+      return tempList;
+    }));
   }
 }

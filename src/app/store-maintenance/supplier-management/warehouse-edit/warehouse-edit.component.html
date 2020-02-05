@@ -91,10 +91,7 @@
                 </div>
             </div>
             <div class="row">
-                <label class="control-label">
-                    <b>&nbsp;</b>
-                    <span>&nbsp;</span>
-                </label>
+                <label class="control-label">&nbsp;</label>
                 <div class="control-input" *ngFor="let item of sms_telephone;let i=index" [class.tel-input]="i!==0">
                     <input nz-input class="form-control" name="tel_{{i}}_{{item.time}}" maxlength="11"
                            (input)="errPositionItem.sms_telephone.isError=false"

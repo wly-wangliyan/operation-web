@@ -126,8 +126,8 @@
           <select class="form-control" [(ngModel)]="importParams.project_num" name="project_num"
                   style="margin-left: 15px;width: 403px" >
             <option value="">全部</option>
-            <option *ngFor="let project of projectList" [value]="project.project_number" [title]="project.project_name">
-              {{project.project_name | zMaxLength:30}}
+            <option *ngFor="let project of projectList" [value]="project.project_num" [title]="project.project_name">
+              {{project.project_name | zMaxLength:25}}
             </option>
           </select>
         </div>

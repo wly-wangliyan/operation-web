@@ -156,7 +156,7 @@ export class SupplierManagementHttpService {
    * 编辑仓库信息
    * @param string supplier_id  供应商编号
    * @param string warehouse_id 仓库id
-   * @param ticket WarehouseEntity 仓库信息
+   * @param option WarehouseEntity 仓库信息
    * @returns Observable<HttpResponse<any>>
    */
   public requestEditWarehouseData(supplier_id: string, warehouse_id: string, warehouse: WarehouseEntity): Observable<HttpResponse<any>> {

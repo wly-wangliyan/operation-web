@@ -4,7 +4,7 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProjectEditComponent } from '../project-edit/project-edit.component';
-import { ProjectEntity, ProjectManagementHttpService } from '../project-management-http.service';
+import { ParamEntity, ProjectEntity, ProjectManagementHttpService } from '../project-management-http.service';
 
 const PageSize = 15;
 
@@ -37,6 +37,9 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit() {
+    const temp = [];
+    temp.push({});
+    this.projectList = temp;
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>
@@ -75,7 +78,7 @@ export class ProjectListComponent implements OnInit {
 
   // 显示编辑保养项目模态框
   public onEditProjectClick(data) {
-    this.projectEditComponent.openProjectModal(data.id, () => {
+    this.projectEditComponent.openProjectModal(data, () => {
       this.projectEditComponent.clear();
       this.pageIndex = 1;
       timer(0).subscribe(() => {
@@ -87,8 +90,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   // 显示配件参数模态框
-  public onEditParamClick(data) {
-    this.projectEditComponent.openParamModal(data.id, () => {
+  public onEditParamClick(data: ProjectEntity) {
+    this.projectEditComponent.openParamModal(data, () => {
       this.projectEditComponent.clear();
       this.pageIndex = 1;
       timer(0).subscribe(() => {

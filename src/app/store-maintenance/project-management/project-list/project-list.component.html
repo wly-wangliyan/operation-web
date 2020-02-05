@@ -13,23 +13,26 @@
                     <th>项目名称</th>
                     <th>配套项目</th>
                     <th>规格单位</th>
-                    <th>参数</th>
+                    <th nzWidth="15%">参数</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index">
                     <td>{{i+(pageIndex-1)*15+1}}</td>
-                    <td>{{data.project_number}}</td>
+                    <td>{{data.project_num}}</td>
                     <td [title]="data.project_name">{{data.project_name|zMaxLength: 10}}</td>
                     <td [title]="data.related_project_name">{{data.related_project_name|zMaxLength: 10}}</td>
                     <td>{{data.specification?.unit?data.specification?.unit:'--'}}</td>
                     <td>
-                        {{data.ic_company_name?(data.ic_company_name|zMaxLength:4):'--'}}
+                        <ng-container *ngFor="let item of data.param_list">
+                            {{item.param_name+';'}}
+                        </ng-container>
+                        <ng-container *ngIf="!data.param_list">--</ng-container>
                     </td>
                     <td class="operation">
-                        <a [title]="'配件参数'" (click)="onEditParamClick(data)">配件参数</a>
-                        <a [title]="'编辑'" (click)="onEditProjectClick(data)">编辑</a>
+                        <a *ngIf="data.project_num==11" [title]="'配件参数'" (click)="onEditParamClick(data)">配件参数</a>
+                        <a [title]="'查看'" (click)="onEditProjectClick(data)">查看</a>
                     </td>
                 </tr>
                 </tbody>
