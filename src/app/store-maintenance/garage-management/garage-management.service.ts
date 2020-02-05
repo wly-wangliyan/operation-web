@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { AccessoryEntity } from '../accessory-library/accessory-library.service';
+import { WarehouseEntity, SupplierEntity } from '../supplier-management/supplier-management-http.service';
 
 export class SearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业 2.不营业
@@ -22,9 +23,12 @@ export class SupplyConfigParams extends EntityBase {
   public page_size = 45; // 每页条数
 }
 
+// 设置供应商
 export class SetSupplyConfigParams extends EntityBase {
   public supply_type: any = ''; // 供货方式 1:第三方供应商 2:门店自供
   public accessory_ids: string = undefined; // 配件ID集合 "xxx,xxx"
+  public supplier_id = ''; // 供应商ID
+  public warehouse_id = ''; // 供应仓库ID
 }
 
 /*
@@ -38,6 +42,7 @@ export class RepairCompanyEntity extends EntityBase {
   public updated_time: number = undefined; // 更新时间
 }
 
+// 编辑汽修店基本信息
 export class EditRepairShopParams extends EntityBase {
   public door_run_start_time: number = null; // 上门服务开始时间 默认:空
   public door_run_end_time: number = null; // 上门服务结束时间 默认:空
@@ -75,12 +80,12 @@ export class WashCarEntity extends EntityBase {
 }
 
 // 到店保养服务
-export class UpkeepServiceEntity extends EntityBase {
-  public upkeep_id: string = undefined; // 汽修店洗车相关 主键
-  public upkeep_tags: Array<any> = []; // 洗车标签
+export class MaintainInfoEntity extends EntityBase {
+  public repair_maintain_info_id: string = undefined; // 汽修店洗车相关 主键
+  public maintain_tags: Array<any> = []; // 洗车标签
   public start_time: number = null; // 汽修店洗车营业开始时间
   public end_time: number = null; // 汽修店洗车营业结束时间
-  public upkeep_telephone = ''; // 客服电话(汽修店洗车客服电话)
+  public maintain_telephone = ''; // 客服电话(汽修店到店保养客服电话)
   public shop_instruction = ''; // 店铺简介
   public repair_shop: RepairShopEntity = undefined; // 汽修店
   public service_num: number = undefined; // 已服务次数
@@ -95,7 +100,7 @@ export class UpkeepServiceEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
-    delete json.upkeep_id;
+    delete json.repair_maintain_info_id;
     delete json.repair_shop;
     delete json.service_num;
     return json;
@@ -130,6 +135,7 @@ export class RepairShopEntity extends EntityBase {
   public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
   public rescue_config: RescueConfig = undefined; // 救援配置
   public wash_car: WashCarEntity = undefined; // 洗车相关
+  public maintain_info: MaintainInfoEntity = undefined; // 到店保养服务
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
 
@@ -143,6 +149,9 @@ export class RepairShopEntity extends EntityBase {
     }
     if (propertyName === 'wash_car') {
       return WashCarEntity;
+    }
+    if (propertyName === 'maintain_info') {
+      return MaintainInfoEntity;
     }
     return null;
   }
@@ -347,8 +356,38 @@ export class GarageManagementService {
    * @param params 参数列表
    * @returns Observable<HttpResponse<any>>
    */
-  public requestEditUpkeepInfo(repair_shop_id: string, params: UpkeepServiceEntity): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/repair_shops/${repair_shop_id}/wash_car_info`;
+  public requestEditMaintainInfo(repair_shop_id: string, params: MaintainInfoEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/repair_shops/${repair_shop_id}/maintain_info`;
     return this.httpService.put(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 获取所有供应商
+   * @param repair_shop_id 参数
+   */
+  public requestSupplierListData(): Observable<Array<SupplierEntity>> {
+    const httpUrl = `${this.domain}/admin/suppliers/all`;
+    return this.httpService.get(httpUrl).pipe(map(result => {
+      const tempList: Array<SupplierEntity> = [];
+      result.body.forEach(res => {
+        tempList.push(SupplierEntity.Create(res));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 获取供应商下所有仓库
+   * @param supplier_id 参数
+   */
+  public requestWarehouseListData(supplier_id: string): Observable<Array<WarehouseEntity>> {
+    const httpUrl = `${this.domain}/admin/suppliers/${supplier_id}/warehouses/all`;
+    return this.httpService.get(httpUrl).pipe(map(result => {
+      const tempList: Array<WarehouseEntity> = [];
+      result.body.forEach(res => {
+        tempList.push(WarehouseEntity.Create(res));
+      });
+      return tempList;
+    }));
   }
 }

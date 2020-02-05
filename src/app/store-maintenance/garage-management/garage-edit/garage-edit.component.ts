@@ -8,7 +8,7 @@ import { HttpErrorEntity } from '../../../core/http.service';
 import { isUndefined } from 'util';
 import {
   GarageManagementService, RepairShopEntity, EditRepairShopParams,
-  WashCarEntity, UpkeepServiceEntity
+  WashCarEntity, MaintainInfoEntity
 } from '../garage-management.service';
 import { DateFormatHelper, TimeItem } from '../../../../utils/date-format-helper';
 import { Subject, Subscription, timer } from 'rxjs';
@@ -42,7 +42,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   private serviceNames = ['default', '到店保养服务', '救援服务', '洗车服务']; // 基本信息-服务类型名称
   public service_initial_value: Array<number> = []; // 标记服务类型初始值，控制tab显示与隐藏
   public washInfo: WashCarEntity = new WashCarEntity(); // 洗车服务详情
-  public upkeepInfo: UpkeepServiceEntity = new UpkeepServiceEntity(); // 到店保养服务详情
+  public maintainInfo: MaintainInfoEntity = new MaintainInfoEntity(); // 到店保养服务详情
   public tagList: Array<any> = []; // 标签列表
   public tag: any; // 未保存的标签内容
 
@@ -52,8 +52,8 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   public wash_start_time: TimeItem = new TimeItem(); // 洗车服务-洗车营业开始时间
   public wash_end_time: TimeItem = new TimeItem(); // 洗车服务-洗车营业结束时间
 
-  public upkeep_start_time: TimeItem = new TimeItem(); // 到店保养-营业开始时间
-  public upkeep_end_time: TimeItem = new TimeItem(); // 到店保养-营业结束时间
+  public maintain_start_time: TimeItem = new TimeItem(); // 到店保养-营业开始时间
+  public maintain_end_time: TimeItem = new TimeItem(); // 到店保养-营业结束时间
 
   private repair_shop_id: string; // 汽修店id
   private requestSubscription: Subscription;
@@ -122,6 +122,11 @@ export class GarageEditComponent implements OnInit, OnDestroy {
         // 处理门店地址
         this.regionsObj = new RegionEntity(this.currentGarage);
         this.loading = false;
+        if (this.tab_index === 1) {
+          this.initMaintainInfo();
+        } else if (this.tab_index === 3) {
+          this.initWashInfo();
+        }
       }, err => {
         this.loading = false;
         if (!this.globalService.httpErrorProcess(err)) {
@@ -136,11 +141,6 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   // 切换tab页时，重新获取数据
   public onTabChange(event: any): void {
     this.searchText$.next();
-    if (event === 1) {
-      this.initUpkeepInfo();
-    } else if (event === 3) {
-      this.initWashInfo();
-    }
   }
 
   // 初始化洗车服务
@@ -159,17 +159,17 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   }
 
   // 初始化到店保养服务相关
-  private initUpkeepInfo(): void {
+  private initMaintainInfo(): void {
     this.tag = null;
-    this.upkeepInfo = this.currentGarage.wash_car ? this.currentGarage.wash_car.clone() : new UpkeepServiceEntity();
-    this.tagList = this.upkeepInfo.upkeep_tags ? this.upkeepInfo.upkeep_tags : [];
-    this.upkeep_start_time = this.upkeepInfo.start_time ? DateFormatHelper.getMinuteOrTime(this.upkeepInfo.start_time)
+    this.maintainInfo = this.currentGarage.maintain_info ? this.currentGarage.maintain_info.clone() : new MaintainInfoEntity();
+    this.tagList = this.maintainInfo.maintain_tags ? this.maintainInfo.maintain_tags : [];
+    this.maintain_start_time = this.maintainInfo.start_time ? DateFormatHelper.getMinuteOrTime(this.maintainInfo.start_time)
       : new TimeItem();
-    this.upkeep_end_time = this.upkeepInfo.end_time ? DateFormatHelper.getMinuteOrTime(this.upkeepInfo.end_time)
+    this.maintain_end_time = this.maintainInfo.end_time ? DateFormatHelper.getMinuteOrTime(this.maintainInfo.end_time)
       : new TimeItem();
-    const tempContent = this.upkeepInfo.shop_instruction.replace('/\r\n/g', '<br>').replace(/\n/g, '');
+    const tempContent = this.maintainInfo.shop_instruction.replace('/\r\n/g', '<br>').replace(/\n/g, '');
     timer(200).subscribe(() => {
-      CKEDITOR.instances.upkeepServiceEditor.setData(tempContent);
+      CKEDITOR.instances.maintainInfoEditor.setData(tempContent);
     });
   }
 
@@ -232,38 +232,36 @@ export class GarageEditComponent implements OnInit, OnDestroy {
     this.garageService.requestEditWashInfo(this.repair_shop_id, this.washInfo).subscribe(() => {
       this.globalService.promptBox.open('保存成功！');
       this.searchText$.next();
-      this.initWashInfo();
     }, err => {
       this.errorProcess(err);
     });
   }
 
   // 保存到店保养服务
-  public onUpkeepFormSubmit(): void {
-    const upkeep_start_time = DateFormatHelper.getSecondTimeSum(this.upkeep_start_time);
-    const upkeep_end_time = DateFormatHelper.getSecondTimeSum(this.upkeep_end_time);
+  public onMaintainFormSubmit(): void {
+    const maintain_start_time = DateFormatHelper.getSecondTimeSum(this.maintain_start_time);
+    const maintain_end_time = DateFormatHelper.getSecondTimeSum(this.maintain_end_time);
 
-    if (upkeep_start_time >= upkeep_end_time) {
+    if (maintain_start_time >= maintain_end_time) {
       this.globalService.promptBox.open('营业的开始时间需小于结束时间！', null, 2000, null, false);
       return;
     }
-    this.upkeepInfo.start_time = upkeep_start_time;
-    this.upkeepInfo.end_time = upkeep_end_time;
-    if (!ValidateHelper.Phone(this.upkeepInfo.upkeep_telephone)) {
+    this.maintainInfo.start_time = maintain_start_time;
+    this.maintainInfo.end_time = maintain_end_time;
+    if (!ValidateHelper.Phone(this.maintainInfo.maintain_telephone)) {
       this.globalService.promptBox.open('客服电话格式错误！', null, 2000, null, false);
       return;
     }
-    const tempContent = CKEDITOR.instances.upkeepServiceEditor.getData();
+    const tempContent = CKEDITOR.instances.maintainInfoEditor.getData();
     if (tempContent) {
-      this.upkeepInfo.shop_instruction = tempContent.replace('/\r\n/g', '').replace(/\n/g, '');
+      this.maintainInfo.shop_instruction = tempContent.replace('/\r\n/g', '').replace(/\n/g, '');
     } else {
-      this.upkeepInfo.shop_instruction = '';
+      this.maintainInfo.shop_instruction = '';
     }
-    this.upkeepInfo.upkeep_tags = this.tagList;
-    this.garageService.requestEditUpkeepInfo(this.repair_shop_id, this.upkeepInfo).subscribe(() => {
+    this.maintainInfo.maintain_tags = this.tagList;
+    this.garageService.requestEditMaintainInfo(this.repair_shop_id, this.maintainInfo).subscribe(() => {
       this.globalService.promptBox.open('保存成功！');
       this.searchText$.next();
-      this.initUpkeepInfo();
     }, err => {
       this.errorProcess(err);
     });
@@ -283,7 +281,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
           if (content.resource === 'wash_car_tags' && content.code === 'exceed_the_limit') {
             this.globalService.promptBox.open('标签个数超过上限！', null, 2000, null, false);
             return;
-          } else if (content.resource === 'upkeep_tags' && content.code === 'exceed_the_limit') {
+          } else if (content.resource === 'maintain_tags' && content.code === 'exceed_the_limit') {
             this.globalService.promptBox.open('标签个数超过上限！', null, 2000, null, false);
             return;
           } else {

@@ -196,7 +196,7 @@
       </div>
     </form>
 
-    <form class="form-horizontal upkeep-form" autocomplete="off" #upkeepForm="ngForm" *ngIf="tab_index===1">
+    <form class="form-horizontal maintain-form" autocomplete="off" #maintainForm="ngForm" *ngIf="tab_index===1">
       <div class="row">
         <label class="control-label">
           <b>*</b>
@@ -226,10 +226,10 @@
           <span>营业时间</span>
         </label>
         <div class="control-input">
-          <app-date-clock [has24]="false" [(hour)]="upkeep_start_time.hour" [(minute)]="upkeep_start_time.minute">
+          <app-date-clock [has24]="false" [(hour)]="maintain_start_time.hour" [(minute)]="maintain_start_time.minute">
           </app-date-clock>
           <span class="line"> 至 </span>
-          <app-date-clock [has24]="true" [(hour)]="upkeep_end_time.hour" [(minute)]="upkeep_end_time.minute">
+          <app-date-clock [has24]="true" [(hour)]="maintain_end_time.hour" [(minute)]="maintain_end_time.minute">
           </app-date-clock>
         </div>
       </div>
@@ -239,8 +239,8 @@
           <span>客服电话</span>
         </label>
         <div class="control-input">
-          <input class="form-control" [(ngModel)]="upkeepInfo.upkeep_telephone" placeholder="请输入手机号" name="telephone"
-            maxlength="11" appIntNumber required>
+          <input class="form-control" [(ngModel)]="maintainInfo.maintain_telephone" placeholder="请输入手机号"
+            name="telephone" maxlength="11" appIntNumber required>
         </div>
       </div>
       <div class="row">
@@ -249,13 +249,13 @@
           <span>店铺简介</span>
         </label>
         <div style="display: inline-block;">
-          <app-z-text-ckeditor ckEditorId='upkeepServiceEditor' #upkeepServiceEditor></app-z-text-ckeditor>
+          <app-z-text-ckeditor ckEditorId='maintainInfoEditor' #maintainInfoEditor></app-z-text-ckeditor>
         </div>
       </div>
 
       <div style="margin-top: 40px;margin-bottom: 40px">
         <button class="sure-btn" type="button" nz-button nzType="primary"
-          [disabled]="!upkeepForm.form.valid || tagList.length===0" (appZDebounceClick)="onUpkeepFormSubmit()">保存
+          [disabled]="!maintainForm.form.valid || tagList.length===0" (appZDebounceClick)="onMaintainFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
