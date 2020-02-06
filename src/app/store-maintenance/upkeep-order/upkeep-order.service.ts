@@ -158,18 +158,30 @@ export class AccessoryItem extends EntityBase {
   public content: string = undefined; // 规格
   public image: string = undefined; // 规格图片
   public sale_fee: number = undefined; // 单价
+  public brand_name: string = undefined; // 品牌
+  public original_fee: number = undefined; // 应付
+  public project_number: number = undefined; // 项目编号 10:蓄电池, 11:机油, 12:机油滤净器
+  public supplier_name: string = undefined; // 供应商名称
+  public warehouse_name: string = undefined; // 仓库名称
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'accessory_params') {
+      return AccessoryParamsEntity;
+    }
+    return null;
+  }
 }
 // 到店保养订单-服务
 export class ServiceItem extends EntityBase {
   public service_fee_id: string = undefined; // 服务id
   public service_fee_name: string = undefined; // 服务费名称
-  public sale_amount: string = undefined; // 单价
+  public sale_amount: number = undefined; // 单价
   public number = 1; // 数量
 }
 
 // 到店保养订单
 export class ArrivalOrderEntity extends EntityBase {
-  public order_id: string = undefined; // 订单id-主键
+  public arrival_order_id: string = undefined; // 订单id-主键
   public user_id: string = undefined; // 用户id
   public client_id: string = undefined; // client_id 区分平台
   public buyer_name: string = undefined; // 购买人
@@ -280,7 +292,7 @@ export class UpkeepOrderService {
    * 获取项目列表
    */
   public requestProjectListData(): Observable<Array<ProjectEntity>> {
-    const httpUrl = `${this.domain}/projects/all`;
+    const httpUrl = `${this.domain}/admin/projects/all`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       const tempList: Array<ProjectEntity> = [];
       res.body.forEach(data => {

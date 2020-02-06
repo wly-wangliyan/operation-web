@@ -68,7 +68,7 @@
       </form>
     </div>
     <div class="zmy-table arrival-table">
-      <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+      <nz-table [nzData]="arrivalOrderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #arrivalOrderTable>
         <thead>
           <tr>
@@ -94,20 +94,20 @@
           <tr *ngFor="let order of arrivalOrderTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
 
-            <td [title]="order.order_id?order.order_id:''" rowspan="order.accessory_info.length || 1">
-              <span *ngIf="order.order_id" [appTxtCopy]="order.order_id">
-                {{order.order_id|zMaxLength:10}}
+            <td [title]="order.arrival_order_id?order.arrival_order_id:''">
+              <span *ngIf="order.arrival_order_id" [appTxtCopy]="order.arrival_order_id">
+                {{order.arrival_order_id|zMaxLength:10}}
               </span>
-              <span *ngIf="!order.order_id">--</span>
+              <span *ngIf="!order.arrival_order_id">--</span>
             </td>
 
             <td>
               <div class="column-box">
-                <ng-container *ngIf="order.contact_name || order.contact_tel">
-                  <span [title]="order.contact_name || ''">{{order.contact_name | zMaxLength:6}}</span>
-                  <span>{{order.contact_tel || ''}}</span>
+                <ng-container *ngIf="order.buyer_name || order.buyer_tel">
+                  <span [title]="order.buyer_name || ''">{{order.buyer_name | zMaxLength:6}}</span>
+                  <span>{{order.buyer_tel || ''}}</span>
                 </ng-container>
-                <ng-container *ngIf="!order.contact_name && !order.contact_tel">
+                <ng-container *ngIf="!order.buyer_name && !order.buyer_tel">
                   <span>--</span>
                 </ng-container>
               </div>
@@ -141,9 +141,9 @@
                             <label
                               *ngIf="accessory.accessory_params.oil_api">{{accessory.accessory_params.oil_api}}</label>
                             <label *ngIf="accessory.accessory_params.oil_place"
-                              [title]="accessory.accessory_params.oil_place">{{accessory.accessory_params.oil_place|zMaxLength:4}}</label>
+                              [title]="accessory.accessory_params.oil_place">{{accessory.accessory_params.oil_place|zMaxLength:10}}</label>
                             <label *ngIf="accessory.accessory_params.oil_expire"
-                              [title]="accessory.accessory_params.oil_expire">{{accessory.accessory_params.oil_expire|zMaxLength:4}}</label>
+                              [title]="accessory.accessory_params.oil_expire">{{accessory.accessory_params.oil_expire|zMaxLength:10}}</label>
                           </div>
                         </div>
                       </div>
@@ -192,13 +192,13 @@
 
             <td>
               <div class="column-box">
-                <span *ngIf="order.order_time">
-                  {{order.order_time ?('下单：'+(order.order_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
+                <span *ngIf="order.created_time">
+                  {{order.created_time ?('下单：'+(order.created_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
                 </span>
                 <span *ngIf="order.pay_time">
                   {{order.pay_time ?('支付：'+(order.pay_time* 1000 | date:"y-MM-dd HH:mm:ss")):''}}
                 </span>
-                <span *ngIf="!order.order_time && !order.pay_time">--</span>
+                <span *ngIf="!order.created_time && !order.pay_time">--</span>
               </div>
             </td>
 
@@ -212,7 +212,7 @@
 
             <td class="operation">
               <div>
-                <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.door_order_id]">查看</a>
+                <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.arrival_order_id]">查看</a>
                 <a [title]="'服务完成'">服务完成</a>
               </div>
             </td>

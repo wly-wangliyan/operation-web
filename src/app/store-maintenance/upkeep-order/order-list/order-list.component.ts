@@ -72,7 +72,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.requestOrderList();
     });
 
-    this.searchText$.next();
+    this.searchArrivalOrderText$.next();
   }
 
   public ngOnDestroy() {
@@ -93,8 +93,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.arrivalOrderList = [];
     this.orderList = [];
     if (event === 1) {
-      this.searchText$.next();
-      // this.searchArrivalOrderText$.next();
+      this.searchArrivalOrderText$.next();
     } else if (event === 2) {
       this.searchText$.next();
       this.requestProjectList();
@@ -160,7 +159,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 条件查询
   public onSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
-      this.searchText$.next();
+      if (this.tab_index === 1) {
+        this.searchArrivalOrderText$.next();
+      } else {
+        this.searchText$.next();
+      }
     }
   }
 
