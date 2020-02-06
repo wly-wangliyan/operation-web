@@ -140,6 +140,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
 
   // 切换tab页时，重新获取数据
   public onTabChange(event: any): void {
+    this.tagList = [];
     this.searchText$.next();
   }
 

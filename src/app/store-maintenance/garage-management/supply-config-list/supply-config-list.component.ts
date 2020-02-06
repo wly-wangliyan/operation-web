@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileImportViewModel } from '../../../../utils/file-import.model';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../core/http.service';
-import { GarageManagementService, SupplyConfigParams, SupplyConfigEntity, SetSupplyConfigParams } from '../garage-management.service';
-import { ProjectEntity, AccessoryLibraryService, AccessoryEntity } from '../../accessory-library/accessory-library.service';
+import { GarageManagementService, SupplyConfigParams, SetSupplyConfigParams, AccessoryInfoEntity } from '../garage-management.service';
+import { ProjectEntity, AccessoryLibraryService } from '../../accessory-library/accessory-library.service';
+import { SupplierEntity, WarehouseEntity } from '../../supplier-management/supplier-management-http.service';
 
 const PageSize = 15;
 
@@ -17,12 +18,21 @@ const PageSize = 15;
 })
 export class SupplyConfigListComponent implements OnInit {
 
-  public accessoryList: Array<AccessoryEntity> = []; // 配件列表
+  public accessoryList: Array<AccessoryInfoEntity> = []; // 配件列表
 
   public searchParams: SupplyConfigParams = new SupplyConfigParams();
   public importViewModel: FileImportViewModel = new FileImportViewModel();
   public projectList: Array<ProjectEntity> = []; // 所属项目
+  public supplierList: Array<SupplierEntity> = []; // 供应商列表
+  public searchWarehouseList: Array<WarehouseEntity> = []; // 筛选供应仓库列表
+  public warehouseList: Array<WarehouseEntity> = []; // 供应仓库列表
   public configParams: SetSupplyConfigParams = new SetSupplyConfigParams();
+  public supply_type = [1, 2]; // 1:第三方供应商 2:门店自供
+
+  public isAllDisplayDataChecked = false;
+  public isIndeterminate = false;
+  public mapOfCheckedId: { [key: string]: boolean } = {};
+  public tempCheckedArr: Array<any> = []; // 选中的id集合
 
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
@@ -54,6 +64,7 @@ export class SupplyConfigListComponent implements OnInit {
     if (this.repair_shop_id) {
       this.generateConfigList();
       this.requestProjectList();
+      this.requestSupplierList();
     } else {
       this.router.navigate(['../../'], { relativeTo: this.route });
     }
@@ -70,6 +81,7 @@ export class SupplyConfigListComponent implements OnInit {
 
   // 请求配置列表
   private requestConfigList() {
+    this.resetCheckStatus();
     this.garageService.requestSupplyConfigList(this.searchParams, this.repair_shop_id).subscribe(res => {
       this.accessoryList = res.results;
       this.linkUrl = res.linkUrl;
@@ -82,17 +94,87 @@ export class SupplyConfigListComponent implements OnInit {
     });
   }
 
+  // 全选
+  public onCheckAll(event: any) {
+    if (event.target.checked) {
+      $('.check-single').prop('checked', true);
+      this.checkItem();
+    } else {
+      this.resetCheckStatus();
+    }
+  }
+
+  public onChangeCheck(event: any): void {
+    this.checkItem();
+    if ($('.check-single ').length > this.tempCheckedArr.length) {
+      $('.check-all').prop('checked', false);
+    } else if ($('.check-single ').length === this.tempCheckedArr.length) {
+      $('.check-all').prop('checked', true);
+    }
+  }
+
+  // 处理列表
+  private checkItem() {
+    this.tempCheckedArr = [];
+    const tempCheckList = $('.check-single');
+    for (const item of tempCheckList) {
+      const checkValue = item.value;
+      if (item.checked && !this.tempCheckedArr.includes(checkValue)) {
+        this.tempCheckedArr.push(checkValue);
+      }
+    }
+  }
+
+  // 重置多选及全选
+  private resetCheckStatus() {
+    this.tempCheckedArr = [];
+    $('.check-all').prop('checked', false);
+    $('.check-single ').prop('checked', false);
+  }
+
   // 获取项目列表
   private requestProjectList() {
-    this.accessoryService.requestProjectListData().subscribe(res => {
-      this.projectList = res.results;
+    this.garageService.requestProjectListData().subscribe(res => {
+      this.projectList = res;
     }, err => {
+      this.projectList = [];
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 获取供应商列表
+  private requestSupplierList() {
+    this.garageService.requestSupplierListData().subscribe(res => {
+      this.supplierList = res;
+    }, err => {
+      this.supplierList = [];
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 获取供应仓库列表
+  private requestSearchWarehouseList(supplier_id: string): void {
+    this.garageService.requestWarehouseListData(supplier_id).subscribe(res => {
+      this.searchWarehouseList = res;
+    }, err => {
+      this.searchWarehouseList = [];
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  // 获取供应仓库列表
+  private requestWarehouseList(supplier_id: string): void {
+    this.garageService.requestWarehouseListData(supplier_id).subscribe(res => {
+      this.warehouseList = res;
+    }, err => {
+      this.warehouseList = [];
       this.globalService.httpErrorProcess(err);
     });
   }
 
   // 翻页方法
   public onNZPageIndexChange(pageIndex: number) {
+    this.resetCheckStatus();
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
@@ -106,21 +188,61 @@ export class SupplyConfigListComponent implements OnInit {
     }
   }
 
+  public onChangeSearchSupplier(event: any): void {
+    this.searchParams.warehouse_id = '';
+    if (event.target.value) {
+      this.requestSearchWarehouseList(event.target.value);
+    }
+  }
+
   // 查询
   public onSearchBtnClick() {
     this.searchText$.next();
   }
 
-  public onSettingClick(data: AccessoryEntity): void {
+  // 设置供应商
+  public onSettingClick(data: AccessoryInfoEntity): void {
     this.configParams = new SetSupplyConfigParams();
-    this.configParams.supply_type = data.supply_type || '';
     this.configParams.accessory_ids = data.accessory_id;
+    if (data.supply_config) {
+      this.configParams.supply_type = data.supply_config.supply_type || '';
+      this.configParams.supplier_id = data.supply_config.supplier ? data.supply_config.supplier.supplier_id : '';
+      this.configParams.warehouse_id = data.supply_config.warehouse ? data.supply_config.warehouse.warehouse_id : '';
+      if (this.configParams.supply_type === 1 && this.configParams.supplier_id) {
+        if (this.supplierList.some(supplier => supplier.supplier_id === this.configParams.supplier_id)) {
+          this.requestWarehouseList(this.configParams.supplier_id);
+          if (!this.warehouseList.some(warehouse => warehouse.warehouse_id === this.configParams.warehouse_id)) {
+            this.configParams.warehouse_id = '';
+          }
+        } else {
+          this.configParams.supplier_id = '';
+        }
+      }
+    }
     $('#configModal').modal();
   }
 
+  // 批量设置供应商
+  public onBatchSetting() {
+    this.configParams = new SetSupplyConfigParams();
+    this.configParams.accessory_ids = this.tempCheckedArr.join(',');
+    $('#configModal').modal();
+  }
+
+  // 切换供货方式
   public onChangeSupplyType(event: any): void {
+    this.configParams.supplier_id = '';
+    this.configParams.warehouse_id = '';
     if (event.target.value) {
       this.configParams.supply_type = Number(event.target.value);
+    }
+  }
+
+  // 切换供应商
+  public onChangeSupplier(event: any): void {
+    this.configParams.warehouse_id = '';
+    if (event.target.value) {
+      this.requestWarehouseList(event.target.value);
     }
   }
 

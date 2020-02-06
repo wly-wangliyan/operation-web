@@ -1,6 +1,14 @@
 <div class="content-header">
   <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'供货配置列表'" [level2RelativePath]="'../../'">
   </app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" class="header-btn" [disabled]="tempCheckedArr.length===0" nz-button nzType="primary"
+        (appZDebounceClick)="onBatchSetting()">
+        批置设置
+      </button>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="table-container">
@@ -13,11 +21,10 @@
         </div>
         <div class="form-group">
           <span>供货方式：</span>
-          <select class="form-control" [(ngModel)]="searchParams.supply_type" name="supply_type">
+          <select class="form-control" [(ngModel)]="searchParams.supply_type" name="search_supply_type">
             <option value="">全部</option>
             <option value="3">空</option>
-            <option value="1">第三方供应商</option>
-            <option value="2">门店自供</option>
+            <option *ngFor="let type of supply_type" [value]="type">{{type|supplyType}}</option>
           </select>
         </div>
 
@@ -26,6 +33,27 @@
           <select class="form-control" [(ngModel)]="searchParams.project_id" name="project_id">
             <option value="">全部</option>
             <option *ngFor="let project of projectList" [value]="project.project_id">{{project.project_name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <span>供应商：</span>
+          <select class="form-control" [(ngModel)]="searchParams.supplier_id" name="search_supplier_id"
+            (change)="onChangeSearchSupplier($event)" style="width: 200px;">
+            <option value="">全部</option>
+            <option *ngFor="let supplier of supplierList" [value]="supplier.supplier_id">{{supplier.supplier_name}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <span>供应商仓库：</span>
+          <select class="form-control" [(ngModel)]="searchParams.warehouse_id" name="search_warehouse_id"
+            style="width: 200px;">
+            <option value="">全部</option>
+            <option *ngFor="let warehouse of searchWarehouseList" [value]="warehouse.warehouse_id">
+              {{warehouse.warehouse_name}}
+            </option>
           </select>
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
@@ -39,7 +67,11 @@
         (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
         <thead>
           <tr>
-            <th>序号</th>
+            <th>
+              <input type="checkbox" class="check-all" (change)="onCheckAll($event)" name="checkbox_all"
+                [disabled]="!accessoryList || accessoryList.length===0">
+            </th>
+            <!-- <th>序号</th> -->
             <th style="width: 18%;">产品信息</th>
             <th>配件所属品牌</th>
             <th>供货方式</th>
@@ -50,7 +82,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
+            <td>
+              <input type="checkbox" class="check-single" (change)="onChangeCheck($event)"
+                name="checkbox_{{data.accessory_id}}" [value]="data.accessory_id">
+            </td>
+            <!-- <td>{{i+(pageIndex-1)*15+1}}</td> -->
             <td>
               <div class="img-item">
                 <div class="img-box">
@@ -64,16 +100,33 @@
                 <div style="text-align: left;padding: 10px 0;">
                   <span [title]="data.accessory_name ||''"
                     style="word-break: keep-all;">{{data.accessory_name | zMaxLength:15}}</span>
-                  <div class="match-info">
-                    <!-- <label>已匹配</label> -->
+                  <div class="match-info" *ngIf="data.accessory_params">
+                    <label *ngIf="data.accessory_params.oil_num">{{data.accessory_params.oil_num}}</label>
+                    <label *ngIf="data.accessory_params.oil_type">{{data.accessory_params.oil_type}}</label>
+                    <label *ngIf="data.accessory_params.oil_api">{{data.accessory_params.oil_api}}</label>
+                    <label *ngIf="data.accessory_params.oil_place"
+                      [title]="data.accessory_params.oil_place">{{data.accessory_params.oil_place|zMaxLength:10}}</label>
+                    <label *ngIf="data.accessory_params.oil_expire"
+                      [title]="data.accessory_params.oil_expire">{{data.accessory_params.oil_expire|zMaxLength:10}}</label>
+                    <label>哈哈哈哈哈哈哈哈哈哈...</label>
                   </div>
                 </div>
               </div>
             </td>
-            <td [title]="data.accessory_brand || ''">{{(data.accessory_brand | zMaxLength:6) || '--'}}</td>
-            <td>{{data.supply_type?(data.supply_type===1?'第三方供应商':'门店自供'):'--'}}</td>
-            <td>--</td>
-            <td>--</td>
+            <td [title]="data.accessory_brand?.brand_name || ''">
+              {{(data.accessory_brand?.brand_name | zMaxLength:6) || '--'}}
+            </td>
+
+            <ng-container *ngIf="data.supply_config">
+              <td>{{data.supply_config.supply_type|supplyType}}</td>
+              <td>{{data.supply_config.supply_type===1 && data.supply_config.supplier?.supplier_name || '--'}}</td>
+              <td>{{data.supply_config.supply_type===1 && data.supply_config.warehouse?.warehouse_name || '--'}}</td>
+            </ng-container>
+            <ng-container *ngIf="!data.supply_config">
+              <td>--</td>
+              <td>--</td>
+              <td>--</td>
+            </ng-container>
             <td class="operation">
               <a [title]="'设置'" (click)="onSettingClick(data)">设置</a>
             </td>
@@ -96,16 +149,46 @@
       <div class="modal-body">
         <form autocomplete="off" class="form-horizontal" #configForm="ngForm">
 
-          <div class="row" style="margin-bottom: 40px;">
+          <div class="row" [ngStyle]="{'margin-bottom':configParams.supply_type===1?'0':'40px'}">
             <label class="control-label">
-              <b>&nbsp;</b>
+              <b>*</b>
               <span>供货方式：</span>
             </label>
             <div class="control-input">
               <select class="form-control" [(ngModel)]="configParams.supply_type" name="supply_type"
                 (change)="onChangeSupplyType($event)">
-                <option value="">无</option>
-                <option value="2">门店自供</option>
+                <option value="">空</option>
+                <option *ngFor="let type of supply_type" [value]="type">{{type|supplyType}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="configParams.supply_type===1">
+            <label class="control-label">
+              <b>*</b>
+              <span>供应商：</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="configParams.supplier_id" name="supplier_id"
+                (change)="onChangeSupplier($event)" required>
+                <option value="">请选择</option>
+                <option *ngFor="let supplier of supplierList" [value]="supplier.supplier_id">{{supplier.supplier_name}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 40px;" *ngIf="configParams.supply_type===1">
+            <label class="control-label">
+              <b>*</b>
+              <span>供应仓库：</span>
+            </label>
+            <div class="control-input">
+              <select class="form-control" [(ngModel)]="configParams.warehouse_id" name="warehouse_id" required>
+                <option value="">请选择</option>
+                <option *ngFor="let warehouse of warehouseList" [value]="warehouse.warehouse_id">
+                  {{warehouse.warehouse_name}}
+                </option>
               </select>
             </div>
           </div>

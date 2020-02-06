@@ -5,7 +5,7 @@ import { HttpService, LinkResponse } from '../../core/http.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { AccessoryEntity } from '../accessory-library/accessory-library.service';
+import { AccessoryEntity, ProjectEntity } from '../accessory-library/accessory-library.service';
 import { WarehouseEntity, SupplierEntity } from '../supplier-management/supplier-management-http.service';
 
 export class SearchParams extends EntityBase {
@@ -15,10 +15,13 @@ export class SearchParams extends EntityBase {
   public page_size = 45; // 每页条数
 }
 
+// 供货配置筛选参数
 export class SupplyConfigParams extends EntityBase {
   public accessory_name: string = undefined; // 配件名称
   public supply_type = ''; // 供货方式 1:第三方供应商  2:门店自供
   public project_id = ''; // 保养项目ID(机油ID/机油滤清器ID) "xxx"
+  public supplier_id = ''; // 供货商ID
+  public warehouse_id = ''; // 供应仓库ID
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -185,8 +188,8 @@ export class SupplyConfigEntity extends EntityBase {
   public repair_shop: RepairShopEntity = undefined; // 	汽修店 外键
   public accessory: AccessoryEntity = undefined; // 配件
   public supply_type: number = undefined; // 供货方式 1:第三方供应商  2:门店自供
-  public supplier: any = undefined; // 供应商
-  public warehouse: any = undefined;  // 仓库
+  public supplier: SupplierEntity = undefined; // 供应商
+  public warehouse: WarehouseEntity = undefined;  // 仓库
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
 
@@ -197,15 +200,32 @@ export class SupplyConfigEntity extends EntityBase {
     if (propertyName === 'accessory') {
       return AccessoryEntity;
     }
+    if (propertyName === 'supplier') {
+      return SupplierEntity;
+    }
+    if (propertyName === 'warehouse') {
+      return WarehouseEntity;
+    }
+    return null;
+  }
+}
+
+// 配件信息
+export class AccessoryInfoEntity extends AccessoryEntity {
+  public supply_config: SupplyConfigEntity = undefined;
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'supply_config') {
+      return SupplyConfigEntity;
+    }
     return null;
   }
 }
 
 export class SupplyConfigLinkResponse extends LinkResponse {
-  public generateEntityData(results: Array<any>): Array<AccessoryEntity> {
-    const tempList: Array<AccessoryEntity> = [];
+  public generateEntityData(results: Array<any>): Array<AccessoryInfoEntity> {
+    const tempList: Array<AccessoryInfoEntity> = [];
     results.forEach(res => {
-      tempList.push(AccessoryEntity.Create(res));
+      tempList.push(AccessoryInfoEntity.Create(res));
     });
     return tempList;
   }
@@ -386,6 +406,20 @@ export class GarageManagementService {
       const tempList: Array<WarehouseEntity> = [];
       result.body.forEach(res => {
         tempList.push(WarehouseEntity.Create(res));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 获取项目列表
+   */
+  public requestProjectListData(): Observable<Array<ProjectEntity>> {
+    const httpUrl = `${this.domain}/admin/projects/all`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<ProjectEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(ProjectEntity.Create(data));
       });
       return tempList;
     }));
