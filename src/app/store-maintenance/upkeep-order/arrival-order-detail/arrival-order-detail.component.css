@@ -93,4 +93,40 @@
 
 .img-box img {
   width: 80px;
+  height: 80px;
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.match-info label {
+  display: inline-block;
+  min-height: 20px;
+  min-width: 70px;
+  padding: 0 8px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 5px 0 0;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.match-info img {
+  height: 18px;
+  margin: 10px 5px 0 0;
+}
+
+.match-info label:nth-child(odd) {
+  background: #c6e2ff;
+  color: #409dfd;
+}
+
+.match-info label:nth-child(even) {
+  background: #e1f3d8;
+  color: #67c23a;
 }
