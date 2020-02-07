@@ -37,9 +37,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const temp = [];
-    temp.push({});
-    this.projectList = temp;
     this.searchText$.pipe(
         debounceTime(500),
         switchMap(() =>

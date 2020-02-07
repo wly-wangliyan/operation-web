@@ -18,7 +18,6 @@ export class ProjectEditComponent implements OnInit {
   public errmsg: string;
   public isEdit: boolean;
 
-  private continueRequestSubscription: Subscription;
   private sureCallback: any;
   private closeCallback: any;
 
@@ -116,7 +115,6 @@ export class ProjectEditComponent implements OnInit {
     this.currentParam.option = this.optionList.map(v => v.option);
     this.projectHttpService.requestEditParamData
     (this.currentProject.project_id, this.currentParam.param_id, this.currentParam.option).subscribe(() => {
-      this.onClose();
       this.globalService.promptBox.open('保存成功！', () => {
         this.onEditParamClose();
       });
@@ -128,16 +126,6 @@ export class ProjectEditComponent implements OnInit {
   // 清空
   public clear() {
     this.errmsg = '';
-  }
-
-  // 确定按钮回调
-  private sureCallbackInfo() {
-    if (this.sureCallback) {
-      const temp = this.sureCallback;
-      this.closeCallback = null;
-      this.sureCallback = null;
-      temp();
-    }
   }
 
   // 接口错误状态
