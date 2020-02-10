@@ -118,7 +118,7 @@ export class AccessoryEditComponent implements OnInit {
     this.accessory_image_url = this.accessoryData.accessory_images ? this.accessoryData.accessory_images.split(',') : [];
     this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
     this.accessoryParams.project_id = this.accessoryData.project ? this.accessoryData.project.project_id : '';
-    if (this.accessoryParams.project_id) {
+    if (this.accessoryParams.project_id && this.accessoryParams.project_name === '机油') {
       this.requestProjectParams();
     }
     this.accessoryParams.project_name = this.accessoryData.project ? this.accessoryData.project.project_name : '';
