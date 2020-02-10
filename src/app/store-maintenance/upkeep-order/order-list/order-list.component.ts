@@ -406,6 +406,21 @@ export class OrderListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 服务完成
+  public onFinishClick(arrival_order_id: string): void {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，请确认是否已完成保养服务，且车主已知晓并同意完成服务？', () => {
+      this.globalService.confirmationBox.close();
+      this.orderService.requestFinishDate(arrival_order_id).subscribe(res => {
+        this.globalService.promptBox.open('已完成服务');
+        this.searchArrivalOrderText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('未完成服务！', null, 2000, null, false);
+        }
+      });
+    });
+  }
+
   /* 生成并检查参数有效性 */
   private generateAndCheckParamsValid(): boolean {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),

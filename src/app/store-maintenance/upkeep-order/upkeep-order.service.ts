@@ -154,6 +154,7 @@ export class UpkeepOrderLinkResponse extends LinkResponse {
 export class AccessoryItem extends EntityBase {
   public accessory_name: string = undefined; // 配件名称
   public accessory_params: AccessoryParamsEntity = undefined; // 配件参数
+  public supply_type: number = undefined; // 供应方式
   public number: number = undefined; // 数量
   public content: string = undefined; // 规格
   public image: string = undefined; // 规格图片
@@ -458,9 +459,9 @@ export class UpkeepOrderService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestFinishDate(arrival_order_id: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}`;
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}/user_status`;
     const body = {
-      status: 5
+      user_status: 5
     };
     return this.httpService.patch(httpUrl, body);
   }

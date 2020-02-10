@@ -1,6 +1,13 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养订单'" [level2Name]="'订单详情'" [level1RelativePath]="'../../'">
   </app-crumb>
+  <ul class="header-right">
+    <li
+      *ngIf="orderRecord.user_status===3 && (orderRecord.is_checked && orderRecord.check_images || !orderRecord.is_checked)"
+      class="big-bg" (click)="onFinishClick()">
+      <a>完成服务</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="content-container">

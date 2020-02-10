@@ -59,4 +59,19 @@ export class ArrivalOrderDetailComponent implements OnInit {
     });
   }
 
+  // 服务完成
+  public onFinishClick(): void {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，请确认是否已完成保养服务，且车主已知晓并同意完成服务？', () => {
+      this.globalService.confirmationBox.close();
+      this.orderService.requestFinishDate(this.arrival_order_id).subscribe(res => {
+        this.globalService.promptBox.open('已完成服务');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('未完成服务！', null, 2000, null, false);
+        }
+      });
+    });
+  }
+
 }
