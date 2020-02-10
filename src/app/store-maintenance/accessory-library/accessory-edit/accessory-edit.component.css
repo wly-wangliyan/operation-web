@@ -149,3 +149,12 @@
 :host ::ng-deep .ant-table-tbody>tr {
   height: 68px;
 }
+
+select {
+  font-size: 14px;
+}
+
+input:not(:disabled),
+input:not(:read-only) {
+  background-color: #fff !important;
+}

@@ -244,8 +244,8 @@
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.buy_fee" nz-input autocomplete="off"
-                          name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
+                        <input class="price-input" [(ngModel)]="data.settlement_fee" nz-input autocomplete="off"
+                          name="settlement-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
@@ -258,7 +258,8 @@
                     </td>
                     <td>
                       <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
-                        name="store-{{data.time}}-{{i}}" required maxlength='5' />
+                        name="store-{{data.time}}-{{i}}" placeholder="0-99999" required maxlength='5'
+                        appIntNumber="true" />
                     </td>
                     <td>
                       <span class='volume'>已售：{{data.sale_num||0}}</span>
@@ -266,6 +267,9 @@
                   </tr>
                 </tbody>
               </nz-table>
+            </div>
+            <div class="text-danger">
+              <span class="input-error">{{specificationErrors}}</span>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -278,19 +282,19 @@
                 [nzNoResult]="noResultText" #basicTable [nzScroll]="{ y: '400px' }">
                 <thead>
                   <tr>
-                    <th style="width: 50px;">图片</th>
+                    <th style="width: 80px !important">图片</th>
                     <th style="width: 80px;">{{projectInfo?.specification?.name}}</th>
                     <!-- <th style="width: 80px;">容量</th> -->
-                    <th style="width: 70px;">尾款原价</th>
-                    <th style="width: 70px;">尾款现价</th>
-                    <th style="width: 60px;">库存</th>
+                    <th style="width: 80px;">尾款原价</th>
+                    <th style="width: 80px;">尾款现价</th>
+                    <th style="width: 80px;">库存</th>
                     <th></th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of specificationsList; let i=index">
-                    <td style="width: 60px;">
+                    <td style="width: 80px;">
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
                           [limitImgSize]="2" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
@@ -350,6 +354,9 @@
                 </tbody>
               </nz-table>
             </div>
+            <div class="text-danger">
+              <span class="input-error">{{specificationErrors}}</span>
+            </div>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="蓄电池"'>
@@ -362,9 +369,8 @@
                     <nz-form-label [nzNoColon]='true'>预付原价</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="originPriceUnit">
-                        <input class="price-input" [(ngModel)]="accessoryParams.real_prepaid_fee" nz-input
-                          autocomplete="off" name="real_prepaid_fee" maxlength='8' appFloatNumber
-                          [appMaxNumber]='99999.99' required />
+                        <input class="price-input" [(ngModel)]="real_prepaid_fee" nz-input autocomplete="off"
+                          name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
                     </nz-form-control>
@@ -376,9 +382,8 @@
                     <nz-form-control>
                       <div>
                         <nz-input-group [nzSuffix]="salePriceUnit">
-                          <input class="price-input" [(ngModel)]="accessoryParams.right_prepaid_fee" nz-input
-                            autocomplete="off" name="right_prepaid_fee" maxlength='8' appFloatNumber
-                            [appMaxNumber]='99999.99' required />
+                          <input class="price-input" [(ngModel)]="right_prepaid_fee" nz-input autocomplete="off"
+                            name="right_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
                         </nz-input-group>
                         <ng-template #salePriceUnit>元</ng-template>
                       </div>
@@ -414,7 +419,7 @@
         </nz-form-item>
         <div style="margin-top: 40px;margin-bottom: 40px">
           <button class="sure-btn" nz-button nzType="primary" (click)='onSaveFormSubmit()'
-            [disabled]="!workFeesForm.form.valid||isSaveBtnDisabled">保存</button>
+            [disabled]="!workFeesForm.form.valid||isSaveBtnDisabled ">保存</button>
           <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>
       </div>
