@@ -62,6 +62,7 @@
 
 .options-space {
     width: 280px;
+    height: min-content;
     background: #F7F8FA;
     border: 1px solid #D1D1D1;
 }
