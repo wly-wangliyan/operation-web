@@ -26,7 +26,7 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex [hidden]='!accessoryParams.project_id'>
-          <nz-form-label nzRequired [nzNoColon]='true'>产品图片</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]='true'>图片</nz-form-label>
           <nz-form-control>
             <app-z-photo-select #accessoryImg file_id="accessoryImg" [hasAddPicture]="true" [hasDeletePicture]="true"
               [limitImgSize]="2" [isCutCoverImg]="true" [aspectRatio]='1/1' [maxLength]="6"
@@ -209,6 +209,7 @@
                     <th>售价</th>
                     <th>库存</th>
                     <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -263,6 +264,13 @@
                     </td>
                     <td>
                       <span class='volume'>已售：{{data.sale_num||0}}</span>
+                    </td>
+                    <td class="operation">
+                      <a [title]="'移除'" class="del-btn" *ngIf="specificationsList.length>1"
+                        (click)="onDelSpecifications(data,i)">移除</a>
+                      <a [title]="'添加'" class="add-btn"
+                        *ngIf="specificationsList.length<50 && i===specificationsList.length-1"
+                        (click)="onAddSpecifications()">添加</a>
                     </td>
                   </tr>
                 </tbody>
@@ -338,7 +346,8 @@
                     </td>
                     <td style="width: 100px;">
                       <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
-                        name="store-{{data.time}}-{{i}}" required maxlength='5' />
+                        name="store-{{data.time}}-{{i}}" required maxlength='5' placeholder="0-99999"
+                        appIntNumber="true" />
                     </td>
                     <td>
                       <span class='volume'>已售：{{data.sale_num||0}}</span>
@@ -419,7 +428,7 @@
         </nz-form-item>
         <div style="margin-top: 40px;margin-bottom: 40px">
           <button class="sure-btn" nz-button nzType="primary" (click)='onSaveFormSubmit()'
-            [disabled]="!workFeesForm.form.valid||isSaveBtnDisabled ">保存</button>
+            [disabled]="!workFeesForm.form.valid||isSaveBtnDisabled">保存</button>
           <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
         </div>
       </div>

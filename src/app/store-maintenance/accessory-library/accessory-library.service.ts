@@ -9,7 +9,7 @@ import { ParamEntity } from '../project-management/project-management-http.servi
 
 // 规格实体
 export class SpecificationEntity extends EntityBase {
-  public specification_id: string = undefined; // string	规格id-主键
+  public specification_id = ''; // string	规格id-主键
   public name: string = undefined; // string	名称
   public accessory: AccessoryEntity = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片

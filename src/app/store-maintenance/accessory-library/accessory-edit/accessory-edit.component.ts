@@ -59,7 +59,6 @@ export class AccessoryEditComponent implements OnInit {
   public accessoryParams = new SearchAccessoryParams(); // 编辑配件参数
   public specificationsList: Array<SpecificationEntity> = [];
   public specificationsDelList: Array<SpecificationEntity> = [];
-  public tempSpecificationsParams: Array<SpecificationEntity> = []; // 规格参数
   public price_info: PriceInfoEntity = new PriceInfoEntity(); // 机滤价格参数
   public projectInfo: ProjectEntity = new ProjectEntity();
   public accessoryData = new AccessoryEntity(); // 配件详情
@@ -190,12 +189,12 @@ export class AccessoryEditComponent implements OnInit {
       const specification = new SpecificationEntity();
       specification.time = this.num;
       this.specificationsList.push(specification);
-      if (this.accessory_id) {
+      /*if (this.accessory_id) {
         this.accessoryData.specification_info.forEach((item, index) => {
           this.specificationsDelList[index] = item.clone();
           this.specificationsDelList[index].is_deleted = true;
         });
-      }
+      }*/
       this.price_info = new PriceInfoEntity();
       this.getEditorData(null);
     }
@@ -283,28 +282,9 @@ export class AccessoryEditComponent implements OnInit {
   public onAddSpecifications() {
     this.clear();
     const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
-    const batteryModelList = this.specificationsList.filter(m => !(m.battery_model));
-    const originalBalanceFeeList = this.specificationsList.filter(o => !o.original_balance_fee);
-    const saleBalanceFeeList = this.specificationsList.filter(b => !b.sale_balance_fee);
-    const storeList = this.specificationsList.filter(s => !(s.store || Number(s.store) === 0));
-    const specificationsPriceList = this.specificationsList.filter(i =>
-      Number(i.sale_balance_fee) > Number(i.original_balance_fee));
-    const modelNameList = this.specificationsList.map(m => m.battery_model);
     if (imageNoneList.length !== 0) {
       this.specificationErrors = `请先选择规格图片!`;
-    } else if (batteryModelList.length !== 0) {
-      this.specificationErrors = `请填写型号后再添加!`;
-    } else if (new Set(modelNameList).size !== modelNameList.length) {
-      this.specificationErrors = `型号不可重复!`;
-    } else if (originalBalanceFeeList.length !== 0) {
-      this.specificationErrors = `请填写尾款原价后再添加!`;
-    } else if (saleBalanceFeeList.length !== 0) {
-      this.specificationErrors = `请填写尾款现价后再添加!`;
-    } else if (storeList.length !== 0) {
-      this.specificationErrors = `请填写库存后再添加!`;
-    } else if (specificationsPriceList.length !== 0) {
-      this.specificationErrors = `规格的尾款现价不得大于尾款原价!`;
-    } else {
+    } else if (this.validSpecificationInfo(false)) {
       timer(0).subscribe(() => {
         this.num++;
         const specification = new SpecificationEntity();
@@ -313,7 +293,6 @@ export class AccessoryEditComponent implements OnInit {
       });
       timer(0).subscribe(() => {
         $('.ant-table-body').scrollTop($('.ant-table-body')[0].scrollHeight);
-
       });
     }
   }
@@ -333,7 +312,7 @@ export class AccessoryEditComponent implements OnInit {
     if (this.accessoryParams.project_id) {
       if (this.accessoryParams.project_name === '机油滤清器') {
         return this.accessoryImgComponent.imageList.length === 0;
-      } else {
+      } else if (this.accessoryImgComponent && this.specificationsImgSelectList) {
         const imageNoneList = this.specificationsImgSelectList.filter(i => i.imageList.length === 0);
         return this.accessoryImgComponent.imageList.length === 0 || imageNoneList.length > 0;
       }
@@ -346,39 +325,24 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     if (this.accessoryImgComponent.imageList.length === 0) {
       this.errPositionItem.icon.isError = true;
-      this.errPositionItem.icon.errMes = '请上传产品图片！';
+      this.errPositionItem.icon.errMes = '请上传图片！';
     } else if (this.accessoryParams.project_name === '蓄电池') {
       this.handleParams();
       const regPhone = /^(1[3-9])\d{9}$/g;
-      const specificationsPriceList = this.accessoryParams.specifications.filter(a =>
-        Number(a.sale_balance_fee) > Number(a.original_balance_fee));
-      const modelNameList = this.accessoryParams.specifications.map(m => m.battery_model);
-      if (new Set(modelNameList).size !== modelNameList.length) {
-        this.specificationErrors = `规格型号不可重复!`;
-      } else if (specificationsPriceList.length !== 0) {
-        this.specificationErrors = `规格的尾款现价不得大于尾款原价!`;
-      } else if (Number(this.accessoryParams.right_prepaid_fee) > Number(this.accessoryParams.real_prepaid_fee)) {
+      if (Number(this.accessoryParams.right_prepaid_fee) > Number(this.accessoryParams.real_prepaid_fee)) {
         this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
       } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
         this.operationTelErrors = '请输入正确的运营手机号！';
       } else {
+        this.accessoryParams.real_prepaid_fee = this.handleCentPrice(this.real_prepaid_fee);
+        this.accessoryParams.right_prepaid_fee = this.handleCentPrice(this.right_prepaid_fee);
         this.isSaveBtnDisabled = true;
         this.handleUpdateAssessoryData();
       }
     } else if (this.accessoryParams.project_name === '机油') {
       this.handleParams();
-      const specificationsPriceNew1List = this.accessoryParams.specifications.filter(a =>
-        Number(a.sale_fee) > Number(a.original_fee));
-      const specificationsPriceNew2List = this.accessoryParams.specifications.filter(a =>
-        Number(a.settlement_fee) > Number(a.sale_fee));
-      if (specificationsPriceNew1List.length !== 0) {
-        this.specificationErrors = `规格的原价应大于等于售价!`;
-      } else if (specificationsPriceNew2List.length !== 0) {
-        this.specificationErrors = `规格的结算价应小于等于售价!`;
-      } else {
-        this.isSaveBtnDisabled = true;
-        this.handleUpdateAssessoryData();
-      }
+      this.isSaveBtnDisabled = true;
+      this.handleUpdateAssessoryData();
     } else { // 机油滤清器
       if (!this.price_info.original_fee || Number(this.price_info.original_fee) === 0) {
         this.specificationErrors = '原价应大于0！';
@@ -393,26 +357,7 @@ export class AccessoryEditComponent implements OnInit {
       } else {
         this.isSaveBtnDisabled = true;
         this.accessoryParams.price_info = this.price_info.clone().toEditJson();
-        forkJoin(this.accessoryImgComponent.upload()).subscribe(
-          data => {
-            this.accessory_image_url = this.accessoryImgComponent.imageList.map(i => i.sourceUrl);
-            this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
-            this.requestUpdateAssessoryData();
-          }, err => {
-            this.isSaveBtnDisabled = false;
-            if (!this.globalService.httpErrorProcess(err)) {
-              if (err.status === 422) {
-                this.errPositionItem.icon.isError = true;
-                this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
-              } else if (err.status === 413) {
-                this.errPositionItem.icon.isError = true;
-                this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
-              } else {
-                this.errPositionItem.icon.isError = true;
-                this.errPositionItem.icon.errMes = '上传失败，请重试！';
-              }
-            }
-          });
+        this.handleUpdateAssessoryData();
       }
     }
   }
@@ -420,14 +365,12 @@ export class AccessoryEditComponent implements OnInit {
 
   // 处理服务配置入参
   private handleParams() {
-    this.tempSpecificationsParams = [];
+    const tempSpecificationsParams = [];
     this.specificationsList.forEach(item => {
       const specification = item.toEditJson();
-      this.tempSpecificationsParams.push(specification);
+      tempSpecificationsParams.push(specification);
     });
-    this.accessoryParams.specifications = this.tempSpecificationsParams.concat(this.specificationsDelList);
-    this.accessoryParams.real_prepaid_fee = this.handleCentPrice(this.real_prepaid_fee);
-    this.accessoryParams.right_prepaid_fee = this.handleCentPrice(this.right_prepaid_fee);
+    this.accessoryParams.specifications = tempSpecificationsParams;
   }
 
   // 钱的单位由分转换为元
@@ -442,18 +385,23 @@ export class AccessoryEditComponent implements OnInit {
 
   // 处理上传图片并更新配件库接口
   private handleUpdateAssessoryData() {
-    forkJoin(this.accessoryImgComponent.upload()).subscribe(
-      data => {
-        this.accessory_image_url = this.accessoryImgComponent.imageList.map(image => image.sourceUrl);
-        this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
-        let i = 0;
+    forkJoin(this.accessoryImgComponent.upload()).subscribe(data => {
+      this.accessory_image_url = this.accessoryImgComponent.imageList.map(image => image.sourceUrl);
+      this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
+
+      if (this.accessoryParams.project_name !== '机油滤清器') {
         const specificationsListLength = this.specificationsImgSelectList.length;
         this.specificationsImgSelectList.forEach((child, index) => {
           child.upload().subscribe(() => {
             const newImage = child.imageList.map(s => s.sourceUrl);
             this.specificationsList[index].image = newImage.join(',');
-            i++;
-            if (i === specificationsListLength) {
+            if (this.validSpecificationInfo()) {
+              this.accessoryParams.specifications = this.accessoryParams.specifications.concat(this.specificationsDelList);
+              this.requestUpdateAssessoryData();
+            } else {
+              this.isSaveBtnDisabled = false;
+            }
+            /*if (i === specificationsListLength) {
               const imageNoneList = this.specificationsList.filter(v => !v.image);
               if (imageNoneList.length !== 0) {
                 this.isSaveBtnDisabled = false;
@@ -461,7 +409,7 @@ export class AccessoryEditComponent implements OnInit {
               } else {
                 this.requestUpdateAssessoryData();
               }
-            }
+            }*/
           }, err => {
             this.isSaveBtnDisabled = false;
             if (!this.globalService.httpErrorProcess(err)) {
@@ -478,38 +426,45 @@ export class AccessoryEditComponent implements OnInit {
             }
           });
         });
-      }, err => {
-        this.isSaveBtnDisabled = false;
-        if (!this.globalService.httpErrorProcess(err)) {
-          if (err.status === 422) {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
-          } else if (err.status === 413) {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
-          } else {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes = '上传失败，请重试！';
-          }
+      } else {
+        this.requestUpdateAssessoryData();
+      }
+    }, err => {
+      this.isSaveBtnDisabled = false;
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
+        } else if (err.status === 413) {
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
+        } else {
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes = '上传失败，请重试！';
         }
-      });
+      }
+    });
   }
 
   // 校验规格信息
-  private validSpecificationInfo(): boolean {
+  private validSpecificationInfo(validImg: boolean = true): boolean {
     let result = true;
     const tempSpecificationNameList = [];
     this.accessoryParams.specifications = [];
     this.specificationsList.forEach((specification, index) => {
       let model_name = '';
-      if (!specification.image) {
+      if (validImg && !specification.image) {
         this.specificationErrors = `第${index + 1}条规格信息-请上传规格图片！`;
         result = false;
         return;
       }
       if (this.accessoryParams.project_name === '蓄电池') {
         model_name = specification.battery_model;
-        if (tempSpecificationNameList.includes(specification.battery_model)) {
+        if (!specification.battery_model) {
+          this.specificationErrors = `第${index + 1}条规格信息-请输入${this.projectInfo.specification.name}！`;
+          result = false;
+          return;
+        } else if (tempSpecificationNameList.includes(specification.battery_model)) {
           this.specificationErrors = `第${index + 1}条规格信息-${this.projectInfo.specification.name}名称重复！`;
           result = false;
           return;
@@ -528,7 +483,11 @@ export class AccessoryEditComponent implements OnInit {
         }
       } else if (this.accessoryParams.project_name === '机油') {
         model_name = specification.content;
-        if (tempSpecificationNameList.includes(specification.content)) {
+        if (!specification.content) {
+          this.specificationErrors = `第${index + 1}条规格信息-请输入${this.projectInfo.specification.name}！`;
+          result = false;
+          return;
+        } else if (tempSpecificationNameList.includes(specification.content)) {
           this.specificationErrors = `第${index + 1}条规格信息-${this.projectInfo.specification.name}名称重复！`;
           result = false;
           return;
@@ -554,7 +513,8 @@ export class AccessoryEditComponent implements OnInit {
           return;
         }
       }
-      if (!specification.store || Number(specification.store) !== 0) {
+
+      if (!specification.store && Number(specification.store) !== 0) {
         this.specificationErrors = `第${index + 1}条规格信息-库存应输入0-99999！`;
         result = false;
         return;
