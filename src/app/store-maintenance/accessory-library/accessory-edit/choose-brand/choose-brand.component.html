@@ -8,9 +8,9 @@
         <div class="contet-box">
           <div class="content-list">
             <ul>
-              <li *ngFor="let category of brandList" (click)="onCategoryClick(category)"
-                [class.active]="category.accessory_brand_id === currentCategory">
-                {{category.brand_name}}
+              <li *ngFor="let brand of brandList" (click)="onBrandClick(brand)"
+                [class.active]="brand.accessory_brand_id === currentBrand.accessory_brand_id">
+                {{brand.brand_name}}
               </li>
             </ul>
           </div>

@@ -1,16 +1,19 @@
 <div class="content-header">
   <app-crumb [level1Name]="'配件库'" [level1RelativePath]="'../'" [level2Name]="accessory_id?'编辑配件':'创建配件'"></app-crumb>
 </div>
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
   <div class='des_card'>
-    <form nz-form class="content-layout" #workFeesForm="ngForm">
+    <form nz-form class="content-layout" #workFeesForm="ngForm" autocomplete="off">
       <div class="card_content">
         <nz-form-item nzFlex>
           <nz-form-label nzRequired [nzNoColon]='true'>所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
-              <input class="pro-input" nz-input [(ngModel)]="accessoryParams.project_name" autocomplete="off"
-                name="project" disabled />
+              <input class="pro-input" nz-input [(ngModel)]="accessoryParams.project_name" name="project" required
+                readonly />
               <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
             </nz-input-group>
           </nz-form-control>
@@ -19,7 +22,7 @@
           <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
           <nz-form-control>
             <input class="pro-name" [(ngModel)]="accessoryParams.accessory_name" placeholder="输入1-30个字标题" nz-input
-              autocomplete="off" name="accessory-name" required maxlength='30' />
+              name="accessory-name" required maxlength='30' appIgnoreSpace />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex [hidden]='!accessoryParams.project_id'>
@@ -36,13 +39,13 @@
             <div>注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</div>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name!=="蓄电池"'>
+        <nz-form-item nzFlex *ngIf='accessoryParams.project_id'>
           <nz-form-label nzRequired [nzNoColon]='true'>所属品牌</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
-              <input class="pro-input" nz-input [(ngModel)]="accessoryParams.project_name" autocomplete="off"
-                name="project" disabled />
-              <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
+              <input class="pro-input" nz-input [(ngModel)]="accessoryParams.accessory_brand_name" autocomplete="off"
+                name="brand_name" required readonly />
+              <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenBrandModal()'>选择</a></ng-template>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -56,12 +59,10 @@
                   <nz-form-item nzFlex>
                     <nz-form-label nzRequired [nzNoColon]='true'>机油标号</nz-form-label>
                     <nz-form-control>
-                      <select class="form-control" name="oil_num"
-                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_num"
+                      <select class="form-control" name="oil_num" [(ngModel)]="accessoryParams.accessory_params.oil_num"
                         required>
                         <option value="">请选择</option>
-                        <!-- <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
-                        </option> -->
+                        <option *ngFor='let data of oil_num' [value]=data>{{data}}</option>
                       </select>
                     </nz-form-control>
                   </nz-form-item>
@@ -71,12 +72,9 @@
                     <nz-form-label nzRequired [nzNoColon]='true'>机油类别</nz-form-label>
                     <nz-form-control>
                       <select class="form-control" name="oil_type"
-                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_type"
-                        required>
+                        [(ngModel)]="accessoryParams.accessory_params.oil_type" required>
                         <option value="">请选择</option>
-                        <option [value]="'1'">全合成</option>
-                        <option [value]="'2'">半合成</option>
-                        <option [value]="'3'">矿物质</option>
+                        <option *ngFor='let data of oil_type' [value]=data>{{data}}</option>
                       </select>
                     </nz-form-control>
                   </nz-form-item>
@@ -86,10 +84,9 @@
                     <nz-form-label [nzNoColon]='true'>API等级</nz-form-label>
                     <nz-form-control class="ml_10">
                       <select class="form-control" name="oil_api"
-                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_api">
+                        [(ngModel)]="accessoryParams.accessory_params.oil_api">
                         <option value="">请选择</option>
-                        <!-- <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
-                        </option> -->
+                        <option *ngFor='let data of oil_api' [value]=data>{{data}}</option>
                       </select>
                     </nz-form-control>
                   </nz-form-item>
@@ -100,8 +97,7 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>商品产地</nz-form-label>
                     <nz-form-control>
-                      <input class="params"
-                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_place"
+                      <input class="params" [(ngModel)]="accessoryParams.accessory_params.oil_place"
                         placeholder="输入0-50字" nz-input autocomplete="off" name="oil_place" maxlength='50' />
                     </nz-form-control>
                   </nz-form-item>
@@ -111,8 +107,8 @@
                     <nz-form-label [nzNoColon]='true'>保质期</nz-form-label>
                     <nz-form-control>
                       <input class="params" placeholder="输入0-20字"
-                        [(ngModel)]="accessoryParams.accessory_params&&accessoryParams.accessory_params.oil_expire"
-                        nz-input autocomplete="off" name="oil_expire" maxlength='20' />
+                        [(ngModel)]="accessoryParams.accessory_params.oil_expire" nz-input autocomplete="off"
+                        name="oil_expire" maxlength='20' />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -121,11 +117,11 @@
           </nz-form-control>
         </nz-form-item>
         <!-- 机滤价格 -->
-        <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="机滤"'>
+        <nz-form-item nzFlex *ngIf='accessoryParams.project_id&&accessoryParams.project_name==="机油滤清器"'>
           <nz-form-label nzRequired [nzNoColon]='true'>价格</nz-form-label>
           <nz-form-control>
             <div class="table-form">
-              <nz-table [nzShowPagination]="false" [nzFrontPagination]='false' [nzNoResult]="noResultText" #basicTable>
+              <nz-table [nzData]="spaceList" [nzFrontPagination]='false' #priceInfoTable>
                 <thead>
                   <tr>
                     <th>原价</th>
@@ -139,32 +135,35 @@
                   <tr>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="oil_filter_original_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="price_info.original_fee" nz-input autocomplete="off"
                           name="info_original_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="oil_filter_settlement_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="price_info.settlement_fee" nz-input autocomplete="off"
                           name="settlement_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="oil_filter_sale_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="price_info.sale_fee" nz-input autocomplete="off"
                           name="info_sale_fee" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td>
-                      <input class="price-input" [(ngModel)]="accessoryParams.price_info.store" nz-input
-                        autocomplete="off" name="info_store" required maxlength='5' />
+                      <input class="price-input" [(ngModel)]="price_info.store" nz-input autocomplete="off"
+                        name="info_store" required maxlength='5' appIntNumber="true" />
                     </td>
                     <td>
-                      <span class='volume'>已售：{{0}}</span>
+                      <span class='volume'>已售：{{accessoryData.sale_num||0}}</span>
                     </td>
                   </tr>
                 </tbody>
               </nz-table>
+            </div>
+            <div class="text-danger">
+              <span class="input-error">{{specificationErrors}}</span>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -199,22 +198,22 @@
           <nz-form-label nzRequired [nzNoColon]='true'>规格</nz-form-label>
           <nz-form-control>
             <div class="table-form">
-              <nz-table [nzData]="specificationsList" [nzShowPagination]="false" [nzFrontPagination]='false'
+              <nz-table [nzData]="spaceList" [nzShowPagination]="false" [nzFrontPagination]='false'
                 [nzNoResult]="noResultText" #basicTable [nzScroll]="{ y: '400px' }">
                 <thead>
                   <tr>
-                    <th style="width: 55px;">图片</th>
-                    <th style="width: 70px;">净含量</th>
-                    <th style="width: 70px;">原价</th>
-                    <th style="width: 75px;">结算价</th>
-                    <th style="width: 75px;">售价</th>
-                    <th style="width: 80px;">库存</th>
+                    <th>图片</th>
+                    <th>净含量</th>
+                    <th>原价</th>
+                    <th>结算价</th>
+                    <th>售价</th>
+                    <th>库存</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of specificationsList; let i=index">
-                    <td style="width: 60px;">
+                    <td>
                       <div style="margin-left: 22px;">
                         <app-z-photo-select #specificationsImg [hasAddPicture]="true" [hasDeletePicture]="true"
                           [limitImgSize]="2" [isCutCoverImg]="true" [isChangeAddPic]='true' [aspectRatio]='1/1'
@@ -229,35 +228,35 @@
                         </div>
                       </div>
                     </td>
-                    <td style="width: 150px;">
+                    <td>
                       <nz-input-group [nzSuffix]="'L'">
                         <input class="price-input" [(ngModel)]="data.content" nz-input autocomplete="off"
                           name="content-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
-                    <td style="width: 125px;">
+                    <td>
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
                           name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
-                    <td style="width: 125px;">
+                    <td>
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.buy_fee" nz-input autocomplete="off"
                           name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
-                    <td style="width: 125px;">
+                    <td>
                       <nz-input-group [nzSuffix]="'元'">
                         <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
                           name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
-                    <td style="width: 100px;">
+                    <td>
                       <input class="price-input" [(ngModel)]="data.store" nz-input autocomplete="off"
                         name="store-{{data.time}}-{{i}}" required maxlength='5' />
                     </td>
@@ -321,14 +320,14 @@
                     </td> -->
                     <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.original_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="data.original_balance_fee" nz-input autocomplete="off"
                           name="original-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
                     </td>
                     <td style="width: 125px;">
                       <nz-input-group [nzSuffix]="'元'">
-                        <input class="price-input" [(ngModel)]="data.sale_fee" nz-input autocomplete="off"
+                        <input class="price-input" [(ngModel)]="data.sale_balance_fee" nz-input autocomplete="off"
                           name="sale-fee-{{data.time}}-{{i}}" required maxlength='8' appFloatNumber
                           [appMaxNumber]='99999.99' />
                       </nz-input-group>
@@ -344,7 +343,7 @@
                       <a [title]="'移除'" class="del-btn" *ngIf="specificationsList.length>1"
                         (click)="onDelSpecifications(data,i)">移除</a>
                       <a [title]="'添加'" class="add-btn"
-                        *ngIf="specificationsList.length<50&&i===specificationsList.length-1"
+                        *ngIf="specificationsList.length<50 && i===specificationsList.length-1"
                         (click)="onAddSpecifications()">添加</a>
                     </td>
                   </tr>
@@ -363,8 +362,9 @@
                     <nz-form-label [nzNoColon]='true'>预付原价</nz-form-label>
                     <nz-form-control>
                       <nz-input-group [nzSuffix]="originPriceUnit">
-                        <input class="price-input" [(ngModel)]="real_prepaid_fee" nz-input autocomplete="off"
-                          name="real_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                        <input class="price-input" [(ngModel)]="accessoryParams.real_prepaid_fee" nz-input
+                          autocomplete="off" name="real_prepaid_fee" maxlength='8' appFloatNumber
+                          [appMaxNumber]='99999.99' required />
                       </nz-input-group>
                       <ng-template #originPriceUnit>元</ng-template>
                     </nz-form-control>
@@ -376,8 +376,9 @@
                     <nz-form-control>
                       <div>
                         <nz-input-group [nzSuffix]="salePriceUnit">
-                          <input class="price-input" [(ngModel)]="right_prepaid_fee" nz-input autocomplete="off"
-                            name="right_prepaid_fee" maxlength='8' appFloatNumber [appMaxNumber]='99999.99' required />
+                          <input class="price-input" [(ngModel)]="accessoryParams.right_prepaid_fee" nz-input
+                            autocomplete="off" name="right_prepaid_fee" maxlength='8' appFloatNumber
+                            [appMaxNumber]='99999.99' required />
                         </nz-input-group>
                         <ng-template #salePriceUnit>元</ng-template>
                       </div>
@@ -402,9 +403,10 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex [hidden]='!accessoryParams.project_id'>
-          <nz-form-label nzRequired [nzNoColon]='true'>图文详情</nz-form-label>
+          <nz-form-label [nzNoColon]='true'>图文详情</nz-form-label>
           <nz-form-control>
-            <app-z-text-ckeditor ckEditorId='accessoryEditor' #accessoryEditor></app-z-text-ckeditor>
+            <app-z-text-ckeditor ckEditorId='accessoryEditor' [replaceWidth]="1000" #accessoryEditor>
+            </app-z-text-ckeditor>
             <div class="text-danger">
               <span class="input-error">{{accessoryDetailErrors}}</span>
             </div>
@@ -423,5 +425,6 @@
 <app-choose-project #chooseProject [selectedProjectid]="accessoryParams.project_id"
   (selectedProject)="onSelectedProject($event)"></app-choose-project>
 <!-- 选择品牌 -->
-<app-choose-brand #chooseBrand [selectedBrandid]="accessoryParams.project_id"
-  (selectedProject)="onSelectedBrand($event)"></app-choose-brand>
+<app-choose-brand #chooseBrand [selectedBrandId]="accessoryParams.accessory_brand.accessory_brand_id"
+  (selectedBrand)="onSelectedBrand($event)">
+</app-choose-brand>

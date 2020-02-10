@@ -12,9 +12,12 @@ import {
   AccessoryEntity,
   SearchAccessoryParams,
   ProjectEntity,
+  PriceInfoEntity,
+  AccessoryParamsEntity,
 } from '../accessory-library.service';
 import { HttpErrorEntity } from '../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
+import { ParamEntity } from '../../project-management/project-management-http.service';
 
 export class ErrMessageItem {
   public isError = false;
@@ -34,7 +37,7 @@ export class ErrPositionItem {
   ic_name: ErrMessageItem = new ErrMessageItem();
 
   constructor(icon?: ErrMessageItem, title?: ErrMessageItem, ic_name?: ErrMessageItem,
-              corner?: ErrMessageItem) {
+    corner?: ErrMessageItem) {
     if (isUndefined(icon) || isUndefined(ic_name)) {
       return;
     }
@@ -49,28 +52,30 @@ export class ErrPositionItem {
   styleUrls: ['./accessory-edit.component.css']
 })
 export class AccessoryEditComponent implements OnInit {
-
+  public loading = true;
+  public spaceList = ['']; // 占位数组
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public errSpecificationsItem: ErrPositionItem = new ErrPositionItem();
-  public accessoryParams = new SearchAccessoryParams();
+  public accessoryParams = new SearchAccessoryParams(); // 编辑配件参数
   public specificationsList: Array<SpecificationEntity> = [];
-  public specificationsTempList: Array<SpecificationEntity> = [];
   public specificationsDelList: Array<SpecificationEntity> = [];
+  public price_info: PriceInfoEntity = new PriceInfoEntity(); // 机滤价格参数
   public projectInfo: ProjectEntity = new ProjectEntity();
-  public accessoryData = new AccessoryEntity();
+  public accessoryData = new AccessoryEntity(); // 配件详情
   public noResultText = '数据加载中...';
-  public accessory_id = '';
-  public right_prepaid_fee = '';
-  public real_prepaid_fee = '';
-  public oil_filter_original_fee = '';
-  public oil_filter_settlement_fee = '';
-  public oil_filter_sale_fee = '';
-  public operationTelErrors = '';
-  public prepaidSalePriceErrors = '';
-  public accessoryDetailErrors = '';
+  public accessory_id = ''; // 配件id
+  public operationTelErrors = ''; // 运营手机号错误信息
+  public prepaidSalePriceErrors = ''; // 预付价格错误信息
+  public accessoryDetailErrors = ''; // 图文描述错误信息
+  public specificationErrors = ''; // 规格参数错误信息
   public accessory_image_url: Array<any> = [];
   public specifications_image_num: number;
   public isSaveBtnDisabled = false;
+  public params: Array<ParamEntity> = []; // 配件参数
+  public accessory_params = new AccessoryParamsEntity(); // 机油参数
+  public oil_num = [];
+  public oil_type = [];
+  public oil_api = [];
 
   private searchText$ = new Subject<any>();
 
@@ -80,7 +85,7 @@ export class AccessoryEditComponent implements OnInit {
   @ViewChildren('specificationsImg') public specificationsImgSelectList: QueryList<ZPhotoSelectComponent>;
 
   constructor(private globalService: GlobalService, private routerInfo: ActivatedRoute,
-              private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
+    private router: Router, private accessoryLibraryService: AccessoryLibraryService) { }
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -92,13 +97,17 @@ export class AccessoryEditComponent implements OnInit {
         this.accessoryData = res;
         this.getDetailData();
         this.getEditorData(res.detail);
+        this.loading = false;
       }, err => {
+        this.loading = false;
+        this.getEditorData(null);
         this.globalService.httpErrorProcess(err);
       });
     });
     if (this.accessory_id) {
       this.searchText$.next();
     } else {
+      this.loading = false;
       this.specificationsList.push(new SpecificationEntity());
     }
   }
@@ -109,28 +118,40 @@ export class AccessoryEditComponent implements OnInit {
     this.accessory_image_url = this.accessoryData.accessory_images ? this.accessoryData.accessory_images.split(',') : [];
     this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
     this.accessoryParams.project_id = this.accessoryData.project ? this.accessoryData.project.project_id : '';
+    if (this.accessoryParams.project_id) {
+      this.requestProjectParams();
+    }
     this.accessoryParams.project_name = this.accessoryData.project ? this.accessoryData.project.project_name : '';
+    this.accessoryParams.accessory_brand_id = this.accessoryData.accessory_brand ?
+      this.accessoryData.accessory_brand.accessory_brand_id : '';
+    this.accessoryParams.accessory_brand_name = this.accessoryData.accessory_brand ?
+      this.accessoryData.accessory_brand.brand_name : '';
     this.accessoryData.specification_info.forEach(i => {
       i.imageList = i.image ? i.image.split(',') : [];
-      i.original_fee = this.getCentPrice(i.original_balance_fee);
-      i.sale_fee = this.getCentPrice(i.sale_balance_fee);
+      i.original_balance_fee = this.getCentPrice(i.original_balance_fee);
+      i.sale_balance_fee = this.getCentPrice(i.sale_balance_fee);
+      i.original_fee = this.getCentPrice(i.original_fee);
+      i.settlement_fee = this.getCentPrice(i.settlement_fee);
+      i.sale_fee = this.getCentPrice(i.sale_fee);
     });
-    this.specificationsList = this.accessoryData.specification_info;
-    this.specificationsTempList = this.accessoryData.specification_info;
-    this.real_prepaid_fee = this.getCentPrice(this.accessoryData.real_prepaid_fee);
-    this.right_prepaid_fee = this.getCentPrice(this.accessoryData.right_prepaid_fee);
-    if (this.accessoryData.price_info) {
-      this.oil_filter_original_fee = this.getCentPrice(this.accessoryData.price_info.original_fee);
-      this.oil_filter_settlement_fee = this.getCentPrice(this.accessoryData.price_info.settlement_fee);
-      this.oil_filter_sale_fee = this.getCentPrice(this.accessoryData.price_info.sale_fee);
+    if (!this.accessoryData.specification_info || this.accessoryData.specification_info.length === 0) {
+      this.specificationsList.push(new SpecificationEntity());
+    } else {
+      this.specificationsList = this.accessoryData.specification_info;
     }
+    this.price_info = this.accessoryData.specification_info ?
+      new PriceInfoEntity(this.accessoryData.specification_info[0]) : new PriceInfoEntity();
+    this.accessoryParams.accessory_params = this.accessoryParams.accessory_params ?
+      this.accessoryParams.accessory_params : new AccessoryParamsEntity();
+    this.accessoryParams.real_prepaid_fee = this.getCentPrice(this.accessoryData.real_prepaid_fee);
+    this.accessoryParams.right_prepaid_fee = this.getCentPrice(this.accessoryData.right_prepaid_fee);
     this.getProjectInfo();
   }
 
   // 富文本数据处理
   private getEditorData(detail: string) {
-    CKEDITOR.instances.accessoryEditor.destroy(true);
-    CKEDITOR.replace('accessoryEditor').setData(detail);
+    const tempContent = detail ? detail.replace('/\r\n/g', '').replace(/\n/g, '') : '';
+    CKEDITOR.instances.accessoryEditor.setData(tempContent);
   }
 
   // 打开所属项目选择组件
@@ -140,21 +161,42 @@ export class AccessoryEditComponent implements OnInit {
 
   // 选择所属项目回调函数
   public onSelectedProject(event: any): void {
-    if (event) {
+    if (event && this.accessoryParams.project_id !== event.project.project_id) {
+      this.accessoryParams = new SearchAccessoryParams();
       this.accessoryParams.project_id = event.project.project_id;
       this.accessoryParams.project_name = event.project.project_name;
+      if (event.project.project_name === '机油') {
+        this.requestProjectParams();
+        this.accessoryParams.accessory_params = new AccessoryParamsEntity();
+      }
       this.getProjectInfo();
+      this.accessory_image_url = [];
+      this.specificationsList = [];
+      this.specificationsDelList = [];
+      this.specificationsList.push(new SpecificationEntity());
+      if (this.accessory_id) {
+        this.accessoryData.specification_info.forEach((item, index) => {
+          this.specificationsDelList[index] = item.clone();
+          this.specificationsDelList[index].is_deleted = true;
+        });
+      }
+      this.price_info = new PriceInfoEntity();
+      this.getEditorData(null);
     }
+  }
+
+  // 打开所属品牌选择组件
+  public onOpenBrandModal(): void {
+    this.chooseBrand.open();
   }
 
   // 选择所属品牌回调函数
   public onSelectedBrand(event: any): void {
     if (event) {
-      this.accessoryParams.project_id = event.brand.project_id;
-      this.accessoryParams.project_name = event.brand.project_name;
+      this.accessoryParams.accessory_brand_id = event.brand.accessory_brand_id;
+      this.accessoryParams.accessory_brand_name = event.brand.brand_name;
     }
   }
-
 
   // 获取项目信息
   private getProjectInfo() {
@@ -162,6 +204,19 @@ export class AccessoryEditComponent implements OnInit {
       this.projectInfo = res;
     }, err => {
       this.handleErrorFunc(err, 1);
+    });
+  }
+
+  // 获取配置参数
+  private requestProjectParams(): void {
+    this.accessoryLibraryService.requestProjectParamsData(this.accessoryParams.project_id).subscribe(res => {
+      this.params = res;
+      this.oil_num = res.filter(param => param.param_name === '机油标号')[0].option;
+      this.oil_type = res.filter(param => param.param_name === '机油类别')[0].option;
+      this.oil_api = res.filter(param => param.param_name === 'API等级')[0].option;
+    }, err => {
+      this.params = [];
+      this.globalService.httpErrorProcess(err);
     });
   }
 
@@ -174,7 +229,7 @@ export class AccessoryEditComponent implements OnInit {
     this.operationTelErrors = '';
     this.prepaidSalePriceErrors = '';
     this.accessoryDetailErrors = '';
-    this.isSaveBtnDisabled = false;
+    this.specificationErrors = '';
   }
 
   // 产品图片：选择图片时校验图片格式
@@ -255,74 +310,75 @@ export class AccessoryEditComponent implements OnInit {
 
   // 保存数据
   public onSaveFormSubmit() {
-    this.isSaveBtnDisabled = true;
-    this.handleParams();
+    this.clear();
+    this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
     if (this.accessoryImgComponent.imageList.length === 0) {
-      this.clear();
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传产品图片！';
     } else if (this.accessoryParams.project_name === '蓄电池') {
+      this.handleParams();
       const regPhone = /^(1[3-9])\d{9}$/g;
-      const specificationsPriceList = this.accessoryParams.battery_specification.filter(a =>
+      const specificationsPriceList = this.accessoryParams.specifications.filter(a =>
         Number(a.sale_balance_fee) > Number(a.original_balance_fee));
-      const modelNameList = this.accessoryParams.battery_specification.map(m => m.battery_model);
+      const modelNameList = this.accessoryParams.specifications.map(m => m.battery_model);
       if (new Set(modelNameList).size !== modelNameList.length) {
-        this.clear();
-        this.globalService.promptBox.open(`型号不可重复!`, null, 2000, '/assets/images/warning.png');
+        this.specificationErrors = `规格型号不可重复!`;
       } else if (specificationsPriceList.length !== 0) {
-        this.clear();
-        this.globalService.promptBox.open(`规格的尾款现价不得大于尾款原价!`, null, 2000, '/assets/images/warning.png');
+        this.specificationErrors = `规格的尾款现价不得大于尾款原价!`;
       } else if (Number(this.accessoryParams.right_prepaid_fee) > Number(this.accessoryParams.real_prepaid_fee)) {
-        this.clear();
         this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
       } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
-        this.clear();
         this.operationTelErrors = '请输入正确的运营手机号！';
-      } else if (!CKEDITOR.instances.accessoryEditor.getData()) {
-        this.clear();
-        this.accessoryDetailErrors = '请输入图文详情！';
       } else {
-        this.clear();
         this.isSaveBtnDisabled = true;
         this.handleUpdateAssessoryData();
       }
     } else if (this.accessoryParams.project_name === '机油') {
-      const specificationsPriceNew1List = this.accessoryParams.battery_specification.filter(a =>
-        Number(a.buy_fee) > Number(a.original_balance_fee));
-      const specificationsPriceNew2List = this.accessoryParams.battery_specification.filter(a =>
-        Number(a.sale_balance_fee) > Number(a.buy_fee));
+      this.handleParams();
+      const specificationsPriceNew1List = this.accessoryParams.specifications.filter(a =>
+        Number(a.sale_fee) > Number(a.original_fee));
+      const specificationsPriceNew2List = this.accessoryParams.specifications.filter(a =>
+        Number(a.settlement_fee) > Number(a.sale_fee));
       if (specificationsPriceNew1List.length !== 0) {
-        this.clear();
-        this.globalService.promptBox.open(`规格的结算价不得大于售价!`, null, 2000, '/assets/images/warning.png');
+        this.specificationErrors = `规格的原价应大于等于售价!`;
       } else if (specificationsPriceNew2List.length !== 0) {
-        this.clear();
-        this.globalService.promptBox.open(`规格的售价不得大于结算价!`, null, 2000, '/assets/images/warning.png');
-      } else if (!CKEDITOR.instances.accessoryEditor.getData()) {
-        this.clear();
-        this.accessoryDetailErrors = '请输入图文详情！';
+        this.specificationErrors = `规格的结算价应小于等于售价!`;
       } else {
-        this.clear();
         this.isSaveBtnDisabled = true;
         this.handleUpdateAssessoryData();
       }
-    } else { // 机滤
-      if (Number(this.accessoryData.price_info.settlement_fee) > Number(this.accessoryData.price_info.original_fee)) {
-        this.clear();
-        this.prepaidSalePriceErrors = '结算价不得大于原价！';
-      } else if (Number(this.accessoryData.price_info.sale_fee) > Number(this.accessoryData.price_info.settlement_fee)) {
-        this.clear();
-        this.prepaidSalePriceErrors = '售价不得大于结算价！';
-      } else if (!CKEDITOR.instances.accessoryEditor.getData()) {
-        this.clear();
-        this.accessoryDetailErrors = '请输入图文详情！';
+    } else { // 机油滤清器
+      if (!this.price_info.original_fee || Number(this.price_info.original_fee) === 0) {
+        this.specificationErrors = '原价应大于0！';
+      } else if (!this.price_info.settlement_fee || Number(this.price_info.settlement_fee) === 0) {
+        this.specificationErrors = '结算价应大于0！';
+      } else if (!this.price_info.sale_fee || Number(this.price_info.sale_fee) === 0) {
+        this.specificationErrors = '售价应大于0！';
+      } else if (Number(this.price_info.sale_fee) > Number(this.price_info.original_fee)) {
+        this.specificationErrors = '原价应大于等于售价！';
+      } else if (Number(this.price_info.settlement_fee) > Number(this.price_info.sale_fee)) {
+        this.specificationErrors = '结算价应小于等于售价！';
       } else {
-        this.clear();
         this.isSaveBtnDisabled = true;
+        this.accessoryParams.price_info = this.price_info.toEditJson();
         forkJoin(this.accessoryImgComponent.upload()).subscribe(
           data => {
             this.accessory_image_url = this.accessoryImgComponent.imageList.map(i => i.sourceUrl);
             this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
             this.requestUpdateAssessoryData();
+          }, err => {
+            if (!this.globalService.httpErrorProcess(err)) {
+              if (err.status === 422) {
+                this.errPositionItem.icon.isError = true;
+                this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
+              } else if (err.status === 413) {
+                this.errPositionItem.icon.isError = true;
+                this.errPositionItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
+              } else {
+                this.errPositionItem.icon.isError = true;
+                this.errPositionItem.icon.errMes = '上传失败，请重试！';
+              }
+            }
           });
       }
     }
@@ -331,26 +387,23 @@ export class AccessoryEditComponent implements OnInit {
 
   // 处理服务配置入参
   private handleParams() {
-    this.accessoryParams.battery_specification = this.specificationsList.concat(this.specificationsDelList);
-    this.accessoryParams.battery_specification.forEach(p => {
-      p.original_balance_fee = this.handleCentPrice(p.original_fee);
-      p.sale_balance_fee = this.handleCentPrice(p.sale_fee);
+    this.accessoryParams.specifications = this.specificationsList.concat(this.specificationsDelList);
+    this.accessoryParams.specifications.forEach(p => {
+      p.original_balance_fee = this.handleCentPrice(p.original_balance_fee);
+      p.sale_balance_fee = this.handleCentPrice(p.sale_balance_fee);
+      p.original_fee = this.handleCentPrice(p.original_fee);
+      p.settlement_fee = this.handleCentPrice(p.settlement_fee);
+      p.sale_fee = this.handleCentPrice(p.sale_fee);
     });
-    this.accessoryParams.real_prepaid_fee = this.handleCentPrice(this.real_prepaid_fee);
-    this.accessoryParams.right_prepaid_fee = this.handleCentPrice(this.right_prepaid_fee);
-    this.accessoryData.price_info.original_fee = this.handleCentPrice(this.oil_filter_original_fee);
-    this.accessoryData.price_info.settlement_fee = this.handleCentPrice(this.oil_filter_settlement_fee);
-    this.accessoryData.price_info.sale_fee = this.handleCentPrice(this.oil_filter_sale_fee);
-    this.accessoryParams.detail = CKEDITOR.instances.accessoryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
   }
 
   // 钱的单位由分转换为元
-  private getCentPrice(fee: number) {
-    return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
+  private getCentPrice(fee: number): number {
+    return (fee || fee === 0) ? Number((Number(fee) / 100).toFixed(2)) : null;
   }
 
   // 钱的单位由元转换为分
-  private handleCentPrice(fee: string) {
+  private handleCentPrice(fee: any): number {
     return Math.round(Number(fee) * 100);
   }
 
@@ -358,7 +411,7 @@ export class AccessoryEditComponent implements OnInit {
   private handleUpdateAssessoryData() {
     forkJoin(this.accessoryImgComponent.upload()).subscribe(
       data => {
-        this.accessory_image_url = this.accessoryImgComponent.imageList.map(i => i.sourceUrl);
+        this.accessory_image_url = this.accessoryImgComponent.imageList.map(image => image.sourceUrl);
         this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
         let i = 0;
         const specificationsListLength = this.specificationsImgSelectList.length;
@@ -368,7 +421,7 @@ export class AccessoryEditComponent implements OnInit {
             this.specificationsList[index].image = newImage.join(',');
             i++;
             if (i === specificationsListLength) {
-              const imageNoneList = this.accessoryParams.battery_specification.filter(v => !v.image);
+              const imageNoneList = this.accessoryParams.specifications.filter(v => !v.image);
               if (imageNoneList.length !== 0) {
                 this.clear();
                 this.globalService.promptBox.open(`请上传规格图片!`, null, 2000, '/assets/images/warning.png');
@@ -385,18 +438,19 @@ export class AccessoryEditComponent implements OnInit {
   private requestUpdateAssessoryData() {
     if (!this.accessory_id) {// 新增
       this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams).subscribe(() => {
-        this.globalService.promptBox.open('创建配件成功！');
-        this.isSaveBtnDisabled = false;
-        timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
+        this.globalService.promptBox.open('创建配件成功！', () => {
+          this.onCancelBtn();
+        });
       }, err => {
         this.handleErrorFunc(err, 1);
         this.isSaveBtnDisabled = false;
       });
     } else {// 编辑
       this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id).subscribe(() => {
-        this.globalService.promptBox.open('编辑配件成功！');
+        this.globalService.promptBox.open('编辑配件成功！', () => {
+          this.onCancelBtn();
+        });
         this.isSaveBtnDisabled = false;
-        timer(2000).subscribe(() => this.router.navigateByUrl('/accessory-library'));
       }, err => {
         this.handleErrorFunc(err, 1);
         this.isSaveBtnDisabled = false;
@@ -406,8 +460,9 @@ export class AccessoryEditComponent implements OnInit {
 
   // 处理错误信息
   private handleErrorFunc(err: any, type: number) {
+    console.log(err.status);
     const text = type === 1 ? '新建' : '编辑';
-    if (!this.globalService.httpErrorProcess(err)) { } {
+    if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {

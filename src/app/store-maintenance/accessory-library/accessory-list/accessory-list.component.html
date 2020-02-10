@@ -15,9 +15,9 @@
             <nz-form-item nzFlex>
               <nz-form-label>所属项目</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="accessory_brand_id" [(ngModel)]="searchParams.accessory_brand_id">
-                  <option value="">请选择</option>
-                  <option *ngFor='let data of brandList' [value]=data.accessory_brand_id>{{data.brand_name}}
+                <select class="form-control" name="project_id" [(ngModel)]="searchParams.project_id">
+                  <option value="">全部</option>
+                  <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
                   </option>
                 </select>
               </nz-form-control>
@@ -27,9 +27,9 @@
             <nz-form-item nzFlex>
               <nz-form-label>配件品牌</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="project_id" [(ngModel)]="searchParams.project_id">
-                  <option value="">请选择</option>
-                  <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                <select class="form-control" name="accessory_brand_id" [(ngModel)]="searchParams.accessory_brand_id">
+                  <option value="">全部</option>
+                  <option *ngFor='let data of brandList' [value]=data.accessory_brand_id>{{data.brand_name}}
                   </option>
                 </select>
               </nz-form-control>
@@ -40,7 +40,7 @@
               <nz-form-label>配件名称</nz-form-label>
               <nz-form-control>
                 <input class="form-control" placeholder="请输入配件名称" autocomplete="off"
-                  [(ngModel)]="searchParams.accessory_name" name="accessory_name" maxlength='20' />
+                  [(ngModel)]="searchParams.accessory_name" name="accessory_name" maxlength='20' appIgnoreSpace />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -49,7 +49,7 @@
               <nz-form-label>ID</nz-form-label>
               <nz-form-control>
                 <input class="form-control" placeholder="请输入ID" autocomplete="off"
-                  [(ngModel)]="searchParams.accessory_id" name="accessory_id" maxlength='50' />
+                  [(ngModel)]="searchParams.accessory_id" name="accessory_id" maxlength='32' />
               </nz-form-control>
             </nz-form-item>
           </div>

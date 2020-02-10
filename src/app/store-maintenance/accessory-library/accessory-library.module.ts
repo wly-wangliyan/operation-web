@@ -18,7 +18,9 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StoreShareModule } from '../share/store-share.module';
+import { from } from 'rxjs';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -41,7 +43,8 @@ const uploadToken: UploadConfig = {
     NzAnchorModule,
     NzTreeModule,
     NzButtonModule,
-    StoreShareModule
+    StoreShareModule,
+    NzSpinModule
   ],
   declarations: [
     AccessoryLibraryComponent,
