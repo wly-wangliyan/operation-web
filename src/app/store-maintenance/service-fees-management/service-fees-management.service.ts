@@ -5,6 +5,9 @@ import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
+import {
+  ProjectEntity,
+} from '../accessory-library/accessory-library.service';
 
 export class SearchWorkFeesParams extends EntityBase {
   public fee_type = 1; // integer	F	费用类型 1工时费 2救援费
@@ -35,7 +38,7 @@ export class ServiceFeeEntity extends EntityBase {
   public service_fee_id: string = undefined; // string	服务费ID 主键
   public service_fee_name: string = undefined; // string	服务费名称
   public fee_type: number = undefined; // Integer	费用类型 1工时费 2救援费
-  public project: Array<any> = []; // string 图片
+  public project: ProjectEntity = undefined; // ProjectEntity 项目
   public original_amount: number = undefined; // float	工时费原价 单位:分
   public sale_amount: number = undefined; // float	工时费销售单价 单位:分
   public settlement_amount: number = undefined; // 工时费结算价 单位:分
@@ -48,6 +51,13 @@ export class ServiceFeeEntity extends EntityBase {
   public status: boolean = undefined; // integer	状态 1:开启 2:关闭(默认)
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'project') {
+      return ProjectEntity;
+    }
+    return null;
+  }
 }
 
 export class ServiceFeeLinkResponse extends LinkResponse {

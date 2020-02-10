@@ -69,8 +69,8 @@
             <td>{{data.settlement_amount | centPriceChange:'元'}}</td>
             <td>
               <nz-switch [ngModel]="data.status===1?true:false"
-                (ngModelChange)="onSwitchChange(data.sale_status, $event)" [nzControl]=true nzCheckedChildren="On"
-                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.accessory_id,data.sale_status)">
+                (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"
+                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.service_fee_id,data.status)">
               </nz-switch>
             </td>
             <td class="operation">

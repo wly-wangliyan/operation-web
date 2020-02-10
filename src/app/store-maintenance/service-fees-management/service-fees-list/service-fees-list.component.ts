@@ -3,13 +3,13 @@ import { GlobalService } from '../../../core/global.service';
 import {
   ServiceFeeEntity,
   ServiceFeesManagementService,
-  SearchParams,
+  SearchParams
 } from '../service-fees-management.service';
 import {
   WashCarServiceConfigService,
   WashCarServiceConfigEntity,
   WashCarSpecificationEntity,
-  BasePriceEntity,
+  BasePriceEntity
 } from '../wash-car-service-config.service';
 import { Subject, Subscription, timer } from 'rxjs/index';
 import { debounceTime } from 'rxjs/operators';
@@ -25,16 +25,25 @@ export class TabItem {
 @Component({
   selector: 'app-service-fees-list',
   templateUrl: './service-fees-list.component.html',
-  styleUrls: ['./service-fees-list.component.css', '../../../../assets/less/tab-bar-list.less']
+  styleUrls: [
+    './service-fees-list.component.css',
+    '../../../../assets/less/tab-bar-list.less'
+  ]
 })
 export class ServiceFeesListComponent implements OnInit {
-
   public serviceFeeList: Array<ServiceFeeEntity> = [];
   public pageIndex = 1;
   public searchParams = new SearchParams();
   public noResultText = '数据加载中...';
-  public tabs: Array<TabItem> = [{ key: 0, value: '保养服务费' }, { key: 1, value: '救援服务' }, { key: 2, value: '洗车服务' }];
-  public washTabs: Array<TabItem> = [{ key: 1, value: '5座小型车' }, { key: 2, value: 'SUV/MPV' }]; // 洗车服务下tab
+  public tabs: Array<TabItem> = [
+    { key: 0, value: '保养服务费' },
+    { key: 1, value: '救援服务' },
+    { key: 2, value: '洗车服务' }
+  ];
+  public washTabs: Array<TabItem> = [
+    { key: 1, value: '5座小型车' },
+    { key: 2, value: 'SUV/MPV' }
+  ]; // 洗车服务下tab
   public washServiceConfig: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 洗车服务配置
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
   public basePrice: Array<BasePriceEntity> = []; // 基础价格
@@ -55,53 +64,91 @@ export class ServiceFeesListComponent implements OnInit {
   }
 
   constructor(
-    private globalService: GlobalService, private feesService: ServiceFeesManagementService,
-    private washCarService: WashCarServiceConfigService) { }
+    private globalService: GlobalService,
+    private feesService: ServiceFeesManagementService,
+    private washCarService: WashCarServiceConfigService
+  ) {}
 
   public ngOnInit() {
     // 救援服务
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.feesService.requestServiceFeeListData(this.searchParams).subscribe(res => {
-        this.serviceFeeList = res.results;
-        this.getPriceData();
-        this.linkUrl = res.linkUrl;
-        this.noResultText = '暂无数据';
-        this.pageIndex = 1;
-      }, err => {
-        this.globalService.httpErrorProcess(err);
-      });
+      this.feesService.requestServiceFeeListData(this.searchParams).subscribe(
+        res => {
+          this.serviceFeeList = res.results;
+          this.getPriceData();
+          this.linkUrl = res.linkUrl;
+          this.noResultText = '暂无数据';
+          this.pageIndex = 1;
+        },
+        err => {
+          this.globalService.httpErrorProcess(err);
+        }
+      );
     });
     this.searchWashCarText$.pipe(debounceTime(500)).subscribe(() => {
       this.washCarService.requestWashCarServiceConfigData().subscribe(res => {
         this.washServiceConfig = res;
-        this.washServiceConfig.base_price_info = res.base_price_info ? res.base_price_info : [];
-        this.washServiceConfig.specification_info = res.specification_info ? res.specification_info : [];
+        this.washServiceConfig.base_price_info = res.base_price_info
+          ? res.base_price_info
+          : [];
+        this.washServiceConfig.specification_info = res.specification_info
+          ? res.specification_info
+          : [];
         this.calculateSpecificationPrice();
-        this.specificationList = this.washServiceConfig.specification_info.filter(specification => specification.car_type === 1);
+        this.specificationList = this.washServiceConfig.specification_info.filter(
+          specification => specification.car_type === 1
+        );
       });
     });
-    // this.searchText$.next();
+    this.searchParams.fee_type = 1;
+    this.searchText$.next();
   }
-
 
   // 开关状态改变
   public onSwitchChange(status: number, event: boolean) {
     timer(2000).subscribe(() => {
-      return status = event ? 1 : 2;
+      return (status = event ? 1 : 2);
     });
   }
 
   // 开关点击调用接口
-  public onSwitchClick(accessory_id: string, status: number) {
-    const text = status === 1 ? '开启' : '关闭';
+  public onSwitchClick(service_fee_id: string, status: number) {
+    const text = status === 1 ? '关闭' : '开启';
     const newStatus = status === 1 ? 2 : 1;
-    this.feesService.requestUpdateStatusData(accessory_id, newStatus).subscribe(res => {
-      this.globalService.promptBox.open(`${text}成功`);
-      this.searchText$.next();
-    }, err => {
-      this.globalService.promptBox.open(`${text}失败，请重试！`, null, 2000, '/assets/images/warning.png');
-      this.searchText$.next();
-    });
+    this.feesService
+      .requestUpdateStatusData(service_fee_id, newStatus)
+      .subscribe(
+        res => {
+          this.globalService.promptBox.open(`${text}成功`);
+          this.searchText$.next();
+        },
+        err => {
+          if (!this.globalService.httpErrorProcess(err)) {
+            if (err.status === 422) {
+              const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+              for (const content of error.errors) {
+                if (content.code === 'already_open') {
+                  this.globalService.promptBox.open(
+                    `同一项目下最多开启一个服务费!`,
+                    null,
+                    2000,
+                    '/assets/images/warning.png'
+                  );
+                  return;
+                } else {
+                  this.globalService.promptBox.open(
+                    `${text}失败，请重试！`,
+                    null,
+                    2000,
+                    '/assets/images/warning.png'
+                  );
+                }
+              }
+            }
+          }
+          this.searchText$.next();
+        }
+      );
   }
 
   /**
@@ -111,12 +158,14 @@ export class ServiceFeesListComponent implements OnInit {
    */
   private getPriceData() {
     this.serviceFeeList.forEach(i => {
-      i.initial_price = i.balance_initial_price && i.prepay_initial_price
-        ? Number(i.balance_initial_price) + Number(i.prepay_initial_price) : i.balance_initial_price || i.prepay_initial_price
-        || 0;
-      i.current_price = i.balance_current_price && i.prepay_current_price
-        ? Number(i.balance_current_price) + Number(i.prepay_current_price) : i.balance_current_price || i.prepay_current_price
-        || 0;
+      i.initial_price =
+        i.balance_initial_price && i.prepay_initial_price
+          ? Number(i.balance_initial_price) + Number(i.prepay_initial_price)
+          : i.balance_initial_price || i.prepay_initial_price || 0;
+      i.current_price =
+        i.balance_current_price && i.prepay_current_price
+          ? Number(i.balance_current_price) + Number(i.prepay_current_price)
+          : i.balance_current_price || i.prepay_current_price || 0;
     });
   }
 
@@ -132,13 +181,19 @@ export class ServiceFeesListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       // tslint:disable-next-line:no-unused-expression
-      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.feesService.continueServiceFeeListData(this.linkUrl).subscribe(res => {
-        this.serviceFeeList = this.serviceFeeList.concat(res.results);
-        this.linkUrl = res.linkUrl;
-      }, err => {
-        this.globalService.httpErrorProcess(err);
-      });
+      this.continueRequestSubscription &&
+        this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription = this.feesService
+        .continueServiceFeeListData(this.linkUrl)
+        .subscribe(
+          res => {
+            this.serviceFeeList = this.serviceFeeList.concat(res.results);
+            this.linkUrl = res.linkUrl;
+          },
+          err => {
+            this.globalService.httpErrorProcess(err);
+          }
+        );
     }
   }
   /**
@@ -147,15 +202,23 @@ export class ServiceFeesListComponent implements OnInit {
    */
   private calculateSpecificationPrice() {
     this.washServiceConfig.specification_info.forEach(item => {
-      const base_price = this.washServiceConfig.base_price_info.filter(price => price.car_type === item.car_type);
-      const service_type_1 = base_price.filter(price => price.service_type === 1);
-      const service_type_2 = base_price.filter(price => price.service_type === 2);
+      const base_price = this.washServiceConfig.base_price_info.filter(
+        price => price.car_type === item.car_type
+      );
+      const service_type_1 = base_price.filter(
+        price => price.service_type === 1
+      );
+      const service_type_2 = base_price.filter(
+        price => price.service_type === 2
+      );
       if (base_price && base_price.length > 0) {
         if (service_type_1) {
-          item.original_fee = item.base_num * service_type_1[0].original_unit_fee;
+          item.original_fee =
+            item.base_num * service_type_1[0].original_unit_fee;
         }
         if (service_type_2) {
-          item.original_fee += item.base_wax_num * service_type_2[0].original_unit_fee;
+          item.original_fee +=
+            item.base_wax_num * service_type_2[0].original_unit_fee;
         }
       }
       if (isNaN(item.original_fee)) {
@@ -166,6 +229,7 @@ export class ServiceFeesListComponent implements OnInit {
 
   // 切换服务tab
   public onTabChange(event: any): void {
+    this.serviceFeeList = [];
     this.searchParams = new SearchParams();
     this.selectedCarTypeTabIndex = event;
     this.noResultText = '数据加载中...';
@@ -183,10 +247,15 @@ export class ServiceFeesListComponent implements OnInit {
   public onChangeWashTabClick(tab: TabItem): void {
     this.noResultText = '暂无数据';
     this.selectedCarTypeTabIndex = tab.key;
-    this.specificationList = this.washServiceConfig.specification_info.filter(specification => specification.car_type === tab.key);
+    this.specificationList = this.washServiceConfig.specification_info.filter(
+      specification => specification.car_type === tab.key
+    );
   }
   // 规格开关
-  public onChangeSpecificationStatus(wash_car_specification_id: string, event: any): void {
+  public onChangeSpecificationStatus(
+    wash_car_specification_id: string,
+    event: any
+  ): void {
     const status = event ? 1 : 2;
     let sucessMsg = '开启成功!';
     let errMsg = '开启失败,请重试!';
@@ -194,25 +263,51 @@ export class ServiceFeesListComponent implements OnInit {
       sucessMsg = '关闭成功';
       errMsg = '关闭失败，请重试!';
     }
-    this.washCarService.requestChangeStatus(wash_car_specification_id, status).subscribe(() => {
-      this.globalService.promptBox.open(sucessMsg);
-      this.searchText$.next();
-    }, err => {
-      if (!this.globalService.httpErrorProcess(err)) {
-        this.searchText$.next();
-        if (err.status === 422) {
-          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-          for (const content of error.errors) {
-            if (content.resource === 'time' && content.code === 'already_expired') {
-              this.globalService.promptBox.open('当前时间超过有效期，无法开启!', null, 2000, null, false);
-            } else {
-              this.globalService.promptBox.open(errMsg, null, 2000, null, false);
+    this.washCarService
+      .requestChangeStatus(wash_car_specification_id, status)
+      .subscribe(
+        () => {
+          this.globalService.promptBox.open(sucessMsg);
+          this.searchText$.next();
+        },
+        err => {
+          if (!this.globalService.httpErrorProcess(err)) {
+            this.searchText$.next();
+            if (err.status === 422) {
+              const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+              for (const content of error.errors) {
+                if (
+                  content.resource === 'time' &&
+                  content.code === 'already_expired'
+                ) {
+                  this.globalService.promptBox.open(
+                    '当前时间超过有效期，无法开启!',
+                    null,
+                    2000,
+                    null,
+                    false
+                  );
+                } else {
+                  this.globalService.promptBox.open(
+                    errMsg,
+                    null,
+                    2000,
+                    null,
+                    false
+                  );
+                }
+              }
+            } else if (err.status === 404) {
+              this.globalService.promptBox.open(
+                '规格信息不存在!',
+                null,
+                2000,
+                null,
+                false
+              );
             }
           }
-        } else if (err.status === 404) {
-          this.globalService.promptBox.open('规格信息不存在!', null, 2000, null, false);
         }
-      }
-    });
+      );
   }
 }
