@@ -239,7 +239,7 @@ export class AccessoryLibraryService {
    * @returns Observable<ProjectLinkResponse>
    */
   public requestProjectListData(): Observable<ProjectLinkResponse> {
-    const httpUrl = `${this.domain}/projects/all`;
+    const httpUrl = `${this.domain}/admin/projects/all`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new ProjectLinkResponse(res)));
   }

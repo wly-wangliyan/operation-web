@@ -25,9 +25,9 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>{{data.brand_name||'--'}}</td>
             <td>
-              <img *ngIf='!data.image' style="width: 100px;height:100px;margin: auto 20px;"
+              <img *ngIf='!data.sign_image' style="width: 100px;height:100px;margin: auto 20px;"
                 src="/assets/images/image_space.png">
-              <img *ngIf='data.image' style="width: 100px;height:100px;margin: auto 20px;" [src]="data.sign_image">
+              <img *ngIf='data.sign_image' style="width: 100px;height:100px;margin: auto 20px;" [src]="data.sign_image">
             </td>
             <td [title]='data.introduce'>{{(data.introduce|zMaxLength:20)||'--'}}</td>
             <td class="operation">

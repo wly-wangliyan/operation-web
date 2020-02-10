@@ -7,7 +7,7 @@ import { HttpErrorEntity } from '../../../../core/http.service';
 import {
   AccessoryBrandEntity,
   BrandManagementHttpService,
-  SearchBrandParams,
+  SearchBrandParams
 } from '../../brand-management-http.service';
 
 export class ErrMessageItem {
@@ -39,8 +39,10 @@ export class ErrPositionItem {
   styleUrls: ['./brand-edit.component.css']
 })
 export class BrandEditComponent implements OnInit {
-
-  constructor(private globalService: GlobalService, private brandManagementService: BrandManagementHttpService) { }
+  constructor(
+    private globalService: GlobalService,
+    private brandManagementService: BrandManagementHttpService
+  ) {}
 
   public searchBrandParams: SearchBrandParams = new SearchBrandParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
@@ -55,11 +57,12 @@ export class BrandEditComponent implements OnInit {
   private is_save = false; // 防止连续出发保存事件
 
   @Input() public accessory_brand_id: string;
-  @ViewChild('bannerPromptDiv', { static: false }) public bannerPromptDiv: ElementRef;
-  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('bannerPromptDiv', { static: false })
+  public bannerPromptDiv: ElementRef;
+  @ViewChild('coverImg', { static: false })
+  public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  public ngOnInit() {
-  }
+  public ngOnInit() {}
 
   // 弹框close
   public onClose() {
@@ -75,17 +78,27 @@ export class BrandEditComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(data: AccessoryBrandEntity, sureFunc: any, closeFunc: any = null) {
+  public open(
+    data: AccessoryBrandEntity,
+    sureFunc: any,
+    closeFunc: any = null
+  ) {
     const openBannerModal = () => {
       timer(0).subscribe(() => {
         $(this.bannerPromptDiv.nativeElement).modal('show');
       });
     };
     this.accessory_brand_id = data ? data.accessory_brand_id : '';
-    this.searchBrandParams = data ? JSON.parse(JSON.stringify(data)) : new SearchBrandParams();
+    this.searchBrandParams = data
+      ? JSON.parse(JSON.stringify(data))
+      : new SearchBrandParams();
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
+    this.cover_url = [];
+    if (data && data.sign_image) {
+      this.cover_url.push(data.sign_image);
+    }
     this.is_save = false;
     openBannerModal();
   }
@@ -97,40 +110,58 @@ export class BrandEditComponent implements OnInit {
     }
     this.clear();
     this.is_save = true;
-    this.coverImgSelectComponent.upload().subscribe(() => {
-      const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
-      this.searchBrandParams.sign_image = imageUrl.join(',');
-      if (this.verification()) {
-        if (this.accessory_brand_id) {
-          // 添加配件品牌
-          this.brandManagementService.requestAddAccessoryData(this.searchBrandParams).subscribe(() => {
-            this.onClose();
-            this.globalService.promptBox.open('新建成功！', () => {
-              this.sureCallbackInfo();
-            });
-          }, err => {
-            this.is_save = false;
-            this.errorProcess(err, 1);
-          });
+    this.coverImgSelectComponent.upload().subscribe(
+      () => {
+        const imageUrl = this.coverImgSelectComponent.imageList.map(
+          i => i.sourceUrl
+        );
+        this.searchBrandParams.sign_image = imageUrl.join(',');
+        if (this.verification()) {
+          if (!this.accessory_brand_id) {
+            // 添加配件品牌
+            this.brandManagementService
+              .requestAddAccessoryData(this.searchBrandParams)
+              .subscribe(
+                () => {
+                  this.onClose();
+                  this.globalService.promptBox.open('新建成功！', () => {
+                    this.sureCallbackInfo();
+                  });
+                },
+                err => {
+                  this.is_save = false;
+                  this.errorProcess(err, 1);
+                }
+              );
+          } else {
+            // 编辑配件品牌
+            this.brandManagementService
+              .requestUpdateAccessoryData(
+                this.accessory_brand_id,
+                this.searchBrandParams
+              )
+              .subscribe(
+                () => {
+                  this.onClose();
+                  this.globalService.promptBox.open('编辑成功！', () => {
+                    this.sureCallbackInfo();
+                  });
+                },
+                err => {
+                  this.is_save = false;
+                  this.errorProcess(err, 2);
+                }
+              );
+          }
         } else {
-          // 编辑配件品牌
-          this.brandManagementService.requestUpdateAccessoryData(this.accessory_brand_id, this.searchBrandParams).subscribe(() => {
-            this.onClose();
-            this.globalService.promptBox.open('编辑成功！', () => {
-              this.sureCallbackInfo();
-            });
-          }, err => {
-            this.is_save = false;
-            this.errorProcess(err, 2);
-          });
+          this.is_save = false;
         }
-      } else {
+      },
+      err => {
         this.is_save = false;
+        this.upLoadErrMsg(err);
       }
-    }, err => {
-      this.is_save = false;
-      this.upLoadErrMsg(err);
-    });
+    );
   }
 
   // 表单提交校验
@@ -167,17 +198,43 @@ export class BrandEditComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          const field = content.field === 'brand_name' ? '品牌名称' : content.field === 'sign_image' ?
-            '品牌标志' : content.field === 'introduce' ? '简介' : '';
+          const field =
+            content.field === 'brand_name'
+              ? '品牌名称'
+              : content.field === 'sign_image'
+              ? '品牌标志'
+              : content.field === 'introduce'
+              ? '简介'
+              : '';
           if (content.code === 'missing_field') {
-            this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open(
+              `${field}字段未填写!`,
+              null,
+              2000,
+              '/assets/images/warning.png'
+            );
             return;
           } else if (content.code === 'invalid') {
-            this.globalService.promptBox.open(`${field}字段输入错误!`, null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open(
+              `${field}字段输入错误!`,
+              null,
+              2000,
+              '/assets/images/warning.png'
+            );
           } else if (content.code === 'already_existed') {
-            this.globalService.promptBox.open(`配件品牌已经存在!`, null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open(
+              `配件品牌已经存在!`,
+              null,
+              2000,
+              '/assets/images/warning.png'
+            );
           } else {
-            this.globalService.promptBox.open(`${text}配件品牌失败,请重试!`, null, 2000, '/assets/images/warning.png');
+            this.globalService.promptBox.open(
+              `${text}配件品牌失败,请重试!`,
+              null,
+              2000,
+              '/assets/images/warning.png'
+            );
           }
         }
       }
@@ -212,4 +269,3 @@ export class BrandEditComponent implements OnInit {
     }
   }
 }
-
