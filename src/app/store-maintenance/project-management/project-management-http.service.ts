@@ -12,7 +12,7 @@ export class ProjectEntity extends EntityBase {
   public project_num: string = undefined; // string	项目编号 10:蓄电池, 11:机油, 12:机油滤净器
   public project_name: string = undefined; // string	项目名称
   public related_project_name: string = undefined; // string	配套项目名称 机油滤清器 机油 蓄电池
-  public specification = {}; // json	规格 {'type': 1, 'name': 'xxx', 'unit': 'xxx'} 1:数值
+  public specification: SpecificationEntity = new SpecificationEntity(); // json	规格 {'type': 1, 'name': 'xxx', 'unit': 'xxx'} 1:数值
   public description: string = undefined; // string	描述
   public param_list: Array<ParamEntity> = []; // Array 保养项目参数
   public is_deleted = undefined; // bool	逻辑删除
@@ -24,8 +24,18 @@ export class ProjectEntity extends EntityBase {
     if (propertyName === 'param_list') {
       return ParamEntity;
     }
+    if (propertyName === 'specification') {
+      return SpecificationEntity;
+    }
     return null;
   }
+}
+
+// 保养项目参数
+export class SpecificationEntity extends EntityBase {
+  public type: number = undefined; // int	类型
+  public name: string = undefined; // string	名称
+  public unit: string = undefined; // string	单位
 }
 
 // 保养项目参数
