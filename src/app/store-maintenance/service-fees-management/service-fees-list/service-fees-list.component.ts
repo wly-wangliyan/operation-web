@@ -48,7 +48,7 @@ export class ServiceFeesListComponent implements OnInit {
   public specificationList: Array<WashCarSpecificationEntity> = []; // 规格
   public basePrice: Array<BasePriceEntity> = []; // 基础价格
   public valid_unit = { day: '日', month: '月', year: '年' };
-  public selectedCarTypeTabIndex = 0;
+  public selectedCarTypeTabIndex = 1;
   public selectedTabIndex = 0;
 
   private searchText$ = new Subject<any>();
@@ -67,7 +67,7 @@ export class ServiceFeesListComponent implements OnInit {
     private globalService: GlobalService,
     private feesService: ServiceFeesManagementService,
     private washCarService: WashCarServiceConfigService
-  ) {}
+  ) { }
 
   public ngOnInit() {
     // 救援服务
@@ -231,7 +231,7 @@ export class ServiceFeesListComponent implements OnInit {
   public onTabChange(event: any): void {
     this.serviceFeeList = [];
     this.searchParams = new SearchParams();
-    this.selectedCarTypeTabIndex = event;
+    this.selectedCarTypeTabIndex = 1;
     this.noResultText = '数据加载中...';
     if (event === 0) {
       this.searchParams.fee_type = 1;
@@ -240,6 +240,7 @@ export class ServiceFeesListComponent implements OnInit {
       this.searchParams.fee_type = 2;
       this.searchText$.next();
     } else {
+      this.specificationList = [];
       this.searchWashCarText$.next();
     }
   }
