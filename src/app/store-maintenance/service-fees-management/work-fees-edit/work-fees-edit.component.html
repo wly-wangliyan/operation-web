@@ -1,79 +1,150 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'保养服务费'" [level1RelativePath]="'../'" [level2Name]="'服务费配置'"></app-crumb>
+  <app-crumb
+    [level1Name]="'保养服务费'"
+    [level1RelativePath]="'../'"
+    [level2Name]="'服务费配置'"
+  ></app-crumb>
 </div>
 <div class="content-flow">
-  <div class='des_card'>
+  <div *ngIf="!loading" style="text-align: center;margin: 150px 0;">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div class="des_card" *ngIf="loading">
     <form nz-form class="content-layout" #workFeesForm="ngForm">
       <div class="card_content">
         <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>服务费名称</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"
+            >服务费名称</nz-form-label
+          >
           <nz-form-control>
-            <input class="fee-name" [(ngModel)]="searchWorkFeesParams.service_fee_name" placeholder="输入1-20字名称" nz-input
-              autocomplete="off" name="service_fee_name" required maxlength='20' />
+            <input
+              class="fee-name"
+              [(ngModel)]="searchWorkFeesParams.service_fee_name"
+              placeholder="输入1-20字名称"
+              nz-input
+              autocomplete="off"
+              name="service_fee_name"
+              required
+              maxlength="20"
+            />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]='true'>所属项目</nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true">所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
-              <input class="pro-input" [(ngModel)]="project_name" nz-input autocomplete="off" name="project_name"
-                required disabled />
-              <ng-template #chooseBtn><a style="padding: 10px;" (click)='onOpenProjectModal()'>选择</a></ng-template>
+              <input
+                class="pro-input"
+                [(ngModel)]="project_name"
+                nz-input
+                autocomplete="off"
+                name="project_name"
+                required
+                disabled
+              />
+              <ng-template #chooseBtn
+                ><a style="padding: 10px;" (click)="onOpenProjectModal()"
+                  >选择</a
+                ></ng-template
+              >
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="5">
             <nz-form-item nzFlex>
-              <nz-form-label nzRequired [nzNoColon]='true'>原价</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">原价</nz-form-label>
               <nz-form-control>
                 <nz-input-group [nzSuffix]="'元'">
-                  <input class="price-input" [(ngModel)]="original_amount" nz-input
-                    autocomplete="off" name="original_amount" required maxlength='8' appFloatNumber
-                    [appMaxNumber]='99999.99' />
+                  <input
+                    class="price-input"
+                    [(ngModel)]="original_amount"
+                    nz-input
+                    autocomplete="off"
+                    name="original_amount"
+                    required
+                    maxlength="8"
+                    appFloatNumber
+                    [appMaxNumber]="99999.99"
+                  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="5">
             <nz-form-item nzFlex>
-              <nz-form-label nzRequired [nzNoColon]='true'>销售单价</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"
+                >销售单价</nz-form-label
+              >
               <nz-form-control>
                 <nz-input-group [nzSuffix]="'元'">
-                  <input class="price-input" [(ngModel)]="sale_amount" nz-input autocomplete="off"
-                    name="sale_amount" required maxlength='8' appFloatNumber [appMaxNumber]='99999.99' />
+                  <input
+                    class="price-input"
+                    [(ngModel)]="sale_amount"
+                    nz-input
+                    autocomplete="off"
+                    name="sale_amount"
+                    required
+                    maxlength="8"
+                    appFloatNumber
+                    [appMaxNumber]="99999.99"
+                  />
                 </nz-input-group>
                 <div class="text-danger">
-                  <span class="input-error">{{saleAmountPriceErrors}}</span>
+                  <span class="input-error">{{ saleAmountPriceErrors }}</span>
                 </div>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="5">
             <nz-form-item nzFlex>
-              <nz-form-label nzRequired [nzNoColon]='true'>结算价</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"
+                >结算价</nz-form-label
+              >
               <nz-form-control class="ml_10">
                 <nz-input-group [nzSuffix]="'元'">
-                  <input class="price-input" [(ngModel)]="settlement_amount" nz-input
-                    autocomplete="off" name="settlement_amount" required maxlength='8' appFloatNumber
-                    [appMaxNumber]='99999.99' />
+                  <input
+                    class="price-input"
+                    [(ngModel)]="settlement_amount"
+                    nz-input
+                    autocomplete="off"
+                    name="settlement_amount"
+                    required
+                    maxlength="8"
+                    appFloatNumber
+                    [appMaxNumber]="99999.99"
+                  />
                 </nz-input-group>
                 <div class="text-danger">
-                  <span class="input-error">{{settlementAmountPriceErrors}}</span>
+                  <span class="input-error">{{
+                    settlementAmountPriceErrors
+                  }}</span>
                 </div>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
         <div style="margin-top: 40px;margin-bottom: 40px">
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!workFeesForm.form.valid"
-            (appZDebounceClick)='onSaveFormSubmit()'>保存</button>
-          <button class="close-btn" nz-button (click)="onCancelBtn()">取消</button>
+          <button
+            class="sure-btn"
+            nz-button
+            nzType="primary"
+            [disabled]="!workFeesForm.form.valid"
+            (appZDebounceClick)="onSaveFormSubmit()"
+          >
+            保存
+          </button>
+          <button class="close-btn" nz-button (click)="onCancelBtn()">
+            取消
+          </button>
         </div>
       </div>
     </form>
   </div>
 </div>
 <!-- 选择保养项目 -->
-<app-choose-project #chooseProject [selectedProjectid]="searchWorkFeesParams.project_id"
-  (selectedProject)="onSelectedProject($event)"></app-choose-project>
+<app-choose-project
+  #chooseProject
+  [selectedProjectid]="searchWorkFeesParams.project_id"
+  (selectedProject)="onSelectedProject($event)"
+></app-choose-project>

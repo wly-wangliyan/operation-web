@@ -68,6 +68,7 @@ export class WorkFeesEditComponent implements OnInit {
           },
           err => {
             this.globalService.httpErrorProcess(err);
+            this.loading = true;
           }
         );
     });
