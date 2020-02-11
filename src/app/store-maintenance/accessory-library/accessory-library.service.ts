@@ -6,10 +6,11 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 import { ParamEntity } from '../project-management/project-management-http.service';
+import { CarSeriesEntity } from '../vehicle-management/vehicle-management-http.service';
 
 // 规格实体
 export class SpecificationEntity extends EntityBase {
-  public specification_id = ''; // string	规格id-主键
+  public specification_id: string = undefined; // string	规格id-主键
   public name: string = undefined; // string	名称
   public accessory: AccessoryEntity = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片
@@ -35,22 +36,6 @@ export class SpecificationEntity extends EntityBase {
       return AccessoryEntity;
     }
     return null;
-  }
-
-  public toEditJson(): SpecificationEntity {
-    const json = this.json();
-    json.original_balance_fee = json.original_balance_fee ? Math.round(json.original_balance_fee * 100) : null;
-    json.sale_balance_fee = json.sale_balance_fee ? Math.round(json.sale_balance_fee * 100) : null;
-    json.original_fee = json.original_fee ? Math.round(json.original_fee * 100) : null;
-    json.settlement_fee = json.settlement_fee ? Math.round(json.settlement_fee * 100) : null;
-    json.sale_fee = json.sale_fee ? Math.round(json.sale_fee * 100) : null;
-    delete json.accessory;
-    delete json.sale_num;
-    delete json.imageList;
-    delete json.time;
-    delete json.created_time;
-    delete json.updated_time;
-    return json;
   }
 }
 
@@ -94,7 +79,6 @@ export class AccessoryParamsEntity extends EntityBase {
 
 // 机滤参数实体
 export class PriceInfoEntity extends EntityBase {
-  public specification_id = ''; // string	规格id-主键
   public original_fee: number = undefined; // float	机滤原价
   public settlement_fee: number = undefined; // float 机滤结算价
   public sale_fee: number = undefined; // float	机滤售价
@@ -103,7 +87,6 @@ export class PriceInfoEntity extends EntityBase {
   constructor(source?: SpecificationEntity) {
     super();
     if (source) {
-      this.specification_id = source.specification_id || '';
       this.original_fee = source.original_fee;
       this.settlement_fee = source.settlement_fee;
       this.sale_fee = source.sale_fee;
@@ -126,10 +109,11 @@ export class AccessoryEntity extends EntityBase {
   public accessory_name: string = undefined; // tring	配件名称
   public accessory_images: string = undefined; // string	图片 多个逗号分隔
   public operation_telephone: string = undefined; // string	运营手机号
-  public accessory_imagesList: Array<any> = undefined; // array	图片数组
+  public accessory_imagesList: Array<any> = []; // array	图片数组
+  public car_series_list: Array<CarSeriesEntity> = []; // array	车系数组
   public project: ProjectEntity = undefined; // 项目对象 Project
   public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
-  public specification_info: Array<SpecificationEntity> = undefined; // object	规格 Specification
+  public specification_info: Array<SpecificationEntity> = []; // object	规格 Specification
   public accessory_params: AccessoryParamsEntity = undefined; // json	机油参数
   public price_info: PriceInfoEntity = undefined; // json	机滤参数
   public detail: string = undefined; // string	图文详情
@@ -160,6 +144,8 @@ export class AccessoryEntity extends EntityBase {
       return AccessoryParamsEntity;
     } else if (propertyName === 'price_info') {
       return PriceInfoEntity;
+    } else if (propertyName === 'car_series_list') {
+      return CarSeriesEntity;
     }
     return null;
   }
@@ -228,19 +214,21 @@ export class SearchAccessoryParams extends EntityBase {
   providedIn: 'root'
 })
 export class AccessoryLibraryService {
-
   private domain = environment.STORE_DOMAIN; // 保养域名
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {}
 
   /**
    * 获取配件库列表
    * @param searchParams 条件检索参数
    * @returns Observable<AccessoryLinkResponse>
    */
-  public requestAccessoryListData(searchParams: SearchParams): Observable<AccessoryLinkResponse> {
+  public requestAccessoryListData(
+    searchParams: SearchParams
+  ): Observable<AccessoryLinkResponse> {
     const httpUrl = `${this.domain}/accessories`;
-    return this.httpService.get(httpUrl, searchParams.json())
+    return this.httpService
+      .get(httpUrl, searchParams.json())
       .pipe(map(res => new AccessoryLinkResponse(res)));
   }
 
@@ -249,8 +237,12 @@ export class AccessoryLibraryService {
    * @param string url linkUrl
    * @returns Observable<AccessoryLinkResponse>
    */
-  public continueAccessoryistData(url: string): Observable<AccessoryLinkResponse> {
-    return this.httpService.get(url).pipe(map(res => new AccessoryLinkResponse(res)));
+  public continueAccessoryistData(
+    url: string
+  ): Observable<AccessoryLinkResponse> {
+    return this.httpService
+      .get(url)
+      .pipe(map(res => new AccessoryLinkResponse(res)));
   }
 
   /**
@@ -259,7 +251,10 @@ export class AccessoryLibraryService {
    * @param sale_status boolean	T	销售状态 默认：False 停售
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateStatusData(accessory_id: string, sale_status: boolean): Observable<HttpResponse<any>> {
+  public requestUpdateStatusData(
+    accessory_id: string,
+    sale_status: boolean
+  ): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}/sale_status`;
     return this.httpService.patch(httpUrl, { sale_status });
   }
@@ -269,9 +264,13 @@ export class AccessoryLibraryService {
    * @param accessory_id string	T	配件库ID
    * @returns Observable<AccessoryEntity>
    */
-  public requestAccessoryDetailData(accessory_id: string): Observable<AccessoryEntity> {
+  public requestAccessoryDetailData(
+    accessory_id: string
+  ): Observable<AccessoryEntity> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}`;
-    return this.httpService.get(httpUrl).pipe(map(res => AccessoryEntity.Create(res.body)));
+    return this.httpService
+      .get(httpUrl)
+      .pipe(map(res => AccessoryEntity.Create(res.body)));
   }
 
   /**
@@ -280,7 +279,8 @@ export class AccessoryLibraryService {
    */
   public requestProjectListData(): Observable<ProjectLinkResponse> {
     const httpUrl = `${this.domain}/admin/projects/all`;
-    return this.httpService.get(httpUrl)
+    return this.httpService
+      .get(httpUrl)
       .pipe(map(res => new ProjectLinkResponse(res)));
   }
 
@@ -289,9 +289,13 @@ export class AccessoryLibraryService {
    * @param project_id string	T	项目ID
    * @returns Observable<ProjectEntity>
    */
-  public requestProjectDetailData(project_id: string): Observable<ProjectEntity> {
+  public requestProjectDetailData(
+    project_id: string
+  ): Observable<ProjectEntity> {
     const httpUrl = `${this.domain}/admin/projects/${project_id}`;
-    return this.httpService.get(httpUrl).pipe(map(res => ProjectEntity.Create(res.body)));
+    return this.httpService
+      .get(httpUrl)
+      .pipe(map(res => ProjectEntity.Create(res.body)));
   }
 
   /**
@@ -299,7 +303,9 @@ export class AccessoryLibraryService {
    * @param params SearchAccessoryParams 参数
    * @returns Observable<HttpResponse<any>>
    */
-  public requestAddAccessoryData(params: SearchAccessoryParams): Observable<HttpResponse<any>> {
+  public requestAddAccessoryData(
+    params: SearchAccessoryParams
+  ): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories`;
     return this.httpService.post(httpUrl, params);
   }
@@ -310,7 +316,10 @@ export class AccessoryLibraryService {
    * @param params SearchAccessoryParams 参数
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateAccessoryData(params: SearchAccessoryParams, accessory_id: string): Observable<HttpResponse<any>> {
+  public requestUpdateAccessoryData(
+    params: SearchAccessoryParams,
+    accessory_id: string
+  ): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}`;
     return this.httpService.put(httpUrl, params);
   }
@@ -320,7 +329,9 @@ export class AccessoryLibraryService {
    * @param accessory_id 配件id
    * @returns Observable<HttpResponse<any>>
    */
-  public requestDeleteAccessoryData(accessory_id: string): Observable<HttpResponse<any>> {
+  public requestDeleteAccessoryData(
+    accessory_id: string
+  ): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}`;
     return this.httpService.delete(httpUrl);
   }
@@ -331,7 +342,10 @@ export class AccessoryLibraryService {
    * @param car_series_ids string 车系
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateRecommendData(car_series_ids: string, accessory_id: string): Observable<HttpResponse<any>> {
+  public requestUpdateRecommendData(
+    car_series_ids: string,
+    accessory_id: string
+  ): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/accessories/${accessory_id}/car_series`;
     return this.httpService.patch(httpUrl, { car_series_ids });
   }
@@ -341,15 +355,18 @@ export class AccessoryLibraryService {
    * @param project_id 项目id
    * @returns Observable<Array<ParamEntity>>
    */
-  public requestProjectParamsData(project_id: string): Observable<Array<ParamEntity>> {
+  public requestProjectParamsData(
+    project_id: string
+  ): Observable<Array<ParamEntity>> {
     const httpUrl = `${this.domain}/admin/projects/${project_id}/params`;
-    return this.httpService.get(httpUrl).pipe(map(res => {
-      const tempList: Array<ParamEntity> = [];
-      res.body.forEach(data => {
-        tempList.push(ParamEntity.Create(data));
-      });
-      return tempList;
-    }));
+    return this.httpService.get(httpUrl).pipe(
+      map(res => {
+        const tempList: Array<ParamEntity> = [];
+        res.body.forEach(data => {
+          tempList.push(ParamEntity.Create(data));
+        });
+        return tempList;
+      })
+    );
   }
 }
-

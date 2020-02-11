@@ -1,6 +1,15 @@
 <!--选择所属项目-->
-<div class="modal fade" id="selectMultiBrandFirmModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
-  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+<div
+  class="modal fade"
+  id="selectMultiBrandFirmModal"
+  data-backdrop="false"
+  data-keyboard="false"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+  #projectPromptDiv
+>
   <div class="modal-dialog modal-dialog-common" role="document">
     <div class="modal-content modal-content-common">
       <div>
@@ -9,21 +18,34 @@
           <div class="content-tree">
             <div class="content-list">
               <div class="leter-list">
-                <ul>
+                <ul class="tree_ul">
                   <li *ngFor="let leter of letter_list">
                     <nz-anchor [nzAffix]="false" [nzTarget]="anchorContainer">
-                      <nz-link nzHref="#{{leter}}" nzTitle="{{leter}}"></nz-link>
+                      <nz-link
+                        nzHref="#{{ leter }}"
+                        nzTitle="{{ leter }}"
+                      ></nz-link>
                     </nz-anchor>
                   </li>
                 </ul>
               </div>
-              <div class='tree-box' #anchorContainer>
+              <div class="tree-box" #anchorContainer>
                 <ul #anchorContainer>
                   <li *ngFor="let leter of letter_list">
-                    <div *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length>0">
-                      <p id="{{leter}}" class="leter-title">{{leter}}</p>
-                      <nz-tree nzCheckable [nzData]="mapOfBrand[leter]" (nzClick)="nzEvent($event)"
-                        (nzExpandChange)="nzEvent($event)" (nzCheckBoxChange)="nzCheck($event)">
+                    <div
+                      *ngIf="mapOfBrand[leter] && mapOfBrand[leter].length > 0"
+                    >
+                      <p id="{{ leter }}" class="leter-title">{{ leter }}</p>
+                      <nz-tree
+                        nzCheckable
+                        [nzCheckedKeys]="defaultCheckedKeys"
+                        [nzExpandedKeys]="defaultExpandedKeys"
+                        [nzSelectedKeys]="defaultSelectedKeys"
+                        [nzData]="mapOfBrand[leter]"
+                        (nzClick)="nzEvent($event)"
+                        (nzExpandChange)="nzEvent($event)"
+                        (nzCheckBoxChange)="nzCheck($event)"
+                      >
                       </nz-tree>
                     </div>
                   </li>
@@ -34,7 +56,12 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectCarSeries()">
+        <button
+          class="sure-btn"
+          nz-button
+          nzType="primary"
+          (appZDebounceClick)="onSelectCarSeries()"
+        >
           确定
         </button>
         <button class="close-btn" nz-button data-dismiss="modal">取消</button>

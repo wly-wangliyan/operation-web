@@ -15,9 +15,16 @@
             <nz-form-item nzFlex>
               <nz-form-label>所属项目</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="project_id" [(ngModel)]="searchParams.project_id">
+                <select
+                  class="form-control"
+                  name="project_id"
+                  [(ngModel)]="searchParams.project_id"
+                >
                   <option value="">全部</option>
-                  <option *ngFor='let data of projectList' [value]=data.project_id>{{data.project_name}}
+                  <option
+                    *ngFor="let data of projectList"
+                    [value]="data.project_id"
+                    >{{ data.project_name }}
                   </option>
                 </select>
               </nz-form-control>
@@ -27,9 +34,16 @@
             <nz-form-item nzFlex>
               <nz-form-label>配件品牌</nz-form-label>
               <nz-form-control class="form_control">
-                <select class="form-control" name="accessory_brand_id" [(ngModel)]="searchParams.accessory_brand_id">
+                <select
+                  class="form-control"
+                  name="accessory_brand_id"
+                  [(ngModel)]="searchParams.accessory_brand_id"
+                >
                   <option value="">全部</option>
-                  <option *ngFor='let data of brandList' [value]=data.accessory_brand_id>{{data.brand_name}}
+                  <option
+                    *ngFor="let data of brandList"
+                    [value]="data.accessory_brand_id"
+                    >{{ data.brand_name }}
                   </option>
                 </select>
               </nz-form-control>
@@ -39,8 +53,15 @@
             <nz-form-item nzFlex>
               <nz-form-label>配件名称</nz-form-label>
               <nz-form-control>
-                <input class="form-control" placeholder="请输入配件名称" autocomplete="off"
-                  [(ngModel)]="searchParams.accessory_name" name="accessory_name" maxlength='20' appIgnoreSpace />
+                <input
+                  class="form-control"
+                  placeholder="请输入配件名称"
+                  autocomplete="off"
+                  [(ngModel)]="searchParams.accessory_name"
+                  name="accessory_name"
+                  maxlength="20"
+                  appIgnoreSpace
+                />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -48,21 +69,35 @@
             <nz-form-item nzFlex>
               <nz-form-label>ID</nz-form-label>
               <nz-form-control>
-                <input class="form-control" placeholder="请输入ID" autocomplete="off"
-                  [(ngModel)]="searchParams.accessory_id" name="accessory_id" maxlength='32' />
+                <input
+                  class="form-control"
+                  placeholder="请输入ID"
+                  autocomplete="off"
+                  [(ngModel)]="searchParams.accessory_id"
+                  name="accessory_id"
+                  maxlength="32"
+                />
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div class='search_btn'>
+          <div class="search_btn">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">
-              查询</button>
+              查询
+            </button>
           </div>
         </div>
       </form>
     </div>
     <div class="zmy-table">
-      <nz-table [nzData]="accessoryNewList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" #basicTable>
+      <nz-table
+        [nzData]="accessoryNewList"
+        [nzShowPagination]="true"
+        [nzNoResult]="noResultText"
+        [nzPageSize]="'15'"
+        (nzPageIndexChange)="onNZPageIndexChange($event)"
+        [(nzPageIndex)]="pageIndex"
+        #basicTable
+      >
         <thead>
           <tr>
             <th>序号</th>
@@ -79,17 +114,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i=index">
-            <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td [title]="data.accessory_id||''">
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>{{ i + (pageIndex - 1) * 15 + 1 }}</td>
+            <td [title]="data.accessory_id || ''">
               <span [appTxtCopy]="data.accessory_id">
-                {{(data.accessory_id|zMaxLength:8)||'--'}}
+                {{ (data.accessory_id | zMaxLength: 8) || '--' }}
               </span>
             </td>
             <td>
               <div class="img-item">
                 <div class="img-box">
-                  <ng-container *ngIf="data.accessory_imagesList.length!==0">
+                  <ng-container *ngIf="data.accessory_imagesList.length !== 0">
                     <img [src]="data.accessory_imagesList[0]" />
                   </ng-container>
                   <ng-container *ngIf="data.accessory_imagesList.length === 0">
@@ -97,47 +132,79 @@
                   </ng-container>
                 </div>
                 <div style="display: grid">
-                  <a style="word-break: keep-all;text-align: left" [title]="data.accessory_name">
-                    {{data.accessory_name | zMaxLength:15}}
+                  <a
+                    style="word-break: keep-all;text-align: left"
+                    [title]="data.accessory_name"
+                  >
+                    {{ data.accessory_name | zMaxLength: 15 }}
                   </a>
-                  <div class="accessory-tip" *ngIf='data.accessory_params'>
-                    <label *ngIf='data.accessory_params.oil_num'>{{data.accessory_params.oil_num}}</label>
-                    <label *ngIf='data.accessory_params.oil_type'>{{data.accessory_params.oil_type|oilType}}</label>
-                    <label *ngIf='data.accessory_params.oil_api'>{{data.accessory_params.oil_api}}</label>
-                    <label *ngIf='data.accessory_params.oil_place'
-                      [title]="data.accessory_params.oil_place">{{data.accessory_params.oil_place| zMaxLength:12}}</label>
-                    <label *ngIf='data.accessory_params.oil_expire'
-                      [title]="data.accessory_params.oil_expire">{{data.accessory_params.oil_expire| zMaxLength:12}}</label>
+                  <div class="accessory-tip" *ngIf="data.accessory_params">
+                    <label *ngIf="data.accessory_params.oil_num">{{
+                      data.accessory_params.oil_num
+                    }}</label>
+                    <label *ngIf="data.accessory_params.oil_type">{{
+                      data.accessory_params.oil_type | oilType
+                    }}</label>
+                    <label *ngIf="data.accessory_params.oil_api">{{
+                      data.accessory_params.oil_api
+                    }}</label>
+                    <label
+                      *ngIf="data.accessory_params.oil_place"
+                      [title]="data.accessory_params.oil_place"
+                      >{{
+                        data.accessory_params.oil_place | zMaxLength: 12
+                      }}</label
+                    >
+                    <label
+                      *ngIf="data.accessory_params.oil_expire"
+                      [title]="data.accessory_params.oil_expire"
+                      >{{
+                        data.accessory_params.oil_expire | zMaxLength: 12
+                      }}</label
+                    >
                   </div>
                 </div>
               </div>
             </td>
-            <td>{{data.project?.project_name||'--'}}</td>
-            <td>{{data.accessory_brand?.brand_name||'--'}}</td>
+            <td>{{ data.project?.project_name || '--' }}</td>
+            <td>{{ data.accessory_brand?.brand_name || '--' }}</td>
             <td>
-              <span *ngIf='data.min_real_balance!==data.max_real_balance'>
-                {{data.min_real_balance|centPriceChange}}-</span>
-              {{data.max_real_balance|centPriceChange:'元'}}
+              <span *ngIf="data.min_real_balance !== data.max_real_balance">
+                {{ data.min_real_balance | centPriceChange }}-</span
+              >
+              {{ data.max_real_balance | centPriceChange: '元' }}
             </td>
             <td>
-              <span *ngIf='data.min_right_balance!==data.max_right_balance'>
-                {{data.min_right_balance|centPriceChange}}-</span>
-              {{data.max_right_balance|centPriceChange:'元'}}</td>
+              <span *ngIf="data.min_right_balance !== data.max_right_balance">
+                {{ data.min_right_balance | centPriceChange }}-</span
+              >
+              {{ data.max_right_balance | centPriceChange: '元' }}
+            </td>
             <td>
-              <span *ngIf='data.min_buy_price!==data.max_buy_price'>
-                {{data.min_buy_price|centPriceChange}}-
+              <span *ngIf="data.min_buy_price !== data.max_buy_price">
+                {{ data.min_buy_price | centPriceChange }}-
               </span>
-              {{data.max_buy_price|centPriceChange:'元'}}</td>
-            <td>{{data.sale_num||0}}</td>
+              {{ data.max_buy_price | centPriceChange: '元' }}
+            </td>
+            <td>{{ data.sale_num || 0 }}</td>
             <td>
-              <nz-switch [ngModel]="data.sale_status" (ngModelChange)="onSwitchChange(data.sale_status, $event)"
-                [nzControl]=true nzCheckedChildren="On" nzUnCheckedChildren="Off"
-                (click)="onSwitchClick(data.accessory_id,data.sale_status)">
+              <nz-switch
+                [ngModel]="data.sale_status"
+                (ngModelChange)="onSwitchChange(data.sale_status, $event)"
+                [nzControl]="true"
+                nzCheckedChildren="On"
+                nzUnCheckedChildren="Off"
+                (click)="onSwitchClick(data.accessory_id, data.sale_status)"
+              >
               </nz-switch>
             </td>
             <td class="operation">
-              <a [title]="'编辑'" [routerLink]="['../edit',data.accessory_id]">编辑</a>
-              <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data.accessory_id)">推荐设置</a>
+              <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]"
+                >编辑</a
+              >
+              <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data)"
+                >推荐设置</a
+              >
               <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
             </td>
           </tr>
