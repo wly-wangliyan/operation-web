@@ -18,7 +18,7 @@ export class SearchParams extends EntityBase {
 // 供货配置筛选参数
 export class SupplyConfigParams extends EntityBase {
   public accessory_name: string = undefined; // 配件名称
-  public supply_type = ''; // 供货方式 1:第三方供应商  2:门店自供
+  public supply_type = 4; // 供货方式 1:第三方供应商  2:门店自供 3空 4全部
   public project_id = ''; // 保养项目ID(机油ID/机油滤清器ID) "xxx"
   public supplier_id = ''; // 供货商ID
   public warehouse_id = ''; // 供应仓库ID

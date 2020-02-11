@@ -22,8 +22,8 @@
         <div class="form-group">
           <span>供货方式：</span>
           <select class="form-control" [(ngModel)]="searchParams.supply_type" name="search_supply_type">
-            <option value="">全部</option>
-            <option value="3">空</option>
+            <option value=4>全部</option>
+            <option value=3>空</option>
             <option *ngFor="let type of supply_type" [value]="type">{{type|supplyType}}</option>
           </select>
         </div>
