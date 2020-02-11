@@ -400,9 +400,12 @@ export class GarageManagementService {
    * 获取供应商下所有仓库
    * @param supplier_id 参数
    */
-  public requestWarehouseListData(supplier_id: string): Observable<Array<WarehouseEntity>> {
+  public requestWarehouseListData(supplier_id: string, status: any = ''): Observable<Array<WarehouseEntity>> {
     const httpUrl = `${this.domain}/admin/suppliers/${supplier_id}/warehouses/all`;
-    return this.httpService.get(httpUrl).pipe(map(result => {
+    const params = status ? {
+      status
+    } : '';
+    return this.httpService.get(httpUrl, params).pipe(map(result => {
       const tempList: Array<WarehouseEntity> = [];
       result.body.forEach(res => {
         tempList.push(WarehouseEntity.Create(res));

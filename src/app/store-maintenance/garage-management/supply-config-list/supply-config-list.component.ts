@@ -164,7 +164,7 @@ export class SupplyConfigListComponent implements OnInit {
 
   // 获取供应仓库列表
   private requestWarehouseList(supplier_id: string, warehouse_id?: string): void {
-    this.garageService.requestWarehouseListData(supplier_id).subscribe(res => {
+    this.garageService.requestWarehouseListData(supplier_id, 1).subscribe(res => {
       this.warehouseList = res;
       if (warehouse_id && !this.warehouseList.some(warehouse => warehouse.warehouse_id === warehouse_id)) {
         this.configParams.warehouse_id = '';
