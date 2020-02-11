@@ -59,8 +59,8 @@
                   <nz-form-item nzFlex>
                     <nz-form-label nzRequired [nzNoColon]='true'>机油标号</nz-form-label>
                     <nz-form-control>
-                      <select class="form-control" name="oil_num" [(ngModel)]="accessoryParams.accessory_params.oil_num"
-                        required>
+                      <select class="form-control" style="width: 200px;" name="oil_num"
+                        [(ngModel)]="accessoryParams.accessory_params.oil_num" required>
                         <option value="">请选择</option>
                         <option *ngFor='let data of oil_num' [value]=data>{{data}}</option>
                       </select>
@@ -71,7 +71,7 @@
                   <nz-form-item nzFlex>
                     <nz-form-label nzRequired [nzNoColon]='true'>机油类别</nz-form-label>
                     <nz-form-control>
-                      <select class="form-control" name="oil_type"
+                      <select class="form-control" style="width: 200px;" name="oil_type"
                         [(ngModel)]="accessoryParams.accessory_params.oil_type" required>
                         <option value="">请选择</option>
                         <option *ngFor='let data of oil_type' [value]=data>{{data}}</option>
@@ -83,7 +83,7 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>API等级</nz-form-label>
                     <nz-form-control class="ml_10">
-                      <select class="form-control" name="oil_api"
+                      <select class="form-control" style="width: 200px;" name="oil_api"
                         [(ngModel)]="accessoryParams.accessory_params.oil_api">
                         <option value="">请选择</option>
                         <option *ngFor='let data of oil_api' [value]=data>{{data}}</option>
@@ -97,8 +97,9 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>商品产地</nz-form-label>
                     <nz-form-control>
-                      <input class="params" [(ngModel)]="accessoryParams.accessory_params.oil_place"
-                        placeholder="输入0-50字" nz-input autocomplete="off" name="oil_place" maxlength='50' />
+                      <input class="params" style="width: 200px;"
+                        [(ngModel)]="accessoryParams.accessory_params.oil_place" placeholder="输入0-50字" nz-input
+                        autocomplete="off" name="oil_place" maxlength='50' />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -106,7 +107,7 @@
                   <nz-form-item nzFlex>
                     <nz-form-label [nzNoColon]='true'>保质期</nz-form-label>
                     <nz-form-control>
-                      <input class="params" placeholder="输入0-20字"
+                      <input class="params" style="width: 200px;" placeholder=" 输入0-20字"
                         [(ngModel)]="accessoryParams.accessory_params.oil_expire" nz-input autocomplete="off"
                         name="oil_expire" maxlength='20' />
                     </nz-form-control>
