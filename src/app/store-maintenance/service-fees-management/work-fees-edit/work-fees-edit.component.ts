@@ -74,6 +74,8 @@ export class WorkFeesEditComponent implements OnInit {
     });
     if (this.service_fee_id) {
       this.searchText$.next();
+    } else {
+      this.loading = true;
     }
   }
 
