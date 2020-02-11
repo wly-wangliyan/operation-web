@@ -37,6 +37,30 @@ export class SpecificationEntity extends EntityBase {
     }
     return null;
   }
+
+  public toEditJson(): SpecificationEntity {
+    const json = this.json();
+    json.original_balance_fee = json.original_balance_fee
+      ? Math.round(json.original_balance_fee * 100)
+      : null;
+    json.sale_balance_fee = json.sale_balance_fee
+      ? Math.round(json.sale_balance_fee * 100)
+      : null;
+    json.original_fee = json.original_fee
+      ? Math.round(json.original_fee * 100)
+      : null;
+    json.settlement_fee = json.settlement_fee
+      ? Math.round(json.settlement_fee * 100)
+      : null;
+    json.sale_fee = json.sale_fee ? Math.round(json.sale_fee * 100) : null;
+    delete json.accessory;
+    delete json.sale_num;
+    delete json.imageList;
+    delete json.time;
+    delete json.created_time;
+    delete json.updated_time;
+    return json;
+  }
 }
 
 // 项目实体
@@ -79,6 +103,7 @@ export class AccessoryParamsEntity extends EntityBase {
 
 // 机滤参数实体
 export class PriceInfoEntity extends EntityBase {
+  public specification_id = ''; // string	规格id-主键
   public original_fee: number = undefined; // float	机滤原价
   public settlement_fee: number = undefined; // float 机滤结算价
   public sale_fee: number = undefined; // float	机滤售价
@@ -87,6 +112,7 @@ export class PriceInfoEntity extends EntityBase {
   constructor(source?: SpecificationEntity) {
     super();
     if (source) {
+      this.specification_id = source.specification_id || '';
       this.original_fee = source.original_fee;
       this.settlement_fee = source.settlement_fee;
       this.sale_fee = source.sale_fee;
@@ -109,11 +135,11 @@ export class AccessoryEntity extends EntityBase {
   public accessory_name: string = undefined; // tring	配件名称
   public accessory_images: string = undefined; // string	图片 多个逗号分隔
   public operation_telephone: string = undefined; // string	运营手机号
-  public accessory_imagesList: Array<any> = []; // array	图片数组
-  public car_series_list: Array<CarSeriesEntity> = []; // array	车系数组
+  public accessory_imagesList: Array<any> = undefined; // array	图片数组
   public project: ProjectEntity = undefined; // 项目对象 Project
   public accessory_brand: AccessoryBrandEntity = undefined; // object	配件品牌对象 AccessoryBrand
-  public specification_info: Array<SpecificationEntity> = []; // object	规格 Specification
+  public car_series_list: Array<CarSeriesEntity> = []; // array	车系数组
+  public specification_info: Array<SpecificationEntity> = undefined; // object	规格 Specification
   public accessory_params: AccessoryParamsEntity = undefined; // json	机油参数
   public price_info: PriceInfoEntity = undefined; // json	机滤参数
   public detail: string = undefined; // string	图文详情
