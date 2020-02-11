@@ -85,7 +85,7 @@
                     <span>短信通知</span>
                 </label>
                 <div>
-                    <nz-switch [ngModel]="currentWarehouse.st_status===1" name="st_status" nzCheckedChildren="On"
+                    <nz-switch [(ngModel)]="st_status" name="st_status" nzCheckedChildren="On"
                                style="display: inline-flex;margin-right: 10px" nzUnCheckedChildren="Off"></nz-switch>
                     <label class="msg-span">开启后此手机号将收到发货和退货的短信通知，同一门店仅可以开启2个短信通知手机号</label>
                 </div>

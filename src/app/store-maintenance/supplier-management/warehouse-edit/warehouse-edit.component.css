@@ -69,6 +69,7 @@
 .content-flow {
     background: #fff!important;
     margin-left: 15px;
+    height: calc(100% - 200px);
 }
 
 .common-btn {

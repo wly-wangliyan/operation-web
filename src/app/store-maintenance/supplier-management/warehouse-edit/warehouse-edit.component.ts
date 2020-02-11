@@ -48,6 +48,7 @@ export class WarehouseEditComponent implements OnInit {
   public sms_telephone = [];
   public run_start_time: TimeItem = new TimeItem(); // 营业开始时间
   public run_end_time: TimeItem = new TimeItem(); //  营业结束时间
+  public st_status: boolean;
 
   private continueRequestSubscription: Subscription;
   private warehouse_id: string;
@@ -79,6 +80,7 @@ export class WarehouseEditComponent implements OnInit {
             this.sms_telephone.push({tel: value, time: new Date().getTime()});
           });
           this.is_add_tel = this.sms_telephone.length >= 2 ? false : true;
+          this.st_status = res.st_status === 1 ? true : false;
           this.run_start_time = res.run_start_time ? DateFormatHelper.getMinuteOrTime(res.run_start_time) : new TimeItem();
           this.run_end_time = res.run_end_time ? DateFormatHelper.getMinuteOrTime(res.run_end_time) : new TimeItem();
           const regionObj = new RegionEntity(this.currentWarehouse);
@@ -104,7 +106,7 @@ export class WarehouseEditComponent implements OnInit {
       // 编辑商家
       const telList = this.sms_telephone.map(value => value.tel);
       this.currentWarehouse.sms_telephone = telList.join(',');
-      this.currentWarehouse.st_status = this.currentWarehouse.st_status ? 1 : 2;
+      this.currentWarehouse.st_status = this.st_status ? 1 : 2;
       this.supplierHttpService.requestEditWarehouseData(this.supplier_id, this.warehouse_id, this.currentWarehouse).subscribe(() => {
         this.globalService.promptBox.open('保存成功！', () => {
           this.router.navigate([`/supplier-management/supplier-list/${this.supplier_id}/warehouse-list`]);
