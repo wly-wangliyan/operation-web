@@ -174,8 +174,9 @@
           <span>客服电话</span>
         </label>
         <div class="control-input">
-          <input class="form-control" [(ngModel)]="washInfo.wash_car_telephone" placeholder="请输入手机号" name="telephone"
-            maxlength="11" appIntNumber required>
+          <input class="form-control" [(ngModel)]="washInfo.wash_car_telephone" placeholder="请输入客服电话"
+            name="wash_car_telephone" maxlength="12" onInput="value=value.replace(/[^0-9-]/g,'')" appIgnoreSpace
+            required>
         </div>
       </div>
       <div class="row">
@@ -239,8 +240,8 @@
           <span>客服电话</span>
         </label>
         <div class="control-input">
-          <input class="form-control" [(ngModel)]="maintainInfo.maintain_telephone" placeholder="请输入手机号"
-            name="telephone" maxlength="11" appIntNumber required>
+          <input class="form-control" [(ngModel)]="maintainInfo.maintain_telephone" placeholder="请输入客服电话"
+            name="telephone" maxlength="12" onInput="value=value.replace(/[^0-9-]/g,'')" appIgnoreSpace required>
         </div>
       </div>
       <div class="row">
