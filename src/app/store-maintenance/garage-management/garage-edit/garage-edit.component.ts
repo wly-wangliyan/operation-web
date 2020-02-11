@@ -336,4 +336,9 @@ export class GarageEditComponent implements OnInit, OnDestroy {
       this.tag = '';
     }
   }
+
+  // 服务类型至少选择一项
+  public ifDisabled(): boolean {
+    return !this.serviceList.some(service => service.isChecked);
+  }
 }

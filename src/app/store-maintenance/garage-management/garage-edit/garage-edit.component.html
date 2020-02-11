@@ -37,7 +37,7 @@
       </div>
       <div class="row">
         <label class="control-label">
-          <b>&nbsp;&nbsp;</b>
+          <b>*</b>
           <span>服务类型</span>
         </label>
         <div class="control-input">
@@ -124,8 +124,8 @@
         </div>
       </div>
       <div style="margin-top: 40px;margin-bottom: 40px">
-        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editForm.form.valid"
-          (appZDebounceClick)="onEditFormSubmit()">保存
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+          [disabled]="!editForm.form.valid || ifDisabled()" (appZDebounceClick)="onEditFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
