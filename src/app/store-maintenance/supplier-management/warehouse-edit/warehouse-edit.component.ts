@@ -130,7 +130,7 @@ export class WarehouseEditComponent implements OnInit {
       this.currentWarehouse.run_start_time = run_start_time;
       this.currentWarehouse.run_end_time = run_end_time;
     }
-    if (this.currentWarehouse.st_status === 1 && (this.sms_telephone.length === 0 || !this.sms_telephone[0].tel)) {
+    if (this.st_status && (this.sms_telephone.length === 0 || !this.sms_telephone[0].tel)) {
       this.errPositionItem.sms_telephone.isError = true;
       this.errPositionItem.sms_telephone.errMes = '短信通知已开启，请填写手机号！';
       isCheck = false;

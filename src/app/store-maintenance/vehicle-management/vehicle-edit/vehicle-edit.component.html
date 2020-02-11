@@ -49,8 +49,8 @@
                     <tr *ngFor="let data of basicTable.data; let i=index">
                         <td>{{data.project_id}}</td>
                         <td [title]="data.project_name">{{data.project_name|zMaxLength:10}}</td>
-                        <td>{{data.part_param?.jy_ShuXin}}</td>
                         <td>{{data.part_param?.jy_ShuXing2}}</td>
+                        <td>{{data.part_param?.jy_ShuXin===1?'全合成':data.part_param?.jy_ShuXin===2?'半合成':data.part_param?.jy_ShuXin===3?'矿物质':'--'}}</td>
                         <td>{{data.reference_amount?data.reference_amount:'--'}}</td>
                         <td>{{data.unit?data.unit:'--'}}</td>
                     </tr>

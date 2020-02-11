@@ -195,7 +195,8 @@ export class VehicleListComponent implements OnInit {
   // 获取全部项目信息
   private requestProjectListAll() {
     this.projectHttpService.requestProjectListAll().subscribe(res => {
-      this.projectList = res.results;
+      this.importParams.project_num = '11';
+      this.projectList = res.results.filter(value => value.project_num === '11');
     }, error => {
       this.globalService.httpErrorProcess(error);
     });
