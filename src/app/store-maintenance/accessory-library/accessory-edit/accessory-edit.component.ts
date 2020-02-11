@@ -226,9 +226,10 @@ export class AccessoryEditComponent implements OnInit {
   private requestProjectParams(): void {
     this.accessoryLibraryService.requestProjectParamsData(this.accessoryParams.project_id).subscribe(res => {
       this.params = res;
-      this.oil_num = res.filter(param => param.param_name === '机油标号')[0].option;
-      this.oil_type = res.filter(param => param.param_name === '机油类别')[0].option;
-      this.oil_api = res.filter(param => param.param_name === 'API等级')[0].option;
+      this.oil_num = res.filter(param => param.param_name === '机油标号')[0] ? res.filter(param => param.param_name === '机油标号')[0].option : [];
+      this.oil_type = res.filter(param => param.param_name === '机油类别')[0] ? res.filter(param => param.param_name === '机油类别')[0].option : [];
+      this.oil_api = res.filter(param => param.param_name === 'API等级')[0] ?
+        res.filter(param => param.param_name === 'API等级')[0].option : [];
       this.accessoryParams.accessory_params.oil_num = this.oil_num.includes(this.accessoryParams.accessory_params.oil_num) ?
         this.accessoryParams.accessory_params.oil_num : '';
       this.accessoryParams.accessory_params.oil_type = this.oil_type.includes(this.accessoryParams.accessory_params.oil_type) ?
