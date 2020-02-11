@@ -149,12 +149,19 @@ export class AccessoryEntity extends EntityBase {
   public right_prepaid_fee: number = undefined; // float	应付预付价 单位：分
   public is_deleted: boolean = undefined; // bool	是否删除
   public sale_status: boolean = undefined; // integer	销售状态 1：在售 2：停售
-  public min_right_balance: number = undefined; // integer	最小原价
-  public max_right_balance: number = undefined; // integer	最大原价
-  public min_buy_price: number = undefined; // integer	最小结算价
-  public max_buy_price: number = undefined; // integer	最大结算价
-  public min_real_balance: number = undefined; // integer	最小售价
-  public max_real_balance: number = undefined; // integer	最大售价
+  public min_right_balance: number = undefined; // 蓄电池-最小原价
+  public max_right_balance: number = undefined; // 蓄电池-最大原价
+  public min_buy_price: number = undefined; // 蓄电池-最小结算价
+  public max_buy_price: number = undefined; // 蓄电池-最大结算价
+  public min_real_balance: number = undefined; // 蓄电池-	最小售价
+  public max_real_balance: number = undefined; // 蓄电池-最大售价
+
+  public min_original_fee: number = undefined; // （机油、机滤）最小原价
+  public max_original_fee: number = undefined; // （机油、机滤）最大原价
+  public min_sale_fee: number = undefined; // （机油、机滤）最小售价
+  public max_sale_fee: number = undefined; // （机油、机滤）	最大售价
+  public min_settlement_fee: number = undefined; // （机油、机滤）最小结算价
+  public max_settlement_fee: number = undefined; // （机油、机滤）最大结算价
   public sale_num: number = undefined; // integer	销量
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间

@@ -163,11 +163,15 @@ export class SupplyConfigListComponent implements OnInit {
   }
 
   // 获取供应仓库列表
-  private requestWarehouseList(supplier_id: string): void {
+  private requestWarehouseList(supplier_id: string, warehouse_id?: string): void {
     this.garageService.requestWarehouseListData(supplier_id).subscribe(res => {
       this.warehouseList = res;
+      if (warehouse_id && !this.warehouseList.some(warehouse => warehouse.warehouse_id === warehouse_id)) {
+        this.configParams.warehouse_id = '';
+      }
     }, err => {
       this.warehouseList = [];
+      this.configParams.warehouse_id = '';
       this.globalService.httpErrorProcess(err);
     });
   }
@@ -210,10 +214,7 @@ export class SupplyConfigListComponent implements OnInit {
       this.configParams.warehouse_id = data.supply_config.warehouse ? data.supply_config.warehouse.warehouse_id : '';
       if (this.configParams.supply_type === 1 && this.configParams.supplier_id) {
         if (this.supplierList.some(supplier => supplier.supplier_id === this.configParams.supplier_id)) {
-          this.requestWarehouseList(this.configParams.supplier_id);
-          if (!this.warehouseList.some(warehouse => warehouse.warehouse_id === this.configParams.warehouse_id)) {
-            this.configParams.warehouse_id = '';
-          }
+          this.requestWarehouseList(this.configParams.supplier_id, this.configParams.warehouse_id);
         } else {
           this.configParams.supplier_id = '';
         }
