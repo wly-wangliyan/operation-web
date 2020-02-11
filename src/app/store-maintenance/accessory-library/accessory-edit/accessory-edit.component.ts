@@ -327,7 +327,6 @@ export class AccessoryEditComponent implements OnInit {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传图片！';
     } else if (this.accessoryParams.project_name === '蓄电池') {
-      this.handleParams();
       const regPhone = /^(1[3-9])\d{9}$/g;
       if (Number(this.accessoryParams.right_prepaid_fee) > Number(this.accessoryParams.real_prepaid_fee)) {
         this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
@@ -340,7 +339,6 @@ export class AccessoryEditComponent implements OnInit {
         this.handleUpdateAssessoryData();
       }
     } else if (this.accessoryParams.project_name === '机油') {
-      this.handleParams();
       this.isSaveBtnDisabled = true;
       this.handleUpdateAssessoryData();
     } else { // 机油滤清器

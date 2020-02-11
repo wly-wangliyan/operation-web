@@ -10,7 +10,7 @@ import { CarSeriesEntity } from '../vehicle-management/vehicle-management-http.s
 
 // 规格实体
 export class SpecificationEntity extends EntityBase {
-  public specification_id: string = undefined; // string	规格id-主键
+  public specification_id = undefined; // string	规格id-主键
   public name: string = undefined; // string	名称
   public accessory: AccessoryEntity = undefined; // object	配件对象 Accessory
   public image: string = undefined; // string	图片
@@ -53,6 +53,7 @@ export class SpecificationEntity extends EntityBase {
       ? Math.round(json.settlement_fee * 100)
       : null;
     json.sale_fee = json.sale_fee ? Math.round(json.sale_fee * 100) : null;
+    json.specification_id = json.specification_id || '';
     delete json.accessory;
     delete json.sale_num;
     delete json.imageList;
@@ -242,7 +243,7 @@ export class SearchAccessoryParams extends EntityBase {
 export class AccessoryLibraryService {
   private domain = environment.STORE_DOMAIN; // 保养域名
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
   /**
    * 获取配件库列表
