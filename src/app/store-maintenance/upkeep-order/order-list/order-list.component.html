@@ -14,7 +14,7 @@
         <div class="form-group">
           <span>订单状态：</span>
           <select name="user_order_status" class="form-control" style="width: 130px;"
-            [(ngModel)]="searchParams.user_order_status">
+            [(ngModel)]="searchParams.user_status">
             <option value="">全部</option>
             <option *ngFor="let status of arrivalOrderStatus" [value]="status">{{status|arrivalOrderStatus}}</option>
           </select>

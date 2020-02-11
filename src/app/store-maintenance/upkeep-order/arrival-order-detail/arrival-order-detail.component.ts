@@ -13,7 +13,7 @@ import { ProjectEntity } from '../../accessory-library/accessory-library.service
 })
 export class ArrivalOrderDetailComponent implements OnInit {
   public orderRecord: ArrivalOrderEntity = new ArrivalOrderEntity(); // 到店保养订单详情
-  public projectIds = [11, 12, 10]; // 11:机油 12:机油滤清器 10:蓄电池
+  public projectIds = ['11', '12', '10']; // 11:机油 12:机油滤清器 10:蓄电池
   public mapOfAccessory: { [key: string]: Array<AccessoryItem> } = {}; // 保养项目对应配件
   public img_urls = [];
 

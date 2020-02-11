@@ -10,7 +10,7 @@ import { RepairShopEntity } from '../garage-management/garage-management.service
 
 export class UpkeepOrderSearchParams extends EntityBase {
   // 到店保养订单
-  public user_order_status = ''; // 订单状态 1：待支付 2:待收货(配送中) 3:待服务(已到达) 4：已取消 5：已完成
+  public user_status = ''; // 订单状态 1：待支付 2:待收货(配送中) 3:待服务(已到达) 4：已取消 5：已完成
   public buyer_tel: string = undefined; // 手机号
   public buyer_name: string = undefined; // 购买人
   public arrival_order_id: string = undefined; // 订单id
@@ -161,7 +161,7 @@ export class AccessoryItem extends EntityBase {
   public sale_fee: number = undefined; // 单价
   public brand_name: string = undefined; // 品牌
   public original_fee: number = undefined; // 应付
-  public project_number: number = undefined; // 项目编号 10:蓄电池, 11:机油, 12:机油滤净器
+  public project_number: string = undefined; // 项目编号 10:蓄电池, 11:机油, 12:机油滤净器
   public supplier_name: string = undefined; // 供应商名称
   public warehouse_name: string = undefined; // 仓库名称
 
