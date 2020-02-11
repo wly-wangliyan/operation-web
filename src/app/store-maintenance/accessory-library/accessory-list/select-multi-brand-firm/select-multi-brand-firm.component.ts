@@ -68,6 +68,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   public defaultExpandedKeys = [];
   public defaultCheckedKeys = [];
   public defaultSelectedKeys = [];
+  public loading = false;
 
   private sureCallback: any;
   private closeCallback: any;
@@ -110,6 +111,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
 
   // 初始化
   private initModal() {
+    this.loading = false;
     this.accessory_id = '';
     this.carBrandList = [];
     this.carFactoryList = [];
@@ -141,9 +143,6 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     this.defaultExpandedKeys = this.car_brand_checked_list.concat(
       this.car_factory_checked_list
     );
-    console.log('1', this.defaultCheckedKeys);
-    console.log('2', this.defaultSelectedKeys);
-    console.log('3', this.defaultExpandedKeys);
   }
 
   // 确定按钮回调
@@ -173,8 +172,10 @@ export class SelectMultiBrandFirmComponent implements OnInit {
               brand => brand.car_brand_initial === leter
             );
           });
+          this.loading = true;
         },
         err => {
+          this.loading = true;
           $('#selectMultiBrandFirmModal').modal('hide');
           this.globalService.httpErrorProcess(err);
         }
@@ -205,6 +206,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
           });
         },
         err => {
+          this.loading = true;
           $('#selectMultiBrandFirmModal').modal('hide');
           this.globalService.httpErrorProcess(err);
         }
@@ -234,6 +236,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
         });
       },
       err => {
+        this.loading = true;
         this.carFactoryList = [];
         $('#selectMultiBrandFirmModal').modal('hide');
         this.globalService.httpErrorProcess(err);
@@ -268,8 +271,12 @@ export class SelectMultiBrandFirmComponent implements OnInit {
               brand => brand.car_brand_initial === leter
             );
           });
+          timer(500).subscribe(() => {
+            this.loading = true;
+          });
         },
         err => {
+          this.loading = true;
           this.carSeriesList = [];
           $('#selectMultiBrandFirmModal').modal('hide');
           this.globalService.httpErrorProcess(err);
