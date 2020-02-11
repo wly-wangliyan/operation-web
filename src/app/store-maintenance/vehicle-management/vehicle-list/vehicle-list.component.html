@@ -113,7 +113,7 @@
   <div class="modal-dialog modal-dialog-common" role="document">
     <div class="modal-content modal-content-common">
       <div class="modal-header">
-        <span class="modal-title">导入车型</span>
+        <span class="modal-title">{{importType === 'param'?'导入原厂参数':'导入车型'}}</span>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCancelData()">&times;
         </button>
       </div>
