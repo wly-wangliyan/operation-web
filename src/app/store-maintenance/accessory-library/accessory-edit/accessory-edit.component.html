@@ -74,7 +74,7 @@
                       <select class="form-control" style="width: 200px;" name="oil_type"
                         [(ngModel)]="accessoryParams.accessory_params.oil_type" required>
                         <option value="">请选择</option>
-                        <option *ngFor='let data of oil_type' [value]=data>{{data}}</option>
+                        <option *ngFor='let data of oil_type' [value]=data>{{data|oilType}}</option>
                       </select>
                     </nz-form-control>
                   </nz-form-item>

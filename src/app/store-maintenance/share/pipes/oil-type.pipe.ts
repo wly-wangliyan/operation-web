@@ -24,7 +24,7 @@ export class OilTypePipe implements PipeTransform {
       result = OilType[value];
     }
     if (!result) {
-      result = '';
+      result = '' || value;
     }
     return result;
   }

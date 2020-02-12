@@ -137,7 +137,7 @@
                             <label
                               *ngIf="accessory.accessory_params.oil_num">{{accessory.accessory_params.oil_num}}</label>
                             <label
-                              *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type}}</label>
+                              *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type  | oilType}}</label>
                             <label
                               *ngIf="accessory.accessory_params.oil_api">{{accessory.accessory_params.oil_api}}</label>
                             <label *ngIf="accessory.accessory_params.oil_place"

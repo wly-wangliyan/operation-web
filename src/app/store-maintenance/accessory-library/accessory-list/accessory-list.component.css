@@ -96,8 +96,15 @@
   padding-left: 30px !important;
 }
 
-.operation {
-  min-width: 68px;
+.operation div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.operation a {
+  margin: 3px 5px 3px 5px;
 }
 
 .img-item {
