@@ -159,9 +159,10 @@ export class AccessoryListComponent implements OnInit {
   // 推荐设置打开所属厂商选择组件
   public onOpenBrandFirmModal(data: AccessoryEntity): void {
     this.selectMultiBrandFirmComponent.open(data, () => {
-      timer(0).subscribe(() => {
-        this.searchText$.next();
-      });
+      this.accessoryList = [];
+      this.accessoryNewList = [];
+      this.noResultText = '数据加载中...';
+      this.searchText$.next();
     });
   }
 

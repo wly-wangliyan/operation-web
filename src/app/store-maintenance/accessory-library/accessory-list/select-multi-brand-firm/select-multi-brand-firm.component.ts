@@ -70,6 +70,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   public defaultSelectedKeys = [];
   public loading = false;
 
+  private isRequestSeriesData = false;
   private sureCallback: any;
   private closeCallback: any;
   private requestBrandSubscription: Subscription; // 获取品牌数据
@@ -155,7 +156,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     }
   }
 
-  // 获取品牌列表
+  // 没有勾选车系时获取品牌列表
   private requestBrandAllList() {
     this.requestBrandSubscription = this.vehicleService
       .requestCarBrandsListData()
@@ -200,6 +201,8 @@ export class SelectMultiBrandFirmComponent implements OnInit {
             const isChekedBrand = this.car_brand_checked_list
               .join(',')
               .includes(i.car_brand_id);
+            console.log('11', isChekedBrand);
+
             if (isChekedBrand) {
               this.getCheckedFactoryList(i, index);
             }
@@ -303,6 +306,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   // 复选>选中父级默认勾选子级
   nzCheck(event: any): void {
     if (event.eventName === 'check') {
+      this.isRequestSeriesData = true;
       const node = event.node;
       if (node && node.getChildren().length === 0 && !node.isExpanded) {
         if (node.level === 0) {
@@ -358,8 +362,10 @@ export class SelectMultiBrandFirmComponent implements OnInit {
               i.isChecked = true;
             });
           }
+          this.isRequestSeriesData = false;
         },
         err => {
+          this.isRequestSeriesData = false;
           this.carSeriesList = [];
           $('#selectMultiBrandFirmModal').modal('hide');
           this.globalService.httpErrorProcess(err);
@@ -396,6 +402,33 @@ export class SelectMultiBrandFirmComponent implements OnInit {
 
   // 回传选中事件
   public onSelectCarSeries() {
+    if (this.getCheckedSeriesId().length === 0) {
+      this.globalService.promptBox.open(
+        `请勾选车系后再保存!`,
+        null,
+        2000,
+        '/assets/images/warning.png'
+      );
+    } else {
+      const newList = this.getCheckedSeriesId().flat();
+      const seriesIds = newList
+        .map(item => item.car_series_id && item.car_series_id)
+        .join(',');
+      if (!seriesIds && this.isRequestSeriesData) {
+        this.globalService.promptBox.open(
+          `正在请求车系数据，请稍后保存!`,
+          null,
+          2000,
+          '/assets/images/warning.png'
+        );
+      } else {
+        this.setRecommendData(seriesIds);
+      }
+    }
+  }
+
+  // 获取选中的车系ID
+  private getCheckedSeriesId(): Array<any> {
     const seriesList = [];
     for (const item of Object.keys(this.mapOfBrand)) {
       this.mapOfBrand[item].forEach(i => {
@@ -414,20 +447,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
         }
       });
     }
-    if (seriesList.length === 0) {
-      this.globalService.promptBox.open(
-        `请勾选车系后再保存!`,
-        null,
-        2000,
-        '/assets/images/warning.png'
-      );
-    } else {
-      const newList = seriesList.flat();
-      const seriesIds = newList
-        .map(item => item.car_series_id && item.car_series_id)
-        .join(',');
-      this.setRecommendData(seriesIds);
-    }
+    return seriesList;
   }
 
   // 获取第三级勾选数据
