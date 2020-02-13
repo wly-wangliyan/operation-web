@@ -140,10 +140,6 @@
                               *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type  | oilType}}</label>
                             <label
                               *ngIf="accessory.accessory_params.oil_api">{{accessory.accessory_params.oil_api}}</label>
-                            <label *ngIf="accessory.accessory_params.oil_place"
-                              [title]="accessory.accessory_params.oil_place">{{accessory.accessory_params.oil_place|zMaxLength:10}}</label>
-                            <label *ngIf="accessory.accessory_params.oil_expire"
-                              [title]="accessory.accessory_params.oil_expire">{{accessory.accessory_params.oil_expire|zMaxLength:10}}</label>
                           </div>
                         </div>
                       </div>

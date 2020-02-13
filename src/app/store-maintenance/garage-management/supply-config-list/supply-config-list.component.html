@@ -104,10 +104,6 @@
                     <label *ngIf="data.accessory_params.oil_num">{{data.accessory_params.oil_num}}</label>
                     <label *ngIf="data.accessory_params.oil_type">{{data.accessory_params.oil_type | oilType}}</label>
                     <label *ngIf="data.accessory_params.oil_api">{{data.accessory_params.oil_api}}</label>
-                    <label *ngIf="data.accessory_params.oil_place"
-                      [title]="data.accessory_params.oil_place">{{data.accessory_params.oil_place|zMaxLength:10}}</label>
-                    <label *ngIf="data.accessory_params.oil_expire"
-                      [title]="data.accessory_params.oil_expire">{{data.accessory_params.oil_expire|zMaxLength:10}}</label>
                   </div>
                 </div>
               </div>
