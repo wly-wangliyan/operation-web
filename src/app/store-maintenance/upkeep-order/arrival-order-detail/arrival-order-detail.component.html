@@ -165,7 +165,9 @@
                   </div>
                 </td>
                 <td>{{accessoryData.brand_name || '--'}}</td>
-                <td>{{accessoryData.content || '--'}}</td>
+                <td>
+                  {{accessoryData.content?(accessoryData.content.includes('L')?accessoryData.content:accessoryData.content+'L') : '--'}}
+                </td>
                 <td>{{accessoryData.number || 0}}</td>
                 <td>
                   <span *ngIf="accessoryData.supply_type===1">{{accessoryData.supplier_name || '--'}}</span>
