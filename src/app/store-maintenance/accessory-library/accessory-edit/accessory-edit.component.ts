@@ -106,7 +106,7 @@ export class AccessoryEditComponent implements OnInit {
     private routerInfo: ActivatedRoute,
     private router: Router,
     private accessoryLibraryService: AccessoryLibraryService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -492,16 +492,19 @@ export class AccessoryEditComponent implements OnInit {
           this.specificationsImgSelectList.forEach((child, index) => {
             child.upload().subscribe(
               () => {
-                const newImage = child.imageList.map(s => s.sourceUrl);
-                this.specificationsList[index].image = newImage.join(',');
-                if (this.validSpecificationInfo()) {
-                  this.accessoryParams.specifications = this.accessoryParams.specifications.concat(
-                    this.specificationsDelList
-                  );
-                  this.requestUpdateAssessoryData();
-                } else {
-                  this.isSaveBtnDisabled = false;
+                if (index === this.specificationsImgSelectList.length - 1) {
+                  const newImage = child.imageList.map(s => s.sourceUrl);
+                  this.specificationsList[index].image = newImage.join(',');
+                  if (this.validSpecificationInfo()) {
+                    this.accessoryParams.specifications = this.accessoryParams.specifications.concat(
+                      this.specificationsDelList
+                    );
+                    this.requestUpdateAssessoryData();
+                  } else {
+                    this.isSaveBtnDisabled = false;
+                  }
                 }
+
                 /*if (i === specificationsListLength) {
               const imageNoneList = this.specificationsList.filter(v => !v.image);
               if (imageNoneList.length !== 0) {
@@ -572,7 +575,7 @@ export class AccessoryEditComponent implements OnInit {
         if (!specification.battery_model) {
           this.specificationErrors = `第${index + 1}条规格信息-请输入${
             this.projectInfo.specification.name
-            }！`;
+          }！`;
           result = false;
           return;
         } else if (
@@ -580,7 +583,7 @@ export class AccessoryEditComponent implements OnInit {
         ) {
           this.specificationErrors = `第${index + 1}条规格信息-${
             this.projectInfo.specification.name
-            }名称重复！`;
+          }名称重复！`;
           result = false;
           return;
         } else if (
@@ -613,13 +616,13 @@ export class AccessoryEditComponent implements OnInit {
         if (!specification.content) {
           this.specificationErrors = `第${index + 1}条规格信息-请输入${
             this.projectInfo.specification.name
-            }！`;
+          }！`;
           result = false;
           return;
         } else if (tempSpecificationNameList.includes(specification.content)) {
           this.specificationErrors = `第${index + 1}条规格信息-${
             this.projectInfo.specification.name
-            }名称重复！`;
+          }名称重复！`;
           result = false;
           return;
         } else if (
@@ -721,36 +724,36 @@ export class AccessoryEditComponent implements OnInit {
             content.field === 'project_id'
               ? '项目名称'
               : content.field === 'accessory_name'
-                ? '产品名称'
-                : content.field === 'accessory_images'
-                  ? '图片'
-                  : content.field === 'accessory_brand_id'
-                    ? '所属品牌'
-                    : content.field === 'accessory_params'
-                      ? '参数'
-                      : content.field === 'detail'
-                        ? '图文详情'
-                        : content.field === 'battery_specification'
-                          ? '规格'
-                          : content.field === 'real_prepaid_fee'
-                            ? '预约原价'
-                            : content.field === 'right_prepaid_fee'
-                              ? '预付现价'
-                              : content.field === 'operation_telephone'
-                                ? '运营手机号'
-                                : content.field === 'price_info'
-                                  ? '价格'
-                                  : content.field === 'oil_filter_original_fee'
-                                    ? '原价'
-                                    : content.field === 'oil_filter_original_fee'
-                                      ? '结算价'
-                                      : content.field === 'oil_filter_sale_fee'
-                                        ? '售价'
-                                        : content.field === 'oil_filter_store'
-                                          ? '库存'
-                                          : content.field === 'params'
-                                            ? '参数'
-                                            : '';
+              ? '产品名称'
+              : content.field === 'accessory_images'
+              ? '图片'
+              : content.field === 'accessory_brand_id'
+              ? '所属品牌'
+              : content.field === 'accessory_params'
+              ? '参数'
+              : content.field === 'detail'
+              ? '图文详情'
+              : content.field === 'battery_specification'
+              ? '规格'
+              : content.field === 'real_prepaid_fee'
+              ? '预约原价'
+              : content.field === 'right_prepaid_fee'
+              ? '预付现价'
+              : content.field === 'operation_telephone'
+              ? '运营手机号'
+              : content.field === 'price_info'
+              ? '价格'
+              : content.field === 'oil_filter_original_fee'
+              ? '原价'
+              : content.field === 'oil_filter_original_fee'
+              ? '结算价'
+              : content.field === 'oil_filter_sale_fee'
+              ? '售价'
+              : content.field === 'oil_filter_store'
+              ? '库存'
+              : content.field === 'params'
+              ? '参数'
+              : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(
               `${field}字段未填写!`,
