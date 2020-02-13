@@ -177,9 +177,11 @@ export class AccessoryListComponent implements OnInit {
           .requestDeleteAccessoryData(data.accessory_id)
           .subscribe(
             () => {
-              this.globalService.promptBox.open('删除成功', () => {
-                this.searchText$.next();
-              });
+              this.globalService.promptBox.open(`删除成功`);
+              this.accessoryList = [];
+              this.accessoryNewList = [];
+              this.noResultText = '数据加载中...';
+              this.searchText$.next();
             },
             err => {
               this.globalService.httpErrorProcess(err);

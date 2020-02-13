@@ -492,9 +492,16 @@ export class AccessoryEditComponent implements OnInit {
           this.specificationsImgSelectList.forEach((child, index) => {
             child.upload().subscribe(
               () => {
+                const newImage = child.imageList.map(s => s.sourceUrl);
+                this.specificationsList[index].image = newImage.join(',');
+                console.log('1', index);
+                console.log('2', this.specificationsImgSelectList.length - 1);
+                console.log(
+                  '3',
+                  index === this.specificationsImgSelectList.length - 1
+                );
+
                 if (index === this.specificationsImgSelectList.length - 1) {
-                  const newImage = child.imageList.map(s => s.sourceUrl);
-                  this.specificationsList[index].image = newImage.join(',');
                   if (this.validSpecificationInfo()) {
                     this.accessoryParams.specifications = this.accessoryParams.specifications.concat(
                       this.specificationsDelList
