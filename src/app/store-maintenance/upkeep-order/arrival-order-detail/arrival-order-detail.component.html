@@ -85,7 +85,7 @@
 
         <tr>
           <td>到货时间</td>
-          <td>{{orderRecord.aog_time ? (orderRecord.aog_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
+          <td>{{orderRecord.sign_time ? (orderRecord.sign_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
           <td>验货时间</td>
           <td>{{ orderRecord.check_time ? (orderRecord.check_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--' }}</td>
           <td>验货照片</td>
