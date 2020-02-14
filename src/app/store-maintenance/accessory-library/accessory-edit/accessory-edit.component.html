@@ -270,7 +270,7 @@
                       <a [title]="'移除'" class="del-btn" *ngIf="specificationsList.length>1"
                         (click)="onDelSpecifications(data,i)">移除</a>
                       <a [title]="'添加'" class="add-btn"
-                        *ngIf="specificationsList.length<50 && i===specificationsList.length-1"
+                        *ngIf="specificationsList.length<5 && i===specificationsList.length-1"
                         (click)="onAddSpecifications()">添加</a>
                     </td>
                   </tr>
