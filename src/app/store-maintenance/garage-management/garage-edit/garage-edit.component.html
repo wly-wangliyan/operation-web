@@ -134,7 +134,7 @@
     <form class="form-horizontal" autocomplete="off" #washForm="ngForm" *ngIf="tab_index===3">
       <div class="row">
         <label class="control-label">
-          <b>*</b>
+          <b>&nbsp;&nbsp;</b>
           <span>洗车标签</span>
         </label>
         <div class="control-input">
@@ -190,8 +190,8 @@
       </div>
 
       <div style="margin-top: 40px;margin-bottom: 40px">
-        <button class="sure-btn" type="button" nz-button nzType="primary"
-          [disabled]="!washForm.form.valid || tagList.length===0" (appZDebounceClick)="onWashFormSubmit()">保存
+        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!washForm.form.valid"
+          (appZDebounceClick)="onWashFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
@@ -200,7 +200,7 @@
     <form class="form-horizontal maintain-form" autocomplete="off" #maintainForm="ngForm" *ngIf="tab_index===1">
       <div class="row">
         <label class="control-label">
-          <b>*</b>
+          <b>&nbsp;&nbsp;</b>
           <span>到店保养服务标签</span>
         </label>
         <div class="control-input">
@@ -255,8 +255,8 @@
       </div>
 
       <div style="margin-top: 40px;margin-bottom: 40px">
-        <button class="sure-btn" type="button" nz-button nzType="primary"
-          [disabled]="!maintainForm.form.valid || tagList.length===0" (appZDebounceClick)="onMaintainFormSubmit()">保存
+        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!maintainForm.form.valid"
+          (appZDebounceClick)="onMaintainFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onClose()">取消</button>
       </div>
