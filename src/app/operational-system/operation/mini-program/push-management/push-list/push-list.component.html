@@ -77,8 +77,9 @@
             <td *ngIf="data.push_range===4">
               <span>{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.free_range_type|diyRangeType)+'-'+
                     ((data.push_range_detail?.free_range_type|diyRangeTypeMsg)+data.push_range_detail?.free_date_limit)}}日</span>
-              <span
-                *ngIf="data.push_range_detail?.free_date_limit >=0 && data.push_range_detail?.free_date_limit_end >=0 && push_range_detail.free_date_limit !== push_range_detail.free_date_limit_end">至{{push_range_detail.free_date_limit_end}}日</span>
+              <span *ngIf="data.push_range_detail?.free_date_limit >=0 && data.push_range_detail?.free_date_limit_end >=0 
+                && data.push_range_detail.free_date_limit !== data.push_range_detail.free_date_limit_end">
+                至{{data.push_range_detail.free_date_limit_end}}日</span>
               <span>时提醒</span>
             </td>
 

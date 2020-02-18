@@ -25,9 +25,13 @@
               <span *ngIf="pushRecord.push_range===1">{{pushRecord.push_range|pushRange}}</span>
               <span *ngIf="pushRecord.push_range===2">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.range_type|rangeType)+'-'+
                             ('距离到期'+pushRecord.push_range_detail?.date_limit+'日时提醒')}}</span>
-              <span
-                *ngIf="pushRecord.push_range===4">{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.free_range_type|diyRangeType)+'-'+
-                            ((pushRecord.push_range_detail?.free_range_type|diyRangeTypeMsg)+pushRecord.push_range_detail?.free_date_limit+'日时提醒')}}</span>
+              <span *ngIf="pushRecord.push_range===4">
+                <span>{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.free_range_type|diyRangeType)+'-'+
+                              ((pushRecord.push_range_detail?.free_range_type|diyRangeTypeMsg)+pushRecord.push_range_detail?.free_date_limit)}}日</span>
+                <span
+                  *ngIf="pushRecord.push_range_detail?.free_date_limit >=0 && pushRecord.push_range_detail?.free_date_limit_end >=0 && pushRecord.push_range_detail.free_date_limit !== pushRecord.push_range_detail.free_date_limit_end">至{{pushRecord.push_range_detail.free_date_limit_end}}日</span>
+                <span>时提醒</span>
+              </span>
               <span
                 *ngIf="pushRecord.push_speed_type===2">{{'每隔'+pushRecord.push_speed?.push_interval+'日进行推送，每日推送'+pushRecord.push_speed?.push_num_everyday+'次，最大推送'+pushRecord.push_speed?.push_num+'次'}}</span>
             </div>
