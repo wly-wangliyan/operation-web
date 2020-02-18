@@ -44,8 +44,9 @@
         </div>
         <p *ngIf="bannerParams.banner_type===1" class="cover-hint">
           注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===2||bannerParams.banner_type===3||bannerParams.banner_type===5"
-          class="cover-hint">注：尺寸690*360px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===2||bannerParams.banner_type===3||bannerParams.banner_type===5 || bannerParams.banner_type===6 "
+          class="cover-hint">
+          注：尺寸690*360px，格式PNG/JPG/GIF，大小2M以内</p>
         <p *ngIf="bannerParams.banner_type===4" class="cover-hint">注：尺寸540*146px，格式PNG/JPG/GIF，大小2M以内</p>
         <div class="row">
           <label class="control-label">
