@@ -121,6 +121,7 @@ export class PushEditComponent implements OnInit {
         this.pushParams.push_range = status;
         this.pushParams.free_range_type = 1;
         this.pushParams.free_date_limit = null;
+        this.pushParams.free_date_limit_end = null;
         break;
       case 'range_type':
         this.pushParams.coupon_id = '';
@@ -151,6 +152,7 @@ export class PushEditComponent implements OnInit {
   public onChangeFreeRangeType(event: any): void {
     if (event.target.value) {
       this.pushParams.free_date_limit = null;
+      this.pushParams.free_date_limit_end = null;
       this.pushParams.free_range_type = Number(event.target.value);
     }
   }

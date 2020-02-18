@@ -65,6 +65,7 @@
               style="width: 180px!important;" (change)="onChangeFreeRangeType($event)">
               <option [value]=1>临近车险投保日期用户</option>
               <option [value]=2>临近年检日期用户</option>
+              <option [value]=3>临近免检换贴更换日期用户</option>
             </select>
           </div>
         </div>
@@ -93,9 +94,13 @@
             <ng-container>
               <span *ngIf="pushParams.free_range_type===1">自初登日期(月-日)起，临近投保日期</span>
               <span *ngIf="pushParams.free_range_type===2">自初登日期起第5年后，临近年检日期</span>
-              <input class="form-control" [(ngModel)]="pushParams.free_date_limit" name="free_date_limit" maxlength="3"
-                placeholder="0-999" required appIntNumber="true">
-              <label>日</label>
+              <span *ngIf="pushParams.free_range_type===3">自初登日期起，临近第2年、第4年免检贴更换</span>
+              <input class="form-control" [(ngModel)]="pushParams.free_date_limit" name="free_date_limit_start"
+                maxlength="3" placeholder="0-365" required appIntNumber="true">
+              <label>日</label>至
+              <input class="form-control" [(ngModel)]="pushParams.free_date_limit_end" name="free_date_limit_end"
+                maxlength="3" placeholder="0-365" required appIntNumber="true">
+              <label>日</label>&nbsp;时推送
             </ng-container>
           </div>
         </div>
