@@ -27,9 +27,9 @@
                             ('距离到期'+pushRecord.push_range_detail?.date_limit+'日时提醒')}}</span>
               <span *ngIf="pushRecord.push_range===4">
                 <span>{{(pushRecord.push_range|pushRange)+'-'+(pushRecord.push_range_detail?.free_range_type|diyRangeType)+'-'+
-                              ((pushRecord.push_range_detail?.free_range_type|diyRangeTypeMsg)+pushRecord.push_range_detail?.free_date_limit)}}日</span>
+                              ((pushRecord.push_range_detail?.free_range_type|diyRangeTypeMsg)+pushRecord.push_range_detail?.free_start_limit)}}日</span>
                 <span
-                  *ngIf="pushRecord.push_range_detail?.free_date_limit >=0 && pushRecord.push_range_detail?.free_date_limit_end >=0 && pushRecord.push_range_detail.free_date_limit !== pushRecord.push_range_detail.free_date_limit_end">至{{pushRecord.push_range_detail.free_date_limit_end}}日</span>
+                  *ngIf="pushRecord.push_range_detail?.free_start_limit >=0 && pushRecord.push_range_detail?.free_end_limit >=0 && pushRecord.push_range_detail.free_start_limit !== pushRecord.push_range_detail.free_end_limit">至{{pushRecord.push_range_detail.free_end_limit}}日</span>
                 <span>时提醒</span>
               </span>
               <span
