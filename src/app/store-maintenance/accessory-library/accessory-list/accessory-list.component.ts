@@ -109,6 +109,8 @@ export class AccessoryListComponent implements OnInit {
 
   // 查询按钮
   public onSearchBtnClick() {
+    this.accessoryNewList = [];
+    this.noResultText = '数据加载中...';
     this.searchText$.next();
   }
 
