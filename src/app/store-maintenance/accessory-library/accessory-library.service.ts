@@ -211,6 +211,7 @@ export class SearchParams extends EntityBase {
   public accessory_brand_id = ''; // string	F	配件品牌
   public accessory_name: string = undefined; // string	F	配件名称
   public accessory_id: string = undefined; // string	F	配件id
+  public sale_status = ''; // 上下架状态 1：在售 2：停售
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
