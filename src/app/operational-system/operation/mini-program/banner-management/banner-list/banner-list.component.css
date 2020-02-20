@@ -9,7 +9,7 @@
 }
 
 .tab-bar-list .ant-radio-button-wrapper {
-  width: 120px;
+  width: 130px;
 }
 
 .form-group .line {
@@ -22,4 +22,22 @@
 
 ::ng-deep .cdk-drag-placeholder {
   opacity: 0;
+}
+
+/* 首页banner */
+.img-spec {
+  width: 216px;
+  height: 56px;
+  margin: auto 20px;
+}
+
+.img-spec-1 {
+  width: 130px;
+  height: 68px;
+}
+
+/* 弹窗banner-路外扫码缴费完成页 */
+.img-spec-2 {
+  width: 216px;
+  height: 113px;
 }

@@ -15,10 +15,11 @@
             <span>页面</span>
           </label>
           <div class="control-input">
-            <nz-radio-group [(ngModel)]="bannerParams.page_layout" name='page_layout' required>
-              <label nz-radio [nzValue]='1'>车辆认证完成页</label>
-              <label nz-radio [nzValue]='2'>实名认证完成页</label>
-              <!-- <label nz-radio [nzValue]='3'>路外扫码缴费完成页</label> -->
+            <nz-radio-group [(ngModel)]="bannerParams.page_layout" name='page_layout'
+              (ngModelChange)='onChangePageLayout($event)' required>
+              <label nz-radio [nzValue]=1>车辆认证完成页</label>
+              <label nz-radio [nzValue]=2>实名认证完成页</label>
+              <label nz-radio [nzValue]=3>路外扫码缴费完成页</label>
             </nz-radio-group>
           </div>
         </div>
@@ -44,10 +45,12 @@
         </div>
         <p *ngIf="bannerParams.banner_type===1" class="cover-hint">
           注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===2||bannerParams.banner_type===3||bannerParams.banner_type===5 || bannerParams.banner_type===6 "
+        <p *ngIf="bannerParams.banner_type===2||bannerParams.banner_type===3
+        ||bannerParams.banner_type===5 || bannerParams.banner_type===6 || bannerParams.banner_type===4 && bannerParams.page_layout===3"
           class="cover-hint">
           注：尺寸690*360px，格式PNG/JPG/GIF，大小2M以内</p>
-        <p *ngIf="bannerParams.banner_type===4" class="cover-hint">注：尺寸540*146px，格式PNG/JPG/GIF，大小2M以内</p>
+        <p *ngIf="bannerParams.banner_type===4 && bannerParams.page_layout!==3" class="cover-hint">
+          注：尺寸540*146px，格式PNG/JPG/GIF，大小2M以内</p>
         <div class="row">
           <label class="control-label">
             <b>*</b>

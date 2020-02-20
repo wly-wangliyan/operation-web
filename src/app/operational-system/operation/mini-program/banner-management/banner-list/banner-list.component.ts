@@ -58,8 +58,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
       { key: 2, value: '检车Banner' },
       { key: 3, value: '机场停车Banner' },
       { key: 5, value: '洗车Banner' },
-      { key: 4, value: '弹窗展位' },
-      { key: 6, value: '路外支付完成页' },
+      { key: 4, value: '弹窗展位' }
     ];
     this.generateBannerList();
   }

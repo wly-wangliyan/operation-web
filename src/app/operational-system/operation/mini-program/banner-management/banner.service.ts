@@ -119,7 +119,9 @@ export class BannerService {
    */
   public requestAddBannerData(bannerParams: BannerParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/banner`;
-    return this.httpService.post(httpUrl, bannerParams.json());
+    const params = bannerParams.json();
+    params.belong_to = params.belong_to === 0 ? null : params.belong_to;
+    return this.httpService.post(httpUrl, params);
   }
 
   /**
