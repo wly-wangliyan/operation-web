@@ -8,7 +8,6 @@ import {
   VehicleManagementHttpService
 } from '../../../vehicle-management/vehicle-management-http.service';
 import { AccessoryLibraryService } from '../../accessory-library.service';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/core';
 import { HttpErrorEntity } from '../../../../core/http.service';
 
 @Component({
@@ -144,6 +143,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     this.defaultExpandedKeys = this.car_brand_checked_list.concat(
       this.car_factory_checked_list
     );
+    this.defaultExpandedKeys = this.car_factory_checked_list;
   }
 
   // 确定按钮回调
@@ -201,8 +201,6 @@ export class SelectMultiBrandFirmComponent implements OnInit {
             const isChekedBrand = this.car_brand_checked_list
               .join(',')
               .includes(i.car_brand_id);
-            console.log('11', isChekedBrand);
-
             if (isChekedBrand) {
               this.getCheckedFactoryList(i, index);
             }
@@ -228,7 +226,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
           children: [],
           expanded: false
         }));
-        this.vehicleBrandTreeList[index].expanded = true;
+        // this.vehicleBrandTreeList[index].expanded = true;
         this.carFactoryList.forEach((v, idx) => {
           const isChekedFactory = this.car_factory_checked_list
             .join(',')
