@@ -110,7 +110,7 @@
                   </ng-container>
                 </div>
                 <div style="display: grid">
-                  <a style="word-break: keep-all;text-align: left" [title]="data.accessory_name">
+                  <a style="word-break: keep-all;white-space: nowrap;text-align: left" [title]="data.accessory_name">
                     {{ data.accessory_name | zMaxLength: 15 }}
                   </a>
                   <div class="accessory-tip" *ngIf="data.accessory_params">

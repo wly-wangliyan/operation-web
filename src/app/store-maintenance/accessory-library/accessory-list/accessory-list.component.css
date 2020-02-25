@@ -115,7 +115,7 @@
 }
 
 .img-box {
-  width: 90px;
+  width: 80px;
   position: relative;
   display: inline-block;
   margin-right: 5px;
@@ -127,18 +127,21 @@
 }
 
 .accessory-tip {
+  min-width: 150px;
   text-align: left;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin-right: 0px;
 }
 
 .accessory-tip label {
   min-width: 70px;
   min-height: 20px;
-  padding: 3px 10px;
+  padding: 0px 8px;
   border-radius: 4px;
   text-align: center;
-  margin-right: 10px;
+  margin: 10px 5px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  word-break: break-all;
 }
 
 .accessory-tip label:nth-child(3n+1) {
