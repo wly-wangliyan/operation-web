@@ -92,9 +92,7 @@
           </div>
           <div class="push-rate location-crowd" *ngIf="pushParams.push_range===4">
             <ng-container>
-              <span *ngIf="pushParams.free_range_type===1">自初登日期(月-日)起，临近投保日期</span>
-              <span *ngIf="pushParams.free_range_type===2">自初登日期起第5年后，临近年检日期</span>
-              <span *ngIf="pushParams.free_range_type===3">自初登日期起，临近第2年、第4年免检贴更换</span>
+              <span>{{free_range_type_tips[pushParams.free_range_type]}}</span>
               <input class="form-control" [(ngModel)]="pushParams.free_start_limit" name="free_start_limit"
                 maxlength="3" placeholder="0-365" required appIntNumber="true" appMaxNumber="365">
               <label>日</label>至
@@ -102,6 +100,12 @@
                 placeholder="0-365" required appIntNumber="true" appMaxNumber="365">
               <label>日</label>&nbsp;时推送
             </ng-container>
+          </div>
+        </div>
+        <div class="row row-message" style="height: 20px;margin-bottom: 10px;">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.push_range?.isError">{{errPositionItem?.push_range?.errMes}}</span>
           </div>
         </div>
         <div class="row">
