@@ -98,11 +98,11 @@
                 <span *ngIf="!record.wash_car_specification">--</span>
               </div>
             </td>
-            <td>{{record.original_fee | centPriceChange:'元'}}</td>
-            <td>{{record.minus_fee | centPriceChange:'元'}}</td>
+            <td>{{(record.original_fee || 0) | centPriceChange:'元'}}</td>
+            <td>{{(record.minus_fee || 0) | centPriceChange:'元'}}</td>
             <td>{{(record.coupon_used_amount||0) | centPriceChange:'元'}}</td>
-            <td>{{record.sale_fee | centPriceChange:'元'}}</td>
-            <td>{{record.buy_fee | centPriceChange:'元'}}</td>
+            <td>{{(record.sale_fee || 0) | centPriceChange:'元'}}</td>
+            <td>{{(record.buy_fee || 0) | centPriceChange:'元'}}</td>
 
             <td>{{record.created_time? (record.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
