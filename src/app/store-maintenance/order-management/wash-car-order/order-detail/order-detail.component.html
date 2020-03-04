@@ -34,7 +34,7 @@
           <td>{{orderRecord.original_fee | centPriceChange:'元'}}</td>
 
           <td>优惠券：</td>
-          <td>{{(orderRecord.coupon_fee||0) | centPriceChange:'元'}}</td>
+          <td>{{(orderRecord.coupon_used_amount||0) | centPriceChange:'元'}}</td>
 
           <td>平台立减：</td>
           <td>{{orderRecord.minus_fee | centPriceChange:'元'}}</td>

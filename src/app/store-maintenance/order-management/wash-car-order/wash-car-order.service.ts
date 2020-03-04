@@ -28,7 +28,7 @@ export class WashCarOrderEntity extends EntityBase {
   public sale_fee: number = undefined; // 实收(售价) 单位:分
   public minus_fee: number = undefined; // 平台立减 单位:分
   public buy_fee: number = undefined; // 结算价 单位:分
-  public coupon_fee: number = undefined; // 优惠卷 单位:分
+  public coupon_used_amount: number = undefined; // 优惠卷 单位:分
   public remark: string = undefined; // 订单备注
   public order_status: number = undefined; // 订单状态 1：待支付 2：已取消 3：待核销 4：已完成 5:已关闭 6:已失效
   public pay_type: string = undefined; // 支付方式
