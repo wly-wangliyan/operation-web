@@ -20,6 +20,35 @@
           </div>
         </div>
         <div class="row">
+          <label class="control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>品牌标签</span>
+          </label>
+          <div class="control-input tag-group">
+            <ul>
+              <li *ngFor="let tag of tagList; let i=index">
+                <div class="tag-item">{{tag}}</div>
+                <span class="tag-span" (click)="onDeleteTag(i)">
+                  <img src="/assets/images/tag_delete.png">
+                </span>
+              </li>
+              <li *ngIf="tagList.length < 5">
+                <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="bind-tag" maxlength="10"
+                  appIgnoreSpace>
+                <span class="tag-span" [class.disabled]="!tag" [title]="!tag?'标签内容不能为空':''" (click)="onAddTagClick()">
+                  <img src="/assets/images/tag_add.png">
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.tags?.isError">{{errPositionItem?.tags?.errMes}}</span>
+          </div>
+        </div>
+        <div class="row">
           <label class=" control-label">
             <b>*</b>
             <span>品牌标志</span>

@@ -25,11 +25,13 @@ export class ErrMessageItem {
 
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
-  constructor(icon?: ErrMessageItem) {
-    if (isUndefined(icon)) {
+  tags: ErrMessageItem = new ErrMessageItem();
+  constructor(icon?: ErrMessageItem, tags?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(tags)) {
       return;
     }
     this.icon = icon;
+    this.tags = tags;
   }
 }
 
@@ -42,12 +44,14 @@ export class BrandEditComponent implements OnInit {
   constructor(
     private globalService: GlobalService,
     private brandManagementService: BrandManagementHttpService
-  ) {}
+  ) { }
 
   public searchBrandParams: SearchBrandParams = new SearchBrandParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
   public aspectRatio = 1 / 1; // 截取图片比例
+  public tag = '';
+  public tagList = []; // 品牌标签
 
   private sureCallback: any;
   private closeCallback: any;
@@ -62,7 +66,7 @@ export class BrandEditComponent implements OnInit {
   @ViewChild('coverImg', { static: false })
   public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  public ngOnInit() {}
+  public ngOnInit() { }
 
   // 弹框close
   public onClose() {
@@ -179,6 +183,7 @@ export class BrandEditComponent implements OnInit {
   // 清空
   public clear(): void {
     this.errPositionItem.icon.isError = false;
+    this.errPositionItem.tags.isError = false;
   }
 
   // 确定按钮回调
@@ -202,10 +207,10 @@ export class BrandEditComponent implements OnInit {
             content.field === 'brand_name'
               ? '品牌名称'
               : content.field === 'sign_image'
-              ? '品牌标志'
-              : content.field === 'introduce'
-              ? '简介'
-              : '';
+                ? '品牌标志'
+                : content.field === 'introduce'
+                  ? '简介'
+                  : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(
               `${field}字段未填写!`,
@@ -267,5 +272,26 @@ export class BrandEditComponent implements OnInit {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
     }
+  }
+
+  // 添加标签
+  public onAddTagClick(): void {
+    this.errPositionItem.tags.isError = false;
+    if (this.tag === '' || this.tag === null) {
+      return;
+    } else if (this.tagList.some(i => i === this.tag)) {
+      this.errPositionItem.tags.isError = true;
+      this.errPositionItem.tags.errMes = '添加的标签重复,请重新输入';
+      return;
+    } else {
+      this.tagList.push(this.tag);
+      this.tag = '';
+    }
+  }
+
+  // 删除标签
+  public onDeleteTag(index: number): void {
+    this.errPositionItem.tags.isError = false;
+    this.tagList.splice(index, 1);
   }
 }
