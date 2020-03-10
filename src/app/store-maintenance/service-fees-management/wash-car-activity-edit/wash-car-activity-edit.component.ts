@@ -30,7 +30,7 @@ export class WashCarActivityEditComponent implements OnInit {
   public activityErrMsg = ''; // 错误信息
   public isCreateActivity = true; // 标记创建或编辑
   public specification_name: string; // 规格名称
-  private specificationData: WashCarSpecificationEntity; // 洗车规格信息
+  public specificationData: WashCarSpecificationEntity; // 洗车规格信息
   private selectedActivity: WashCarActivityEntity = new WashCarActivityEntity(); // 当前操作活动
   private removeList: Array<RemoveItem> = []; // 移除的已有活动
   private editActivityParams: EditWashCarActivityParams = new EditWashCarActivityParams();
@@ -75,6 +75,7 @@ export class WashCarActivityEditComponent implements OnInit {
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
+    this.identifier = 0;
     this.is_save = false;
     this.removeList = [];
     this.washCarActivityList = [];
