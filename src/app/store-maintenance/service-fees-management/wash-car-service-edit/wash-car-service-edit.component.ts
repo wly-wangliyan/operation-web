@@ -183,10 +183,15 @@ export class WashCarServiceEditComponent implements OnInit {
     this.specificationErrMsg = '';
     const wash_car_specification_id = data.wash_car_specification_id;
     if (wash_car_specification_id) {
-      data.is_deleted = true;
-      this.removeList.push(data.clone());
+      this.globalService.confirmationBox.open('提示', '删除规格后相关联的特卖活动将自动删除！是否移除？', () => {
+        this.globalService.confirmationBox.close();
+        data.is_deleted = true;
+        this.removeList.push(data.clone());
+        this.specificationList.splice(index, 1);
+      });
+    } else {
+      this.specificationList.splice(index, 1);
     }
-    this.specificationList.splice(index, 1);
   }
 
   // 原价数据联动

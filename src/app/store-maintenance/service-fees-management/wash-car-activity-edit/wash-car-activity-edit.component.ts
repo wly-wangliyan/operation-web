@@ -103,7 +103,7 @@ export class WashCarActivityEditComponent implements OnInit {
       this.openWashCarActivityModal();
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
-        this.globalService.promptBox.open('洗车活动数据获取失败,请刷新重试', null, -1, null, false);
+        this.globalService.promptBox.open('洗车活动数据获取失败,请刷新重试！', null, 2000, null, false);
       }
     });
   }
@@ -177,11 +177,12 @@ export class WashCarActivityEditComponent implements OnInit {
     this.washCarService.requestAddWashCarActivityData(this.wash_car_specification_id, this.editActivityParams)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox.open('新建成功！', () => {
+        this.globalService.promptBox.open('编辑成功', () => {
           this.sureCallbackInfo();
         });
       }, err => {
         this.is_save = false;
+        this.errProcess(err);
       });
   }
   // 编辑活动
@@ -189,12 +190,23 @@ export class WashCarActivityEditComponent implements OnInit {
     this.washCarService.requestEditWashCarActivityData(this.wash_car_specification_id, this.editActivityParams)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox.open('编辑成功！', () => {
+        this.globalService.promptBox.open('编辑成功', () => {
           this.sureCallbackInfo();
         });
       }, err => {
         this.is_save = false;
+        this.errProcess(err);
       });
+  }
+
+  private errProcess(err: any): void {
+    if (!this.globalService.httpErrorProcess(err)) {
+      if (err.status === 422) {
+        this.globalService.promptBox.open('参数缺失或无效', null, 2000, null, false);
+      } else if (err.status === 404) {
+        this.globalService.promptBox.open('洗车规格数据不存在，请刷新重试！', null, 2000, null, false);
+      }
+    }
   }
 
   // 表单提交校验

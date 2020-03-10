@@ -14,12 +14,17 @@
         </div>
 
         <ng-container *ngIf="washCarActivityList && washCarActivityList.length===0 else hasData">
-          <div class="activity-text">
+          <div class="activity-text" *ngIf="isCreateActivity">
             此规格暂未设置任何活动哦！
           </div>
           <div class="modal-footer">
+            <button class="add-btn" type="button" (appZDebounceClick)="onAddActivityClick()">新增</button>
+          </div>
+          <div class="modal-footer" *ngIf="!isCreateActivity">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal"
+              style="margin-right: 80px;">取消</button>
             <button class="sure-btn" type="button" nz-button nzType="primary"
-              (appZDebounceClick)="onAddActivityClick()">新增
+              [disabled]="!editWashCarActivityForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
             </button>
           </div>
         </ng-container>

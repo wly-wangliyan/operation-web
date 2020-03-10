@@ -157,7 +157,7 @@
 .add-btn {
   color: #3E71F7;
   border: none !important;
-  background-color: #f7f8fa !important;
+  background-color: transparent !important;
 }
 
 .add-btn,
