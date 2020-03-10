@@ -282,7 +282,7 @@ export class WashCarActivityEditComponent implements OnInit {
         }
 
         if (activity.activity_num < 0) {
-          this.activityErrMsg = `活动${this.chnNumChar[index]}：活动数量应大于等于0！`;
+          this.activityErrMsg = `活动${this.chnNumChar[index]}：可售数量应大于等于0！`;
           return false;
         }
         if (this.isCreateActivity) {
