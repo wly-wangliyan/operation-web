@@ -20,6 +20,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StoreShareModule } from '../share/store-share.module';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { WashCarActivityEditComponent } from './wash-car-activity-edit/wash-car-activity-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -44,6 +45,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     WorkFeesEditComponent,
     ChooseProjectComponent,
     WashCarServiceEditComponent,
+    WashCarActivityEditComponent,
   ],
   providers: [
     ServiceFeesManagementService,

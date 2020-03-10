@@ -49,8 +49,8 @@ export class BasePriceEntity extends EntityBase {
 
   public toEditJson() {
     const json = this.clone().json();
-    json.original_unit_fee = Math.ceil(json.original_unit_fee * 100);
-    json.buy_unit_fee = Math.ceil(json.buy_unit_fee * 100);
+    json.original_unit_fee = Math.round(json.original_unit_fee * 100);
+    json.buy_unit_fee = Math.round(json.buy_unit_fee * 100);
     return json;
   }
 }
@@ -87,13 +87,65 @@ export class WashCarSpecificationEntity extends EntityBase {
 
   public toEditJson() {
     const json = this.clone().json();
-    json.sale_fee = Math.ceil(json.sale_fee * 100);
+    json.sale_fee = Math.round(json.sale_fee * 100);
     json.valid_date_start = json.valid_date_start ? json.valid_date_start / 1000 : '';
     json.valid_date_end = json.valid_date_end ? json.valid_date_end / 1000 : '';
     return json;
   }
 }
 
+// 洗车活动实体
+export class WashCarActivityEntity extends EntityBase {
+  public wash_car_activity_id: string = undefined;
+  public wash_car_specification: WashCarSpecificationEntity = undefined; // 洗车规格
+  public period_type: number = undefined; // 有效期类型 1: 每日 2：每周 3：每月 4：自定义
+  public week_day: number | string = ''; // int 周(1-7 代表周一到周日)--period_type=2 必填
+  public month_day: number = undefined; // 月(1-28号)---period_type=3 必填
+  public valid_time_start: any = undefined; // 活动开始时间 单位：分 period_type=1/2/3 必填
+  public valid_time_end: any = undefined; // 活动结束时间 单位：分 period_type=1/2/3 必填
+  public valid_date_start: any = undefined; // 活动开始日期 period_type=4 必填
+  public valid_date_end: any = undefined; // 活动结束日期 period_type=4 必填
+  public activity_fee: number = undefined; // 活动价格 单位：分
+  public activity_num: number = undefined; // 活动数量
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 创建时间
+  public is_deleted = false; // 是否删除
+  public identifier: number = undefined; // dom防重复标识符
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'wash_car_specification') {
+      return WashCarSpecificationEntity;
+    }
+    return null;
+  }
+
+  public toEditJson() {
+    const json = this.json();
+    json.activity_fee = Math.round(json.activity_fee * 100);
+    json.week_day = json.week_day || null;
+    json.month_day = json.month_day || null;
+    json.valid_time_start = json.valid_time_start >= 0 ? json.valid_time_start : null;
+    json.valid_time_end = json.valid_time_end >= 0 ? json.valid_time_end : null;
+    json.valid_date_start = json.valid_date_start || null;
+    json.valid_date_end = json.valid_date_end || null;
+    delete json.updated_time;
+    delete json.created_time;
+    delete json.identifier;
+    return json;
+  }
+}
+
+// 新建／编辑 洗车规格活动
+export class EditWashCarActivityParams extends EntityBase {
+  public wash_car_activities: Array<WashCarActivityEntity> = [];
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'wash_car_activities') {
+      return WashCarActivityEntity;
+    }
+    return null;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -144,10 +196,48 @@ export class WashCarServiceConfigService {
     const httpUrl = `${this.domain}/admin/repair_shops/wash_car`;
     return this.httpService.get(httpUrl).pipe(map(result => {
       const tempList: Array<RepairShopEntity> = [];
-      result.body.forEach(res => {
+      result.body.forEach((res: RepairShopEntity) => {
         tempList.push(RepairShopEntity.Create(res));
       });
       return tempList;
     }));
+  }
+
+  /**
+   * 获取洗车服务活动列表
+   */
+  public requestWashCarActivitiesData(wash_car_specification_id: string): Observable<Array<WashCarActivityEntity>> {
+    const httpUrl = `${this.domain}/admin/wash_car_specifications/${wash_car_specification_id}/wash_car_activities`;
+    return this.httpService.get(httpUrl).pipe(map(result => {
+      const tempList: Array<WashCarActivityEntity> = [];
+      result.body.forEach((res: WashCarActivityEntity) => {
+        tempList.push(WashCarActivityEntity.Create(res));
+      });
+      return tempList;
+    }));
+  }
+
+  /**
+   * 新建洗车活动
+   * @param wash_car_specification_id 洗车规格Id
+   * @param editParams EditWashCarActivityParams
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestAddWashCarActivityData(
+    wash_car_specification_id: string, editParams: EditWashCarActivityParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/wash_car_specifications/${wash_car_specification_id}/wash_car_activities`;
+    return this.httpService.post(httpUrl, editParams);
+  }
+
+  /**
+   * 新建洗车活动
+   * @param wash_car_specification_id 洗车规格Id
+   * @param editParams EditWashCarActivityParams
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditWashCarActivityData(
+    wash_car_specification_id: string, editParams: EditWashCarActivityParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/wash_car_specifications/${wash_car_specification_id}/wash_car_activities`;
+    return this.httpService.put(httpUrl, editParams);
   }
 }

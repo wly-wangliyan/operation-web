@@ -7,6 +7,8 @@ import { WashCarCouponTypePipe } from './pipes/wash-car-coupon-type.pipe';
 import { ArrivalOrderStatusPipe } from './pipes/arrival-order-status.pipe';
 import { ProjectNamePipe } from './pipes/project-name.pipe';
 import { SupplyTypePipe } from './pipes/supply-type.pipe';
+import { WashCarPeriodTypesPipe } from './pipes/wash-car-period-types.pipe';
+import { WeekDayPipe } from './pipes/week-day.pipe';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { SupplyTypePipe } from './pipes/supply-type.pipe';
     WashCarCouponTypePipe,
     ArrivalOrderStatusPipe,
     ProjectNamePipe,
-    SupplyTypePipe
+    SupplyTypePipe,
+    WashCarPeriodTypesPipe,
+    WeekDayPipe
   ],
   exports: [
     WashCarTypePipe,
@@ -25,7 +29,9 @@ import { SupplyTypePipe } from './pipes/supply-type.pipe';
     WashCarCouponTypePipe,
     ArrivalOrderStatusPipe,
     ProjectNamePipe,
-    SupplyTypePipe
+    SupplyTypePipe,
+    WashCarPeriodTypesPipe,
+    WeekDayPipe
   ],
   imports: [
     CommonModule
