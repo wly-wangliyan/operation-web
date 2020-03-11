@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WashOrderService, WashCarOrderEntity, WashCarSearchParams, WashCarRefundParams } from '../wash-car-order.service';
 import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
 import { GlobalService } from '../../../../core/global.service';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, forkJoin } from 'rxjs';
 import { GlobalConst } from '../../../../share/global-const';
 import { debounceTime } from 'rxjs/operators';
-import { WashCarEntity } from 'src/app/store-maintenance/garage-management/garage-management.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
+import { environment } from '../../../../../environments/environment';
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
@@ -31,6 +31,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private linkUrl: string; // 分页url
   private selectOrder: WashCarOrderEntity = new WashCarOrderEntity(); // 选中行
   private operationing = false;
+  private searchUrl: string;
+  public total_num = 0; // 总条数
 
   private get pageCount(): number {
     if (this.orderList.length % GlobalConst.NzPageSize === 0) {
@@ -45,6 +47,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
+      this.exportSearchUrl();
       this.requestOrderList();
     });
     this.searchText$.next();
@@ -57,16 +60,22 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   // 请求订单列表
   private requestOrderList(): void {
-    this.requestSubscription = this.orderService.requestOrderListData(this.searchParams).subscribe(res => {
-      this.orderList = res.results;
-      this.linkUrl = res.linkUrl;
-      this.pageIndex = 1;
-      this.noResultText = '暂无数据';
-    }, err => {
-      this.pageIndex = 1;
-      this.noResultText = '暂无数据';
-      this.globalService.httpErrorProcess(err);
-    });
+    this.requestSubscription = forkJoin(
+      this.orderService.requestOrderListData(this.searchParams),
+      this.orderService.requestWashCarStatisticsData(this.searchParams))
+      .subscribe(result => {
+        this.orderList = result[0].results;
+        this.linkUrl = result[0].linkUrl;
+        this.pageIndex = 1;
+        this.total_num = result[1].wash_car_orders_num || 0;
+        this.noResultText = '暂无数据';
+        this.exportSearchUrl();
+      }, err => {
+        this.pageIndex = 1;
+        this.noResultText = '暂无数据';
+        this.total_num = 0;
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 翻页
@@ -75,11 +84,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.orderService.continueOrderListData(this.linkUrl)
-        .subscribe(res => {
-          const results = res.results;
+      this.continueRequestSubscription = forkJoin(
+        this.orderService.continueOrderListData(this.linkUrl),
+        this.orderService.requestWashCarStatisticsData(this.searchParams))
+        .subscribe(continueData => {
+          const results = continueData[0].results;
           this.orderList = this.orderList.concat(results);
-          this.linkUrl = res.linkUrl;
+          this.linkUrl = continueData[0].linkUrl;
+          this.total_num = continueData[1].wash_car_orders_num || 0;
         }, err => {
           this.globalService.httpErrorProcess(err);
         });
@@ -90,6 +102,24 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public onSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
       this.searchText$.next();
+    }
+  }
+
+  // 导出
+  public onExportRecords(): void {
+    if (this.generateAndCheckParamsValid()) {
+      window.open(this.searchUrl);
+    }
+  }
+
+  // 导出url
+  private exportSearchUrl() {
+    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car_orders/export?default=1`;
+    const params = this.searchParams.json();
+    for (const key in params) {
+      if (params[key]) {
+        this.searchUrl += `&${key}=${params[key]}`;
+      }
     }
   }
 

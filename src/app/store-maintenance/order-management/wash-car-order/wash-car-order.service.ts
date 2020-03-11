@@ -154,4 +154,18 @@ export class WashOrderService {
     };
     return this.httpService.patch(httpUrl, body);
   }
+
+  /**
+   * 洗车订单数量统计
+   * @param searchParams WashCarSearchParams
+   * @returns Observable<WashCarOrderEntity>
+   */
+  public requestWashCarStatisticsData(searchParams: WashCarSearchParams): Observable<any> {
+    const params = searchParams.clone();
+    delete params.page_num;
+    delete params.page_size;
+    const httpUrl = `${this.domain}/admin/wash_car_orders/statistics`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => res.body));
+  }
 }
