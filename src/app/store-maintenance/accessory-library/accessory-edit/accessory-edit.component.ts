@@ -67,19 +67,18 @@ export class AccessoryEditComponent implements OnInit {
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public errSpecificationsItem: ErrPositionItem = new ErrPositionItem();
   public accessoryParams = new SearchAccessoryParams(); // 编辑配件参数
-  public specificationsList: Array<SpecificationEntity> = [];
-  public specificationsDelList: Array<SpecificationEntity> = [];
+  public specificationsList: Array<SpecificationEntity> = []; // 规格列表
+  public specificationsDelList: Array<SpecificationEntity> = []; // 被移除的原有规格信息
   public price_info: PriceInfoEntity = new PriceInfoEntity(); // 机滤价格参数
-  public projectInfo: ProjectEntity = new ProjectEntity();
+  public projectInfo: ProjectEntity = new ProjectEntity(); // 项目信息
   public accessoryData = new AccessoryEntity(); // 配件详情
   public noResultText = '数据加载中...';
   public accessory_id = ''; // 配件id
   public operationTelErrors = ''; // 运营手机号错误信息
-  public prepaidSalePriceErrors = ''; // 预付价格错误信息
   public accessoryDetailErrors = ''; // 图文描述错误信息
   public specificationErrors = ''; // 规格参数错误信息
-  public accessory_image_url: Array<any> = [];
-  public specifications_image_num: number;
+  public accessory_image_url: Array<any> = []; // 配件图片
+  public specifications_image_num: number; // 规格图片索引
   public isSaveBtnDisabled = false;
   public params: Array<ParamEntity> = []; // 配件参数
   public accessory_params = new AccessoryParamsEntity(); // 机油参数
@@ -114,21 +113,19 @@ export class AccessoryEditComponent implements OnInit {
     });
     // 配件库列表
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.accessoryLibraryService
-        .requestAccessoryDetailData(this.accessory_id)
-        .subscribe(
-          res => {
-            this.accessoryData = res;
-            this.getDetailData();
-            this.getEditorData(res.detail);
-            this.loading = false;
-          },
-          err => {
-            this.loading = false;
-            this.getEditorData(null);
-            this.globalService.httpErrorProcess(err);
-          }
-        );
+      this.accessoryLibraryService.requestAccessoryDetailData(this.accessory_id).subscribe(
+        res => {
+          this.accessoryData = res;
+          this.getDetailData();
+          this.getEditorData(res.detail);
+          this.loading = false;
+        },
+        err => {
+          this.loading = false;
+          this.getEditorData(null);
+          this.globalService.httpErrorProcess(err);
+        }
+      );
     });
     if (this.accessory_id) {
       this.searchText$.next();
@@ -145,42 +142,33 @@ export class AccessoryEditComponent implements OnInit {
   private getDetailData() {
     this.accessoryParams.accessory_name = this.accessoryData.accessory_name;
     this.accessory_image_url = this.accessoryData.accessory_images
-      ? this.accessoryData.accessory_images.split(',')
-      : [];
+      ? this.accessoryData.accessory_images.split(',') : [];
     this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
     this.accessoryParams.project_id = this.accessoryData.project
-      ? this.accessoryData.project.project_id
-      : '';
+      ? this.accessoryData.project.project_id : '';
     this.accessoryParams.project_name = this.accessoryData.project
-      ? this.accessoryData.project.project_name
-      : '';
-    if (
-      this.accessoryParams.project_id &&
-      this.accessoryParams.project_name === '机油'
-    ) {
+      ? this.accessoryData.project.project_name : '';
+    if (this.accessoryParams.project_id && this.accessoryParams.project_name === '机油') {
       this.requestProjectParams();
     }
     this.accessoryParams.accessory_brand_id = this.accessoryData.accessory_brand
-      ? this.accessoryData.accessory_brand.accessory_brand_id
-      : '';
-    this.accessoryParams.accessory_brand_name = this.accessoryData
-      .accessory_brand
-      ? this.accessoryData.accessory_brand.brand_name
-      : '';
+      ? this.accessoryData.accessory_brand.accessory_brand_id : '';
+    this.accessoryParams.accessory_brand_name = this.accessoryData.accessory_brand
+      ? this.accessoryData.accessory_brand.brand_name : '';
     this.accessoryData.specification_info.forEach(i => {
       i.imageList = i.image ? i.image.split(',') : [];
       i.original_balance_fee = this.getCentPrice(i.original_balance_fee);
       i.sale_balance_fee = this.getCentPrice(i.sale_balance_fee);
+      i.original_prepaid_fee = this.getCentPrice(i.original_prepaid_fee);
+      i.sale_prepaid_fee = this.getCentPrice(i.sale_prepaid_fee);
       i.original_fee = this.getCentPrice(i.original_fee);
       i.settlement_fee = this.getCentPrice(i.settlement_fee);
       i.sale_fee = this.getCentPrice(i.sale_fee);
       this.num++;
       i.time = this.num;
     });
-    if (
-      !this.accessoryData.specification_info ||
-      this.accessoryData.specification_info.length === 0
-    ) {
+    if (!this.accessoryData.specification_info
+      || this.accessoryData.specification_info.length === 0) {
       this.num++;
       const specification = new SpecificationEntity();
       specification.time = this.num;
@@ -311,7 +299,6 @@ export class AccessoryEditComponent implements OnInit {
     this.errSpecificationsItem.icon.isError = false;
     this.errSpecificationsItem.ic_name.isError = false;
     this.operationTelErrors = '';
-    this.prepaidSalePriceErrors = '';
     this.accessoryDetailErrors = '';
     this.specificationErrors = '';
   }
@@ -406,8 +393,6 @@ export class AccessoryEditComponent implements OnInit {
       const regPhone = /^(1[3-9])\d{9}$/g;
       if (this.specificationsList && this.specificationsList.length > 50) {
         this.specificationErrors = '规格信息最多50条！';
-      } else if (Number(this.right_prepaid_fee) > Number(this.real_prepaid_fee)) {
-        this.prepaidSalePriceErrors = '预付现价不得大于预付原价！';
       } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
         this.operationTelErrors = '请输入正确的运营手机号！';
       } else {
@@ -483,87 +468,65 @@ export class AccessoryEditComponent implements OnInit {
 
   // 处理上传图片并更新配件库接口
   private handleUpdateAssessoryData() {
-    forkJoin(this.accessoryImgComponent.upload()).subscribe(
-      data => {
-        this.accessory_image_url = this.accessoryImgComponent.imageList.map(
-          image => image.sourceUrl
-        );
-        this.accessoryParams.accessory_images = this.accessory_image_url.join(
-          ','
-        );
+    forkJoin(this.accessoryImgComponent.upload()).subscribe(data => {
+      this.accessory_image_url = this.accessoryImgComponent.imageList.map(
+        image => image.sourceUrl
+      );
+      this.accessoryParams.accessory_images = this.accessory_image_url.join(',');
 
-        if (this.accessoryParams.project_name !== '机油滤清器') {
-          const specificationsListLength = this.specificationsImgSelectList
-            .length;
-          let i = 0;
-          this.specificationsImgSelectList.forEach((child, index) => {
-            child.upload().subscribe(
-              () => {
-                const newImage = child.imageList.map(s => s.sourceUrl);
-                this.specificationsList[index].image = newImage.join(',');
-                i++;
+      if (this.accessoryParams.project_name !== '机油滤清器') {
+        const specificationsListLength = this.specificationsImgSelectList.length;
+        let i = 0;
+        this.specificationsImgSelectList.forEach((child, index) => {
+          child.upload().subscribe(() => {
+            const newImage = child.imageList.map(s => s.sourceUrl);
+            this.specificationsList[index].image = newImage.join(',');
+            i++;
 
-                if (i === specificationsListLength) {
-                  if (this.validSpecificationInfo()) {
-                    this.accessoryParams.specifications = this.accessoryParams.specifications.concat(
-                      this.specificationsDelList
-                    );
-                    this.requestUpdateAssessoryData();
-                  } else {
-                    this.isSaveBtnDisabled = false;
-                  }
-                }
-
-                /*if (i === specificationsListLength) {
-              const imageNoneList = this.specificationsList.filter(v => !v.image);
-              if (imageNoneList.length !== 0) {
-                this.isSaveBtnDisabled = false;
-                this.globalService.promptBox.open(`请上传规格图片!`, null, 2000, '/assets/images/warning.png');
-              } else {
+            if (i === specificationsListLength) {
+              if (this.validSpecificationInfo()) {
+                this.accessoryParams.specifications = this.accessoryParams.specifications
+                  .concat(this.specificationsDelList);
                 this.requestUpdateAssessoryData();
-              }
-            }*/
-              },
-              err => {
+              } else {
                 this.isSaveBtnDisabled = false;
-                if (!this.globalService.httpErrorProcess(err)) {
-                  if (err.status === 422) {
-                    this.errSpecificationsItem.icon.isError = true;
-                    this.errSpecificationsItem.icon.errMes =
-                      '参数错误，可能文件格式错误！';
-                  } else if (err.status === 413) {
-                    this.errSpecificationsItem.icon.isError = true;
-                    this.errSpecificationsItem.icon.errMes =
-                      '上传资源文件太大，服务器无法保存！';
-                  } else {
-                    this.errSpecificationsItem.icon.isError = true;
-                    this.errSpecificationsItem.icon.errMes =
-                      '上传失败，请重试！';
-                  }
-                }
               }
-            );
+            }
+          }, err => {
+            this.isSaveBtnDisabled = false;
+            if (!this.globalService.httpErrorProcess(err)) {
+              if (err.status === 422) {
+                this.errSpecificationsItem.icon.isError = true;
+                this.errSpecificationsItem.icon.errMes = '参数错误，可能文件格式错误！';
+              } else if (err.status === 413) {
+                this.errSpecificationsItem.icon.isError = true;
+                this.errSpecificationsItem.icon.errMes = '上传资源文件太大，服务器无法保存！';
+              } else {
+                this.errSpecificationsItem.icon.isError = true;
+                this.errSpecificationsItem.icon.errMes = '上传失败，请重试！';
+              }
+            }
           });
+        });
+      } else {
+        this.requestUpdateAssessoryData();
+      }
+    }, err => {
+      this.isSaveBtnDisabled = false;
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
+        } else if (err.status === 413) {
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes =
+            '上传资源文件太大，服务器无法保存！';
         } else {
-          this.requestUpdateAssessoryData();
-        }
-      },
-      err => {
-        this.isSaveBtnDisabled = false;
-        if (!this.globalService.httpErrorProcess(err)) {
-          if (err.status === 422) {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes = '参数错误，可能文件格式错误！';
-          } else if (err.status === 413) {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes =
-              '上传资源文件太大，服务器无法保存！';
-          } else {
-            this.errPositionItem.icon.isError = true;
-            this.errPositionItem.icon.errMes = '上传失败，请重试！';
-          }
+          this.errPositionItem.icon.isError = true;
+          this.errPositionItem.icon.errMes = '上传失败，请重试！';
         }
       }
+    }
     );
   }
 
@@ -575,7 +538,6 @@ export class AccessoryEditComponent implements OnInit {
       if (this.specificationsList.hasOwnProperty(key)) {
         const specification = this.specificationsList[key];
         const index = Number(key);
-        // this.specificationsList.forEach((specification, index) => {
         let model_name = '';
         if (validImg && !specification.image) {
           this.specificationErrors = `第${index + 1}条规格信息-请重新上传规格图片！`;
@@ -584,68 +546,59 @@ export class AccessoryEditComponent implements OnInit {
         if (this.accessoryParams.project_name === '蓄电池') {
           model_name = specification.battery_model;
           if (!specification.battery_model) {
-            this.specificationErrors = `第${index + 1}条规格信息-请输入${
-              this.projectInfo.specification.name
-              }！`;
+            this.specificationErrors = `第${index + 1}条规格信息-请输入${this.projectInfo.specification.name}！`;
             return false;
           } else if (
             tempSpecificationNameList.includes(specification.battery_model)
           ) {
             this.specificationErrors = `第${index + 1}条规格信息-${this.projectInfo.specification.name}重复！`;
             return false;
-          } else if (
-            !specification.original_balance_fee ||
-            Number(specification.original_balance_fee) === 0
-          ) {
-            this.specificationErrors = `第${index +
-              1}条规格信息-尾款原价应大于0！`;
+          } else if (!specification.original_balance_fee ||
+            Number(specification.original_balance_fee) === 0) {
+            this.specificationErrors = `第${index + 1}条规格信息-尾款原价应大于0！`;
             return false;
-          } else if (
-            !specification.sale_balance_fee ||
-            Number(specification.sale_balance_fee) === 0
-          ) {
-            this.specificationErrors = `第${index +
-              1}条规格信息-尾款现价应大于0！`;
+          } else if (!specification.sale_balance_fee ||
+            Number(specification.sale_balance_fee) === 0) {
+            this.specificationErrors = `第${index + 1}条规格信息-尾款现价应大于0！`;
             return false;
-          } else if (
-            Number(specification.sale_balance_fee) >
-            Number(specification.original_balance_fee)
-          ) {
-            this.specificationErrors = `第${index +
-              1}条规格信息-尾款现价应小于等于尾款原价！`;
+          } else if (Number(specification.sale_balance_fee) > Number(specification.original_balance_fee)) {
+            this.specificationErrors = `第${index + 1}条规格信息-尾款现价应小于等于尾款原价！`;
+            return false;
+          } else if (!specification.original_prepaid_fee ||
+            Number(specification.original_prepaid_fee) === 0) {
+            this.specificationErrors = `第${index + 1}条规格信息-预付原价应大于0！`;
+            return false;
+          } else if (!specification.sale_prepaid_fee ||
+            Number(specification.sale_prepaid_fee) === 0) {
+            this.specificationErrors = `第${index + 1}条规格信息-预付现价应大于0！`;
+            return false;
+          } else if (Number(specification.sale_prepaid_fee) > Number(specification.original_prepaid_fee)) {
+            this.specificationErrors = `第${index + 1}条规格信息-预付现价应小于等于预付原价！`;
             return false;
           }
         } else if (this.accessoryParams.project_name === '机油') {
           model_name = specification.content ? String(specification.content) : '';
           if (!specification.content) {
             if (String(specification.content) === '0') {
-              this.specificationErrors = `第${index + 1}条规格信息-${
-                this.projectInfo.specification.name}应大于0！`;
+              this.specificationErrors = `第${index + 1}条规格信息-${this.projectInfo.specification.name}应大于0`;
             } else {
-              this.specificationErrors = `第${index + 1}条规格信息-请输入${
-                this.projectInfo.specification.name
-                }！`;
+              this.specificationErrors = `第${index + 1}条规格信息-请输入${this.projectInfo.specification.name}！`;
             }
             return false;
           } else if (tempSpecificationNameList.includes(String(specification.content))) {
-            this.specificationErrors = `第${index + 1}条规格信息-${
-              this.projectInfo.specification.name
-              }重复！`;
+            this.specificationErrors = `第${index + 1}条规格信息-${this.projectInfo.specification.name}重复！`;
             return false;
-          } else if (
-            !specification.original_fee ||
+          } else if (!specification.original_fee ||
             Number(specification.original_fee) === 0
           ) {
             this.specificationErrors = `第${index + 1}条规格信息-原价应大于0！`;
             return false;
-          } else if (
-            !specification.settlement_fee ||
+          } else if (!specification.settlement_fee ||
             Number(specification.settlement_fee) === 0
           ) {
             this.specificationErrors = `第${index + 1}条规格信息-结算价应大于0！`;
             return false;
-          } else if (
-            !specification.sale_fee ||
+          } else if (!specification.sale_fee ||
             Number(specification.sale_fee) === 0
           ) {
             this.specificationErrors = `第${index + 1}条规格信息-售价应大于0！`;
@@ -653,29 +606,24 @@ export class AccessoryEditComponent implements OnInit {
           } else if (
             Number(specification.sale_fee) > Number(specification.original_fee)
           ) {
-            this.specificationErrors = `第${index +
-              1}条规格信息-原价应大于等于售价！`;
+            this.specificationErrors = `第${index + 1}条规格信息-原价应大于等于售价！`;
             return false;
           } else if (
             Number(specification.settlement_fee) > Number(specification.sale_fee)
           ) {
-            this.specificationErrors = `第${index +
-              1}条规格信息-结算价应小于等于售价！`;
+            this.specificationErrors = `第${index + 1}条规格信息-结算价应小于等于售价！`;
             return false;
           }
         }
 
         if (!specification.store && Number(specification.store) !== 0) {
-          this.specificationErrors = `第${index +
-            1}条规格信息-库存应输入0-99999！`;
+          this.specificationErrors = `第${index + 1}条规格信息-库存应输入0-99999！`;
           return false;
         }
         tempSpecificationNameList.push(model_name);
         this.accessoryParams.specifications.push(specification.toEditJson());
-        // });
       }
     }
-
     return true;
   }
 
@@ -683,35 +631,27 @@ export class AccessoryEditComponent implements OnInit {
   private requestUpdateAssessoryData() {
     if (!this.accessory_id) {
       // 新增
-      this.accessoryLibraryService
-        .requestAddAccessoryData(this.accessoryParams)
-        .subscribe(
-          () => {
-            this.globalService.promptBox.open('创建配件成功！', () => {
-              this.onCancelBtn();
-            });
-          },
-          err => {
-            this.handleErrorFunc(err, 1);
-            this.isSaveBtnDisabled = false;
-          }
-        );
+      this.accessoryLibraryService.requestAddAccessoryData(this.accessoryParams)
+        .subscribe(() => {
+          this.globalService.promptBox.open('创建配件成功！', () => {
+            this.onCancelBtn();
+          });
+        }, err => {
+          this.handleErrorFunc(err, 1);
+          this.isSaveBtnDisabled = false;
+        });
     } else {
       // 编辑
-      this.accessoryLibraryService
-        .requestUpdateAccessoryData(this.accessoryParams, this.accessory_id)
-        .subscribe(
-          () => {
-            this.globalService.promptBox.open('编辑配件成功！', () => {
-              this.onCancelBtn();
-            });
-            this.isSaveBtnDisabled = false;
-          },
-          err => {
-            this.handleErrorFunc(err, 1);
-            this.isSaveBtnDisabled = false;
-          }
-        );
+      this.accessoryLibraryService.requestUpdateAccessoryData(this.accessoryParams, this.accessory_id)
+        .subscribe(() => {
+          this.globalService.promptBox.open('编辑配件成功！', () => {
+            this.onCancelBtn();
+          });
+          this.isSaveBtnDisabled = false;
+        }, err => {
+          this.handleErrorFunc(err, 1);
+          this.isSaveBtnDisabled = false;
+        });
     }
   }
 
@@ -758,33 +698,17 @@ export class AccessoryEditComponent implements OnInit {
                                             : '';
           if (content.code === 'missing_field') {
             this.globalService.promptBox.open(
-              `${field}字段未填写!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+              `${field}字段未填写!`, null, 2000, null, false);
             return;
           } else if (content.code === 'invalid') {
             this.globalService.promptBox.open(
-              `${field}字段输入错误!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+              `${field}字段输入错误!`, null, 2000, null, false);
           } else if (content.code === 'already_existed') {
             this.globalService.promptBox.open(
-              `配件已经存在!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+              `配件已经存在!`, null, 2000, null, false);
           } else {
             this.globalService.promptBox.open(
-              `${text}配件库失败,请重试!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+              `${text}配件库失败,请重试!`, null, 2000, null, false);
           }
         }
       }

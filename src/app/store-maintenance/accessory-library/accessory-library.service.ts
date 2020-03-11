@@ -20,6 +20,8 @@ export class SpecificationEntity extends EntityBase {
   public content: string = undefined; // string	容量(蓄电池)/净含量(机油)
   public original_balance_fee: number = undefined; // 尾款原价(蓄电池) 单位:分
   public sale_balance_fee: number = undefined; // 尾款现价(蓄电池) 单位:分
+  public original_prepaid_fee: number = undefined; // 预付原价(蓄电池) 单位:分
+  public sale_prepaid_fee: number = undefined; // 预付现价(蓄电池) 单位:分
   public original_fee: number = undefined; // 原价(机滤、机油) 单位：分
   public settlement_fee: number = undefined; // 结算价(机滤、机油) 单位：分
   public sale_fee: number = undefined; // 售价(机滤、机油) 单位：分
@@ -41,17 +43,17 @@ export class SpecificationEntity extends EntityBase {
   public toEditJson(): SpecificationEntity {
     const json = this.json();
     json.original_balance_fee = json.original_balance_fee
-      ? Math.round(json.original_balance_fee * 100)
-      : null;
+      ? Math.round(json.original_balance_fee * 100) : null;
     json.sale_balance_fee = json.sale_balance_fee
-      ? Math.round(json.sale_balance_fee * 100)
-      : null;
+      ? Math.round(json.sale_balance_fee * 100) : null;
+    json.original_prepaid_fee = json.original_prepaid_fee
+      ? Math.round(json.original_prepaid_fee * 100) : null;
+    json.sale_prepaid_fee = json.sale_prepaid_fee
+      ? Math.round(json.sale_prepaid_fee * 100) : null;
     json.original_fee = json.original_fee
-      ? Math.round(json.original_fee * 100)
-      : null;
+      ? Math.round(json.original_fee * 100) : null;
     json.settlement_fee = json.settlement_fee
-      ? Math.round(json.settlement_fee * 100)
-      : null;
+      ? Math.round(json.settlement_fee * 100) : null;
     json.sale_fee = json.sale_fee ? Math.round(json.sale_fee * 100) : null;
     json.specification_id = json.specification_id || '';
     delete json.accessory;
