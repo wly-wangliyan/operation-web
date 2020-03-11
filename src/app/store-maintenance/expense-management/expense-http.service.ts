@@ -69,4 +69,18 @@ export class ExpenseHttpService {
   public continueExpenseRecordData(url: string): Observable<ExpenseRecordLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new ExpenseRecordLinkResponse(res)));
   }
+
+  /**
+   * 核销码数量统计
+   * @param searchParams WashCarSearchParams
+   * @returns Observable<WashCarOrderEntity>
+   */
+  public requestExpenseStatisticsData(searchParams: ExpenseSearchParams): Observable<any> {
+    const params = searchParams.clone();
+    delete params.page_num;
+    delete params.page_size;
+    const httpUrl = `${this.domain}/admin/wash_car/expense_verifies/statistics`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => res.body));
+  }
 }
