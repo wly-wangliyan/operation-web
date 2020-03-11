@@ -12,9 +12,19 @@ export class AccessoryBrandEntity extends EntityBase {
   public brand_name: string = undefined; // string	配件品牌名称
   public sign_image: string = undefined; // string	配件品牌标志图片
   public introduce: string = undefined; // string	简介
+  public tag: Array<any> = []; // 标签
   public is_deleted: boolean = undefined; // bool	是否删除
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.accessory_brand_id;
+    delete json.is_deleted;
+    delete json.created_time;
+    delete json.updated_time;
+    return json;
+  }
 }
 
 export class AccessoryBrandLinkResponse extends LinkResponse {
@@ -31,13 +41,6 @@ export class AccessoryBrandLinkResponse extends LinkResponse {
 export class SearchParams extends EntityBase {
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
-}
-
-// 编辑配件品牌参数
-export class SearchBrandParams extends EntityBase {
-  public brand_name = ''; // string	T	配件品牌名称
-  public sign_image = ''; // string	T	配件品牌标志图片
-  public introduce = ''; // string	string	T	简介 无：''
 }
 
 @Injectable({
@@ -91,23 +94,23 @@ export class BrandManagementHttpService {
 
   /**
    * 新建配件品牌
-   * @param params SearchBrandParams 参数
+   * @param params AccessoryBrandEntity 参数
    * @returns Observable<HttpResponse<any>>
    */
-  public requestAddAccessoryData(params: SearchBrandParams): Observable<HttpResponse<any>> {
+  public requestAddAccessoryData(params: AccessoryBrandEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/accessory_brands`;
-    return this.httpService.post(httpUrl, params);
+    return this.httpService.post(httpUrl, params.toEditJson());
   }
 
   /**
    * 编辑配件品牌
    * @param accessory_brand_id 配件品牌id
-   * @param params SearchBrandParams 参数
+   * @param params AccessoryBrandEntity 参数
    * @returns Observable<HttpResponse<any>>
    */
-  public requestUpdateAccessoryData(accessory_brand_id: string, params: SearchBrandParams): Observable<HttpResponse<any>> {
+  public requestUpdateAccessoryData(accessory_brand_id: string, params: AccessoryBrandEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/accessory_brands/${accessory_brand_id}`;
-    return this.httpService.put(httpUrl, params);
+    return this.httpService.put(httpUrl, params.toEditJson());
   }
 
   /**

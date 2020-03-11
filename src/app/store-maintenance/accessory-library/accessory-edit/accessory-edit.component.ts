@@ -85,8 +85,6 @@ export class AccessoryEditComponent implements OnInit {
   public oil_num = [];
   public oil_type = [1, 2, 3]; // 1:全合成 2:半合成 3:矿物质
   public oil_api = [];
-  public real_prepaid_fee: number;
-  public right_prepaid_fee: number;
   private num = 0;
 
   private searchText$ = new Subject<any>();
@@ -182,12 +180,6 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryParams.accessory_params = this.accessoryData.accessory_params
       ? this.accessoryData.accessory_params
       : new AccessoryParamsEntity();
-    this.real_prepaid_fee = this.getCentPrice(
-      this.accessoryData.real_prepaid_fee
-    );
-    this.right_prepaid_fee = this.getCentPrice(
-      this.accessoryData.right_prepaid_fee
-    );
     this.getProjectInfo();
   }
 
@@ -396,12 +388,6 @@ export class AccessoryEditComponent implements OnInit {
       } else if (!regPhone.test(this.accessoryParams.operation_telephone)) {
         this.operationTelErrors = '请输入正确的运营手机号！';
       } else {
-        this.accessoryParams.real_prepaid_fee = this.handleCentPrice(
-          this.real_prepaid_fee
-        );
-        this.accessoryParams.right_prepaid_fee = this.handleCentPrice(
-          this.right_prepaid_fee
-        );
         this.isSaveBtnDisabled = true;
         this.handleUpdateAssessoryData();
       }
@@ -675,11 +661,12 @@ export class AccessoryEditComponent implements OnInit {
                       ? '参数'
                       : content.field === 'detail'
                         ? '图文详情'
-                        : content.field === 'battery_specification'
+                        : (content.field === 'battery_specification'
+                          || content.field === 'specifications')
                           ? '规格'
-                          : content.field === 'real_prepaid_fee'
-                            ? '预约原价'
-                            : content.field === 'right_prepaid_fee'
+                          : content.field === 'original_prepaid_fee'
+                            ? '预付原价'
+                            : content.field === 'sale_prepaid_fee'
                               ? '预付现价'
                               : content.field === 'operation_telephone'
                                 ? '运营手机号'
@@ -708,7 +695,7 @@ export class AccessoryEditComponent implements OnInit {
               `配件已经存在!`, null, 2000, null, false);
           } else {
             this.globalService.promptBox.open(
-              `${text}配件库失败,请重试!`, null, 2000, null, false);
+              `${text}配件失败,请重试!`, null, 2000, null, false);
           }
         }
       }
