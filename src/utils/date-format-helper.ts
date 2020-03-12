@@ -3,6 +3,18 @@
  */
 import { EntityBase } from './z-entity';
 
+export class TimeItem extends EntityBase {
+  public hour = '00';
+  public minute = '00';
+
+  constructor(hour?: string) {
+    super();
+    if (hour) {
+      this.hour = hour;
+    }
+  }
+}
+
 export class DateFormatHelper {
 
   public static NowBlock: any; // 用来同步当前服务器时间的闭包函数
@@ -341,14 +353,17 @@ export class DateFormatHelper {
   }
 
   /**
-   * 分钟拆分
+   * 分钟拆分 秒|分->00:00
    * @param time 时间
+   * @param unit 单位 ss|mm
    * @returns TimeItem 返回值
    */
-  public static getMinuteOrTime(time: any): TimeItem {
+  public static getMinuteOrTime(time: any, unit: 'ss' | 'mm' = 'ss'): TimeItem {
     const time_point = new TimeItem();
-    const hour = Math.floor(parseFloat(time) / (60 * 60));
-    const minute = (parseFloat(time) / 60) % 60;
+    const denominator_hour = unit === 'ss' ? 60 * 60 : 60;
+    const denominator_minute = unit === 'ss' ? 60 : 1;
+    const hour = Math.floor(parseFloat(time) / denominator_hour);
+    const minute = (parseFloat(time) / denominator_minute) % 60;
     if (hour < 10) {
       time_point.hour = '0' + hour;
     } else {
@@ -363,23 +378,16 @@ export class DateFormatHelper {
   }
 
   /**
-   * 求时间值
+   * 求时间值 00:00->秒|分
    * @param TimeItem timeParam
+   * @param unit 单位 ss|mm
    * @returns number
    */
-  public static getSecondTimeSum(timeParam: TimeItem): number {
-    return parseFloat(timeParam.hour) * 60 * 60 + parseFloat(timeParam.minute) * 60;
-  }
-}
-
-export class TimeItem extends EntityBase {
-  public hour = '00';
-  public minute = '00';
-
-  constructor(hour?: string) {
-    super();
-    if (hour) {
-      this.hour = hour;
+  public static getSecondTimeSum(timeParam: TimeItem, unit: 'ss' | 'mm' = 'ss'): number {
+    if (unit === 'ss') {
+      return parseFloat(timeParam.hour) * 60 * 60 + parseFloat(timeParam.minute) * 60;
+    } else if (unit === 'mm') {
+      return parseFloat(timeParam.hour) * 60 + parseFloat(timeParam.minute);
     }
   }
 }

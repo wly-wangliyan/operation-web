@@ -91,9 +91,9 @@ export class WashCarActivityEditComponent implements OnInit {
         item.identifier = this.identifier;
         item.activity_fee = Number((item.activity_fee / 100).toFixed(2));
         if (item.period_type !== 4) {
-          item.valid_time_start = item.valid_time_start ? DateFormatHelper.getMinuteOrTime(item.valid_time_start)
+          item.valid_time_start = item.valid_time_start ? DateFormatHelper.getMinuteOrTime(item.valid_time_start, 'mm')
             : new TimeItem();
-          item.valid_time_end = item.valid_time_end ? DateFormatHelper.getMinuteOrTime(item.valid_time_end)
+          item.valid_time_end = item.valid_time_end ? DateFormatHelper.getMinuteOrTime(item.valid_time_end, 'mm')
             : new TimeItem();
         } else {
           item.valid_date_start = item.valid_date_start * 1000;
@@ -261,8 +261,8 @@ export class WashCarActivityEditComponent implements OnInit {
               return false;
             }
           }
-          const valid_time_start = DateFormatHelper.getSecondTimeSum(activity.valid_time_start);
-          const valid_time_end = DateFormatHelper.getSecondTimeSum(activity.valid_time_end);
+          const valid_time_start = DateFormatHelper.getSecondTimeSum(activity.valid_time_start, 'mm');
+          const valid_time_end = DateFormatHelper.getSecondTimeSum(activity.valid_time_end, 'mm');
 
           if (valid_time_start >= valid_time_end) {
             this.activityErrMsg = `活动${this.chnNumChar[index]}：活动开始时间应小于活动结束时间！`;
