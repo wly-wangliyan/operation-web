@@ -203,7 +203,7 @@ export class WashCarActivityEditComponent implements OnInit {
   private errProcess(err: any): void {
     if (!this.globalService.httpErrorProcess(err)) {
       if (err.status === 422) {
-        this.globalService.promptBox.open('参数缺失或无效', null, 2000, null, false);
+        this.globalService.promptBox.open('参数缺失或无效！', null, 2000, null, false);
       } else if (err.status === 404) {
         this.globalService.promptBox.open('洗车规格数据不存在，请刷新重试！', null, 2000, null, false);
       }

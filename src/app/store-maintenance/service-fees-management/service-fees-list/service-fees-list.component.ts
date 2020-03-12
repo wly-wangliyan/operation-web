@@ -112,7 +112,7 @@ export class ServiceFeesListComponent implements OnInit {
         ? res.specification_info : [];
       this.calculateSpecificationPrice();
       this.specificationList = this.washServiceConfig.specification_info.filter(
-        specification => specification.car_type === 1
+        specification => specification.car_type === this.selectedCarTypeTabIndex
       );
     }, err => {
       this.noResultText = '暂无数据';
