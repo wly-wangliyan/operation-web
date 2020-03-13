@@ -53,7 +53,7 @@
                               <div class="row-box">
                                 <div class="price-group">
                                   <select *ngIf="data.period_type===2" name="week_day_{{data.identifier}}"
-                                    class="form-control" style="width: 100px;margin-right: 8px;"
+                                    class="form-control" style="width: 108px;margin-right: 8px;"
                                     (change)="onChangeWeekDay($event,data)" [(ngModel)]="data.week_day" required>
                                     <option value=''>请选择星期</option>
                                     <option *ngFor="let day of week_day" [value]="day">
