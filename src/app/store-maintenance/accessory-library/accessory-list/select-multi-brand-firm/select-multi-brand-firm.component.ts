@@ -211,7 +211,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     }
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
-    // todo:
+    // todo: timer
     setTimeout(() => {
       $('#selectMultiBrandFirmModal').modal();
     }, 0);
