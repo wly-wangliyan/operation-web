@@ -6,8 +6,7 @@ import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-sele
 import { HttpErrorEntity } from '../../../../core/http.service';
 import {
   AccessoryBrandEntity,
-  BrandManagementHttpService,
-  SearchBrandParams
+  BrandManagementHttpService
 } from '../../brand-management-http.service';
 
 export class ErrMessageItem {
@@ -25,11 +24,13 @@ export class ErrMessageItem {
 
 export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
-  constructor(icon?: ErrMessageItem) {
-    if (isUndefined(icon)) {
+  tags: ErrMessageItem = new ErrMessageItem();
+  constructor(icon?: ErrMessageItem, tags?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(tags)) {
       return;
     }
     this.icon = icon;
+    this.tags = tags;
   }
 }
 
@@ -42,34 +43,33 @@ export class BrandEditComponent implements OnInit {
   constructor(
     private globalService: GlobalService,
     private brandManagementService: BrandManagementHttpService
-  ) {}
+  ) { }
 
-  public searchBrandParams: SearchBrandParams = new SearchBrandParams();
+  public editBrandParams: AccessoryBrandEntity = new AccessoryBrandEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
   public aspectRatio = 1 / 1; // 截取图片比例
+  public tag = '';
+  public tagList = []; // 品牌标签
 
   private sureCallback: any;
   private closeCallback: any;
   private requestSubscription: Subscription;
-  private banner_id: string;
+  public accessory_brand_id: string; // 配件品牌ID
 
   private is_save = false; // 防止连续出发保存事件
 
-  @Input() public accessory_brand_id: string;
-  @ViewChild('bannerPromptDiv', { static: false })
-  public bannerPromptDiv: ElementRef;
-  @ViewChild('coverImg', { static: false })
-  public coverImgSelectComponent: ZPhotoSelectComponent;
+  @ViewChild('brandPromptDiv', { static: false }) public brandPromptDiv: ElementRef;
+  @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
-  public ngOnInit() {}
+  public ngOnInit() { }
 
   // 弹框close
   public onClose() {
     this.clear();
     this.requestSubscription && this.requestSubscription.unsubscribe();
-    this.searchBrandParams = new SearchBrandParams();
-    $(this.bannerPromptDiv.nativeElement).modal('hide');
+    this.editBrandParams = new AccessoryBrandEntity();
+    $(this.brandPromptDiv.nativeElement).modal('hide');
   }
 
   /**
@@ -78,20 +78,16 @@ export class BrandEditComponent implements OnInit {
    * @param sureFunc 确认回调
    * @param closeFunc 取消回调
    */
-  public open(
-    data: AccessoryBrandEntity,
-    sureFunc: any,
-    closeFunc: any = null
-  ) {
-    const openBannerModal = () => {
+  public open(data: AccessoryBrandEntity, sureFunc: any, closeFunc: any = null) {
+    const openBrandModal = () => {
       timer(0).subscribe(() => {
-        $(this.bannerPromptDiv.nativeElement).modal('show');
+        $(this.brandPromptDiv.nativeElement).modal('show');
       });
     };
     this.accessory_brand_id = data ? data.accessory_brand_id : '';
-    this.searchBrandParams = data
-      ? JSON.parse(JSON.stringify(data))
-      : new SearchBrandParams();
+    this.tagList = data && data.tag ? data.tag : [];
+    this.tag = '';
+    this.editBrandParams = data ? data.clone() : new AccessoryBrandEntity();
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
@@ -100,7 +96,7 @@ export class BrandEditComponent implements OnInit {
       this.cover_url.push(data.sign_image);
     }
     this.is_save = false;
-    openBannerModal();
+    openBrandModal();
   }
 
   // form提交
@@ -110,75 +106,67 @@ export class BrandEditComponent implements OnInit {
     }
     this.clear();
     this.is_save = true;
-    this.coverImgSelectComponent.upload().subscribe(
-      () => {
-        const imageUrl = this.coverImgSelectComponent.imageList.map(
-          i => i.sourceUrl
-        );
-        this.searchBrandParams.sign_image = imageUrl.join(',');
-        if (this.verification()) {
-          if (!this.accessory_brand_id) {
-            // 添加配件品牌
-            this.brandManagementService
-              .requestAddAccessoryData(this.searchBrandParams)
-              .subscribe(
-                () => {
-                  this.onClose();
-                  this.globalService.promptBox.open('新建成功！', () => {
-                    this.sureCallbackInfo();
-                  });
-                },
-                err => {
-                  this.is_save = false;
-                  this.errorProcess(err, 1);
-                }
-              );
-          } else {
-            // 编辑配件品牌
-            this.brandManagementService
-              .requestUpdateAccessoryData(
-                this.accessory_brand_id,
-                this.searchBrandParams
-              )
-              .subscribe(
-                () => {
-                  this.onClose();
-                  this.globalService.promptBox.open('编辑成功！', () => {
-                    this.sureCallbackInfo();
-                  });
-                },
-                err => {
-                  this.is_save = false;
-                  this.errorProcess(err, 2);
-                }
-              );
-          }
+    this.coverImgSelectComponent.upload().subscribe(() => {
+      const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+      this.editBrandParams.sign_image = imageUrl.join(',');
+      if (this.verification()) {
+        if (!this.accessory_brand_id) {
+          this.requestAddAccessoryBrand();
         } else {
-          this.is_save = false;
+          this.requestUpdateAccessoryBrand();
         }
-      },
-      err => {
+      } else {
         this.is_save = false;
-        this.upLoadErrMsg(err);
       }
-    );
+    }, err => {
+      this.is_save = false;
+      this.upLoadErrMsg(err);
+    });
+  }
+  // 添加配件品牌
+  private requestAddAccessoryBrand(): void {
+    this.brandManagementService
+      .requestAddAccessoryData(this.editBrandParams).subscribe(() => {
+        this.onClose();
+        this.globalService.promptBox.open('新建成功！', () => {
+          this.sureCallbackInfo();
+        });
+      }, err => {
+        this.is_save = false;
+        this.errorProcess(err, 1);
+      });
+  }
+  // 编辑配件品牌
+  private requestUpdateAccessoryBrand(): void {
+    this.brandManagementService.requestUpdateAccessoryData(
+      this.accessory_brand_id,
+      this.editBrandParams
+    ).subscribe(() => {
+      this.onClose();
+      this.globalService.promptBox.open('编辑成功！', () => {
+        this.sureCallbackInfo();
+      });
+    }, err => {
+      this.is_save = false;
+      this.errorProcess(err, 2);
+    });
   }
 
   // 表单提交校验
   private verification(): boolean {
-    let cisCheck = true;
-
-    if (!this.searchBrandParams.sign_image) {
+    if (!this.editBrandParams.sign_image) {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请重新上传图片！';
-      cisCheck = false;
+      return false;
     }
-    return cisCheck;
+    this.editBrandParams.tag = this.tagList;
+    return true;
   }
 
   // 清空
   public clear(): void {
     this.errPositionItem.icon.isError = false;
+    this.errPositionItem.tags.isError = false;
   }
 
   // 确定按钮回调
@@ -198,43 +186,18 @@ export class BrandEditComponent implements OnInit {
       if (err.status === 422) {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
-          const field =
-            content.field === 'brand_name'
-              ? '品牌名称'
-              : content.field === 'sign_image'
-              ? '品牌标志'
-              : content.field === 'introduce'
-              ? '简介'
-              : '';
+          const field = content.field === 'brand_name' ?
+            '品牌名称' : content.field === 'sign_image' ?
+              '品牌标志' : content.field === 'introduce' ?
+                '简介' : content.field === 'tag' ? '品牌标签' : '';
           if (content.code === 'missing_field') {
-            this.globalService.promptBox.open(
-              `${field}字段未填写!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
-            return;
+            this.globalService.promptBox.open(`${field}字段未填写!`, null, 2000, null, false);
           } else if (content.code === 'invalid') {
-            this.globalService.promptBox.open(
-              `${field}字段输入错误!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+            this.globalService.promptBox.open(`${field}字段输入错误!`, null, 2000, null, false);
           } else if (content.code === 'already_existed') {
-            this.globalService.promptBox.open(
-              `配件品牌已经存在!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+            this.globalService.promptBox.open(`配件品牌已经存在!`, null, 2000, null, false);
           } else {
-            this.globalService.promptBox.open(
-              `${text}配件品牌失败,请重试!`,
-              null,
-              2000,
-              '/assets/images/warning.png'
-            );
+            this.globalService.promptBox.open(`${text}配件品牌失败,请重试!`, null, 2000, null, false);
           }
         }
       }
@@ -267,5 +230,26 @@ export class BrandEditComponent implements OnInit {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '图片大小不得高于2M！';
     }
+  }
+
+  // 添加标签
+  public onAddTagClick(): void {
+    this.errPositionItem.tags.isError = false;
+    if (this.tag === '' || this.tag === null) {
+      return;
+    } else if (this.tagList.some(i => i === this.tag)) {
+      this.errPositionItem.tags.isError = true;
+      this.errPositionItem.tags.errMes = '添加的标签重复,请重新输入！';
+      return;
+    } else {
+      this.tagList.push(this.tag);
+      this.tag = '';
+    }
+  }
+
+  // 删除标签
+  public onDeleteTag(index: number): void {
+    this.errPositionItem.tags.isError = false;
+    this.tagList.splice(index, 1);
   }
 }

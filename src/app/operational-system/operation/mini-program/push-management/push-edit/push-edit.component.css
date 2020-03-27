@@ -1,133 +1,135 @@
 .content-flow {
   background: #fff !important;
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .row-message {
-    margin-top: -8px !important;
+  margin-top: -8px !important;
 }
 
 .row-message .err-message {
-    margin-top: -12px !important;
+  margin-top: -12px !important;
 }
 
 .cover-hint {
-    margin-left: 131px;
+  margin-left: 131px;
 }
 
 .form-control {
-    background: #f8f9fb ;
+  background: #f8f9fb;
 }
 
 .control-input {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .control-label {
-    margin-bottom: 0!important;
-    height: 45px!important;
-    line-height: 45px;
+  margin-bottom: 0 !important;
+  height: 45px !important;
+  line-height: 45px;
 }
 
 select {
-    width: 130px !important;
-    background: #fff !important;
+  width: 130px !important;
+  background: #fff !important;
+  border-radius: 0;
 }
 
 .online-btn,
 .offline-btn {
-    font-size: 13px;
-    min-width: 120px;
-    padding: 0 10px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-    color: #888 !important;
-    border: 0;
-    background: #F7F8FA;
-    outline: none;
-    border-right: 1px solid rgba(136, 136, 136, 0.3);
+  font-size: 13px;
+  min-width: 120px;
+  padding: 0 10px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  color: #888 !important;
+  border: 0;
+  background: #F7F8FA;
+  outline: none;
+  border-right: 1px solid rgba(136, 136, 136, 0.3);
 }
 
 .online-btn {
-    border-radius: 2px;
+  border-radius: 2px;
 }
 
 .online-disabled {
-    cursor: default;
+  cursor: default;
 }
 
 .offline-btn:first-child {
-    border-radius: 2px 0 0 2px;
+  border-radius: 2px 0 0 2px;
 }
 
 .offline-btn:last-child {
-    border-right: none!important;
-    border-radius: 0 2px 2px 0;
+  border-right: none !important;
+  border-radius: 0 2px 2px 0;
 }
 
 .offline-btn:hover {
-    color: #fff !important;
-    background: #315AC5;
+  color: #fff !important;
+  background: #315AC5;
 }
 
 .active-btn {
-    color: #fff !important;
-    background: #3E71F7;
+  color: #fff !important;
+  background: #3E71F7;
 }
 
 .push-rate {
-    display: inline-flex;
-    line-height: 34px;
-    margin-left: 105px;
-    margin-top: 10px;
+  display: inline-flex;
+  line-height: 34px;
+  margin-left: 105px;
+  margin-top: 10px;
 }
 
 .push-rate label {
-    height: 34px;
-    width: 34px;
-    text-align: center;
-    line-height: 34px;
-    border: 0.5px solid rgba(136,136,136,.4);
-    background: #f8f9fb;
-    margin-right: 5px;
-    margin-left: -34px;
+  height: 34px;
+  width: 34px;
+  text-align: center;
+  line-height: 34px;
+  border: 0.5px solid rgba(136, 136, 136, .4);
+  border-left: none;
+  background: #f8f9fb;
+  margin-right: 5px;
+  margin-left: -34px;
 }
 
 .push-rate label:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .push-rate input {
-    width: 100px;
-    margin-left: 5px;
+  width: 100px;
+  margin-left: 5px;
 }
 
 .push-rate select {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .location-crowd input:first-child {
-    margin-left: 0;
-    margin-right: 5px;
-    width: 220px;
+  margin-left: 0;
+  margin-right: 5px;
+  width: 220px;
 }
 
 :host ::ng-deep.ant-calendar-picker {
-    width: 182px!important;
+  width: 182px !important;
 }
 
 .break-line {
-    width: 95%;
-    margin: 10px 0 15px 0 !important;
-    height:2px;
-    border:1px solid rgba(136,136,136,.5);
+  width: 95%;
+  margin: 10px 0 15px 0 !important;
+  height: 2px;
+  border: 1px solid rgba(136, 136, 136, .5);
 }
 
 .modal-footer {
-    width: 560px;
+  width: 560px;
 }
 
 .sure-btn {
-    margin-left: 0;
+  margin-left: 0;
 }

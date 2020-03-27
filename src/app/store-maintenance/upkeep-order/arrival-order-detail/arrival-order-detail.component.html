@@ -62,8 +62,8 @@
           <td>优惠券</td>
           <td>
             <!-- 此处文档缺字段 -->
-            <span>配件：</span>--
-            <span>，服务：</span>--
+            <span>配件：</span>0元
+            <span>，服务：</span>0元
           </td>
           <td>合计实收</td>
           <td colspan="3">{{ orderRecord.sale_total_fee | centPriceChange: '元' }}</td>
@@ -85,7 +85,7 @@
 
         <tr>
           <td>到货时间</td>
-          <td>{{orderRecord.aog_time ? (orderRecord.aog_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
+          <td>{{orderRecord.sign_time ? (orderRecord.sign_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--'}}</td>
           <td>验货时间</td>
           <td>{{ orderRecord.check_time ? (orderRecord.check_time * 1000 | date: 'y-MM-dd HH:mm:ss') : '--' }}</td>
           <td>验货照片</td>
@@ -153,19 +153,17 @@
                         <label
                           *ngIf="accessoryData.accessory_params.oil_num">{{accessoryData.accessory_params.oil_num}}</label>
                         <label
-                          *ngIf="accessoryData.accessory_params.oil_type">{{accessoryData.accessory_params.oil_type}}</label>
+                          *ngIf="accessoryData.accessory_params.oil_type">{{accessoryData.accessory_params.oil_type | oilType}}</label>
                         <label
                           *ngIf="accessoryData.accessory_params.oil_api">{{accessoryData.accessory_params.oil_api}}</label>
-                        <label *ngIf="accessoryData.accessory_params.oil_place"
-                          [title]="accessoryData.accessory_params.oil_place">{{accessoryData.accessory_params.oil_place|zMaxLength:10}}</label>
-                        <label *ngIf="accessoryData.accessory_params.oil_expire"
-                          [title]="accessoryData.accessory_params.oil_expire">{{accessoryData.accessory_params.oil_expire|zMaxLength:10}}</label>
                       </div>
                     </div>
                   </div>
                 </td>
                 <td>{{accessoryData.brand_name || '--'}}</td>
-                <td>{{accessoryData.content || '--'}}</td>
+                <td>
+                  {{accessoryData.content?(accessoryData.content.includes('L')?accessoryData.content:accessoryData.content+'L') : '--'}}
+                </td>
                 <td>{{accessoryData.number || 0}}</td>
                 <td>
                   <span *ngIf="accessoryData.supply_type===1">{{accessoryData.supplier_name || '--'}}</span>

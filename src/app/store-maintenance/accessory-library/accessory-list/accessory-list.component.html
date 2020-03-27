@@ -25,6 +25,18 @@
           </div>
           <div>
             <nz-form-item nzFlex>
+              <nz-form-label>状态</nz-form-label>
+              <nz-form-control class="form_control">
+                <select class="form-control" name="sale_status" [(ngModel)]="searchParams.sale_status">
+                  <option value="">全部</option>
+                  <option value=1>在售</option>
+                  <option value=2>停售</option>
+                </select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div>
+            <nz-form-item nzFlex>
               <nz-form-label>配件品牌</nz-form-label>
               <nz-form-control class="form_control">
                 <select class="form-control" name="accessory_brand_id" [(ngModel)]="searchParams.accessory_brand_id">
@@ -98,7 +110,7 @@
                   </ng-container>
                 </div>
                 <div style="display: grid">
-                  <a style="word-break: keep-all;text-align: left" [title]="data.accessory_name">
+                  <a style="word-break: keep-all;white-space: nowrap;text-align: left" [title]="data.accessory_name">
                     {{ data.accessory_name | zMaxLength: 15 }}
                   </a>
                   <div class="accessory-tip" *ngIf="data.accessory_params">
@@ -106,17 +118,11 @@
                       data.accessory_params.oil_num
                     }}</label>
                     <label *ngIf="data.accessory_params.oil_type">{{
-                      data.accessory_params.oil_type 
+                      data.accessory_params.oil_type | oilType
                     }}</label>
                     <label *ngIf="data.accessory_params.oil_api">{{
                       data.accessory_params.oil_api
                     }}</label>
-                    <label *ngIf="data.accessory_params.oil_place" [title]="data.accessory_params.oil_place">{{
-                        data.accessory_params.oil_place | zMaxLength: 12
-                      }}</label>
-                    <label *ngIf="data.accessory_params.oil_expire" [title]="data.accessory_params.oil_expire">{{
-                        data.accessory_params.oil_expire | zMaxLength: 12
-                      }}</label>
                   </div>
                 </div>
               </div>
@@ -169,9 +175,11 @@
               </nz-switch>
             </td>
             <td class="operation">
-              <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]">编辑</a>
-              <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data)">推荐设置</a>
-              <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
+              <div>
+                <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]">编辑</a>
+                <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data)">推荐设置</a>
+                <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
+              </div>
             </td>
           </tr>
         </tbody>

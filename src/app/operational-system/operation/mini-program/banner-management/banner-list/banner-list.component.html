@@ -61,16 +61,9 @@
           <tr *ngFor="let data of bannerTable.data; let i=index" cdkDrag>
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>
-              <div *ngIf='data.banner_type===1||data.banner_type===4'>
-                <img *ngIf='!data.image' style="width: 270px;height:70px;margin: auto 20px;"
-                  src="/assets/images/space_banner.png">
-                <img *ngIf='data.image' style="width: 270px;height:70px;margin: auto 20px;" [src]="data.image">
-              </div>
-              <div *ngIf='data.banner_type!==1&&data.banner_type!==4'>
-                <img *ngIf='!data.image' style="width: 130px;height:68px;margin: auto 20px;"
-                  src="/assets/images/space_banner.png">
-                <img *ngIf='data.image' style="width: 130px;height:68px;margin: auto 20px;" [src]="data.image">
-              </div>
+              <img class="img-spec" [class.img-spec-1]="data.banner_type!==1&&data.banner_type!==4"
+                [class.img-spec-2]="data.banner_type===4 && data.page_layout===3"
+                [src]="data.image?data.image:'/assets/images/space_banner.png'" />
             </td>
             <td>{{data.title}}</td>
             <td *ngIf='searchParams.banner_type===4'>{{data.page_layout|pageLayout}}</td>

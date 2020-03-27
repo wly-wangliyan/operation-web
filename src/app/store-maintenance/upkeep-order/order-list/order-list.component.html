@@ -137,21 +137,17 @@
                             <label
                               *ngIf="accessory.accessory_params.oil_num">{{accessory.accessory_params.oil_num}}</label>
                             <label
-                              *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type}}</label>
+                              *ngIf="accessory.accessory_params.oil_type">{{accessory.accessory_params.oil_type  | oilType}}</label>
                             <label
                               *ngIf="accessory.accessory_params.oil_api">{{accessory.accessory_params.oil_api}}</label>
-                            <label *ngIf="accessory.accessory_params.oil_place"
-                              [title]="accessory.accessory_params.oil_place">{{accessory.accessory_params.oil_place|zMaxLength:10}}</label>
-                            <label *ngIf="accessory.accessory_params.oil_expire"
-                              [title]="accessory.accessory_params.oil_expire">{{accessory.accessory_params.oil_expire|zMaxLength:10}}</label>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div>
-                      <span>{{accessory.content || '--'}}</span>
+                      <span>{{accessory.content?(accessory.content.includes('L')?accessory.content:accessory.content+'L') : '--'}}</span>
                     </div>
-                    <div><span>{{accessory.num || 0}}</span></div>
+                    <div><span>{{accessory.number || 0}}</span></div>
                     <div><span>{{accessory.sale_fee | centPriceChange:'¥ ':'left' }}</span></div>
                   </div>
                 </div>
@@ -162,7 +158,7 @@
                     <div>
                       <div class="img-item">
                         <div class="img-box">
-                          <img src="/assets/images/image_space.png" />
+                          <img style="width: 40px;height: 40px;" src="/assets/images/space_service.jpg" />
                         </div>
                         <div style="text-align: left;padding: 10px 0;">
                           <span [title]="service.service_fee_name ||''"

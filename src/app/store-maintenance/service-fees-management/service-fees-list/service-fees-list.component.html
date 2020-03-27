@@ -68,9 +68,9 @@
             <td>{{data.sale_amount | centPriceChange:'元'}}</td>
             <td>{{data.settlement_amount | centPriceChange:'元'}}</td>
             <td>
-              <nz-switch [ngModel]="data.status===1?true:false"
-                (ngModelChange)="onSwitchChange(data.status, $event)" [nzControl]=true nzCheckedChildren="On"
-                nzUnCheckedChildren="Off" (click)="onSwitchClick(data.service_fee_id,data.status)">
+              <nz-switch [ngModel]="data.status===1?true:false" (ngModelChange)="onSwitchChange(data.status, $event)"
+                [nzControl]=true nzCheckedChildren="On" nzUnCheckedChildren="Off"
+                (click)="onSwitchClick(data.service_fee_id,data.status)">
               </nz-switch>
             </td>
             <td class="operation">
@@ -154,6 +154,7 @@
             <th>销量</th>
             <th>有效期</th>
             <th>状态</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -179,9 +180,14 @@
                 nzUnCheckedChildren="Off"
                 (ngModelChange)="onChangeSpecificationStatus(data.wash_car_specification_id,$event)"></nz-switch>
             </td>
+            <td class="operation">
+              <a [title]="'编辑活动'" (click)="onShowModal(data)">编辑活动</a>
+            </td>
           </tr>
         </tbody>
       </nz-table>
     </div>
   </div>
 </div>
+
+<app-wash-car-activity-edit #appWashCarActivityEdit></app-wash-car-activity-edit>

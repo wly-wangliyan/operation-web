@@ -23,7 +23,7 @@ export class WashCarServiceEditComponent implements OnInit {
   public basePrice_1: Array<BasePriceEntity> = []; // 标准洗车1次 基础价格
   public basePrice_2: Array<BasePriceEntity> = []; // 标准洗车1次+打蜡1次 基础价格
   public repairShopList: Array<RepairShopEntity> = []; // 通用门店列表
-  public removeList: Array<WashCarSpecificationEntity> = []; // 移除的已有规格
+  private removeList: Array<WashCarSpecificationEntity> = []; // 移除的已有规格
   public selectedTabIndex = 1;
   public tabs = [{ key: 1, value: '5座小型车' }, { key: 2, value: 'SUV/MPV' }];
   public basePriceErrMsg = '';
@@ -183,10 +183,15 @@ export class WashCarServiceEditComponent implements OnInit {
     this.specificationErrMsg = '';
     const wash_car_specification_id = data.wash_car_specification_id;
     if (wash_car_specification_id) {
-      data.is_deleted = true;
-      this.removeList.push(data.clone());
+      this.globalService.confirmationBox.open('提示', '删除规格后相关联的特卖活动将自动删除！\n 是否移除？', () => {
+        this.globalService.confirmationBox.close();
+        data.is_deleted = true;
+        this.removeList.push(data.clone());
+        this.specificationList.splice(index, 1);
+      });
+    } else {
+      this.specificationList.splice(index, 1);
     }
-    this.specificationList.splice(index, 1);
   }
 
   // 原价数据联动
@@ -349,8 +354,20 @@ export class WashCarServiceEditComponent implements OnInit {
     let result = true;
     const tempSpecificationNameList = [];
     validSpecification.forEach((specification, index) => {
-      if (tempSpecificationNameList.includes(specification.specification_name)) {
+      if (!specification.specification_name) {
+        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请输入规格名称！`;
+        result = false;
+        return;
+      } else if (tempSpecificationNameList.includes(specification.specification_name)) {
         this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-规格名称重复！`;
+        result = false;
+        return;
+      } else if (!specification.base_num && specification.base_num !== 0) {
+        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请输入[标准洗车]规格配置数量！`;
+        result = false;
+        return;
+      } else if (!specification.base_wax_num && specification.base_wax_num !== 0) {
+        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-请输入[标准洗车+打蜡]规格配置数量！`;
         result = false;
         return;
       } else if (!specification.base_num && !specification.base_wax_num) {
@@ -363,6 +380,10 @@ export class WashCarServiceEditComponent implements OnInit {
         return;
       } else if (specification.original_fee < specification.sale_fee) {
         this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-售价应小于等于原价！`;
+        result = false;
+        return;
+      } else if ((!specification.store && specification.store !== 0) || specification.store < 0) {
+        this.specificationErrMsg = `${car_name}-第${index + 1}条规格信息-库存应大于等于0！`;
         result = false;
         return;
       } else if (!specification.valid_date_type) {

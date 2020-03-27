@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
+import { Subscription, timer, of, forkJoin } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
 import {
   CarBrandEntity,
@@ -8,8 +8,19 @@ import {
   VehicleManagementHttpService
 } from '../../../vehicle-management/vehicle-management-http.service';
 import { AccessoryLibraryService } from '../../accessory-library.service';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/core';
 import { HttpErrorEntity } from '../../../../core/http.service';
+import { switchMap, map, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+interface Expandable {
+  key: string;
+  title: string;
+  children: Array<any>;
+  expanded: boolean;
+  prepareState: 'noNeed' | 'need' | 'ready';
+}
+
+const MAX_REQUEST_COUNT = 3;
 
 @Component({
   selector: 'app-select-multi-brand-firm',
@@ -17,11 +28,12 @@ import { HttpErrorEntity } from '../../../../core/http.service';
   styleUrls: ['./select-multi-brand-firm.component.css']
 })
 export class SelectMultiBrandFirmComponent implements OnInit {
+
   constructor(
     private globalService: GlobalService,
     private vehicleService: VehicleManagementHttpService,
     private accessoryLibraryService: AccessoryLibraryService
-  ) {}
+  ) { }
 
   @Input() public accessory_id: string;
 
@@ -70,12 +82,116 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   public defaultSelectedKeys = [];
   public loading = false;
 
+  private isRequestSeriesData = false;
   private sureCallback: any;
   private closeCallback: any;
   private requestBrandSubscription: Subscription; // 获取品牌数据
   private requestFirmSubscription: Subscription; // 获取厂商数据
 
-  public ngOnInit() {}
+  public ngOnInit() { }
+
+  private requestAllCheckedCarBrands() {
+    this.requestBrandSubscription = this.vehicleService
+      .requestCarBrandsListData().pipe(map((carBrands: any) => {
+        const carBrandCheckedStr = this.car_brand_checked_list.join(',');
+        return carBrands.results.map((carBrand: any) =>
+          ({
+            ...carBrand,
+            key: carBrand.car_brand_id,
+            title: carBrand.car_brand_name,
+            children: [],
+            expanded: false,
+            prepareState: carBrandCheckedStr.includes(carBrand.car_brand_id) ? 'need' : 'noNeed'
+          }));
+      }), switchMap(carBrandList => this.requestCheckedFactories(carBrandList))).subscribe(carBrandList => {
+        this.loading = true;
+        console.log('结果集:', carBrandList);
+      }, err => {
+        this.loading = true;
+        $('#selectMultiBrandFirmModal').modal('hide');
+        this.globalService.httpErrorProcess(err);
+      });
+  }
+
+  private requestCheckedFactories(carBrandList: Array<Expandable & { car_brand_id: string }>): Observable<any> {
+    const forkJoinHttps = [];
+    const currentCarBrands = [];
+    for (const carBrand of carBrandList) {
+      if (carBrand.prepareState === 'need') {
+        forkJoinHttps.push(this.vehicleService.requestCarFactoryListData(carBrand.car_brand_id));
+        currentCarBrands.push(carBrand);
+      }
+      if (forkJoinHttps.length === MAX_REQUEST_COUNT) {
+        // factory的最大并发数
+        break;
+      }
+    }
+    if (forkJoinHttps.length > 0) {
+      // 存在需要加载的数据这执行递归调用
+      const carFactoryCheckedStr = this.car_factory_checked_list
+        .join(',');
+      return forkJoin(forkJoinHttps).pipe(switchMap((httpRes: Array<any>) => {
+        httpRes.forEach((carFactoryRes, index) => {
+          currentCarBrands[index].children = carFactoryRes.results.map((carFactory: any) => ({
+            ...carFactory,
+            key: carFactory.car_factory_id,
+            title: carFactory.car_factory_name,
+            children: [],
+            expanded: false,
+            prepareState: carFactoryCheckedStr.includes(carFactory.car_factory_id) ? 'need' : 'noNeed'
+          }));
+          currentCarBrands[index].prepareState = 'ready';
+        });
+        return this.requestCheckedSeries(currentCarBrands).pipe(switchMap(() => this.requestCheckedFactories(carBrandList)));
+      }));
+    } else {
+      return of(carBrandList);
+    }
+  }
+
+  private requestCheckedSeries(carBrandList: Array<Expandable & { car_brand_id: string }>): Observable<any> {
+    const forkJoinHttps = [];
+    const currentCarFactories = [];
+    for (const carBrand of carBrandList) {
+      for (const carFactory of carBrand.children) {
+        if (carFactory.prepareState === 'need') {
+          forkJoinHttps.push(this.vehicleService
+            .requestCarSeriesListData(carBrand.car_brand_id, carFactory.car_factory_id));
+          currentCarFactories.push(carFactory);
+        }
+        if (forkJoinHttps.length === MAX_REQUEST_COUNT) {
+          // series的最大并发数
+          break;
+        }
+      }
+      if (forkJoinHttps.length === MAX_REQUEST_COUNT) {
+        // series的最大并发数
+        break;
+      }
+    }
+
+    if (forkJoinHttps.length > 0) {
+      // 存在需要加载的数据这执行递归调用
+      const carSeriesCheckedStr = this.car_series_checked_list
+        .join(',');
+      return forkJoin(forkJoinHttps).pipe(switchMap((httpRes: Array<any>) => {
+        httpRes.forEach((carSeriesRes, index) => {
+          currentCarFactories[index].children = carSeriesRes.results.map((carSeries: any) => ({
+            ...carSeries,
+            isLeaf: true,
+            key: carSeries.car_series_id,
+            title: carSeries.car_series_name,
+            selected: carSeriesCheckedStr.includes(carSeries.car_series_id),
+            checked: carSeriesCheckedStr.includes(carSeries.car_series_id)
+          }));
+          currentCarFactories[index].prepareState = 'ready';
+        });
+        return this.requestCheckedSeries(carBrandList);
+      }));
+    } else {
+      return of(carBrandList);
+    }
+  }
 
   /**
    * 打开
@@ -88,11 +204,14 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     if (this.car_series_list.length === 0) {
       this.requestBrandAllList();
     } else {
+      // todo:改
       this.getDefaultKeys();
+      // this.requestAllCheckedCarBrands();
       this.requestBrandList();
     }
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
+    // todo: timer
     setTimeout(() => {
       $('#selectMultiBrandFirmModal').modal();
     }, 0);
@@ -143,6 +262,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     this.defaultExpandedKeys = this.car_brand_checked_list.concat(
       this.car_factory_checked_list
     );
+    this.defaultExpandedKeys = this.car_factory_checked_list;
   }
 
   // 确定按钮回调
@@ -155,7 +275,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
     }
   }
 
-  // 获取品牌列表
+  // 没有勾选车系时获取品牌列表
   private requestBrandAllList() {
     this.requestBrandSubscription = this.vehicleService
       .requestCarBrandsListData()
@@ -225,7 +345,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
           children: [],
           expanded: false
         }));
-        this.vehicleBrandTreeList[index].expanded = true;
+        // this.vehicleBrandTreeList[index].expanded = true;
         this.carFactoryList.forEach((v, idx) => {
           const isChekedFactory = this.car_factory_checked_list
             .join(',')
@@ -303,6 +423,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   // 复选>选中父级默认勾选子级
   nzCheck(event: any): void {
     if (event.eventName === 'check') {
+      this.isRequestSeriesData = true;
       const node = event.node;
       if (node && node.getChildren().length === 0 && !node.isExpanded) {
         if (node.level === 0) {
@@ -358,8 +479,10 @@ export class SelectMultiBrandFirmComponent implements OnInit {
               i.isChecked = true;
             });
           }
+          this.isRequestSeriesData = false;
         },
         err => {
+          this.isRequestSeriesData = false;
           this.carSeriesList = [];
           $('#selectMultiBrandFirmModal').modal('hide');
           this.globalService.httpErrorProcess(err);
@@ -396,6 +519,33 @@ export class SelectMultiBrandFirmComponent implements OnInit {
 
   // 回传选中事件
   public onSelectCarSeries() {
+    if (this.getCheckedSeriesId().length === 0) {
+      this.globalService.promptBox.open(
+        `请勾选车系后再保存!`,
+        null,
+        2000,
+        '/assets/images/warning.png'
+      );
+    } else {
+      const newList = this.getCheckedSeriesId().flat();
+      const seriesIds = newList
+        .map(item => item.car_series_id && item.car_series_id)
+        .join(',');
+      if (!seriesIds && this.isRequestSeriesData) {
+        this.globalService.promptBox.open(
+          `正在请求车系数据，请稍后保存!`,
+          null,
+          2000,
+          '/assets/images/warning.png'
+        );
+      } else {
+        this.setRecommendData(seriesIds);
+      }
+    }
+  }
+
+  // 获取选中的车系ID
+  private getCheckedSeriesId(): Array<any> {
     const seriesList = [];
     for (const item of Object.keys(this.mapOfBrand)) {
       this.mapOfBrand[item].forEach(i => {
@@ -414,20 +564,7 @@ export class SelectMultiBrandFirmComponent implements OnInit {
         }
       });
     }
-    if (seriesList.length === 0) {
-      this.globalService.promptBox.open(
-        `请勾选车系后再保存!`,
-        null,
-        2000,
-        '/assets/images/warning.png'
-      );
-    } else {
-      const newList = seriesList.flat();
-      const seriesIds = newList
-        .map(item => item.car_series_id && item.car_series_id)
-        .join(',');
-      this.setRecommendData(seriesIds);
-    }
+    return seriesList;
   }
 
   // 获取第三级勾选数据

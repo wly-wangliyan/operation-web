@@ -12,3 +12,19 @@
 ::ng-deep .z-modal .mes {
   padding: 0 20px !important;
 }
+
+.operation div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.operation a {
+  margin: 3px 5px 3px 5px;
+}
+
+:host ::ng-deep .ant-pagination-total-text {
+  float: right;
+  margin-left: 10px;
+}

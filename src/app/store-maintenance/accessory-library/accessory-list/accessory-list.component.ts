@@ -24,7 +24,6 @@ const PageSize = 15;
 export class AccessoryListComponent implements OnInit {
   public projectList: Array<ProjectEntity> = [];
   public brandList: Array<AccessoryBrandEntity> = [];
-  public accessoryList: Array<AccessoryEntity> = [];
   public accessoryNewList: Array<any> = [];
   public pageIndex = 1;
   public searchParams = new SearchParams();
@@ -42,10 +41,10 @@ export class AccessoryListComponent implements OnInit {
   private linkUrl: string;
 
   private get pageCount(): number {
-    if (this.accessoryList.length % PageSize === 0) {
-      return this.accessoryList.length / PageSize;
+    if (this.accessoryNewList.length % PageSize === 0) {
+      return this.accessoryNewList.length / PageSize;
     }
-    return this.accessoryList.length / PageSize + 1;
+    return this.accessoryNewList.length / PageSize + 1;
   }
 
   @ViewChild(SelectMultiBrandFirmComponent, { static: true })
@@ -55,75 +54,63 @@ export class AccessoryListComponent implements OnInit {
     private globalService: GlobalService,
     private accessoryLibraryService: AccessoryLibraryService,
     private brandManagementService: BrandManagementHttpService
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     // 配件库列表
-    this.searchText$
-      .pipe(
-        debounceTime(500),
-        switchMap(() =>
-          this.accessoryLibraryService.requestAccessoryListData(
-            this.searchParams
-          )
-        )
-      )
-      .subscribe(
-        res => {
-          this.accessoryList = res.results;
-          this.accessoryNewList = this.accessoryList.map(i => ({
-            ...i,
-            accessory_imagesList: i.accessory_images
-              ? i.accessory_images.split(',')
-              : []
-          }));
-          this.linkUrl = res.linkUrl;
-          this.noResultText = '暂无数据';
-        },
-        err => {
-          this.globalService.httpErrorProcess(err);
-        }
-      );
+    this.searchText$.pipe(debounceTime(500)).subscribe(res => {
+      this.requestAccessoryList();
+    });
     this.searchText$.next();
 
     // 项目列表
-    this.searchProjectText$
-      .pipe(
-        debounceTime(500),
-        switchMap(() => this.accessoryLibraryService.requestProjectListData())
-      )
-      .subscribe(
-        res => {
-          this.projectList = res.results;
-        },
-        err => {
-          this.globalService.httpErrorProcess(err);
-        }
-      );
+    this.searchProjectText$.subscribe(res => {
+      this.requestProjectList();
+    });
     this.searchProjectText$.next();
 
     // 配件品牌列表
-    this.searchBrandText$
-      .pipe(
-        debounceTime(500),
-        switchMap(() =>
-          this.brandManagementService.requestAccessoryBrandAllListData()
-        )
-      )
-      .subscribe(
-        res => {
-          this.brandList = res.results;
-        },
-        err => {
-          this.globalService.httpErrorProcess(err);
-        }
-      );
+    this.searchBrandText$.subscribe(res => {
+      this.requestAccessoryBrandAllList();
+    });
     this.searchBrandText$.next();
+  }
+
+  private requestAccessoryList(): void {
+    this.accessoryLibraryService.requestAccessoryListData(this.searchParams).subscribe(res => {
+      this.pageIndex = 1;
+      this.accessoryNewList = res.results.map(i => ({
+        ...i, accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+      }));
+      this.linkUrl = res.linkUrl;
+      this.noResultText = '暂无数据';
+    }, err => {
+      this.noResultText = '暂无数据';
+      this.pageIndex = 1;
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  private requestProjectList(): void {
+    this.accessoryLibraryService.requestProjectListData().subscribe(res => {
+      this.projectList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
+  }
+
+  private requestAccessoryBrandAllList(): void {
+    this.brandManagementService.requestAccessoryBrandAllListData().subscribe(res => {
+      this.brandList = res.results;
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 查询按钮
   public onSearchBtnClick() {
-    this.pageIndex = 1;
+    this.accessoryNewList = [];
+    this.noResultText = '数据加载中...';
     this.searchText$.next();
   }
 
@@ -159,9 +146,9 @@ export class AccessoryListComponent implements OnInit {
   // 推荐设置打开所属厂商选择组件
   public onOpenBrandFirmModal(data: AccessoryEntity): void {
     this.selectMultiBrandFirmComponent.open(data, () => {
-      timer(0).subscribe(() => {
-        this.searchText$.next();
-      });
+      this.accessoryNewList = [];
+      this.noResultText = '数据加载中...';
+      this.searchText$.next();
     });
   }
 
@@ -176,9 +163,10 @@ export class AccessoryListComponent implements OnInit {
           .requestDeleteAccessoryData(data.accessory_id)
           .subscribe(
             () => {
-              this.globalService.promptBox.open('删除成功', () => {
-                this.searchText$.next();
-              });
+              this.globalService.promptBox.open(`删除成功`);
+              this.accessoryNewList = [];
+              this.noResultText = '数据加载中...';
+              this.searchText$.next();
             },
             err => {
               this.globalService.httpErrorProcess(err);
@@ -193,25 +181,16 @@ export class AccessoryListComponent implements OnInit {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
-      this.continueRequestSubscription &&
-        this.continueRequestSubscription.unsubscribe();
+      this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.accessoryLibraryService
-        .continueAccessoryistData(this.linkUrl)
-        .subscribe(
-          res => {
-            this.accessoryList = this.accessoryList.concat(res.results);
-            this.accessoryNewList = this.accessoryList.map(i => ({
-              ...i,
-              accessory_imagesList: i.accessory_images
-                ? i.accessory_images.split(',')
-                : []
-            }));
-            this.linkUrl = res.linkUrl;
-          },
-          err => {
-            this.globalService.httpErrorProcess(err);
-          }
-        );
+        .continueAccessoryistData(this.linkUrl).subscribe(res => {
+          this.accessoryNewList = this.accessoryNewList.concat(res.results.map(i => ({
+            ...i, accessory_imagesList: i.accessory_images ? i.accessory_images.split(',') : []
+          })));
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 }

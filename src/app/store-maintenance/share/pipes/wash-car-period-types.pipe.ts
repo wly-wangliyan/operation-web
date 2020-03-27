@@ -1,30 +1,30 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/** 机油类型 */
-const OilType = {
-  1: '全合成',
-  2: '半合成',
-  3: '矿物质'
+/** 活动时间类型 */
+const WashCarPeriodType = {
+  1: '每日',
+  2: '每周',
+  3: '每月',
+  4: '自定义'
 };
-
 @Pipe({
-  name: 'oilType'
+  name: 'washCarPeriodTypes'
 })
-export class OilTypePipe implements PipeTransform {
+export class WashCarPeriodTypesPipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
-    let result = '';
+    let result = '--';
     if (value === null || value === undefined || value === '') {
       return result;
     }
     if (value && (typeof value === 'string')) {
       // 当直接传递字符串时的处理
-      result = OilType[value];
+      result = WashCarPeriodType[value];
     } else {
-      result = OilType[value];
+      result = WashCarPeriodType[value];
     }
     if (!result) {
-      result = '' || value;
+      result = '--';
     }
     return result;
   }

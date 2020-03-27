@@ -13,7 +13,7 @@ const PageSize = 15;
 @Component({
   selector: 'app-banner-list',
   templateUrl: './banner-list.component.html',
-  styleUrls: ['./banner-list.component.css']
+  styleUrls: ['./banner-list.component.css', '../../../../../../assets/less/tab-bar-list.less']
 })
 export class BannerListComponent implements OnInit, OnDestroy {
 
@@ -58,7 +58,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
       { key: 2, value: '检车Banner' },
       { key: 3, value: '机场停车Banner' },
       { key: 5, value: '洗车Banner' },
-      { key: 4, value: '弹窗展位' },
+      { key: 4, value: '弹窗展位' }
     ];
     this.generateBannerList();
   }
@@ -92,7 +92,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
   }
 
   // 翻页方法
-  public onNZPageIndexChange(pageIndex: number) {
+  public onNZPageIndexChange(pageIndex: number): void {
     this.pageIndex = pageIndex;
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
@@ -141,14 +141,14 @@ export class BannerListComponent implements OnInit, OnDestroy {
   }
 
   // 开启开关状态改变
-  public onSwitchChange(event: boolean) {
+  public onSwitchChange(event: boolean): void {
     timer(2000).subscribe(() => {
       return event;
     });
   }
 
   // 修改启停状态
-  public onSwitchClick(banner_id: string, status: boolean) {
+  public onSwitchClick(banner_id: string, status: boolean): void {
     const swith = !status;
     let sucessMsg = '开启成功!';
     let errMsg = '开启失败,请重试!';
@@ -214,7 +214,7 @@ export class BannerListComponent implements OnInit, OnDestroy {
   }
 
   // 显示添加编辑Bannermodal
-  public onShowModal(data?: BannerEntity) {
+  public onShowModal(data?: BannerEntity): void {
     const banner_id = data ? data.banner_id : null;
     this.bannerEdit.open(banner_id, this.searchParams.banner_type, () => {
       this.bannerEdit.clear();
@@ -261,7 +261,8 @@ export class BannerListComponent implements OnInit, OnDestroy {
   }
 
   // tab页切换
-  public onTabChange(banner_type: number) {
+  public onTabChange(banner_type: number): void {
+    this.noResultText = '数据加载中...';
     this.bannerList = [];
     this.searchParams = new SearchParams();
     this.start_time = null;

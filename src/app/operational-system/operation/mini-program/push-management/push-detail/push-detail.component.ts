@@ -22,10 +22,10 @@ export class PushDetailComponent implements OnInit {
   @ViewChild(ZPhotoSelectComponent, { static: true }) public ZhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
-      private route: ActivatedRoute,
-      private router: Router,
-      private globalService: GlobalService,
-      private pushService: PushManagementService
+    private route: ActivatedRoute,
+    private router: Router,
+    private globalService: GlobalService,
+    private pushService: PushManagementService
   ) {
     this.route.paramMap.subscribe(map => {
       this.push_plan_id = map.get('push_plan_id');

@@ -208,7 +208,8 @@ export class ArrivalOrderEntity extends EntityBase {
   public car_model: string = undefined; // 车型
   public repair_shop_address: string = undefined; // 汽修店地址
   public send_time: number = undefined; // 配送时间
-  public aog_time: number = undefined; // 货物到达时间
+  public aog_time: number = undefined; // 货物预计到达时间
+  public sign_time: number = undefined; // 到货时间
   public check_time: number = undefined; // 验货时间
   public check_images: string = undefined; // 验货图片 "xxx,xxx,..."
   public complete_time: number = undefined; // 完成时间

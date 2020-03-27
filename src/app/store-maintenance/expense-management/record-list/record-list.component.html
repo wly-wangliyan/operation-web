@@ -65,24 +65,26 @@
     <div class="zmy-table">
       <nz-table [nzData]="expenseVerifyRecords" [nzShowPagination]="true" [nzNoResult]="noResultText"
         [nzPageSize]="'15'" (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex"
-        #expenseVerifyTable>
+        [nzShowTotal]="totalTemplate" #expenseVerifyTable>
         <thead>
           <tr>
             <th>序号</th>
+            <th>用户ID</th>
             <th>核销码</th>
             <th>券码类型</th>
             <th>车型</th>
             <th>有效期</th>
+            <th>支付时间</th>
             <th>核销时间</th>
             <th>核销人</th>
-            <th>所属门店</th>
+            <th style="width: 8%;">所属门店</th>
             <th>状态</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let record of expenseVerifyTable.data; let i = index">
             <td>{{ i + (pageIndex - 1) * 15 + 1 }}</td>
-
+            <td>{{record.wash_car_order?.ht_code || '--'}}</td>
             <td>
               <span *ngIf="record.expense_verify_code" [appTxtCopy]="record.expense_verify_code">
                 {{ record.expense_verify_code }}
@@ -101,13 +103,11 @@
               </ng-container>
               <span *ngIf="!record.valid_date_start">--</span>
             </td>
-
             <td>
-              {{
-                record.verify_time
-                  ? (record.verify_time * 1000 | date: 'y-MM-dd HH:mm:ss')
-                  : '--'
-              }}
+              {{record.wash_car_order?.pay_time? (record.wash_car_order.pay_time * 1000 | date: 'y-MM-dd HH:mm'): '--'}}
+            </td>
+            <td>
+              {{record.verify_time ? (record.verify_time * 1000 | date: 'y-MM-dd HH:mm') : '--'}}
             </td>
 
             <td>{{ record.verify_person || '--' }}</td>
@@ -117,6 +117,7 @@
           </tr>
         </tbody>
       </nz-table>
+      <ng-template #totalTemplate> 共 {{ total_num }} 条 </ng-template>
     </div>
   </div>
 </div>

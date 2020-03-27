@@ -75,6 +75,8 @@ export class PushParams extends EntityBase {
   public date_limit: number = undefined; // 	int	F	距离到期几日内显示推送(push_range为2时必传)
   public free_range_type: number = undefined; // 人群定位'自定义'下的类型 1:临近车险投保日期 2:临近年检日期用户(push_range为4时必传)
   public free_date_limit: number = undefined; // 临近(投保)日期推送天数(push_range为4且free_range_type为1时必传)
+  public free_start_limit: number = undefined; // 临近日期推送开始日(push_range为4且free_range_type为1,2或3时必传)
+  public free_end_limit: number = undefined; // 临近日期推送结束日(push_range为4且free_range_type为1,2或3时必传)
   public push_speed_type: number = undefined; // 	int	T	推送频次类型1:触发后不再推送,2:触发后持续推送
   public push_interval: number = undefined; // 	int	F	推送最小间隔天数(push_speed_type为2时必传)
   public push_num_everyday: number = undefined; // 	int	F	每日最大推送次数(push_speed_type为2时必传)
@@ -100,6 +102,8 @@ export class PushParams extends EntityBase {
       this.date_limit = entity.push_range_detail.date_limit; // 	int	F	距离到期几日内显示推送(push_range为2时必传)
       this.free_range_type = entity.push_range_detail.free_range_type;
       this.free_date_limit = entity.push_range_detail.free_date_limit;
+      this.free_start_limit = entity.push_range_detail.free_start_limit;
+      this.free_end_limit = entity.push_range_detail.free_end_limit;
       this.push_speed_type = entity.push_speed_type; // 	int	T	推送频次类型1:触发后不再推送,2:触发后持续推送
       this.push_interval = entity.push_speed.push_interval; // 	int	F	推送最小间隔天数(push_speed_type为2时必传)
       this.push_num_everyday = entity.push_speed.push_num_everyday;
@@ -147,7 +151,7 @@ export class PushManagementService {
   public requestPushListData(searchParams: SearchParams): Observable<PushLinkResponse> {
     const httpUrl = `${this.domain}/push_plans`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new PushLinkResponse(res)));
+      .pipe(map(res => new PushLinkResponse(res)));
   }
 
   /**

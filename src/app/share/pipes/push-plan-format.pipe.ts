@@ -83,7 +83,8 @@ export class PushSpeedPipe implements PipeTransform {
 /** 自定义推送人群 */
 export const diyRangeType = {
   1: '临近车险投保日期用户',
-  2: '临近年检日期用户'
+  2: '临近年检日期用户',
+  3: '临近免检贴更换日期用户'
 };
 
 @Pipe({
@@ -105,7 +106,8 @@ export class DiyRangeTypePipe implements PipeTransform {
 /** 自定义推送人群类型对应提示 */
 const DiyRangeTypeMsg = {
   1: '临近投保日期',
-  2: '临近年检日期'
+  2: '临近年检日期',
+  3: '临近更换日期',
 };
 
 @Pipe({

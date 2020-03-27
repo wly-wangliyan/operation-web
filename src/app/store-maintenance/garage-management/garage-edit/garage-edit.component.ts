@@ -282,8 +282,14 @@ export class GarageEditComponent implements OnInit, OnDestroy {
           if (content.resource === 'wash_car_tags' && content.code === 'exceed_the_limit') {
             this.globalService.promptBox.open('标签个数超过上限！', null, 2000, null, false);
             return;
+          } else if (content.field === 'wash_car_tags' && content.code === 'invalid') {
+            this.globalService.promptBox.open('标签数据缺失！', null, 2000, null, false);
+            return;
           } else if (content.resource === 'maintain_tags' && content.code === 'exceed_the_limit') {
             this.globalService.promptBox.open('标签个数超过上限！', null, 2000, null, false);
+            return;
+          } else if (content.field === 'maintain_tags' && content.code === 'invalid') {
+            this.globalService.promptBox.open('标签数据缺失！', null, 2000, null, false);
             return;
           } else {
             this.globalService.promptBox.open('数据错误或无效！', null, 2000, null, false);

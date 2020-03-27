@@ -100,8 +100,8 @@ export class BannerEditComponent implements OnInit {
     this.clear();
     this.is_save = false;
     this.offline_time = '';
+    this.bannerParams = new BannerParams();
     if (this.isCreateBanner) {
-      this.bannerParams = new BannerParams();
       this.bannerParams.banner_type = banner_type;
       // 首页banner与检车banner设置不同落地页类型默认值
       // this.bannerParams.belong_to = banner_type === 2 ? 0 : this.bannerParams.belong_to;
@@ -117,6 +117,9 @@ export class BannerEditComponent implements OnInit {
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.requestSubscription = this.bannerService.requestBannerDetail(this.banner_id).subscribe(res => {
       this.bannerParams = res;
+      if (res.page_layout === 3) {
+        this.aspectRatio = 1.917 / 1;
+      }
       this.cover_url = this.bannerParams.image ? this.bannerParams.image.split(',') : [];
       this.bannerParams.belong_to = !res.belong_to ? 0 : res.belong_to;
       if (res.offline_status === 2) {
@@ -125,6 +128,11 @@ export class BannerEditComponent implements OnInit {
     }, err => {
       this.globalService.httpErrorProcess(err);
     });
+  }
+
+  public onChangePageLayout(event: any): void {
+    // this.cover_url = [];
+    this.aspectRatio = (event === 3 ? 1.917 / 1 : 3.699 / 1);
   }
 
   // 切换下线方式
@@ -148,7 +156,6 @@ export class BannerEditComponent implements OnInit {
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
       this.bannerParams.image = imageUrl.join(',');
-      this.bannerParams.belong_to = this.bannerParams.belong_to === 0 ? null : this.bannerParams.belong_to;
       if (this.verification()) {
         // params.image = this.bannerParams.image;
         if (this.isCreateBanner) {

@@ -1,0 +1,218 @@
+.modal {
+  z-index: 300;
+}
+
+.modal-dialog-common {
+  width: 920px !important;
+  min-height: 600px !important;
+  height: 661px !important;
+  max-width: 920px !important;
+  box-sizing: border-box;
+  margin-top: 50px !important;
+}
+
+.modal-footer {
+  justify-content: center !important;
+}
+
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: flex-start !important;
+  justify-content: flex-start;
+  margin-bottom: 20px !important;
+}
+
+.form-control:not(:disabled) {
+  background-color: #fff !important;
+}
+
+.control-label {
+  margin-bottom: 0 !important;
+}
+
+.control-input {
+  margin-bottom: 0 !important;
+}
+
+.activity-table {
+  margin: 10px;
+}
+
+.table-scroll {
+  min-width: 900px;
+  overflow-x: auto;
+}
+
+.price-group .one-word-lable,
+.price-group .two-word-lable,
+.price-group .four-word-lable,
+.price-group .eight-word-lable {
+  display: inline-block;
+  height: 34px;
+  line-height: 34px;
+  font-size: 13px;
+  border: 1px solid #d9d9d9;
+  color: #888;
+  background: #fff;
+  text-align: center;
+  border-radius: 1px;
+}
+
+.price-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.price-group .eight-word-lable {
+  text-align: left;
+  width: 80px;
+  padding-left: 8px;
+  border: .5px solid #d9d9d9;
+  border-right: 0;
+  color: #495057;
+  margin-bottom: 0;
+}
+
+.price-group .one-word-lable {
+  border-left: none;
+  margin-bottom: 0;
+  width: 24px !important;
+  margin-left: -24px !important;
+}
+
+.price-group input {
+  width: 120px;
+}
+
+.two-number {
+  width: 80px !important;
+}
+
+.five-number {
+  width: 100px !important;
+}
+
+.disabled-word {
+  background-color: #f7f8fa !important;
+}
+
+.table-item {
+  border: 0px solid #D8D8D8;
+  min-width: 900px;
+}
+
+.activity-table table>tbody>tr {
+  border: .5px solid #D8D8D8;
+}
+
+.table-item table {
+  text-align: center;
+  word-break: break-all;
+  width: 100%;
+  margin: 0;
+}
+
+.table-item table tr {
+  height: 40px;
+}
+
+.table-item table tr>td,
+.table-item table>thead tr>th,
+.table-item table>tbody tr>td {
+  height: 40px;
+  box-sizing: border-box;
+  color: #23242f;
+  font-size: 14px;
+  vertical-align: middle;
+  cursor: default;
+  padding: 5px;
+}
+
+.table-item table>thead tr>th {
+  background-color: #F1F1F1;
+}
+
+.table-item table>tbody tr>td {
+  background-color: #F7F8FA;
+}
+
+.column-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.add-btn {
+  color: #3E71F7;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.add-btn,
+.remove-btn {
+  height: 34px;
+  width: 40px;
+  box-shadow: none !important;
+  text-shadow: none;
+  outline: none;
+}
+
+.remove-btn {
+  color: #E82038;
+  background-color: #f7f8fa !important;
+  border: none !important;
+  text-shadow: none;
+}
+
+.add-btn:hover,
+.remove-btn:hover {
+  opacity: 0.8;
+}
+
+.activity-text {
+  font-size: 18px;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+  margin: 0 0 5px;
+}
+
+.activity-num {
+  font-size: 16px;
+  font-weight: 500;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+/* 占位符 */
+.space-box {
+  width: 180px;
+  height: 30px;
+  margin-top: 5px;
+}
+
+:host ::ng-deep .date-clock {
+  height: 34px !important;
+  width: 100px !important;
+}
+
+.activity-table ::ng-deep .ant-calendar-picker {
+  width: 150px !important;
+
+}
+
+.activity-table ::ng-deep .ant-calendar-picker-input {
+  background: #fff !important;
+}

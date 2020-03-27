@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
-import { differenceInCalendarDays } from 'date-fns';
+import { Subscription, Subject, forkJoin } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
 import { ExpenseHttpService, ExpenseVerifyEntity, ExpenseSearchParams } from '../expense-http.service';
 import { GlobalConst } from '../../../share/global-const';
@@ -29,6 +28,7 @@ export class RecordListComponent implements OnInit {
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
   private searchUrl: string;
+  public total_num = 0; // 总条数
 
   private get pageCount(): number {
     if (this.expenseVerifyRecords.length % GlobalConst.NzPageSize === 0) {
@@ -47,15 +47,20 @@ export class RecordListComponent implements OnInit {
   }
 
   private requestExpenseVerifyRecords(): void {
-    this.requestSubscription = this.expenseHttpService.requestExpenseRecordData(this.searchParams).subscribe(res => {
+    this.requestSubscription = forkJoin(
+      this.expenseHttpService.requestExpenseRecordData(this.searchParams),
+      this.expenseHttpService.requestExpenseStatisticsData(this.searchParams)
+    ).subscribe(result => {
       this.pageIndex = 1;
-      this.expenseVerifyRecords = res.results;
-      this.linkUrl = res.linkUrl;
+      this.expenseVerifyRecords = result[0].results;
+      this.linkUrl = result[0].linkUrl;
       this.noResultText = '暂无数据';
+      this.total_num = result[1].expense_verifies_num || 0;
       this.exportSearchUrl();
     }, err => {
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
+      this.total_num = 0;
       this.globalService.httpErrorProcess(err);
     });
   }
@@ -66,9 +71,13 @@ export class RecordListComponent implements OnInit {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.expenseHttpService.continueExpenseRecordData(this.linkUrl).subscribe(res => {
-        this.expenseVerifyRecords = this.expenseVerifyRecords.concat(res.results);
-        this.linkUrl = res.linkUrl;
+      this.continueRequestSubscription = forkJoin(
+        this.expenseHttpService.continueExpenseRecordData(this.linkUrl),
+        this.expenseHttpService.requestExpenseStatisticsData(this.searchParams)
+      ).subscribe(continueData => {
+        this.expenseVerifyRecords = this.expenseVerifyRecords.concat(continueData[0].results);
+        this.linkUrl = continueData[0].linkUrl;
+        this.total_num = continueData[1].expense_verifies_num || 0;
       }, err => {
         this.globalService.httpErrorProcess(err);
       });

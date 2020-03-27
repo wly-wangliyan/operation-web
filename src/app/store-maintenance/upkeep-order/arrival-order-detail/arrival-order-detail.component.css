@@ -121,12 +121,17 @@
   margin: 10px 5px 0 0;
 }
 
-.match-info label:nth-child(odd) {
+.match-info label:nth-child(3n+1) {
   background: #c6e2ff;
   color: #409dfd;
 }
 
-.match-info label:nth-child(even) {
+.match-info label:nth-child(3n+2) {
   background: #e1f3d8;
   color: #67c23a;
+}
+
+.match-info label:nth-child(3n+3) {
+  background: #FAECD8;
+  color: #E6A23C;
 }

@@ -1,6 +1,6 @@
 .des_card {
   height: auto;
-  padding: 20px 50px;
+  padding: 20px 40px;
   background: #fff;
   margin-bottom: 10px;
 }
@@ -71,32 +71,32 @@
 }
 
 .params-box {
-  width: 1000px;
+  width: 900px;
   padding-top: 12px;
   background: rgba(247, 248, 250, 1);
   border: 1px solid #e0dfdf;
 }
 
 .table-form {
-  width: 1000px;
+  min-width: 900px;
+  overflow-x: auto;
   border: 1px solid #e0dfdf;
 }
 
 :host ::ng-deep .table-form .ant-table {
   border: none;
-  padding: 0 0 10px 20px;
-  background: rgba(247, 248, 250, 1);
+  background: transparent;
 }
 
 :host ::ng-deep .ant-table-fixed-header>.ant-table-content>.ant-table-scroll>.ant-table-body {
   background-color: rgba(247, 248, 250, 1);
-  padding-right: 20px;
+  /* padding-right: 20px; */
   overflow-y: auto !important;
   max-height: 400px;
 }
 
 :host ::ng-deep .table-form .ant-table-thead>tr>th {
-  width: 80px;
+  /* width: 80px; */
   background: rgba(247, 248, 250, 1);
   font-size: 12px;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -157,4 +157,8 @@ select {
 input:not(:disabled),
 input:not(:read-only) {
   background-color: #fff !important;
+}
+
+.operation a {
+  margin: auto 8px auto 0;
 }

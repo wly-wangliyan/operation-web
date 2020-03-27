@@ -62,9 +62,10 @@
           </div>
           <div class="push-rate" *ngIf="pushParams.push_range===4">
             <select class="form-control" [(ngModel)]="pushParams.free_range_type" name="free_range_type" required
-              style="width: 180px!important;" (change)="onChangeFreeRangeType($event)">
+              style="width: 220px!important;" (change)="onChangeFreeRangeType($event)">
               <option [value]=1>临近车险投保日期用户</option>
               <option [value]=2>临近年检日期用户</option>
+              <option [value]=3>临近免检贴更换日期用户</option>
             </select>
           </div>
         </div>
@@ -91,12 +92,20 @@
           </div>
           <div class="push-rate location-crowd" *ngIf="pushParams.push_range===4">
             <ng-container>
-              <span *ngIf="pushParams.free_range_type===1">自初登日期(月-日)起，临近投保日期</span>
-              <span *ngIf="pushParams.free_range_type===2">自初登日期起第5年后，临近年检日期</span>
-              <input class="form-control" [(ngModel)]="pushParams.free_date_limit" name="free_date_limit" maxlength="3"
-                placeholder="0-999" required appIntNumber="true">
-              <label>日</label>
+              <span>{{free_range_type_tips[pushParams.free_range_type]}}</span>
+              <input class="form-control" [(ngModel)]="pushParams.free_start_limit" name="free_start_limit"
+                maxlength="3" placeholder="0-365" required appIntNumber="true" appMaxNumber="365">
+              <label>日</label>至
+              <input class="form-control" [(ngModel)]="pushParams.free_end_limit" name="free_end_limit" maxlength="3"
+                placeholder="0-365" required appIntNumber="true" appMaxNumber="365">
+              <label>日</label>&nbsp;时推送
             </ng-container>
+          </div>
+        </div>
+        <div class="row row-message" style="height: 20px;margin-bottom: 10px;">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.push_range?.isError">{{errPositionItem?.push_range?.errMes}}</span>
           </div>
         </div>
         <div class="row">

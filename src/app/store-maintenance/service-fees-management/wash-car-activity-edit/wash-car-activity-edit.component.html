@@ -1,0 +1,143 @@
+<!--新增/编辑配件品牌-->
+<div class="modal fade" id="editWashCarActivityModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #washCarPromptDiv>
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">编辑活动</span>
+        <button type="button" class="close" data-dismiss="modal">&times;
+        </button>
+      </div>
+      <form autocomplete="off" class="form-horizontal" #editWashCarActivityForm="ngForm">
+        <div class="activity-text">
+          规格名称：{{specificationData?.specification_name}}
+        </div>
+
+        <ng-container *ngIf="washCarActivityList && washCarActivityList.length===0 else hasData">
+          <div class="activity-text" *ngIf="isCreateActivity">
+            此规格暂未设置任何活动哦！
+          </div>
+          <div class="modal-footer">
+            <button class="add-btn" type="button" (appZDebounceClick)="onAddActivityClick()">新增</button>
+          </div>
+          <div class="modal-footer" *ngIf="!isCreateActivity">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal"
+              style="margin-right: 80px;">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary"
+              [disabled]="!editWashCarActivityForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #hasData>
+          <div class="row">
+            <div class="table-item activity-table">
+              <div class="table-scroll">
+                <table>
+                  <tbody>
+                    <ng-container *ngFor="let data of washCarActivityList;let i=index">
+                      <tr>
+                        <td>
+                          <span class="activity-num">活动{{chnNumChar[i]}}</span>
+                        </td>
+                        <td>
+                          <div class="column-box" style="width: 350px;">
+                            <div class="price-group">
+                              <nz-radio-group [(ngModel)]="data.period_type" name="period_type_{{data.identifier}}"
+                                (ngModelChange)='onChangePeriodTypeClick(data,$event)' required>
+                                <label nz-radio [nzValue]="type"
+                                  *ngFor="let type of period_types">{{type|washCarPeriodTypes}}</label>
+                              </nz-radio-group>
+                            </div>
+                            <ng-container *ngIf="data.period_type && data.period_type!==4">
+                              <div class="row-box">
+                                <div class="price-group">
+                                  <select *ngIf="data.period_type===2" name="week_day_{{data.identifier}}"
+                                    class="form-control" style="width: 108px;margin-right: 8px;"
+                                    (change)="onChangeWeekDay($event,data)" [(ngModel)]="data.week_day" required>
+                                    <option value=''>请选择</option>
+                                    <option *ngFor="let day of week_day" [value]="day">
+                                      {{day|weekDay}}</option>
+                                  </select>
+                                </div>
+
+                                <div class="price-group" *ngIf="data.period_type===3" style="margin-right: 8px;">
+                                  <input name="month_day_{{data.identifier}}" [(ngModel)]="data.month_day"
+                                    class="form-control two-number " (change)="activityErrMsg=''" placeholder="1-28"
+                                    [appMaxNumber]='28' appIntNumber="true" maxlength='2' required />
+                                  <label class="one-word-lable">号</label>
+                                </div>
+                                <app-date-clock [has24]="false" [(hour)]="data.valid_time_start.hour"
+                                  [(minute)]="data.valid_time_start.minute"></app-date-clock>
+                                <span class="partition">-</span>
+                                <app-date-clock [has24]="true" [(hour)]="data.valid_time_end.hour"
+                                  [(minute)]="data.valid_time_end.minute"></app-date-clock>
+                              </div>
+                            </ng-container>
+                            <div class="row-box" *ngIf="data.period_type===4">
+                              <nz-date-picker [(ngModel)]="data.valid_date_start" [nzShowToday]=false
+                                (nzOnOpenChange)="onOpenChange($event,data)" nzPlaceHolder="开始时间"
+                                (ngModelChange)="onValidStartChange($event,data)"
+                                [nzDisabledDate]="disabledValidStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm" name='bind_valid_date_start_{{data.identifier}}' required>
+                              </nz-date-picker>
+                              <span class='partition'>-</span>
+                              <nz-date-picker [(ngModel)]="data.valid_date_end" [nzShowToday]=false
+                                (nzOnOpenChange)="onOpenChange($event,data)"
+                                (ngModelChange)="onValidEndChange($event,data)" nzPlaceHolder="结束时间"
+                                [nzDisabledDate]="disabledValidEndTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm" name='bind_valid_date_end_{{data.identifier}}'
+                                aria-required="true" required>
+                              </nz-date-picker>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="space-box"></div>
+                          <div class="price-group" *ngIf="data.period_type">
+                            <label class="eight-word-lable">活动价格</label>
+                            <input name="activity_fee_{{data.identifier}}" [(ngModel)]="data.activity_fee"
+                              class="form-control five-number" (change)="activityErrMsg=''" appFloatNumber
+                              placeholder="0-99999" [appMaxNumber]='99999' maxlength='8' required />
+                            <label class="one-word-lable">元</label>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="space-box"></div>
+                          <div class="price-group" *ngIf="data.period_type">
+                            <label class="eight-word-lable">可售数量</label>
+                            <input name="activity_num_{{data.identifier}}" [(ngModel)]="data.activity_num"
+                              class="form-control five-number" (change)="activityErrMsg=''" placeholder="0-99999"
+                              [appMaxNumber]='99999' appIntNumber="true" maxlength='5' required />
+                          </div>
+                        </td>
+                        <td>
+                          <div [class.space-box]="data.period_type" style="width: 90px;"></div>
+                          <div class="button-group">
+                            <button class="add-btn" type="button" (click)="onAddActivityClick()"
+                              *ngIf="washCarActivityList.length===(i+1) && washCarActivityList.length<5">添加</button>
+                            <button class="remove-btn" type="button" (click)="onDeleteActivityClick(data,i)">移除</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <div class="control-input err-message" style="height: 20px;">
+                <span>{{activityErrMsg}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal"
+              style="margin-right: 80px;">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary"
+              [disabled]="!editWashCarActivityForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+            </button>
+          </div>
+        </ng-template>
+      </form>
+    </div>
+  </div>
+</div>

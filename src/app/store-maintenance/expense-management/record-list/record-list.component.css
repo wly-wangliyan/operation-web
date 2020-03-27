@@ -9,3 +9,8 @@
 .operation a {
   margin: auto 5px;
 }
+
+:host ::ng-deep .ant-pagination-total-text {
+  float: right;
+  margin-left: 10px;
+}

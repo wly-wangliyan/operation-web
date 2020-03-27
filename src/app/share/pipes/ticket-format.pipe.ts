@@ -64,13 +64,14 @@ export class CentPriceChangePipe implements PipeTransform {
   public transform(value: any, unit = '', position = 'right'): any {
     if (value === null || value === undefined || value === '') {
       return '--';
-    } else if (value) {
+    } else if (!isNaN(Number(value)) && Number(value)) {
       if (position === 'left') {
         return `${unit}${(Number(value) / 100).toFixed(2)}`;
       } else {
         return `${(Number(value) / 100).toFixed(2)}${unit}`;
       }
     } else {
+      value = 0;
       if (position === 'left') {
         return `${unit}${value}`;
       } else {

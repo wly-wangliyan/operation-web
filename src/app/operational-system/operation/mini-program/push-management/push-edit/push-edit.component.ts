@@ -24,15 +24,20 @@ export class ErrPositionItem {
   icon: ErrMessageItem = new ErrMessageItem();
   offline_time: ErrMessageItem = new ErrMessageItem();
   push_plan_rank: ErrMessageItem = new ErrMessageItem();
+  push_range: ErrMessageItem = new ErrMessageItem();
   push_speed: ErrMessageItem = new ErrMessageItem();
 
-  constructor(icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem, push_speed?: ErrMessageItem) {
-    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank) || isUndefined(push_speed)) {
+  constructor(
+    icon?: ErrMessageItem, offline_time?: ErrMessageItem, push_plan_rank?: ErrMessageItem,
+    push_range?: ErrMessageItem, push_speed?: ErrMessageItem) {
+    if (isUndefined(icon) || isUndefined(offline_time) || isUndefined(push_plan_rank)
+      || isUndefined(push_range) || isUndefined(push_speed)) {
       return;
     }
     this.icon = icon;
     this.offline_time = offline_time;
     this.push_plan_rank = push_plan_rank;
+    this.push_range = push_range;
     this.push_speed = push_speed;
   }
 }
@@ -51,6 +56,7 @@ export class PushEditComponent implements OnInit {
   public offline_status = null;
   public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
   public levelName = '新建';
+  public free_range_type_tips = ['default', '自初登日期(月-日)起，临近投保日期', '自初登日期起第5年后，临近年检日期', '自初登日期起，临近第2年、第4年免检贴更换'];
 
   private push_id: string;
 
@@ -121,6 +127,9 @@ export class PushEditComponent implements OnInit {
         this.pushParams.push_range = status;
         this.pushParams.free_range_type = 1;
         this.pushParams.free_date_limit = null;
+        this.pushParams.free_start_limit = null;
+        this.pushParams.free_end_limit = null;
+        this.errPositionItem.push_range.isError = false;
         break;
       case 'range_type':
         this.pushParams.coupon_id = '';
@@ -149,8 +158,11 @@ export class PushEditComponent implements OnInit {
   }
 
   public onChangeFreeRangeType(event: any): void {
+    this.errPositionItem.push_range.isError = false;
     if (event.target.value) {
       this.pushParams.free_date_limit = null;
+      this.pushParams.free_start_limit = null;
+      this.pushParams.free_end_limit = null;
       this.pushParams.free_range_type = Number(event.target.value);
     }
   }
@@ -215,6 +227,14 @@ export class PushEditComponent implements OnInit {
       this.errPositionItem.push_speed.isError = true;
       this.errPositionItem.push_speed.errMes = '每日推送次数不能大于最大推送次数！';
       cisCheck = false;
+    }
+
+    if (this.pushParams.push_range === 4) {
+      if (this.pushParams.free_start_limit > this.pushParams.free_end_limit) {
+        this.errPositionItem.push_range.isError = true;
+        this.errPositionItem.push_range.errMes = `推送区间:开始日应小于等于结束日！`;
+        cisCheck = false;
+      }
     }
 
     if (this.offline_status === 2) {

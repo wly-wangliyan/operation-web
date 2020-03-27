@@ -75,8 +75,13 @@
             <td *ngIf="data.push_range===2">{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.range_type|rangeType)+'-'+
                     ('距离到期'+data.push_range_detail?.date_limit+'日时提醒')}}</td>
             <td *ngIf="data.push_range===4">
-              {{(data.push_range|pushRange)+'-'+(data.push_range_detail?.free_range_type|diyRangeType)+'-'+
-                    ((data.push_range_detail?.free_range_type|diyRangeTypeMsg)+data.push_range_detail?.free_date_limit+'日时提醒')}}
+              <span>{{(data.push_range|pushRange)+'-'+(data.push_range_detail?.free_range_type|diyRangeType)+'-'+
+                    ((data.push_range_detail?.free_range_type|diyRangeTypeMsg)+data.push_range_detail?.free_start_limit)}}日</span>
+              <span
+                *ngIf="data.push_range_detail?.free_start_limit >=0 
+                && data.push_range_detail?.free_end_limit >=0 
+                && data.push_range_detail.free_start_limit !== data.push_range_detail.free_end_limit">至{{data.push_range_detail.free_end_limit}}日</span>
+              <span>时提醒</span>
             </td>
 
             <td>{{data.reach_user_num >=0 ? data.reach_user_num: '--'}}</td>
