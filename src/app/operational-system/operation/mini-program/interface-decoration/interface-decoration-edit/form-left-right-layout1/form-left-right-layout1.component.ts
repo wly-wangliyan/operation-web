@@ -24,6 +24,7 @@ export class FormLeftRightLayout1Component implements OnInit {
 
   public initForm(currentTemplate: TemplateEntity) {
     this.currentTemplate = currentTemplate;
+    this.contentIndex = 0;
     this.errMsg = '';
   }
 
