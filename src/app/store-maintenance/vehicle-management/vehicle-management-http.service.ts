@@ -196,7 +196,7 @@ export class VehicleManagementHttpService {
   }
 
   /**
-   * 获取车型下拉列表
+   * 获取品牌列表
    * @returns Observable<CarParamLinkResponse>
    */
   public requestCarBrandsListData(): Observable<CarBrandResponse> {
@@ -207,7 +207,7 @@ export class VehicleManagementHttpService {
 
   /**
    * 获取厂商下拉列表
-   * @param car_brand_id string 车型ID
+   * @param car_brand_id string 品牌ID
    * @returns Observable<CarFactoryResponse>
    */
   public requestCarFactoryListData(car_brand_id: string): Observable<CarFactoryResponse> {
@@ -218,7 +218,7 @@ export class VehicleManagementHttpService {
 
   /**
    * 获取车系下拉列表
-   * @param car_brand_id string 车型ID
+   * @param car_brand_id string 品牌ID
    * @param car_factory_id string 厂商ID
    * @returns Observable<CarSeriesResponse>
    */
