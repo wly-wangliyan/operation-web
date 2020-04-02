@@ -15,7 +15,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'banner-list', pathMatch: 'full' },
     { path: 'banner-list', component: BannerListComponent },
     { path: 'banner-config-list', component: BannerConfigListComponent },
-    { path: 'banner-content-list', component: BannerContentListComponent },
+    { path: 'banner-content-list/:banner_id', component: BannerContentListComponent },
     { path: '**', redirectTo: 'banner-list', pathMatch: 'full' }
   ]
 }];

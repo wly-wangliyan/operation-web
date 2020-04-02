@@ -61,14 +61,31 @@
   background: #fff;
 }
 
-.operation a:hover {
-  color: rgba(62, 113, 247, 1) !important;
-  text-decoration: none;
-}
+.operation {
+  min-width: 68px;
 
-.operation a {
-  word-break: keep-all;
-  color: rgba(0, 0, 0, 0.65) !important;
+  a {
+    word-break: keep-all;
+    white-space: nowrap;
+    color: #3E71F7 !important;
+    margin: 3px 8px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10px;
+
+    button,
+    a {
+      margin: 3px 5px;
+    }
+  }
 }
 
 .ant-table-body>table {
@@ -80,7 +97,7 @@
   border-right: none;
 }
 
-.ant-table-tbody>tr:last-child >td {
+.ant-table-tbody>tr:last-child>td {
   border-bottom: none;
 }
 

@@ -38,11 +38,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let banner of bannerTable.data;let index = index">
+            <td>{{index+(pageIndex-1)*15+1}}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td class="operation">
+              <a class="edit-btn" [title]="'编辑'" [routerLink]="['../banner-content-list',banner.banner_id]">编辑</a>
+            </td>
           </tr>
         </tbody>
       </nz-table>
