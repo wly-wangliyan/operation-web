@@ -8,9 +8,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { BannerConfigListComponent } from './banner-config-list/banner-config-list.component';
+import { BannerContentListComponent } from './banner-content-list/banner-content-list.component';
 @NgModule({
-  declarations: [BannersComponent, BannerListComponent, BannerConfigListComponent],
+  declarations: [BannersComponent, BannerListComponent, BannerConfigListComponent, BannerContentListComponent],
   imports: [
     CommonModule,
     BannersRoutingModule,
@@ -18,7 +20,8 @@ import { BannerConfigListComponent } from './banner-config-list/banner-config-li
     DragDropModule,
     NzTableModule,
     NzButtonModule,
-    NzSwitchModule
+    NzSwitchModule,
+    NzDatePickerModule
   ]
 })
 export class BannersModule { }

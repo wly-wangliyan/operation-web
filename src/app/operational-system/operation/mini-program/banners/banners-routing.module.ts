@@ -5,6 +5,7 @@ import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { BannersComponent } from './banners.component';
 import { BannerListComponent } from './banner-list/banner-list.component';
 import { BannerConfigListComponent } from './banner-config-list/banner-config-list.component';
+import { BannerContentListComponent } from './banner-content-list/banner-content-list.component';
 
 
 const routes: Routes = [{
@@ -14,6 +15,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'banner-list', pathMatch: 'full' },
     { path: 'banner-list', component: BannerListComponent },
     { path: 'banner-config-list', component: BannerConfigListComponent },
+    { path: 'banner-content-list', component: BannerContentListComponent },
     { path: '**', redirectTo: 'banner-list', pathMatch: 'full' }
   ]
 }];

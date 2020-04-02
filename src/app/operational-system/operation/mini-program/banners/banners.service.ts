@@ -6,9 +6,19 @@ import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// 展位列表筛选
 export class SearchBannerParams extends EntityBase {
   // todo: 对应接口时需要变更
   public banner_name: string = undefined; // 所属展位
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
+}
+
+// 展位内容列表筛选
+export class SearchBannerContentParams extends EntityBase {
+  // todo: 对应接口时需要变更
+  public title: string = undefined; // 所属展位
+  public online_time: number = undefined; // 上线时间
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -44,6 +54,23 @@ export class BannerLinkResponse extends LinkResponse {
   }
 }
 
+// 展位内容
+export class BannerContentEntity extends EntityBase {
+  public banner_id: string = undefined; // id
+  public updated_time: number = undefined; // 更新时间
+  public created_time: number = undefined; // 创建时间
+}
+
+export class BannerContentLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<BannerContentEntity> {
+    const tempList: Array<BannerContentEntity> = [];
+    results.forEach(res => {
+      tempList.push(BannerContentEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,5 +93,21 @@ export class BannersService {
    */
   public continueBannerListData(url: string): Observable<BannerLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new BannerLinkResponse(res)));
+  }
+
+  /** 获取Banner内容列表 */
+  public requestBannerContentListData(searchParams: SearchBannerContentParams): Observable<BannerContentLinkResponse> {
+    const httpUrl = `${this.domain}/admin/banner`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new BannerContentLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求Banner内容列表
+   * @param string url linkUrl
+   * @returns Observable<BannerContentLinkResponse>
+   */
+  public continueBannerContentListData(url: string): Observable<BannerContentLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new BannerContentLinkResponse(res)));
   }
 }
