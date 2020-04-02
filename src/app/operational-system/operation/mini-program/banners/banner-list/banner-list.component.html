@@ -1,0 +1,51 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        [routerLink]="['../banner-config-list']">
+        展位设置
+      </button>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+  <div class="table-container">
+    <div class="search-container">
+      <form class="search-form" autocomplete="off">
+        <div class="form-group">
+          <span>所属展位：</span>
+          <input class="form-control" placeholder="请输入所属展位" maxlength="20" name="banner_name"
+            [(ngModel)]="searchParams.banner_name" />
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="zmy-table">
+      <nz-table #bannerTable [nzData]="bannerList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>所属展位</th>
+            <th>关键字</th>
+            <th>类型</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let banner of bannerTable.data;let index = index">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

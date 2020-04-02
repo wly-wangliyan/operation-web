@@ -12,7 +12,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'banner-management', pathMatch: 'full' },
     {
       path: 'banner-management', /** 展位管理 */
-      loadChildren: () => import('./banner-management/banner-management.module').then(m => m.BannerManagementModule),
+      loadChildren: () => import('./banners/banners.module').then(m => m.BannersModule),
       canLoad: [AuthGuardService]
     },
     {

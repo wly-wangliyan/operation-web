@@ -1,0 +1,43 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'" [level3Name]="'展位设置'" [level2RelativePath]="'../'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary">
+        新建展位
+      </button>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table #bannerConfigTable [nzData]="bannerConfigList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+        (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>展位名称</th>
+            <th>关键字</th>
+            <th>类型</th>
+            <th>尺寸</th>
+            <th>支持格式</th>
+            <th>启停</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let banner of bannerConfigTable.data;let index = index">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
