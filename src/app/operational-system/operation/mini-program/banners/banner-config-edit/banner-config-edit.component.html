@@ -1,0 +1,113 @@
+<!-- 新建、编辑展位 -->
+<div class="modal fade " id="bannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">{{isCreate ? '新建展位' : '编辑展位'}}</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #bannerConfigForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>展位名称：</span>
+            </label>
+            <div class="control-input">
+              <input name="bind-banner_name" placeholder="输入1-20字展位名称" [(ngModel)]="bannerData.banner_name"
+                maxlength="20" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>关键字：</span>
+            </label>
+            <div class="control-input">
+              <input name="bind-key" placeholder="输入1-20字关键字" [(ngModel)]="bannerData.key" maxlength="20"
+                class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>展位类型：</span>
+            </label>
+            <div class="control-input">
+              <select name="bind-banner_type" [(ngModel)]="bannerData.banner_type" class="form-control" required>
+                <option value=''>请选择</option>
+                <option *ngFor="let type of bannerType" [value]='type'>{{type}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>尺寸：</span>
+            </label>
+            <div class="control-input">
+              <div class="inline-item">
+                <label class="one-word-lable" style="border-right: 0;">宽</label>
+                <input name="bind-width" [(ngModel)]="bannerData.width" class="form-control five-number"
+                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
+                <label class="one-word-lable" style="border-left: 0;">px</label>
+              </div>
+              <div class="inline-item">
+                <label class="one-word-lable" style="border-right: 0;">高</label>
+                <input name="bind-height" [(ngModel)]="bannerData.height" class="form-control five-number"
+                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
+                <label class="one-word-lable" style="border-left: 0;">px</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>支持格式：</span>
+            </label>
+            <div class="control-input">
+              <label *ngFor="let data of formatList;let i=index" name="format_{{i}}" nz-checkbox
+                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedFormat()">{{data.key}}</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>跳转链接：</span>
+            </label>
+            <div class="control-input">
+              <label *ngFor="let data of belongList;let i=index" name="belong_{{i}}" nz-checkbox
+                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedBelong()">{{data.key}}</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;&nbsp;</b>
+              <span>备注：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="remark" class="form-control" [(ngModel)]="bannerData.remark" maxlength="100"
+                placeholder="输入备注，100字以内">
+              </textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary"
+              [disabled]="!bannerConfigForm.form.valid || ifDisabled()" (appZDebounceClick)="onCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

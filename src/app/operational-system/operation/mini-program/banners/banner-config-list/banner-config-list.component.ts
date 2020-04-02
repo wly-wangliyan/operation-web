@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { TabelHelper } from '../../../../../../utils/table-helper';
 import { GlobalService } from '../../../../../core/global.service';
 import { BannersService, BannerEntity, SearchBannerParams } from '../banners.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { BannerConfigEditComponent } from '../banner-config-edit/banner-config-edit.component';
 
 @Component({
   selector: 'app-banner-config-list',
@@ -23,6 +24,8 @@ export class BannerConfigListComponent implements OnInit, OnDestroy {
   private get pageCount(): number {
     return Math.ceil(this.bannerConfigList.length / TabelHelper.NgPageSize);
   }
+
+  @ViewChild('bannerConfigEdit', { static: true }) public bannerConfigEditRef: BannerConfigEditComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -59,6 +62,13 @@ export class BannerConfigListComponent implements OnInit, OnDestroy {
   // 启停
   public onChangeSwitchStatus(): void {
 
+  }
+
+  // 编辑
+  public onEditClick(data?: BannerEntity): void {
+    this.bannerConfigEditRef.open(data || null, () => {
+      this.searchText$.next();
+    });
   }
 
   // 翻页

@@ -9,10 +9,12 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { BannerConfigListComponent } from './banner-config-list/banner-config-list.component';
 import { BannerContentListComponent } from './banner-content-list/banner-content-list.component';
+import { BannerConfigEditComponent } from './banner-config-edit/banner-config-edit.component';
 @NgModule({
-  declarations: [BannersComponent, BannerListComponent, BannerConfigListComponent, BannerContentListComponent],
+  declarations: [BannersComponent, BannerListComponent, BannerConfigListComponent, BannerContentListComponent, BannerConfigEditComponent],
   imports: [
     CommonModule,
     BannersRoutingModule,
@@ -21,7 +23,8 @@ import { BannerContentListComponent } from './banner-content-list/banner-content
     NzTableModule,
     NzButtonModule,
     NzSwitchModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzCheckboxModule
   ]
 })
 export class BannersModule { }

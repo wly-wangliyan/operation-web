@@ -2,7 +2,8 @@
   <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'" [level3Name]="'展位设置'" [level2RelativePath]="'../'"></app-crumb>
   <ul class="header-right">
     <li>
-      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary">
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        (appZDebounceClick)='onEditClick()'>
         新建展位
       </button>
     </li>
@@ -35,7 +36,7 @@
             <td></td>
             <td></td>
             <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" [routerLink]="['../banner-content-list',banner.banner_id]">编辑</a>
+              <a class="edit-btn" [title]="'编辑'" (appZDebounceClick)='onEditClick(banner)'>编辑</a>
             </td>
           </tr>
         </tbody>
@@ -43,3 +44,5 @@
     </div>
   </div>
 </div>
+
+<app-banner-config-edit #bannerConfigEdit></app-banner-config-edit>

@@ -33,6 +33,9 @@ export class ClickStatisticsEntity extends EntityBase {
 // banner
 export class BannerEntity extends EntityBase {
   public banner_id: string = undefined; // id
+  public banner_type: any = ''; // 展位类型
+  public formats: Array<any> = undefined;
+  public belongs: Array<any> = undefined;
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
