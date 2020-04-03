@@ -50,21 +50,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let booth of boothContentTable.data;let index = index">
+          <tr *ngFor="let boothContent of boothContentTable.data;let index = index">
             <td>{{index+(pageIndex-1)*15+1}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+              <img [src]='boothContent.image' style="width: 120px;" />
+            </td>
+            <td>{{boothContent.title || '--'}}</td>
+            <td>{{boothContent.booth?.booth_type | boothType}}</td>
+            <td>{{boothContent.online_date ?(boothContent.online_date* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+            <td>{{boothContent.click_num || 0}}</td>
+            <td>{{boothContent.click_person_num || 0}}</td>
+            <td>{{boothContent.day_average_click_num || 0}}</td>
+            <td>
+              <nz-switch [ngModel]="boothContent.status===1?'true':'false'" nzCheckedChildren="On"
+                nzUnCheckedChildren="Off" [nzControl]=true style="height: 10px"
+                (click)="onChangeSwitchStatus(boothContent.status,boothContent.booth_content_id)">
+              </nz-switch>
+            </td>
             <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" (click)="onDetailClick(booth)"
-                (appZDebounceClick)='onEditClick()'>编辑</a>
-              <a class="view-btn" [title]="'查看'" (click)="onDetailClick(booth)">查看</a>
-              <a class="del-btn" [title]="'删除'" (click)="onDeleteClick(booth)">删除</a>
+              <a class="edit-btn" [title]="'编辑'" (appZDebounceClick)='onEditClick(boothContent)'>编辑</a>
+              <a class="view-btn" [title]="'查看'" (click)="onDetailClick(boothContent)">查看</a>
+              <a class="del-btn" [title]="'删除'" (click)="onDeleteClick(boothContent)">删除</a>
             </td>
           </tr>
         </tbody>

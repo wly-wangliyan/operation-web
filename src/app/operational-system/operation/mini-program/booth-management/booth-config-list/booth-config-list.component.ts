@@ -34,9 +34,6 @@ export class BoothConfigListComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.boothConfigList.push(new BoothEntity());
-    this.boothConfigList[0].booth_id = '666';
-
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestBoothConfigList();
     });

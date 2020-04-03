@@ -7,6 +7,7 @@ import { TabelHelper } from '../../../../../../utils/table-helper';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { BoothService, BoothContentEntity, SearchBoothContentParams } from '../booth.service';
 import { BoothContentEditComponent } from '../booth-content-edit/booth-content-edit.component';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
   selector: 'app-booth-content-list',
@@ -77,7 +78,9 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
 
   // 查询
   public onSearchBtnClick(): void {
-
+    if (this.generateAndCheckParamsValid()) {
+      this.searchText$.next();
+    }
   }
 
 
@@ -89,15 +92,45 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
   }
 
   // 删除
-  public onDeleteClick(booth: BoothContentEntity): void {
+  public onDeleteClick(boothContent: BoothContentEntity): void {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
-
+      this.globalService.confirmationBox.close();
+      this.boothService.requestDeleteBoothContentData(this.booth_id, boothContent.booth_content_id)
+        .subscribe(res => {
+          this.searchText$.next();
+          this.globalService.promptBox.open('删除成功');
+        }, err => {
+          if (!this.globalService.httpErrorProcess(err)) {
+            this.globalService.promptBox.open('删除失败，请重试！', null, 2000, null, false);
+          }
+        });
     });
   }
 
   // 启停
-  public onChangeSwitchStatus(): void {
-
+  public onChangeSwitchStatus(status: any, booth_content_id: string): void {
+    const swith_status = status === 1 ? 2 : 1;
+    const tipMsg = swith_status === 1 ? '开启' : '关闭';
+    this.boothService.requestChangeBoothContentStatus(this.booth_id, booth_content_id, swith_status)
+      .subscribe(() => {
+        this.globalService.promptBox.open(`${tipMsg}成功`);
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+            for (const content of error.errors) {
+              if (content.field === 'status' && content.code === 'missing_field') {
+                this.globalService.promptBox.open(`参数缺失，无法${tipMsg}!`, null, 2000, null, false);
+              } else if (content.field === 'status' && content.code === 'invalid') {
+                this.globalService.promptBox.open(`参数不合法，无法${tipMsg}!`, null, 2000, null, false);
+              } else {
+                this.globalService.promptBox.open(`${tipMsg}失败！`, null, 2000, null, false);
+              }
+            }
+          }
+        }
+      });
   }
 
   // 翻页
@@ -114,6 +147,24 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
           this.globalService.httpErrorProcess(err);
         });
     }
+  }
+
+  /* 生成并检查参数有效性 */
+  private generateAndCheckParamsValid(): boolean {
+    const sTimestamp = this.online_start_time ? (new Date(this.online_start_time).setHours(new Date(this.online_start_time).getHours(),
+      new Date(this.online_start_time).getMinutes(), 0, 0) / 1000).toString() : 0;
+    const eTimeStamp = this.online_end_time ? (new Date(this.online_end_time).setHours(new Date(this.online_end_time).getHours(),
+      new Date(this.online_end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
+    if (sTimestamp > eTimeStamp) {
+      this.globalService.promptBox.open('上线开始时间不能大于上线结束时间！', null, 2000, null, false);
+      return false;
+    }
+    if (this.online_start_time || this.online_end_time) {
+      this.searchParams.section = `${sTimestamp},${eTimeStamp}`;
+    } else {
+      this.searchParams.section = null;
+    }
+    return true;
   }
 
   // 上线开始时间的禁用部分

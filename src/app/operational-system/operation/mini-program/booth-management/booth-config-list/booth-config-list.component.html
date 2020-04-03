@@ -33,13 +33,14 @@
             <td>{{booth.booth_key || '--'}}</td>
             <td>{{booth.booth_type | boothType}}</td>
             <td>
-              <span>W{{booth.width||0}}px</span>
-              <span>、H{{booth.height||0}}px</span></td>
+              <span>W:{{booth.width||0}}px</span>
+              <span>、H:{{booth.height||0}}px</span></td>
             <td>
               <span *ngFor="let format of booth.formats;last as isLast">
                 <span>{{format | format}}</span>
                 <span *ngIf="!isLast">、</span>
               </span>
+              <span *ngIf="!booth.formats || booth.formats.length===0">--</span>
             </td>
             <td>
               <nz-switch [ngModel]="booth.status===1?'true':'false'" nzCheckedChildren="On" nzUnCheckedChildren="Off"
