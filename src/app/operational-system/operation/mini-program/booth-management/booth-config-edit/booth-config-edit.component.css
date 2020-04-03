@@ -1,7 +1,3 @@
-.form-control {
-  box-sizing: border-box !important;
-}
-
 .form-control:focus {
   box-shadow: none !important;
 }

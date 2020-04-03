@@ -1,51 +1,54 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BannersService, SearchBannerContentParams, BannerContentEntity } from '../banners.service';
-import { GlobalService } from '../../../../../core/global.service';
-import { TabelHelper } from '../../../../../../utils/table-helper';
-import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalService } from '../../../../../core/global.service';
+import { TabelHelper } from '../../../../../../utils/table-helper';
+import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+import { BoothService, BoothContentEntity, SearchBoothContentParams } from '../booth.service';
+import { BoothContentEditComponent } from '../booth-content-edit/booth-content-edit.component';
 
 @Component({
-  selector: 'app-banner-content-list',
-  templateUrl: './banner-content-list.component.html',
-  styleUrls: ['./banner-content-list.component.css']
+  selector: 'app-booth-content-list',
+  templateUrl: './booth-content-list.component.html',
+  styleUrls: ['./booth-content-list.component.css']
 })
-export class BannerContentListComponent implements OnInit, OnDestroy {
+export class BoothContentListComponent implements OnInit, OnDestroy {
 
-  public bannerContentList: Array<BannerContentEntity> = []; // 展位列表(只展示已开启的)
-  public searchParams: SearchBannerContentParams = new SearchBannerContentParams();
+  public boothContentList: Array<BoothContentEntity> = []; // 展位列表(只展示已开启的)
+  public searchParams: SearchBoothContentParams = new SearchBoothContentParams();
   public pageIndex = TabelHelper.NgDefaultPageIndex; // 当前页码
   public noResultText = TabelHelper.loadingText;
   public online_start_time = ''; // 上线开始时间
   public online_end_time = ''; // 上线结束时间
-  private banner_id = '';  // 展位id
+  private booth_id = '';  // 展位id
   private searchText$ = new Subject<any>();
   private requestSubscription: Subscription; // 获取数据
   private linkUrl: string;
   private continueRequestSubscription: Subscription;
 
   private get pageCount(): number {
-    return Math.ceil(this.bannerContentList.length / TabelHelper.NgPageSize);
+    return Math.ceil(this.boothContentList.length / TabelHelper.NgPageSize);
   }
+
+  @ViewChild('boothContentEdit', { static: true }) public boothContentEditRef: BoothContentEditComponent;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private globalService: GlobalService,
-    private bannerService: BannersService
+    private boothService: BoothService
   ) {
     this.route.paramMap.subscribe(map => {
-      this.banner_id = map.get('banner_id');
+      this.booth_id = map.get('booth_id');
     });
   }
 
   public ngOnInit() {
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.requestBannerContentList();
+      this.requestBoothContentList();
     });
-    if (this.banner_id) {
+    if (this.booth_id) {
       this.searchText$.next();
     } else {
       this.router.navigate(['../../'], { relativeTo: this.route });
@@ -58,12 +61,12 @@ export class BannerContentListComponent implements OnInit, OnDestroy {
   }
 
   // 获取展位内容列表
-  private requestBannerContentList(): void {
-    this.requestSubscription = this.bannerService.requestBannerContentListData(this.searchParams)
+  private requestBoothContentList(): void {
+    this.requestSubscription = this.boothService.requestBoothContentListData(this.searchParams)
       .subscribe(backData => {
         this.pageIndex = TabelHelper.NgDefaultPageIndex;
         this.noResultText = TabelHelper.noResultText;
-        this.bannerContentList = backData.results;
+        this.boothContentList = backData.results;
         this.linkUrl = backData.linkUrl;
       }, err => {
         this.pageIndex = TabelHelper.NgDefaultPageIndex;
@@ -77,8 +80,16 @@ export class BannerContentListComponent implements OnInit, OnDestroy {
 
   }
 
+
+  // 编辑
+  public onEditClick(data?: BoothContentEntity): void {
+    this.boothContentEditRef.open(data || null, () => {
+      this.searchText$.next();
+    });
+  }
+
   // 删除
-  public onDeleteClick(banner: BannerContentEntity): void {
+  public onDeleteClick(booth: BoothContentEntity): void {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
 
     });
@@ -95,9 +106,9 @@ export class BannerContentListComponent implements OnInit, OnDestroy {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.bannerService.continueBannerContentListData(this.linkUrl)
+      this.continueRequestSubscription = this.boothService.continueBoothContentListData(this.linkUrl)
         .subscribe(res => {
-          this.bannerContentList = this.bannerContentList.concat(res.results);
+          this.boothContentList = this.boothContentList.concat(res.results);
           this.linkUrl = res.linkUrl;
         }, err => {
           this.globalService.httpErrorProcess(err);

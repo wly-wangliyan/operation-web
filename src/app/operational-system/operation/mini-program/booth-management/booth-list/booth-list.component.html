@@ -3,7 +3,7 @@
   <ul class="header-right">
     <li>
       <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-        [routerLink]="['../banner-config-list']">
+        [routerLink]="['../booth-config-list']">
         展位设置
       </button>
     </li>
@@ -15,8 +15,8 @@
       <form class="search-form" autocomplete="off">
         <div class="form-group">
           <span>所属展位：</span>
-          <input class="form-control" placeholder="请输入所属展位" maxlength="20" name="banner_name"
-            [(ngModel)]="searchParams.banner_name" />
+          <input class="form-control" placeholder="请输入所属展位" maxlength="20" name="booth_name"
+            [(ngModel)]="searchParams.booth_name" />
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
             </button>
@@ -25,7 +25,7 @@
       </form>
     </div>
     <div class="zmy-table">
-      <nz-table #bannerTable [nzData]="bannerList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+      <nz-table #boothTable [nzData]="boothList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
         <thead>
           <tr>
@@ -37,13 +37,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let banner of bannerTable.data;let index = index">
+          <tr *ngFor="let booth of boothTable.data;let index = index">
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td></td>
             <td></td>
             <td></td>
             <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" [routerLink]="['../banner-content-list',banner.banner_id]">编辑</a>
+              <a class="edit-btn" [title]="'编辑'" [routerLink]="['../booth-content-list',booth.booth_id]">编辑</a>
             </td>
           </tr>
         </tbody>

@@ -1,5 +1,5 @@
 <!-- 新建、编辑展位 -->
-<div class="modal fade " id="bannerModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+<div class="modal fade " id="boothConfigModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-common">
     <div class="modal-content modal-content-common">
@@ -8,7 +8,7 @@
         <button type="button" class="close" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
-        <form autocomplete="off" class="form-horizontal" #bannerConfigForm="ngForm">
+        <form autocomplete="off" class="form-horizontal" #boothConfigForm="ngForm">
 
           <div class="row">
             <label class="control-label">
@@ -16,8 +16,8 @@
               <span>展位名称：</span>
             </label>
             <div class="control-input">
-              <input name="bind-banner_name" placeholder="输入1-20字展位名称" [(ngModel)]="bannerData.banner_name"
-                maxlength="20" class="form-control" required>
+              <input name="booth_name" placeholder="输入1-20字展位名称" [(ngModel)]="boothData.booth_name" maxlength="20"
+                class="form-control" appIgnoreSpace required>
             </div>
           </div>
 
@@ -27,8 +27,8 @@
               <span>关键字：</span>
             </label>
             <div class="control-input">
-              <input name="bind-key" placeholder="输入1-20字关键字" [(ngModel)]="bannerData.key" maxlength="20"
-                class="form-control" required>
+              <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
+                class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9-]/g,'')" required>
             </div>
           </div>
 
@@ -38,9 +38,9 @@
               <span>展位类型：</span>
             </label>
             <div class="control-input">
-              <select name="bind-banner_type" [(ngModel)]="bannerData.banner_type" class="form-control" required>
+              <select name="bind-booth_type" [(ngModel)]="boothData.booth_type" class="form-control" required>
                 <option value=''>请选择</option>
-                <option *ngFor="let type of bannerType" [value]='type'>{{type}}</option>
+                <option *ngFor="let type of boothType" [value]='type'>{{type}}</option>
               </select>
             </div>
           </div>
@@ -53,13 +53,13 @@
             <div class="control-input">
               <div class="inline-item">
                 <label class="one-word-lable" style="border-right: 0;">宽</label>
-                <input name="bind-width" [(ngModel)]="bannerData.width" class="form-control five-number"
+                <input name="bind-width" [(ngModel)]="boothData.width" class="form-control five-number"
                   appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
                 <label class="one-word-lable" style="border-left: 0;">px</label>
               </div>
               <div class="inline-item">
                 <label class="one-word-lable" style="border-right: 0;">高</label>
-                <input name="bind-height" [(ngModel)]="bannerData.height" class="form-control five-number"
+                <input name="bind-height" [(ngModel)]="boothData.height" class="form-control five-number"
                   appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
                 <label class="one-word-lable" style="border-left: 0;">px</label>
               </div>
@@ -94,7 +94,7 @@
               <span>备注：</span>
             </label>
             <div class="control-input">
-              <textarea name="remark" class="form-control" [(ngModel)]="bannerData.remark" maxlength="100"
+              <textarea name="remark" class="form-control" [(ngModel)]="boothData.remark" maxlength="100"
                 placeholder="输入备注，100字以内">
               </textarea>
             </div>
@@ -103,7 +103,7 @@
           <div class="modal-footer">
             <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
             <button class="sure-btn" type="button" nz-button nzType="primary"
-              [disabled]="!bannerConfigForm.form.valid || ifDisabled()" (appZDebounceClick)="onCheckClick()">确认
+              [disabled]="!boothConfigForm.form.valid || ifDisabled()" (appZDebounceClick)="onCheckClick()">确认
             </button>
           </div>
         </form>

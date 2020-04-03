@@ -2,7 +2,8 @@
   <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'" [level3Name]="'展位内容'" [level2RelativePath]="'../'"></app-crumb>
   <ul class="header-right">
     <li>
-      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary">
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        (appZDebounceClick)='onEditClick()'>
         新建
       </button>
     </li>
@@ -32,7 +33,7 @@
       </form>
     </div>
     <div class="zmy-table">
-      <nz-table #bannerContentTable [nzData]="bannerContentList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+      <nz-table #boothContentTable [nzData]="boothContentList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
         <thead>
           <tr>
@@ -49,7 +50,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let banner of bannerContentTable.data;let index = index">
+          <tr *ngFor="let booth of boothContentTable.data;let index = index">
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td></td>
             <td></td>
@@ -60,9 +61,10 @@
             <td></td>
             <td></td>
             <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" (click)="onDetailClick(banner)">编辑</a>
-              <a class="view-btn" [title]="'查看'" (click)="onDetailClick(banner)">查看</a>
-              <a class="del-btn" [title]="'删除'" (click)="onDeleteClick(banner)">删除</a>
+              <a class="edit-btn" [title]="'编辑'" (click)="onDetailClick(booth)"
+                (appZDebounceClick)='onEditClick()'>编辑</a>
+              <a class="view-btn" [title]="'查看'" (click)="onDetailClick(booth)">查看</a>
+              <a class="del-btn" [title]="'删除'" (click)="onDeleteClick(booth)">删除</a>
             </td>
           </tr>
         </tbody>
@@ -70,3 +72,4 @@
     </div>
   </div>
 </div>
+<app-booth-content-edit #boothContentEdit></app-booth-content-edit>

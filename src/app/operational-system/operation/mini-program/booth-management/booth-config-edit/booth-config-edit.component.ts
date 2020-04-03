@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { BannerEntity, BannersService } from '../banners.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { timer } from 'rxjs';
+import { BoothEntity, BoothService } from '../booth.service';
 
 export class CheckItem {
   key: number;
@@ -14,13 +14,13 @@ export class CheckItem {
 }
 
 @Component({
-  selector: 'app-banner-config-edit',
-  templateUrl: './banner-config-edit.component.html',
-  styleUrls: ['./banner-config-edit.component.css']
+  selector: 'app-booth-config-edit',
+  templateUrl: './booth-config-edit.component.html',
+  styleUrls: ['./booth-config-edit.component.css']
 })
-export class BannerConfigEditComponent implements OnInit {
-  public bannerData: BannerEntity = new BannerEntity(); // 展位数据
-  public bannerType = [1, 2]; // 1:轮播图(5个) 2:焦点图(1个)
+export class BoothConfigEditComponent implements OnInit {
+  public boothData: BoothEntity = new BoothEntity(); // 展位数据
+  public boothType = [1, 2]; // 1:轮播图(5个) 2:焦点图(1个)
   public formatList: Array<CheckItem> = []; // 支持格式
   public belongList: Array<CheckItem> = []; // 跳转链接
   public isCreate = true; // 标记新建\编辑
@@ -28,28 +28,28 @@ export class BannerConfigEditComponent implements OnInit {
   private closeCallback: any;
   constructor(
     private globalService: GlobalService,
-    private bannerService: BannersService) { }
+    private boothService: BoothService) { }
 
   public ngOnInit() {
   }
 
-  public open(data: BannerEntity, sureFunc: any, closeFunc: any = null) {
-    const openBannerModal = () => {
+  public open(data: BoothEntity, sureFunc: any, closeFunc: any = null) {
+    const openBoothModal = () => {
       timer(0).subscribe(() => {
-        $('#bannerModal').modal();
+        $('#boothConfigModal').modal();
       });
     };
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.initFormats(null);
     this.initBelongs(null);
-    openBannerModal();
+    openBoothModal();
   }
 
   // 弹框close
   public onClose() {
-    this.bannerData = new BannerEntity();
-    $('#bannerModal').modal('hide');
+    this.boothData = new BoothEntity();
+    $('#boothConfigModal').modal('hide');
   }
 
   // 改变支持格式
@@ -60,7 +60,7 @@ export class BannerConfigEditComponent implements OnInit {
         result.push(checkItem.key);
       }
     });
-    this.bannerData.formats = result;
+    this.boothData.formats = result;
   }
 
   // 改变跳转链接
@@ -71,7 +71,7 @@ export class BannerConfigEditComponent implements OnInit {
         result.push(checkItem.key);
       }
     });
-    this.bannerData.belongs = result;
+    this.boothData.link_types = result;
   }
 
   // 支持格式及跳转链接都至少选择一项

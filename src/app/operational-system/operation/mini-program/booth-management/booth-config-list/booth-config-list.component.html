@@ -12,7 +12,7 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="zmy-table">
-      <nz-table #bannerConfigTable [nzData]="bannerConfigList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+      <nz-table #boothConfigTable [nzData]="boothConfigList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
         (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
         <thead>
           <tr>
@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let banner of bannerConfigTable.data;let index = index">
+          <tr *ngFor="let booth of boothConfigTable.data;let index = index">
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td></td>
             <td></td>
@@ -36,7 +36,7 @@
             <td></td>
             <td></td>
             <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" (appZDebounceClick)='onEditClick(banner)'>编辑</a>
+              <a class="edit-btn" [title]="'编辑'" (appZDebounceClick)='onEditClick(booth)'>编辑</a>
             </td>
           </tr>
         </tbody>
@@ -45,4 +45,4 @@
   </div>
 </div>
 
-<app-banner-config-edit #bannerConfigEdit></app-banner-config-edit>
+<app-booth-config-edit #boothConfigEdit></app-booth-config-edit>

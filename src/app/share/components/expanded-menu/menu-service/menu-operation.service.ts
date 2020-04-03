@@ -52,7 +52,7 @@ export class MenuOperationService {
   private generateMiniProgramMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('小程序', null);
     systemMenu.icon = '/assets/images/menu_mini_program.png';
-    const subFinanceMenu1 = new SideMenuItem('展位', '/main/operation/mini-program/banner-management', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('展位', '/main/operation/mini-program/booth-management', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('通知管理', '/main/operation/mini-program/notice-management', systemMenu);
     systemMenu.children.push(subFinanceMenu2);

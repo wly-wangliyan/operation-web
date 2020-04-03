@@ -9,10 +9,10 @@ const routes: Routes = [{
   path: '', component: MiniProgramComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService],
   children: [
-    { path: '', redirectTo: 'banner-management', pathMatch: 'full' },
+    { path: '', redirectTo: 'booth-management', pathMatch: 'full' },
     {
-      path: 'banner-management', /** 展位管理 */
-      loadChildren: () => import('./banners/banners.module').then(m => m.BannersModule),
+      path: 'booth-management', /** 展位管理 */
+      loadChildren: () => import('./booth-management/booth-management.module').then(m => m.BoothManagementModule),
       canLoad: [AuthGuardService]
     },
     {

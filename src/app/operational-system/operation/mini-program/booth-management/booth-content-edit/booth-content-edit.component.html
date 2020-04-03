@@ -1,0 +1,124 @@
+<!--新增/编辑booth-->
+<div class="modal fade" id="boothContentModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">{{isCreate ? '新建' : '编辑'}}展位内容</span>
+        <button type="button" class="close" data-dismiss="modal">&times;
+        </button>
+      </div>
+      <form *ngIf="boothParams" autocomplete="off" class="form-horizontal" #editBoothContentModal="ngForm">
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>所属展位</span>
+          </label>
+          <div class="control-input">
+            <span>首页轮播图</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>标题</span>
+          </label>
+          <div class="control-input">
+            <input class="form-control" placeholder="输入1-20字标题" [(ngModel)]="boothParams.title" name="title"
+              maxlength="20" autocomplete="off" required appIgnoreSpace>
+          </div>
+        </div>
+        <div class="row">
+          <label class=" control-label">
+            <b>*</b>
+            <span>图片</span>
+          </label>
+          <div class="control-input">
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+              [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+              [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg
+              [aspectRatio]="aspectRatio" [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true"
+              [imageShowWidth]="94*aspectRatio">
+            </app-z-photo-select>
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+          </div>
+        </div>
+        <div class="err-message font-12">
+          <span>{{ errPositionItem?.icon?.errMes }}</span>
+        </div>
+        <p class="cover-hint">
+          <span>注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</span>
+        </p>
+        <div class="row">
+          <label class=" control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>落地页</span>
+          </label>
+          <div class="control-input">
+            <select class="form-control" [(ngModel)]="boothParams.belong_to" name="belong_to"
+              (change)="onChangeBelongTo($event)">
+              <option [value]=0>请选择</option>
+              <option [value]=2>H5</option>
+              <option [value]=1>小程序原生页</option>
+              <option [value]=3>视频链接</option>
+            </select>
+            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="boothParams.jump_link" name="jump_link"
+              maxlength="2000" autocomplete="off" appIgnoreSpace (change)="errPositionItem.jump_link.isError=false">
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.jump_link?.isError">{{errPositionItem?.jump_link?.errMes}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>下线时间</span>
+          </label>
+          <div class="control-input">
+            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_status===1"
+              (click)="onChangeOfflineStatus(1)">永不下线</a>
+            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_status===2"
+              (click)="onChangeOfflineStatus(2)" style="margin-right: 5px">定时下线</a>
+            <nz-date-picker *ngIf="boothParams.offline_status===2" [(ngModel)]="offline_time"
+              (ngModelChange)="errPositionItem.offline_time.isError=false" [nzShowToday]=false
+              [nzDisabledDate]="disabledTime" name='offline_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+              nzFormat="yyyy-MM-dd HH:mm">
+            </nz-date-picker>
+          </div>
+        </div>
+        <div class="row row-message">
+          <label class="control-label"></label>
+          <div class="control-input err-message">
+            <span *ngIf="errPositionItem?.offline_time?.isError">{{errPositionItem?.offline_time?.errMes}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;&nbsp;</b>
+            <span>备注</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="4" placeholder="输入描述，100字以内" [(ngModel)]="boothParams.booth_describe"
+              name="booth_describe" maxlength="100">
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+          <button class="sure-btn" type="button" nz-button nzType="primary"
+            [disabled]="!editBoothContentModal.form.valid || coverImg.imageList.length===0  || boothParams.offline_status === 2 && !offline_time"
+            (appZDebounceClick)="onEditFormSubmit()">保存
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
