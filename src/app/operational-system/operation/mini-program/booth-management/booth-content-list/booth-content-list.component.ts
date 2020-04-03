@@ -62,7 +62,7 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
 
   // 获取展位内容列表
   private requestBoothContentList(): void {
-    this.requestSubscription = this.boothService.requestBoothContentListData(this.searchParams)
+    this.requestSubscription = this.boothService.requestBoothContentListData(this.booth_id, this.searchParams)
       .subscribe(backData => {
         this.pageIndex = TabelHelper.NgDefaultPageIndex;
         this.noResultText = TabelHelper.noResultText;

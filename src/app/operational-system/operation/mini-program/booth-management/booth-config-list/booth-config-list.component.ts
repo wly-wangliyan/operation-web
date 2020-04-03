@@ -5,6 +5,7 @@ import { BoothService, BoothEntity, SearchBoothParams } from '../booth.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { BoothConfigEditComponent } from '../booth-config-edit/booth-config-edit.component';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
   selector: 'app-booth-config-list',
@@ -33,6 +34,9 @@ export class BoothConfigListComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
+    this.boothConfigList.push(new BoothEntity());
+    this.boothConfigList[0].booth_id = '666';
+
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestBoothConfigList();
     });
@@ -60,8 +64,28 @@ export class BoothConfigListComponent implements OnInit, OnDestroy {
   }
 
   // 启停
-  public onChangeSwitchStatus(): void {
-
+  public onChangeSwitchStatus(status: any, booth_id: string): void {
+    const swith_status = status === 1 ? 2 : 1;
+    const tipMsg = swith_status === 1 ? '开启' : '关闭';
+    this.boothService.requestChangeBoothConfigStatus(booth_id, swith_status).subscribe(() => {
+      this.globalService.promptBox.open(`${tipMsg}成功`);
+      this.searchText$.next();
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 422) {
+          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          for (const content of error.errors) {
+            if (content.field === 'status' && content.code === 'missing_field') {
+              this.globalService.promptBox.open(`参数缺失，无法${tipMsg}!`, null, 2000, null, false);
+            } else if (content.field === 'status' && content.code === 'invalid') {
+              this.globalService.promptBox.open(`参数不合法，无法${tipMsg}!`, null, 2000, null, false);
+            } else {
+              this.globalService.promptBox.open(`${tipMsg}失败！`, null, 2000, null, false);
+            }
+          }
+        }
+      }
+    });
   }
 
   // 编辑

@@ -33,3 +33,10 @@
   text-align: center;
   border-radius: 1px;
 }
+
+.err-message {
+  font-size: 12px !important;
+  height: 20px;
+  margin-left: 128px;
+  margin-top: -18px;
+}

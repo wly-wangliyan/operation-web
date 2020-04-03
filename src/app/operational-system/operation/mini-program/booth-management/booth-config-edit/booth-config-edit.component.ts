@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../../core/global.service';
 import { timer } from 'rxjs';
 import { BoothEntity, BoothService } from '../booth.service';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 export class CheckItem {
   key: number;
   name: string;
   isChecked: boolean;
-  constructor(key: number, isChecked: boolean = true) {
+  constructor(key: number, isChecked: boolean = false) {
     this.key = key;
     this.isChecked = isChecked;
   }
@@ -22,8 +23,10 @@ export class BoothConfigEditComponent implements OnInit {
   public boothData: BoothEntity = new BoothEntity(); // 展位数据
   public boothType = [1, 2]; // 1:轮播图(5个) 2:焦点图(1个)
   public formatList: Array<CheckItem> = []; // 支持格式
-  public belongList: Array<CheckItem> = []; // 跳转链接
+  public linkTypeList: Array<CheckItem> = []; // 跳转链接
   public isCreate = true; // 标记新建\编辑
+  public errMsg = ''; // 错误提示
+  private saving = false; // 保存中
   private sureCallback: any;
   private closeCallback: any;
   constructor(
@@ -39,17 +42,68 @@ export class BoothConfigEditComponent implements OnInit {
         $('#boothConfigModal').modal();
       });
     };
+    this.initForm();
+    this.isCreate = data && data.booth_id ? false : true;
+    if (!this.isCreate) {
+      this.boothData = data.clone();
+    }
+    this.initFormats();
+    this.initLinkTypes();
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
-    this.initFormats(null);
-    this.initBelongs(null);
     openBoothModal();
+  }
+
+  private initForm(): void {
+    this.clear();
+    this.saving = false;
+    this.boothData = new BoothEntity();
+    this.boothData.booth_type = '';
+    this.boothData.formats = [1, 2, 3];
+    this.boothData.link_types = [1, 2, 3];
+  }
+
+  private initFormats() {
+    let index = 1;
+    this.formatList = [];
+    while (index <= 3) {
+      const checkItem = new CheckItem(index);
+      if (this.boothData.formats && this.boothData.formats.includes(index)) {
+        checkItem.isChecked = true;
+      }
+      this.formatList.push(checkItem);
+      index++;
+    }
+  }
+
+  private initLinkTypes() {
+    let index = 1;
+    this.linkTypeList = [];
+    while (index <= 3) {
+      const checkItem = new CheckItem(index);
+      if (this.boothData.link_types && this.boothData.link_types.includes(index)) {
+        checkItem.isChecked = true;
+      }
+      this.linkTypeList.push(checkItem);
+      index++;
+    }
+  }
+
+  private clear(): void {
+    this.errMsg = '';
   }
 
   // 弹框close
   public onClose() {
-    this.boothData = new BoothEntity();
     $('#boothConfigModal').modal('hide');
+  }
+
+  // 变更展位类型
+  public onChangeBoothType(event: any): void {
+    const targetValue = event.target.value;
+    if (targetValue) {
+      this.boothData.booth_type = Number(targetValue);
+    }
   }
 
   // 改变支持格式
@@ -64,9 +118,9 @@ export class BoothConfigEditComponent implements OnInit {
   }
 
   // 改变跳转链接
-  public onChangeCheckedBelong(): void {
+  public onChangeCheckedLinkType(): void {
     const result = [];
-    this.formatList.forEach(checkItem => {
+    this.linkTypeList.forEach(checkItem => {
       if (checkItem.isChecked) {
         result.push(checkItem.key);
       }
@@ -77,12 +131,68 @@ export class BoothConfigEditComponent implements OnInit {
   // 支持格式及跳转链接都至少选择一项
   public ifDisabled(): boolean {
     return !this.formatList.some(checkItem => checkItem.isChecked)
-      || !this.belongList.some(checkItem => checkItem.isChecked);
+      || !this.linkTypeList.some(checkItem => checkItem.isChecked);
   }
 
-  //
+  // 保存
   public onCheckClick() {
+    if (this.saving) {
+      return;
+    }
+    if (this.generateAndCheckParamsValid()) {
+      this.saving = true;
+      if (this.isCreate) {
+        this.requestAddBooth();
+      } else {
+        this.requestEditBooth();
+      }
+    } else {
+      this.saving = false;
+    }
+  }
 
+  // 新建展位
+  private requestAddBooth(): void {
+    this.boothService.requestAddBoothData(this.boothData)
+      .subscribe(res => {
+        this.onClose();
+        this.globalService.promptBox('新建展位成功', () => {
+          this.sureCallbackInfo();
+        });
+      }, err => {
+        this.errorProcess(err);
+      });
+  }
+
+  // 编辑展位
+  private requestEditBooth(): void {
+    this.boothService.requestUpdateBoothData(this.boothData.booth_id, this.boothData)
+      .subscribe(res => {
+        this.onClose();
+        this.globalService.promptBox('编辑展位成功', () => {
+          this.sureCallbackInfo();
+        });
+      }, err => {
+        this.errorProcess(err);
+      });
+  }
+
+  // 格式展位数量
+  private generateAndCheckParamsValid(): boolean {
+    const booth_type = this.boothData.booth_type;
+    this.boothData.booth_num = booth_type === 1 ? 5 : booth_type === 2 ? 1 : null;
+
+    if (!this.boothData.width || Number(this.boothData.width) === 0) {
+      this.errMsg = '尺寸：宽应大于0px！';
+      return false;
+    }
+
+    if (!this.boothData.height || Number(this.boothData.height) === 0) {
+      this.errMsg = '尺寸：高应大于0px！';
+      return false;
+    }
+
+    return true;
   }
 
   // 确定按钮回调
@@ -95,29 +205,22 @@ export class BoothConfigEditComponent implements OnInit {
     }
   }
 
-  private initFormats(formats: Array<number>) {
-    let index = 1;
-    this.formatList = [];
-    while (index <= 3) {
-      const checkItem = new CheckItem(index);
-      if (formats && !formats.includes(index)) {
-        checkItem.isChecked = false;
+  private errorProcess(err: any): void {
+    this.saving = false;
+    const tipMag = this.isCreate ? '新建展位' : '编辑展位';
+    if (!this.globalService.httpErrorProcess(err)) {
+      if (err.status === 422) {
+        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+        for (const content of error.errors) {
+          if (content.code === 'already_existed' && content.field === 'booth_name') {
+            this.errMsg = '展位名称已存在！';
+          } else if (content.code === 'already_existed' && content.field === 'booth_key') {
+            this.errMsg = '关键字已存在！';
+          } else {
+            this.errMsg = '参数缺失或不合法，请重试！';
+          }
+        }
       }
-      this.formatList.push(checkItem);
-      index++;
-    }
-  }
-
-  private initBelongs(belong_to: Array<number>) {
-    let index = 1;
-    this.belongList = [];
-    while (index <= 3) {
-      const checkItem = new CheckItem(index);
-      if (belong_to && !belong_to.includes(index)) {
-        checkItem.isChecked = false;
-      }
-      this.belongList.push(checkItem);
-      index++;
     }
   }
 }

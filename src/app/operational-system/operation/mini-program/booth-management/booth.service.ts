@@ -18,8 +18,8 @@ export class SearchBoothParams extends EntityBase {
 // 展位内容列表筛选
 export class SearchBoothContentParams extends EntityBase {
   // todo: 对应接口时需要变更
-  public title: string = undefined; // 所属展位
-  public online_time: number = undefined; // 上线时间
+  public title: string = undefined; // 标题
+  public section: string = undefined; // 上线时间区间 "xxx,xxx"
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -52,6 +52,15 @@ export class BoothEntity extends EntityBase {
       return ClickStatisticsEntity;
     }
     return null;
+  }
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.booth_id;
+    delete json.updated_time;
+    delete json.created_time;
+
+    return json;
   }
 }
 
@@ -141,28 +150,41 @@ export class BoothService {
 
   /**
    * 添加Booth
-   * @param  boothParams 添加参数
+   * @param addParams 添加参数
    */
-  public requestAddBoothData(boothParams: BoothEntity): Observable<HttpResponse<any>> {
+  public requestAddBoothData(addParams: BoothEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/boothes`;
-    const params = boothParams.json();
-    params.belong_to = params.belong_to === 0 ? null : params.belong_to;
-    return this.httpService.post(httpUrl, params);
+    return this.httpService.post(httpUrl, addParams.toEditJson());
   }
 
   /**
    * 编辑Booth
    * @param booth_id ID
-   * @param boothParams 编辑参数
+   * @param editParams 编辑参数
    */
-  public requestUpdateBoothData(booth_id: string, boothParams: BoothEntity): Observable<HttpResponse<any>> {
+  public requestUpdateBoothData(booth_id: string, editParams: BoothEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/boothes/${booth_id}`;
-    return this.httpService.put(httpUrl, boothParams.json());
+    return this.httpService.put(httpUrl, editParams.toEditJson());
   }
 
-  /** 获取Booth内容列表 */
-  public requestBoothContentListData(searchParams: SearchBoothContentParams): Observable<BoothContentLinkResponse> {
-    const httpUrl = `${this.domain}/admin/booth_contents`;
+  /**
+   * 修改展位启停状态
+   * @param booth_id 展位内容ID
+   * @param status int 启停状态 1：开启 2：关闭 默认关闭
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestChangeBoothConfigStatus(booth_id: string, status: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/status`;
+    const body = { status };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /** 获取Booth内容列表
+   * @param booth_id ID
+   * @param searchParams
+   */
+  public requestBoothContentListData(booth_id: string, searchParams: SearchBoothContentParams): Observable<BoothContentLinkResponse> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new BoothContentLinkResponse(res)));
   }
@@ -174,5 +196,78 @@ export class BoothService {
    */
   public continueBoothContentListData(url: string): Observable<BoothContentLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new BoothContentLinkResponse(res)));
+  }
+
+  /**
+   * 展位内容详情
+   * @param booth_id ID
+   * @param booth_content_id 展位内容ID
+   * @returns Observable<BoothEntity>
+   */
+  public requestBoothContentData(booth_id: string, booth_content_id: string): Observable<BoothContentEntity> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      return BoothEntity.Create(res.body);
+    }));
+  }
+
+  /**
+   * 添加展位内容
+   * @param booth_id 展位ID
+   * @param addParams 添加参数
+   */
+  public requestAddBoothContentData(booth_id: string, addParams: BoothContentEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents`;
+    const params = addParams.json();
+    return this.httpService.post(httpUrl, params);
+  }
+
+  /**
+   * 编辑展位内容
+   * @param booth_id ID
+   * @param booth_content_id 展位内容ID
+   * @param boothParams 编辑参数
+   */
+  public requestUpdateBoothContentData(
+    booth_id: string, booth_content_id: string, editParams: BoothContentEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}`;
+    return this.httpService.put(httpUrl, editParams.json());
+  }
+
+  /**
+   * 更新序列
+   * @param booth_id ID
+   * @param booth_content_id 展位内容ID
+   * @param order_num 新的序号
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateBoothContentOrder(booth_id: string, booth_content_id: string, order_num: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}/order_num`;
+    const body = { order_num };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 修改展位内容启停状态
+   * @param booth_id ID
+   * @param booth_content_id 展位内容ID
+   * @param status int 启停状态 1：开启 2：关闭 默认关闭
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestChangeBoothContentStatus(booth_id: string, booth_content_id: string, status: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}/status`;
+    const body = { status };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 删除展位内容
+   * @param booth_id ID
+   * @param booth_content_id 展位内容ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeleteBoothContentData(booth_id: string, booth_content_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}`;
+    return this.httpService.delete(httpUrl);
   }
 }

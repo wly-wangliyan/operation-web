@@ -17,7 +17,7 @@
             </label>
             <div class="control-input">
               <input name="booth_name" placeholder="输入1-20字展位名称" [(ngModel)]="boothData.booth_name" maxlength="20"
-                class="form-control" appIgnoreSpace required>
+                (change)="errMsg=''" class="form-control" appIgnoreSpace required>
             </div>
           </div>
 
@@ -28,7 +28,7 @@
             </label>
             <div class="control-input">
               <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
-                class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9-]/g,'')" required>
+                class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9-]/g,'')" (change)="errMsg=''" required>
             </div>
           </div>
 
@@ -38,9 +38,10 @@
               <span>展位类型：</span>
             </label>
             <div class="control-input">
-              <select name="bind-booth_type" [(ngModel)]="boothData.booth_type" class="form-control" required>
+              <select name="bind-booth_type" [(ngModel)]="boothData.booth_type" (change)="onChangeBoothType($event)"
+                class="form-control" required>
                 <option value=''>请选择</option>
-                <option *ngFor="let type of boothType" [value]='type'>{{type}}</option>
+                <option *ngFor="let type of boothType" [value]='type'>{{type | boothType}}</option>
               </select>
             </div>
           </div>
@@ -53,14 +54,16 @@
             <div class="control-input">
               <div class="inline-item">
                 <label class="one-word-lable" style="border-right: 0;">宽</label>
-                <input name="bind-width" [(ngModel)]="boothData.width" class="form-control five-number"
-                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
+                <input name="bind-width" [(ngModel)]="boothData.width" (change)="errMsg=''"
+                  class="form-control five-number" appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999'
+                  maxlength='5' required />
                 <label class="one-word-lable" style="border-left: 0;">px</label>
               </div>
               <div class="inline-item">
                 <label class="one-word-lable" style="border-right: 0;">高</label>
-                <input name="bind-height" [(ngModel)]="boothData.height" class="form-control five-number"
-                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
+                <input name="bind-height" [(ngModel)]="boothData.height" (change)="errMsg=''"
+                  class="form-control five-number" appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999'
+                  maxlength='5' required />
                 <label class="one-word-lable" style="border-left: 0;">px</label>
               </div>
             </div>
@@ -73,7 +76,7 @@
             </label>
             <div class="control-input">
               <label *ngFor="let data of formatList;let i=index" name="format_{{i}}" nz-checkbox
-                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedFormat()">{{data.key}}</label>
+                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedFormat()">{{data.key | format}}</label>
             </div>
           </div>
 
@@ -83,8 +86,8 @@
               <span>跳转链接：</span>
             </label>
             <div class="control-input">
-              <label *ngFor="let data of belongList;let i=index" name="belong_{{i}}" nz-checkbox
-                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedBelong()">{{data.key}}</label>
+              <label *ngFor="let data of linkTypeList;let i=index" name="link_type_{{i}}" nz-checkbox
+                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedLinkType()">{{data.key | linkType}}</label>
             </div>
           </div>
 
@@ -98,6 +101,10 @@
                 placeholder="输入备注，100字以内">
               </textarea>
             </div>
+          </div>
+
+          <div class="err-message">
+            <span>{{ errMsg }}</span>
           </div>
 
           <div class="modal-footer">

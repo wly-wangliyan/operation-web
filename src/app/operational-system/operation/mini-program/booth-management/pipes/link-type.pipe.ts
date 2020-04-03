@@ -1,15 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/** booth类型 */
-const BoothType = {
-  1: '轮播图',
-  2: '焦点图'
+/** 跳转链接 */
+const LinkType = {
+  1: '视频链接',
+  2: 'H5链接',
+  3: '小程序原生页'
 };
 
 @Pipe({
-  name: 'boothType'
+  name: 'linkType'
 })
-export class BoothTypePipe implements PipeTransform {
+export class LinkTypePipe implements PipeTransform {
 
   public transform(value: any, args?: any): any {
     let result = '--';
@@ -17,7 +18,7 @@ export class BoothTypePipe implements PipeTransform {
       return result;
     }
 
-    result = BoothType[value] || '--';
+    result = LinkType[value] || '--';
 
     return result;
   }
