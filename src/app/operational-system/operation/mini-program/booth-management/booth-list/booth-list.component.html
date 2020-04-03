@@ -39,9 +39,9 @@
         <tbody>
           <tr *ngFor="let booth of boothTable.data;let index = index">
             <td>{{index+(pageIndex-1)*15+1}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{booth.booth_name || '--'}}</td>
+            <td>{{booth.booth_key || '--'}}</td>
+            <td>{{booth.booth_type | boothType}}</td>
             <td class="operation">
               <a class="edit-btn" [title]="'编辑'" [routerLink]="['../booth-content-list',booth.booth_id]">编辑</a>
             </td>

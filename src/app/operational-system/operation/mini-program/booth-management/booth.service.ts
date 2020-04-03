@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 // 展位列表筛选
 export class SearchBoothParams extends EntityBase {
   // todo: 对应接口时需要变更
-  public booth_name: string = undefined; // 所属展位
+  public booth_name: string = undefined; // 展位名称
+  public status: number = undefined; // 启停状态 1：开启 2：关闭 默认关闭
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }

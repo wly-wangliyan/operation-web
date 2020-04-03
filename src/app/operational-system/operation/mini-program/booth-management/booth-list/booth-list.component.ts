@@ -13,7 +13,7 @@ import { BoothService, BoothEntity, SearchBoothParams } from '../booth.service';
 export class BoothListComponent implements OnInit, OnDestroy {
 
   public boothList: Array<BoothEntity> = []; // 展位列表(只展示已开启的)
-  public searchParams: SearchBoothParams = new SearchBoothParams();
+  public searchParams: SearchBoothParams = new SearchBoothParams(); // 条件筛选
   public pageIndex = TabelHelper.NgDefaultPageIndex; // 当前页码
   public noResultText = TabelHelper.loadingText;
   private searchText$ = new Subject<any>();
@@ -31,9 +31,7 @@ export class BoothListComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.boothList.push(new BoothEntity());
-
-
+    this.searchParams.status = 1;
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.requestBoothList();
     });
