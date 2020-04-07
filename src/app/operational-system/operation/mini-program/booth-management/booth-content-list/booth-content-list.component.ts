@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { GlobalService } from '../../../../../core/global.service';
 import { TabelHelper } from '../../../../../../utils/table-helper';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
@@ -154,6 +155,39 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
               }
             }
           }
+        }
+      });
+  }
+
+  // 列表排序(停用的不发送请求，位置没有发生变化的不发送请求)
+  public onDrop(event: CdkDragDrop<string[]>, data: any): void {
+    if (!data[event.previousIndex].status || data[event.previousIndex].status === 2) {
+      return;
+    }
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    let move_num = event.previousIndex;
+    if (event.previousIndex > event.currentIndex) {
+      const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
+      move_num = this.boothContentList[index].order_num;
+      if (event.currentIndex === 0 && this.boothContentList[index].order_num === 1) {
+        move_num = 0;
+      }
+    } else {
+      move_num = this.boothContentList[event.currentIndex].order_num;
+    }
+    moveItemInArray(data, event.previousIndex, event.currentIndex);
+    this.boothService.requestUpdateBoothContentOrder(
+      this.booth_id,
+      this.boothContentList[event.previousIndex].booth_content_id,
+      move_num).subscribe((res) => {
+        this.globalService.promptBox.open('排序成功');
+        this.searchText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('排序失败，请重试！', null, 2000, null, false);
+          this.searchText$.next();
         }
       });
   }

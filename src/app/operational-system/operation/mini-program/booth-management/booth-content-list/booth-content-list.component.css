@@ -1,0 +1,16 @@
+/* 拖拽排序 */
+::ng-deep .cdk-drag-preview {
+  display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.search-container {
+  padding: 0;
+}
+
+.search-btn-group {
+  margin-top: -1px !important;
+}

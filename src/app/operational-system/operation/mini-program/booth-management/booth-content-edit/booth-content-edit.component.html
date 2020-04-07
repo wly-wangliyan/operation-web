@@ -49,7 +49,7 @@
         </div>
         <p class="cover-hint" style="padding-left: 140px;">
           <span>注：尺寸{{boothData.width || 0}}px * {{boothData.height || 0}}px，格式<span
-              *ngFor="let format of boothData.formats;last as isLast">{{format|format}}<span
+              *ngFor="let format of boothData.formats;last as isLast">{{format}}<span
                 *ngIf="!isLast">/</span></span>，大小2M以内</span>
         </p>
         <div class="row">
@@ -59,10 +59,11 @@
           </label>
           <div class="control-input">
             <select class="form-control" [(ngModel)]="boothParams.link_type" name="link_type"
-              (change)="onChangeLinkType($event)">
-              <option *ngFor="let type of boothData.link_types" [value]='type'>type | linkType</option>
+              (change)="onChangeLinkType($event)">\
+              <option value=''>请选择</option>
+              <option *ngFor="let type of boothData.link_types" [value]='type'>{{type | linkType}}</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="boothParams.link_url" name="link_url"
+            <input class="form-control" placeholder="输入跳转URL" [(ngModel)]="boothParams.link_url" name="link_url"
               maxlength="2000" appIgnoreSpace (change)="errMessageGroup.errJson.link_url.errMes=''">
           </div>
         </div>

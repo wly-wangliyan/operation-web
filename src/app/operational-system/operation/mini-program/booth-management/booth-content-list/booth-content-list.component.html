@@ -49,11 +49,11 @@
             <th>操作</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let boothContent of boothContentTable.data;let index = index">
+        <tbody cdkDropList (cdkDropListDropped)="onDrop($event, boothContentTable.data)">
+          <tr *ngFor="let boothContent of boothContentTable.data;let index = index" cdkDrag>
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td>
-              <img [src]='boothContent.image' style="width: 120px;" />
+              <img [src]='boothContent.image' style="max-width: 120px;" />
             </td>
             <td>{{boothContent.title || '--'}}</td>
             <td>{{boothContent.booth?.booth_type | boothType}}</td>
@@ -62,9 +62,9 @@
             <td>{{boothContent.click_person_num || 0}}</td>
             <td>{{boothContent.day_average_click_num || 0}}</td>
             <td>
-              <nz-switch [ngModel]="boothContent.status===1?'true':'false'" nzCheckedChildren="On"
+              <nz-switch [ngModel]="boothContent.status===1 ? true : false" nzCheckedChildren="On"
                 nzUnCheckedChildren="Off" [nzControl]=true style="height: 10px"
-                (click)="onChangeSwitchStatus(boothContent.status,boothContent.booth_content_id)">
+                (click)="onChangeSwitchStatus(boothContent,boothContent.booth_content_id)">
               </nz-switch>
             </td>
             <td class="operation">

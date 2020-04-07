@@ -81,7 +81,7 @@ export class BoothContentEntity extends EntityBase {
   public booth: BoothEntity = undefined; // 展位对象
   public title: string = undefined; // 标题
   public image: string = undefined; // 图片
-  public link_type: number = undefined; // int 链接类型 1:视频链接 2:H5链接 3:小程序原生页
+  public link_type: any = ''; // int 链接类型 1:视频链接 2:H5链接 3:小程序原生页
   public link_url: string = undefined; // 链接url
   public offline_type: number = undefined; // 下线时间类型 1：永不下线 2：定时下线 默认为1
   public offline_date: number = undefined; // float 下线时间 若offline_type=2,必填
@@ -104,6 +104,9 @@ export class BoothContentEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
+    if (!json.link_type) {
+      delete json.link_type;
+    }
     json.remark = json.remark || '';
     delete json.booth_content_id;
     delete json.booth;

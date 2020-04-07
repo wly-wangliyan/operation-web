@@ -64,13 +64,13 @@ export class BoothContentEditComponent implements OnInit {
       Number((this.boothData.width / this.boothData.height).toFixed(2)) : 1 / 1;
     const imgReg = ['jpeg'];
     this.boothData.formats && this.boothData.formats.forEach(format => {
-      imgReg.push(this.imgRegPipe[format]);
+      imgReg.push(format.toLowerCase());
     });
     this.imgReg = new RegExp('(' + imgReg.join('|') + ')$');
     // 落地页
     this.boothParams.link_type =
       this.boothData.link_types && this.boothData.link_types.includes(this.boothParams.link_type)
-        ? this.boothData.link_types[0] : null;
+        ? this.boothParams.link_type : '';
     // 下线时间
     this.boothParams.offline_type = this.boothParams.offline_type || 1; // 默认永不下线
     if (this.boothParams.offline_type === 2) {
@@ -81,8 +81,8 @@ export class BoothContentEditComponent implements OnInit {
   // 切换落地页
   public onChangeLinkType(event: any): void {
     this.errMessageGroup.errJson.link_url.errMes = '';
+    this.boothParams.link_url = null;
     if (event.target.value) {
-      this.boothParams.link_url = null;
       this.boothParams.link_type = Number(event.target.value);
     }
   }
@@ -90,9 +90,7 @@ export class BoothContentEditComponent implements OnInit {
   // 切换下线方式
   public onChangeOfflineType(offline_type: number): void {
     this.errMessageGroup.errJson.offline_date.errMes = '';
-    if (offline_type === 1) {
-      this.offline_date = '';
-    }
+    this.offline_date = '';
     this.boothParams.offline_type = offline_type;
   }
 
@@ -150,9 +148,8 @@ export class BoothContentEditComponent implements OnInit {
     this.boothService.requestAddBoothContentData(this.boothData.booth_id, this.boothParams)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox('新建展位内容成功', () => {
-          this.sureCallbackInfo();
-        });
+        this.sureCallbackInfo();
+        this.globalService.promptBox.open('新建展位内容成功');
       }, err => {
         this.errorProcess(err);
       });
@@ -163,9 +160,8 @@ export class BoothContentEditComponent implements OnInit {
     this.boothService.requestUpdateBoothContentData(this.boothData.booth_id, this.boothParams.booth_content_id, this.boothParams)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox('编辑展位内容成功', () => {
-          this.sureCallbackInfo();
-        });
+        this.sureCallbackInfo();
+        this.globalService.promptBox.open('编辑展位内容成功');
       }, err => {
         this.errorProcess(err);
       });
