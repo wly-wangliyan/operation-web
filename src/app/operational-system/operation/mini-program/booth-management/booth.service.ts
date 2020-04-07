@@ -56,6 +56,7 @@ export class BoothEntity extends EntityBase {
 
   public toEditJson(): any {
     const json = this.json();
+    json.remark = json.remark || '';
     delete json.booth_id;
     delete json.updated_time;
     delete json.created_time;

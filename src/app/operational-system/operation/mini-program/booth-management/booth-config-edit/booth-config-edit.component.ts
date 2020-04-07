@@ -3,13 +3,15 @@ import { GlobalService } from '../../../../../core/global.service';
 import { timer } from 'rxjs';
 import { BoothEntity, BoothService } from '../booth.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
+import { ErrMessageGroup, ErrMessageBase } from '../../../../../../utils/error-message-helper';
 
 export class CheckItem {
   key: number;
   name: string;
   isChecked: boolean;
-  constructor(key: number, isChecked: boolean = false) {
+  constructor(key?: number, name?: string, isChecked: boolean = false) {
     this.key = key;
+    this.name = name;
     this.isChecked = isChecked;
   }
 }
@@ -25,7 +27,7 @@ export class BoothConfigEditComponent implements OnInit {
   public formatList: Array<CheckItem> = []; // 支持格式
   public linkTypeList: Array<CheckItem> = []; // 跳转链接
   public isCreate = true; // 标记新建\编辑
-  public errMsg = ''; // 错误提示
+  public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
   private saving = false; // 保存中
   private sureCallback: any;
   private closeCallback: any;
@@ -59,21 +61,20 @@ export class BoothConfigEditComponent implements OnInit {
     this.saving = false;
     this.boothData = new BoothEntity();
     this.boothData.booth_type = '';
-    this.boothData.formats = [1, 2, 3];
+    this.boothData.formats = ['PNG', 'JPG', 'GIF'];
     this.boothData.link_types = [1, 2, 3];
   }
 
   private initFormats() {
-    let index = 1;
+    const formats = ['PNG', 'JPG', 'GIF'];
     this.formatList = [];
-    while (index <= 3) {
-      const checkItem = new CheckItem(index);
-      if (this.boothData.formats && this.boothData.formats.includes(index)) {
+    formats.forEach(format => {
+      const checkItem = new CheckItem(null, format);
+      if (this.boothData.formats && this.boothData.formats.includes(format)) {
         checkItem.isChecked = true;
       }
       this.formatList.push(checkItem);
-      index++;
-    }
+    });
   }
 
   private initLinkTypes() {
@@ -89,8 +90,12 @@ export class BoothConfigEditComponent implements OnInit {
     }
   }
 
-  private clear(): void {
-    this.errMsg = '';
+  // 清除错误信息
+  public clear(): void {
+    this.errMessageGroup.errJson = {};
+    this.errMessageGroup.errJson.booth_name = new ErrMessageBase();
+    this.errMessageGroup.errJson.booth_key = new ErrMessageBase();
+    this.errMessageGroup.errJson.icon_size = new ErrMessageBase();
   }
 
   // 弹框close
@@ -111,7 +116,7 @@ export class BoothConfigEditComponent implements OnInit {
     const result = [];
     this.formatList.forEach(checkItem => {
       if (checkItem.isChecked) {
-        result.push(checkItem.key);
+        result.push(checkItem.name);
       }
     });
     this.boothData.formats = result;
@@ -156,9 +161,8 @@ export class BoothConfigEditComponent implements OnInit {
     this.boothService.requestAddBoothData(this.boothData)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox('新建展位成功', () => {
-          this.sureCallbackInfo();
-        });
+        this.sureCallbackInfo();
+        this.globalService.promptBox.open('新建展位成功');
       }, err => {
         this.errorProcess(err);
       });
@@ -169,9 +173,8 @@ export class BoothConfigEditComponent implements OnInit {
     this.boothService.requestUpdateBoothData(this.boothData.booth_id, this.boothData)
       .subscribe(res => {
         this.onClose();
-        this.globalService.promptBox('编辑展位成功', () => {
-          this.sureCallbackInfo();
-        });
+        this.sureCallbackInfo();
+        this.globalService.promptBox.open('编辑展位成功');
       }, err => {
         this.errorProcess(err);
       });
@@ -183,12 +186,12 @@ export class BoothConfigEditComponent implements OnInit {
     this.boothData.booth_num = booth_type === 1 ? 5 : booth_type === 2 ? 1 : null;
 
     if (!this.boothData.width || Number(this.boothData.width) === 0) {
-      this.errMsg = '尺寸：宽应大于0px！';
+      this.errMessageGroup.errJson.icon_size.errMes = '宽应大于0px！';
       return false;
     }
 
     if (!this.boothData.height || Number(this.boothData.height) === 0) {
-      this.errMsg = '尺寸：高应大于0px！';
+      this.errMessageGroup.errJson.icon_size.errMes = '高应大于0px！';
       return false;
     }
 
@@ -213,11 +216,11 @@ export class BoothConfigEditComponent implements OnInit {
         const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
         for (const content of error.errors) {
           if (content.code === 'already_existed' && content.field === 'booth_name') {
-            this.errMsg = '展位名称已存在！';
+            this.errMessageGroup.errJson.booth_name.errMes = '展位名称已存在！';
           } else if (content.code === 'already_existed' && content.field === 'booth_key') {
-            this.errMsg = '关键字已存在！';
+            this.errMessageGroup.errJson.booth_key.errMes = '关键字已存在！';
           } else {
-            this.errMsg = '参数缺失或不合法，请重试！';
+            this.globalService.promptBox.open('参数缺失或不合法，请重试！', null, 2000, null, false);
           }
         }
       }
