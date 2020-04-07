@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
 import { TabelHelper } from '../../../../../../utils/table-helper';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
-import { BoothService, BoothContentEntity, SearchBoothContentParams } from '../booth.service';
+import { BoothService, BoothContentEntity, SearchBoothContentParams, BoothEntity } from '../booth.service';
 import { BoothContentEditComponent } from '../booth-content-edit/booth-content-edit.component';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 
@@ -23,6 +23,7 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
   public online_start_time = ''; // 上线开始时间
   public online_end_time = ''; // 上线结束时间
   private booth_id = '';  // 展位id
+  private boothData: BoothEntity; // 所属展位
   private searchText$ = new Subject<any>();
   private requestSubscription: Subscription; // 获取数据
   private linkUrl: string;
@@ -50,6 +51,7 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
       this.requestBoothContentList();
     });
     if (this.booth_id) {
+      this.requestBoothDetail();
       this.searchText$.next();
     } else {
       this.router.navigate(['../../'], { relativeTo: this.route });
@@ -76,6 +78,16 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
       });
   }
 
+  // 获取所属展位详情
+  private requestBoothDetail(): void {
+    this.boothService.requestBoothDetailData(this.booth_id)
+      .subscribe(backData => {
+        this.boothData = backData;
+      }, err => {
+        this.globalService.httpErrorProcess(err);
+      });
+  }
+
   // 查询
   public onSearchBtnClick(): void {
     if (this.generateAndCheckParamsValid()) {
@@ -86,7 +98,17 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
 
   // 编辑
   public onEditClick(data?: BoothContentEntity): void {
-    this.boothContentEditRef.open(data || null, () => {
+    const tipMsg = data ? '编辑' : '新建';
+    let boothData = this.boothData ? this.boothData.clone() : null;
+    if (!boothData) {
+      if (data && data.booth) {
+        boothData = data.booth.clone();
+      } else {
+        this.globalService.promptBox.open(`所属展位信息获取失败，无法${tipMsg}，\n请刷新重试！`, null, 2000, null, false);
+        return;
+      }
+    }
+    this.boothContentEditRef.open(data || null, boothData, () => {
       this.searchText$.next();
     });
   }
@@ -108,8 +130,9 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
   }
 
   // 启停
-  public onChangeSwitchStatus(status: any, booth_content_id: string): void {
-    const swith_status = status === 1 ? 2 : 1;
+  public onChangeSwitchStatus(boothContent: BoothContentEntity, booth_content_id: string): void {
+    const swith_status = boothContent.status === 1 ? 2 : 1;
+    const limit = boothContent.booth && boothContent.booth.booth_type === 1 ? 5 : 1;
     const tipMsg = swith_status === 1 ? '开启' : '关闭';
     this.boothService.requestChangeBoothContentStatus(this.booth_id, booth_content_id, swith_status)
       .subscribe(() => {
@@ -124,6 +147,8 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
                 this.globalService.promptBox.open(`参数缺失，无法${tipMsg}!`, null, 2000, null, false);
               } else if (content.field === 'status' && content.code === 'invalid') {
                 this.globalService.promptBox.open(`参数不合法，无法${tipMsg}!`, null, 2000, null, false);
+              } else if (content.resource === 'booth_content' && content.code === 'beyond_limit') {
+                this.globalService.promptBox.open(`只能同时开启${limit}个内容!`, null, 2000, null, false);
               } else {
                 this.globalService.promptBox.open(`${tipMsg}失败！`, null, 2000, null, false);
               }

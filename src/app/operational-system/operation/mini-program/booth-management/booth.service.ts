@@ -89,7 +89,7 @@ export class BoothContentEntity extends EntityBase {
   public click_num: number = undefined; // 点击量
   public click_person_num: number = undefined; // 点击人数
   public day_average_click_num: number = undefined; // 日均点击量
-  public status: number = undefined; // 展位序号
+  public status: number = undefined; // 启停状态
   public online_date: number = undefined; // 上线时间
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
@@ -99,6 +99,22 @@ export class BoothContentEntity extends EntityBase {
       return BoothEntity;
     }
     return null;
+  }
+
+  public toEditJson(): any {
+    const json = this.json();
+    json.remark = json.remark || '';
+    delete json.booth_content_id;
+    delete json.booth;
+    delete json.order_num;
+    delete json.click_num;
+    delete json.click_person_num;
+    delete json.day_average_click_num;
+    delete json.status;
+    delete json.online_date;
+    delete json.updated_time;
+    delete json.created_time;
+    return json;
   }
 }
 
@@ -141,7 +157,7 @@ export class BoothService {
    * @param booth_id ID
    * @returns Observable<BoothEntity>
    */
-  public requestBoothDetail(booth_id: string): Observable<BoothEntity> {
+  public requestBoothDetailData(booth_id: string): Observable<BoothEntity> {
     const httpUrl = `${this.domain}/admin/boothes/${booth_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => {
       return BoothEntity.Create(res.body);
@@ -218,8 +234,7 @@ export class BoothService {
    */
   public requestAddBoothContentData(booth_id: string, addParams: BoothContentEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents`;
-    const params = addParams.json();
-    return this.httpService.post(httpUrl, params);
+    return this.httpService.post(httpUrl, addParams.toEditJson());
   }
 
   /**
@@ -231,7 +246,7 @@ export class BoothService {
   public requestUpdateBoothContentData(
     booth_id: string, booth_content_id: string, editParams: BoothContentEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}`;
-    return this.httpService.put(httpUrl, editParams.json());
+    return this.httpService.put(httpUrl, editParams.toEditJson());
   }
 
   /**

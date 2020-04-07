@@ -1,3 +1,7 @@
+.modal {
+  z-index: 100;
+}
+
 .form-control:focus {
   box-shadow: none !important;
 }
@@ -35,4 +39,21 @@
 .offline-btn:hover {
   color: #fff !important;
   background: #315AC5;
+}
+
+.active-btn {
+  color: #fff !important;
+  background: #3E71F7;
+}
+
+select {
+  width: 150px !important;
+  background: #fff !important;
+}
+
+.err-message {
+  font-size: 12px !important;
+  height: 20px;
+  margin-left: 140px;
+  margin-top: -18px;
 }

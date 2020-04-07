@@ -15,7 +15,7 @@
             <span>所属展位</span>
           </label>
           <div class="control-input">
-            <span>首页轮播图</span>
+            <span style="line-height: 34px;">{{boothData.booth_name || '--'}}</span>
           </div>
         </div>
         <div class="row">
@@ -25,34 +25,32 @@
           </label>
           <div class="control-input">
             <input class="form-control" placeholder="输入1-20字标题" [(ngModel)]="boothParams.title" name="title"
-              maxlength="20" autocomplete="off" required appIgnoreSpace>
+              (change)="errMessageGroup.errJson.title.errMes=''" maxlength="20" required appIgnoreSpace>
           </div>
         </div>
+        <div class="err-message">
+          <span>{{ errMessageGroup.errJson?.title?.errMes }}</span>
+        </div>
         <div class="row">
-          <label class=" control-label">
+          <label class="control-label" style="margin-bottom: 0;">
             <b>*</b>
             <span>图片</span>
           </label>
-          <div class="control-input">
+          <div class="control-input" style="margin-bottom: 0;">
             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
               [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
               [imageWidth]="94*aspectRatio" [imageHeight]="94" [imageUrls]="cover_url" #coverImg
-              [aspectRatio]="aspectRatio" [minCropBoxWidth]="360" [minCropBoxHeight]="94" [resizable]="true"
-              [imageShowWidth]="94*aspectRatio">
+              [aspectRatio]="aspectRatio" [resizable]="true" [imageShowWidth]="94*aspectRatio">
             </app-z-photo-select>
           </div>
         </div>
-        <div class="row row-message">
-          <label class="control-label"></label>
-          <div class="control-input err-message">
-            <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
-          </div>
+        <div class="err-message" style="margin-top:-10px">
+          <span>{{ errMessageGroup.errJson?.icon?.errMes }}</span>
         </div>
-        <div class="err-message font-12">
-          <span>{{ errPositionItem?.icon?.errMes }}</span>
-        </div>
-        <p class="cover-hint">
-          <span>注：尺寸1080*282px，格式PNG/JPG/GIF，大小2M以内</span>
+        <p class="cover-hint" style="padding-left: 140px;">
+          <span>注：尺寸{{boothData.width || 0}}px * {{boothData.height || 0}}px，格式<span
+              *ngFor="let format of boothData.formats;last as isLast">{{format|format}}<span
+                *ngIf="!isLast">/</span></span>，大小2M以内</span>
         </p>
         <div class="row">
           <label class=" control-label">
@@ -60,46 +58,39 @@
             <span>落地页</span>
           </label>
           <div class="control-input">
-            <select class="form-control" [(ngModel)]="boothParams.belong_to" name="belong_to"
-              (change)="onChangeBelongTo($event)">
-              <option [value]=0>请选择</option>
-              <option [value]=2>H5</option>
-              <option [value]=1>小程序原生页</option>
-              <option [value]=3>视频链接</option>
+            <select class="form-control" [(ngModel)]="boothParams.link_type" name="link_type"
+              (change)="onChangeLinkType($event)">
+              <option *ngFor="let type of boothData.link_types" [value]='type'>type | linkType</option>
             </select>
-            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="boothParams.jump_link" name="jump_link"
-              maxlength="2000" autocomplete="off" appIgnoreSpace (change)="errPositionItem.jump_link.isError=false">
+            <input class="form-control" placeholder="请输入跳转URL" [(ngModel)]="boothParams.link_url" name="link_url"
+              maxlength="2000" appIgnoreSpace (change)="errMessageGroup.errJson.link_url.errMes=''">
           </div>
         </div>
-        <div class="row row-message">
-          <label class="control-label"></label>
-          <div class="control-input err-message">
-            <span *ngIf="errPositionItem?.jump_link?.isError">{{errPositionItem?.jump_link?.errMes}}</span>
-          </div>
+        <div class="err-message">
+          <span>{{ errMessageGroup.errJson?.link_url?.errMes }}</span>
         </div>
+
         <div class="row">
           <label class="control-label">
             <b>*</b>
             <span>下线时间</span>
           </label>
           <div class="control-input">
-            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_status===1"
-              (click)="onChangeOfflineStatus(1)">永不下线</a>
-            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_status===2"
-              (click)="onChangeOfflineStatus(2)" style="margin-right: 5px">定时下线</a>
-            <nz-date-picker *ngIf="boothParams.offline_status===2" [(ngModel)]="offline_time"
-              (ngModelChange)="errPositionItem.offline_time.isError=false" [nzShowToday]=false
-              [nzDisabledDate]="disabledTime" name='offline_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===1"
+              (click)="onChangeOfflineType(1)">永不下线</a>
+            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===2"
+              (click)="onChangeOfflineType(2)" style="margin-right: 5px">定时下线</a>
+            <nz-date-picker *ngIf="boothParams.offline_type===2" [(ngModel)]="offline_date"
+              (ngModelChange)="errMessageGroup.errJson.offline_date.errMes=''" [nzShowToday]=false
+              [nzDisabledDate]="disabledTime" name='offline_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
               nzFormat="yyyy-MM-dd HH:mm">
             </nz-date-picker>
           </div>
         </div>
-        <div class="row row-message">
-          <label class="control-label"></label>
-          <div class="control-input err-message">
-            <span *ngIf="errPositionItem?.offline_time?.isError">{{errPositionItem?.offline_time?.errMes}}</span>
-          </div>
+        <div class="err-message">
+          <span>{{ errMessageGroup.errJson?.offline_date?.errMes }}</span>
         </div>
+
         <div class="row">
           <label class="control-label">
             <b>&nbsp;&nbsp;</b>
@@ -111,11 +102,12 @@
             </textarea>
           </div>
         </div>
+
         <div class="modal-footer">
           <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
           <button class="sure-btn" type="button" nz-button nzType="primary"
-            [disabled]="!editBoothContentModal.form.valid || coverImg.imageList.length===0  || boothParams.offline_status === 2 && !offline_time"
-            (appZDebounceClick)="onEditFormSubmit()">保存
+            [disabled]="!editBoothContentModal.form.valid || coverImg.imageList.length===0  || boothParams.offline_type === 2 && !offline_date"
+            (appZDebounceClick)="onCheckClick()">保存
           </button>
         </div>
       </form>
