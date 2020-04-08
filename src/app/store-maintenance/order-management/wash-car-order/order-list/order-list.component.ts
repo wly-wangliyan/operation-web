@@ -60,9 +60,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   // 请求订单列表
   private requestOrderList(): void {
+    const statisticsParams = this.searchParams.clone();
+    delete statisticsParams.page_size;
+    delete statisticsParams.page_num;
     this.requestSubscription = forkJoin(
       this.orderService.requestOrderListData(this.searchParams),
-      this.orderService.requestWashCarStatisticsData(this.searchParams))
+      this.orderService.requestWashCarStatisticsData(statisticsParams))
       .subscribe(result => {
         this.orderList = result[0].results;
         this.linkUrl = result[0].linkUrl;
