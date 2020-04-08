@@ -54,6 +54,12 @@
           <span class="partition">-</span>
           <nz-date-picker [(ngModel)]="expense_end_time" [nzShowToday]="false" [nzDisabledDate]="disabledEndTime"
             name="bind_end_time" [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+
+        <div class="form-group">
+          <span>订单编号：</span>
+          <input name="wash_car_order_id" class="form-control" [(ngModel)]="searchParams.wash_car_order_id"
+            placeholder="请输入订单编号" maxlength="32" appIgnoreSpace />
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">
               查询
@@ -69,6 +75,7 @@
         <thead>
           <tr>
             <th>序号</th>
+            <th>订单编号</th>
             <th>用户ID</th>
             <th>核销码</th>
             <th>券码类型</th>
@@ -84,6 +91,13 @@
         <tbody>
           <tr *ngFor="let record of expenseVerifyTable.data; let i = index">
             <td>{{ i + (pageIndex - 1) * 15 + 1 }}</td>
+            <td [title]="record.wash_car_order?.wash_car_order_id || ''">
+              <span *ngIf="record.wash_car_order?.wash_car_order_id"
+                [appTxtCopy]="record.wash_car_order?.wash_car_order_id">
+                {{ record.wash_car_order?.wash_car_order_id | zMaxLength:10 }}
+              </span>
+              <span *ngIf="!record.wash_car_order?.wash_car_order_id">--</span>
+            </td>
             <td>{{record.wash_car_order?.ht_code || '--'}}</td>
             <td>
               <span *ngIf="record.expense_verify_code" [appTxtCopy]="record.expense_verify_code">

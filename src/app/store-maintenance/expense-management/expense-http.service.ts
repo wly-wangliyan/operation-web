@@ -5,6 +5,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { HttpService, LinkResponse, HttpErrorEntity } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
+import { WashCarOrderEntity } from '../order-management/wash-car-order/wash-car-order.service';
 
 export class ExpenseSearchParams extends EntityBase {
   public status: any = ''; // 消费凭证状态1:已核销 (2:未核销) 3:已失效
@@ -13,12 +14,13 @@ export class ExpenseSearchParams extends EntityBase {
   public expense_section: string = undefined; // 核销时间区间 "xxx,xxx"
   public car_type: any = ''; // 车型 1:5座小型车 2:SUV/MPV
   public service_type: any = ''; // 服务类型 1:1次标准洗车 2：1次标准洗车+1次打蜡
+  public wash_car_order_id: string = undefined; // 洗车订单id
 }
 
 // 核销记录实体
 export class ExpenseVerifyEntity extends EntityBase {
   public expense_verify_id: string = undefined; // 消费凭证ID
-  public wash_car_order: string = undefined; // 洗车订单对象 WashCarOrder
+  public wash_car_order: WashCarOrderEntity = undefined; // 洗车订单对象 WashCarOrder
   public expense_verify_code: string = undefined; // 消费凭证码
   public service_type: string = undefined; // 服务类型 1:1次标准洗车 2：1次标准洗车+1次打蜡
   public car_type: number = undefined; // 车型 1: 5座小型车 2：SUV/MPV
@@ -29,6 +31,13 @@ export class ExpenseVerifyEntity extends EntityBase {
   public valid_date_start: number = undefined; // 有效期开始日期
   public valid_date_end: number = undefined; // 有效期结束日期
   public status: number = undefined; // 消费凭证状态 1：已核销 2： 未核销 3： 已失效
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'wash_car_order') {
+      return WashCarOrderEntity;
+    }
+    return null;
+  }
 }
 
 export class ExpenseRecordLinkResponse extends LinkResponse {
