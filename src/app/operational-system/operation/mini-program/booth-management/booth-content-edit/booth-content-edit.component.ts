@@ -62,15 +62,23 @@ export class BoothContentEditComponent implements OnInit {
     const aspectRatio = this.boothData.width && this.boothData.height ?
       Number((this.boothData.width / this.boothData.height).toFixed(2)) : 1 / 1;
     this.aspectRatio = aspectRatio > 4.28 ? 4.28 : aspectRatio;
-    const imgReg = ['jpeg'];
+    const imgReg = [];
     this.boothData.formats && this.boothData.formats.forEach(format => {
       imgReg.push(format.toLowerCase());
+      if (format.toLowerCase() === 'jpg') {
+        imgReg.push('jpeg');
+      }
     });
-    this.imgReg = new RegExp('(' + imgReg.join('|') + ')$');
+    if (imgReg && imgReg.length > 0) {
+      this.imgReg = new RegExp('(' + imgReg.join('|') + ')$');
+    }
     // 落地页
     this.boothParams.link_type =
       this.boothData.link_types && this.boothData.link_types.includes(this.boothParams.link_type)
         ? this.boothParams.link_type : '';
+    if (!this.boothParams.link_type) {
+      this.boothParams.link_url = null;
+    }
     // 下线时间
     this.boothParams.offline_type = this.boothParams.offline_type || 1; // 默认永不下线
     if (this.boothParams.offline_type === 2) {
@@ -127,6 +135,17 @@ export class BoothContentEditComponent implements OnInit {
     this.saving = true;
     this.coverImgSelectComponent.upload().subscribe(() => {
       const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+      if (imageUrl && imageUrl.length > 0) {
+        for (const image of imageUrl) {
+          const lastPointIndex = image.lastIndexOf('.');
+          const file_type = image.slice(lastPointIndex - image.length + 1);
+          if (!this.imgReg.test(file_type)) {
+            this.errMessageGroup.errJson.icon.errMes = `当前图片格式为${file_type.toLocaleUpperCase()}，请上传正确格式的图片！`;
+            this.saving = false;
+            return;
+          }
+        }
+      }
       this.boothParams.image = imageUrl.join(',');
       if (this.generateAndCheckParamsValid()) {
         if (this.isCreate) {
