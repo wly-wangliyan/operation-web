@@ -12,8 +12,8 @@ import {
 } from '../upkeep-order.service';
 import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../../accessory-library/accessory-library.service';
 import { RepairShopEntity } from '../../garage-management/garage-management.service';
-
-const PageSize = 15;
+import { TabelHelper } from '../../../../utils/table-helper';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-order-list',
@@ -51,13 +51,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private linkUrl: string; // 分页url
   private selectOrder: UpkeepOrderEntity = new UpkeepOrderEntity(); // 选中行
   private operationing = false;
+  private searchUrl: string; // 到店保养导出url
 
   private get pageCount(): number {
     const pageList = this.tab_index === 1 ? this.arrivalOrderList : this.orderList;
-    if (pageList.length % PageSize === 0) {
-      return pageList.length / PageSize;
-    }
-    return pageList.length / PageSize + 1;
+    return Math.ceil(pageList.length / TabelHelper.NgPageSize);
   }
   constructor(
     private globalService: GlobalService,
@@ -65,6 +63,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.searchArrivalOrderText$.pipe(debounceTime(500)).subscribe(() => {
+      this.exportSearchUrl();
       this.requestArrivalOrderList();
     });
 
@@ -92,6 +91,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.noResultText = '数据加载中...';
     this.arrivalOrderList = [];
     this.orderList = [];
+    this.searchUrl = '';
     if (event === 1) {
       this.searchArrivalOrderText$.next();
     } else if (event === 2) {
@@ -107,6 +107,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.linkUrl = res.linkUrl;
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
+      this.exportSearchUrl();
     }, err => {
       this.pageIndex = 1;
       this.noResultText = '暂无数据';
@@ -163,6 +164,19 @@ export class OrderListComponent implements OnInit, OnDestroy {
         this.searchArrivalOrderText$.next();
       } else {
         this.searchText$.next();
+      }
+    }
+  }
+
+  // 导出url
+  private exportSearchUrl() {
+    this.searchUrl = `${environment.STORE_DOMAIN}/admin/arrival_orders/export?default=1`;
+    const params = this.searchParams.json();
+    delete params.page_size;
+    delete params.page_num;
+    for (const key in params) {
+      if (params[key]) {
+        this.searchUrl += `&${key}=${params[key]}`;
       }
     }
   }

@@ -1,5 +1,10 @@
 <div class="content-header">
   <app-crumb [level1Name]="'保养订单'"></app-crumb>
+  <ul class="header-right" *ngIf="tab_index===1">
+    <li class="big-bg">
+      <a (click)='onExportRecords()'>导出Excel</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
   <div class="tab-bar-list">
