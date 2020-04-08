@@ -28,6 +28,7 @@ export class WashCarServiceEditComponent implements OnInit {
   public tabs = [{ key: 1, value: '5座小型车' }, { key: 2, value: 'SUV/MPV' }];
   public basePriceErrMsg = '';
   public specificationErrMsg = '';
+  public minSaleFeeErrMsg = '';
   public tempSpecificationList_1: Array<WashCarSpecificationEntity> = []; // 临时存储5座小型车规格
   public tempSpecificationList_2: Array<WashCarSpecificationEntity> = []; // 临时存储SUV/MPV规格
   private selectedSpecification: WashCarSpecificationEntity = new WashCarSpecificationEntity(); // 当前操作规格
@@ -262,6 +263,7 @@ export class WashCarServiceEditComponent implements OnInit {
       this.operationing = true;
       this.basePriceErrMsg = '';
       this.specificationErrMsg = '';
+      this.minSaleFeeErrMsg = '';
       this.washCarService.requestEditWashCarServiceConfigData(this.editParams).subscribe(() => {
         this.globalService.promptBox.open('保存成功', () => {
           this.onCancelClick();
@@ -342,6 +344,12 @@ export class WashCarServiceEditComponent implements OnInit {
     if (!this.validSpecificationInfo(car_name, validSpecification)) {
       return false;
     }
+
+    if (!this.washServiceConfig.min_sale_fee || Number(this.washServiceConfig.min_sale_fee) === 0) {
+      this.minSaleFeeErrMsg = '起售价格应大于0！';
+      return false;
+    }
+    this.editParams.min_sale_fee = this.washServiceConfig.min_sale_fee;
 
     this.removeList.forEach(removeItem => {
       this.editParams.specification_info.push(removeItem.toEditJson());

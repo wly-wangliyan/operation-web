@@ -214,6 +214,25 @@
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>起售价格</span>
+        </label>
+        <div class="control-input" style="width: 900px;">
+          <div class="price-group">
+            <input name="min_sale_fee" [(ngModel)]="washServiceConfig.min_sale_fee" placeholder="0-99999"
+              (change)="minSaleFeeErrMsg=''" [appMaxNumber]='99999' maxlength='8' class="form-control" appFloatNumber
+              required />
+            <label class="one-word-lable">元</label>
+          </div>
+          <label style="color: darkgray;font-size: 12px;">（此价格显示在洗车列表和门店详情页）</label>
+        </div>
+      </div>
+      <div class="err-message" style="margin: -30px 0 5px 105px;height: 20px;">
+        <span>{{ minSaleFeeErrMsg }}</span>
+      </div>
       <div class="row">
         <label class="control-label">
           <b>&nbsp;&nbsp;</b>

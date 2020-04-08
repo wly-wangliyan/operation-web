@@ -11,6 +11,7 @@ import { RepairShopEntity } from '../garage-management/garage-management.service
 export class WashCarServiceConfigEntity extends EntityBase {
   public wash_car_service_config_id: string = undefined; // 洗车服务配置ID 主键
   public service_introduce: string = undefined; // string	服务说明
+  public min_sale_fee: number = undefined; // float	起售价格 单位:分
   public specification_info: Array<WashCarSpecificationEntity> = []; // 规格
   public base_price_info: Array<BasePriceEntity> = []; // 基础价格
   public updated_time: number = undefined; // 更新时间
