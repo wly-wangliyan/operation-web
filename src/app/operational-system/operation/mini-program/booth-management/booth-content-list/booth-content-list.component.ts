@@ -177,6 +177,7 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
     } else {
       move_num = this.boothContentList[event.currentIndex].order_num;
     }
+    console.log(data[event.previousIndex].order_num, data[event.currentIndex].order_num, move_num);
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.boothService.requestUpdateBoothContentOrder(
       this.booth_id,
