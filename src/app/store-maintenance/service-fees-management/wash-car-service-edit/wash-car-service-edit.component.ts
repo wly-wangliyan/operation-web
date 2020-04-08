@@ -60,6 +60,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.calculateSpecificationPrice(this.washServiceConfig.specification_info, true);
         this.initSpecification();
         this.repairShopList = res[1];
+        this.washServiceConfig.min_sale_fee = res[0].min_sale_fee ? Number((res[0].min_sale_fee / 100).toFixed(2)) : res[0].min_sale_fee;
         this.loading = false;
       }, err => {
         this.loading = false;
@@ -349,7 +350,7 @@ export class WashCarServiceEditComponent implements OnInit {
       this.minSaleFeeErrMsg = '起售价格应大于0！';
       return false;
     }
-    this.editParams.min_sale_fee = this.washServiceConfig.min_sale_fee;
+    this.editParams.min_sale_fee = Math.round(this.washServiceConfig.min_sale_fee * 100);
 
     this.removeList.forEach(removeItem => {
       this.editParams.specification_info.push(removeItem.toEditJson());
