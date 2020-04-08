@@ -54,6 +54,18 @@
             <option value="">全部</option>
             <option *ngFor="let item of carTypes" [value]="item">{{item | washCarType}}</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <span>用户ID：</span>
+          <input name="ht_code" class="form-control" placeholder="请输入用户ID" maxlength="32"
+            [(ngModel)]="searchParams.ht_code" appIgnoreSpace />
+        </div>
+
+        <div class="form-group">
+          <span>手机号：</span>
+          <input name="telephone" class="form-control" placeholder="请输入手机号" maxlength="11"
+            [(ngModel)]="searchParams.telephone" appIgnoreSpace />
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
             </button>
@@ -70,6 +82,7 @@
             <th>序号</th>
             <th>订单编号</th>
             <th>用户ID</th>
+            <th>手机号</th>
             <th>规格名称</th>
             <th>应收</th>
             <th>平台立减</th>
@@ -95,7 +108,7 @@
             </td>
 
             <td>{{record.ht_code || '--'}}</td>
-
+            <td>{{record.telephone || '--'}}</td>
             <td>
               <div class="column-box">
                 <ng-container *ngIf="record.wash_car_specification">

@@ -19,6 +19,16 @@
           <td>订单编号：</td>
           <td>{{orderRecord.wash_car_order_id || '--'}}</td>
 
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>用户ID：</td>
+          <td>{{orderRecord.ht_code || '--'}}</td>
+
+          <td>手机号：</td>
+          <td>{{orderRecord.telephone || '--'}}</td>
+
           <td>购买产品</td>
           <td>
             <ng-container *ngIf="orderRecord.wash_car_specification">

@@ -14,6 +14,8 @@ export class WashCarSearchParams extends EntityBase {
   public order_section: string = undefined; // 下单时间区间 "xxx,xxx"
   public pay_section: string = undefined; // 支付时间区间 "xxx,xxx"
   public car_type = ''; // 车型 1: 5座小型车 2：SUV/MPV
+  public ht_code: string = undefined; // 用户id
+  public telephone: string = undefined; // 手机号
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }

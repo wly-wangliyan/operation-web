@@ -116,6 +116,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private exportSearchUrl() {
     this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car_orders/export?default=1`;
     const params = this.searchParams.json();
+    delete params.page_size;
+    delete params.page_num;
     for (const key in params) {
       if (params[key]) {
         this.searchUrl += `&${key}=${params[key]}`;
