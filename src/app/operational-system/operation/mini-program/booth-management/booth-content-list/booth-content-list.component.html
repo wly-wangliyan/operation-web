@@ -53,7 +53,7 @@
           <tr *ngFor="let boothContent of boothContentTable.data;let index = index" cdkDrag>
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td>
-              <img [src]='boothContent.image' style="width: 270px;" />
+              <img [src]='boothContent.image?boothContent.image:no_img_url' style="width: 90px;" />
             </td>
             <td>{{boothContent.title || '--'}}</td>
             <td>{{boothContent.booth?.booth_type | boothType}}</td>

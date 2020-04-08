@@ -16,7 +16,7 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
   styleUrls: ['./booth-content-list.component.css']
 })
 export class BoothContentListComponent implements OnInit, OnDestroy {
-
+  public no_img_url = '../../../../../../assets/images/space_banner.png'; // 默认图片
   public boothContentList: Array<BoothContentEntity> = []; // 展位列表(只展示已开启的)
   public searchParams: SearchBoothContentParams = new SearchBoothContentParams();
   public pageIndex = TabelHelper.NgDefaultPageIndex; // 当前页码

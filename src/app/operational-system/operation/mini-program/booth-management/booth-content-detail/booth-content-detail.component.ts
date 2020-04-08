@@ -10,7 +10,7 @@ import { BoothService, BoothContentEntity, ClickStatisticsEntity } from '../boot
 })
 export class BoothContentDetailComponent implements OnInit {
 
-  public no_img_url = '../../../../../assets/images/space_banner.png'; // 默认图片
+  public no_img_url = '../../../../../../assets/images/space_banner.png'; // 默认图片
 
   public boothContentRecord: BoothContentEntity = new BoothContentEntity(); // 展位详情
 

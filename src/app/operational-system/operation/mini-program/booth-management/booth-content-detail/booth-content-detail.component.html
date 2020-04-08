@@ -12,7 +12,7 @@
         <tr>
           <td rowspan="4" class="td-img">
             <img style="width: 270px;margin: auto;"
-              src="{{boothContentRecord.image?boothContentRecord.image:no_img_url}}" />
+              [src]='boothContentRecord.image?boothContentRecord.image:no_img_url' />
           </td>
           <td>标题：</td>
           <td>{{boothContentRecord.title || '--'}}</td>
