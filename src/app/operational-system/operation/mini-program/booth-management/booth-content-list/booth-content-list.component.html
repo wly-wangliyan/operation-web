@@ -38,7 +38,7 @@
         <thead>
           <tr>
             <th>序号</th>
-            <th>图片</th>
+            <th nzWidth='300px'>图片</th>
             <th>标题</th>
             <th>类型</th>
             <th>上线时间</th>
@@ -53,7 +53,7 @@
           <tr *ngFor="let boothContent of boothContentTable.data;let index = index" cdkDrag>
             <td>{{index+(pageIndex-1)*15+1}}</td>
             <td>
-              <img [src]='boothContent.image' style="max-width: 120px;" />
+              <img [src]='boothContent.image' style="width: 270px;" />
             </td>
             <td>{{boothContent.title || '--'}}</td>
             <td>{{boothContent.booth?.booth_type | boothType}}</td>
@@ -69,7 +69,8 @@
             </td>
             <td class="operation">
               <a class="edit-btn" [title]="'编辑'" (appZDebounceClick)='onEditClick(boothContent)'>编辑</a>
-              <a class="view-btn" [title]="'查看'" (click)="onDetailClick(boothContent)">查看</a>
+              <a class="view-btn" [title]="'明细'"
+                [routerLink]="['../../booth-content-detail',boothContent.booth?.booth_id,boothContent.booth_content_id]">明细</a>
               <a class="del-btn" [title]="'删除'" (click)="onDeleteClick(boothContent)">删除</a>
             </td>
           </tr>

@@ -17,6 +17,7 @@ import { BoothListComponent } from './booth-list/booth-list.component';
 import { BoothTypePipe } from './pipes/booth-type.pipe';
 import { FormatPipe } from './pipes/format.pipe';
 import { LinkTypePipe } from './pipes/link-type.pipe';
+import { BoothContentDetailComponent } from './booth-content-detail/booth-content-detail.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { LinkTypePipe } from './pipes/link-type.pipe';
     BoothListComponent,
     BoothTypePipe,
     FormatPipe,
-    LinkTypePipe
+    LinkTypePipe,
+    BoothContentDetailComponent
   ],
   imports: [
     CommonModule,

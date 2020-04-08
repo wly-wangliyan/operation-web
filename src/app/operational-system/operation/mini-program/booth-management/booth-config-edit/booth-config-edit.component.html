@@ -33,8 +33,8 @@
             </label>
             <div class="control-input">
               <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
-                class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9-]/g,'')"
-                (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required>
+                class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9_]/g,'')"
+                (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required [disabled]='!isCreate'>
             </div>
           </div>
 
@@ -49,7 +49,7 @@
             </label>
             <div class="control-input">
               <select name="bind-booth_type" [(ngModel)]="boothData.booth_type" (change)="onChangeBoothType($event)"
-                class="form-control" required>
+                class="form-control" required [disabled]='!isCreate'>
                 <option value=''>请选择</option>
                 <option *ngFor="let type of boothType" [value]='type'>{{type | boothType}}</option>
               </select>

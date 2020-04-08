@@ -21,7 +21,6 @@ export class BoothContentEditComponent implements OnInit {
   public aspectRatio = 1 / 1; // 图片比例
   public offline_date: any = ''; // 下线时间
   public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
-  private imgRegPipe = ['', 'png', 'jpg', 'gif']; // 图片格式pipe
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
   private saving = false;
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
@@ -60,8 +59,9 @@ export class BoothContentEditComponent implements OnInit {
     this.saving = false;
     // 图片组件相关参数
     this.cover_url = this.boothParams.image ? this.boothParams.image.split(',') : [];
-    this.aspectRatio = this.boothData.width && this.boothData.height ?
+    const aspectRatio = this.boothData.width && this.boothData.height ?
       Number((this.boothData.width / this.boothData.height).toFixed(2)) : 1 / 1;
+    this.aspectRatio = aspectRatio > 4.28 ? 4.28 : aspectRatio;
     const imgReg = ['jpeg'];
     this.boothData.formats && this.boothData.formats.forEach(format => {
       imgReg.push(format.toLowerCase());

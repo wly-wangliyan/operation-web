@@ -1,0 +1,69 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'" [level2RelativePath]="'../../../booth-list'" [level3Name]="'展位内容'"
+    [level3RelativePath]="level3RelativePath" [level4Name]="'明细'">
+  </app-crumb>
+</div>
+<div class="content-flow" *ngIf="booth_id && booth_content_id">
+  <!-- 查看明细 -->
+
+  <div class="content-container">
+    <div class="table-item booth-table">
+      <table class="detail-table">
+        <tr>
+          <td rowspan="4" class="td-img">
+            <img style="width: 270px;margin: auto;"
+              src="{{boothContentRecord.image?boothContentRecord.image:no_img_url}}" />
+          </td>
+          <td>标题：</td>
+          <td>{{boothContentRecord.title || '--'}}</td>
+
+          <td>状态：</td>
+          <td>{{boothContentRecord.status ? '展示中' : '已停用'}}</td>
+        </tr>
+        <tr>
+          <td>落地页：</td>
+          <td colspan="5">
+            <span *ngIf="boothContentRecord.link_type">{{boothContentRecord.link_type|linkType}}：</span>
+            <span>{{boothContentRecord.link_url || '--'}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>上线时间：</td>
+          <td>{{boothContentRecord.online_date ? (boothContentRecord.online_date*1000 | date:"y-MM-dd HH:mm") : '--' }}
+          </td>
+
+          <td>下线时间：</td>
+          <td *ngIf="boothContentRecord.offline_type===1">永不下线</td>
+          <td *ngIf="boothContentRecord.offline_type!==1">
+            {{boothContentRecord.offline_date ? (boothContentRecord.offline_date*1000 | date:"y-MM-dd HH:mm") : '--' }}
+          </td>
+        </tr>
+        <tr>
+          <td>累计点击量</td>
+          <td>{{boothContentRecord.click_num || 0}}</td>
+          <td>累计点击人数</td>
+          <td>{{boothContentRecord.click_person_num || 0}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="table-item click-table" *ngIf="clickStatisticsList && clickStatisticsList.length>0">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>点击量</th>
+            <th>点击人数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let click of clickStatisticsList">
+            <td>{{click.click_date ? (click.click_date* 1000 | date:"y-MM-dd") : '--'}}</td>
+            <td>{{click.click_num  || 0}}</td>
+            <td>{{click.click_person_num || 0}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

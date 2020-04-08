@@ -6,6 +6,7 @@ import { BoothManagementComponent } from './booth-management.component';
 import { BoothListComponent } from './booth-list/booth-list.component';
 import { BoothConfigListComponent } from './booth-config-list/booth-config-list.component';
 import { BoothContentListComponent } from './booth-content-list/booth-content-list.component';
+import { BoothContentDetailComponent } from './booth-content-detail/booth-content-detail.component';
 
 const routes: Routes = [{
   path: '', component: BoothManagementComponent,
@@ -15,6 +16,7 @@ const routes: Routes = [{
     { path: 'booth-list', component: BoothListComponent },
     { path: 'booth-config-list', component: BoothConfigListComponent },
     { path: 'booth-content-list/:booth_id', component: BoothContentListComponent },
+    { path: 'booth-content-detail/:booth_id/:booth_content_id', component: BoothContentDetailComponent },
     { path: '**', redirectTo: 'booth-list', pathMatch: 'full' }
   ]
 }];

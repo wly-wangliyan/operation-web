@@ -26,9 +26,10 @@ export class SearchBoothContentParams extends EntityBase {
 
 // 点击统计
 export class ClickStatisticsEntity extends EntityBase {
-  public date: number = undefined; // 时间
+  public click_num_statistic_id: string = undefined; // 点击量统计id
+  public click_date: number = undefined; // 点击日期
   public click_num: number = undefined; // 点击数
-  public click_person: number = undefined; // 点击人数
+  public click_person_num: number = undefined; // 点击人数
 }
 
 // 展位
@@ -92,12 +93,17 @@ export class BoothContentEntity extends EntityBase {
   public day_average_click_num: number = undefined; // 日均点击量
   public status: number = undefined; // 启停状态
   public online_date: number = undefined; // 上线时间
+  public click_num_statistics: Array<ClickStatisticsEntity> = undefined; // 点击量统计
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'booth') {
       return BoothEntity;
+    }
+
+    if (propertyName === 'click_num_statistics') {
+      return ClickStatisticsEntity;
     }
     return null;
   }
@@ -116,6 +122,7 @@ export class BoothContentEntity extends EntityBase {
     delete json.day_average_click_num;
     delete json.status;
     delete json.online_date;
+    delete json.click_num_statistics;
     delete json.updated_time;
     delete json.created_time;
     return json;
@@ -222,12 +229,12 @@ export class BoothService {
    * 展位内容详情
    * @param booth_id ID
    * @param booth_content_id 展位内容ID
-   * @returns Observable<BoothEntity>
+   * @returns Observable<BoothContentEntity>
    */
-  public requestBoothContentData(booth_id: string, booth_content_id: string): Observable<BoothContentEntity> {
+  public requestBoothContentDetailData(booth_id: string, booth_content_id: string): Observable<BoothContentEntity> {
     const httpUrl = `${this.domain}/admin/boothes/${booth_id}/booth_contents/${booth_content_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => {
-      return BoothEntity.Create(res.body);
+      return BoothContentEntity.Create(res.body);
     }));
   }
 
