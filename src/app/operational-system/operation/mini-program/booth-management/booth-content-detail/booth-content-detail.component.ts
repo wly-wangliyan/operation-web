@@ -16,9 +16,9 @@ export class BoothContentDetailComponent implements OnInit {
 
   public clickStatisticsList: Array<ClickStatisticsEntity> = []; // 点击统计列表
 
-  private booth_id: string; // 展位ID
+  public booth_id: string; // 展位ID
 
-  private booth_content_id: string; // 展位内容ID
+  public booth_content_id: string; // 展位内容ID
 
   public level3RelativePath: string; // 展位内容路由
 
