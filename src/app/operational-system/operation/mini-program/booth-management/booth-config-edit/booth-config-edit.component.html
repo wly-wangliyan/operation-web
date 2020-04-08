@@ -34,7 +34,7 @@
             <div class="control-input">
               <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
                 class="form-control" onInput="value=value.replace(/[^a-zA-Z0-9_]/g,'')"
-                (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required [disabled]='!isCreate'>
+                (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required>
             </div>
           </div>
 
