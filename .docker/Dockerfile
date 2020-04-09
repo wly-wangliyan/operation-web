@@ -1,5 +1,5 @@
 ### build app
-FROM node:10.9-alpine as build-app
+FROM node:10.15-alpine as build-app
 
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
