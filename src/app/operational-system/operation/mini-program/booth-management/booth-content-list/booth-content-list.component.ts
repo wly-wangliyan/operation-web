@@ -150,6 +150,8 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
                 this.globalService.promptBox.open(`参数不合法，无法${tipMsg}!`, null, 2000, null, false);
               } else if (content.resource === 'booth_content' && content.code === 'beyond_limit') {
                 this.globalService.promptBox.open(`只能同时开启${limit}个内容!`, null, 2000, null, false);
+              } else if (content.resource === 'booth_content' && content.code === 'already_offline') {
+                this.globalService.promptBox.open(`当前时间已超出下线时间，无法开启!`, null, 2000, null, false);
               } else {
                 this.globalService.promptBox.open(`${tipMsg}失败！`, null, 2000, null, false);
               }
