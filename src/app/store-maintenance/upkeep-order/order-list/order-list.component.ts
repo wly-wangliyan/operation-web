@@ -168,6 +168,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 导出
+  public onExportRecords(): void {
+    if (this.generateAndCheckParamsValid()) {
+      window.open(this.searchUrl);
+    }
+  }
+
   // 导出url
   private exportSearchUrl() {
     this.searchUrl = `${environment.STORE_DOMAIN}/admin/arrival_orders/export?default=1`;

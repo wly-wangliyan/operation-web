@@ -93,11 +93,7 @@ export class RecordListComponent implements OnInit {
   // 导出
   public onExportRecords(): void {
     if (this.generateAndCheckParamsValid()) {
-      try {
-        window.open(this.searchUrl);
-      } catch (e) {
-        this.globalService.promptBox.open('导出失败！', null, 2000, null, false);
-      }
+      window.open(this.searchUrl);
     }
   }
 
