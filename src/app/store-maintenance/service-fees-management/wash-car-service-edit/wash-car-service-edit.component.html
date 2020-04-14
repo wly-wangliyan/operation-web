@@ -20,12 +20,13 @@
                 <th></th>
                 <th>车型</th>
                 <th>单价</th>
+                <th>平台标准价</th>
                 <th>结算价</th>
               </tr>
             </thead>
             <tbody>
               <tr style="height: 10px;">
-                <td style="height: 10px" colspan="4"></td>
+                <td style="height: 10px" colspan="5"></td>
               </tr>
               <tr *ngFor="let data of basePrice_1;let i=index">
                 <td [attr.rowspan]="basePrice_1.length" *ngIf="basePrice_1.length&&i === 0">
@@ -41,6 +42,14 @@
                 </td>
                 <td>
                   <div class="price-group">
+                    <input name="base_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.base_unit_fee"
+                      placeholder="0-99999" (change)="basePriceErrMsg=''" [appMaxNumber]='99999' maxlength='8'
+                      class="form-control" appFloatNumber required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
                     <input name="buy_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.buy_unit_fee"
                       (change)="basePriceErrMsg=''" class="form-control" placeholder="0-99999" appFloatNumber
                       [appMaxNumber]='99999' maxlength='8' required />
@@ -49,7 +58,7 @@
                 </td>
               </tr>
               <tr style="height: 10px;">
-                <td style="height: 10px;padding: 0;" colspan="4">
+                <td style="height: 10px;padding: 0;" colspan="5">
                   <div class="table-line"></div>
                 </td>
               </tr>
@@ -62,6 +71,14 @@
                     <input name="original_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.original_unit_fee"
                       (change)="basePriceErrMsg=''" placeholder="0-99999" (blur)="onPriceChange()" class="form-control"
                       appFloatNumber [appMaxNumber]='99999' maxlength='8' required />
+                    <label class="one-word-lable">元</label>
+                  </div>
+                </td>
+                <td>
+                  <div class="price-group">
+                    <input name="base_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.base_unit_fee"
+                      placeholder="0-99999" (change)="basePriceErrMsg=''" [appMaxNumber]='99999' maxlength='8'
+                      class="form-control" appFloatNumber required />
                     <label class="one-word-lable">元</label>
                   </div>
                 </td>
@@ -230,7 +247,7 @@
           <label style="color: darkgray;font-size: 12px;">（此价格显示在洗车列表和门店详情页）</label>
         </div>
       </div>
-      <div class="err-message" style="margin: -30px 0 5px 105px;height: 20px;">
+      <div class="err-message" style="margin: -30px 0 5px 120px;height: 20px;">
         <span>{{ minSaleFeeErrMsg }}</span>
       </div>
       <div class="row">
@@ -248,15 +265,25 @@
       <div class="row">
         <label class="control-label">
           <b>*</b>
+          <span>过期自动退款</span>
+        </label>
+        <div class="control-input" style="line-height: 30px;">
+          <nz-switch name="switch" [ngModel]="washServiceConfig.switch===1" nzCheckedChildren="On"
+            nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange($event)"></nz-switch>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
           <span>服务说明</span>
         </label>
         <div class="control-input" style="width: 900px;">
           <textarea name="service_introduce" rows="5" [(ngModel)]="washServiceConfig.service_introduce"
-            class="form-control" placeholder="输入1-200字" maxlength="200" required>
+            class="form-control" placeholder="输入1-500字" maxlength="500" required>
           </textarea>
         </div>
       </div>
-      <div style="margin-top: 40px;margin-bottom: 40px">
+      <div style="margin: 40px 0 40px 12px;">
         <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid"
           (appZDebounceClick)="onFormSubmit()">保存
         </button>

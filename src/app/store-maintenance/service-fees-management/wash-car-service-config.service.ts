@@ -3,7 +3,7 @@ import { EntityBase } from 'src/utils/z-entity';
 import { Observable } from 'rxjs/index';
 import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse } from '@angular/common/http';
-import { HttpService, LinkResponse } from '../../core/http.service';
+import { HttpService } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 import { RepairShopEntity } from '../garage-management/garage-management.service';
 
@@ -12,6 +12,7 @@ export class WashCarServiceConfigEntity extends EntityBase {
   public wash_car_service_config_id: string = undefined; // 洗车服务配置ID 主键
   public service_introduce: string = undefined; // string	服务说明
   public min_sale_fee: number = undefined; // float	起售价格 单位:分
+  public switch: number = undefined; // int 1开 2关
   public specification_info: Array<WashCarSpecificationEntity> = []; // 规格
   public base_price_info: Array<BasePriceEntity> = []; // 基础价格
   public updated_time: number = undefined; // 更新时间
@@ -37,6 +38,7 @@ export class BasePriceEntity extends EntityBase {
   public service_type: number = undefined; // 服务类型 1：标准洗车1次 2：标准洗车1次+打蜡1次
   public car_type: number = undefined; // 车型 1: 5座小型车 2：SUV/MPV
   public original_unit_fee: number = undefined; // 原价单价 单位：分
+  public base_unit_fee: number = undefined; // 平台标准价 单位：分
   public buy_unit_fee: number = undefined; // 结算单价 单位：分
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间

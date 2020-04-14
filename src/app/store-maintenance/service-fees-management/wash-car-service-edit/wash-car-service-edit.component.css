@@ -13,6 +13,7 @@
 }
 
 .control-label {
+  width: 120px !important;
   margin-bottom: 0 !important;
 }
 
