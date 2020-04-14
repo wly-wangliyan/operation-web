@@ -10,7 +10,7 @@ const routes: Routes = [{
   path: '', component: OperationComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
   children: [
-    {path: 'home', component: HomeComponent},
+    { path: 'home', component: HomeComponent },
     {
       path: 'parking',
       loadChildren: () => import('./mx-parking/mx-parking.module').then(m => m.MxParkingModule),
@@ -34,6 +34,11 @@ const routes: Routes = [{
     {
       path: 'operation-config',
       loadChildren: () => import('./operation-config/operation-config.module').then(m => m.OperationConfigModule),
+      canLoad: [AuthGuardService]
+    },
+    {
+      path: 'advanced-function', /** 高级功能 */
+      loadChildren: () => import('./advanced-function/advanced-function.module').then(m => m.AdvancedFunctionModule),
       canLoad: [AuthGuardService]
     },
     { path: '**', redirectTo: 'home', pathMatch: 'full' }

@@ -1,0 +1,48 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'高级功能'" [level2Name]="'48小时推送'"></app-crumb>
+  <ul class="header-right">
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        [routerLink]="['../add-push']">
+        新建推送
+      </button>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table #pushTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+        [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+        (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>推送主题</th>
+            <th>推送时间</th>
+            <th>生效间隔</th>
+            <th>推送人数</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of pushTable.data; let i = index">
+            <td>{{ i + (nzSearchAssistant.currentPage - 1) * 15 + 1 }}</td>
+            <td [title]="data.subject || ''">
+              {{ (data.subject | zMaxLength: 12) || '--' }}
+            </td>
+            <td>{{data.created_time ? (data.created_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
+            <td>
+              <span>{{data.start_time ? (data.start_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
+              <span> 至 {{data.end_time ? (data.end_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
+            </td>
+            <td>{{ data.push_amount || 0 }}</td>
+            <td class="operation">
+              <a [routerLink]="['../push-detail', data.push_message_id]" [title]="'查看推送信息'">查看推送信息</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

@@ -21,6 +21,7 @@ export class MenuOperationService {
     menusItem.push(this.generateMiniProgramMenu());
     menusItem.push(this.generateOperationConfigMenu());
     menusItem.push(this.generateCommentMenu());
+    menusItem.push(this.generateAdvancedFunctionMenu());
     return menusItem;
   }
 
@@ -78,6 +79,16 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu3);
     const subFinanceMenu4 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
     systemMenu.children.push(subFinanceMenu4);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 运营 》高级功能
+  private generateAdvancedFunctionMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('高级功能', null);
+    systemMenu.icon = '/assets/images/menu_config.png';
+    const subFinanceMenu1 = new SideMenuItem('48小时推送', '/main/operation/advanced-function/push', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
