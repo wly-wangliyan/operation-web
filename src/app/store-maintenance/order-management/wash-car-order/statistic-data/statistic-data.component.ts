@@ -19,9 +19,9 @@ import { NzSearchAssistant } from '../../../../share/nz-search-assistant';
 export class StatisticDataComponent implements OnInit, OnDestroy {
 
   public nzSearchAssistant: NzSearchAssistant;
-  public searchParams: StatisticSearchParams = new StatisticSearchParams(); // 洗车订单
-  public order_start_time: any = ''; // 下单开始时间
-  public order_end_time: any = ''; // 下单结束时间]
+  public searchParams: StatisticSearchParams = new StatisticSearchParams(); // 检索条件
+  public order_start_time: any = ''; // 开始时间
+  public order_end_time: any = ''; // 结束时间
 
   private searchUrl: string; // 导出url
 

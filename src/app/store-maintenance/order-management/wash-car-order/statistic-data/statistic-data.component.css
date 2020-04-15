@@ -28,7 +28,7 @@ td > .row-group:last-child {
     min-width: 100px;
     min-height: 40px;
     padding: 5px;
-    display: inline-flex;
+    display: grid;
     align-items: center;
     justify-content: center;
 }
