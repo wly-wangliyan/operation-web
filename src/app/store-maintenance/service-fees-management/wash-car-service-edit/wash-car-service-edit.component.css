@@ -218,3 +218,9 @@ b {
 .active-btn {
   color: #3E71F7 !important;
 }
+
+p {
+  font-size: 14px;
+  color: #888;
+  margin: 5px 0;
+}
