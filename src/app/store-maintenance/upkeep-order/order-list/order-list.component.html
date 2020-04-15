@@ -215,7 +215,7 @@
               <div>
                 <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.arrival_order_id]">查看</a>
                 <a [title]="'服务完成'"
-                  *ngIf="order.user_status===3 && (order.is_checked && order.check_images || !order.is_checked)"
+                  *ngIf="order.user_status===2 || order.user_status===3"
                   (click)="onFinishClick(order.arrival_order_id)">服务完成</a>
               </div>
             </td>

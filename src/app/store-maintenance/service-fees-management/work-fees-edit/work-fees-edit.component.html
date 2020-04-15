@@ -30,7 +30,7 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
-          <nz-form-label nzRequired [nzNoColon]="true">所属项目</nz-form-label>
+          <nz-form-label [nzNoColon]="true">所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
               <input
@@ -39,7 +39,6 @@
                 nz-input
                 autocomplete="off"
                 name="project_name"
-                required
                 disabled
               />
               <ng-template #chooseBtn
@@ -48,6 +47,20 @@
                 ></ng-template
               >
             </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
+          <nz-form-label [nzNoColon]="true">服务说明</nz-form-label>
+          <nz-form-control>
+            <input
+                    class="fee-name"
+                    [(ngModel)]="searchWorkFeesParams.service_instruction"
+                    placeholder="输入1-100字服务说明"
+                    nz-input
+                    autocomplete="off"
+                    name="service_instruction"
+                    maxlength="100"
+            />
           </nz-form-control>
         </nz-form-item>
         <div nz-row [nzGutter]="24">
@@ -129,7 +142,7 @@
             class="sure-btn"
             nz-button
             nzType="primary"
-            [disabled]="!workFeesForm.form.valid"
+            [disabled]="!workFeesForm.form.valid||(!project_name&&!searchWorkFeesParams.service_instruction)"
             (appZDebounceClick)="onSaveFormSubmit()"
           >
             保存

@@ -2,6 +2,9 @@
   <app-crumb [level1Name]="'洗车订单'"></app-crumb>
   <ul class="header-right">
     <li class="big-bg">
+      <a [routerLink]="['../statistic']">查看统计数据</a>
+    </li>
+    <li class="big-bg">
       <a (click)='onExportRecords()'>导出Excel</a>
     </li>
   </ul>

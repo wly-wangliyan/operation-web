@@ -63,7 +63,7 @@
           <tr *ngFor="let data of workFeesTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>{{data.service_fee_name||'--'}}</td>
-            <td>{{data.project?.project_name||'--'}}</td>
+            <td>{{data.project?.project_name||'不限'}}</td>
             <td>{{data.original_amount | centPriceChange:'元'}}</td>
             <td>{{data.sale_amount | centPriceChange:'元'}}</td>
             <td>{{data.settlement_amount | centPriceChange:'元'}}</td>
@@ -79,7 +79,7 @@
           </tr>
         </tbody>
       </nz-table>
-    </div>
+    </div>`
   </div>
   <div class="table-container" *ngIf="selectedTabIndex===1">
     <div class="search-container">

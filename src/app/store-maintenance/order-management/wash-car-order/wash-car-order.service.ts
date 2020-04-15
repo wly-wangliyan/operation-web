@@ -20,6 +20,12 @@ export class WashCarSearchParams extends EntityBase {
   public page_size = 45; // 每页条数
 }
 
+export class StatisticSearchParams extends EntityBase {
+  public section: string = undefined; // 时间区间 "xxx,xxx"
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
+}
+
 export class WashCarOrderEntity extends EntityBase {
   public wash_car_order_id: string = undefined; // 订单编号 主键
   public ht_code: string = undefined; // 用户id
@@ -58,11 +64,41 @@ export class WashCarOrderEntity extends EntityBase {
   }
 }
 
+export class OrderStatisticEntity extends EntityBase {
+  public wash_car_statistic_id: string = undefined; //  string	洗车订单统计id 主键
+  public statistic_date: number = undefined; // 	float	日期
+  public pay_order_num: number = undefined; // 	integer	支付订单数量
+  public specification_infos: any = []; // 	array	规格数量信息
+// -specification_name	string	规格名称
+// -car_type	integer	车型 车型 1: 5座小型车 2：SUV/MPV
+// -specification_num	integer	规格数量
+  public running_money: number = undefined; // 	integer	流水 单位:分
+  public code_num: number = undefined; // 	integer	核销码数量（卷数量）
+  public small_code_num: number = undefined; // 	integer	小车卷数量
+  public large_code_num: number = undefined; // 	integer	大车卷数量
+  public verify_num: number = undefined; // 	integer	核销数量
+  public refund_order_num: number = undefined; // 	integer	退款订单数量
+  public refund_fee: number = undefined; // 	integer	退款金额
+  public cancel_order_num: number = undefined; // 	integer	取消订单数量
+  public created_time: number = undefined; // 下单时间(创建时间)
+  public updated_time: number = undefined; // 更新时间
+}
+
 export class WashCarOrderLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<WashCarOrderEntity> {
     const tempList: Array<WashCarOrderEntity> = [];
     results.forEach(res => {
       tempList.push(WashCarOrderEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class OrderStatisticLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<OrderStatisticEntity> {
+    const tempList: Array<OrderStatisticEntity> = [];
+    results.forEach(res => {
+      tempList.push(OrderStatisticEntity.Create(res));
     });
     return tempList;
   }
@@ -169,5 +205,25 @@ export class WashOrderService {
     const httpUrl = `${this.domain}/admin/wash_car_orders/statistics`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => res.body));
+  }
+
+  /**
+   * 洗车订单统计数据
+   * @param searchParams StatisticSearchParams
+   * @returns Observable<OrderStatisticEntity>
+   */
+  public requestOrderStatisticsData(searchParams: StatisticSearchParams): Observable<OrderStatisticLinkResponse> {
+    const httpUrl = `${this.domain}/admin/wash_car_order_statistics`;
+    return this.httpService.get(httpUrl, searchParams.json())
+        .pipe(map(res => new OrderStatisticLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求订单统计数据
+   * @param string url linkUrl
+   * @returns Observable<WashCarOrderLinkResponse>
+   */
+  public continueOrderStatisticData(url: string): Observable<OrderStatisticLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new OrderStatisticLinkResponse(res)));
   }
 }

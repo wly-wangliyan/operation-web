@@ -16,6 +16,7 @@ export class SearchWorkFeesParams extends EntityBase {
   public original_amount: number = undefined; // float	T	原价 单位: 分
   public sale_amount: number = undefined; // float	T	销售单价 单位: 分
   public settlement_amount: number = undefined; // float	T	结算价 单位: 分
+  public service_instruction = ''; // string T	服务说明
 }
 
 export class SearchParams extends EntityBase {

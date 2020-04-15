@@ -181,7 +181,7 @@
           <tr *ngFor="let service of orderRecord.service_info">
             <td colspan="9">
               <div style="text-align: left !important;">
-                工时费：{{service.sale_amount | centPriceChange:'元'}}</div>
+                {{service.service_fee_name}}：{{service.sale_amount | centPriceChange:'元'}}</div>
             </td>
           </tr>
         </tbody>

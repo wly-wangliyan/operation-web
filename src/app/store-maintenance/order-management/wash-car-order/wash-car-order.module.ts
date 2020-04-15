@@ -10,9 +10,10 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
 import { StoreShareModule } from '../../share/store-share.module';
+import { StatisticDataComponent } from './statistic-data/statistic-data.component';
 
 @NgModule({
-  declarations: [WashOrderComponent, OrderListComponent, WashCarOrderStatusPipe, OrderDetailComponent],
+  declarations: [WashOrderComponent, OrderListComponent, WashCarOrderStatusPipe, OrderDetailComponent, StatisticDataComponent],
   imports: [
     CommonModule,
     WashOrderRoutingModule,

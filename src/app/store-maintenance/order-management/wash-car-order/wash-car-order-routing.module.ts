@@ -5,6 +5,7 @@ import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { WashOrderComponent } from './wash-car-order.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { StatisticDataComponent } from './statistic-data/statistic-data.component';
 
 const routes: Routes = [{
   path: '', component: WashOrderComponent,
@@ -13,6 +14,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: OrderListComponent },
     { path: 'detail/:wash_car_order_id', component: OrderDetailComponent },
+    { path: 'statistic', component: StatisticDataComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];
