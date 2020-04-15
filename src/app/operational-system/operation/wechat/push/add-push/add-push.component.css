@@ -1,0 +1,133 @@
+.content-container {
+  min-height: 800px;
+}
+
+.tab-container-footer {
+  height: 50px;
+  border: 1px solid #e3e3e3;
+  border-top: none;
+}
+
+.container-border {
+  height: 170px;
+  padding: 20px;
+  font-size: 14px;
+  border: 1px solid #e3e3e3;
+}
+
+.form-control:disabled {
+  cursor: not-allowed;
+}
+
+.form-control:not(:disabled),
+:host ::ng-deep .ant-calendar-picker:not(.ant-input-disabled),
+:host ::ng-deep .ant-input:not(.ant-input-disabled) {
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+:host ::ng-deep .ant-input:focus {
+  box-shadow: none !important;
+  border-color: #3E71F7 !important;
+}
+
+.partition {
+  font-size: 14px;
+  margin: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.remark-tip {
+  color: #3E71F7;
+  font-size: 12px;
+  margin-left: 20px;
+}
+
+.link-url,
+.link-url:hover {
+  color: #3E71F7;
+  font-size: 14px;
+  line-height: 50px;
+  margin-left: 20px;
+  text-decoration: underline;
+}
+
+.insert-btn {
+  font-size: 14px;
+  height: 50px;
+  width: 100px;
+  box-shadow: none !important;
+  text-shadow: none;
+  outline: none;
+  color: #3E71F7;
+  border: none !important;
+  background-color: transparent !important;
+  float: right;
+}
+
+.insert:hover {
+  opacity: 0.8;
+}
+
+.tab-bar-list {
+  background-color: transparent;
+  border: 1px solid #e3e3e3;
+  border-bottom: none;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper {
+  width: 124px;
+  height: 50px;
+  color: #23242f;
+  text-align: center;
+  line-height: 50px;
+  font-size: 14px;
+  font-family: 'Microsoft YaHei';
+  border-bottom: none;
+  border-top: none;
+  padding: 0 5px;
+  border-radius: 0;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper-checked {
+  color: #fff;
+  background: #ccc;
+  border-color: #E3E3E3;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper:first-child {
+  border-left: none;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
+  display: none;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  background: #ccc;
+  border-color: #E3E3E3;
+}
+
+.ant-radio-button-wrapper-disabled:not(.ant-radio-button-wrapper-checked) {
+  background: #fff;
+}
+
+.ant-checkbox-wrapper {
+  color: #212529;
+}
+
+.checked-color {
+  color: #3E71F7;
+}

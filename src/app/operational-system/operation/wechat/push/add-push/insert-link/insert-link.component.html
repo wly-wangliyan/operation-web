@@ -12,33 +12,32 @@
 
           <div class="row">
             <label class="control-label">
-              <b>*</b>
+              <b>&nbsp;</b>
               <span>设置链接名：</span>
             </label>
             <div class="control-input">
               <input name="booth_name" placeholder="输入1-20字链接名" [(ngModel)]="linkParams.link_name" maxlength="20"
-                (change)="this.errMessageGroup.errJson.link_name.errMes=''" class="form-control" appIgnoreSpace
-                required>
+                (change)="this.errMessageGroup.errJson.link_name.errMes=''" class="form-control" appIgnoreSpace>
             </div>
           </div>
 
           <div class="err-message">
-            <span>{{ this.errMessageGroup?.errJson?.link_name.errMes }}</span>
+            <span>{{ this.errMessageGroup?.errJson?.link_name?.errMes }}</span>
           </div>
 
           <div class="row">
             <label class="control-label">
-              <b>*</b>
+              <b>&nbsp;</b>
               <span>链接：</span>
             </label>
             <div class="control-input">
               <input name="link_url" placeholder="输入链接" [(ngModel)]="linkParams.link_url" maxlength="2000"
-                class="form-control" (change)="this.errMessageGroup.errJson.link_url.errMes=''" required>
+                class="form-control" (change)="this.errMessageGroup.errJson.link_url.errMes=''" appIgnoreSpace>
             </div>
           </div>
 
           <div class="err-message">
-            <span>{{ this.errMessageGroup?.errJson?.link_url.errMes }}</span>
+            <span>{{ this.errMessageGroup?.errJson?.link_url?.errMes }}</span>
           </div>
 
           <div class="modal-footer">

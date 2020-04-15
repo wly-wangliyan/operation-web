@@ -1,3 +1,7 @@
+.row .control-label {
+  width: 120px !important;
+}
+
 .form-control:focus {
   box-shadow: none !important;
 }
@@ -13,6 +17,6 @@
 .err-message {
   font-size: 12px !important;
   height: 20px;
-  margin-left: 128px;
+  margin-left: 130px;
   margin-top: -18px;
 }

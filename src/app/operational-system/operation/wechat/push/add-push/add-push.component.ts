@@ -9,6 +9,13 @@ import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper
 import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 import { InsertLinkComponent } from './insert-link/insert-link.component';
 
+enum MsgTagType {
+  'subscribe' = '关注',
+  'dialogue' = '对话',
+  'scan' = '扫码',
+  'menu' = '点击菜单',
+}
+
 export class CheckItem {
   key: number;
   name: string;
@@ -35,19 +42,21 @@ export class AddPushComponent implements OnInit {
   public end_time: any = ''; // 生效间隔-结束时间
   public isCheckedAll: boolean; // 标记推送对象是否全选
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
+  public tabList = [{ key: 'text', value: '文本信息' }, { key: 'image', value: '图片' }];
+  public msgTagType = MsgTagType;
   public link_name: string; // 插入小程序-链接名称
   private appid = environment.version === 'r' ? 'wxb3b23f913746f653' : 'wx5041d139e198b0af';
   public link_url: string; // 插入小程序-链接
   private saving = false; // 标记是否正在保存
 
-  @ViewChild('insertLink', { static: true }) public insertLinkRef: InsertLinkComponent;
+  @ViewChild('insertLinkModal', { static: true }) public insertLinkModalRef: InsertLinkComponent;
 
   constructor(
     private route: ActivatedRoute,
     private globalService: GlobalService,
     private pushService: PushService) {
-    route.queryParams.subscribe(queryParams => {
-      this.push_message_id = queryParams.push_message_id;
+    this.route.paramMap.subscribe(map => {
+      this.push_message_id = map.get('push_message_id');
     });
   }
 
@@ -88,21 +97,30 @@ export class AddPushComponent implements OnInit {
   public ifDisabled(): boolean {
     return !this.msg_tags.some(checkItem => checkItem.isChecked)
       || !this.start_time || !this.end_time ||
-      this.editParams.send_type === 'image' && !this.editParams.media_id
-      || this.editParams.send_type === 'text' && (!this.link_name || !this.link_url);
+      this.editParams.send_type === 'image' && !this.editParams.media_id;
+    // || this.editParams.send_type === 'text' && (!this.link_name || !this.link_url)
   }
 
   // 初始化推送对象数据
   private initMsgTags() {
     const tags = ['subscribe', 'dialogue', 'scan', 'menu'];
     this.msg_tags = [];
+    const checked_tags = this.editParams.msg_tags ? this.editParams.msg_tags.split(',') : [];
     tags.forEach(tag => {
       const checkItem = new CheckItem(null, tag);
-      if (this.editParams.msg_tags && this.editParams.msg_tags.includes(tag)) {
+      if (this.editParams.msg_tags && checked_tags.includes(tag)) {
         checkItem.isChecked = true;
       }
       this.msg_tags.push(checkItem);
     });
+
+    if (this.push_message_id) {
+      this.tabList = this.tabList.filter(tab => tab.key === this.editParams.send_type);
+    } else {
+      this.start_time = this.editParams.start_time ? this.editParams.start_time * 1000 : '';
+      this.end_time = this.editParams.end_time ? this.editParams.end_time * 1000 : '';
+    }
+    this.editParams.send_type = this.editParams.send_type || 'text';
   }
 
   // 修改推送对象是否全选
@@ -117,7 +135,7 @@ export class AddPushComponent implements OnInit {
 
   // 插入小程序
   public onOpenLinkModal(): void {
-    this.insertLinkRef.open(this.link_name, this.link_url);
+    this.insertLinkModalRef.open(this.link_name, this.link_url);
   }
 
   // 修改插入小程序链接
