@@ -96,8 +96,6 @@ export class VehicleListComponent implements OnInit {
     });
   }
 
-
-
   public onDeleteBtnClick(data: CarBrandEntity, index: number) {
     this.carBrandList.splice;
 

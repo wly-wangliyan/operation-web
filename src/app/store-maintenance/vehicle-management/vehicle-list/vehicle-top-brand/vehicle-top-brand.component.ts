@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../../core/global.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CarBrandEntity, VehicleManagementHttpService } from '../../vehicle-management-http.service';
 
@@ -20,14 +21,27 @@ export class VehicleTopBrandComponent implements OnInit {
   public carBrandList: Array<CarBrandEntity> = [];
   public noRecommendedResultText = '加载数据中...';
   public noNotRecommendedResultText = '加载数据中...';
-  public notRecommendedList: Array<any> = [];
-  public recommendedList: Array<any> = [];
+  public notRecommendedList: Array<CarBrandEntity> = [];
+  public recommendedList: Array<CarBrandEntity> = [];
+
   private sureCallback: any;
   private subscription: Subscription;
+  private searchRecommendedBrandText$ = new Subject<any>();
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
 
   ngOnInit() {
+    // 已推荐品牌列表
+    this.searchRecommendedBrandText$.pipe(
+      debounceTime(500),
+      switchMap(() =>
+        this.vehicleManagementService.requestRecommendedCarBrandsListData(true))
+    ).subscribe(res => {
+      this.recommendedList = res.results;
+      this.noRecommendedResultText = '暂无数据';
+    }, err => {
+      this.globalService.httpErrorProcess(err);
+    });
   }
 
   // 选入未推荐的品牌
@@ -43,7 +57,7 @@ export class VehicleTopBrandComponent implements OnInit {
     this.recommendedList = this.recommendedList.filter(item => item.car_brand_id !== data.car_brand_id);
     const notRecommendedCarBrandList = [];
     notRecommendedCarBrandList.push(data);
-    this.notRecommendedList.concat(notRecommendedCarBrandList);
+    this.notRecommendedList = this.notRecommendedList.concat(notRecommendedCarBrandList);
   }
 
   // 保存数据
@@ -114,9 +128,8 @@ export class VehicleTopBrandComponent implements OnInit {
    */
   public open(carBrandList: Array<CarBrandEntity> = [], sureFunc: any) {
     this.carBrandList = carBrandList;
-    this.recommendedList = this.carBrandList.filter(item => item.is_recommended);
+    this.searchRecommendedBrandText$.next();
     this.notRecommendedList = this.carBrandList.filter(item => !item.is_recommended);
-    this.noRecommendedResultText = '暂无数据';
     this.noNotRecommendedResultText = '暂无数据';
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {

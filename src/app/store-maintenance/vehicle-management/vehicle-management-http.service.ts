@@ -207,6 +207,17 @@ export class VehicleManagementHttpService {
   }
 
   /**
+   * 获取已推荐的品牌列表
+   * @param boolean is_recommended 是否推荐
+   * @returns Observable<CarParamLinkResponse>
+   */
+  public requestRecommendedCarBrandsListData(is_recommended: boolean): Observable<CarBrandResponse> {
+    const httpUrl = `${this.domain}/car_brands`;
+    return this.httpService.get(httpUrl, { is_recommended })
+      .pipe(map(res => new CarBrandResponse(res)));
+  }
+
+  /**
    * 获取厂商下拉列表
    * @param car_brand_id string 品牌ID
    * @returns Observable<CarFactoryResponse>
