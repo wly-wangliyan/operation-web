@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdvancedFunctionComponent } from './advanced-function.component';
+import { InsertLinkComponent } from './insert-link.component';
 
-describe('AdvancedFunctionComponent', () => {
-  let component: AdvancedFunctionComponent;
-  let fixture: ComponentFixture<AdvancedFunctionComponent>;
+describe('InsertLinkComponent', () => {
+  let component: InsertLinkComponent;
+  let fixture: ComponentFixture<InsertLinkComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdvancedFunctionComponent ]
+      declarations: [ InsertLinkComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdvancedFunctionComponent);
+    fixture = TestBed.createComponent(InsertLinkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../core/route-monitor.service';
-import { AdvancedFunctionComponent } from './advanced-function.component';
+import { WechatComponent } from './wechat.component';
 
 
 const routes: Routes = [
   {
-    path: '', component: AdvancedFunctionComponent,
+    path: '', component: WechatComponent,
     canActivateChild: [AuthGuardService, RouteMonitorService],
     children: [
       { path: '', redirectTo: 'push', pathMatch: 'full' },
@@ -24,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdvancedFunctionRoutingModule { }
+export class WechatRoutingModule { }

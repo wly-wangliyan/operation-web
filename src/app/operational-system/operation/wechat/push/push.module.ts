@@ -11,8 +11,9 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { AddPushComponent } from './add-push/add-push.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { InsertLinkComponent } from './add-push/insert-link/insert-link.component';
 @NgModule({
-  declarations: [PushListComponent, PushComponent, AddPushComponent],
+  declarations: [PushListComponent, PushComponent, AddPushComponent, InsertLinkComponent],
   imports: [
     CommonModule,
     PushRoutingModule,

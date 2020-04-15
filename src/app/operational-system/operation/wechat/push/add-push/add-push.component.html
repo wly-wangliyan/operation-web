@@ -47,12 +47,22 @@
         <span>{{ this.errMessageGroup?.errJson?.content.errMes }}</span>
       </div>
       <div class="row">
+        <label class="control-label">
+        </label>
+        <div class="control-input">
+          <a [href]="link_url">{{link_name}}</a>
+        </div>
+      </div>
+      <div class="row">
         <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
           [disabled]="!addPushForm.form.valid || ifDisabled()" (appZDebounceClick)="onEditFormSubmit()">
           保存
         </button>
         <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+        <!-- <button (click)="onOpenLinkModal()">插入小程序</button> -->
       </div>
     </form>
   </div>
 </div>
+
+<app-insert-link (changeLink)="onChangeLink($event)"></app-insert-link>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../../../core/global.service';
 import { PushService, PushMessageEntity } from '../push.service';
@@ -7,6 +7,7 @@ import { ErrMessageGroup, ErrMessageBase } from '../../../../../../utils/error-m
 import { environment } from '../../../../../../environments/environment';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
+import { InsertLinkComponent } from './insert-link/insert-link.component';
 
 export class CheckItem {
   key: number;
@@ -36,8 +37,10 @@ export class AddPushComponent implements OnInit {
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
   public link_name: string; // 插入小程序-链接名称
   private appid = environment.version === 'r' ? 'wxb3b23f913746f653' : 'wx5041d139e198b0af';
-  public link: string; // 插入小程序-链接
+  public link_url: string; // 插入小程序-链接
   private saving = false; // 标记是否正在保存
+
+  @ViewChild('insertLink', { static: true }) public insertLinkRef: InsertLinkComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,13 +84,15 @@ export class AddPushComponent implements OnInit {
     this.errMessageGroup.errJson.media_id = new ErrMessageBase();
   }
 
+  // 表单必填数据校验
   public ifDisabled(): boolean {
     return !this.msg_tags.some(checkItem => checkItem.isChecked)
       || !this.start_time || !this.end_time ||
       this.editParams.send_type === 'image' && !this.editParams.media_id
-      || this.editParams.send_type === 'text' && (!this.link_name || !this.link);
+      || this.editParams.send_type === 'text' && (!this.link_name || !this.link_url);
   }
 
+  // 初始化推送对象数据
   private initMsgTags() {
     const tags = ['subscribe', 'dialogue', 'scan', 'menu'];
     this.msg_tags = [];
@@ -110,6 +115,27 @@ export class AddPushComponent implements OnInit {
     this.isCheckedAll = this.msg_tags && this.msg_tags.length > 0 && this.msg_tags.every(tag => tag.isChecked === true);
   }
 
+  // 插入小程序
+  public onOpenLinkModal(): void {
+    this.insertLinkRef.open(this.link_name, this.link_url);
+  }
+
+  // 修改插入小程序链接
+  public onChangeLink(event: any): void {
+    if (event) {
+      this.link_name = event.link.link_name;
+      this.link_url = event.link.link_url;
+    }
+  }
+
+  public onEditFormSubmit(): void {
+
+  }
+
+  public onCancelClick(): void {
+    window.history.back();
+  }
+
   // 开始时间的禁用部分
   public disabledStartTime = (startValue: Date): boolean => {
     const twoDaysAgo = new Date(new Date().getTime() - 86400000 * 2);
@@ -129,7 +155,7 @@ export class AddPushComponent implements OnInit {
   }
 
   // 处理时间秒数为0
-  public onValidSecondsZero(date: any, ): any {
+  private onValidSecondsZero(date: any): any {
     return new Date(date).setHours(new Date(date).getHours(),
       new Date(date).getMinutes(), 0, 0);
   }

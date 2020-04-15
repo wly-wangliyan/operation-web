@@ -37,8 +37,8 @@ const routes: Routes = [{
       canLoad: [AuthGuardService]
     },
     {
-      path: 'advanced-function', /** 高级功能 */
-      loadChildren: () => import('./advanced-function/advanced-function.module').then(m => m.AdvancedFunctionModule),
+      path: 'wechat', /** 高级功能 */
+      loadChildren: () => import('./wechat/wechat.module').then(m => m.WechatModule),
       canLoad: [AuthGuardService]
     },
     { path: '**', redirectTo: 'home', pathMatch: 'full' }

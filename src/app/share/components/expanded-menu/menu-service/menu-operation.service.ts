@@ -85,9 +85,9 @@ export class MenuOperationService {
 
   // 运营 》高级功能
   private generateAdvancedFunctionMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('高级功能', null);
+    const systemMenu = new SideMenuItem('微信服务号', null);
     systemMenu.icon = '/assets/images/menu_config.png';
-    const subFinanceMenu1 = new SideMenuItem('48小时推送', '/main/operation/advanced-function/push', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('48小时推送', '/main/operation/wechat/push', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;

@@ -1,0 +1,54 @@
+<!-- 新建、编辑展位 -->
+<div class="modal fade " id="insertLinkModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">插入小程序</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #insertLinkForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>设置链接名：</span>
+            </label>
+            <div class="control-input">
+              <input name="booth_name" placeholder="输入1-20字链接名" [(ngModel)]="linkParams.link_name" maxlength="20"
+                (change)="this.errMessageGroup.errJson.link_name.errMes=''" class="form-control" appIgnoreSpace
+                required>
+            </div>
+          </div>
+
+          <div class="err-message">
+            <span>{{ this.errMessageGroup?.errJson?.link_name.errMes }}</span>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>链接：</span>
+            </label>
+            <div class="control-input">
+              <input name="link_url" placeholder="输入链接" [(ngModel)]="linkParams.link_url" maxlength="2000"
+                class="form-control" (change)="this.errMessageGroup.errJson.link_url.errMes=''" required>
+            </div>
+          </div>
+
+          <div class="err-message">
+            <span>{{ this.errMessageGroup?.errJson?.link_url.errMes }}</span>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!insertLinkForm.form.valid"
+              (appZDebounceClick)="onCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

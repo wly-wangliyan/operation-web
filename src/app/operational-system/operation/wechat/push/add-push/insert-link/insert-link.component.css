@@ -1,0 +1,18 @@
+.form-control:focus {
+  box-shadow: none !important;
+}
+
+.form-control:focus {
+  border-color: #3E71F7 !important;
+}
+
+.control-input label {
+  margin-bottom: 0 !important;
+}
+
+.err-message {
+  font-size: 12px !important;
+  height: 20px;
+  margin-left: 128px;
+  margin-top: -18px;
+}
