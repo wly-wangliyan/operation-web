@@ -8,6 +8,7 @@ import { VehicleEditComponent } from './vehicle-edit/vehicle-edit.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { VehicleTopBrandComponent } from './vehicle-list/vehicle-top-brand/vehicle-top-brand.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     VehicleManagementComponent,
     VehicleListComponent,
     VehicleEditComponent,
+    VehicleTopBrandComponent,
   ],
   providers: [
   ]

@@ -13,6 +13,7 @@ export class CarBrandEntity extends EntityBase {
   public car_brand_name: string = undefined; // string	品牌名称
   public car_brand_initial: string = undefined; // string	品牌拼音大写首字母
   public car_brand_image: string = undefined; // string	品牌图片
+  public is_recommended = false; // boolean	boolean 是否推荐
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 }
@@ -310,5 +311,15 @@ export class VehicleManagementHttpService {
       });
       return tempList;
     }));
+  }
+
+  /**
+   * 修改车辆品牌推荐状态
+   * @param car_brand_ids string 汽车品牌ids
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestUpdateRecommendedBrands(car_brand_ids: string): Observable<HttpResponse<any>> {
+    return this.httpService.patch(`${this.domain}/admin/car_brands/is_recommended`, { car_brand_ids }
+    );
   }
 }

@@ -1,0 +1,71 @@
+<!-- 新建/编辑标签 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">热门品牌</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCloseModal()">&times;
+        </button>
+      </div>
+      <form nz-form class="content-layout" #brandForm="ngForm">
+        <div class="table-main">
+          <div class="table-title">未推荐</div>
+          <div class="table-container">
+            <div class="zmy-table">
+              <nz-table #notRecommendedTable [nzData]="notRecommendedList" [nzShowPagination]="false"
+                [nzFrontPagination]='false' [nzNoResult]="noNotRecommendedResultText" [nzScroll]="{y:'300px'}">
+                <thead>
+                  <tr>
+                    <th nzWidth="155px">品牌</th>
+                    <th>推荐</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of notRecommendedTable.data; let i=index">
+                    <td>{{data.car_brand_name}}</td>
+                    <td class="choose-btn">
+                      <a [title]="'选入'" (click)="onChooseBtnClick(data)">选入</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+          </div>
+        </div>
+        <div class="table-main">
+          <div class="table-title">已推荐</div>
+          <div class="table-container">
+            <div class="zmy-table">
+              <nz-table #recommendedTable [nzData]="recommendedList" [nzShowPagination]="false"
+                [nzFrontPagination]='false' [nzNoResult]="noRecommendedResultText" [nzScroll]="{y:'300px'}">
+                <thead>
+                  <tr>
+                    <th nzWidth="155px">品牌</th>
+                    <th>推荐</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of recommendedTable.data; let i=index">
+                    <td>{{data.car_brand_name}}</td>
+                    <td class="del-btn">
+                      <a [title]="'移除'" (click)="onDeleteBtnClick(data)">移除</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+          </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCloseModal()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="recommendedList.length!==10"
+            (click)='onSaveBtnClick()'>
+            保存
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

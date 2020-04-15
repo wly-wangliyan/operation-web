@@ -14,6 +14,7 @@ import { FileImportViewModel } from '../../../../utils/file-import.model';
 import { ProgressModalComponent } from '../../../share/components/progress-modal/progress-modal.component';
 import { Router } from '@angular/router';
 import { ProjectEntity, ProjectManagementHttpService } from '../../project-management/project-management-http.service';
+import { VehicleTopBrandComponent } from './vehicle-top-brand/vehicle-top-brand.component';
 
 const PageSize = 15;
 
@@ -38,6 +39,7 @@ export class VehicleListComponent implements OnInit {
   public importParams: ImportParams = new ImportParams();
 
   @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
+  @ViewChild('vehicleTopBrand', { static: true }) public vehicleTopBrand: VehicleTopBrandComponent;
 
   private searchText$ = new Subject<any>();
   private searchBrandText$ = new Subject<any>();
@@ -85,6 +87,20 @@ export class VehicleListComponent implements OnInit {
       this.globalService.httpErrorProcess(err);
     });
     this.searchBrandText$.next();
+  }
+
+  // 热门品牌
+  public onChooseTopBrand() {
+    this.vehicleTopBrand.open(this.carBrandList, () => {
+      this.searchBrandText$.next();
+    });
+  }
+
+
+
+  public onDeleteBtnClick(data: CarBrandEntity, index: number) {
+    this.carBrandList.splice;
+
   }
 
   // 翻页方法
@@ -273,21 +289,21 @@ export class VehicleListComponent implements OnInit {
 
   private importCarType(successFun: any, failFun: any) {
     this.importSubscription = this.vehicleManagementService.requestImportCarTypesData(
-        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
-      successFun(res);
-    }, err => {
-      failFun(err);
-    });
+      this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+        successFun(res);
+      }, err => {
+        failFun(err);
+      });
   }
 
   private importCarParam(successFun: any, failFun: any) {
     this.importParams.project_name = this.projectList.filter(v => v.project_num === this.importParams.project_num)[0].project_name;
     this.importSubscription = this.vehicleManagementService.requestImportCarParamData(this.importParams,
-        this.importViewModel.type, this.importViewModel.file).subscribe(res => {
-      successFun(res);
-    }, err => {
-      failFun(err);
-    });
+      this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+        successFun(res);
+      }, err => {
+        failFun(err);
+      });
   }
 
   // 解订阅
@@ -304,6 +320,6 @@ export class VehicleListComponent implements OnInit {
   // 查看详情
   public onDetailClick(data: CarParamEntity) {
     this.router.navigate(['/vehicle-management/edit'],
-        {queryParams: {car_param_id: data.car_param_id, car_series_id: data.car_series.car_series_id}});
+      { queryParams: { car_param_id: data.car_param_id, car_series_id: data.car_series.car_series_id } });
   }
 }

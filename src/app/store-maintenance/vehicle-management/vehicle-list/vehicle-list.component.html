@@ -1,6 +1,9 @@
 <div class="content-header">
   <app-crumb [level1Name]="'车型原厂参数'" [level2Name]=""></app-crumb>
   <ul class="header-right">
+    <li class="big-bg big-white-btn" *ngIf='carBrandList.length!==0'>
+      <a (click)="onChooseTopBrand()">热门品牌</a>
+    </li>
     <li class="big-bg big-white-btn">
       <a (click)="onImportClick('vehicle')">导入车型</a>
     </li>
@@ -99,6 +102,7 @@
             </td>
             <td class="operation">
               <a [title]="'查看'" (click)="onDetailClick(data)">查看</a>
+              <a [title]="'删除'" (click)="onDeleteBtnClick(data,i)">删除</a>
             </td>
           </tr>
         </tbody>
@@ -124,7 +128,7 @@
         <div class="form-group" *ngIf="importType === 'param'">
           <span>导入数据所属项目</span>
           <select class="form-control" [(ngModel)]="importParams.project_num" name="project_num"
-                  style="margin-left: 15px;width: 403px" >
+            style="margin-left: 15px;width: 403px">
             <option *ngFor="let project of projectList" [value]="project.project_num" [title]="project.project_name">
               {{project.project_name | zMaxLength:25}}
             </option>
@@ -147,7 +151,7 @@
         <div class="modal-footer">
           <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
           <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()"
-          [disabled]="!importParams.project_num && importType === 'param'">上传</button>
+            [disabled]="!importParams.project_num && importType === 'param'">上传</button>
         </div>
       </form>
     </div>
@@ -155,3 +159,4 @@
   <!--进度条-->
   <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
 </div>
+<app-vehicle-top-brand #vehicleTopBrand></app-vehicle-top-brand>
