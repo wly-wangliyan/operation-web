@@ -19,10 +19,22 @@ export class PushMessageEntity extends EntityBase {
    * data-miniprogram-path="pages/index/index" > 点击跳小程序 </a>
    */
   public content: string = undefined; // 文本信息 send_type = 'text'时必传
+  public title: string = undefined; // F 小程序链接名称
+  public link: string = undefined; // F 小程序链接
   public media_id: string = undefined; // 微信返回图片media_id send_type = 'image'时必传
+  public city_code: 'sy_wxmp' | 'bx_wxmp' = 'sy_wxmp'; // 城市code
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
   public request_date: number = undefined; // 标记数据请求时间
+
+  public toEditJson(): any {
+    const json = this.json();
+    delete json.push_message_id;
+    delete json.created_time;
+    delete json.updated_time;
+    delete json.request_date;
+    return json;
+  }
 }
 
 export class PushMessageLinkResponse extends LinkResponse {
@@ -57,6 +69,15 @@ export class PushService {
    */
   public continuePushMessageListData(url: string): Observable<PushMessageLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new PushMessageLinkResponse(res)));
+  }
+
+  /**
+   * 给用户推送消息
+   * @param addParams PushMessageEntity 添加参数
+   */
+  public requestAddPushMessageData(addParams: PushMessageEntity): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/custom/message/send`;
+    return this.httpService.post(httpUrl, addParams.toEditJson());
   }
 
   /**

@@ -1,6 +1,10 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'微信服务号'" [level2Name]="'48小时推送'" [level2RelativePath]="push_message_id?'../../':'../'"
+  <app-crumb [level1Name]="'微信服务号'" [level2Name]="'48小时推送'" [level2RelativePath]="isCreate?'../../':'../../'"
     [level3Name]="title"></app-crumb>
+  <ul class="header-right">
+    <li style="line-height: 50px;">
+      当前日期：{{editParams?.request_date?(editParams.request_date | date:"y-MM-dd HH:mm:ss"):'--'}}</li>
+  </ul>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
   <nz-spin nzSimple></nz-spin>
@@ -15,7 +19,7 @@
         </label>
         <div class="control-input" style="width: 900px;">
           <input class="form-control" style="width: 428px;" [(ngModel)]="editParams.subject" placeholder="请输入推送主题"
-            maxlength="50" name="subject" appIgnoreSpace required [disabled]="push_message_id">
+            maxlength="50" name="subject" appIgnoreSpace required [disabled]="!isCreate">
           <label class="remark-tip">仅作区分用，不会向用户展示(字数不超过50个汉字)</label>
         </div>
       </div>
@@ -27,13 +31,17 @@
         <div class="control-input" style="width: 900px;">
           <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
             name='bind_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"
-            [disabled]="push_message_id"></nz-date-picker>
+            [disabled]="!isCreate" (ngModelChange)="clear()"></nz-date-picker>
           <span class="partition">至</span>
           <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
-            name='bind_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"
-            [disabled]="push_message_id"></nz-date-picker>
+            name='bind_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm" [disabled]="!isCreate"
+            (ngModelChange)="clear()">
+          </nz-date-picker>
           <label class="remark-tip">请以当前时间为基准，选择发送此推送的时间范围</label>
         </div>
+      </div>
+      <div class="err-message">
+        <span>{{ this.errMessageGroup?.errJson?.time.errMes }}</span>
       </div>
       <div class="row">
         <label class="control-label">
@@ -42,9 +50,9 @@
         </label>
         <div class="control-input">
           <label name="msg_tags_all" nz-checkbox [(ngModel)]="isCheckedAll" (ngModelChange)="onChangeCheckAll($event)"
-            [disabled]="push_message_id" [class.checked-color]="isCheckedAll">全部</label>
+            [disabled]="!isCreate" [class.checked-color]="isCheckedAll">全部</label>
           <label *ngFor="let tag of msg_tags;let i=index" name="msg_tags_{{i}}" nz-checkbox [(ngModel)]="tag.isChecked"
-            [disabled]="push_message_id" [class.checked-color]="tag.isChecked"
+            [disabled]="!isCreate" [class.checked-color]="tag.isChecked"
             (ngModelChange)="onChangeTag()">{{msgTagType[tag.name]}}</label>
         </div>
       </div>
@@ -53,7 +61,7 @@
       </div>
       <div class="tab-bar-list">
         <nz-radio-group name="send_type" [nzButtonStyle]="'solid'" [(ngModel)]="editParams.send_type"
-          [disabled]="push_message_id">
+          [disabled]="!isCreate">
           <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'
             (click)="onTabChange(tab.key)">{{tab.value}}</label>
         </nz-radio-group>
@@ -61,31 +69,35 @@
       <div class="tab-container" style="height: 220px;">
         <ng-container *ngIf="editParams.send_type==='text'">
           <div>
-            <textarea name="content" class="form-control" placeholder="文本信息，100字以内" [(ngModel)]="content_text"
-              maxlength="100" style="height: 170px;" required [disabled]="push_message_id"></textarea>
+            <textarea name="content" class="form-control" placeholder="文本信息，100字以内" [(ngModel)]="editParams.content"
+              maxlength="100" style="height: 170px;" required [disabled]="!isCreate"></textarea>
           </div>
         </ng-container>
         <ng-container *ngIf="editParams.send_type==='image'">
           <div class="container-border">
-            <div *ngIf="push_message_id">图片信息</div>
-            <div *ngIf="!push_message_id">
+            <div *ngIf="!isCreate">图片信息</div>
+            <div *ngIf="isCreate">
               <span>上传图片</span>
               <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
-                style="margin-left: 0;margin-top:30px;width: 132px;height:28px"
-                [disabled]="!addPushForm.form.valid || ifDisabled()" (appZDebounceClick)="onEditFormSubmit()">
+                style="margin-left: 10px;margin-right: 20px;width: 132px;height:28px"
+                (appZDebounceClick)="onSelectPictureClick()">
                 上传图片
               </button>
+              <span>图片大小不要超过1M</span>
             </div>
           </div>
         </ng-container>
         <div class="tab-container-footer">
-          <ng-container *ngIf="editParams.send_type==='text'">
-            <a id="link-url" class="link-url">{{link_name}}</a>
+          <ng-container *ngIf="editParams.send_type==='text' && isCreate">
+            <a id="link-url" class="link-url" [title]="editParams.link||''">{{editParams.title}}</a>
             <button name="insert_btn" type="button" class="insert-btn" (click)="onOpenLinkModal()">插入小程序</button>
           </ng-container>
         </div>
       </div>
-      <div class="row" *ngIf="!push_message_id">
+      <div class="err-message" style="margin-top: 0;margin-left: 0;">
+        <span>{{ this.errMessageGroup?.errJson?.content.errMes }}</span>
+      </div>
+      <div class="row" *ngIf="isCreate">
         <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
           style="margin-left: 0;margin-top:30px" [disabled]="!addPushForm.form.valid || ifDisabled()"
           (appZDebounceClick)="onEditFormSubmit()">

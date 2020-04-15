@@ -1,5 +1,5 @@
 .content-container {
-  min-height: 800px;
+  height: 100%;
 }
 
 .tab-container-footer {
@@ -18,6 +18,13 @@
 .form-control:disabled {
   color: #888;
   cursor: not-allowed;
+}
+
+.err-message {
+  font-size: 12px !important;
+  height: 20px;
+  margin-left: 110px;
+  margin-top: -18px;
 }
 
 .form-control:not(:disabled),
@@ -53,6 +60,7 @@
   line-height: 50px;
   margin-left: 20px;
   text-decoration: underline;
+  cursor: default;
 }
 
 .insert-btn {

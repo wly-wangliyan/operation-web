@@ -8,6 +8,7 @@ import { environment } from '../../../../../../environments/environment';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 import { InsertLinkComponent } from './insert-link/insert-link.component';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 enum MsgTagType {
   'subscribe' = '关注',
@@ -35,7 +36,8 @@ export class CheckItem {
 export class AddPushComponent implements OnInit {
   public editParams: PushMessageEntity = new PushMessageEntity();
   public title = '新建推送';
-  public push_message_id: string; // 推送记录id
+  private push_message_id: string; // 推送记录id
+  public isCreate = true;
   public loading = true;
   public msg_tags: Array<CheckItem> = []; // 推送对象
   public start_time: any = ''; // 生效间隔-开始时间
@@ -44,9 +46,6 @@ export class AddPushComponent implements OnInit {
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
   public tabList = [{ key: 'text', value: '文本信息' }, { key: 'image', value: '图片' }];
   public msgTagType = MsgTagType;
-  public link_name: string; // 插入小程序-链接名称
-  public link_url: string; // 插入小程序-链接
-  public content_text: string; // 文本消息
   private saving = false; // 标记是否正在保存
 
   @ViewChild('insertLinkModal', { static: true }) public insertLinkModalRef: InsertLinkComponent;
@@ -63,6 +62,7 @@ export class AddPushComponent implements OnInit {
   public ngOnInit() {
     this.clear();
     if (this.push_message_id) {
+      this.isCreate = false;
       this.title = '查看推送信息';
       this.getPushDetail();
     } else {
@@ -85,19 +85,22 @@ export class AddPushComponent implements OnInit {
   }
 
   public onTabChange(key: string): void {
-    this.content_text = '';
-    this.link_name = '';
-    this.link_url = '';
+    this.editParams.content = '';
+    this.editParams.title = '';
+    this.editParams.link = '';
     this.editParams.media_id = null;
+  }
+
+  // 点击上传图片
+  public onSelectPictureClick() {
+
   }
 
   // 清除错误信息
   public clear(): void {
     this.errMessageGroup.errJson = {};
     this.errMessageGroup.errJson.time = new ErrMessageBase();
-    this.errMessageGroup.errJson.msg_tags = new ErrMessageBase();
     this.errMessageGroup.errJson.content = new ErrMessageBase();
-    this.errMessageGroup.errJson.media_id = new ErrMessageBase();
   }
 
   // 表单必填数据校验
@@ -121,11 +124,12 @@ export class AddPushComponent implements OnInit {
       this.msg_tags.push(checkItem);
     });
 
-    if (this.push_message_id) {
+    if (!this.isCreate) {
       this.tabList = this.tabList.filter(tab => tab.key === this.editParams.send_type);
       this.start_time = this.editParams.start_time ? this.editParams.start_time * 1000 : '';
       this.end_time = this.editParams.end_time ? this.editParams.end_time * 1000 : '';
-      // const content_text = this.editParams.content.
+    } else {
+      this.editParams.request_date = this.editParams.request_date ? this.editParams.request_date : new Date().getTime();
     }
     this.editParams.send_type = this.editParams.send_type || 'text';
   }
@@ -142,23 +146,75 @@ export class AddPushComponent implements OnInit {
 
   // 插入小程序
   public onOpenLinkModal(): void {
-    this.insertLinkModalRef.open(this.link_name, this.link_url);
+    this.insertLinkModalRef.open(this.editParams.title, this.editParams.link);
   }
 
-  // 修改插入小程序链接
+  // 接收小程序链接信息
   public onChangeLink(event: any): void {
     if (event) {
-      this.link_name = event.link.link_name;
-      this.link_url = event.link.link_url;
+      this.editParams.title = event.link.link_name;
+      this.editParams.link = event.link.link_url;
     }
   }
 
+  // 发布
   public onEditFormSubmit(): void {
-
+    if (this.saving) {
+      return;
+    }
+    this.clear();
+    if (this.generateAndCheckParamsValid()) {
+      this.globalService.confirmationBox.open('提示', '请确认 \n 是否立即推送此消息?', () => {
+        this.globalService.confirmationBox.close();
+        this.requestAddPushMessage();
+      });
+    } else {
+      this.saving = false;
+    }
   }
 
-  public onCancelClick(): void {
-    window.history.back();
+  // 发送消息
+  private requestAddPushMessage(): void {
+    this.pushService.requestAddPushMessageData(this.editParams)
+      .subscribe(res => {
+        this.globalService.promptBox.open('发布成功', () => {
+          window.history.back();
+        });
+      }, err => {
+        this.saving = false;
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            this.globalService.promptBox.open('数据缺失或非法', null, 2000, null, false);
+          }
+        }
+      });
+  }
+
+  // 校验数据
+  private generateAndCheckParamsValid(): boolean {
+    const sTimestamp = this.start_time ? (new Date(this.start_time).setHours(new Date(this.start_time).getHours(),
+      new Date(this.start_time).getMinutes(), 0, 0) / 1000) : 0;
+    const eTimeStamp = this.end_time ? (new Date(this.end_time).setHours(new Date(this.end_time).getHours(),
+      new Date(this.end_time).getMinutes(), 0, 0) / 1000) : null;
+    const currentTimeStamp = new Date().getTime() / 1000;
+    if (sTimestamp >= eTimeStamp) {
+      this.errMessageGroup.errJson.time.errMes = '开始时间应小于结束时间！';
+      return false;
+    }
+
+    if (sTimestamp && currentTimeStamp - sTimestamp > 86400 * 2) {
+      this.errMessageGroup.errJson.time.errMes = '开始时间距离当前时间不能超过48小时！';
+      return false;
+    }
+    if (eTimeStamp && eTimeStamp > currentTimeStamp) {
+      this.errMessageGroup.errJson.time.errMes = '结束时间不能大于当前时间！';
+      return false;
+    }
+    this.editParams.start_time = sTimestamp;
+    this.editParams.end_time = eTimeStamp;
+    const tags = this.msg_tags.filter(tagItem => tagItem.isChecked).map(tag => tag.isChecked && tag.name);
+    this.editParams.msg_tags = tags.join(',');
+    return true;
   }
 
   // 开始时间的禁用部分
