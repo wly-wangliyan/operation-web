@@ -35,9 +35,9 @@ export class CheckItem {
 export class AddPushComponent implements OnInit {
   public editParams: PushMessageEntity = new PushMessageEntity();
   public title = '新建推送';
-  private push_message_id: string; // 推送记录id
+  public push_message_id: string; // 推送记录id
   public loading = true;
-  public msg_tags: Array<CheckItem> = [];
+  public msg_tags: Array<CheckItem> = []; // 推送对象
   public start_time: any = ''; // 生效间隔-开始时间
   public end_time: any = ''; // 生效间隔-结束时间
   public isCheckedAll: boolean; // 标记推送对象是否全选
@@ -45,8 +45,8 @@ export class AddPushComponent implements OnInit {
   public tabList = [{ key: 'text', value: '文本信息' }, { key: 'image', value: '图片' }];
   public msgTagType = MsgTagType;
   public link_name: string; // 插入小程序-链接名称
-  private appid = environment.version === 'r' ? 'wxb3b23f913746f653' : 'wx5041d139e198b0af';
   public link_url: string; // 插入小程序-链接
+  public content_text: string; // 文本消息
   private saving = false; // 标记是否正在保存
 
   @ViewChild('insertLinkModal', { static: true }) public insertLinkModalRef: InsertLinkComponent;
@@ -84,6 +84,13 @@ export class AddPushComponent implements OnInit {
       });
   }
 
+  public onTabChange(key: string): void {
+    this.content_text = '';
+    this.link_name = '';
+    this.link_url = '';
+    this.editParams.media_id = null;
+  }
+
   // 清除错误信息
   public clear(): void {
     this.errMessageGroup.errJson = {};
@@ -116,9 +123,9 @@ export class AddPushComponent implements OnInit {
 
     if (this.push_message_id) {
       this.tabList = this.tabList.filter(tab => tab.key === this.editParams.send_type);
-    } else {
       this.start_time = this.editParams.start_time ? this.editParams.start_time * 1000 : '';
       this.end_time = this.editParams.end_time ? this.editParams.end_time * 1000 : '';
+      // const content_text = this.editParams.content.
     }
     this.editParams.send_type = this.editParams.send_type || 'text';
   }

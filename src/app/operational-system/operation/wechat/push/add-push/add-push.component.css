@@ -16,6 +16,7 @@
 }
 
 .form-control:disabled {
+  color: #888;
   cursor: not-allowed;
 }
 

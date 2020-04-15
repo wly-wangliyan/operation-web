@@ -68,6 +68,14 @@
         <ng-container *ngIf="editParams.send_type==='image'">
           <div class="container-border">
             <div *ngIf="push_message_id">图片信息</div>
+            <div *ngIf="!push_message_id">
+              <span>上传图片</span>
+              <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+                style="margin-left: 0;margin-top:30px;width: 132px;height:28px"
+                [disabled]="!addPushForm.form.valid || ifDisabled()" (appZDebounceClick)="onEditFormSubmit()">
+                上传图片
+              </button>
+            </div>
           </div>
         </ng-container>
         <div class="tab-container-footer">
