@@ -83,12 +83,14 @@ export class MenuOperationService {
     return systemMenu;
   }
 
-  // 运营 》高级功能
+  // 运营 》微信服务号
   private generateAdvancedFunctionMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('微信服务号', null);
-    systemMenu.icon = '/assets/images/menu_config.png';
-    const subFinanceMenu1 = new SideMenuItem('48小时推送', '/main/operation/wechat/push', systemMenu);
+    systemMenu.icon = '/assets/images/menu/menu_wechat.png';
+    const subFinanceMenu1 = new SideMenuItem('功能授权', '/main/operation/wechat/function-authorize', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    const subFinanceMenu2 = new SideMenuItem('48小时推送', '/main/operation/wechat/push', systemMenu);
+    systemMenu.children.push(subFinanceMenu2);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

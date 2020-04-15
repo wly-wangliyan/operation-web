@@ -16,6 +16,11 @@ const routes: Routes = [
         loadChildren: () => import('./push/push.module').then(m => m.PushModule),
         canLoad: [AuthGuardService]
       },
+      {
+        path: 'function-authorize', /** 功能授权 */
+        loadChildren: () => import('./function-authorize/function-authorize.module').then(m => m.FunctionAuthorizeModule),
+        canLoad: [AuthGuardService]
+      },
     ]
   }
 ];

@@ -43,12 +43,6 @@ export class StatisticDataComponent implements OnInit, OnDestroy {
       private orderService: WashOrderService) { }
 
   public ngOnInit() {
-    const temp = new OrderStatisticEntity();
-    temp.specification_infos = [{specification_name: 'aaa', specification_num: 10},
-      {specification_name: 'bbb', specification_num: 100},
-      {specification_name: 'ccc', specification_num: 20}];
-    this.statisticList.push(temp);
-    this.statisticList.push(temp);
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
       this.exportSearchUrl();
       this.requestOrderList();
@@ -112,13 +106,16 @@ export class StatisticDataComponent implements OnInit, OnDestroy {
 
   // 导出url
   private exportSearchUrl() {
-    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car_order_statistics/export?section=${this.searchParams.section}`;
+    this.searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car_order_statistics/export`;
+    if (this.searchParams.section) {
+      this.searchUrl += `?section=${this.searchParams.section}`;
+    }
   }
 
   /* 生成并检查参数有效性 */
   private generateAndCheckParamsValid(): boolean {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(0, 0, 0, 0) / 1000).toString() : 0;
-    const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(0, 0, 0, 0) / 1000).toString() : 253402185600;
+    const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(24, 0, 0, 0) / 1000).toString() : 253402185600;
     if (sTimestamp > eTimeStamp) {
       this.globalService.promptBox.open('下单开始时间不能大于结束时间！', null, 2000, null, false);
       return false;

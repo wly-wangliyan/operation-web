@@ -51,6 +51,7 @@ export class WorkFeesEditComponent implements OnInit {
           res => {
             this.serviceFeeData = res;
             this.searchWorkFeesParams.service_fee_name = this.serviceFeeData.service_fee_name;
+            this.searchWorkFeesParams.service_instruction = this.serviceFeeData.service_instruction;
             this.project_name = this.serviceFeeData.project
               ? this.serviceFeeData.project.project_name
               : '';

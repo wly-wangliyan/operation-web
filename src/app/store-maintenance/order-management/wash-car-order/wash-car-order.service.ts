@@ -68,7 +68,7 @@ export class OrderStatisticEntity extends EntityBase {
   public wash_car_statistic_id: string = undefined; //  string	洗车订单统计id 主键
   public statistic_date: number = undefined; // 	float	日期
   public pay_order_num: number = undefined; // 	integer	支付订单数量
-  public specification_infos: any = []; // 	array	规格数量信息
+  public specification_infos: Array<OrderSpecificatioEntity> = undefined; // 	array	规格数量信息
 // -specification_name	string	规格名称
 // -car_type	integer	车型 车型 1: 5座小型车 2：SUV/MPV
 // -specification_num	integer	规格数量
@@ -82,6 +82,19 @@ export class OrderStatisticEntity extends EntityBase {
   public cancel_order_num: number = undefined; // 	integer	取消订单数量
   public created_time: number = undefined; // 下单时间(创建时间)
   public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'specification_infos') {
+      return OrderSpecificatioEntity;
+    }
+    return null;
+  }
+}
+
+export class OrderSpecificatioEntity extends EntityBase {
+  public specification_name: string = undefined; //  string	规格名称
+  public car_type: number = undefined; // 	integer	车型 车型 1: 5座小型车 2：SUV/MPV
+  public specification_num: number = undefined; // 	integer	规格数量
 }
 
 export class WashCarOrderLinkResponse extends LinkResponse {

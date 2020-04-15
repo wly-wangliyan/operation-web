@@ -28,3 +28,7 @@
   float: right;
   margin-left: 10px;
 }
+
+.header-right>li.big-bg>a {
+  color: #fff;
+}

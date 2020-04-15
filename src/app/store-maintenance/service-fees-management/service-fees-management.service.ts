@@ -50,6 +50,7 @@ export class ServiceFeeEntity extends EntityBase {
   public prepay_initial_price: number = undefined; // Integer	救援费预付原价 单位:分
   public prepay_current_price: number = undefined; // Integer	救援费预付现价 单位:分
   public status: boolean = undefined; // integer	状态 1:开启 2:关闭(默认)
+  public service_instruction = ''; // string T	服务说明
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 
