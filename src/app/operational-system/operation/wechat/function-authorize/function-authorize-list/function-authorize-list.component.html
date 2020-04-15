@@ -3,38 +3,30 @@
 </div>
 <div class="content-flow">
     <div class="content-tip">
-        1.可在微信公众平台关闭此功能
+        <span>产品门票信息</span>
+        <div class="tip-text">
+            <span>1.可在微信公众平台关闭此功能</span>
+        </div>
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table #authorizeTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
-                      [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
-                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+            <nz-table #authorizeTable [nzData]="'[]'" [nzShowPagination]="false" nzBordered>
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>推送主题</th>
-                    <th>推送时间</th>
-                    <th>生效间隔</th>
-                    <th>推送人数</th>
-                    <th>操作</th>
+                    <th>公众号名称</th>
+                    <th>微信号</th>
+                    <th>账号主体</th>
+                    <th>功能开启状态</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of authorizeTable.data; let i = index">
-                    <td>{{ i + (nzSearchAssistant.currentPage - 1) * 15 + 1 }}</td>
-                    <td [title]="data.subject || ''">
-                        {{ (data.subject | zMaxLength: 12) || '--' }}
-                    </td>
-                    <td>{{data.created_time ? (data.created_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
-                    <td>
-                        <span>{{data.start_time ? (data.start_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
-                        <span> 至 {{data.end_time ? (data.end_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
-                    </td>
-                    <td>{{ data.push_amount || 0 }}</td>
-                    <td class="operation">
-                        <a [routerLink]="['../push-detail', data.push_message_id]" [title]="'查看推送信息'">查看推送信息</a>
-                    </td>
+                <tr>
+                    <td>1</td>
+                    <td>沈阳智慧停车</td>
+                    <td>gh_52944of5c3f</td>
+                    <td>沈阳智慧停车平台建设运营有限公司</td>
+                    <td>--</td>
                 </tr>
                 </tbody>
             </nz-table>

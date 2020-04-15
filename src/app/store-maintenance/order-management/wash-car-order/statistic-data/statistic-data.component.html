@@ -17,14 +17,14 @@
                     <span class='partition'>-</span>
                     <nz-date-picker [(ngModel)]="order_end_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderEndTime"
                                     name='order_end_time' nzFormat="yyyy-MM-dd"></nz-date-picker>
-                    <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询</button>
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询</button>
                 </div>
             </form>
         </div>
         <div class="zmy-table">
-            <nz-table [nzData]="statisticList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex"
-                      #statisticTable >
+            <nz-table #statisticTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
                 <thead>
                 <tr>
                     <th>日期</th>
@@ -62,6 +62,7 @@
                                 <div>{{record.specification_num || 0}}</div>
                             </div>
                         </ng-container>
+                        <ng-container *ngIf="!record.specification_infos||record.specification_infos.length===0">--</ng-container>
                     </td>
                     <td>{{record.code_num || 0}}</td>
                     <td>{{record.small_code_num || 0}}</td>
