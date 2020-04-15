@@ -62,7 +62,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.repairShopList = res[1];
         this.washServiceConfig.min_sale_fee = res[0].min_sale_fee >= 0 ?
           Number((res[0].min_sale_fee / 100).toFixed(2)) : res[0].min_sale_fee;
-        this.washServiceConfig.switch = res[0].switch ? res[0].switch : 2;
+        this.washServiceConfig.refund_switch = res[0].refund_switch ? res[0].refund_switch : 2;
         this.loading = false;
       }, err => {
         this.loading = false;
@@ -78,7 +78,7 @@ export class WashCarServiceEditComponent implements OnInit {
   private initBasePrice() {
     this.washServiceConfig.base_price_info.forEach(price => {
       price.original_unit_fee = price.original_unit_fee >= 0 ? Number((price.original_unit_fee / 100).toFixed(2)) : null;
-      price.base_unit_fee = price.base_unit_fee >= 0 ? Number((price.base_unit_fee / 100).toFixed(2)) : null;
+      price.standard_price = price.standard_price >= 0 ? Number((price.standard_price / 100).toFixed(2)) : null;
       price.buy_unit_fee = price.buy_unit_fee >= 0 ? Number((price.buy_unit_fee / 100).toFixed(2)) : null;
     });
     this.basePrice_1 = this.washServiceConfig.base_price_info.filter(price => price.service_type === 1);
@@ -256,7 +256,7 @@ export class WashCarServiceEditComponent implements OnInit {
 
   // 切换
   public onSwitchChange(event: any) {
-    this.washServiceConfig.switch = event ? 1 : 2;
+    this.washServiceConfig.refund_switch = event ? 1 : 2;
   }
 
   // 取消
@@ -320,7 +320,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.basePriceErrMsg = `${car_tip}：结算价应大于等于0！`;
         return false;
       }
-      if (!price.base_unit_fee) {
+      if (!price.standard_price) {
         this.basePriceErrMsg = `${car_tip}：平台标准价应大于等于0！`;
         return false;
       }
@@ -340,7 +340,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.basePriceErrMsg = `${car_tip}：结算价应大于等于0！`;
         return false;
       }
-      if (!price.base_unit_fee) {
+      if (!price.standard_price) {
         this.basePriceErrMsg = `${car_tip}：平台标准价应大于等于0！`;
         return false;
       }
@@ -368,7 +368,7 @@ export class WashCarServiceEditComponent implements OnInit {
       return false;
     }
     this.editParams.min_sale_fee = Math.round(this.washServiceConfig.min_sale_fee * 100);
-    this.editParams.switch = this.washServiceConfig.switch;
+    this.editParams.refund_switch = this.washServiceConfig.refund_switch;
     this.removeList.forEach(removeItem => {
       this.editParams.specification_info.push(removeItem.toEditJson());
     });

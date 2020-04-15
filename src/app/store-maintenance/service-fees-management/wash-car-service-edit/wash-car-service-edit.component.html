@@ -42,7 +42,7 @@
                 </td>
                 <td>
                   <div class="price-group">
-                    <input name="base_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.base_unit_fee"
+                    <input name="standard_price_{{data.base_price_id}}" [(ngModel)]="data.standard_price"
                       placeholder="0-99999" (change)="basePriceErrMsg=''" [appMaxNumber]='99999' maxlength='8'
                       class="form-control" appFloatNumber required />
                     <label class="one-word-lable">元</label>
@@ -76,7 +76,7 @@
                 </td>
                 <td>
                   <div class="price-group">
-                    <input name="base_unit_fee_{{data.base_price_id}}" [(ngModel)]="data.base_unit_fee"
+                    <input name="standard_price{{data.base_price_id}}" [(ngModel)]="data.standard_price"
                       placeholder="0-99999" (change)="basePriceErrMsg=''" [appMaxNumber]='99999' maxlength='8'
                       class="form-control" appFloatNumber required />
                     <label class="one-word-lable">元</label>
@@ -268,7 +268,7 @@
           <span>过期自动退款</span>
         </label>
         <div class="control-input" style="line-height: 30px;">
-          <nz-switch name="switch" [ngModel]="washServiceConfig.switch===1" nzCheckedChildren="On"
+          <nz-switch name="switch" [ngModel]="washServiceConfig.refund_switch===1" nzCheckedChildren="On"
             nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange($event)"></nz-switch>
         </div>
       </div>
