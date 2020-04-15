@@ -79,7 +79,7 @@ export class StatisticDataComponent implements OnInit, OnDestroy {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(0, 0, 0, 0) / 1000).toString() : 0;
     const eTimeStamp = this.order_end_time ? (new Date(this.order_end_time).setHours(24, 0, 0, 0) / 1000).toString() : 253402185600;
     if (sTimestamp > eTimeStamp) {
-      this.globalService.promptBox.open('下单开始时间不能大于结束时间！', null, 2000, null, false);
+      this.globalService.promptBox.open('统计范围开始时间不能大于结束时间！', null, 2000, null, false);
       return false;
     }
     if (this.order_start_time || this.order_end_time) {
