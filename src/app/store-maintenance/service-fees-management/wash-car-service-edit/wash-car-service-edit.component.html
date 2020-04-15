@@ -270,11 +270,10 @@
           <nz-switch name="switch" [ngModel]="washServiceConfig.refund_switch===1" nzCheckedChildren="On"
             nzUnCheckedChildren="Off" (ngModelChange)="onSwitchChange($event)"></nz-switch>
         </div>
-        <div>
-          <p>开启此项后过期且未使用的核销码将折价后退款会给用户</p>
-          <p>计算规则：实付总金额 - 券码平台标准价（不同券码单独计算） × 已核销数量 = 退款金额（小于0时则不予退款）</p>
-        </div>
-
+      </div>
+      <div style="margin:-30px 0 10px 120px;">
+        <p>开启此项后过期且未使用的核销码将折价后退款会给用户</p>
+        <p>计算规则：实付总金额 - 券码平台标准价（不同券码单独计算） × 已核销数量 = 退款金额（小于0时则不予退款）</p>
       </div>
       <div class="row">
         <label class="control-label">
