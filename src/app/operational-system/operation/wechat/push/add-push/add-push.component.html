@@ -88,9 +88,10 @@
           </div>
         </ng-container>
         <div class="tab-container-footer">
-          <ng-container *ngIf="editParams.send_type==='text' && isCreate">
+          <ng-container *ngIf="editParams.send_type==='text'">
             <a id="link-url" class="link-url" [title]="editParams.link||''">{{editParams.title}}</a>
-            <button name="insert_btn" type="button" class="insert-btn" (click)="onOpenLinkModal()">插入小程序</button>
+            <button *ngIf="isCreate" name="insert_btn" type="button" class="insert-btn"
+              (click)="onOpenLinkModal()">插入小程序</button>
           </ng-container>
         </div>
       </div>
