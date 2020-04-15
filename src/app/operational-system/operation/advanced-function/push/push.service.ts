@@ -22,6 +22,7 @@ export class PushMessageEntity extends EntityBase {
   public media_id: string = undefined; // 微信返回图片media_id send_type = 'image'时必传
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
+  public request_date: number = undefined; // 标记数据请求时间
 }
 
 export class PushMessageLinkResponse extends LinkResponse {
@@ -66,7 +67,10 @@ export class PushService {
   public requestPushMessageDetail(push_message_id: string): Observable<PushMessageEntity> {
     const httpUrl = `${this.domain}/custom/messages/${push_message_id}`;
     return this.httpService.get(httpUrl).pipe(map(res => {
-      return PushMessageEntity.Create(res.body);
+      const body = res.body;
+      const date = res.headers.get('date');
+      body.request_date = date ? new Date(date).getTime() : null;
+      return PushMessageEntity.Create(body);
     }));
   }
 }

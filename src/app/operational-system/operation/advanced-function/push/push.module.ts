@@ -8,8 +8,11 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { AddPushComponent } from './add-push/add-push.component';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 @NgModule({
-  declarations: [PushListComponent, PushComponent],
+  declarations: [PushListComponent, PushComponent, AddPushComponent],
   imports: [
     CommonModule,
     PushRoutingModule,
@@ -17,7 +20,9 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzTableModule,
     NzButtonModule,
     NzRadioModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzSpinModule,
+    NzDatePickerModule
   ]
 })
 export class PushModule { }

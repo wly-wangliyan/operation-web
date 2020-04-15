@@ -1,0 +1,58 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'高级功能'" [level2Name]="'48小时推送'" [level3Name]="title"></app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+  <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]='loading'>
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #addPushForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>推送主题</span>
+        </label>
+        <div class="control-input" style="width: 900px;">
+          <input class="form-control" style="width: 428px;" [(ngModel)]="editParams.subject" placeholder="请输入推送主题"
+            maxlength="50" name="subject" appIgnoreSpace required>
+          <label style="color: darkgray;font-size: 12px; margin-left: 8px;">仅作区分用，不会向用户展示(字数不超过50个汉字)</label>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>生效间隔</span>
+        </label>
+        <div class="control-input">
+          <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+            name='bind_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+          <span class="partition">-</span>
+          <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+            name='bind_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>推送对象</span>
+        </label>
+        <div class="control-input">
+          <label name="msg_tags_all" nz-checkbox [ngModel]="isCheckedAll"
+            (ngModelChange)="onChangeCheckAll($event)">全部</label>
+          <label *ngFor="let tag of msg_tags;let i=index" name="msg_tags_{{i}}" nz-checkbox [(ngModel)]="tag.isChecked"
+            (ngModelChange)="onChangeTag()">{{tag.name}}</label>
+        </div>
+      </div>
+      <div class="err-message">
+        <span>{{ this.errMessageGroup?.errJson?.content.errMes }}</span>
+      </div>
+      <div class="row">
+        <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!addPushForm.form.valid || ifDisabled()" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+      </div>
+    </form>
+  </div>
+</div>

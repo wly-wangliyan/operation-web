@@ -10,6 +10,9 @@
   </ul>
 </div>
 <div class="content-flow">
+  <div class="content-tip">
+    1.生效间隔：每次推送时，需要以时间间隔来确定发送范围，即多长时间范围内产生特定动作的用户；若选定的是0-12小时，则表明所选的范围是，以推送时间为准，向前取12小时的符合条件的一批用户
+  </div>
   <div class="table-container">
     <div class="zmy-table">
       <nz-table #pushTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"

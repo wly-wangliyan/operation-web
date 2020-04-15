@@ -4,6 +4,7 @@ import { AuthGuardService } from '../../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { PushListComponent } from './push-list/push-list.component';
 import { PushComponent } from './push.component';
+import { AddPushComponent } from './add-push/add-push.component';
 
 
 const routes: Routes = [{
@@ -12,7 +13,7 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'push-list', pathMatch: 'full' },
     { path: 'push-list', component: PushListComponent },
-    // { path: 'add-push', component: AddPushComponent },
+    { path: 'add-push', component: AddPushComponent },
     // { path: 'push-detail/:push_message_id', component: AddPushComponent },
     { path: '**', redirectTo: 'push-list', pathMatch: 'full' }
   ]
