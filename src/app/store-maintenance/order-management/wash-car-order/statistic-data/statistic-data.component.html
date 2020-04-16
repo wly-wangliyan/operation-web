@@ -60,7 +60,7 @@
                                     <span [title]="item.specification_name || ''">{{(item.specification_name | zMaxLength:12)}}</span>
                                     <span>{{'('+(item.car_type|washCarType)+')'}}</span>
                                 </div>
-                                <div>{{record.specification_num || 0}}</div>
+                                <div>{{item.specification_num || 0}}</div>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="!record.specification_infos||record.specification_infos.length===0">--</ng-container>

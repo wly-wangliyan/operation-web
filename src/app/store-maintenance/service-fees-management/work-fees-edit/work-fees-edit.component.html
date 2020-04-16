@@ -142,7 +142,7 @@
             class="sure-btn"
             nz-button
             nzType="primary"
-            [disabled]="!workFeesForm.form.valid||(!project_name&&!searchWorkFeesParams.service_instruction)"
+            [disabled]="!workFeesForm.form.valid"
             (appZDebounceClick)="onSaveFormSubmit()"
           >
             保存
