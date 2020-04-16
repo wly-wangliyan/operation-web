@@ -3,7 +3,7 @@ import { UploadImageModel } from './upload-image.model';
 import { UploadService } from '../../../../../core/upload.service';
 import { HttpResponse } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-upload-image',
@@ -35,16 +35,19 @@ export class UploadImageComponent implements OnInit {
   }
 
   public open() {
-    $(`#${this.uploadModalId}`).modal();
+    this.clear();
+    timer(0).subscribe(() => {
+      $(`#${this.uploadModalId}`).modal();
+    });
   }
 
   // 检测数据变更
-  public getDirty() {
+  public getDirty(): boolean {
     return this.uploadImageModel.dirty;
   }
 
   // 确认上传图片
-  public confirmUpload() {
+  public confirmUpload(): void {
     if (this.uploading) {
       return;
     }
@@ -77,11 +80,15 @@ export class UploadImageComponent implements OnInit {
     }
   }
 
-  // 关闭上传
-  public onCloseUpload() {
+  private clear(): void {
     this.uploading = false;
     this.uploadImageModel.initImportData();
     this.uploadSubscription$ && this.uploadSubscription$.unsubscribe();
+  }
+
+  // 关闭上传
+  public onCloseUpload(): void {
+    this.clear();
     $(`#${this.uploadModalId}`).modal('hide');
   }
 }
