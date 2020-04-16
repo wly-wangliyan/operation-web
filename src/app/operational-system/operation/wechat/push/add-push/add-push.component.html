@@ -3,7 +3,7 @@
     [level3Name]="title"></app-crumb>
   <ul class="header-right">
     <li style="line-height: 50px;">
-      当前日期：{{editParams?.request_date?(editParams.request_date | date:"y-MM-dd HH:mm:ss"):'--'}}</li>
+      当前日期：{{editParams?.request_date?(editParams.request_date | date:"y-MM-dd HH:mm"):'--'}}</li>
   </ul>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
@@ -56,9 +56,7 @@
             (ngModelChange)="onChangeTag()">{{msgTagType[tag.name]}}</label>
         </div>
       </div>
-      <div class="err-message">
-        <span>{{ this.errMessageGroup?.errJson?.content.errMes }}</span>
-      </div>
+
       <div class="tab-bar-list">
         <nz-radio-group name="send_type" [nzButtonStyle]="'solid'" [(ngModel)]="editParams.send_type"
           [disabled]="!isCreate">

@@ -90,6 +90,7 @@ export class AddPushComponent implements OnInit {
     this.editParams.link = '';
     this.editParams.media_id = null;
     this.safeUrl = null;
+    this.errMessageGroup.errJson.content.errMes = '';
   }
 
   // 点击上传图片
@@ -194,7 +195,7 @@ export class AddPushComponent implements OnInit {
         this.saving = false;
         if (!this.globalService.httpErrorProcess(err)) {
           if (err.status === 422) {
-            this.globalService.promptBox.open('数据缺失或非法', null, 2000, null, false);
+            this.globalService.promptBox.open('发布失败，数据缺失或非法！', null, 2000, null, false);
           }
         }
       });
@@ -222,6 +223,10 @@ export class AddPushComponent implements OnInit {
     }
     this.editParams.start_time = sTimestamp;
     this.editParams.end_time = eTimeStamp;
+    if (this.editParams.send_type === 'image' && !this.editParams.media_id) {
+      this.errMessageGroup.errJson.content.errMes = '图片数据错误，请重新上传！';
+      return false;
+    }
     const tags = this.msg_tags.filter(tagItem => tagItem.isChecked).map(tag => tag.isChecked && tag.name);
     this.editParams.msg_tags = tags.join(',');
     return true;
