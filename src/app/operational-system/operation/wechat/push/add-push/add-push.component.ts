@@ -132,6 +132,7 @@ export class AddPushComponent implements OnInit {
       }
       this.msg_tags.push(checkItem);
     });
+    this.isCheckedAll = this.msg_tags && this.msg_tags.length > 0 && this.msg_tags.every(tag => tag.isChecked === true);
 
     if (!this.isCreate) {
       this.tabList = this.tabList.filter(tab => tab.key === this.editParams.send_type);
