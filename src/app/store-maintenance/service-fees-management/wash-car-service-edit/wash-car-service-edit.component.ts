@@ -62,7 +62,7 @@ export class WashCarServiceEditComponent implements OnInit {
         this.repairShopList = res[1];
         this.washServiceConfig.min_sale_fee = res[0].min_sale_fee >= 0 ?
           Number((res[0].min_sale_fee / 100).toFixed(2)) : res[0].min_sale_fee;
-        this.washServiceConfig.refund_switch = res[0].refund_switch ? res[0].refund_switch : 2;
+        this.washServiceConfig.refund_switch = res[0].refund_switch ? res[0].refund_switch : 1;
         this.loading = false;
       }, err => {
         this.loading = false;
@@ -256,7 +256,7 @@ export class WashCarServiceEditComponent implements OnInit {
 
   // 切换
   public onSwitchChange(event: any) {
-    this.washServiceConfig.refund_switch = event ? 1 : 2;
+    this.washServiceConfig.refund_switch = !event ? 1 : 2;
   }
 
   // 取消
