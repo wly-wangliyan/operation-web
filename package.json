@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "login-build": "node ./node_modules/@angular/cli/bin/ng build login --prod",
     "operational-system-build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build operational-system --prod",
-    "store-maintenance-build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build store-maintenance --prod",
+    "store-maintenance-build": "node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build store-maintenance --prod",
     "exemption-build": "node ./node_modules/@angular/cli/bin/ng build exemption --prod",
     "order-parking-build": "node ./node_modules/@angular/cli/bin/ng build order-parking --prod",
     "topic-build": "node ./node_modules/@angular/cli/bin/ng build topic --prod"

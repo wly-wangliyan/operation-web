@@ -84,6 +84,9 @@
                 上传图片
               </button>
               <span>图片大小不要超过1M</span>
+
+              <img *ngIf="safeUrl" class="safe-img" [src]="safeUrl" />
+              <div *ngIf="!safeUrl" class="safe-img">图片显示区域</div>
             </div>
           </div>
         </ng-container>
@@ -110,3 +113,5 @@
 </div>
 
 <app-insert-link #insertLinkModal (changeLink)="onChangeLink($event)"></app-insert-link>
+<app-upload-image #uploadWxImage uploadModalId='uploadWxImage' limitImgSize='1'
+  (selectedImgChange)="onSelectedImgChange($event)"></app-upload-image>

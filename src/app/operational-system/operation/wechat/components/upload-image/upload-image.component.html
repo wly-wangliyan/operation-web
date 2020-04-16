@@ -1,0 +1,44 @@
+<!--上传-->
+<div class="modal fade" data-backdrop="true" [id]="uploadModalId" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard='false'>
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">图像上传</span>
+        <button type="button" class="close" (click)="onCloseUpload()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body modal-body-upload">
+        <div class="select-file-upload-container">
+          <div class="select-file-upload-contain">
+            <div class="form-group">
+              <input type="text" class="form-control file-input" [(ngModel)]="uploadImageModel.address" name="address"
+                placeholder="请选择文件" disabled>
+              <div class="select-file">
+                <a class="choose-file">
+                  <span class="choose-btn">选择文件</span>
+                  <input #importFileInput type="file" name="files1" id="file-upload" [disabled]="uploading"
+                    (change)="uploadImageModel.selectedFile($event,importFileInput)" accept="image/*" />
+                </a>
+              </div>
+            </div>
+            <div class="upload-hint" *ngIf='this.uploadImageModel.hasErrorTip'>
+              {{this.uploadImageModel.errorTip}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="close-btn" type="button" nz-button (click)="onCloseUpload()">
+          取消
+        </button>
+        <button class="sure-btn" type="button" nz-button nzType="primary"
+          [ngClass]="{'btn-disabled':this.uploadImageModel.hasErrorTip || !this.uploadImageModel.file}"
+          (click)="confirmUpload()" [disabled]="this.uploadImageModel.hasErrorTip || !this.uploadImageModel.file">
+          {{uploading?'正在上传...':'上传'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

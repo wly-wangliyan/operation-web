@@ -4,11 +4,9 @@ import { GlobalService } from '../../../../../core/global.service';
 import { PushService, PushMessageEntity } from '../push.service';
 import { ActivatedRoute } from '@angular/router';
 import { ErrMessageGroup, ErrMessageBase } from '../../../../../../utils/error-message-helper';
-import { environment } from '../../../../../../environments/environment';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
-import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 import { InsertLinkComponent } from './insert-link/insert-link.component';
-import { HttpErrorEntity } from '../../../../../core/http.service';
+import { UploadImageComponent } from '../../components/upload-image/upload-image.component';
 
 enum MsgTagType {
   'subscribe' = '关注',
@@ -46,9 +44,11 @@ export class AddPushComponent implements OnInit {
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
   public tabList = [{ key: 'text', value: '文本信息' }, { key: 'image', value: '图片' }];
   public msgTagType = MsgTagType;
+  public safeUrl: any; // 本地图片地址
   private saving = false; // 标记是否正在保存
 
   @ViewChild('insertLinkModal', { static: true }) public insertLinkModalRef: InsertLinkComponent;
+  @ViewChild('uploadWxImage', { static: true }) public uploadImageComponent: UploadImageComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,11 +89,20 @@ export class AddPushComponent implements OnInit {
     this.editParams.title = '';
     this.editParams.link = '';
     this.editParams.media_id = null;
+    this.safeUrl = null;
   }
 
   // 点击上传图片
   public onSelectPictureClick() {
+    this.uploadImageComponent.open();
+  }
 
+  // 接收图片信息
+  public onSelectedImgChange(event: any): void {
+    if (event) {
+      this.editParams.media_id = event.media_id;
+      this.safeUrl = event.safeUrl;
+    }
   }
 
   // 清除错误信息

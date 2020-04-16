@@ -12,6 +12,8 @@ import { AddPushComponent } from './add-push/add-push.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { InsertLinkComponent } from './add-push/insert-link/insert-link.component';
+import { UploadImageModule } from '../components/upload-image/upload-image.module';
+
 @NgModule({
   declarations: [PushListComponent, PushComponent, AddPushComponent, InsertLinkComponent],
   imports: [
@@ -23,7 +25,8 @@ import { InsertLinkComponent } from './add-push/insert-link/insert-link.componen
     NzRadioModule,
     NzCheckboxModule,
     NzSpinModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    UploadImageModule
   ]
 })
 export class PushModule { }

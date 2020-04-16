@@ -80,6 +80,18 @@
   opacity: 0.8;
 }
 
+.safe-img {
+  width: 130px;
+  height: 130px;
+  float: right;
+  background-color: #3E71F7;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  line-height: 130px;
+  border: 1px solid #e3e3e3;
+}
+
 .tab-bar-list {
   background-color: transparent;
   border: 1px solid #e3e3e3;

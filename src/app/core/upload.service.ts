@@ -90,6 +90,30 @@ export class UploadService {
       });
     });
   }
+
+  /**
+   * 上传文件到微信
+   * @param media file 媒体文件
+   * @param city_code 城市code 沈阳：'sy_wxmp'　本溪:'bx_wxmp'
+   * @param type 媒体文件类型， image:图片 voice:语音 video:视频 thumb：缩略图
+   */
+  public requestUploadWxMediafIle(media: File, city_code: 'sy_wxmp' | 'bx_wxmp', type: 'image' | 'voice' | 'video' | 'thumb') {
+    if (!this.config) {
+      // tslint:disable-next-line: max-line-length
+      console.error('config is undefined,you can not use this function.you can define token yourself or use anther method to implement. by zwl');
+      return;
+    }
+    const uploadConfig = this.config.img_config;
+    const formData = new FormData();
+    formData.append('media', media);
+    formData.append('city_code', city_code);
+    formData.append('type', type);
+    const request = new HttpRequest('POST', uploadConfig.url, formData, {
+      withCredentials: true,
+      reportProgress: uploadConfig.reportProcess
+    });
+    return this.httpClient.request(request);
+  }
 }
 
 
