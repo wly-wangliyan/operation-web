@@ -178,6 +178,11 @@
               </tr>
             </ng-container>
           </ng-container>
+          <tr>
+            <td colspan="9" style="background-color: #f1f1f1;" *ngIf="orderRecord.service_info&&orderRecord.service_info.length>0">
+              <div style="text-align: left !important;">服务</div>
+            </td>
+          </tr>
           <tr *ngFor="let service of orderRecord.service_info">
             <td colspan="9">
               <div style="text-align: left !important;">
