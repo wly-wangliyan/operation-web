@@ -15,6 +15,7 @@ export class WashCarServiceConfigEntity extends EntityBase {
   public refund_switch: number = undefined; // int 1开 2关
   public specification_info: Array<WashCarSpecificationEntity> = []; // 规格
   public base_price_info: Array<BasePriceEntity> = []; // 基础价格
+  public tags: Array<any> = []; // array	洗车标签 最多10个 标签长度10
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
 

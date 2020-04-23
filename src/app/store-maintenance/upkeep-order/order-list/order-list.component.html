@@ -90,6 +90,7 @@
               </div>
             </th>
             <th>合计实收</th>
+            <th>优惠券</th>
             <th>下单&支付时间</th>
             <th>订单状态</th>
             <th>操作</th>
@@ -190,6 +191,13 @@
             </td>
 
             <td>{{order.sale_total_fee | centPriceChange:'¥ ':'left'}}</td>
+
+            <td>
+              <div class="column-box">
+                <span>配件：{{order.coupon_used_amount | centPriceChange:'¥ ':'left'}}</span>
+                <span>服务：{{0 | centPriceChange:'¥ ':'left'}}</span>
+              </div>
+            </td>
 
             <td>
               <div class="column-box">

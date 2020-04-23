@@ -31,6 +31,7 @@ export class WashCarServiceEditComponent implements OnInit {
   public minSaleFeeErrMsg = '';
   public tempSpecificationList_1: Array<WashCarSpecificationEntity> = []; // 临时存储5座小型车规格
   public tempSpecificationList_2: Array<WashCarSpecificationEntity> = []; // 临时存储SUV/MPV规格
+  public tag = '';
   private selectedSpecification: WashCarSpecificationEntity = new WashCarSpecificationEntity(); // 当前操作规格
   private editParams: WashCarServiceConfigEntity = new WashCarServiceConfigEntity(); // 编辑配置参数
   private sort = 0; // 防重复标记
@@ -309,6 +310,7 @@ export class WashCarServiceEditComponent implements OnInit {
     this.editParams = new WashCarServiceConfigEntity();
     this.editParams.service_introduce = this.washServiceConfig.service_introduce;
     this.editParams.wash_car_service_config_id = this.washServiceConfig.wash_car_service_config_id;
+    this.editParams.tags = this.washServiceConfig.tags;
     // 校验基础价格
     for (const price of this.basePrice_1) {
       const car_tip = price.car_type === 1 ? '1次标准洗车-5座小型车' : '1次标准洗车-SUV/MPV';
@@ -438,5 +440,12 @@ export class WashCarServiceEditComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  public onAddTagClick() {
+    if (this.tag) {
+      this.washServiceConfig.tags.push(this.tag);
+      this.tag = '';
+    }
   }
 }

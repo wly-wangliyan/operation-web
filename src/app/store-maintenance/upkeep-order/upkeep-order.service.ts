@@ -198,6 +198,7 @@ export class ArrivalOrderEntity extends EntityBase {
   public sale_work_fee: number = undefined; // 实付(售价)工时费 单位：分
   public minus_work_fee: number = undefined; // 平台立减(原价-售价)工时费 单位：分
   public sale_total_fee: number = undefined; // 合计实收(总售价) 单位：分
+  public coupon_used_amount: number = undefined; // 优惠券-配件 单位：分
   public order_time: number = undefined; // 下单时间
   public pay_time: number = undefined; // 支付时间
   public user_status: number = undefined; // C端用户订单状态 1：待支付 2:待收货(配送中) 3:待服务(已到达 ) 4：已取消 5：已完成

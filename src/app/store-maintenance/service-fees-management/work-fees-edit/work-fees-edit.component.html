@@ -49,20 +49,6 @@
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nzFlex>
-          <nz-form-label [nzNoColon]="true">服务说明</nz-form-label>
-          <nz-form-control>
-            <input
-                    class="fee-name"
-                    [(ngModel)]="searchWorkFeesParams.service_instruction"
-                    placeholder="输入1-100字服务说明"
-                    nz-input
-                    autocomplete="off"
-                    name="service_instruction"
-                    maxlength="100"
-            />
-          </nz-form-control>
-        </nz-form-item>
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="5">
             <nz-form-item nzFlex>
@@ -137,6 +123,19 @@
             </nz-form-item>
           </div>
         </div>
+        <nz-form-item nzFlex>
+          <nz-form-label [nzNoColon]="true">服务说明</nz-form-label>
+          <nz-form-control>
+                  <textarea
+                          class="fee-name"
+                          [(ngModel)]="searchWorkFeesParams.service_instruction"
+                          placeholder="输入200字以内服务说明"
+                          nz-input rows="4"
+                          autocomplete="off"
+                          name="service_instruction"
+                          maxlength="200"></textarea>
+          </nz-form-control>
+        </nz-form-item>
         <div style="margin-top: 40px;margin-bottom: 40px">
           <button
             class="sure-btn"

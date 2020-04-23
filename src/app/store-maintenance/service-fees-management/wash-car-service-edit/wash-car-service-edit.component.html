@@ -101,6 +101,26 @@
       <div class="row">
         <label class="control-label">
           <b>*</b>
+          <span>洗车标签</span>
+        </label>
+        <div class="tag">
+          <div *ngFor="let tag of washServiceConfig.tags; let i=index">
+            <label class="tag-label">{{tag}}</label>
+            <label class="tag-span" (click)="washServiceConfig.tags.splice(i, 1)">
+              <img src="/assets/images/tag_delete.png">
+            </label>
+          </div>
+          <div *ngIf="washServiceConfig.tags.length < 10" style="display: flex">
+            <input class="form-control tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="tag" maxlength="10">
+            <label class="tag-span" [class.disabled]="!tag" (click)="onAddTagClick()">
+              <img src="/assets/images/tag_add.png">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
           <span>规格设置</span>
         </label>
         <div class="table-item specification-table">
@@ -287,7 +307,7 @@
         </div>
       </div>
       <div style="margin: 40px 0 40px 12px;">
-        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid"
+        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid||washServiceConfig.tags.length===0"
           (appZDebounceClick)="onFormSubmit()">保存
         </button>
         <button class="close-btn" nz-button (click)="onCancelClick()">取消</button>

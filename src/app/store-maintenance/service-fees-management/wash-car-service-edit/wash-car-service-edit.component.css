@@ -224,3 +224,39 @@ p {
   color: #888;
   margin: 5px 0;
 }
+
+.tag {
+  width: 1150px;
+}
+
+.tag div {
+  float: left;
+}
+
+.tag-label, .tag-input {
+  width: 188px;
+  height: 34px;
+  vertical-align: middle;
+  line-height: 34px;
+  text-align: left;
+  color: #3E71F7;
+  background: rgba(62,113,247,0.22);
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.tag-span {
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 34px;
+  background-color: rgba(62,113,247,1);
+  cursor: pointer;
+  position: relative;
+  left: -34px;
+}
+
+.disabled {
+  cursor: not-allowed;
+}

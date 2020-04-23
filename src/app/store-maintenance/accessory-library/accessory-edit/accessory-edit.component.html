@@ -21,8 +21,22 @@
         <nz-form-item nzFlex *ngIf='accessoryParams.project_id'>
           <nz-form-label nzRequired [nzNoColon]='true'>产品名称</nz-form-label>
           <nz-form-control>
-            <input class="pro-name" [(ngModel)]="accessoryParams.accessory_name" placeholder="输入1-30个字标题" nz-input
-              name="accessory-name" required maxlength='30' appIgnoreSpace />
+            <input class="pro-name" [(ngModel)]="accessoryParams.accessory_name" placeholder="输入1-60个字标题" nz-input
+              name="accessory-name" required maxlength='60' />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex *ngIf="accessoryParams.project_id&&accessoryParams.project_num==='11'">
+          <nz-form-label nzRequired [nzNoColon]='true'>小标题</nz-form-label>
+          <nz-form-control>
+            <input class="pro-name" [(ngModel)]="accessoryParams.small_title" placeholder="输入1-10个字小标题" nz-input
+                   name="small_title" required maxlength='10' />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex *ngIf="accessoryParams.project_id&&accessoryParams.project_num==='11'">
+          <nz-form-label [nzNoColon]='true'>产品卖点</nz-form-label>
+          <nz-form-control>
+            <textarea class="pro-name" [(ngModel)]="accessoryParams.sale_point" placeholder="输入200字以内文字" nz-input
+                      name="sale_point" maxlength='200' rows="3"></textarea>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex [hidden]='!accessoryParams.project_id'>
@@ -404,6 +418,16 @@
             </app-z-text-ckeditor>
             <div class="text-danger">
               <span class="input-error">{{accessoryDetailErrors}}</span>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex [hidden]="!accessoryParams.project_id||accessoryParams.project_num!=='11'">
+          <nz-form-label [nzNoColon]='true'>正品溯源</nz-form-label>
+          <nz-form-control>
+            <app-z-text-ckeditor ckEditorId='accessorySourceEditor' [replaceWidth]="900" #accessorySourceEditor>
+            </app-z-text-ckeditor>
+            <div class="text-danger">
+              <span class="input-error">{{accessorySourceErrors}}</span>
             </div>
           </nz-form-control>
         </nz-form-item>

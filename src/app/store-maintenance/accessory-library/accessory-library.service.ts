@@ -69,7 +69,7 @@ export class SpecificationEntity extends EntityBase {
 // 项目实体
 export class ProjectEntity extends EntityBase {
   public project_id: string = undefined; // string	项目id - 主键
-  public project_number: string = undefined; // string	项目编号
+  public project_num: string = undefined; // string	项目编号
   public project_name: string = undefined; // string	项目名称
   public related_project_name: string = undefined; // string	配套项目名称
   public specification: SpecificationEntity = undefined; // json	规格 { 'type': 1, 'name': 'xxx', 'unit': 'xxx' } 1: 数值
@@ -167,7 +167,10 @@ export class AccessoryEntity extends EntityBase {
   public sale_num: number = undefined; // integer	销量
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
-  public supply_type: number = undefined; // 供应方式  1:第三方供应商 2:门店自供
+  public supply_type: number = undefined; // 供应方式  1:第三方供应商 2:门店自供]
+  public small_title: string = undefined; // 	string	小标题 (10个字)
+  public sale_point: string = undefined; // 	string	产品卖点 (200个字) 无：传 ''
+  public accessory_source: string = undefined; // 	string	正品溯源 无：传 ''
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'project') {
@@ -222,6 +225,7 @@ export class SearchParams extends EntityBase {
 export class SearchAccessoryParams extends EntityBase {
   public project_id: string = undefined; // string	F	所属项目Id
   public project_name: string = undefined; // string	F	所属项目名称
+  public project_num: string = undefined; // string	F	所属项目编号
   public accessory_name: string = undefined; // string	F	配件名称
   public accessory_images: string = undefined; // string	T	图片 多个逗号分隔
   public operation_telephone: string = undefined; // string	T	运营手机号(蓄电池)
@@ -233,6 +237,9 @@ export class SearchAccessoryParams extends EntityBase {
   public price_info: PriceInfoEntity = undefined; // json	机滤参数
   public specifications: Array<SpecificationEntity> = undefined; // object	规格 Specification
   public detail: string = undefined; // string	T	图文详情 无：''
+  public small_title: string = undefined; // 	string	小标题 (10个字)
+  public sale_point: string = undefined; // 	string	产品卖点 (200个字) 无：传 ''
+  public accessory_source: string = undefined; // 	string	正品溯源 无：传 ''
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'specifications') {
       return SpecificationEntity;

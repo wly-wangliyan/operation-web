@@ -76,6 +76,7 @@ export class AccessoryEditComponent implements OnInit {
   public accessory_id = ''; // 配件id
   public operationTelErrors = ''; // 运营手机号错误信息
   public accessoryDetailErrors = ''; // 图文描述错误信息
+  public accessorySourceErrors = ''; // 正品溯源错误信息
   public specificationErrors = ''; // 规格参数错误信息
   public accessory_image_url: Array<any> = []; // 配件图片
   public specifications_image_num: number; // 规格图片索引
@@ -115,7 +116,7 @@ export class AccessoryEditComponent implements OnInit {
         res => {
           this.accessoryData = res;
           this.getDetailData();
-          this.getEditorData(res.detail);
+          this.getEditorData(res);
           this.loading = false;
         },
         err => {
@@ -144,6 +145,8 @@ export class AccessoryEditComponent implements OnInit {
     this.accessoryParams.operation_telephone = this.accessoryData.operation_telephone;
     this.accessoryParams.project_id = this.accessoryData.project
       ? this.accessoryData.project.project_id : '';
+    this.accessoryParams.project_num = this.accessoryData.project
+        ? this.accessoryData.project.project_num : '';
     this.accessoryParams.project_name = this.accessoryData.project
       ? this.accessoryData.project.project_name : '';
     if (this.accessoryParams.project_id && this.accessoryParams.project_name === '机油') {
@@ -153,6 +156,8 @@ export class AccessoryEditComponent implements OnInit {
       ? this.accessoryData.accessory_brand.accessory_brand_id : '';
     this.accessoryParams.accessory_brand_name = this.accessoryData.accessory_brand
       ? this.accessoryData.accessory_brand.brand_name : '';
+    this.accessoryParams.small_title = this.accessoryData.small_title;
+    this.accessoryParams.sale_point = this.accessoryData.sale_point;
     this.accessoryData.specification_info.forEach(i => {
       i.imageList = i.image ? i.image.split(',') : [];
       i.original_balance_fee = this.getCentPrice(i.original_balance_fee);
@@ -184,11 +189,15 @@ export class AccessoryEditComponent implements OnInit {
   }
 
   // 富文本数据处理
-  private getEditorData(detail: string) {
-    const tempContent = detail
-      ? detail.replace('/\r\n/g', '').replace(/\n/g, '')
+  private getEditorData(accessory: AccessoryEntity) {
+    const detailContent = accessory.detail
+      ? accessory.detail.replace('/\r\n/g', '').replace(/\n/g, '')
       : '';
-    CKEDITOR.instances.accessoryEditor.setData(tempContent);
+    const sourceContent = accessory.accessory_source
+        ? accessory.accessory_source.replace('/\r\n/g', '').replace(/\n/g, '')
+        : '';
+    CKEDITOR.instances.accessoryEditor.setData(detailContent);
+    CKEDITOR.instances.accessorySourceEditor.setData(sourceContent);
   }
 
   // 打开所属项目选择组件
@@ -203,6 +212,7 @@ export class AccessoryEditComponent implements OnInit {
       this.accessoryParams = new SearchAccessoryParams();
       this.accessoryParams.project_id = event.project.project_id;
       this.accessoryParams.project_name = event.project.project_name;
+      this.accessoryParams.project_num = event.project.project_num;
       if (event.project.project_name === '机油') {
         this.requestProjectParams();
         this.accessoryParams.accessory_params = new AccessoryParamsEntity();
@@ -292,6 +302,7 @@ export class AccessoryEditComponent implements OnInit {
     this.errSpecificationsItem.ic_name.isError = false;
     this.operationTelErrors = '';
     this.accessoryDetailErrors = '';
+    this.accessorySourceErrors = '';
     this.specificationErrors = '';
   }
 
@@ -378,6 +389,10 @@ export class AccessoryEditComponent implements OnInit {
       .getData()
       .replace('/\r\n/g', '')
       .replace(/\n/g, '');
+    this.accessoryParams.accessory_source = CKEDITOR.instances.accessorySourceEditor
+        .getData()
+        .replace('/\r\n/g', '')
+        .replace(/\n/g, '');
     if (this.accessoryImgComponent.imageList.length === 0) {
       this.errPositionItem.icon.isError = true;
       this.errPositionItem.icon.errMes = '请上传图片！';
