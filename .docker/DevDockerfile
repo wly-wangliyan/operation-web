@@ -20,8 +20,6 @@
 # docker pull docker.uucin.com/zhumengyuan/operation-web:dev && docker-compose -f .docker/docker-compose-dev.yaml up -d
 ###
 
-RUN cp src/environments/environment.d.ts src/environments/environment.prod.ts
-
 FROM nginx:alpine
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./dist /app/dist
