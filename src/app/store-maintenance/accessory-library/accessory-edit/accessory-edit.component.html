@@ -28,8 +28,8 @@
         <nz-form-item nzFlex *ngIf="accessoryParams.project_id&&accessoryParams.project_num==='11'">
           <nz-form-label nzRequired [nzNoColon]='true'>小标题</nz-form-label>
           <nz-form-control>
-            <input class="pro-name" [(ngModel)]="accessoryParams.small_title" placeholder="输入1-10个字小标题" nz-input
-                   name="small_title" required maxlength='10' />
+            <input class="pro-name" [(ngModel)]="accessoryParams.small_title" placeholder="输入1-20个字小标题" nz-input
+                   name="small_title" required maxlength='20' />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex *ngIf="accessoryParams.project_id&&accessoryParams.project_num==='11'">
