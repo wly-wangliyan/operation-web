@@ -198,11 +198,14 @@
               <div class="material-item" *ngIf="orderRecord.driving_license_side">
                 <img [src]="orderRecord.driving_license_side" (click)="onOpenZoomPictureModal(1)" />
                 <span>行驶证副本</span></div>
+              <div class="material-item" *ngIf="orderRecord.car_image">
+                <img [src]="orderRecord.car_image" (click)="onOpenZoomPictureModal(2)" />
+                <span>行驶证正本背面页</span></div>
               <div class="material-item" *ngIf="orderRecord.insurance_policy">
-                <img [src]="orderRecord.insurance_policy" (click)="onOpenZoomPictureModal(2)" />
+                <img [src]="orderRecord.insurance_policy" (click)="onOpenZoomPictureModal(3)" />
                 <span>交强险保单</span></div>
               <div class="material-item" *ngIf="orderRecord.payment_certificate">
-                <img [src]="orderRecord.payment_certificate" (click)="onOpenZoomPictureModal(3)" />
+                <img [src]="orderRecord.payment_certificate" (click)="onOpenZoomPictureModal(4)" />
                 <span>车船税纳税凭证</span></div>
             </div>
 

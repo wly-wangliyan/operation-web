@@ -71,6 +71,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.orderList.forEach(item => {
         let urls = item.driving_license_front ? item.driving_license_front : '';
         urls = urls + (item.driving_license_side ? (',' + item.driving_license_side) : '');
+        urls = urls + (item.car_image ? (',' + item.car_image) : '');
         urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : '');
         urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : '');
         item.imageUrls = urls ? urls.split(',') : [];
