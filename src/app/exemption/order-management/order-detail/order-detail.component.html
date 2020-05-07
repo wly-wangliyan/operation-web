@@ -5,10 +5,10 @@
     <li class="big-bg" *ngIf="orderRecord.processing_flow===1">
       <a (click)="onChangeProcessStatus(2)">已提交办理</a>
     </li>
-    <li class="big-bg" *ngIf="orderRecord.processing_flow===2">
+    <!--<li class="big-bg" *ngIf="orderRecord.processing_flow===2">
       <a (click)="onChangeProcessStatus(3)">制贴完成</a>
-    </li>
-    <li class="big-bg" *ngIf="orderRecord.processing_flow===3">
+    </li>-->
+    <li class="big-bg" *ngIf="orderRecord.processing_flow===2">
       <a (click)="onChangeProcessStatus(4)">发货</a>
     </li>
     <li class="big-bg" *ngIf="orderRecord.processing_flow===4">

@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, ExemptionOrderEntity, EditParams } from '../order-management.service';
-import { environment } from '../../../../environments/environment';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from 'src/app/core/http.service';
 
