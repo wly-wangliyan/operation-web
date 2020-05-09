@@ -6,6 +6,7 @@ import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, ExemptionOrderEntity, EditParams } from '../order-management.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from 'src/app/core/http.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-order-detail',
@@ -296,6 +297,6 @@ export class OrderDetailComponent implements OnInit {
 
   // 打包下载
   public onDownloadClick(): void {
-    this.orderService.requestDownloadMaterial(this.order_id);
+    window.open(`${environment.EXEMPTION_DOMAIN}/exemption/download/orders/${this.order_id}`);
   }
 }
