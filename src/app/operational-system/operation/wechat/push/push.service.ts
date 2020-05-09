@@ -39,6 +39,21 @@ export class PushMessageEntity extends EntityBase {
   }
 }
 
+// 消息推送
+export class PushLogEntity extends EntityBase {
+  public push_message_log_id: string = undefined; // 	string(32)	T	主键id
+  subject: string = undefined; // 	string(50)	T	推送主题
+  total_number: number = undefined; // 	int	T	推送总人数
+  success_number: number = undefined; // 	int	T	推送成功人数
+  fail_number: number = undefined; // 	int	T	推送失败人数
+  user_ids: string = undefined; // 	String	T	所有推送ids
+  success_ids: string = undefined; // 	String	T	推送成功ids
+  fail_ids: string = undefined; // 	String	T	推送失败ids
+  send_time: number = undefined; // 	double	T	推送时间
+  public created_time: number = undefined; // 创建时间
+  public updated_time: number = undefined; // 更新时间
+}
+
 export class SearchParams extends EntityBase {
   public subject: string = undefined; // 推送主题
   public section: string = undefined; // 推送时间
@@ -51,6 +66,16 @@ export class PushMessageLinkResponse extends LinkResponse {
     const tempList: Array<PushMessageEntity> = [];
     results.forEach(res => {
       tempList.push(PushMessageEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class PushLogLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<PushLogEntity> {
+    const tempList: Array<PushLogEntity> = [];
+    results.forEach(res => {
+      tempList.push(PushLogEntity.Create(res));
     });
     return tempList;
   }
@@ -102,5 +127,21 @@ export class PushService {
       body.request_date = date ? new Date(date).getTime() : null;
       return PushMessageEntity.Create(body);
     }));
+  }
+
+  /** 获取消息推送信息列表 */
+  public requestPushLogList(): Observable<PushLogLinkResponse> {
+    const httpUrl = `${this.domain}/custom/send_logs`;
+    const params = this.httpService.generateListURLSearchParams(null);
+    return this.httpService.get(httpUrl, params).pipe(map(res => new PushLogLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求消息推送信息列表
+   * @param string url linkUrl
+   * @returns Observable<PushLogLinkResponse>
+   */
+  public continuePushLogListData(url: string): Observable<PushLogLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new PushLogLinkResponse(res)));
   }
 }

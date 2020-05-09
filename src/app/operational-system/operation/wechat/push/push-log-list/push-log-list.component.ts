@@ -3,6 +3,7 @@ import { NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
 import { PushService, SearchParams } from '../push.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-push-log-list',
@@ -29,11 +30,11 @@ export class PushLogListComponent implements OnInit {
 
   /* 请求检索 */
   public requestSearch(): any {
-    return this.pushService.requestPushMessageList();
+    return this.pushService.requestPushLogList();
   }
 
   public continueSearch(url: string): any {
-    return this.pushService.continuePushMessageListData(url);
+    return this.pushService.continuePushLogListData(url);
   }
 
   /* 生成并检查参数有效性 */
@@ -44,7 +45,7 @@ export class PushLogListComponent implements OnInit {
         new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
     if (sTimestamp && eTimeStamp) {
       if (sTimestamp > eTimeStamp) {
-        this.globalService.promptBox.open('上线开始时间不能大于结束时间！', null, 2000, null, false);
+        this.globalService.promptBox.open('推送开始时间不能大于结束时间！', null, 2000, null, false);
         return false;
       }
     }
@@ -68,5 +69,10 @@ export class PushLogListComponent implements OnInit {
   // 结束时间的禁用部分
   public disabledEndTime = (endValue: Date): boolean => {
     return DisabledTimeHelper.disabledEndTime(endValue, this.start_time);
+  }
+
+  // 数据导出
+  public onExportClick(push_message_log_id: string) {
+    // const searchUrl = `${environment.OPERATION_SERVE}/custom/send_logs/:${push_message_log_id}/export?order_status=${this.searchParams.order_status}&buyer_tel=${this.searchParams.buyer_tel}&buyer_name=${this.searchParams.buyer_name}&order_id=${this.searchParams.order_id}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
   }
 }

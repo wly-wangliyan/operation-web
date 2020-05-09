@@ -62,7 +62,8 @@
           <span>指定人群</span>
         </label>
         <div class="control-input">
-          <select class="form-control" [(ngModel)]="editParams.send_all" name="send_all" (change)="onSendChange($event)">
+          <select class="form-control" [(ngModel)]="editParams.send_all" name="send_all"
+                  [disabled]="!isCreate" (change)="onSendChange($event)">
             <option value="1">全部</option>
             <option value="2">特定</option>
           </select>
