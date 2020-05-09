@@ -13,9 +13,10 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { InsertLinkComponent } from './add-push/insert-link/insert-link.component';
 import { UploadImageModule } from '../components/upload-image/upload-image.module';
+import { PushLogListComponent } from './push-log-list/push-log-list.component';
 
 @NgModule({
-  declarations: [PushListComponent, PushComponent, AddPushComponent, InsertLinkComponent],
+  declarations: [PushListComponent, PushComponent, AddPushComponent, InsertLinkComponent, PushLogListComponent],
   imports: [
     CommonModule,
     PushRoutingModule,

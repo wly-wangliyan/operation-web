@@ -23,6 +23,8 @@ export class PushMessageEntity extends EntityBase {
   public link: string = undefined; // F 小程序链接
   public media_id: string = undefined; // 微信返回图片media_id send_type = 'image'时必传
   public city_code: 'sy_wxmp' | 'bx_wxmp' = 'sy_wxmp'; // 城市code
+  public user_ids: string = undefined; // 	String	F	推送目标用户id
+  public send_all = 1; // 	Integer	T	推送目标用户1全部 2部分
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
   public request_date: number = undefined; // 标记数据请求时间
@@ -35,6 +37,13 @@ export class PushMessageEntity extends EntityBase {
     delete json.request_date;
     return json;
   }
+}
+
+export class SearchParams extends EntityBase {
+  public subject: string = undefined; // 推送主题
+  public section: string = undefined; // 推送时间
+  public page_num = 1; // 页码
+  public page_size = 45; // 每页条数
 }
 
 export class PushMessageLinkResponse extends LinkResponse {

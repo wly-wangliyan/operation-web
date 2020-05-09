@@ -56,6 +56,25 @@
             (ngModelChange)="onChangeTag()">{{msgTagType[tag.name]}}</label>
         </div>
       </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>指定人群</span>
+        </label>
+        <div class="control-input">
+          <select class="form-control" [(ngModel)]="editParams.send_all" name="send_all" (change)="onSendChange($event)">
+            <option value="1">全部</option>
+            <option value="2">特定</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" *ngIf="editParams.send_all==2">
+        <label class="control-label"></label>
+        <div class="control-input">
+          <textarea rows="4" class="form-control" [(ngModel)]="editParams.user_ids" name="user_ids"
+                    placeholder="输入用户ID ，以“,”号进行分割" required></textarea>
+        </div>
+      </div>
 
       <div class="tab-bar-list">
         <nz-radio-group name="send_type" [nzButtonStyle]="'solid'" [(ngModel)]="editParams.send_type"

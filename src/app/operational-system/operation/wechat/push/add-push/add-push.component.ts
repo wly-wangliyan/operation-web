@@ -255,4 +255,9 @@ export class AddPushComponent implements OnInit {
     return new Date(date).setHours(new Date(date).getHours(),
       new Date(date).getMinutes(), 0, 0);
   }
+
+  // 指定人群变化后，清空用户id
+  public onSendChange(event: any) {
+    this.editParams.user_ids = event.target.value === '1' ? '' : this.editParams.user_ids;
+  }
 }

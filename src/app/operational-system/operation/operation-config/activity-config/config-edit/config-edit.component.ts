@@ -80,7 +80,7 @@ export class ConfigEditComponent implements OnInit {
       this.isCreateConfig = true;
       this.isInstanceReady = false;
       this.configParams = new PromotionEntity();
-      this.configParams.promotion_type = 1;
+      this.configParams.promotion_type = '';
       this.editRewardList.push(new RewardEntity());
       timer(500).subscribe(() => {
         CKEDITOR.instances.descriptionEditor.destroy(true);
@@ -122,13 +122,6 @@ export class ConfigEditComponent implements OnInit {
     this.tempContent = this.configParams.description.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
     CKEDITOR.replace('descriptionEditor', { width: 1130 }).setData(this.tempContent);
     this.isInstanceReady = true;
-  }
-
-  // 修改活动类型
-  public onChangeType(event: any): void {
-    if (event.target.value) {
-      this.configParams.promotion_type = Number(event.target.value);
-    }
   }
 
   // 添加奖赠设置

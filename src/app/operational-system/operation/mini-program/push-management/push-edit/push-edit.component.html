@@ -40,6 +40,26 @@
         <div class="row">
           <label class="control-label">
             <b>*</b>
+            <span>用户范围</span>
+          </label>
+          <div class="control-input">
+            <a name="push_range1" class="offline-btn" [class.active-btn]="pushParams.user_range===1"
+               (click)="onChangeTeb('user_range', 1)">全部</a>
+            <a name="push_range2" class="offline-btn" [class.active-btn]="pushParams.user_range===2"
+               (click)="onChangeTeb('user_range', 2)">指定用户</a>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px">
+          <div class="push-rate" *ngIf="pushParams.user_range===2">
+            <div class="control-input">
+              <textarea class="form-control" rows="4" placeholder="输入用户ID ，多个用户使用英文逗号分隔" [(ngModel)]="pushParams.user_ids"
+                      name="user_ids" maxlength="100" required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
             <span>定位人群</span>
           </label>
           <div class="control-input">
@@ -47,6 +67,8 @@
               (click)="onChangeTeb('push_range', 1)">全部</a>
             <a name="push_range2" class="offline-btn" [class.active-btn]="pushParams.push_range===2"
               (click)="onChangeTeb('push_range', 2)">领券未使用用户</a>
+            <!--<a name="push_range2" class="offline-btn" [class.active-btn]="pushParams.push_range===3"
+               (click)="onChangeTeb('push_range', 3)">下单未支付用户</a>-->
             <a name="push_range2" class="offline-btn" [class.active-btn]="pushParams.push_range===4"
               (click)="onChangeTeb('push_range', 4)">自定义</a>
           </div>
@@ -80,7 +102,9 @@
             <select *ngIf="pushParams.range_type===3" class="form-control" [(ngModel)]="pushParams.coupon_service"
               required name="coupon_service">
               <option value=''>请选择</option>
-              <option *ngFor="let item of coupon_service;let i=index" [value]=i+1>{{item}}</option>
+              <ng-container *ngFor="let item of coupon_service;let i=index">
+                <option *ngIf="item" [value]=i+1>{{item}}</option>
+              </ng-container>
             </select>
             <ng-container *ngIf="pushParams.range_type">
               <span>距离到期</span>

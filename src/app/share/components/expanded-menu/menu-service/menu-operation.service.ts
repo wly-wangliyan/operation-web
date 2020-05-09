@@ -91,6 +91,8 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('48小时推送', '/main/operation/wechat/push', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
+    const subFinanceMenu3 = new SideMenuItem('推送记录', '/main/operation/wechat/push/push-log', systemMenu);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

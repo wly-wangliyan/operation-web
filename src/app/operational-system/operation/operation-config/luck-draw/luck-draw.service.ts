@@ -59,7 +59,9 @@ export class ActivityParams extends EntityBase {
   public interval_days: number = undefined; // int	T	间隔天数
   public daily_participation_limit: number = undefined; // int	T	每日可参与上限
   public max_participation_limit: number = undefined; // int	T	最大可参与上限
-  public extra_times: number = undefined; // int T	每人首次分享后额外参与次数 0表示没有设置每人首次分享后额外参与次数
+  public extra_times: number = undefined; // int T	分享后额外参与次数 share_setting有值传1, 无值传0
+  public share_setting: number = undefined; // int T	分享设置 1:每人首次分享 2:每人每次分享 3:每人每天首次分享
+  public share_way: string = undefined; // 	string	T	分享途径 1:分享给好友 2:分享给群聊 3:分享到朋友圈 多个逗号分隔
   public cover_image: string = undefined; // string(150)	T	封面图片
   public lottery_activity_rules: string = undefined; // string(500)	T	活动规则
   public wx_share_title: string = undefined; // string(20)	T	微信好友分享标题
@@ -82,7 +84,9 @@ export class ActivityEntity extends EntityBase {
   public interval_days: number = undefined; // int	T	间隔天数
   public daily_participation_limit: number = undefined; // int	T	每日可参与上限
   public max_participation_limit: number = undefined; // int	T	最大可参与上限
-  public extra_times: number = undefined; // int T	每人首次分享后额外参与次数 0表示没有设置每人首次分享后额外参与次数
+  public extra_times: number = undefined; // int T	分享后额外参与次数 share_setting有值传1, 无值传0
+  public share_setting: number = undefined; // int T	分享设置 1:每人首次分享 2:每人每次分享 3:每人每天首次分享
+  public share_way: string = undefined; // 	string	T	分享途径 1:分享给好友 2:分享给群聊 3:分享到朋友圈 多个逗号分隔
   public cover_image: string = undefined; // string(150)	T	封面图片
   public lottery_activity_rules: string = undefined; // string(500)	T	活动规则
   public wx_share_title: string = undefined; // string(20)	T	微信好友分享标题

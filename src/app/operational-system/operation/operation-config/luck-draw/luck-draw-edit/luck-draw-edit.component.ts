@@ -69,7 +69,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
   public missed_image = []; // 未中奖图
   public start_time = null; // 活动开始时间
   public end_time = null; // 活动开始时间
-  public extra_times: boolean; // 每人首次分享后额外参与
+  public share_way = []; // 分享途径
   public lottery_activity_id: string;
 
   private is_save = false; // 防止连续出发保存事件
@@ -118,7 +118,7 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.wx_share_image = this.activityParams.wx_share_image ? this.activityParams.wx_share_image.split(',') : [];
       this.wx_share_poster = this.activityParams.wx_share_poster ? this.activityParams.wx_share_poster.split(',') : [];
       this.missed_image = this.noPrizeParams.missed_image ? this.noPrizeParams.missed_image.split(',') : [];
-      this.extra_times = this.activityParams.extra_times === 0 ? false : true;
+      this.share_way = this.activityParams.share_way ? this.activityParams.share_way.split(',') : [];
       this.start_time = this.activityParams.start_time ? new Date(this.activityParams.start_time * 1000) : '';
       this.end_time = this.activityParams.end_time ? new Date(this.activityParams.end_time * 1000) : '';
     }, err => {
@@ -159,7 +159,8 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.activityParams.cover_image = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
       this.activityParams.wx_share_image = this.wxShareImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
       this.activityParams.wx_share_poster = this.wxPosterImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
-      this.activityParams.extra_times = this.extra_times ? 1 : 0;
+      this.activityParams.extra_times = this.activityParams.share_setting ? 1 : 0;
+      this.activityParams.share_way = this.share_way.join(',');
       if (this.verification()) {
         if (!this.lottery_activity_id) {
           // 添加抽奖活动
@@ -387,5 +388,10 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  // 分享途径改变时调用
+  public onShareChange(event: any) {
+    this.share_way = event;
   }
 }

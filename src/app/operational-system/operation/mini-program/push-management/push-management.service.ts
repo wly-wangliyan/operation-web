@@ -44,6 +44,8 @@ export class PushEntity extends EntityBase {
   public close_user_num: number = undefined; // 	int	累计关闭人数
   public push_counts: Array<PushCountEntity> = []; // 	[PushPlan][]	推送统计列表
   public url_type: string = undefined; // 	int	推送触发落地页url类型1:小程序原生页,2:H5
+  public user_range: number = undefined; // 	integer	T	用户范围 1: 全部 2:自定用户 默认: 1
+  public user_ids: string = undefined; // 	string	T	用户集合 多个逗号分隔 'xxx,xxx' 无传空字符串
   public is_deleted: boolean = undefined; // 	bool	逻辑删除
   public updated_time: number = undefined; // 更新时间
   public created_time: number = undefined; // 创建时间
@@ -71,7 +73,7 @@ export class PushParams extends EntityBase {
   public range_type: number = undefined; // 	int	F	推送人群类型1:优惠券模板id形式,2:优惠券组id形式,3:优惠券服务业务形式
   public coupon_id: string = undefined; // 	string	F	优惠券模板id(push_range为2时三选一)
   public coupon_group_id: string = undefined; // 	string	F	优惠券组id(push_range为2时三选一)
-  public coupon_service: string = undefined; // 	int	F	优惠券服务业务1:停车,2:检车,3:保养,4:票务,5:预约(push_range为2时三选一)
+  public coupon_service: string = undefined; // 	int	F	优惠券服务业务1:停车,2:检车,3:保养,4:票务,5:预约,9:洗车,10:到店保养(push_range为2时三选一)
   public date_limit: number = undefined; // 	int	F	距离到期几日内显示推送(push_range为2时必传)
   public free_range_type: number = undefined; // 人群定位'自定义'下的类型 1:临近车险投保日期 2:临近年检日期用户(push_range为4时必传)
   public free_date_limit: number = undefined; // 临近(投保)日期推送天数(push_range为4且free_range_type为1时必传)
@@ -88,6 +90,9 @@ export class PushParams extends EntityBase {
   public end_time: number = undefined; // 	float	T	下线时间 9999999999为永不下线
   public description: string = undefined; // 	string	F
   public url_type: string = undefined; // 	int	推送触发落地页url类型1:小程序原生页,2:H5
+  public user_range: number = undefined; // 	integer	T	用户范围 1: 全部 2:自定用户 默认: 1
+  public user_ids: string = undefined; // 	string	T	用户集合 多个逗号分隔 'xxx,xxx' 无传空字符串
+
 
   constructor(entity?: PushEntity) {
     super();
@@ -115,6 +120,8 @@ export class PushParams extends EntityBase {
       this.end_time = entity.end_time; // 	float	T	下线时间 9999999999为永不下线
       this.description = entity.description; // 	string	F
       this.url_type = entity.url_type;
+      this.user_range = entity.user_range;
+      this.user_ids = entity.user_ids;
     }
   }
   public toAddJson(): any {

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { isUndefined } from 'util';
+import { isUndefined } from "util";
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import { GlobalService } from '../../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
@@ -52,7 +52,7 @@ export class PushEditComponent implements OnInit {
   public pushParams: PushParams = new PushParams();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
   public cover_url = [];
-  public coupon_service = ['停车服务', '检车服务', '保养服务', '票务服务', '预约服务'];
+  public coupon_service = ['停车服务', '检车服务', '保养服务', '票务服务', '预约服务', '', '', '', '洗车服务', '到店保养'];
   public offline_status = null;
   public imgReg = /(jpg|jpeg|png|gif)$/; // 允许上传的图片格式
   public levelName = '新建';
@@ -76,6 +76,7 @@ export class PushEditComponent implements OnInit {
   }
 
   public ngOnInit() {
+    console.log(this.coupon_service[1]);
     this.levelName = this.push_id ? '编辑' : '新建';
     if (this.push_id) {
       this.getPushDetail();
@@ -153,6 +154,10 @@ export class PushEditComponent implements OnInit {
         this.offline_status = status;
         this.errPositionItem.offline_time.isError = false;
         this.errPositionItem.offline_time.errMes = '';
+        break;
+      case 'user_range':
+        this.pushParams.user_range = status;
+        this.pushParams.user_ids = status === 1 ? '' : this.pushParams.user_ids;
         break;
     }
   }

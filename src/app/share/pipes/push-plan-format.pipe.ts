@@ -35,6 +35,28 @@ export class PushRangePipe implements PipeTransform {
   }
 }
 
+/** 用户范围 */
+export const userRange = {
+  1: '全部',
+  2: '指定用户'
+};
+
+@Pipe({
+  name: 'userRange'
+})
+export class UserRangePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    if (!value) {
+      return '--';
+    } else if (value && (typeof value === 'string')) {
+      return userRange[value];
+    } else {
+      return userRange[value];
+    }
+  }
+}
+
 /** 推送人群 */
 export const rangeType = {
   1: '指定优惠券模板ID',

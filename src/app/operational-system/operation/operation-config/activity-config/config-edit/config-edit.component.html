@@ -15,12 +15,15 @@
           <span>活动类型</span>
         </label>
         <div class="control-input">
-          <select name="activity_promotion_type" class="form-control" [(ngModel)]="configParams.promotion_type"
-            (change)="onChangeType($event)" required>
+          <select name="activity_promotion_type" class="form-control" [(ngModel)]="configParams.promotion_type" required>
             <option value="">请选择</option>
             <option value=1>消费赠券</option>
+            <option value=2>赠券活动</option>
           </select>
         </div>
+      </div>
+      <div *ngIf="configParams.promotion_type==1">
+        <p class="cover-hint" style="margin: -10px 0 15px 120px">现此类型活动仅支持展示检车服务</p>
       </div>
 
       <div class="row">
@@ -109,7 +112,7 @@
                   (keypress)="inputNumberLimit($event)" required maxlength="7" />
               </div>
             </div>
-            <div class="item-row">
+            <div class="item-row" *ngIf="configParams.promotion_type==1">
               <label class="row-title">赠品</label>
               <div class="control-input" style="margin-right: 10px;">
                 <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control" style="width: 130px;"

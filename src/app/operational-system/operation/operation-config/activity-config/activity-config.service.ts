@@ -39,7 +39,7 @@ export class RewardEntity extends EntityBase {
 export class PromotionEntity extends EntityBase {
   public promotion_id: string = undefined; // 活动id
   public promotion_name: string = undefined; // 活动名称
-  public promotion_type: number = undefined; // 活动类型,1:消费赠券,99:其他
+  public promotion_type: string = undefined; // 活动类型,1:消费赠券,99:其他,2:赠券活动
   public image: string = undefined; // 活动图片
   public status: number = undefined; // 活动状态1:开启,2:停止
   public start_time: number = undefined; // 活动开始时间

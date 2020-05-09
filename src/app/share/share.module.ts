@@ -68,7 +68,7 @@ import {
   PushRangePipe,
   PushSpeedPipe,
   RangeTypePipe,
-  DiyRangeTypeMsgPipe
+  DiyRangeTypeMsgPipe, UserRangePipe
 } from './pipes/push-plan-format.pipe';
 import { FloatNumberDirective } from './directives/float-number.directive';
 import { MaxNumberDirective } from './directives/max-number.directive';
@@ -148,6 +148,7 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     PushRangePipe,
     RangeTypePipe,
     PushSpeedPipe,
+    UserRangePipe,
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
@@ -234,6 +235,7 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     PushRangePipe,
     RangeTypePipe,
     PushSpeedPipe,
+    UserRangePipe,
     PushPlanFormatPipe,
     StoreCategoryPipe,
     StorePayStatus,
