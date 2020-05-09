@@ -232,11 +232,6 @@ export class OrderDetailComponent implements OnInit {
 
   // 确认发货
   public onSendGoodsClick(): void {
-    if (Number(this.logistics_fee) === 0) {
-      this.globalService.promptBox.open('邮费应大于0！', null, 2000, null, false);
-      return;
-    }
-    this.editParams.logistics_fee = Math.round(this.logistics_fee * 100);
     this.editParams.reject_type = null;
     this.requestUpdateOrderDetail(4);
   }

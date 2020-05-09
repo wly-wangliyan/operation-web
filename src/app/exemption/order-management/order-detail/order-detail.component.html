@@ -259,17 +259,6 @@
             </div>
           </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>发件邮费：</span>
-            </label>
-            <div class="control-input">
-              <input name="logistics_fee" placeholder="请输入发件邮费金额" [(ngModel)]="logistics_fee" maxlength="8"
-                class="form-control" required appIgnoreSpace appFloatNumber>
-            </div>
-          </div>
-
           <div class="modal-footer">
             <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
             <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!logisticsForm.form.valid"
