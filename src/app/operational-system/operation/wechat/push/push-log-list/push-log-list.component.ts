@@ -73,6 +73,8 @@ export class PushLogListComponent implements OnInit {
 
   // 数据导出
   public onExportClick(push_message_log_id: string) {
-    // const searchUrl = `${environment.OPERATION_SERVE}/custom/send_logs/:${push_message_log_id}/export?order_status=${this.searchParams.order_status}&buyer_tel=${this.searchParams.buyer_tel}&buyer_name=${this.searchParams.buyer_name}&order_id=${this.searchParams.order_id}&order_time=${this.searchParams.order_time || ''}&pay_time=${this.searchParams.pay_time || ''}`;
+    const searchUrl = `${environment.OPERATION_SERVE}/custom/send_logs/${push_message_log_id}/export?
+    subject=${this.searchParams.subject}&section=${this.searchParams.section}`;
+    window.open(searchUrl);
   }
 }

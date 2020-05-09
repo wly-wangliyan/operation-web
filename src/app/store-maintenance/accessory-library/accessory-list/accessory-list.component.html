@@ -83,9 +83,6 @@
             <th style="width: 200px;">配件信息</th>
             <th>所属项目</th>
             <th>配件品牌</th>
-            <th>原价</th>
-            <th>售价</th>
-            <th>结算价</th>
             <th>销量</th>
             <th>状态</th>
             <th>操作</th>
@@ -129,43 +126,6 @@
             </td>
             <td>{{ data.project?.project_name || '--' }}</td>
             <td>{{ data.accessory_brand?.brand_name || '--' }}</td>
-
-            <ng-container *ngIf="data.project && data.project.project_name==='蓄电池'">
-              <td>
-                <span *ngIf="data.min_real_balance !== data.max_real_balance">
-                  {{ data.min_real_balance | centPriceChange }} -</span>
-                {{ data.max_real_balance | centPriceChange: '元' }}
-              </td>
-              <td>
-                <span *ngIf="data.min_right_balance !== data.max_right_balance">
-                  {{ data.min_right_balance | centPriceChange }} -</span>
-                {{ data.max_right_balance | centPriceChange: '元' }}
-              </td>
-              <td>--</td>
-            </ng-container>
-            <ng-container *ngIf="data.project && data.project.project_name!=='蓄电池'">
-              <td>
-                <span *ngIf="data.min_original_fee !== data.max_original_fee">
-                  {{ data.min_original_fee | centPriceChange }} -</span>
-                {{ data.max_original_fee | centPriceChange: '元' }}
-              </td>
-              <td>
-                <span *ngIf="data.min_sale_fee !== data.max_sale_fee">
-                  {{ data.min_sale_fee | centPriceChange }} -</span>
-                {{ data.max_sale_fee | centPriceChange: '元' }}
-              </td>
-              <td>
-                <span *ngIf="data.min_settlement_fee
-                !== data.max_settlement_fee">
-                  {{ data.min_settlement_fee | centPriceChange }} -</span>
-                {{ data.max_settlement_fee | centPriceChange: '元' }}
-              </td>
-            </ng-container>
-            <ng-container *ngIf="!data.project ||!data.project.project_name">
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </ng-container>
 
             <td>{{ data.sale_num || 0 }}</td>
             <td>
