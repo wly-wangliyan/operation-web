@@ -125,6 +125,10 @@ export class OrderDetailComponent implements OnInit {
     if (this.orderRecord.driving_license_side) {
       this.imageUrls.push(this.orderRecord.driving_license_side);
     }
+    // 行驶证正本背面
+    if (this.orderRecord.car_image) {
+      this.imageUrls.push(this.orderRecord.car_image);
+    }
     // 交强险保单
     if (this.orderRecord.insurance_policy) {
       this.imageUrls.push(this.orderRecord.insurance_policy);
