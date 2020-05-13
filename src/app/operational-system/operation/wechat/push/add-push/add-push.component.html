@@ -73,7 +73,7 @@
         <label class="control-label"></label>
         <div class="control-input">
           <textarea rows="4" class="form-control" [(ngModel)]="editParams.user_ids" name="user_ids"
-                    placeholder="输入用户ID ，以“,”号进行分割" required></textarea>
+                    placeholder="输入用户ID ，以“,”号进行分割" [disabled]="!isCreate" required></textarea>
         </div>
       </div>
 
