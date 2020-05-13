@@ -6,6 +6,7 @@ import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, ExemptionOrderEntity, EditParams } from '../order-management.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 import { HttpErrorEntity } from 'src/app/core/http.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-order-detail',
@@ -231,11 +232,6 @@ export class OrderDetailComponent implements OnInit {
 
   // 确认发货
   public onSendGoodsClick(): void {
-    if (Number(this.logistics_fee) === 0) {
-      this.globalService.promptBox.open('邮费应大于0！', null, 2000, null, false);
-      return;
-    }
-    this.editParams.logistics_fee = Math.round(this.logistics_fee * 100);
     this.editParams.reject_type = null;
     this.requestUpdateOrderDetail(4);
   }
@@ -296,6 +292,6 @@ export class OrderDetailComponent implements OnInit {
 
   // 打包下载
   public onDownloadClick(): void {
-    this.orderService.requestDownloadMaterial(this.order_id);
+    window.open(`${environment.EXEMPTION_DOMAIN}/exemption/download/orders/${this.order_id}`);
   }
 }
