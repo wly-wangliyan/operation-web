@@ -170,7 +170,6 @@ export class SelectMultiBrandFirmComponent implements OnInit {
   public open(data: any, sureFunc: any, closeFunc: any = null): any {
     $('.tree_ul').scrollTop(0);
     this.initModal();
-    debugger;
     this.accessory_id = data.accessory_id;
     this.car_series_list = data.car_series_list || [];
     this.initDefaultKeys();

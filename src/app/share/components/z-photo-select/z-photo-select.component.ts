@@ -213,7 +213,6 @@ export class ZPhotoSelectComponent implements OnInit {
    * @returns Observable<any>
    */
   public upload(): Observable<any> {
-    debugger;
     if (isNullOrUndefined(this.uploadService)) {
       throw new Error('UploadService is not provided');
     }
