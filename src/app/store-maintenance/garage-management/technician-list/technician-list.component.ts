@@ -145,7 +145,7 @@ export class TechnicianListComponent implements OnInit {
       tagList.forEach(value => {
         if (value.length > 10) {
           this.errPositionItem.tags.isError = true;
-          this.errPositionItem.tags.errMes = `每个标签字数在10字以内，${value}超出字数限制！`;
+          this.errPositionItem.tags.errMes = `每个标签字数在10字以内！`;
           isValid = false;
         }
       });
