@@ -55,7 +55,7 @@ export class PushLogEntity extends EntityBase {
 }
 
 export class SearchParams extends EntityBase {
-  public subject: string = undefined; // 推送主题
+  public subject = ''; // 推送主题
   public section: string = undefined; // 推送时间
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
@@ -130,10 +130,9 @@ export class PushService {
   }
 
   /** 获取消息推送信息列表 */
-  public requestPushLogList(): Observable<PushLogLinkResponse> {
+  public requestPushLogList(searchParams: SearchParams): Observable<PushLogLinkResponse> {
     const httpUrl = `${this.domain}/custom/send_logs`;
-    const params = this.httpService.generateListURLSearchParams(null);
-    return this.httpService.get(httpUrl, params).pipe(map(res => new PushLogLinkResponse(res)));
+    return this.httpService.get(httpUrl, searchParams).pipe(map(res => new PushLogLinkResponse(res)));
   }
 
   /**

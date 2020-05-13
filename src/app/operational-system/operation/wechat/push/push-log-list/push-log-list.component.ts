@@ -30,7 +30,7 @@ export class PushLogListComponent implements OnInit {
 
   /* 请求检索 */
   public requestSearch(): any {
-    return this.pushService.requestPushLogList();
+    return this.pushService.requestPushLogList(this.searchParams);
   }
 
   public continueSearch(url: string): any {
