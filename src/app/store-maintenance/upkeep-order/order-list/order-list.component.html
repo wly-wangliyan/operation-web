@@ -164,7 +164,8 @@
                     <div>
                       <div class="img-item">
                         <div class="img-box">
-                          <img style="width: 40px;height: 40px;" src="/assets/images/space_service.jpg" />
+                          <img *ngIf="service.image" style="width: 80px;height: 80px;" [src]="service.image" />
+                          <img *ngIf="!service.image" style="width: 40px;height: 40px;" src="/assets/images/space_service.jpg" />
                         </div>
                         <div style="text-align: left;padding: 10px 0;">
                           <span [title]="service.service_fee_name ||''"

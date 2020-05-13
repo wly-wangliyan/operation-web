@@ -65,6 +65,7 @@
             <td>{{i+(pageIndex-1)*15+1}}</td>
             <td>
               <img *ngIf="data.image" [src]="data.image" style="width: 60px">
+              <img *ngIf="!data.image" src="/assets/images/space_service.jpg" style="width: 60px;padding: 10px">
             </td>
             <td>
               {{data.service_fee_name||'--'}}

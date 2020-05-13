@@ -93,7 +93,7 @@
                         <span>分享设置</span>
                     </label>
                     <nz-radio-group [(ngModel)]="activityParams.share_setting" name="share_setting"
-                                    [disabled]="lottery_activity_id&&share_setting">
+                                    [disabled]="lottery_activity_id&&activityParams.share_setting">
                         <label class="font-style" nz-radio [nzValue]="1">每人首次分享后额外参与1次</label>
                         <label class="font-style" nz-radio [nzValue]="2">每人每次分享后额外参与1次</label>
                         <label class="font-style" nz-radio [nzValue]="3">每人每天首次分享后额外参与1次</label>

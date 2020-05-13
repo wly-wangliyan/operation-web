@@ -186,6 +186,7 @@
           <tr *ngFor="let service of orderRecord.service_info">
             <td colspan="9">
               <div style="text-align: left !important;">
+                <img *ngIf="service.image" style="width: 80px;height: 80px" [src]="service.image"/>
                 {{service.service_fee_name}}：{{service.sale_amount | centPriceChange:'元'}}</div>
             </td>
           </tr>

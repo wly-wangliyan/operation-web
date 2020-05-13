@@ -22,7 +22,7 @@
           </select>
         </div>
       </div>
-      <div *ngIf="configParams.promotion_type==1">
+      <div *ngIf="configParams.promotion_type=='1'">
         <p class="cover-hint" style="margin: -10px 0 15px 120px">现此类型活动仅支持展示检车服务</p>
       </div>
 
@@ -112,7 +112,7 @@
                   (keypress)="inputNumberLimit($event)" required maxlength="7" />
               </div>
             </div>
-            <div class="item-row" *ngIf="configParams.promotion_type==1">
+            <div class="item-row" *ngIf="configParams.promotion_type=='1'">
               <label class="row-title">赠品</label>
               <div class="control-input" style="margin-right: 10px;">
                 <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control" style="width: 130px;"

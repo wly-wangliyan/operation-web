@@ -70,7 +70,6 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
   public start_time = null; // 活动开始时间
   public end_time = null; // 活动开始时间
   public share_way = []; // 分享途径
-  public share_setting: number; // 分享设置
   public lottery_activity_id: string;
 
   private is_save = false; // 防止连续出发保存事件
@@ -122,7 +121,6 @@ export class LuckDrawEditComponent implements OnInit, OnDestroy {
       this.share_way = this.activityParams.share_way ? this.activityParams.share_way.split(',') : [];
       this.start_time = this.activityParams.start_time ? new Date(this.activityParams.start_time * 1000) : '';
       this.end_time = this.activityParams.end_time ? new Date(this.activityParams.end_time * 1000) : '';
-      this.share_setting = this.activityParams.share_setting;
     }, err => {
       if (err.status === 404) {
         this.globalService.promptBox.open('该条数据已删除，请刷新后重试！', null, 2000, null, false);

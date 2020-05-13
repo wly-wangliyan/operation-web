@@ -135,7 +135,7 @@
                 (click)="onSwitchClick(data.accessory_id, data.sale_status)">
               </nz-switch>
             </td>
-            <td>{{ data.upload_status===1 | uploadStatus}}</td>
+            <td>{{ data.upload_status | uploadStatus}}</td>
             <td class="operation">
               <div>
                 <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]">编辑</a>

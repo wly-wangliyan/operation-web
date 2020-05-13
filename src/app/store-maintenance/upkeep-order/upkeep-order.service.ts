@@ -176,6 +176,7 @@ export class AccessoryItem extends EntityBase {
 export class ServiceItem extends EntityBase {
   public service_fee_id: string = undefined; // 服务id
   public service_fee_name: string = undefined; // 服务费名称
+  public image: string = undefined; // 图片
   public sale_amount: number = undefined; // 单价
   public number = 1; // 数量
 }

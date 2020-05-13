@@ -241,8 +241,7 @@ export class AccessoryListComponent implements OnInit {
     const successFun = res => {
       this.progressModalComponent.openOrClose(false);
       $('#dataImportModal').modal('hide');
-      const date = JSON.parse(res.response);
-      this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+      this.globalService.promptBox.open(`上传成功！`, () => {
         this.importViewModel.initImportData();
         $('#importBerthPromptDiv').modal('hide');
         this.searchText$.next();
