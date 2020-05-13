@@ -50,6 +50,7 @@
         <thead>
           <tr>
             <th>序号</th>
+            <th>图片</th>
             <th>工时费名称</th>
             <th>所属项目</th>
             <th>原价</th>
@@ -62,7 +63,12 @@
         <tbody>
           <tr *ngFor="let data of workFeesTable.data; let i=index">
             <td>{{i+(pageIndex-1)*15+1}}</td>
-            <td>{{data.service_fee_name||'--'}}</td>
+            <td>
+              <img *ngIf="data.image" [src]="data.image" style="width: 60px">
+            </td>
+            <td>
+              {{data.service_fee_name||'--'}}
+            </td>
             <td>{{data.project?.project_name||'不限'}}</td>
             <td>{{data.original_amount | centPriceChange:'元'}}</td>
             <td>{{data.sale_amount | centPriceChange:'元'}}</td>

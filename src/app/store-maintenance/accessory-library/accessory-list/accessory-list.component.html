@@ -85,6 +85,7 @@
             <th>配件品牌</th>
             <th>销量</th>
             <th>状态</th>
+            <th>上传状态</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -134,10 +135,12 @@
                 (click)="onSwitchClick(data.accessory_id, data.sale_status)">
               </nz-switch>
             </td>
+            <td>{{ data.upload_status===1 | uploadStatus}}</td>
             <td class="operation">
               <div>
                 <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]">编辑</a>
                 <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data)">推荐设置</a>
+                <a [title]="'批量推荐'" (click)="onOpenImportModal(data.accessory_id)">批量推荐</a>
                 <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
               </div>
             </td>
@@ -149,3 +152,39 @@
 </div>
 <!-- 设置推荐车系 -->
 <app-select-multi-brand-firm></app-select-multi-brand-firm>
+
+<!--导入推荐设置-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" id="importBerthPromptDiv">
+  <div class="modal-dialog modal-dialog-common" role="document">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">导入推荐设置</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCancelData()">&times;
+        </button>
+      </div>
+      <form class="form-horizontal import-form">
+        <div class="form-group">
+          <input type="text" class="form-control" [(ngModel)]="importViewModel.address" name="address"
+                 placeholder="请选择文件" disabled>
+          <div class="select-file">
+            <a class="choose-file">
+              <span class="download">选择文件</span>
+              <input #berthFileImportInput type="file"
+                     (change)="importViewModel.selectedFile($event,berthFileImportInput)" title="" />
+            </a>
+          </div>
+        </div>
+        <!--<div class="form-group import-tip">
+          <span>每次只能上传1000条数据</span>
+        </div>-->
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onCancelData()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" (click)="onSubmitImportBerth()">上传</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--进度条-->
+  <app-progress-modal #progressModal (closeChange)="onCloseUnsubscribe()"></app-progress-modal>
+</div>

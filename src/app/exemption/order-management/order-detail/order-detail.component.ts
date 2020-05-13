@@ -138,6 +138,10 @@ export class OrderDetailComponent implements OnInit {
     if (this.orderRecord.payment_certificate) {
       this.imageUrls.push(this.orderRecord.payment_certificate);
     }
+    // 签名图片
+    if (this.orderRecord.signature_image) {
+      this.imageUrls.push(this.orderRecord.signature_image);
+    }
   }
 
   /**点击流程处理按钮

@@ -6,6 +6,7 @@ import { GarageManagementComponent } from './garage-management.component';
 import { GarageListComponent } from './garage-list/garage-list.component';
 import { GarageEditComponent } from './garage-edit/garage-edit.component';
 import { SupplyConfigListComponent } from './supply-config-list/supply-config-list.component';
+import { TechnicianListComponent } from './technician-list/technician-list.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'list', component: GarageListComponent },
       { path: 'edit/:repair_shop_id', component: GarageEditComponent },
       { path: 'supply-config-list/:repair_shop_id', component: SupplyConfigListComponent },
+      { path: 'technician-list/:repair_shop_id/:repair_shop_name', component: TechnicianListComponent },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]
   }

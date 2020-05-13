@@ -15,6 +15,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StoreShareModule } from '../share/store-share.module';
+import { TechnicianListComponent } from './technician-list/technician-list.component';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -41,6 +42,7 @@ const uploadToken: UploadConfig = {
     GarageListComponent,
     GarageEditComponent,
     SupplyConfigListComponent,
+    TechnicianListComponent,
   ],
   providers: [{
     provide: UPLOAD_TOKEN,

@@ -13,6 +13,8 @@ import {
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SelectMultiBrandFirmComponent } from './select-multi-brand-firm/select-multi-brand-firm.component';
+import { ProgressModalComponent } from '../../../share/components/progress-modal/progress-modal.component';
+import { FileImportViewModel } from '../../../../utils/file-import.model';
 
 const PageSize = 15;
 
@@ -33,12 +35,17 @@ export class AccessoryListComponent implements OnInit {
   public start_reserve_time = null; // 预定时间
   public end_reserve_time = null;
   public workerList: Array<any> = [];
+  public importViewModel: FileImportViewModel = new FileImportViewModel();
 
+  private accessory_id: string; // 配件id
   private searchText$ = new Subject<any>();
   private searchProjectText$ = new Subject<any>();
   private searchBrandText$ = new Subject<any>();
   private continueRequestSubscription: Subscription;
   private linkUrl: string;
+  private importSubscription: Subscription;
+
+  @ViewChild('progressModal', { static: true }) public progressModalComponent: ProgressModalComponent;
 
   private get pageCount(): number {
     if (this.accessoryNewList.length % PageSize === 0) {
@@ -145,12 +152,20 @@ export class AccessoryListComponent implements OnInit {
 
   // 推荐设置打开所属厂商选择组件
   public onOpenBrandFirmModal(data: AccessoryEntity): void {
-    this.selectMultiBrandFirmComponent.open(data, () => {
-      this.accessoryNewList = [];
-      this.noResultText = '数据加载中...';
-      this.searchText$.next();
+    // 获取推荐设置
+    this.accessoryLibraryService.requestRecommendCarSeries(data.accessory_id).subscribe(res => {
+      data.car_series_list = res;
+      this.selectMultiBrandFirmComponent.open(data, () => {
+        this.accessoryNewList = [];
+        this.noResultText = '数据加载中...';
+        this.searchText$.next();
+      });
+    }, error => {
+      this.globalService.httpErrorProcess(error);
     });
+
   }
+
 
   /** 删除配件 */
   public onDeleteAccessory(data: AccessoryEntity) {
@@ -191,6 +206,81 @@ export class AccessoryListComponent implements OnInit {
         }, err => {
           this.globalService.httpErrorProcess(err);
         });
+    }
+  }
+
+  // 上传弹窗
+  public onOpenImportModal(accessory_id: string) {
+    this.accessory_id = accessory_id;
+    $('#importBerthPromptDiv').modal('show');
+  }
+
+  // 解订阅
+  public onCloseUnsubscribe() {
+    this.importSubscription && this.importSubscription.unsubscribe();
+  }
+
+  public onCancelData() {
+    this.onCloseUnsubscribe();
+    this.importViewModel.initImportData();
+    $('#importBerthPromptDiv').modal('hide');
+  }
+
+  /* 导入数据 */
+  public onSubmitImportBerth() {
+    if (this.importViewModel.address) {
+      const length = this.importViewModel.address.length;
+      const index = this.importViewModel.address.lastIndexOf('.');
+      const type = this.importViewModel.address.substring(index, length);
+      if (type !== '.txt') {
+        this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
+        return;
+      }
+    }
+
+    const successFun = res => {
+      this.progressModalComponent.openOrClose(false);
+      $('#dataImportModal').modal('hide');
+      const date = JSON.parse(res.response);
+      this.globalService.promptBox.open(`成功导入${date.success}条，失败${date.failed}条！`, () => {
+        this.importViewModel.initImportData();
+        $('#importBerthPromptDiv').modal('hide');
+        this.searchText$.next();
+        this.searchBrandText$.next();
+      }, -1);
+    };
+
+    const failFun = err => {
+      this.progressModalComponent.openOrClose(false);
+      timer(300).subscribe(() => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          if (err.status === 422) {
+            const tempErr = JSON.parse(err.responseText);
+            const error = tempErr.length > 0 ? tempErr[0].errors[0] : tempErr.errors[0];
+            if (error.field === 'FILE' && error.code === 'invalid') {
+              this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
+            } else if (error.resource === 'FILE' && error.code === 'incorrect_format') {
+              this.globalService.promptBox.open('文件格式错误！', null, 2000, '/assets/images/warning.png');
+            } else if (error.resource === 'FILE' && error.code === 'scale_out') {
+              this.globalService.promptBox.open('单次最大可导入1000条，请重新上传！', null, 2000, '/assets/images/warning.png');
+            } else {
+              this.globalService.promptBox.open('导入文件错误或无效！', null, 2000, '/assets/images/warning.png');
+            }
+          }
+        }
+      });
+    };
+
+    if (this.importViewModel.checkFormDataValid()) {
+      this.progressModalComponent.openOrClose(true);
+      this.importSubscription = this.accessoryLibraryService.requestImportRecommendCarSeries
+      (this.accessory_id, this.importViewModel.type, this.importViewModel.file).subscribe(res => {
+        successFun(res);
+      }, err => {
+        failFun(err);
+      });
+    } else {
+      this.globalService.promptBox.open('文件地址不能为空，请选择！', null, 2000, null, false);
     }
   }
 }

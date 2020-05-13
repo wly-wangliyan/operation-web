@@ -207,6 +207,9 @@
               <div class="material-item" *ngIf="orderRecord.payment_certificate">
                 <img [src]="orderRecord.payment_certificate" (click)="onOpenZoomPictureModal(4)" />
                 <span>车船税纳税凭证</span></div>
+              <div class="material-item" *ngIf="orderRecord.signature_image">
+                <img [src]="orderRecord.signature_image" (click)="onOpenZoomPictureModal(5)" />
+                <span>签名图片</span></div>
             </div>
 
           </td>

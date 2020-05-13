@@ -16,6 +16,16 @@
         <span>汽修店名称：</span>
         <input class="form-control" placeholder="请输入汽修店名称" autocomplete="off" maxlength="50" name="repair_shop_name"
           [(ngModel)]="searchParams.repair_shop_name" />
+      </div>
+      <div class="form-group">
+        <span>服务：</span>
+        <select class="form-control" [(ngModel)]="searchParams.service_type" name="service_type">
+          <option value="">全部</option>
+          <option value="1">到店保养</option>
+          <option value="2">道路救援</option>
+          <option value="3">洗车</option>
+          <option value="4">上门保养</option>
+        </select>
         <div class="search-btn-group">
           <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
           </button>
@@ -33,6 +43,7 @@
             <th>汽修店名称</th>
             <th>汽修店ID</th>
             <th>所属企业</th>
+            <th>服务范围</th>
             <th>客服电话</th>
             <th>营业时间</th>
             <th>营业状态</th>
@@ -60,6 +71,11 @@
               <span [appTxtCopy]="data.repair_shop_id">{{data.repair_shop_id|zMaxLength:15}}</span></td>
             <td [title]="data.repair_company?.repair_company_name?data.repair_company?.repair_company_name:'--'">
               {{data.repair_company?(data.repair_company.repair_company_name|zMaxLength:10):'--'}}
+            </td>
+            <td>
+              <ng-container *ngFor="let item of data.service_type">
+                {{item | serviceType}}
+              </ng-container>
             </td>
             <td>
               <div class="column-box">
@@ -90,6 +106,7 @@
               <a [title]="'编辑资料'" [routerLink]="['../edit', data.repair_shop_id]">编辑资料</a>
               <a [title]="'供货配置'" [routerLink]="['../supply-config-list', data.repair_shop_id]">供货配置</a>
               <a [title]="'救援服务配置'" (click)="onHelpServiceClick(data.repair_shop_id)">救援服务配置</a>
+              <a [title]="'技师管理'" [routerLink]="['../technician-list', data.repair_shop_id, data.repair_shop_name]">技师管理</a>
             </td>
           </tr>
         </tbody>

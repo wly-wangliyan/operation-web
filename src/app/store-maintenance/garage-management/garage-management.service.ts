@@ -10,6 +10,7 @@ import { WarehouseEntity, SupplierEntity } from '../supplier-management/supplier
 
 export class SearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业 2.不营业
+  public service_type = ''; // int	F 服务类型 1:保养服务 2:救援服务 3:洗车服务 4:上门保养
   public repair_shop_name = ''; // 	F	汽修店名称
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
@@ -135,7 +136,7 @@ export class RepairShopEntity extends EntityBase {
   public battery_telephone: string = undefined; // T 此为换电瓶通知手机号
   public status: number = undefined; // 营业状态 1:营业 2:关闭
   public serve_type: number = undefined; // 服务类型 1:保养服务 2:救援服务
-  public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
+  public service_type: Array<number> = []; // 服务类型 1:保养服务 2:救援服务 3:洗车服务 4:上门保养
   public rescue_config: RescueConfig = undefined; // 救援配置
   public wash_car: WashCarEntity = undefined; // 洗车相关
   public maintain_info: MaintainInfoEntity = undefined; // 到店保养服务
@@ -221,6 +222,19 @@ export class AccessoryInfoEntity extends AccessoryEntity {
   }
 }
 
+// 技师信息
+export class MechanicEntity extends EntityBase {
+  public mechanic_id: string = undefined; // 	string	PK
+  public repair_shop_id: string = undefined; // 	string	汽修店id
+  public name: string = undefined; // 	string	姓名
+  public tags: string = undefined; // 	string	标签
+  public image: string = undefined; // 	string	图片
+  public type = '保养技师'; // 	string	类型
+  public intro: string = undefined; // 	string	简介
+  public created_time: number = undefined; // 创建时间
+  public updated_time: number = undefined; // 更新时间
+}
+
 export class SupplyConfigLinkResponse extends LinkResponse {
   public generateEntityData(results: Array<any>): Array<AccessoryInfoEntity> {
     const tempList: Array<AccessoryInfoEntity> = [];
@@ -236,6 +250,16 @@ export class RepairShopsLinkResponse extends LinkResponse {
     const tempList: Array<RepairShopEntity> = [];
     results.forEach(res => {
       tempList.push(RepairShopEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class TechnicianLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<MechanicEntity> {
+    const tempList: Array<MechanicEntity> = [];
+    results.forEach(res => {
+      tempList.push(MechanicEntity.Create(res));
     });
     return tempList;
   }
@@ -426,5 +450,57 @@ export class GarageManagementService {
       });
       return tempList;
     }));
+  }
+
+  /**
+   * 获取汽修店技师列表
+   * @param searchParams 条件检索参数
+   */
+  public requestTechnicianList(repair_shop_id: string): Observable<TechnicianLinkResponse> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/mechanics`;
+    const param = {page_size: 45, page_num: 1};
+    return this.httpService.get(httpUrl, param).pipe(map(res => new TechnicianLinkResponse(res)));
+  }
+
+  /**
+   * 通过linkUrl继续请求汽修店技师列表
+   * @param string url linkUrl
+   * @returns Observable<TechnicianLinkResponse>
+   */
+  public continueTechnicianList(url: string): Observable<TechnicianLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new TechnicianLinkResponse(res)));
+  }
+
+  /**
+   * 添加汽修店技师
+   * @param repair_shop_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestCreateTechnician(repair_shop_id: string, params: any): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/mechanics`;
+    return this.httpService.post(httpUrl, params);
+  }
+
+  /**
+   * 编辑汽修店技师
+   * @param mechanic_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestEditTechnician(repair_shop_id: string, mechanic_id: string, params: any): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/mechanics/${mechanic_id}`;
+    return this.httpService.put(httpUrl, params);
+  }
+
+  /**
+   * 删除汽修店技师
+   * @param mechanic_id 参数
+   * @param params 参数列表
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDelTechnician(repair_shop_id: string, mechanic_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/repair_shops/${repair_shop_id}/mechanics/${mechanic_id}`;
+    return this.httpService.delete(httpUrl);
   }
 }

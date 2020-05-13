@@ -57,7 +57,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="pushParams.user_range!==2">
           <label class="control-label">
             <b>*</b>
             <span>定位人群</span>
@@ -73,7 +73,7 @@
               (click)="onChangeTeb('push_range', 4)">自定义</a>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="pushParams.user_range!==2">
           <div class="push-rate" *ngIf="pushParams.push_range===2">
             <a name="range_type1" class="offline-btn" [class.active-btn]="pushParams.range_type===1"
               (click)="onChangeTeb('range_type', 1)">指定优惠券模板ID</a>
@@ -91,7 +91,7 @@
             </select>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="pushParams.user_range!==2">
           <div class="push-rate location-crowd" *ngIf="pushParams.push_range===2">
             <input *ngIf="pushParams.range_type===1" class="form-control" placeholder="请输入优惠券模板ID"
               oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" [(ngModel)]="pushParams.coupon_id" maxlength="50"
@@ -256,7 +256,7 @@
         </div>
         <div class="modal-footer">
           <button class="sure-btn" type="button" nz-button nzType="primary"
-            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0  || !pushParams.push_range ||
+            [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0  || (!pushParams.push_range&&pushParams.user_range===1) ||
                             (!pushParams.range_type&&pushParams.push_range===2) || !pushParams.push_speed_type || !offline_status ||
                              (!pushParams.url_type&&pushParams.push_location_url) || (pushParams.url_type&&!pushParams.push_location_url)" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>

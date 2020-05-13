@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { EntityBase } from 'src/utils/z-entity';
 import { Observable } from 'rxjs/index';
 import { map } from 'rxjs/operators';
@@ -6,7 +6,8 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpService, LinkResponse } from '../../core/http.service';
 import { environment } from '../../../environments/environment';
 import { ParamEntity } from '../project-management/project-management-http.service';
-import { CarSeriesEntity } from '../vehicle-management/vehicle-management-http.service';
+import { CarSeriesEntity, ImportParams } from '../vehicle-management/vehicle-management-http.service';
+import { file_import } from '../../../utils/file-import';
 
 // 规格实体
 export class SpecificationEntity extends EntityBase {
@@ -171,6 +172,7 @@ export class AccessoryEntity extends EntityBase {
   public small_title: string = undefined; // 	string	小标题 (10个字)
   public sale_point: string = undefined; // 	string	产品卖点 (200个字) 无：传 ''
   public accessory_source: string = undefined; // 	string	正品溯源 无：传 ''
+  public upload_status: number = undefined; // 	integer	上传状态 1:上传中 2:上传失败 3:上传成功
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'project') {
@@ -184,6 +186,17 @@ export class AccessoryEntity extends EntityBase {
     } else if (propertyName === 'price_info') {
       return PriceInfoEntity;
     } else if (propertyName === 'car_series_list') {
+      return CarSeriesEntity;
+    }
+    return null;
+  }
+}
+
+// 推荐设置
+export class RecommendCarSeriesEntity extends EntityBase {
+  public car_series: CarSeriesEntity = undefined; // 车系
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'car_series') {
       return CarSeriesEntity;
     }
     return null;
@@ -412,5 +425,44 @@ export class AccessoryLibraryService {
         return tempList;
       })
     );
+  }
+
+  /**
+   * 获取推荐设置
+   * @param accessory_id 配件id
+   * @returns Observable<Array<RecommendCarSeriesEntity>>
+   */
+  public requestRecommendCarSeries(accessory_id: string): Observable<Array<CarSeriesEntity>> {
+    const httpUrl = `${this.domain}/accessories/${accessory_id}/car_series`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+          const tempList: Array<CarSeriesEntity> = [];
+          res.body.car_series.forEach(data => {
+            tempList.push(CarSeriesEntity.Create(data));
+          });
+          return tempList;
+        })
+    );
+  }
+
+  /**
+   * 导入
+   * 推荐设置
+   * @param type 文件类型
+   * @param param_file FILE
+   */
+  public requestImportRecommendCarSeries(accessory_id: string, type: any, param_file: any) {
+    const eventEmitter = new EventEmitter();
+    const params = {
+      recommend_file: param_file,
+      type
+    };
+
+    const url = `/accessories/${accessory_id}/bulk_car_series`;
+    file_import(params, url, data => {
+      eventEmitter.next(data);
+    }, err => {
+      eventEmitter.error(err);
+    }, this.domain);
+    return eventEmitter;
   }
 }

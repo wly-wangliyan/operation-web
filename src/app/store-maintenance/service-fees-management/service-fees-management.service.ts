@@ -17,6 +17,7 @@ export class SearchWorkFeesParams extends EntityBase {
   public sale_amount: number = undefined; // float	T	销售单价 单位: 分
   public settlement_amount: number = undefined; // float	T	结算价 单位: 分
   public service_instruction = ''; // string T	服务说明
+  public image: string = undefined; // string	F 图片
 }
 
 export class SearchParams extends EntityBase {
@@ -51,6 +52,7 @@ export class ServiceFeeEntity extends EntityBase {
   public prepay_current_price: number = undefined; // Integer	救援费预付现价 单位:分
   public status: boolean = undefined; // integer	状态 1:开启 2:关闭(默认)
   public service_instruction = ''; // string T	服务说明
+  public image: string = undefined; // string	F 图片
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 

@@ -442,6 +442,21 @@ export class OrderListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // 删除订单
+  public onDeleteOrderClick(arrival_order_id: string) {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，确认要删除吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.orderService.requestDeleteOrder(arrival_order_id).subscribe(res => {
+        this.globalService.promptBox.open('删除成功！');
+        this.searchArrivalOrderText$.next();
+      }, err => {
+        if (!this.globalService.httpErrorProcess(err)) {
+          this.globalService.promptBox.open('删除失败！', null, 2000, null, false);
+        }
+      });
+    });
+  }
+
   /* 生成并检查参数有效性 */
   private generateAndCheckParamsValid(): boolean {
     const sTimestamp = this.order_start_time ? (new Date(this.order_start_time).setHours(new Date(this.order_start_time).getHours(),

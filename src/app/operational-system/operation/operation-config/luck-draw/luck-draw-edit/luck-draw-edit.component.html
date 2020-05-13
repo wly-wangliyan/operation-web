@@ -92,7 +92,8 @@
                         <b>&nbsp;</b>
                         <span>分享设置</span>
                     </label>
-                    <nz-radio-group [(ngModel)]="activityParams.share_setting" name="share_setting">
+                    <nz-radio-group [(ngModel)]="activityParams.share_setting" name="share_setting"
+                                    [disabled]="lottery_activity_id&&share_setting">
                         <label class="font-style" nz-radio [nzValue]="1">每人首次分享后额外参与1次</label>
                         <label class="font-style" nz-radio [nzValue]="2">每人每次分享后额外参与1次</label>
                         <label class="font-style" nz-radio [nzValue]="3">每人每天首次分享后额外参与1次</label>
@@ -104,9 +105,9 @@
                         <span>分享途径</span>
                     </label>
                     <nz-checkbox-wrapper (nzOnChange)="onShareChange($event)">
-                        <label class="font-style" nz-checkbox [nzValue]="1">分享给好友</label>
-                        <label class="font-style" nz-checkbox [nzValue]="2">分享给群聊</label>
-                        <label class="font-style" nz-checkbox [nzValue]="3">分享到朋友圈</label>
+                        <label class="font-style" nz-checkbox [nzChecked]="share_way.includes('1')" [nzValue]="'1'">分享给好友</label>
+                        <label class="font-style" nz-checkbox [nzChecked]="share_way.includes('2')" [nzValue]="'2'">分享给群聊</label>
+                        <label class="font-style" nz-checkbox [nzChecked]="share_way.includes('3')" [nzValue]="'3'">分享到本地</label>
                     </nz-checkbox-wrapper>
                 </div>
             </div>
@@ -174,7 +175,7 @@
                     <div class="row row-image">
                         <label class=" control-label">
                             <b>&nbsp;</b>
-                            <span>微信朋友圈分享海报</span>
+                            <span>分享海报</span>
                         </label>
                         <div class="control-input"  style="width: 435px">
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
@@ -192,7 +193,7 @@
                     <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
                     <button class="sure-btn" type="button" nz-button nzType="primary" (appZDebounceClick)="onEditFormSubmit()"
                             [disabled]="!editActivityModal.form.valid||coverImg.imageList.length===0||wxShareImg.imageList.length===0
-                            ||(wxPosterImg.imageList.length===0&&share_way.includes(3))">保存
+                            ||(wxPosterImg.imageList.length===0&&share_way.includes('3'))">保存
                     </button>
                 </div>
             </div>

@@ -38,8 +38,8 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
   public tabs = [{ key: 3, value: '洗车服务' }, { key: 1, value: '到店保养服务' }]; // tab列表
   public tab_index = 0; // 标记当前tab索引
-  public serviceList: Array<ServiceItem> = []; // 基本信息-服务类型 1:到店保养服务 2:救援服务 3:洗车服务
-  private serviceNames = ['default', '到店保养服务', '救援服务', '洗车服务']; // 基本信息-服务类型名称
+  public serviceList: Array<ServiceItem> = []; // 基本信息-服务类型 1:到店保养服务 2:救援服务 3:洗车服务 4:上门保养
+  private serviceNames = ['default', '到店保养服务', '救援服务', '洗车服务', '上门保养服务']; // 基本信息-服务类型名称
   public service_initial_value: Array<number> = []; // 标记服务类型初始值，控制tab显示与隐藏
   public washInfo: WashCarEntity = new WashCarEntity(); // 洗车服务详情
   public maintainInfo: MaintainInfoEntity = new MaintainInfoEntity(); // 到店保养服务详情
@@ -109,7 +109,7 @@ export class GarageEditComponent implements OnInit, OnDestroy {
         // 处理服务类型
         let service_index = 1;
         this.serviceList = [];
-        while (service_index <= 3) {
+        while (service_index <= 4) {
           const serviceItem = new ServiceItem(service_index, false);
           serviceItem.name = this.serviceNames[service_index];
           if (res.service_type.includes(service_index)) {

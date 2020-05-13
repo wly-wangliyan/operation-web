@@ -47,13 +47,10 @@
                     <td [title]="data.subject || ''">
                         {{ (data.subject | zMaxLength: 12) || '--' }}
                     </td>
-                    <td>{{data.created_time ? (data.created_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
-                    <td>
-                        <span>{{data.start_time ? (data.start_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
-                        <span> 至 {{data.end_time ? (data.end_time*1000 | date:"y-MM-dd HH:mm") : '--' }}</span>
-                    </td>
-                    <td>{{ data.push_amount || 0 }}</td>
-                    <td>{{ data.push_amount || 0 }}</td>
+                    <td>{{data.send_time ? (data.send_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
+                    <td>{{ data.total_number || 0 }}</td>
+                    <td>{{ data.success_number || 0 }}</td>
+                    <td>{{ data.fail_number || 0 }}</td>
                     <td class="operation">
                         <a [title]="'数据导出'" (appZDebounceClick)="onExportClick(data.push_message_log_id)">数据导出</a>
                     </td>

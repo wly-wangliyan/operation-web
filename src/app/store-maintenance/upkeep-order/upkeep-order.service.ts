@@ -467,4 +467,14 @@ export class UpkeepOrderService {
     };
     return this.httpService.patch(httpUrl, body);
   }
+
+  /**
+   * 删除订单
+   * @param arrival_order_id 订单ID
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestDeleteOrder(arrival_order_id: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}`;
+    return this.httpService.delete(httpUrl);
+  }
 }

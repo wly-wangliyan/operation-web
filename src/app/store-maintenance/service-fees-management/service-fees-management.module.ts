@@ -21,6 +21,17 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { StoreShareModule } from '../share/store-share.module';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { WashCarActivityEditComponent } from './wash-car-activity-edit/wash-car-activity-edit.component';
+import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
+import { environment } from '../../../environments/environment';
+
+const uploadToken: UploadConfig = {
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
+};
+
 @NgModule({
   imports: [
     CommonModule,
@@ -47,9 +58,12 @@ import { WashCarActivityEditComponent } from './wash-car-activity-edit/wash-car-
     WashCarServiceEditComponent,
     WashCarActivityEditComponent,
   ],
-  providers: [
-    ServiceFeesManagementService,
-  ]
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService,
+    ServiceFeesManagementService]
 })
 export class ServiceFeesManagementModule {
 }

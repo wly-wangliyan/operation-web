@@ -8,9 +8,9 @@ import { HttpErrorEntity } from '../../../core/http.service';
 import {
   ServiceFeeEntity,
   ServiceFeesManagementService,
-  SearchParams,
   SearchWorkFeesParams
 } from '../service-fees-management.service';
+import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
 
 @Component({
   selector: 'app-work-fees-edit',
@@ -38,7 +38,11 @@ export class WorkFeesEditComponent implements OnInit {
   public settlement_amount = '';
   public saleAmountPriceErrors = '';
   public settlementAmountPriceErrors = '';
+  public imageErrors = '';
+  public image_url = [];
   private searchText$ = new Subject<any>();
+
+  @ViewChild('serviceImg', { static: false }) public serviceImgSelectComponent: ZPhotoSelectComponent;
 
   ngOnInit() {
     this.routerInfo.params.subscribe((params: Params) => {
@@ -52,6 +56,7 @@ export class WorkFeesEditComponent implements OnInit {
             this.serviceFeeData = res;
             this.searchWorkFeesParams.service_fee_name = this.serviceFeeData.service_fee_name;
             this.searchWorkFeesParams.service_instruction = this.serviceFeeData.service_instruction;
+            this.image_url = this.serviceFeeData.image ? this.serviceFeeData.image.split(',') : [];
             this.project_name = this.serviceFeeData.project
               ? this.serviceFeeData.project.project_name
               : '';
@@ -92,6 +97,7 @@ export class WorkFeesEditComponent implements OnInit {
   private clear() {
     this.settlementAmountPriceErrors = '';
     this.saleAmountPriceErrors = '';
+    this.imageErrors = '';
   }
 
   // 保存数据
@@ -113,38 +119,41 @@ export class WorkFeesEditComponent implements OnInit {
       this.searchWorkFeesParams.settlement_amount = Math.round(
         Number(this.settlement_amount) * 100
       );
-      if (!this.service_fee_id) {
-        this.feesService
-          .requestAddWorkFeeData(this.searchWorkFeesParams)
-          .subscribe(
-            () => {
-              this.globalService.promptBox.open('新建保养服务费成功！');
-              timer(2000).subscribe(() =>
-                this.router.navigateByUrl('/service-fees-management')
+      this.serviceImgSelectComponent.upload().subscribe(res => {
+        this.searchWorkFeesParams.image = this.serviceImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+        if (!this.service_fee_id) {
+          this.feesService
+              .requestAddWorkFeeData(this.searchWorkFeesParams)
+              .subscribe(
+                  () => {
+                    this.globalService.promptBox.open('新建保养服务费成功！');
+                    timer(2000).subscribe(() =>
+                        this.router.navigateByUrl('/service-fees-management')
+                    );
+                  },
+                  err => {
+                    this.handleErrorFunc(err, 1);
+                  }
               );
-            },
-            err => {
-              this.handleErrorFunc(err, 1);
-            }
-          );
-      } else {
-        this.feesService
-          .requestUpdateWorkFeeData(
-            this.searchWorkFeesParams,
-            this.service_fee_id
-          )
-          .subscribe(
-            () => {
-              this.globalService.promptBox.open('编辑保养服务费成功！');
-              timer(2000).subscribe(() =>
-                this.router.navigateByUrl('/service-fees-management')
+        } else {
+          this.feesService
+              .requestUpdateWorkFeeData(
+                  this.searchWorkFeesParams,
+                  this.service_fee_id
+              )
+              .subscribe(
+                  () => {
+                    this.globalService.promptBox.open('编辑保养服务费成功！');
+                    timer(2000).subscribe(() =>
+                        this.router.navigateByUrl('/service-fees-management')
+                    );
+                  },
+                  err => {
+                    this.handleErrorFunc(err, 2);
+                  }
               );
-            },
-            err => {
-              this.handleErrorFunc(err, 2);
-            }
-          );
-      }
+        }
+      });
     }
   }
 
@@ -205,6 +214,16 @@ export class WorkFeesEditComponent implements OnInit {
     if (event) {
       this.searchWorkFeesParams.project_id = event.project.project_id;
       this.project_name = event.project.project_name;
+    }
+  }
+
+  // 产品图片：选择图片时校验图片格式
+  public onSelectedPicture(event) {
+    this.imageErrors = '';
+    if (event === 'type_error') {
+      this.imageErrors = '格式错误，请重新上传！';
+    } else if (event === 'size_over') {
+      this.imageErrors = '图片大小不得高于2M！';
     }
   }
 }

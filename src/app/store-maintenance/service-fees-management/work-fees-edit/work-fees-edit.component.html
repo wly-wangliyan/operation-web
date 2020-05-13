@@ -30,6 +30,20 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nzFlex>
+          <nz-form-label nzRequired [nzNoColon]="true">图片</nz-form-label>
+          <nz-form-control>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="serviceImg"
+                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="image_url" #serviceImg
+                                [minCropBoxWidth]="150" [minCropBoxHeight]="150" [resizable]="true">
+            </app-z-photo-select>
+            <div class="text-danger">
+                  <span class="input-error">{{imageErrors}}</span>
+            </div>
+            <span>注：尺寸150 × 150px，格式PNG或JPG，大小2M以内</span>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzFlex>
           <nz-form-label [nzNoColon]="true">所属项目</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="chooseBtn">
@@ -141,7 +155,7 @@
             class="sure-btn"
             nz-button
             nzType="primary"
-            [disabled]="!workFeesForm.form.valid"
+            [disabled]="!workFeesForm.form.valid||serviceImg.imageList.length===0"
             (appZDebounceClick)="onSaveFormSubmit()"
           >
             保存

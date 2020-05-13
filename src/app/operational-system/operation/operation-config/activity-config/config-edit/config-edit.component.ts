@@ -218,6 +218,11 @@ export class ConfigEditComponent implements OnInit {
    * @param type 1添加 2编辑
    */
   private requestEditRewars(rewars: Array<RewardEntity>, type: number): void {
+    if (Number(this.configParams.promotion_type) === 2) {
+      rewars.forEach(value => {
+        value.related_reward_id = '';
+      });
+    }
     const message = type === 1 ? '添加' : '保存';
     this.activityService.requestUpdateRewardData(this.promotion_id, rewars).subscribe(res => {
       this.globalService.promptBox.open(message + '成功', () => {

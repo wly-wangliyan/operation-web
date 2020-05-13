@@ -245,3 +245,65 @@ export class DoorRefundOrderStatusPipe implements PipeTransform {
     return result;
   }
 }
+
+
+/** 服务类型 */
+const serviceType = {
+  1: '到店保养服务',
+  2: '救援服务',
+  3: '洗车服务',
+  4: '上门保养'
+};
+
+@Pipe({
+  name: 'serviceType'
+})
+export class ServiceTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = serviceType[value];
+    } else {
+      result = serviceType[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}
+
+/** 推荐设置上传状态 */
+const uploadStatus = {
+  1: '上传中',
+  2: '上传失败',
+  3: '上传成功'
+};
+
+@Pipe({
+  name: 'uploadStatus'
+})
+export class UploadStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = uploadStatus[value];
+    } else {
+      result = uploadStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+}

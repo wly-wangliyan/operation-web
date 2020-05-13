@@ -1,0 +1,142 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'汽修店列表'" [level3Name]="'技师列表'" [level2RelativePath]="'../../'">
+    </app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" class="header-btn" nz-button nzType="primary"
+                    (appZDebounceClick)="onEditTechnician(null)" [disabled]="technicianTable.data.length >= 20">
+                新建技师
+            </button>
+        </li>
+    </ul>
+</div>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="search-container">
+            <span style="font-size: 22px;font-weight: 700">{{repair_shop_name}}</span>
+        </div>
+        <div class="zmy-table">
+            <nz-table #technicianTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>技师</th>
+                    <th>类型</th>
+                    <th nzWidth="35%">标签</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of technicianTable.data; let i = index">
+                    <td>{{ i + (nzSearchAssistant.currentPage - 1) * 15 + 1 }}</td>
+                    <td>
+                        <ng-container style="display: inline-flex">
+                            <img *ngIf="data.image" [src]="data.image" style="width: 60px;height: 60px;margin-right: 15px">
+                            <label [title]="data.name || ''" style="width: calc(50% - 100px);text-align: left">{{data.name}}</label>
+                        </ng-container>
+                    </td>
+                    <td>{{data.type}}</td>
+                    <td>{{ data.tags}}</td>
+                    <td class="operation">
+                        <a [title]="'编辑'" (appZDebounceClick)="onEditTechnician(data)">编辑</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDelTechnician(data.mechanic_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+<!-- 新建、编辑技师模态框 -->
+<div class="modal fade " id="configModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">{{repair_shop_id?'编辑技师':'新建技师'}}</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #configForm="ngForm">
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>技师名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentTechnician.name" name="name" maxlength="15"
+                                   (input)="errPositionItem.name.isError=false" appIgnoreSpace required>
+                        </div>
+                    </div>
+                    <div class="row row-message" style="height: 30px">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="errPositionItem?.name?.isError">{{errPositionItem?.name?.errMes}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>技师头像：</span>
+                        </label>
+                        <div class="control-input">
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg
+                                                [minCropBoxWidth]="100" [minCropBoxHeight]="100" [resizable]="true"
+                                                [imageShowWidth]="100">
+                            </app-z-photo-select>
+                        </div>
+                    </div>
+                    <div class="row row-message" style="height: 30px">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="errPositionItem?.image?.isError">{{errPositionItem?.image?.errMes}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>标签：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentTechnician.tags" name="tags" maxlength="54"
+                                   placeholder="多个标签用英文逗号隔开" (input)="errPositionItem.tags.isError=false">
+                        </div>
+                    </div>
+                    <div class="row row-message" style="height: 30px">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="errPositionItem?.tags?.isError">{{errPositionItem?.tags?.errMes}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>技师简介：</span>
+                        </label>
+                        <div class="control-input">
+                            <textarea class="form-control" [(ngModel)]="currentTechnician.intro" name="intro" rows="4"
+                                      placeholder="请输入500字以内技师简介" maxlength="500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary"
+                                [disabled]="!configForm.form.valid||coverImg.imageList.length===0"
+                                (appZDebounceClick)="onSaveTechClick()">确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

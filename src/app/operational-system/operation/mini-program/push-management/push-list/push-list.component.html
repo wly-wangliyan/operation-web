@@ -74,22 +74,23 @@
                     <td *ngIf="data.end_time!==9999999999">
                         {{data.end_time ? (data.end_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
                     <td>
-                        <span *ngIf="data.push_range===1&&data.user_range!==2">{{data.push_range|pushRange}}</span>
-                        <span *ngIf="data.push_range===1&&data.user_range===2">{{(data.user_range|userRange) + '(' + data.user_ids?.split(',')?.length + ')'}}</span>
-                        <span *ngIf="data.push_range===2">
-                            <ng-container *ngIf="data.user_range===1">{{data.user_range|userRange}}</ng-container>
-                            <ng-container *ngIf="data.user_range===2">{{'(' + data.user_ids?.split(',')?.length + ')'}}</ng-container>
-                            {{(data.push_range|pushRange) + '-' + (data.push_range_detail?.range_type|rangeType) + '-' +
+                        <ng-container *ngIf="data.user_range===1">
+                            <span>{{data.user_range|userRange}}</span>
+                            <span *ngIf="data.push_range===2">
+                                {{'-' + (data.push_range|pushRange) + '-' + (data.push_range_detail?.range_type|rangeType) + '-' +
                             ('距离到期' + data.push_range_detail?.date_limit + '日时提醒')}}</span>
-                        <span *ngIf="data.push_range===4">
-                            <span><ng-container *ngIf="data.user_range===1">{{data.user_range|userRange}}</ng-container>
-                                <ng-container *ngIf="data.user_range===2">{{'(' + data.user_ids?.split(',')?.length + ')'}}</ng-container>
-                                {{(data.push_range|pushRange) + '-' + (data.push_range_detail?.free_range_type|diyRangeType) + '-' +
+                            <span *ngIf="data.push_range===4">
+                            <span>
+                                {{'-' + (data.push_range|pushRange) + '-' + (data.push_range_detail?.free_range_type|diyRangeType) + '-' +
                                 ((data.push_range_detail?.free_range_type|diyRangeTypeMsg) + data.push_range_detail?.free_start_limit)}}日</span>
-                            <span *ngIf="data.push_range_detail?.free_start_limit >=0 && data.push_range_detail?.free_end_limit >=0
+                            <span *ngIf="data.push_range_detail?.free_start_limit && data.push_range_detail?.free_start_limit >=0 && data.push_range_detail?.free_end_limit >=0
                                     && data.push_range_detail.free_start_limit !== data.push_range_detail.free_end_limit">至{{data.push_range_detail.free_end_limit}}日</span>
                             <span>时提醒</span>
                         </span>
+                        </ng-container>
+                        <ng-container *ngIf="data.user_range===2">
+                            <span>{{(data.user_range|userRange) + '(' + data.user_ids?.split(',')?.length + '人)'}}</span>
+                        </ng-container>
                     </td>
 
                     <td>{{data.reach_user_num >= 0 ? data.reach_user_num : '--'}}</td>

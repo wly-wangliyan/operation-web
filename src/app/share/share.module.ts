@@ -54,7 +54,7 @@ import {
   RescueServiceStatusPipe,
   DoorOrderStatusPipe,
   DoorRefundStatusPipe,
-  DoorRefundOrderStatusPipe
+  DoorRefundOrderStatusPipe, ServiceTypePipe, UploadStatusPipe
 } from './pipes/store-format.pipe';
 import { HtmlPipe } from './pipes/html.pipe';
 import { TxtCopyComponent } from './directives/txt-copy/txt-copy.component';
@@ -163,6 +163,8 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     ZDuration3Pipe,
     RefundTypePipe,
     CommonRefundStatusPipe,
+    ServiceTypePipe,
+    UploadStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
@@ -250,6 +252,8 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     ZDuration3Pipe,
     RefundTypePipe,
     CommonRefundStatusPipe,
+    ServiceTypePipe,
+    UploadStatusPipe,
 
     // 指令
     IgnoreSpaceDirective,
