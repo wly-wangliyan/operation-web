@@ -47,8 +47,7 @@ export class TechnicianListComponent implements OnInit {
   public repair_shop_name: string;
   public currentTechnician: MechanicEntity = new MechanicEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
-
-  private repair_shop_id: string;
+  public repair_shop_id: string;
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
