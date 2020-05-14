@@ -22,6 +22,7 @@
         <select name="promotion_type" class="form-control" [(ngModel)]="searchParams.promotion_type">
           <option value=''>全部</option>
           <option value=1>消费赠券</option>
+          <option value=2>赠券活动</option>
         </select>
       </div>
 
@@ -73,7 +74,7 @@
             <td [title]="data.promotion_name?data.promotion_name:''">
               {{data.promotion_name?(data.promotion_name|zMaxLength:10):'--'}}</td>
 
-            <td>{{data.promotion_type?(data.promotion_type===1?'消费赠券':'其他'):'--'}}</td>
+            <td>{{data.promotion_type?(data.promotion_type===1?'消费赠券':'赠券活动'):'--'}}</td>
 
             <td>
               <div class="td-time">

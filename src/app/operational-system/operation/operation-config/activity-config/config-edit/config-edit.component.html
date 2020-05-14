@@ -111,8 +111,16 @@
                   placeholder="可输入0.00001-1数值" class="form-control" (change)="onRateChange($event,i)"
                   (keypress)="inputNumberLimit($event)" required maxlength="7" />
               </div>
+              <ng-container *ngIf="configParams.promotion_type=='2'">
+                <div class="button-group">
+                  <button class="close-btn" type="button" nz-button (click)="onAddRewardClick()"
+                          *ngIf="editRewardList.length===(i+1)" [disabled]="editRewardList.length>=5">添加</button>
+                  <button *ngIf="editRewardList.length>1 || i > 0" class="remove-btn" nz-button type="button"
+                          (click)="onDeleteRewardClick(reward,i)">移除</button>
+                </div>
+              </ng-container>
             </div>
-            <div class="item-row" *ngIf="configParams.promotion_type=='1'">
+            <div class="item-row" *ngIf="configParams.promotion_type!='2'">
               <label class="row-title">赠品</label>
               <div class="control-input" style="margin-right: 10px;">
                 <select name="related_reward_type_{{i}}_{{reward.time}}" class="form-control" style="width: 130px;"
