@@ -74,6 +74,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
         urls = urls + (item.car_image ? (',' + item.car_image) : '');
         urls = urls + (item.insurance_policy ? (',' + item.insurance_policy) : '');
         urls = urls + (item.payment_certificate ? (',' + item.payment_certificate) : '');
+        urls = urls + (item.signature_image ? (',' + item.signature_image) : '');
         item.imageUrls = urls ? urls.split(',') : [];
       });
       this.linkUrl = res.linkUrl;

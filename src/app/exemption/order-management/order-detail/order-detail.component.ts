@@ -288,9 +288,9 @@ export class OrderDetailComponent implements OnInit {
   /**
    * 打开放大图片组件
    */
-  public onOpenZoomPictureModal(openIndex: number) {
+  public onOpenZoomPictureModal(img: string) {
     timer(0).subscribe(() => {
-      this.ZPhotoSelectComponent.zoomPicture(openIndex);
+      this.ZPhotoSelectComponent.zoomPicture(this.imageUrls.indexOf(img));
     });
   }
 
