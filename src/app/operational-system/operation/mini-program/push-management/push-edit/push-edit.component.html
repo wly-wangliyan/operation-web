@@ -257,7 +257,7 @@
         <div class="modal-footer">
           <button class="sure-btn" type="button" nz-button nzType="primary"
             [disabled]="!editPushModal.form.valid || coverImg.imageList.length===0  || (!pushParams.push_range&&pushParams.user_range===1) ||
-                            (!pushParams.range_type&&pushParams.push_range===2) || !pushParams.push_speed_type || !offline_status ||
+                            (!pushParams.range_type&&pushParams.push_range===2) || !pushParams.push_speed_type || !offline_status || !pushParams.user_range ||
                              (!pushParams.url_type&&pushParams.push_location_url) || (pushParams.url_type&&!pushParams.push_location_url)" (appZDebounceClick)="onEditFormSubmit()">保存
           </button>
           <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
