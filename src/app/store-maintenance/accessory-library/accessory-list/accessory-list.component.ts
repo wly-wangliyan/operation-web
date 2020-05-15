@@ -172,6 +172,9 @@ export class AccessoryListComponent implements OnInit {
 
   /** 删除配件 */
   public onDeleteAccessory(data: AccessoryEntity) {
+    if (data.upload_status === 1) {
+      return;
+    }
     this.globalService.confirmationBox.open(
       '提示',
       '此操作不可逆，是否确认删除？',
