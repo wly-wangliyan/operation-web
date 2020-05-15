@@ -158,3 +158,8 @@
   background: #FAECD8;
   color: #E6A23C;
 }
+
+.disabled {
+  color: #888!important;
+  cursor: not-allowed;
+}

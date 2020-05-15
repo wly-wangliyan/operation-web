@@ -152,6 +152,9 @@ export class AccessoryListComponent implements OnInit {
 
   // 推荐设置打开所属厂商选择组件
   public onOpenBrandFirmModal(data: AccessoryEntity): void {
+    if (data.upload_status === 1) {
+      return;
+    }
     // 获取推荐设置
     this.accessoryLibraryService.requestRecommendCarSeries(data.accessory_id).subscribe(res => {
       data.car_series_list = res;
@@ -210,8 +213,11 @@ export class AccessoryListComponent implements OnInit {
   }
 
   // 上传弹窗
-  public onOpenImportModal(accessory_id: string) {
-    this.accessory_id = accessory_id;
+  public onOpenImportModal(data: AccessoryEntity) {
+    if (data.upload_status === 1) {
+      return;
+    }
+    this.accessory_id = data.accessory_id;
     $('#importBerthPromptDiv').modal('show');
   }
 

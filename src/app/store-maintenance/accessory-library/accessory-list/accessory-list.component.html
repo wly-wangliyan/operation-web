@@ -139,8 +139,8 @@
             <td class="operation">
               <div>
                 <a [title]="'编辑'" [routerLink]="['../edit', data.accessory_id]">编辑</a>
-                <a [title]="'推荐设置'" (click)="onOpenBrandFirmModal(data)">推荐设置</a>
-                <a [title]="'批量推荐'" (click)="onOpenImportModal(data.accessory_id)">批量推荐</a>
+                <a [title]="'推荐设置'" [class.disabled]="data.upload_status===1" (click)="onOpenBrandFirmModal(data)">推荐设置</a>
+                <a [title]="'批量推荐'" [class.disabled]="data.upload_status===1" (click)="onOpenImportModal(data)">批量推荐</a>
                 <a [title]="'删除'" (click)="onDeleteAccessory(data)">删除</a>
               </div>
             </td>
