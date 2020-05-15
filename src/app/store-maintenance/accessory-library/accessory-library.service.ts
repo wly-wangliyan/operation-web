@@ -111,6 +111,7 @@ export class PriceInfoEntity extends EntityBase {
   public original_fee: number = undefined; // float	机滤原价
   public settlement_fee: number = undefined; // float 机滤结算价
   public sale_fee: number = undefined; // float	机滤售价
+  public sale_num: number = undefined; // float	机滤售量
   public store: number = undefined; // float	机滤库存
 
   constructor(source?: SpecificationEntity) {
@@ -120,6 +121,7 @@ export class PriceInfoEntity extends EntityBase {
       this.original_fee = source.original_fee;
       this.settlement_fee = source.settlement_fee;
       this.sale_fee = source.sale_fee;
+      this.sale_num = source.sale_num;
       this.store = source.store;
     }
   }
