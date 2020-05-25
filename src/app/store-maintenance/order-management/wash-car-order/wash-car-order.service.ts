@@ -6,6 +6,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { EntityBase } from '../../../../utils/z-entity';
 import { HttpResponse } from '@angular/common/http';
 import { ExpenseVerifyEntity } from '../../expense-management/expense-http.service';
+import { WashRefundEntity } from './refund-management/refund-management.service';
 
 export class WashCarSearchParams extends EntityBase {
   public order_status = ''; // 订单状态 1：待支付 2：已取消 3：待核销 4：已完成 5:已关闭 6:已失效
@@ -53,6 +54,7 @@ export class WashCarOrderEntity extends EntityBase {
   public valid_date_end: number = undefined; // 有效期结束日期
   public telephone: string = undefined; // 用户电话
   public expense_verifies_info: Array<any> = undefined; // 订单下消费码集合(仅提供给前端使用)
+  public refund_application: WashRefundEntity = new WashRefundEntity(); // 	integer	申请状态 1: 处理中 2: 申请通过 3: 申请驳回
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 
@@ -60,6 +62,9 @@ export class WashCarOrderEntity extends EntityBase {
     // if (propertyName === 'wash_car_specification') {
     //   return WashCarSpecificationEntity;
     // }
+    if (propertyName === 'refund_application') {
+      return WashRefundEntity;
+    }
     return null;
   }
 }

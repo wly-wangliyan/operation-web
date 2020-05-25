@@ -47,6 +47,11 @@ const routes: Routes = [
     canLoad: [AuthGuardService, MenuGuardService]
   },
   {
+    path: 'expect-wash-car',
+    loadChildren: () => import('./expect-wash-car-shop/expect-wash-car-shop.module').then(m => m.ExpectWashCarShopModule),
+    canLoad: [AuthGuardService, MenuGuardService]
+  },
+  {
     path: 'rescue-order',
     loadChildren: () => import('./rescue-order/rescue-order.module').then(m => m.RescueOrderModule),
     canLoad: [AuthGuardService, MenuGuardService]

@@ -59,11 +59,27 @@
           <div class="row">
             <label class="control-label">
               <b>*</b>
+              <span>数量：</span>
+            </label>
+            <div class="control-input">
+              <input name="booth_num" placeholder="输入1-10字数量" [(ngModel)]="boothData.booth_num" maxlength="2"
+                     class="form-control" appMaxNumber="10" appIntNumber required style="width: 160px" onInput="value=value&&value<1?1:value">
+              <p *ngIf="boothData.booth_type===1" class="tip">注：轮播图可同时开启并轮播数量</p>
+              <p *ngIf="boothData.booth_type===2" class="tip">注：焦点图数量平分总宽度，请慎重填写</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
               <span>尺寸：</span>
             </label>
             <div class="control-input">
               <div class="inline-item">
-                <label class="one-word-lable" style="border-right: 0;">宽</label>
+                <label class="one-word-lable" style="border-right: 0;">
+                  <span *ngIf="boothData.booth_type!==2">宽</span>
+                  <span *ngIf="boothData.booth_type===2">总宽</span>
+                </label>
                 <input name="bind-width" [(ngModel)]="boothData.width"
                   (change)="this.errMessageGroup.errJson.icon_size.errMes=''" class="form-control five-number"
                   appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />

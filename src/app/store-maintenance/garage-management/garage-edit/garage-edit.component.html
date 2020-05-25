@@ -134,6 +134,20 @@
     <form class="form-horizontal" autocomplete="off" #washForm="ngForm" *ngIf="tab_index===3">
       <div class="row">
         <label class="control-label">
+          <b>*</b>
+          <span>门店等级</span>
+        </label>
+        <div class="control-input" style="width: 208px!important;">
+          <select class="form-control" [(ngModel)]="washInfo.rank" name="rank" required>
+            <option [value]="1">A</option>
+            <option [value]="2">B</option>
+            <option [value]="3">C</option>
+          </select>
+        </div>
+        <p class="tip">A级为最高级别，门店等级讲影响门店排序 【门店排3km范围内权籍高优先，3km范围外距离排序，不包含C级店】</p>
+      </div>
+      <div class="row">
+        <label class="control-label">
           <b>&nbsp;&nbsp;</b>
           <span>标签</span>
         </label>

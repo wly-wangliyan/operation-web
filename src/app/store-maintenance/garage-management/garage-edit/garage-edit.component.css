@@ -185,3 +185,9 @@ nz-range-picker {
 .disabled {
   cursor: not-allowed;
 }
+
+.tip {
+  margin-bottom: 0;
+  line-height: 38px;
+  padding-left: 350px;
+}

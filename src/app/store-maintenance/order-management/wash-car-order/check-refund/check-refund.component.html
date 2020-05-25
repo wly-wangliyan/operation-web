@@ -1,0 +1,53 @@
+<!-- 退款模态框 -->
+<div class="modal fade " id="checRrefundModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">退款申请审核</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>退款金额：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundCheckParams.refund_fee" maxlength="8"
+                                   class="form-control" required appFloatNumber>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>申请原因：</span>
+                        </label>
+                        <div class="control-input">{{selectOrder.refund_reason}}</div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>拒绝原因：</span>
+                        </label>
+                        <div class="control-input">
+                            <textarea name="refuse_reason" class="form-control" [(ngModel)]="refundCheckParams.refuse_reason"
+                                maxlength="20" placeholder="输入0-20字拒绝原因">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="close-btn" type="button" (appZDebounceClick)="onRefuseRefundClick()"
+                                [disabled]="!refundCheckParams.refuse_reason" nz-button data-dismiss="modal">拒绝申请</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!refundForm.form.valid"
+                                (appZDebounceClick)="onRefundCheckClick()">同意并退款</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -33,3 +33,34 @@ export class WashCarOrderStatusPipe implements PipeTransform {
   }
 
 }
+
+/** 订单申请状态 */
+const WashCarApplyStatus = {
+  1: '处理中',
+  2: '申请通过',
+  3: '申请驳回'
+};
+
+@Pipe({
+  name: 'washCarApplyStatus'
+})
+export class WashCarApplyStatusPipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = WashCarApplyStatus[value];
+    } else {
+      result = WashCarApplyStatus[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+
+}

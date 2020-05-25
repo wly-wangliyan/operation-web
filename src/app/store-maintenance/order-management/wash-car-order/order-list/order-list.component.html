@@ -153,6 +153,8 @@
                 <a [title]="'查看'" [routerLink]="['../detail', record.wash_car_order_id]">查看</a>
                 <a *ngIf="(record.order_status===3 || record.order_status===4) && record.refund_status !==1 && record.refund_status !==2"
                   [title]="'退款'" (click)="onRefundClick(record)">退款</a>
+                <a *ngIf="record.refund_application?.apply_status===1"
+                   [title]="'审核并退款'" (click)="onCheckRefundClick(record)">审核并退款</a>
               </div>
             </td>
           </tr>
@@ -209,3 +211,6 @@
     </div>
   </div>
 </div>
+
+<!--审核并退款-->
+<app-check-refund></app-check-refund>

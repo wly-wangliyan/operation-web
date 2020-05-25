@@ -1,0 +1,144 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'洗车退款申请'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg">
+            <a (click)="onExportRecords('current')">当前页数据导出</a>
+        </li>
+        <li class="big-bg">
+            <a (click)="onExportRecords('all')">全部数据导出</a>
+        </li>
+    </ul>
+</div>
+<div class="content-flow">
+    <div class="table-container">
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>订单编号：</span>
+                    <input name="wash_car_order_id" class="form-control" placeholder="请输入订单编号" maxlength="32"
+                           oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" [(ngModel)]="searchParams.wash_car_order_id"
+                           appIgnoreSpace />
+                </div>
+                <div class="form-group">
+                    <span>规格名称：</span>
+                    <input name="specification_name" class="form-control" [(ngModel)]="searchParams.specification_name"
+                           placeholder="请输入规格名称" maxlength="30" appIgnoreSpace />
+                </div>
+
+
+                <div class="form-group">
+                    <span>申请时间：</span>
+                    <nz-date-picker [(ngModel)]="order_start_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderStartTime"
+                                    name='order_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <span class='partition'>-</span>
+                    <nz-date-picker [(ngModel)]="order_end_time" [nzShowToday]=false [nzDisabledDate]="disabledOrderEndTime"
+                                    name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                </div>
+
+                <div class="form-group">
+                    <span>车型：</span>
+                    <select name="car_type" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.car_type">
+                        <option value="">全部</option>
+                        <option *ngFor="let item of carTypes" [value]="item">{{item | washCarType}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <span>用户ID：</span>
+                    <input name="user_id" class="form-control" placeholder="请输入用户ID" maxlength="32"
+                           [(ngModel)]="searchParams.user_id" appIgnoreSpace />
+                </div>
+
+                <div class="form-group">
+                    <span>手机号码：</span>
+                    <input name="telephone" class="form-control" placeholder="请输入手机号码" maxlength="11"
+                           [(ngModel)]="searchParams.telephone" appIgnoreSpace />
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="zmy-table">
+            <nz-table [nzData]="orderList" [nzShowPagination]="true" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate"
+                      #washCarOrderTable>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>申请编号</th>
+                    <th>订单编号</th>
+                    <th>用户ID</th>
+                    <th>手机号</th>
+                    <th>规格/车型</th>
+                    <th>有效日期</th>
+                    <th>申请时间</th>
+                    <th>退款原因</th>
+                    <th>退款金额</th>
+                    <th>售后/退款</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let record of washCarOrderTable.data; let i = index">
+                    <td>{{ i + (pageIndex - 1) * 15 + 1 }}</td>
+                    <td [title]="record.refund_application_id || ''">
+                        <span *ngIf="record.refund_application_id" [appTxtCopy]="record.refund_application_id">
+                            {{ record.refund_application_id | zMaxLength:10 }}
+                        </span>
+                        <span *ngIf="!record.refund_application_id">--</span>
+                    </td>
+                    <td [title]="record.wash_car_order.wash_car_order_id || ''">
+                        <span *ngIf="record.wash_car_order.wash_car_order_id" [appTxtCopy]="record.wash_car_order.wash_car_order_id">
+                            {{ record.wash_car_order.wash_car_order_id | zMaxLength:10 }}
+                        </span>
+                        <span *ngIf="!record.wash_car_order.wash_car_order_id">--</span>
+                    </td>
+
+                    <td>{{record.wash_car_order.ht_code || '--'}}</td>
+                    <td>{{record.wash_car_order.telephone || '--'}}</td>
+                    <td>
+                        <div class="column-box">
+                            <ng-container *ngIf="record.wash_car_specification">
+                                <span [title]="record.wash_car_specification.specification_name || ''">
+                                    {{record.wash_car_specification.specification_name | zMaxLength:10}}</span>
+                                <span *ngIf="record.wash_car_specification.car_type">
+                                    {{'('+(record.wash_car_specification.car_type|washCarType)+')'}}</span>
+                            </ng-container>
+                            <span *ngIf="!record.wash_car_specification">--</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="column-box">
+                            {{record.wash_car_order.valid_date_start? (record.wash_car_order.valid_date_start * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}
+                            <span *ngIf="record.wash_car_order.valid_date_start&&record.wash_car_order.valid_date_end">~</span>
+                            {{record.wash_car_order.valid_date_end? (record.wash_car_order.valid_date_end * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}
+                        </div>
+                    </td>
+                    <td>{{record.created_time? (record.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
+
+                    <td>{{record.refund_reason}}</td>
+                    <td>{{(record.refund_fee || 0) | centPriceChange:'元'}}</td>
+                    <td>
+                        <div class="column-box" *ngIf="record.refund_fee>0">
+                            <span>{{record.sale_fee | refundType:record.refund_fee}}</span>
+                            <span *ngIf="record.refund_status">{{'('+(record.refund_status | commonRefundStatus)+')'}}</span>
+                        </div>
+                        <span *ngIf="!record.refund_fee">--</span>
+                    </td>
+                    <td class="operation">
+                        <div>
+                            <a [title]="'查看'" [routerLink]="['../detail', record.wash_car_order_id]">查看</a>
+                            <a *ngIf="record.refund_application?.apply_status===1"
+                               [title]="'审核并退款'" (click)="onCheckRefundClick(record)">审核并退款</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<!--审核并退款-->
+<app-check-refund></app-check-refund>

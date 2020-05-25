@@ -182,11 +182,8 @@ export class BoothConfigEditComponent implements OnInit {
 
   // 格式展位数量
   private generateAndCheckParamsValid(): boolean {
-    const booth_type = this.boothData.booth_type;
-    this.boothData.booth_num = booth_type === 1 ? 5 : booth_type === 2 ? 1 : null;
-
     if (!this.boothData.width || Number(this.boothData.width) === 0) {
-      this.errMessageGroup.errJson.icon_size.errMes = '宽应大于0px！';
+      this.errMessageGroup.errJson.icon_size.errMes = this.boothData.booth_type === 1 ? '宽应大于0px！' : '总宽应大于0px！';
       return false;
     }
 

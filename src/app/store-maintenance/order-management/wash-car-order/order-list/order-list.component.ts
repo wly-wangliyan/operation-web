@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { WashOrderService, WashCarOrderEntity, WashCarSearchParams, WashCarRefundParams } from '../wash-car-order.service';
 import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
 import { GlobalService } from '../../../../core/global.service';
@@ -7,6 +7,7 @@ import { GlobalConst } from '../../../../share/global-const';
 import { debounceTime } from 'rxjs/operators';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
+import { CheckRefundComponent } from '../check-refund/check-refund.component';
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
@@ -33,6 +34,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private operationing = false;
   private searchUrl: string;
   public total_num = 0; // 总条数
+
+  @ViewChild(CheckRefundComponent, {static: true}) public checkRefundComponent: CheckRefundComponent;
 
   private get pageCount(): number {
     if (this.orderList.length % GlobalConst.NzPageSize === 0) {
@@ -167,6 +170,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
     $('#refundModal').modal('show');
   }
 
+  // 审核并退款
+  public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
+    this.selectOrder = orderItem;
+    this.checkRefundComponent.open(orderItem, () => {
+      this.searchText$.next();
+    });
+  }
+
   // 确认退款
   public onRefundCheckClick(): void {
     if (this.operationing) {
@@ -177,12 +188,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (Number(this.selectOrder.sale_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
+    const sale_fee = this.selectOrder.sale_fee ? this.selectOrder.sale_fee : 0;
+    if (Number(sale_fee) < Math.round(Number(sale_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
     }
 
-    this.globalService.confirmationBox.open('提示', '操作后将退款金额原路返回至支付账户，此操作不可逆，请慎重操作！', () => {
+    this.globalService.confirmationBox.open('提示', '操作后将退款金额原路返回至支付账户，确定操作退款吗？', () => {
       this.globalService.confirmationBox.close();
       this.requestRefund();
     }, '确认退款');

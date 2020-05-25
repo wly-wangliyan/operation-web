@@ -53,11 +53,15 @@
           <td>实收：</td>
           <td>{{(orderRecord.sale_fee || 0) | centPriceChange:'元'}}</td>
 
-          <td></td>
-          <td></td>
+          <td>退款申请:</td>
+          <td>
+            {{orderRecord.refund_application.apply_status | washCarApplyStatus}}
+            <button type="button" class="sure-btn refund-btn" nz-button
+                    nzType="primary" (click)="onCheckRefundClick(orderRecord)">审核并退款</button>
+          </td>
 
-          <td></td>
-          <td></td>
+          <td>申请原因:</td>
+          <td>{{orderRecord.refund_application.refund_reason}}</td>
         </tr>
 
         <tr>
@@ -144,3 +148,6 @@
   </div>
   <app-prompt-loading></app-prompt-loading>
 </div>
+
+<!--审核并退款-->
+<app-check-refund></app-check-refund>

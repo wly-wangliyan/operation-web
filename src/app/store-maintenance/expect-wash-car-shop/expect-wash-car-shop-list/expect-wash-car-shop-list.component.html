@@ -1,0 +1,73 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'商家管理'" [level2Name]="'期望洗车门店'"></app-crumb>
+</div>
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>添加时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+            </div>
+            <div class="form-group">
+                <span>门店名称：</span>
+                <input class="form-control" placeholder="请输入门店名称" maxlength="50" name="wash_shop_name"
+                       [(ngModel)]="searchParams.wash_shop_name"/>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #pushTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>期望门店名称</th>
+                    <th>地址</th>
+                    <th>经纬度</th>
+                    <th>电话</th>
+                    <th>添加时间</th>
+                    <th>用户手机号</th>
+                    <th>用户ID</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of pushTable.data; let i = index">
+                    <td>{{ i + (nzSearchAssistant.currentPage - 1) * 15 + 1 }}</td>
+                    <td [title]="data.wash_shop_name	 || ''">
+                        {{ (data.wash_shop_name	 | zMaxLength: 12) || '--' }}
+                    </td>
+                    <td [title]="data.province + data.city + data.district + data.address">
+                        {{(data.province + data.city + data.district + data.address) | zMaxLength: 15}}
+                    </td>
+                    <td>
+                        <div style="display: grid">
+                            经度：{{data.lat}}
+                            纬度：{{data.lon}}
+                        </div>
+                    </td>
+                    <td>{{ data.shop_tel || '--' }}</td>
+                    <td>{{data.created_time ? (data.created_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
+                    <td>{{ data.user_tel || '--' }}</td>
+                    <td>{{ data.user_id || '--' }}</td>
+                    <td class="operation">
+                        <a *ngIf="!data.is_readed" [title]="'已阅'" (appZDebounceClick)="onReadedClick(data.wash_shop_id)">已阅</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.wash_shop_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

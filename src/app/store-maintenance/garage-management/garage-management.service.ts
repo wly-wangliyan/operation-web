@@ -65,6 +65,7 @@ export class WashCarEntity extends EntityBase {
   public shop_instruction = ''; // 店铺简介
   public repair_shop: RepairShopEntity = undefined; // 汽修店
   public service_num: number = undefined; // 已服务次数
+  public rank = '1'; // integer	T	门店等级
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'repair_shop') {

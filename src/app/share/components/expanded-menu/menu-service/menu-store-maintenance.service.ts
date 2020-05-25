@@ -50,13 +50,15 @@ export class MenuStoreMaintenanceService {
     const subFinanceMenu4 = new SideMenuItem('救援订单', '/rescue-order', systemMenu);
     const subFinanceMenu5 = new SideMenuItem('保养订单', '/upkeep-order', systemMenu);
     const subFinanceMenu6 = new SideMenuItem('核销管理', '/expense-management', systemMenu);
-    const subFinanceMenu7 = new SideMenuItem('洗车订单', '/order-management/wash-car-order', systemMenu);
+    const subFinanceMenu7 = new SideMenuItem('洗车订单', '/order-management/wash-car-order/list', systemMenu);
+    const subFinanceMenu8 = new SideMenuItem('洗车退款申请', '/order-management/wash-car-order/refund-list', systemMenu);
     // systemMenu.children.push(subFinanceMenu1);
     systemMenu.children.push(subFinanceMenu5);
     systemMenu.children.push(subFinanceMenu4);
     systemMenu.children.push(subFinanceMenu7);
     systemMenu.children.push(subFinanceMenu6);
     systemMenu.children.push(subFinanceMenu3);
+    systemMenu.children.push(subFinanceMenu8);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }
@@ -67,8 +69,10 @@ export class MenuStoreMaintenanceService {
     systemMenu.icon = '/assets/images/menu_merchant.png';
     const subFinanceMenu1 = new SideMenuItem('汽修店管理', '/garage-management', systemMenu);
     const subFinanceMenu2 = new SideMenuItem('供应商管理', '/supplier-management', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('期望洗车门店', '/expect-wash-car', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     systemMenu.children.push(subFinanceMenu2);
+    systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

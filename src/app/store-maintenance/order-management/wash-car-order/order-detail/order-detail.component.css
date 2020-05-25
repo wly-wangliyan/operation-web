@@ -137,3 +137,10 @@
   background-color: #cacaca;
   color: #fff;
 }
+
+.refund-btn {
+  height: 27px;
+  padding: 0 5px;
+  width: auto;
+  float: right;
+}

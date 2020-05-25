@@ -7,6 +7,7 @@ import { HttpErrorEntity } from '../../../../core/http.service';
 import { WashCarOrderEntity, WashOrderService } from '../wash-car-order.service';
 import { ExpenseVerifyEntity } from '../../../expense-management/expense-http.service';
 import { PromptLoadingComponent } from '../../../../share/components/prompt-loading/prompt-loading.component';
+import { CheckRefundComponent } from '../check-refund/check-refund.component';
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -21,6 +22,8 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   private wash_car_order_id: string; // wash_car_order_id
 
   @ViewChild(PromptLoadingComponent, { static: true }) public promptLoading: PromptLoadingComponent;
+  @ViewChild(CheckRefundComponent, {static: true}) public checkRefundComponent: CheckRefundComponent;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -93,5 +96,12 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   public onCancelClick(): void {
     this.isEditRemark = false;
     this.searchText$.next();
+  }
+
+  // 审核并退款
+  public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
+    this.checkRefundComponent.open(orderItem, () => {
+      this.searchText$.next();
+    });
   }
 }
