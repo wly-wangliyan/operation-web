@@ -62,7 +62,7 @@
               <span>数量：</span>
             </label>
             <div class="control-input">
-              <input name="booth_num" placeholder="输入1-10字数量" [(ngModel)]="boothData.booth_num" maxlength="2"
+              <input name="booth_num" placeholder="输入1-10字数量" [(ngModel)]="boothData.booth_num" maxlength="2" [disabled]='!isCreate'
                      class="form-control" appMaxNumber="10" appIntNumber required style="width: 160px" onInput="value=value&&value<1?1:value">
               <p *ngIf="boothData.booth_type===1" class="tip">注：轮播图可同时开启并轮播数量</p>
               <p *ngIf="boothData.booth_type===2" class="tip">注：焦点图数量平分总宽度，请慎重填写</p>

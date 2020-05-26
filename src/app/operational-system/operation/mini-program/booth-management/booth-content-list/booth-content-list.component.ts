@@ -133,7 +133,7 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
   // 启停
   public onChangeSwitchStatus(boothContent: BoothContentEntity, booth_content_id: string): void {
     const swith_status = boothContent.status === 1 ? 2 : 1;
-    const limit = boothContent.booth && boothContent.booth.booth_type === 1 ? 5 : 1;
+    const limit = boothContent.booth.booth_num || 0;
     const tipMsg = swith_status === 1 ? '开启' : '关闭';
     this.boothService.requestChangeBoothContentStatus(this.booth_id, booth_content_id, swith_status)
       .subscribe(() => {
