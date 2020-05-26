@@ -1,5 +1,5 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'商家管理'" [level2Name]="'期望洗车门店'"></app-crumb>
+    <app-crumb [level1Name]="'期望洗车门店'"></app-crumb>
 </div>
 <div class="content-flow">
     <div class="search-container">
@@ -39,6 +39,7 @@
                     <th>添加时间</th>
                     <th>用户手机号</th>
                     <th>用户ID</th>
+                    <th>阅读状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -53,14 +54,15 @@
                     </td>
                     <td>
                         <div style="display: grid">
-                            经度：{{data.lat}}
-                            纬度：{{data.lon}}
+                            <span>经度：{{data.lat}}</span>
+                            <span>纬度：{{data.lon}}</span>
                         </div>
                     </td>
                     <td>{{ data.shop_tel || '--' }}</td>
                     <td>{{data.created_time ? (data.created_time*1000 | date:"y-MM-dd HH:mm:ss") : '--' }}</td>
                     <td>{{ data.user_tel || '--' }}</td>
                     <td>{{ data.user_id || '--' }}</td>
+                    <td>{{ data.is_readed?'已阅':'--'}}</td>
                     <td class="operation">
                         <a *ngIf="!data.is_readed" [title]="'已阅'" (appZDebounceClick)="onReadedClick(data.wash_shop_id)">已阅</a>
                         <a [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.wash_shop_id)">删除</a>

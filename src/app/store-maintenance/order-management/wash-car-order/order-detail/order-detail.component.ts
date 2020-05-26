@@ -100,7 +100,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   // 审核并退款
   public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
-    this.checkRefundComponent.open(orderItem, () => {
+    this.checkRefundComponent.open(orderItem.refund_application, () => {
       this.searchText$.next();
     });
   }

@@ -13,7 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
-import { RefundManagementService, WashCarRefundSearchParams } from '../refund-management.service';
+import { RefundManagementService, WashCarRefundSearchParams, WashRefundEntity } from '../refund-management.service';
 
 @Component({
   selector: 'app-refund-list',
@@ -22,7 +22,7 @@ import { RefundManagementService, WashCarRefundSearchParams } from '../refund-ma
 })
 export class RefundListComponent implements OnInit, OnDestroy {
 
-  public orderList: Array<WashCarOrderEntity> = []; // 洗车订单
+  public orderList: Array<WashRefundEntity> = []; // 洗车订单
   public searchParams: WashCarRefundSearchParams = new WashCarRefundSearchParams(); // 洗车订单
   public refundParams: WashCarRefundParams = new WashCarRefundParams(); // 退款
   public carTypes = [1, 2]; // 车型
@@ -30,14 +30,15 @@ export class RefundListComponent implements OnInit, OnDestroy {
   public order_end_time: any = ''; // 下单结束时间
   public pay_start_time: any = ''; // 支付开始时间
   public pay_end_time: any = ''; // 支付结束时间
-
   public pageIndex = 1; // 当前页码
   public noResultText = '数据加载中...';
+  public total_num: number;
+
   private requestSubscription: Subscription; // 获取数据
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
-  private selectOrder: WashCarOrderEntity = new WashCarOrderEntity(); // 选中行
+  private selectOrder: WashRefundEntity = new WashRefundEntity(); // 选中行
 
   @ViewChild(CheckRefundComponent, {static: true}) public checkRefundComponent: CheckRefundComponent;
 
@@ -66,16 +67,17 @@ export class RefundListComponent implements OnInit, OnDestroy {
 
   // 请求订单列表
   private requestOrderList(): void {
-    const statisticsParams = this.searchParams.clone();
-    delete statisticsParams.page_size;
-    delete statisticsParams.page_num;
-    this.requestSubscription = this.refundService.requestOrderRefundList(this.searchParams)
+    this.requestSubscription = forkJoin(
+        this.refundService.requestOrderRefundList(this.searchParams),
+        this.refundService.requestWashCarRefundStatistics(this.searchParams))
         .subscribe(result => {
-          this.orderList = result.results;
-          this.linkUrl = result.linkUrl;
+          this.orderList = result[0].results;
+          this.linkUrl = result[0].linkUrl;
+          this.total_num = result[1].refund_applications_num || 0;
           this.pageIndex = 1;
           this.noResultText = '暂无数据';
         }, err => {
+          this.total_num = 0;
           this.pageIndex = 1;
           this.noResultText = '暂无数据';
           this.globalService.httpErrorProcess(err);
@@ -88,11 +90,14 @@ export class RefundListComponent implements OnInit, OnDestroy {
     if (pageIndex + 1 >= this.pageCount && this.linkUrl) {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-      this.continueRequestSubscription = this.refundService.continueOrderRefundList(this.linkUrl)
+      this.continueRequestSubscription = forkJoin(
+          this.refundService.continueOrderRefundList(this.linkUrl),
+          this.refundService.requestWashCarRefundStatistics(this.searchParams))
           .subscribe(continueData => {
-            const results = continueData.results;
+            const results = continueData[0].results;
             this.orderList = this.orderList.concat(results);
-            this.linkUrl = continueData.linkUrl;
+            this.total_num = continueData[1].refund_applications_num || 0;
+            this.linkUrl = continueData[0].linkUrl;
           }, err => {
             this.globalService.httpErrorProcess(err);
           });
@@ -109,7 +114,7 @@ export class RefundListComponent implements OnInit, OnDestroy {
   // 导出
   public onExportRecords(type: string): void {
     if (this.generateAndCheckParamsValid()) {
-      let searchUrl = `${environment.STORE_DOMAIN}/admin/wash_car_orders/export?default=1`;
+      let searchUrl = `${environment.STORE_DOMAIN}/admin/wash_refund_applications/export?default=1`;
       const params = this.searchParams.json();
       if (type === 'all') {
         delete params.page_size;
@@ -145,7 +150,7 @@ export class RefundListComponent implements OnInit, OnDestroy {
   }
 
   // 审核并退款
-  public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
+  public onCheckRefundClick(orderItem: WashRefundEntity): void {
     this.selectOrder = orderItem;
     this.checkRefundComponent.open(orderItem, () => {
       this.searchText$.next();

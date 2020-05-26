@@ -44,7 +44,7 @@ export class ExpectWashCarShopListComponent implements OnInit {
         new Date(this.end_time).getMinutes(), 0, 0) / 1000).toString() : 253402185600;
     if (sTimestamp && eTimeStamp) {
       if (sTimestamp > eTimeStamp) {
-        this.globalService.promptBox.open('推送开始时间不能大于结束时间！', null, 2000, null, false);
+        this.globalService.promptBox.open('添加开始时间不能大于结束时间！', null, 2000, null, false);
         return false;
       }
     }

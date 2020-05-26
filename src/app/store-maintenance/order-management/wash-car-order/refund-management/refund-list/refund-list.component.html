@@ -70,12 +70,13 @@
                     <th>申请编号</th>
                     <th>订单编号</th>
                     <th>用户ID</th>
-                    <th>手机号</th>
+                    <th>手机号码</th>
                     <th>规格/车型</th>
                     <th>有效日期</th>
                     <th>申请时间</th>
                     <th>退款原因</th>
                     <th>退款金额</th>
+                    <th>退款申请</th>
                     <th>售后/退款</th>
                     <th>操作</th>
                 </tr>
@@ -100,42 +101,49 @@
                     <td>{{record.wash_car_order.telephone || '--'}}</td>
                     <td>
                         <div class="column-box">
-                            <ng-container *ngIf="record.wash_car_specification">
-                                <span [title]="record.wash_car_specification.specification_name || ''">
-                                    {{record.wash_car_specification.specification_name | zMaxLength:10}}</span>
-                                <span *ngIf="record.wash_car_specification.car_type">
-                                    {{'('+(record.wash_car_specification.car_type|washCarType)+')'}}</span>
+                            <ng-container *ngIf="record.specification_name">
+                                <span [title]="record.specification_name || ''">
+                                    {{record.specification_name | zMaxLength:10}}</span>
+                                <span *ngIf="record.car_type">
+                                    {{'('+(record.car_type|washCarType)+')'}}</span>
                             </ng-container>
-                            <span *ngIf="!record.wash_car_specification">--</span>
+                            <span *ngIf="!record.specification_name">--</span>
                         </div>
                     </td>
                     <td>
                         <div class="column-box">
-                            {{record.wash_car_order.valid_date_start? (record.wash_car_order.valid_date_start * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}
-                            <span *ngIf="record.wash_car_order.valid_date_start&&record.wash_car_order.valid_date_end">~</span>
-                            {{record.wash_car_order.valid_date_end? (record.wash_car_order.valid_date_end * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}
+                            <ng-container *ngIf="record.wash_car_order.valid_date_start||record.wash_car_order.valid_date_end">
+                                <span>{{record.wash_car_order.valid_date_start? (record.wash_car_order.valid_date_start * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}</span>
+                                <span>{{record.wash_car_order.valid_date_end? (record.wash_car_order.valid_date_end * 1000 | date: 'y-MM-dd HH:mm:ss'): ''}}</span>
+                            </ng-container>
+                            <ng-container *ngIf="!record.wash_car_order.valid_date_start&&!record.wash_car_order.valid_date_end">--</ng-container>
                         </div>
                     </td>
                     <td>{{record.created_time? (record.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
-                    <td>{{record.refund_reason}}</td>
+                    <td [title]="record.refund_reason||''">{{record.refund_reason|zMaxLength:10}}</td>
                     <td>{{(record.refund_fee || 0) | centPriceChange:'元'}}</td>
                     <td>
-                        <div class="column-box" *ngIf="record.refund_fee>0">
-                            <span>{{record.sale_fee | refundType:record.refund_fee}}</span>
-                            <span *ngIf="record.refund_status">{{'('+(record.refund_status | commonRefundStatus)+')'}}</span>
+                        {{record.apply_status? '已申请('+(record.apply_status|washCarApplyStatus)+')':'未申请'}}
+                    </td>
+                    <td>
+                        <div class="column-box" *ngIf="record.wash_car_order.refund_fee>0">
+                            <span>{{record.wash_car_order.sale_fee | refundType:record.wash_car_order.refund_fee}}</span>
+                            <span *ngIf="record.wash_car_order.refund_status">{{'('+(record.wash_car_order.refund_status | commonRefundStatus)+')'}}</span>
                         </div>
-                        <span *ngIf="!record.refund_fee">--</span>
+                        <span *ngIf="!record.wash_car_order.refund_fee">--</span>
                     </td>
                     <td class="operation">
                         <div>
-                            <a [title]="'查看'" [routerLink]="['../detail', record.wash_car_order_id]">查看</a>
-                            <a *ngIf="record.refund_application?.apply_status===1"
+                            <a [title]="'查看'" [routerLink]="['../detail', record.wash_car_order.wash_car_order_id]">查看</a>
+                            <a *ngIf="(record.wash_car_order.order_status===3||record.wash_car_order.order_status===4)
+                            &&record.wash_car_order.refund_status!==1&&record.wash_car_order.refund_status!==2&&record.apply_status===1"
                                [title]="'审核并退款'" (click)="onCheckRefundClick(record)">审核并退款</a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
+                <ng-template #totalTemplate> 共 {{ total_num }} 条 </ng-template>
             </nz-table>
         </div>
     </div>

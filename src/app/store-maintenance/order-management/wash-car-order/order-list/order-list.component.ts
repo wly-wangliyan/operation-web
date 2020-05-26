@@ -173,7 +173,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 审核并退款
   public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
     this.selectOrder = orderItem;
-    this.checkRefundComponent.open(orderItem, () => {
+    this.checkRefundComponent.open(orderItem.refund_application, () => {
       this.searchText$.next();
     });
   }
@@ -187,9 +187,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-
     const sale_fee = this.selectOrder.sale_fee ? this.selectOrder.sale_fee : 0;
-    if (Number(sale_fee) < Math.round(Number(sale_fee) * 100)) {
+    if (Number(sale_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
     }

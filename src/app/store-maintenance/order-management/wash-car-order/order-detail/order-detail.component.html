@@ -54,10 +54,11 @@
           <td>{{(orderRecord.sale_fee || 0) | centPriceChange:'元'}}</td>
 
           <td>退款申请:</td>
-          <td>
-            {{orderRecord.refund_application.apply_status | washCarApplyStatus}}
-            <button type="button" class="sure-btn refund-btn" nz-button
-                    nzType="primary" (click)="onCheckRefundClick(orderRecord)">审核并退款</button>
+          <td style="line-height: 28px">
+            {{orderRecord.refund_application.apply_status?
+                  '已申请('+(orderRecord.refund_application.apply_status|washCarApplyStatus)+')':'未申请'}}
+            <button *ngIf="(orderRecord.order_status===3||orderRecord.order_status===4)&&orderRecord.refund_status!==1&&orderRecord.refund_status!==2&&orderRecord.refund_application.apply_status===1"
+                    type="button" class="sure-btn refund-btn" nz-button nzType="primary" (click)="onCheckRefundClick(orderRecord)">审核并退款</button>
           </td>
 
           <td>申请原因:</td>

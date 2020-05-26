@@ -31,7 +31,7 @@ export class WishWashShopEntity extends EntityBase {
 export class WishWashShopParams extends EntityBase {
   public add_section: string = undefined; // 	string	F	添加时间区间 "xxx,xxx"
   public wash_shop_name: string = undefined; // 	string	F	门店名称
-  public order_rule: string = undefined; // 	string	F	排序规则 多种排序逗号分隔 1: 添加时间倒序 2:添加时间正序 默认: '1'
+  public order_rules: string = undefined; // 	string	F	排序规则 多种排序逗号分隔 1: 添加时间倒序 2:添加时间正序 默认: '1'
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }

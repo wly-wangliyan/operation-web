@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RefundManagementService, WashCarCheckRefundParams } from '../refund-management/refund-management.service';
+import { RefundManagementService, WashCarCheckRefundParams, WashRefundEntity } from '../refund-management/refund-management.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { WashCarOrderEntity } from '../wash-car-order.service';
 import { GlobalService } from '../../../../core/global.service';
@@ -13,7 +13,7 @@ import { timer } from 'rxjs';
 export class CheckRefundComponent implements OnInit {
 
   public refundCheckParams: WashCarCheckRefundParams = new WashCarCheckRefundParams(); // 退款
-  public selectOrder: WashCarOrderEntity = new WashCarOrderEntity(); // 选中行
+  public selectOrder: WashRefundEntity = new WashRefundEntity(); // 选中行
 
   private operationing = false;
   private sureCallback: any;
@@ -24,10 +24,11 @@ export class CheckRefundComponent implements OnInit {
   ngOnInit() {
   }
 
-  public open(data: WashCarOrderEntity, sureFunc: any) {
+  public open(data: WashRefundEntity, sureFunc: any) {
+    debugger;
     this.operationing = false;
     this.selectOrder = data;
-    this.refundCheckParams.refund_fee = data.sale_fee ? data.sale_fee / 100 : null;
+    this.refundCheckParams.refund_fee = data.refund_fee ? data.refund_fee / 100 : null;
     this.sureCallback = sureFunc;
     timer(0).subscribe(() => {
       $('#checRrefundModal').modal('show');
@@ -45,9 +46,9 @@ export class CheckRefundComponent implements OnInit {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-    const sale_fee = this.selectOrder.sale_fee ? this.selectOrder.sale_fee : 0;
+    const sale_fee = this.selectOrder.refund_fee ? this.selectOrder.refund_fee : 0;
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
-      this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
+      this.globalService.promptBox.open(`退款金额应小于等于申请退款金额！`, null, 2000, null, false);
       return;
     }
 
@@ -96,7 +97,7 @@ export class CheckRefundComponent implements OnInit {
       this.globalService.promptBox.open(successMsg);
       this.sureCallback();
     };
-    this.refundService.requestOrderRefundData(this.selectOrder.wash_car_order_id,
+    this.refundService.requestOrderRefundData(this.selectOrder.refund_application_id,
         this.refundCheckParams).subscribe(() => {
       successFunc();
     }, err => {
