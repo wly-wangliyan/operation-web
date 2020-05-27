@@ -38,7 +38,8 @@ export class WashCarOrderStatusPipe implements PipeTransform {
 const WashCarApplyStatus = {
   1: '处理中',
   2: '申请通过',
-  3: '申请驳回'
+  3: '申请驳回',
+  4: '已完成'
 };
 
 @Pipe({
