@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RefundManagementService, WashCarCheckRefundParams, WashRefundEntity } from '../refund-management/refund-management.service';
-import { HttpErrorEntity } from '../../../../core/http.service';
-import { WashCarOrderEntity } from '../wash-car-order.service';
 import { GlobalService } from '../../../../core/global.service';
 import { timer } from 'rxjs';
 
@@ -17,6 +15,7 @@ export class CheckRefundComponent implements OnInit {
 
   private operationing = false;
   private sureCallback: any;
+  private refund_fee: number; // 应退金额
 
   constructor(private globalService: GlobalService,
               private refundService: RefundManagementService) { }
@@ -50,6 +49,9 @@ export class CheckRefundComponent implements OnInit {
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
+    } else if (Number(this.refund_fee) < Math.round(Number(refund_fee) * 100)) {
+      this.globalService.promptBox.open(`退款金额与申请金额不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
+      return;
     }
 
     this.globalService.confirmationBox.open('提示', '操作后将退款金额原路返回至支付账户，确定操作退款吗？', () => {
@@ -75,8 +77,10 @@ export class CheckRefundComponent implements OnInit {
       this.operationing = false;
       if (!this.globalService.httpErrorProcess(err)) {
         if (err.status === 422) {
-          const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          // const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+          const error = err.error;
           for (const content of error.errors) {
+            this.refund_fee = content.refund_fee;
             if (content.field === 'refund_fee' && content.code === 'invalid') {
               this.globalService.promptBox.open('退款金额错误，请重新输入!', null, 2000, null, false);
               return;
@@ -84,7 +88,7 @@ export class CheckRefundComponent implements OnInit {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
               return;
             } else if (content.resource === 'apply_fee' && content.code === 'already_changed') {
-              this.globalService.promptBox.open('申请金额发生变化，请重试!', null, 2000, null, false);
+              this.globalService.promptBox.open(`退款金额与申请金额不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
               return;
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
