@@ -19,9 +19,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public refundParams: WashCarRefundParams = new WashCarRefundParams(); // 退款
   public orderStatus = [1, 2, 3, 4, 5, 6];
   public carTypes = [1, 2]; // 车型
-  public order_start_time: any = ''; // 下单开始时间
+  public order_start_time: any = new Date().setMonth(new Date().getMonth() - 3); // 下单开始时间
   public order_end_time: any = ''; // 下单结束时间
-  public pay_start_time: any = ''; // 支付开始时间
+  public pay_start_time: any = new Date().setMonth(new Date().getMonth() - 3); // 支付开始时间
   public pay_end_time: any = ''; // 支付结束时间
 
   public pageIndex = 1; // 当前页码
@@ -50,8 +50,10 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-      this.exportSearchUrl();
-      this.requestOrderList();
+      if (this.generateAndCheckParamsValid()) {
+        this.exportSearchUrl();
+        this.requestOrderList();
+      }
     });
     this.searchText$.next();
   }

@@ -24,9 +24,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public tabs = [{ key: 1, value: '到店保养' }, { key: 2, value: '上门保养' }]; // tab列表
   public tab_index = 1; // 标记当前tab索引
   public searchParams: UpkeepOrderSearchParams = new UpkeepOrderSearchParams(); // 条件筛选
-  public order_start_time: any = ''; // 搜索-下单开始时间
+  public order_start_time: any = new Date().setMonth(new Date().getMonth() - 3); // 搜索-下单开始时间
   public order_end_time: any = ''; // 搜索-下单结束时间
-  public pay_start_time: any = ''; // 搜索-支付开始时间
+  public pay_start_time: any = new Date().setMonth(new Date().getMonth() - 3); // 搜索-支付开始时间
   public pay_end_time: any = ''; // 搜索-支付结束时间
   public arrivalOrderStatus = [1, 2, 3, 4, 5]; // 到店保养订单状态
   public orderStatus = [1, 2, 3, 4, 5]; // 上门保养订单状态
@@ -63,8 +63,10 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.searchArrivalOrderText$.pipe(debounceTime(500)).subscribe(() => {
-      this.exportSearchUrl();
-      this.requestArrivalOrderList();
+      if (this.generateAndCheckParamsValid()) {
+        this.exportSearchUrl();
+        this.requestArrivalOrderList();
+      }
     });
 
     this.searchText$.pipe(debounceTime(500)).subscribe(() => {
