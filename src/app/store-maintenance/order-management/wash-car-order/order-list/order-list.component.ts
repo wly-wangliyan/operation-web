@@ -175,7 +175,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 审核并退款
   public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
     this.selectOrder = orderItem;
-    this.checkRefundComponent.open(orderItem.refund_application, () => {
+    const param = {...orderItem.refund_application, sale_fee: orderItem.sale_fee};
+    this.checkRefundComponent.open(param, () => {
       this.searchText$.next();
     });
   }

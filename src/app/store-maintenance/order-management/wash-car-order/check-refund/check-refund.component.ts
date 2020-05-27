@@ -13,7 +13,7 @@ import { timer } from 'rxjs';
 export class CheckRefundComponent implements OnInit {
 
   public refundCheckParams: WashCarCheckRefundParams = new WashCarCheckRefundParams(); // 退款
-  public selectOrder: WashRefundEntity = new WashRefundEntity(); // 选中行
+  public selectOrder = {...new WashRefundEntity(), sale_fee: null}; // 选中行
 
   private operationing = false;
   private sureCallback: any;
@@ -24,7 +24,7 @@ export class CheckRefundComponent implements OnInit {
   ngOnInit() {
   }
 
-  public open(data: WashRefundEntity, sureFunc: any) {
+  public open(data: any, sureFunc: any) {
     this.operationing = false;
     this.selectOrder = data;
     this.refundCheckParams.refund_fee = data.refund_fee ? data.refund_fee / 100 : null;
@@ -45,7 +45,8 @@ export class CheckRefundComponent implements OnInit {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-    const sale_fee = this.selectOrder.wash_car_order.sale_fee ? this.selectOrder.wash_car_order.sale_fee : 0;
+    const sale_fee = this.selectOrder.sale_fee ? this.selectOrder.sale_fee : this.selectOrder.wash_car_order.sale_fee ?
+        this.selectOrder.wash_car_order.sale_fee : 0;
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
