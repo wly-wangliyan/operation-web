@@ -25,7 +25,6 @@ export class CheckRefundComponent implements OnInit {
   }
 
   public open(data: WashRefundEntity, sureFunc: any) {
-    debugger;
     this.operationing = false;
     this.selectOrder = data;
     this.refundCheckParams.refund_fee = data.refund_fee ? data.refund_fee / 100 : null;
@@ -46,9 +45,9 @@ export class CheckRefundComponent implements OnInit {
       this.globalService.promptBox.open('退款金额应大于0！', null, 2000, null, false);
       return;
     }
-    const sale_fee = this.selectOrder.refund_fee ? this.selectOrder.refund_fee : 0;
+    const sale_fee = this.selectOrder.wash_car_order.sale_fee ? this.selectOrder.wash_car_order.sale_fee : 0;
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
-      this.globalService.promptBox.open(`退款金额应小于等于申请退款金额！`, null, 2000, null, false);
+      this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
     }
 
