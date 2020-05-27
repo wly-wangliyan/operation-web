@@ -121,6 +121,7 @@ export class RefundListComponent implements OnInit, OnDestroy {
         delete params.page_num;
       } else {
         params.page_size = 15;
+        params.page_num = this.pageIndex;
       }
       for (const key in params) {
         if (params[key]) {
