@@ -83,6 +83,9 @@ export class CheckRefundComponent implements OnInit {
             } else if (content.resource === 'order' && content.code === 'not_allow') {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
               return;
+            } else if (content.resource === 'apply_fee' && content.code === 'already_changed') {
+              this.globalService.promptBox.open('申请金额发生变化，请重试!', null, 2000, null, false);
+              return;
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
               return;
