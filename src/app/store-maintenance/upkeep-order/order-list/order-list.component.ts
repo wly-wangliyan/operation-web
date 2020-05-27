@@ -96,6 +96,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.searchUrl = '';
     if (event === 1) {
       this.searchArrivalOrderText$.next();
+      this.order_start_time = new Date().setMonth(new Date().getMonth() - 3);
+      this.pay_start_time = new Date().setMonth(new Date().getMonth() - 3);
     } else if (event === 2) {
       this.searchText$.next();
       this.requestProjectList();
