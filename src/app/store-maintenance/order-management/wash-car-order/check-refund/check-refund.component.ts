@@ -50,7 +50,7 @@ export class CheckRefundComponent implements OnInit {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
     } else if (Number(this.refund_fee) < Math.round(Number(refund_fee) * 100)) {
-      this.globalService.promptBox.open(`退款金额与申请金额不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
+      this.globalService.promptBox.open(`退款金额与申请不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
       return;
     }
 
@@ -88,7 +88,7 @@ export class CheckRefundComponent implements OnInit {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
               return;
             } else if (content.resource === 'apply_fee' && content.code === 'already_changed') {
-              this.globalService.promptBox.open(`退款金额与申请金额不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
+              this.globalService.promptBox.open(`退款金额与申请不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
               return;
             } else {
               this.globalService.promptBox.open(errMsg, null, 2000, null, false);
