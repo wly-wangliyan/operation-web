@@ -94,6 +94,7 @@
             <th>结算</th>
             <th>下单时间</th>
             <th>支付时间</th>
+            <th>订单来源</th>
             <th>订单状态</th>
             <th>售后/退款</th>
             <th>操作</th>
@@ -133,6 +134,7 @@
 
             <td>{{record.pay_time? (record.pay_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
+            <td>{{record.client_type | clientType}}</td>
             <td>
               <div class="column-box">
                 <span>{{record.order_status | washCarOrderStatus }}</span>

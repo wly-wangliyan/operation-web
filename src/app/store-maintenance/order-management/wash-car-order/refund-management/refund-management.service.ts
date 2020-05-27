@@ -14,7 +14,7 @@ export class WashRefundEntity extends EntityBase {
   public refuse_reason: string = undefined; // 	string	拒绝原因
   public refund_fee: number = undefined; // 	integer	退款金额
   public refund_explain: string = undefined; // 	string	退款说明
-  public images: string = undefined; // 	string	上传凭证 多个逗号分隔
+  public images = undefined; // 	string	上传凭证 多个逗号分隔
   public apply_status: number = undefined; // 	integer	申请状态 1: 处理中 2: 申请通过 3: 申请驳回
   public specification_name: string = undefined; // 	string	规格名称
   public car_type: number = undefined; // 	integer	车型 1: 5座小型车 2：SUV/MPV

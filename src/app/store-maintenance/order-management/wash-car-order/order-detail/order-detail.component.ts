@@ -2,12 +2,13 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
-import { Subject, forkJoin } from 'rxjs';
+import { Subject, forkJoin, timer } from 'rxjs';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { WashCarOrderEntity, WashOrderService } from '../wash-car-order.service';
 import { ExpenseVerifyEntity } from '../../../expense-management/expense-http.service';
 import { PromptLoadingComponent } from '../../../../share/components/prompt-loading/prompt-loading.component';
 import { CheckRefundComponent } from '../check-refund/check-refund.component';
+import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -19,10 +20,13 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   public isEditRemark = false;
   public expenseStatus = ['default', '已核销', '未核销', '已失效'];
   public searchText$ = new Subject<any>();
+  public imageUrls = [];
+
   private wash_car_order_id: string; // wash_car_order_id
 
   @ViewChild(PromptLoadingComponent, { static: true }) public promptLoading: PromptLoadingComponent;
   @ViewChild(CheckRefundComponent, {static: true}) public checkRefundComponent: CheckRefundComponent;
+  @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,6 +58,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
     forkJoin(this.orderService.requestOrderDetailData(this.wash_car_order_id),
       this.orderService.requestExpenseVerifyRecordsData(this.wash_car_order_id)).subscribe(res => {
         this.orderRecord = res[0];
+        this.imageUrls = this.orderRecord.refund_application.images ? this.orderRecord.refund_application.images.split(',') : [];
         this.expenseVerifyRecords = res[1];
         this.promptLoading.close();
       }, err => {
@@ -102,6 +107,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
     this.checkRefundComponent.open(orderItem.refund_application, () => {
       this.searchText$.next();
+    });
+  }
+
+  /**
+   * 打开放大图片组件
+   */
+  public onOpenZoomPictureModal(index: number) {
+    timer(0).subscribe(() => {
+      this.ZPhotoSelectComponent.zoomPicture(index);
     });
   }
 }

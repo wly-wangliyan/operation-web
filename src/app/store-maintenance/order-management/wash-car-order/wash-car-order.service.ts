@@ -42,6 +42,7 @@ export class WashCarOrderEntity extends EntityBase {
   public order_status: number = undefined; // 订单状态 1：待支付 2：已取消 3：待核销 4：已完成 5:已关闭 6:已失效
   public pay_type: string = undefined; // 支付方式
   public pay_time: number = undefined; // 支付时间
+  public pay_way: number = undefined; // 支付方式 1: 微信  2: 钱包
   public refund_status: number = undefined; // 退款状态 1:退款中 2:已退款 3：退款失败
   public refund_time: number = undefined; // 退款时间
   public refund_reason: string = undefined; // 退款原因
@@ -55,6 +56,7 @@ export class WashCarOrderEntity extends EntityBase {
   public telephone: string = undefined; // 用户电话
   public expense_verifies_info: Array<any> = undefined; // 订单下消费码集合(仅提供给前端使用)
   public refund_application: WashRefundEntity = new WashRefundEntity(); // 	integer	申请状态 1: 处理中 2: 申请通过 3: 申请驳回
+  public client_type: number = undefined; // 订单来源  1: 小程序  2:安卓 3:苹果
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 

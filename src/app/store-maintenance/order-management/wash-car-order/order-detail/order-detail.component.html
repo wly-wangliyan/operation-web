@@ -7,7 +7,7 @@
     <div class="table-item order-table" *ngIf="orderRecord && orderRecord.wash_car_order_id">
       <table class="detail-table">
         <tr>
-          <td rowspan="6" class="row-title">订单信息</td>
+          <td rowspan="8" class="row-title">订单信息</td>
 
           <td>订单状态：</td>
           <td>
@@ -62,7 +62,7 @@
           </td>
 
           <td>申请原因:</td>
-          <td>{{orderRecord.refund_application.refund_reason}}</td>
+          <td>{{orderRecord.refund_application.refund_reason || '--'}}</td>
         </tr>
 
         <tr>
@@ -78,6 +78,30 @@
 
           <td>退款原因</td>
           <td>{{orderRecord.refund_reason || '--'}}</td>
+        </tr>
+
+        <tr>
+          <td>拒绝原因：</td>
+          <td>
+            {{orderRecord.refund_application.refuse_reason || '--'}}
+          </td>
+
+          <td>支付方式：</td>
+          <td>
+            {{orderRecord.pay_way===1?'微信支付':orderRecord.pay_way===2?'钱包支付':'--'}}
+          </td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>退款凭证：</td>
+          <td colspan="5">
+            <ng-container *ngFor="let item of imageUrls;let i=index">
+              <img [src]="item" class="refund-img" (click)="onOpenZoomPictureModal(i)">
+            </ng-container>
+            <span *ngIf="imageUrls.length===0">--</span>
+          </td>
         </tr>
         <tr>
           <td>备注(平台)</td>
@@ -152,3 +176,6 @@
 
 <!--审核并退款-->
 <app-check-refund></app-check-refund>
+
+<!-- 图片放大 -->
+<app-z-photo-select [imageUrls]="imageUrls"></app-z-photo-select>

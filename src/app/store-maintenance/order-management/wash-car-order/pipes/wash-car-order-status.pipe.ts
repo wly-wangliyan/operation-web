@@ -64,3 +64,34 @@ export class WashCarApplyStatusPipe implements PipeTransform {
   }
 
 }
+
+/** 订单状态 */
+const clientType = {
+  1: '小程序',
+  2: 'APP-安卓',
+  3: 'APP-IOS'
+};
+
+@Pipe({
+  name: 'clientType'
+})
+export class ClientTypePipe implements PipeTransform {
+
+  public transform(value: any, args?: any): any {
+    let result = '--';
+    if (value === null || value === undefined || value === '') {
+      return result;
+    }
+    if (value && (typeof value === 'string')) {
+      // 当直接传递字符串时的处理
+      result = clientType[value];
+    } else {
+      result = clientType[value];
+    }
+    if (!result) {
+      result = '--';
+    }
+    return result;
+  }
+
+}

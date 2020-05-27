@@ -144,3 +144,9 @@
   width: auto;
   float: right;
 }
+
+.refund-img {
+  height: 150px;
+  max-width: 220px;
+  margin: 10px 15px;
+}
