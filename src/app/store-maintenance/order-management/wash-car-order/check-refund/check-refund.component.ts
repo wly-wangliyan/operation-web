@@ -28,6 +28,7 @@ export class CheckRefundComponent implements OnInit {
     this.selectOrder = data;
     this.refundCheckParams.refund_fee = data.refund_fee ? data.refund_fee / 100 : null;
     this.sureCallback = sureFunc;
+    this.refund_fee = null;
     timer(0).subscribe(() => {
       $('#checRrefundModal').modal('show');
     });
@@ -49,7 +50,7 @@ export class CheckRefundComponent implements OnInit {
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
-    } else if (Number(this.refund_fee) < Math.round(Number(refund_fee) * 100)) {
+    } else if (this.refund_fee && Number(this.refund_fee) < Math.round(Number(refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额与申请不一致，应退金额${this.refund_fee / 100}元!`, null, 2000, null, false);
       return;
     }
