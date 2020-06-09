@@ -15,7 +15,7 @@ export class OrderSearchParams extends EntityBase {
   public exemption_order_id: string = undefined; // 订单id
   public created_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
-  public hidden: string = undefined; // 隐藏状态
+  public hidden = ''; // 隐藏状态
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
