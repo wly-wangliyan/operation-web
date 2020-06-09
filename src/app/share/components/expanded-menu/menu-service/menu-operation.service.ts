@@ -69,7 +69,7 @@ export class MenuOperationService {
 
   // 运营 》运营配置
   private generateOperationConfigMenu(): SideMenuItem {
-    const systemMenu = new SideMenuItem('运营配置', null);
+    const systemMenu = new SideMenuItem('活动管理', null);
     systemMenu.icon = '/assets/images/menu_config.png';
     const subFinanceMenu1 = new SideMenuItem('专题活动', '/main/operation/operation-config/thematic-activity', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
