@@ -27,6 +27,7 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzCheckboxModule } from 'ng-zorro-antd';
 const uploadToken: UploadConfig = {
   img_config: {
     reportProcess: true,
@@ -63,7 +64,8 @@ const uploadToken: UploadConfig = {
     NzCalendarModule,
     NzInputModule,
     NzTabsModule,
-    NzBackTopModule
+    NzBackTopModule,
+    NzCheckboxModule
   ],
   providers: [{
     provide: UPLOAD_TOKEN,
