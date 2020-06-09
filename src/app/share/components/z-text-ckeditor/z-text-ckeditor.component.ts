@@ -24,6 +24,8 @@ export class ZTextCkeditorComponent implements OnInit {
 
   @Input() public replaceWidth = 900;
 
+  @Input() public replaceHeight = 500;
+
   @Output() public editorChange = new EventEmitter(); // 上传完成
 
   constructor(private uploadService: UploadService) {
@@ -31,7 +33,7 @@ export class ZTextCkeditorComponent implements OnInit {
 
   public ngOnInit() {
     setTimeout(() => {
-      CKEDITOR.replace(this.ckEditorId, { width: this.replaceWidth });
+      CKEDITOR.replace(this.ckEditorId, { width: this.replaceWidth, height: this.replaceHeight});
       CKEDITOR.on('instanceReady', event => {
         event.editor.on('change', () => {
           this.isEditorChange = true;

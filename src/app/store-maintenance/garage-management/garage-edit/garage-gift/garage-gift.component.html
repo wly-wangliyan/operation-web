@@ -1,0 +1,111 @@
+<div class="control-input add-btn">
+    <button type="button" nz-button nzType="primary" [disabled]="nzSearchAssistant.nzData.length>4" (click)="onEditGift(null)">添加</button>
+    <p>(最多可添加5个)</p>
+</div>
+<div class="zmy-table" style="margin-top: 15px">
+    <nz-table #giftTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="false"
+              [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>商品ID</th>
+            <th>商品图片</th>
+            <th>商品名称</th>
+            <th>商品描述</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of giftTable.data; let i = index">
+            <td>{{ i + (nzSearchAssistant.currentPage - 1) * 15 + 1 }}</td>
+            <td>{{data.gift_id || '--'}}</td>
+            <td>
+                <img *ngIf="data.images" [src]="data.images" style="width: 60px;height: 60px">
+            </td>
+            <td>{{(data.name | zMaxLength:12) || '--'}}</td>
+            <td>{{(data.introduce | zMaxLength:15) || '--'}}</td>
+            <td class="operation">
+                <a [title]="'编辑'" (appZDebounceClick)="onEditGift(data)">编辑</a>
+                <a [title]="'删除'" (appZDebounceClick)="onDelGift(data.gift_id)">删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+<!-- 新建、编辑赠送商品模态框 -->
+<div class="modal fade " id="configModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">{{repair_shop_id?'编辑赠送商品':'新建赠送商品'}}</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #configForm="ngForm">
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>商品名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentGift.name" name="name" maxlength="20"
+                                    placeholder="请输入1-20字商品名称" appIgnoreSpace required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;&nbsp;</b>
+                            <span>商品描述：</span>
+                        </label>
+                        <div class="control-input">
+                            <textarea class="form-control" [(ngModel)]="currentGift.introduce" name="introduce" maxlength="500" rows="3"
+                                      placeholder="请输入500字以内商品描述" appIgnoreSpace></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>商品图片：</span>
+                        </label>
+                        <div class="control-input">
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+                                                [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                                [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg
+                                                [minCropBoxWidth]="100" [minCropBoxHeight]="100" [resizable]="true"
+                                                [imageShowWidth]="100">
+                            </app-z-photo-select>
+                        </div>
+                    </div>
+                    <div class="row row-message" style="height: 18px">
+                        <label class="control-label"></label>
+                        <div class="control-input err-message">
+                            <span *ngIf="errPositionItem?.image?.isError">{{errPositionItem?.image?.errMes}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>详情：</span>
+                        </label>
+                        <div class="control-input">
+                            <app-z-text-ckeditor ckEditorId='giftInfoEditor' #giftInfoEditor
+                                                 [replaceWidth]="650" [replaceHeight]="180"></app-z-text-ckeditor>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary"
+                                [disabled]="!configForm.form.valid||coverImg.imageList.length===0"
+                                (appZDebounceClick)="onSaveGiftClick()">确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

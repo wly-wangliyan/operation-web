@@ -93,6 +93,7 @@
             <th>优惠券</th>
             <th>下单&支付时间</th>
             <th>订单状态</th>
+            <th>售后/退款</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -220,12 +221,23 @@
               </div>
             </td>
 
+            <td>
+              <div class="column-box" *ngIf="order.refund_status">
+                <span>{{(order.refund_fee===order.sale_total_fee?2:1) | doorRefundStatus}}</span>
+                <span *ngIf="order.refund_status">
+                  {{'('+(order.refund_status | doorRefundOrderStatus)+')'}}</span>
+              </div>
+              <span *ngIf="!order.refund_status">--</span>
+            </td>
+
             <td class="operation">
               <div>
                 <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.arrival_order_id]">查看</a>
                 <a [title]="'服务完成'"
                   *ngIf="order.user_status===2 || order.user_status===3"
                   (click)="onFinishClick(order.arrival_order_id)">服务完成</a>
+                <a *ngIf="order.user_status===3 || order.user_status===5" [title]="'退款'"
+                   (click)="onRefundClick(order)">退款</a>
                 <a [title]="'删除'" (click)="onDeleteOrderClick(order.arrival_order_id)">删除</a>
               </div>
             </td>
@@ -501,7 +513,7 @@
       <div class="modal-body">
         <form autocomplete="off" class="form-horizontal" #refundForm="ngForm">
 
-          <div class="row" style="margin-bottom: 40px;">
+          <div class="row">
             <label class="control-label">
               <b>*</b>
               <span>退款金额：</span>
@@ -509,6 +521,16 @@
             <div class="control-input">
               <input name="refund_fee" placeholder="输入退款金额" [(ngModel)]="refundParams.refund_fee" maxlength="8"
                 class="form-control" required appFloatNumber>
+            </div>
+          </div>
+          <div class="row" *ngIf="selectOrder?.arrival_order_id">
+            <label class="control-label">
+              <b>&nbsp;&nbsp;</b>
+              <span>退款原因：</span>
+            </label>
+            <div class="control-input">
+              <textarea name="refund_reason" placeholder="输入0-20字退款原因" [(ngModel)]="refundParams.refund_reason" maxlength="20"
+                        class="form-control" rows="3"></textarea>
             </div>
           </div>
 

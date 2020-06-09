@@ -28,7 +28,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public order_end_time: any = ''; // 搜索-下单结束时间
   public pay_start_time: any = new Date().setMonth(new Date().getMonth() - 3); // 搜索-支付开始时间
   public pay_end_time: any = ''; // 搜索-支付结束时间
-  public arrivalOrderStatus = [1, 2, 3, 4, 5]; // 到店保养订单状态
+  public arrivalOrderStatus = [1, 2, 3, 4, 5, 6]; // 到店保养订单状态
   public orderStatus = [1, 2, 3, 4, 5]; // 上门保养订单状态
   public refundParams: DoorRefundParams = new DoorRefundParams(); // 退款参数
   public arrivalOrderList: Array<ArrivalOrderEntity> = []; // 到店保养订单列表
@@ -49,7 +49,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
-  private selectOrder: UpkeepOrderEntity = new UpkeepOrderEntity(); // 选中行
+  private selectOrder: any; // 选中行
   private operationing = false;
   private searchUrl: string; // 到店保养导出url
 
@@ -327,10 +327,14 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   // 退款
-  public onRefundClick(orderItem: UpkeepOrderEntity): void {
+  public onRefundClick(orderItem: any): void {
     this.selectOrder = orderItem;
     this.refundParams = new DoorRefundParams();
-    this.refundParams.refund_fee = orderItem.real_prepaid_fee ? orderItem.real_prepaid_fee / 100 : null;
+    if (orderItem.arrival_order_id) {
+      this.refundParams.refund_fee = orderItem.sale_total_fee ? orderItem.sale_total_fee / 100 : null;
+    } else {
+      this.refundParams.refund_fee = orderItem.real_prepaid_fee ? orderItem.real_prepaid_fee / 100 : null;
+    }
     this.operationing = false;
     $('#refundModal').modal('show');
   }
@@ -345,8 +349,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (Number(this.selectOrder.real_prepaid_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
+    if (this.selectOrder.door_order_id && Number(this.selectOrder.real_prepaid_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于预付实收金额！`, null, 2000, null, false);
+      return;
+    }
+
+    if (this.selectOrder.arrival_order_id && Number(this.selectOrder.sale_total_fee) < Math.round(Number(this.refundParams.refund_fee) * 100)) {
+      this.globalService.promptBox.open(`退款金额应小于等于合计实收金额！`, null, 2000, null, false);
       return;
     }
 
@@ -357,7 +366,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
   }
 
   private requestPrepaidRefund(): void {
-    this.orderService.requestOrderRefundData(this.selectOrder.door_order_id, this.refundParams).subscribe(() => {
+    let request = this.orderService.requestOrderRefundData(this.selectOrder.door_order_id, this.refundParams);
+    if (this.selectOrder.arrival_order_id) {
+      request = this.orderService.requestArrivalOrderRefundData(this.selectOrder.arrival_order_id, this.refundParams);
+    }
+    request.subscribe(() => {
       this.operationing = false;
       $('#refundModal').modal('hide');
       this.globalService.promptBox.open('退款成功');

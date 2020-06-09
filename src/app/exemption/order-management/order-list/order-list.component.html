@@ -1,5 +1,10 @@
 <div class="content-header">
   <app-crumb [level1Name]="'订单管理'" [level2Name]="'产品订单'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg">
+      <a (click)='onExport()'>数据导出</a>
+    </li>
+  </ul>
 </div>
 <div class="content-flow">
 
@@ -64,6 +69,14 @@
           <span class='line'>-</span>
           <nz-date-picker [(ngModel)]="pay_end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndPayTime"
             name='pay_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        </div>
+        <div class="form-group">
+          <span>隐藏状态：</span>
+          <select name="hidden" class="form-control" style="width: 130px;" [(ngModel)]="searchParams.hidden">
+            <option value="">全部</option>
+            <option value="1">隐藏</option>
+            <option value="2">未隐藏</option>
+          </select>
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
             </button>
@@ -86,6 +99,7 @@
             <th>下单&支付时间</th>
             <th>订单状态</th>
             <th>办理流程</th>
+            <th>是否隐藏</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -136,8 +150,11 @@
             </td>
             <td>{{order.status | exemptionOrderStatus}}</td>
             <td>{{order.processing_flow | exemptionFormat}}</td>
+            <td>{{order.hidden===1?'是':'--'}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
+              <a *ngIf="order.hidden===2&&(order.status===4||order.status===5)" [title]="'隐藏'" (click)="onHiddenClick(order.order_id, 1)">隐藏</a>
+              <a *ngIf="order.hidden===1" [title]="'显示'" (click)="onHiddenClick(order.order_id, 2)">显示</a>
             </td>
           </tr>
         </tbody>

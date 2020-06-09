@@ -267,6 +267,16 @@
           <app-z-text-ckeditor ckEditorId='maintainInfoEditor' #maintainInfoEditor></app-z-text-ckeditor>
         </div>
       </div>
+      <div class="row" style="margin-top: 10px">
+        <label class="control-label">
+          <b>&nbsp;&nbsp;</b>
+          <span>线下赠送商品</span>
+        </label>
+        <div style="float: left;width: 1200px">
+          <!--赠品组件-->
+          <app-garag-gift></app-garag-gift>
+        </div>
+      </div>
 
       <div style="margin-top: 40px;margin-bottom: 40px">
         <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!maintainForm.form.valid"

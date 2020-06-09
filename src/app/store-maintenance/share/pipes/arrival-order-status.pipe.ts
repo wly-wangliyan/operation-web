@@ -7,6 +7,7 @@ const ArrivalOrderStatus = {
   3: '待服务',
   4: '已取消',
   5: '已完成',
+  6: '已关闭'
 };
 
 @Pipe({

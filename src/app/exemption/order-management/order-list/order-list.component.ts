@@ -5,6 +5,7 @@ import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
 import { OrderManagementService, OrderSearchParams, ExemptionOrderEntity } from '../order-management.service';
 import { ZPhotoSelectComponent } from '../../../share/components/z-photo-select/z-photo-select.component';
+import { environment } from '../../../../environments/environment';
 
 const PageSize = 15;
 
@@ -144,6 +145,36 @@ export class OrderListComponent implements OnInit, OnDestroy {
     timer(0).subscribe(() => {
       this.ZPhotoSelectComponent.zoomPicture(openIndex);
     });
+  }
+
+  /**
+   * 订单隐藏、显示
+   * hidden 1:隐藏 2:显示
+   * */
+  public onHiddenClick(order_id: string, status: number) {
+    const tip = status === 1 ? '隐藏' : '显示';
+    this.orderService.requestOrderHidden(order_id, status).subscribe(() => {
+      this.globalService.promptBox.open(tip + '成功！');
+      this.searchText$.next();
+    }, err => {
+      this.globalService.promptBox.open(tip + '失败！', null, 2000, null, false);
+    });
+  }
+
+  // 数据导出
+  public onExport() {
+    if (this.generateAndCheckParamsValid()) {
+      let searchUrl = `${environment.EXEMPTION_DOMAIN}/exemption/orders/export?default=1`;
+      const params = this.searchParams.json();
+      delete params.page_num;
+      delete params.page_size;
+      for (const key in params) {
+        if (params[key]) {
+          searchUrl += `&${key}=${params[key]}`;
+        }
+      }
+      window.open(searchUrl);
+    }
   }
 
   /* 生成并检查参数有效性 */

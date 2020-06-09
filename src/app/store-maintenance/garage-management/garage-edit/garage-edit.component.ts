@@ -13,6 +13,7 @@ import {
 import { DateFormatHelper, TimeItem } from '../../../../utils/date-format-helper';
 import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { GarageGiftComponent } from './garage-gift/garage-gift.component';
 
 export class ServiceItem {
   id: number; // 服务类型 1:保养服务 2:救援服务 3:洗车服务
@@ -62,6 +63,8 @@ export class GarageEditComponent implements OnInit, OnDestroy {
   @ViewChild('projectInfoPro', { static: true }) public proCityDistSelectComponent: ProCityDistSelectComponent
     = new ProCityDistSelectComponent();
   @ViewChild(ZMapSelectPointComponent, { static: true }) public zMapSelectPointComponent: ZMapSelectPointComponent;
+
+  @ViewChild(GarageGiftComponent, { static: true }) public giftComponent: GarageGiftComponent;
 
   constructor(
     private router: Router,

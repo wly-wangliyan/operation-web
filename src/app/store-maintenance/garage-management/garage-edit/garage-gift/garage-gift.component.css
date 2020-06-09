@@ -1,0 +1,27 @@
+.modal-dialog {
+    max-width: 850px!important;
+    width: 850px!important;
+}
+
+.control-label {
+    text-align: right;
+}
+
+.row {
+    justify-content: left;
+    margin-left: 20px!important;
+}
+
+.modal-footer {
+    padding: 15px 120px 30px 150px!important;
+}
+
+.add-btn {
+    display: flex;
+}
+
+.add-btn p {
+    margin-bottom: 0;
+    margin-left: 20px;
+    line-height: 34px;
+}

@@ -81,6 +81,11 @@
         </tr>
 
         <tr>
+          <td>退款说明：</td>
+          <td>
+            {{orderRecord.refund_application.refund_explain || '--'}}
+          </td>
+
           <td>拒绝原因：</td>
           <td>
             {{orderRecord.refund_application.refuse_reason || '--'}}
@@ -90,9 +95,6 @@
           <td>
             {{orderRecord.pay_way===1?'微信支付':orderRecord.pay_way===2?'钱包支付':'--'}}
           </td>
-
-          <td></td>
-          <td></td>
         </tr>
         <tr>
           <td>退款凭证：</td>

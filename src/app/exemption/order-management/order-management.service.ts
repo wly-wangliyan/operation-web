@@ -15,6 +15,7 @@ export class OrderSearchParams extends EntityBase {
   public exemption_order_id: string = undefined; // 订单id
   public created_section: string = undefined; // 下单时间
   public pay_section: string = undefined; // 支付时间
+  public hidden: string = undefined; // 隐藏状态
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
 }
@@ -56,6 +57,7 @@ export class ExemptionOrderEntity extends EntityBase {
   public car_image: string = undefined; // 行驶证正本背面
   public signature_image: string = undefined; // 签名图片
   public imageUrls: Array<any> = []; // 图片放大集合
+  public hidden: number = undefined; // 隐藏状态 1:隐藏 2:显示
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 }
@@ -145,6 +147,17 @@ export class OrderManagementService {
     const httpUrl = `${this.domain}/exemption/orders/${order_id}`;
     const body = { processing_flow };
     return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 隐藏/恢复数据
+   * @param order_id 订单ID
+   * @param params 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestOrderHidden(order_id: string, status: number): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/exemption/orders/${order_id}`;
+    return this.httpService.put(httpUrl, {hidden: status});
   }
 
   /**

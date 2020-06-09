@@ -133,6 +133,7 @@ export class UpkeepOrderEntity extends EntityBase {
 
 export class DoorRefundParams extends EntityBase {
   public refund_fee: number = undefined; // 退款金额
+  public refund_reason: string = undefined; // 退款原因
 
   public toEditJson(): any {
     const json = this.json();
@@ -220,6 +221,10 @@ export class ArrivalOrderEntity extends EntityBase {
   public is_checked: number = undefined; // 是否需要验货 1:需要 2:不需要
   public warehouse_ids: string = undefined; // 仓库ids 多个逗号分隔
   public remark: string = undefined; // 订单备注
+  public refund_status: number = undefined; // 	integer	退款状态 1:退款中 2:已退款 3：退款失败
+  public refund_time: number = undefined; // 	float	退款时间
+  public refund_reason: number = undefined; // 	integer	退款原因
+  public refund_fee: number = undefined; // 	integer	退款金额 单位:分
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 
@@ -283,12 +288,22 @@ export class UpkeepOrderService {
   }
 
   /**
-   * 退款
+   * 上门保养退款
    * @param params 参数
    * @returns Observable<HttpResponse<any>>
    */
   public requestOrderRefundData(door_order_id: string, params: DoorRefundParams): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/door_orders/${door_order_id}/refund_orders`;
+    return this.httpService.post(httpUrl, params.toEditJson());
+  }
+
+  /**
+   * 到店保养退款
+   * @param params 参数
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestArrivalOrderRefundData(arrival_order_id: string, params: DoorRefundParams): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}/refund_orders`;
     return this.httpService.post(httpUrl, params.toEditJson());
   }
 

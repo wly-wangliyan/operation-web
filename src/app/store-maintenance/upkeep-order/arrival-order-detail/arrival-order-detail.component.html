@@ -41,7 +41,7 @@
           <td></td>
         </tr>
         <tr>
-          <td rowspan="7" class="row-title">订单信息</td>
+          <td rowspan="8" class="row-title">订单信息</td>
           <td>配件费</td>
           <td>
             <span>应付：</span>{{ orderRecord.original_fee | centPriceChange: '元' }}
@@ -103,6 +103,14 @@
           <td></td>
           <td></td>
           <td></td>
+        </tr>
+        <tr>
+          <td>退款时间</td>
+          <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+          <td>退款金额</td>
+          <td>{{orderRecord.refund_fee | centPriceChange: '元'}}</td>
+          <td>退款原因</td>
+          <td>{{orderRecord.refund_reason || '--'}}</td>
         </tr>
         <tr>
           <td>订单备注</td>

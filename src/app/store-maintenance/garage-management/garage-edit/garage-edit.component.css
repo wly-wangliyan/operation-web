@@ -14,7 +14,7 @@
 .control-label {
   margin-left: 20px;
   margin-bottom: 0 !important;
-  width: 110px !important;
+  width: 130px !important;
   padding-right: 10px;
   padding-left: 0 !important;
   float: left;
@@ -191,3 +191,5 @@ nz-range-picker {
   line-height: 38px;
   padding-left: 350px;
 }
+
+

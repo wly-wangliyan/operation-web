@@ -75,6 +75,7 @@
                     <th>有效日期</th>
                     <th>申请时间</th>
                     <th>退款原因</th>
+                    <th>退款说明</th>
                     <th>退款金额</th>
                     <th>退款申请</th>
                     <th>售后/退款</th>
@@ -122,6 +123,7 @@
                     <td>{{record.created_time? (record.created_time * 1000 | date: 'y-MM-dd HH:mm:ss'): '--'}}</td>
 
                     <td [title]="record.refund_reason||''">{{record.refund_reason|zMaxLength:10}}</td>
+                    <td [title]="record.refund_explain||''">{{record.refund_explain|zMaxLength:10}}</td>
                     <td>{{(record.refund_fee || 0) | centPriceChange:'元'}}</td>
                     <td>
                         {{record.apply_status? '已申请('+(record.apply_status|washCarApplyStatus)+')':'未申请'}}
