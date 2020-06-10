@@ -35,6 +35,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   public orderList: Array<UpkeepOrderEntity> = []; // 上门保养订单列表
   public pageIndex = 1; // 当前页码
   public noResultText = '数据加载中...';
+  public selectOrder: any; // 选中行
 
   public matchParams: MatchParams = new MatchParams(); // 上门保养-人工匹配
   public accessoryList: Array<AccessoryEntity> = []; // 人工匹配-配件列表
@@ -49,7 +50,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
   private searchText$ = new Subject<any>();
   private continueRequestSubscription: Subscription; // 分页获取数据
   private linkUrl: string; // 分页url
-  private selectOrder: any; // 选中行
   private operationing = false;
   private searchUrl: string; // 到店保养导出url
 
