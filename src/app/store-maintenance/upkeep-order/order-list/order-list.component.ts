@@ -374,7 +374,11 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.operationing = false;
       $('#refundModal').modal('hide');
       this.globalService.promptBox.open('退款成功');
-      this.searchText$.next();
+      if (this.selectOrder.door_order_id) {
+        this.searchText$.next();
+      } else {
+        this.searchArrivalOrderText$.next();
+      }
     }, err => {
       this.operationing = false;
       if (!this.globalService.httpErrorProcess(err)) {
