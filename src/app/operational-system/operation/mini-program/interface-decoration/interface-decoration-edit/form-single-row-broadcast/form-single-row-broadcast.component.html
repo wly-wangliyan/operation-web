@@ -6,18 +6,18 @@
     <div class="row">
         <label class="control-label">
             <b>*</b>
-            <span>广告图片 (图片尺寸1439*376px，大小2M以内)</span>
+            <span>广告图片 (图片尺寸1439*752px，大小2M以内)</span>
         </label>
         <div class="control-input" style="display: inline-grid">
             <div *ngFor="let item of currentTemplate.template_content.contents;let i=index" style="margin-bottom: 10px;width: 410px;">
-                <div [class.temp-edit-active]="contentIndex===i" (click)="onImgClick(i)" style="padding: 0 32px;height: 92px">
+                <div [class.temp-edit-active]="contentIndex===i" (click)="onImgClick(i)" style="padding: 0 32px;height: 184px">
                     <app-z-photo-select-upload #{{item.id}} [hasAddPicture]="true" [hasDeletePicture]="true" [imgReg]="imgReg"
                                                [limitImgSize]="2" [isCutCoverImg]="false" [file_id]="i" [imageWidth]="345"
-                                               [imageHeight]="90" [imageUrls]="item.image" [imageAddWidth]="345" [aspectRatio]="3.83/1"
+                                               [imageHeight]="182" [imageUrls]="item.image" [imageAddWidth]="345" [aspectRatio]="3.83/1"
                                                (selectedImgChange)="onSelectedPicture($event, i)" (uploadFinish)="onUploadFinish($event)">
                     </app-z-photo-select-upload>
                     <img *ngIf="i>0" src="/assets/images/interface-decoration/icon_del.png"
-                         class="del-img" style="margin: -190px 0 0 366px" (click)="onDelContentClick(i)">
+                         class="del-img" style="margin: -380px 0 0 365px" (click)="onDelContentClick(i)">
                 </div>
             </div>
         </div>
