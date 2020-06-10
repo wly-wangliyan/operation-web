@@ -99,18 +99,25 @@
         <tr>
           <td>完成时间</td>
           <td>{{orderRecord.complete_time ? (orderRecord.complete_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
+          <td>退款状态</td>
+          <td>
+            <div class="column-box" *ngIf="orderRecord.refund_status">
+              <span>{{(orderRecord.refund_fee===orderRecord.sale_total_fee?2:1) | doorRefundStatus}}</span>
+              <span *ngIf="orderRecord.refund_status">
+                  {{'('+(orderRecord.refund_status | doorRefundOrderStatus)+')'}}</span>
+            </div>
+            <span *ngIf="!orderRecord.refund_status">--</span>
+          </td>
           <td>退款时间</td>
           <td>{{orderRecord.refund_time ? (orderRecord.refund_time* 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}</td>
+        </tr>
+        <tr>
           <td>退款金额</td>
           <td>{{orderRecord.refund_fee | centPriceChange: '元'}}</td>
           <td>退款原因</td>
           <td>{{orderRecord.refund_reason || '--'}}</td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <td>订单备注</td>
