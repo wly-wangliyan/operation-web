@@ -106,6 +106,7 @@ export class ZTextCkeditorComponent implements OnInit {
     this.uploadImg = '';
     this.importViewModel.uploadImg = false;
     this.importViewModel.hasErrorTip = false;
+    $(`#${this.uploadModalId}`).modal('hide');
   }
 
 }

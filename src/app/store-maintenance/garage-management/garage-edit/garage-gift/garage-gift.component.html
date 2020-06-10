@@ -22,8 +22,8 @@
             <td>
                 <img *ngIf="data.images" [src]="data.images" style="width: 60px;height: 60px">
             </td>
-            <td>{{(data.name | zMaxLength:12) || '--'}}</td>
-            <td>{{(data.introduce | zMaxLength:15) || '--'}}</td>
+            <td [title]="data.name||''">{{(data.name | zMaxLength:12) || '--'}}</td>
+            <td [title]="data.introduce||''">{{(data.introduce | zMaxLength:15) || '--'}}</td>
             <td class="operation">
                 <a [title]="'编辑'" (appZDebounceClick)="onEditGift(data)">编辑</a>
                 <a [title]="'删除'" (appZDebounceClick)="onDelGift(data.gift_id)">删除</a>
@@ -70,7 +70,7 @@
                             <b>*</b>
                             <span>商品图片：</span>
                         </label>
-                        <div class="control-input">
+                        <div class="control-input" style="margin-bottom: 0px">
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
                                                 [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
                                                 [imageWidth]="100" [imageHeight]="100" [imageUrls]="cover_url" #coverImg
@@ -79,7 +79,7 @@
                             </app-z-photo-select>
                         </div>
                     </div>
-                    <div class="row row-message" style="height: 18px">
+                    <div class="row row-message">
                         <label class="control-label"></label>
                         <div class="control-input err-message">
                             <span *ngIf="errPositionItem?.image?.isError">{{errPositionItem?.image?.errMes}}</span>
