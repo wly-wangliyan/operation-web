@@ -236,7 +236,7 @@
                 <a [title]="'服务完成'"
                   *ngIf="order.user_status===2 || order.user_status===3"
                   (click)="onFinishClick(order.arrival_order_id)">服务完成</a>
-                <a *ngIf="order.user_status===2 || order.user_status===3 || order.user_status===5" [title]="'退款'"
+                <a *ngIf="(order.user_status===2 || order.user_status===3 || order.user_status===5)&&!order.refund_status" [title]="'退款'"
                    (click)="onRefundClick(order)">退款</a>
                 <a [title]="'删除'" (click)="onDeleteOrderClick(order.arrival_order_id)">删除</a>
               </div>
