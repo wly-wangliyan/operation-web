@@ -153,7 +153,7 @@
             <td>{{order.hidden===1?'是':'--'}}</td>
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../order-detail', order.order_id]">查看</a>
-              <a *ngIf="order.hidden===2&&(order.status===4||order.status===5)" [title]="'隐藏'" (click)="onHiddenClick(order.order_id, 1)">隐藏</a>
+              <a *ngIf="order.hidden===2" [title]="'隐藏'" (click)="onHiddenClick(order.order_id, 1)">隐藏</a>
               <a *ngIf="order.hidden===1" [title]="'显示'" (click)="onHiddenClick(order.order_id, 2)">显示</a>
             </td>
           </tr>
