@@ -157,6 +157,7 @@ export class PageEntity extends EntityBase {
   public page_type: number = undefined; // Integer	页面类型	1:　草稿　2: 发布记录
   public page_content: string = undefined; // String	页面内容	模板id集合　例：　“sdfljksjdkfj,sdfsdfsdfsdf,sdfsdfsdfsdfsdf”
   public templates: Array<TemplateEntity> = undefined; // 页面模板内容
+  public put_place: any = ''; // 投放位置 1：商城 2：发现
   public deleted_time: number = undefined; // Float	删除时间
   public release_time: number = undefined; // Float	发布时间
   public is_deleted: boolean = undefined; // 	bool	逻辑删除
@@ -197,7 +198,7 @@ export class InterfaceDecorationService {
   public requestPageListData(searchParams: SearchParams): Observable<PageLinkResponse> {
     const httpUrl = `${this.domain}/pages`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new PageLinkResponse(res)));
+      .pipe(map(res => new PageLinkResponse(res)));
   }
 
   /**
