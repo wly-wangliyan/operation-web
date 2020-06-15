@@ -66,6 +66,11 @@ const routes: Routes = [
     loadChildren: () => import('./expense-management/expense-management.module').then(m => m.ExpenseManagementModule),
     canLoad: [AuthGuardService, MenuGuardService]
   },
+  {
+    path: 'user-vehicle', /** 用户车型管理 */
+    loadChildren: () => import('./user-vehicle/user-vehicle.module').then(m => m.UserVehicleModule),
+    canLoad: [AuthGuardService, MenuGuardService]
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }];
 

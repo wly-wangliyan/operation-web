@@ -32,6 +32,11 @@ export class NzSearchAssistant {
 
   private noResultText = '数据加载中...';
 
+  public set nzData(dataList: Array<any>) {
+    this.noResultText = '数据加载中...';
+    this.nzDataList = dataList;
+  }
+
   public get nzData(): Array<any> {
     return this.nzDataList || [];
   }

@@ -25,6 +25,7 @@ export class MenuStoreMaintenanceService {
     menusItem.push(this.generateOtherMenu());
     menusItem.push(this.generateExpenseShopMenu());
     menusItem.push(this.generateRefundMenu());
+    // menusItem.push(this.generateUserVehicle());
     return menusItem;
   }
 
@@ -99,6 +100,14 @@ export class MenuStoreMaintenanceService {
     systemMenu.icon = '/assets/images/menu/menu_refund.png';
     const subFinanceMenu1 = new SideMenuItem('洗车退款申请', '/order-management/wash-car-order/refund-list', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
+  }
+
+  // 用户车型管理
+  private generateUserVehicle() {
+    const systemMenu = new SideMenuItem('用户车型管理', '/user-vehicle');
+    systemMenu.icon = '/assets/images/menu/menu_expect.png';
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

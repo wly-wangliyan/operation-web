@@ -1,0 +1,36 @@
+<!-- 验货完成模态框 -->
+<div class="modal fade " id="checkModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">验货</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #checkForm="ngForm">
+
+
+          <div style="padding-left: 10px;">
+            <app-z-photo-select #checkImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              [maxLength]="imageMaxLength" [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)"
+              file_id="checkImg" [imageUrls]="image_urls" [imageWidth]="100" [imageHeight]="100" [imgReg]="imgReg">
+            </app-z-photo-select>
+          </div>
+
+
+          <div class="err-message" style="padding-left: 10px;">
+            <span>{{ checkMsg }}</span>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary"
+              (appZDebounceClick)="onCheckStatusClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

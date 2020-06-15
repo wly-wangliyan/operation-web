@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription, Subject, forkJoin } from 'rxjs';
 import { differenceInCalendarDays } from 'date-fns';
 import { GlobalService } from '../../../core/global.service';
@@ -14,6 +14,7 @@ import { AccessoryEntity, SpecificationEntity, ProjectEntity } from '../../acces
 import { RepairShopEntity } from '../../garage-management/garage-management.service';
 import { TabelHelper } from '../../../../utils/table-helper';
 import { environment } from '../../../../environments/environment';
+import { ExamineGoodsModalComponent } from '../examine-goods-modal/examine-goods-modal.component';
 
 @Component({
   selector: 'app-order-list',
@@ -57,6 +58,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     const pageList = this.tab_index === 1 ? this.arrivalOrderList : this.orderList;
     return Math.ceil(pageList.length / TabelHelper.NgPageSize);
   }
+
+  @ViewChild('examineGoods', { static: true }) public examineGoodsRef: ExamineGoodsModalComponent;
   constructor(
     private globalService: GlobalService,
     private orderService: UpkeepOrderService) { }
@@ -460,6 +463,27 @@ export class OrderListComponent implements OnInit, OnDestroy {
           this.globalService.promptBox.open('未完成服务！', null, 2000, null, false);
         }
       });
+    });
+  }
+
+  // 确认收货
+  public onChangeToRecive(arrival_order_id: string): void {
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，确认要代替商家确认收货吗？', () => {
+      this.orderService.requestChangeStatusToRecive(arrival_order_id, 2)
+        .subscribe(res => {
+          this.searchArrivalOrderText$.next();
+          this.globalService.promptBox.open('确认收货完成');
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
+    });
+  }
+
+  // 验货完成
+  public onChangeStatusToCheck(orderItem: any): void {
+    this.selectOrder = orderItem;
+    this.examineGoodsRef.open(this.selectOrder, () => {
+      this.searchArrivalOrderText$.next();
     });
   }
 

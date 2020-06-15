@@ -166,7 +166,8 @@
                       <div class="img-item">
                         <div class="img-box">
                           <img *ngIf="service.image" style="width: 80px;height: 80px;" [src]="service.image" />
-                          <img *ngIf="!service.image" style="width: 40px;height: 40px;" src="/assets/images/space_service.jpg" />
+                          <img *ngIf="!service.image" style="width: 40px;height: 40px;"
+                            src="/assets/images/space_service.jpg" />
                         </div>
                         <div style="text-align: left;padding: 10px 0;">
                           <span [title]="service.service_fee_name ||''"
@@ -233,11 +234,14 @@
             <td class="operation">
               <div>
                 <a [title]="'查看'" [routerLink]="['../arrival-order-detail', order.arrival_order_id]">查看</a>
-                <a [title]="'服务完成'"
-                  *ngIf="order.user_status===2 || order.user_status===3"
+                <a [title]="'服务完成'" *ngIf="order.user_status===2 || order.user_status===3"
                   (click)="onFinishClick(order.arrival_order_id)">服务完成</a>
-                <a *ngIf="(order.user_status===2 || order.user_status===3 || order.user_status===5)&&!order.refund_status" [title]="'退款'"
-                   (click)="onRefundClick(order)">退款</a>
+                <a *ngIf="(order.user_status===2 || order.user_status===3 || order.user_status===5)&&!order.refund_status"
+                  [title]="'退款'" (appZDebounceClick)="onRefundClick(order)">退款</a>
+                <a [title]="'确认收货'" *ngIf="order.user_status===2"
+                  (click)="onChangeToRecive(order.arrival_order_id)">确认收货</a>
+                <a [title]="'验货完成'" *ngIf="order.is_checked && order.user_status===3 && !order.check_images"
+                  (appZDebounceClick)="onChangeStatusToCheck(order)">验货完成</a>
                 <a [title]="'删除'" (click)="onDeleteOrderClick(order.arrival_order_id)">删除</a>
               </div>
             </td>
@@ -529,8 +533,8 @@
               <span>退款原因：</span>
             </label>
             <div class="control-input">
-              <textarea name="refund_reason" placeholder="输入0-20字退款原因" [(ngModel)]="refundParams.refund_reason" maxlength="20"
-                        class="form-control" rows="3"></textarea>
+              <textarea name="refund_reason" placeholder="输入0-20字退款原因" [(ngModel)]="refundParams.refund_reason"
+                maxlength="20" class="form-control" rows="3"></textarea>
             </div>
           </div>
 
@@ -545,3 +549,5 @@
     </div>
   </div>
 </div>
+
+<app-examine-goods-modal #examineGoods></app-examine-goods-modal>
