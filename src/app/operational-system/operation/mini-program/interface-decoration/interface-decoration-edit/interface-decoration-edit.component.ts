@@ -11,7 +11,8 @@ import {
   SingleLineScrollingProductEntity,
   SingleRowBroadcastContentEntity,
   SingleRowBroadcastEntity,
-  TemplateEntity
+  TemplateEntity,
+  SavaPageParams
 } from '../interface-decoration.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,6 +33,7 @@ import { FormSingleLineScrollComponent } from './form-single-line-scroll/form-si
 export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateComponent {
 
   public mouldList = ['ICON魔方', '单行轮播广告', '左右布局(1)', '左右布局(2)', '单行左右滑动', '商品推荐'];
+  public categoryType = ['', '发现', '首页', '商城'];
   public mouldIndex = -1; // 当前选中的模板index
   public previewData: PageEntity = new PageEntity(); // 预览数据
   public templatesList: Array<TemplateEntity> = []; // 模板List
@@ -47,6 +49,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private currentTemplate_old: TemplateEntity = new TemplateEntity(); // 当前选中的模板备份
   private templatesList_old: Array<TemplateEntity> = []; // 模板List备份
   private is_saved = false;
+  public savaPageParams: SavaPageParams = new SavaPageParams(); // 保存参数
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
   @ViewChild(FormIconMagicComponent, { static: true }) public iconMagicComponent: FormIconMagicComponent;
@@ -82,7 +85,6 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private requestPageDetail() {
     this.interfaceService.requestPageDetail(this.page_id).subscribe(res => {
       this.previewData = res;
-      this.previewData.put_place = res.put_place || '';
       this.templatesList = res.templates;
       this.requestProduct();
       this.templatesList.forEach((value, index) => {
@@ -407,8 +409,8 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   }
 
   // 变更投放位置
-  public onChangePutPlace(event: any) {
-    event.target.value ? this.previewData.put_place = Number(event.target.value) : '';
+  public onChangeCategory(event: any) {
+    event.target.value ? this.savaPageParams.category = Number(event.target.value) : '';
   }
 
   /**
@@ -428,6 +430,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 保存草稿
   public onSaveDraftClick() {
     this.modal_type = 1;
+    this.savaPageParams = new SavaPageParams();
+    this.savaPageParams.category = this.previewData.category || '';
+    this.savaPageParams.page_name = this.previewData.page_name;
     $(this.promptDiv.nativeElement).modal('show');
   }
 
@@ -436,6 +441,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.globalService.confirmationBox.open('提示', '确认要发布吗？发布后可在发布记录中查看此记录!', () => {
       this.globalService.confirmationBox.close();
       this.modal_type = 2;
+      this.savaPageParams = new SavaPageParams();
+      this.savaPageParams.category = this.previewData.category || '';
+      this.savaPageParams.page_name = this.previewData.page_name;
       $(this.promptDiv.nativeElement).modal('show');
     });
   }
@@ -444,10 +452,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   public onSaveTitle() {
     const tip = this.previewData.page_type === 1 ? '保存草稿成功！' : '保存并发布成功！';
     const params = {
-      category: 1,
-      page_name: this.previewData.page_name,
+      category: this.savaPageParams.category || 1,
+      page_name: this.savaPageParams.page_name,
       page_content: this.templatesList.map(v => v.template_id).join(','),
-      put_place: this.modal_type === 2 ? this.previewData.put_place : ''
     };
     if (!this.page_id) {
       // 保存草稿
@@ -483,10 +490,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
           save_template_ids.splice(index, 0, value);
         });
         const copyParams = {
-          category: 1,
-          page_name: this.previewData.page_name,
+          category: this.savaPageParams.category || 1,
+          page_name: this.savaPageParams.page_name,
           page_content: save_template_ids.join(','),
-          put_place: this.modal_type === 2 ? this.previewData.put_place : ''
         };
         this.requestCreatePage(copyParams);
       }, error => {
@@ -494,10 +500,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
       });
     } else {
       const copyParams = {
-        category: 1,
-        page_name: this.previewData.page_name,
-        page_content: templateList.join(','),
-        put_place: this.modal_type === 2 ? this.previewData.put_place : ''
+        category: this.savaPageParams.category || 1,
+        page_name: this.savaPageParams.page_name,
+        page_content: templateList.join(',')
       };
       this.requestCreatePage(copyParams);
     }

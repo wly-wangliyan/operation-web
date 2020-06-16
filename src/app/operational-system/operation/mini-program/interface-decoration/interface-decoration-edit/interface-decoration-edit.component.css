@@ -549,3 +549,17 @@ nz-radio-group label {
     margin-left: 70px;
     color: rgba(232, 32, 56, 1);
 }
+
+.nav-top {
+    position: relative;
+    border-bottom: .5px solid #f7f7f7;
+}
+
+.nav-top>span {
+    position: absolute;
+    width: 100px;
+    text-align: center;
+    top: 32px;
+    left: 50%;
+    margin-left: -50px;
+}

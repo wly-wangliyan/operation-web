@@ -20,7 +20,11 @@
       </div>
     </div>
     <div class="preview-space">
-      <img src="/assets/images/interface-decoration/nav_top.png">
+      <div class="nav-top">
+        <img src="/assets/images/interface-decoration/nav_top_empty.png">
+        <span>{{page_id?categoryType[previewData.category]:'发现'}}</span>
+      </div>
+
       <div style="min-height: 517px">
         <div *ngFor="let item of templatesList;let i=index" style="background: #fff">
           <div *ngIf="item.template_type==1" class="template-1" [class.mould-edit-active]="mouldIndex===i"
@@ -163,7 +167,8 @@
       </div>
       <div>
         <div class="mobile-bottom">没有更多了</div>
-        <img src="/assets/images/interface-decoration/nav_bottom.png">
+        <img *ngIf="previewData.category!==3" src="/assets/images/interface-decoration/nav_bottom_find.png">
+        <img *ngIf="previewData.category===3" src="/assets/images/interface-decoration/nav_bottom_mall.png">
       </div>
     </div>
     <div [hidden]="mouldIndex<0" class="form-space" id="form">
@@ -213,7 +218,7 @@
             <span>名称</span>
           </label>
           <div class="control-input" style="width: 340px">
-            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="previewData.page_name" name="page_name"
+            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="savaPageParams.page_name" name="page_name"
               maxlength="10" autocomplete="off" required appIgnoreSpace>
           </div>
         </div>
@@ -224,11 +229,11 @@
             <span>投放位置</span>
           </label>
           <div class="control-input" style="width: 340px">
-            <select class="form-control" [(ngModel)]="previewData.put_place" name="put_place" required
-              (change)="onChangePutPlace($event)">
+            <select class="form-control" [(ngModel)]="savaPageParams.category" name="category" required
+              (change)="onChangeCategory($event)">
               <option value="">请选择投放位置</option>
-              <option value="1">商城</option>
-              <option value="2">发现</option>
+              <option value="1">发现</option>
+              <option value="3">商城</option>
             </select>
           </div>
         </div>

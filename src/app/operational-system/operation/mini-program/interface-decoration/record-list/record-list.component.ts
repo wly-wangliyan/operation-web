@@ -40,12 +40,12 @@ export class RecordListComponent implements OnInit {
   }
 
   constructor(
-      private globalService: GlobalService,
-      private route: ActivatedRoute,
-      private interfaceDecorationService: InterfaceDecorationService) {
-      route.queryParams.subscribe(queryParams => {
-        this.searchParams.page_type = queryParams.page_type ? Number(queryParams.page_type) : 2;
-      });
+    private globalService: GlobalService,
+    private route: ActivatedRoute,
+    private interfaceDecorationService: InterfaceDecorationService) {
+    route.queryParams.subscribe(queryParams => {
+      this.searchParams.page_type = queryParams.page_type ? Number(queryParams.page_type) : 2;
+    });
   }
 
   public ngOnInit() {
@@ -82,12 +82,12 @@ export class RecordListComponent implements OnInit {
       // 当存在linkUrl并且快到最后一页了请求数据
       this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
       this.continueRequestSubscription = this.interfaceDecorationService.continuePageListData(this.linkUrl)
-          .subscribe(res => {
-            this.recordList = this.recordList.concat(res.results);
-            this.linkUrl = res.linkUrl;
-          }, err => {
-            this.globalService.httpErrorProcess(err);
-          });
+        .subscribe(res => {
+          this.recordList = this.recordList.concat(res.results);
+          this.linkUrl = res.linkUrl;
+        }, err => {
+          this.globalService.httpErrorProcess(err);
+        });
     }
   }
 
@@ -115,6 +115,7 @@ export class RecordListComponent implements OnInit {
     this.start_time = null;
     this.end_time = null;
     this.searchParams.page_type = page_type;
+    this.searchParams.category = '';
     this.searchText$.next();
   }
 
@@ -132,5 +133,10 @@ export class RecordListComponent implements OnInit {
         }
       });
     });
+  }
+
+  // 查询
+  public onSearchBtnClick() {
+    this.searchText$.next();
   }
 }
