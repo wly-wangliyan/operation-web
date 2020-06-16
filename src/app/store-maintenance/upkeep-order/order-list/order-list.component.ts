@@ -460,7 +460,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
         this.searchArrivalOrderText$.next();
       }, err => {
         if (!this.globalService.httpErrorProcess(err)) {
-          this.globalService.promptBox.open('未完成服务！', null, 2000, null, false);
+          this.globalService.promptBox.open('未完成服务,请重试！', null, 2000, null, false);
         }
       });
     });
@@ -469,12 +469,15 @@ export class OrderListComponent implements OnInit, OnDestroy {
   // 确认收货
   public onChangeToRecive(arrival_order_id: string): void {
     this.globalService.confirmationBox.open('提示', '此操作不可逆，确认要代替商家确认收货吗？', () => {
+      this.globalService.confirmationBox.close();
       this.orderService.requestChangeStatusToRecive(arrival_order_id, 2)
         .subscribe(res => {
           this.searchArrivalOrderText$.next();
           this.globalService.promptBox.open('确认收货完成');
         }, err => {
-          this.globalService.httpErrorProcess(err);
+          if (!this.globalService.httpErrorProcess(err)) {
+            this.globalService.promptBox.open('确认收货失败,请重试！', null, 2000, null, false);
+          }
         });
     });
   }
