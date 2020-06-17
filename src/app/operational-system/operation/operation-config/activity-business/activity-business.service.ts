@@ -116,7 +116,7 @@ export class MallSearchParams extends EntityBase {
   public status = ''; // 	int	F	营业状态 1.营业中 2.停业休息
   public business_name = ''; // 	F	商家名称
   public page_num = 1; // 页码
-  public page_size = 45; // 每页条数
+  public page_size = 15; // 每页条数
 }
 
 export class ActivityLinkResponse extends LinkResponse {

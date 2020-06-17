@@ -42,7 +42,7 @@ export class BusinessChooseComponent implements OnInit {
   public name: string; // 商家名称
   public repairList: Array<RepairItem> = [];
   public mallList: Array<MallItem> = [];
-  public checked_all: boolean;
+  public checked_all: boolean; // 是否全选
 
   private sureCallback: any;
   private closeCallback: any;
@@ -68,14 +68,24 @@ export class BusinessChooseComponent implements OnInit {
     this.movement_id = movement_id;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
+    this.initForm();
+    openBoothModal();
+  }
+
+  private initForm() {
     this.repairList = [];
     this.mallList = [];
+    this.name = '';
+    this.checked_all = false;
+    this.batchBusinessParams = new BatchBusinessParams();
+    this.mallSearchParams = new MallSearchParams();
+    this.repairSearchParams = new SearchParams();
     this.nzSearchAssistant.submitSearch(true);
-    openBoothModal();
   }
 
   public onTypeChange() {
     this.name = '';
+    this.checked_all = false;
     this.nzSearchAssistant.submitSearch(false);
   }
 
