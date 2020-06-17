@@ -52,7 +52,7 @@
                             </tbody>
                         </nz-table>
                         <nz-table #businessTable [nzData]="mallList" [nzShowPagination]="true"
-                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'5'" *ngIf="batchBusinessParams.type=='2'"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type=='2'"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
                             <tbody>
                             <tr *ngFor="let data of businessTable.data; let i=index">
