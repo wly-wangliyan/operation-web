@@ -484,9 +484,12 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   // 验货完成
   public onChangeStatusToCheck(orderItem: any): void {
-    this.selectOrder = orderItem;
-    this.examineGoodsRef.open(this.selectOrder, () => {
-      this.searchArrivalOrderText$.next();
+    this.globalService.confirmationBox.open('提示', '此操作不可逆，确认要代替商家进行验货完成操作吗？', () => {
+      this.globalService.confirmationBox.close();
+      this.selectOrder = orderItem;
+      this.examineGoodsRef.open(this.selectOrder, () => {
+        this.searchArrivalOrderText$.next();
+      });
     });
   }
 
