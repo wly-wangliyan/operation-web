@@ -240,7 +240,7 @@
                   [title]="'退款'" (appZDebounceClick)="onRefundClick(order)">退款</a>
                 <a [title]="'确认收货'" *ngIf="order.user_status===2"
                   (click)="onChangeToRecive(order.arrival_order_id)">确认收货</a>
-                <a [title]="'验货完成'" *ngIf="order.is_checked && order.user_status===3 && !order.check_images"
+                <a [title]="'验货完成'" *ngIf="order.is_checked && order.user_status===3 && !order.check_images && !order.is_check_completed"
                   (appZDebounceClick)="onChangeStatusToCheck(order)">验货完成</a>
                 <a [title]="'删除'" (click)="onDeleteOrderClick(order.arrival_order_id)">删除</a>
               </div>
