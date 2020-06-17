@@ -39,7 +39,7 @@
                     </div>
                     <div class="zmy-table">
                         <nz-table #businessTable [nzData]="repairList" [nzShowPagination]="true"
-                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type==1"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type=='1'"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
                             <tbody>
                             <tr *ngFor="let data of businessTable.data; let i=index">
@@ -51,7 +51,7 @@
                             </tbody>
                         </nz-table>
                         <nz-table #businessTable [nzData]="mallList" [nzShowPagination]="true"
-                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type==2"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type=='2'"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
                             <tbody>
                             <tr *ngFor="let data of businessTable.data; let i=index">
