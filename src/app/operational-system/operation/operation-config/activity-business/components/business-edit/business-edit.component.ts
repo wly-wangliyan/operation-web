@@ -157,13 +157,13 @@ export class BusinessEditComponent implements OnInit {
     if (this.saving) {
       return;
     }
-    this.saving = true;
     this.businessImgComponent.upload().subscribe(() => {
       this.currentBusiness.images = this.businessImgComponent.imageList.map(i => i.sourceUrl).join(',');
       this.currentBusiness.telephone = this.telephone_1 && this.telephone_2 ? this.telephone_1 + ',' + this.telephone_2 :
           this.telephone_1 ? this.telephone_1 : this.telephone_2 ? this.telephone_2 : '';
       this.currentBusiness.tags = this.tagList.join(',');
       if (!this.errPositionItem.telephone.isError) {
+        this.saving = true;
         const saveParams = new BusinessParams(this.currentBusiness);
         if (!this.currentBusiness.movement_shop_id) {
           saveParams.movement_id = this.movement_id;
