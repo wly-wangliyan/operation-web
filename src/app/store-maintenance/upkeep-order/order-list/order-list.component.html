@@ -217,7 +217,7 @@
             <td>
               <div class="column-box">
                 <span>{{order.user_status | arrivalOrderStatus}}</span>
-                <span *ngIf="order.is_checked && order.user_status===3 && !order.check_images" style="color:#E82038">
+                <span *ngIf="order.is_checked && order.user_status===3 && !order.check_images && !order.is_check_completed" style="color:#E82038">
                   (待车主验货)</span>
               </div>
             </td>

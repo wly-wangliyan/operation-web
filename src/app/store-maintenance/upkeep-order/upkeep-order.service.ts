@@ -225,6 +225,7 @@ export class ArrivalOrderEntity extends EntityBase {
   public refund_time: number = undefined; // 	float	退款时间
   public refund_reason: number = undefined; // 	integer	退款原因
   public refund_fee: number = undefined; // 	integer	退款金额 单位:分
+  public is_check_completed = undefined; // bool 是否验货完成
   public created_time: number = undefined; // 下单时间
   public updated_time: number = undefined; // 更新时间
 

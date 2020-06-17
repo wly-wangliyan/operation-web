@@ -103,6 +103,7 @@ export class BusinessEditComponent implements OnInit {
 
   private initForm() {
     this.regionsObj = new RegionEntity(this.currentBusiness);
+    this.tag = '';
     this.tagList = this.currentBusiness.tags ? this.currentBusiness.tags.split(',') : [];
     const tel = this.currentBusiness.telephone ? this.currentBusiness.telephone.split(',') : [];
     this.telephone_1 = tel[0] ? tel[0] : '';
