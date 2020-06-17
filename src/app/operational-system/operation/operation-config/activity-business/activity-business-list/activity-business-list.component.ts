@@ -17,6 +17,8 @@ export class ActivityBusinessListComponent implements OnInit {
   public nzSearchAssistant: NzSearchAssistant;
   public currentActivity: ActivityEntity = new ActivityEntity();
 
+  private saving: boolean;  // 是否保存中
+
   constructor(private globalService: GlobalService,
               private activityService: ActivityBusinessService) {
     this.nzSearchAssistant = new NzSearchAssistant(this);
@@ -28,6 +30,7 @@ export class ActivityBusinessListComponent implements OnInit {
 
   // 新建、编辑活动
   public onCreateClick() {
+    this.saving = false;
     this.currentActivity = new ActivityEntity();
     $('#activityBusinessPromptDiv').modal('show');
   }
@@ -46,6 +49,10 @@ export class ActivityBusinessListComponent implements OnInit {
 
   // 数据提交
   public onEditActivitySubmit() {
+    if (this.saving) {
+      return;
+    }
+    this.saving = true;
     this.activityService.requestAddActivity(this.currentActivity).subscribe(res => {
       $('#activityBusinessPromptDiv').modal('hide');
       this.nzSearchAssistant.submitSearch(false);
