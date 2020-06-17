@@ -35,7 +35,7 @@ export class ExamineGoodsModalComponent {
       this.image_urls = [];
       this.imageMaxLength = 2;
       this.orderRecord.accessory_info.forEach(info => {
-        info.supply_type === 1 && (this.imageMaxLength += (Number(info.number) || 0));
+        info.supply_type === 1 && (this.imageMaxLength = this.imageMaxLength + 1);
       });
       console.log(this.imageMaxLength);
       this.sureCallback = sureFunc;
