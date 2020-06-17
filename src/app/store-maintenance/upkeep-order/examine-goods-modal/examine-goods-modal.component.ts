@@ -35,8 +35,9 @@ export class ExamineGoodsModalComponent {
       this.image_urls = [];
       this.imageMaxLength = 2;
       this.orderRecord.accessory_info.forEach(info => {
-        this.imageMaxLength += (Number(info.number) || 0);
+        info.supply_type === 1 && (this.imageMaxLength += (Number(info.number) || 0));
       });
+      console.log(this.imageMaxLength);
       this.sureCallback = sureFunc;
       this.closeCallback = closeFunc;
       openBoothModal();
