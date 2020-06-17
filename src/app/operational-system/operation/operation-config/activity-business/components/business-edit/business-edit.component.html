@@ -81,7 +81,7 @@
                         <div class="control-input">
                             <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj" #projectInfoPro></app-pro-city-dist-select>
                             <input class="form-control" style="margin-top: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address"
-                                   [title]="currentBusiness.address" name="address">
+                                   [title]="currentBusiness.address||''" required name="address">
                         </div>
                     </div>
                     <div class="row" style="margin-top: 30px">
@@ -91,9 +91,9 @@
                         </label>
                         <div class="control-input business-tel">
                             <input class="form-control" [(ngModel)]="telephone_1" name="telephone_1"
-                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="11" (change)="onTelChange($event)">
+                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="12" (change)="onTelChange($event)">
                             <input class="form-control" [(ngModel)]="telephone_2" name="telephone_2"
-                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="11" (change)="onTelChange($event)">
+                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="12" (change)="onTelChange($event)">
                         </div>
                     </div>
                     <div class="row-message" style="height: 20px!important;margin-top: -6px;margin-left: 134px">
@@ -121,7 +121,7 @@
                         取消
                     </button>
                     <button class="sure-btn" nz-button nzType="primary"
-                            [disabled]="!activityBusinessForm.form.valid||businessImg.imageList.length===0"
+                            [disabled]="!activityBusinessForm.form.valid||businessImg.imageList.length===0||(!currentBusiness.lon&&!currentBusiness.lat)"
                             (appZDebounceClick)="onEditActivitySubmit()">
                         保存
                     </button>

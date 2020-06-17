@@ -70,6 +70,7 @@ export class BusinessEditComponent implements OnInit {
   private sureCallback: any;
   private closeCallback: any;
   private movement_id: string;
+  private saving: boolean;  // 是否保存中
 
   @ViewChild('businessImg', {static: true}) public businessImgComponent: ZPhotoSelectComponent;
   @ViewChild(ZMapSelectPointComponent, {static: true}) public zMapSelectPointComponent: ZMapSelectPointComponent;
@@ -102,7 +103,6 @@ export class BusinessEditComponent implements OnInit {
 
   private initForm() {
     this.regionsObj = new RegionEntity(this.currentBusiness);
-    this.tag = '';
     this.tagList = this.currentBusiness.tags ? this.currentBusiness.tags.split(',') : [];
     const tel = this.currentBusiness.telephone ? this.currentBusiness.telephone.split(',') : [];
     this.telephone_1 = tel[0] ? tel[0] : '';
@@ -110,6 +110,7 @@ export class BusinessEditComponent implements OnInit {
     this.cover_url = this.currentBusiness.images ? this.currentBusiness.images.split(',') : [];
     this.errPositionItem.icon.isError = false;
     this.errPositionItem.telephone.isError = false;
+    this.saving = false;
   }
 
   // 选择图片时校验图片格式
@@ -153,9 +154,14 @@ export class BusinessEditComponent implements OnInit {
 
   // 数据提交
   public onEditActivitySubmit() {
+    if (this.saving) {
+      return;
+    }
+    this.saving = true;
     this.businessImgComponent.upload().subscribe(() => {
       this.currentBusiness.images = this.businessImgComponent.imageList.map(i => i.sourceUrl).join(',');
-      this.currentBusiness.telephone = this.telephone_1 + this.telephone_2;
+      this.currentBusiness.telephone = this.telephone_1 && this.telephone_2 ? this.telephone_1 + ',' + this.telephone_2 :
+          this.telephone_1 ? this.telephone_1 : this.telephone_2 ? this.telephone_2 : '';
       this.currentBusiness.tags = this.tagList.join(',');
       if (!this.errPositionItem.telephone.isError) {
         const saveParams = new BusinessParams(this.currentBusiness);
@@ -168,6 +174,7 @@ export class BusinessEditComponent implements OnInit {
           }, err => {
             this.globalService.promptBox.open('保存失败，请重试!', null, 2000, null, false);
             this.globalService.httpErrorProcess(err);
+            this.saving = false;
           });
         } else {
           this.businessService.requestUpdateBusiness(this.currentBusiness.movement_shop_id, saveParams).subscribe(() => {
@@ -177,10 +184,12 @@ export class BusinessEditComponent implements OnInit {
           }, err => {
             this.globalService.promptBox.open('保存失败，请重试!', null, 2000, null, false);
             this.globalService.httpErrorProcess(err);
+            this.saving = false;
           });
         }
       }
     }, err => {
+      this.saving = false;
       this.globalService.httpErrorProcess(err);
     });
   }

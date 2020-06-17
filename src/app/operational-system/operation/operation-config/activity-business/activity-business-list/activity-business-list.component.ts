@@ -28,6 +28,7 @@ export class ActivityBusinessListComponent implements OnInit {
 
   // 新建、编辑活动
   public onCreateClick() {
+    this.currentActivity = new ActivityEntity();
     $('#activityBusinessPromptDiv').modal('show');
   }
 
