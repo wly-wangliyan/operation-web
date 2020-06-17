@@ -493,4 +493,32 @@ export class UpkeepOrderService {
     const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}`;
     return this.httpService.delete(httpUrl);
   }
+
+  /**
+   * 到店保养订单编辑收货状态
+   * @param arrival_order_id 订单ID
+   * @param repair_shop_status B端汽修店订单状态 1:待收货(待收件) 2:待服务 3：已完成
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestChangeStatusToRecive(arrival_order_id: string, repair_shop_status: number = 2): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}/repair_shop_status`;
+    const body = {
+      repair_shop_status
+    };
+    return this.httpService.patch(httpUrl, body);
+  }
+
+  /**
+   * 到店保养订单上传验货图片
+   * @param arrival_order_id 订单ID
+   * @param check_images 验货图片 'xxx,xxx'
+   * @returns Observable<HttpResponse<any>>
+   */
+  public requestChangeStatusToCheck(arrival_order_id: string, check_images: string): Observable<HttpResponse<any>> {
+    const httpUrl = `${this.domain}/admin/arrival_orders/${arrival_order_id}/check_images`;
+    const body = {
+      check_images
+    };
+    return this.httpService.patch(httpUrl, body);
+  }
 }

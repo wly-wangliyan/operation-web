@@ -3,12 +3,12 @@
   </app-crumb>
 </div>
 <div class="content-flow">
-  <ul nz-menu nzMode="horizontal" class="content-title">
+  <!-- <ul nz-menu nzMode="horizontal" class="content-title">
     <li nz-menu-item nzSelected>
       发现
     </li>
-  </ul>
-  <div class="content-space">
+  </ul> -->
+  <div class="content-space" [ngStyle]="{'min-width': mouldIndex<0 ? '100%' : '1230px'}">
     <div [class.mould-disable]="templatesList.length>=20" [class.mould-space]="templatesList.length<20">
       <label>自定义模板</label>
       <div *ngFor="let item of mouldList;let i=index">
@@ -20,81 +20,96 @@
       </div>
     </div>
     <div class="preview-space">
-      <img src="/assets/images/interface-decoration/nav_top.png">
+      <div class="nav-top">
+        <img src="/assets/images/interface-decoration/nav_top_empty.png">
+        <span>{{page_id?categoryType[previewData.category]:'发现'}}</span>
+      </div>
+
       <div style="min-height: 517px">
         <div *ngFor="let item of templatesList;let i=index" style="background: #fff">
           <div *ngIf="item.template_type==1" class="template-1" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(1, i)" id="template_1_{{i}}"
-               [class.active-count-4]="item.template_content.count===4" [class.active-count-5]="item.template_content.count===5">
+            (click)="onMouldEditClick(1, i)" id="template_1_{{i}}"
+            [class.active-count-4]="item.template_content.count===4"
+            [class.active-count-5]="item.template_content.count===5">
             <li *ngFor="let content of item.template_content.contents;let k=index">
-              <img *ngIf="!content.image||content.image.length===0" src="/assets/images/interface-decoration/icon_mould_1_empty.png">
+              <img *ngIf="!content.image||content.image.length===0"
+                src="/assets/images/interface-decoration/icon_mould_1_empty.png">
               <img *ngIf="content.image&&content.image.length>0" [src]="content.image[0]">
               <span>{{content.title?content.title:'未定义'}}</span>
             </li>
           </div>
           <div *ngIf="item.template_type==2" class="template_2" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(2, i)" id="template_2_{{i}}">
+            (click)="onMouldEditClick(2, i)" id="template_2_{{i}}">
             <nz-carousel nzAutoPlay>
               <div nz-carousel-content *ngFor="let content of item.template_content.contents">
-                <img *ngIf="!content.image||content.image.length===0" src="/assets/images/interface-decoration/icon_mould_2_empty.png">
+                <img *ngIf="!content.image||content.image.length===0"
+                  src="/assets/images/interface-decoration/icon_mould_2_empty.png">
                 <img *ngIf="content.image&&content.image.length>0" [src]="content.image[0]">
               </div>
             </nz-carousel>
           </div>
           <div *ngIf="item.template_type==3" class="template_3" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
+            (click)="onMouldEditClick(3, i)" id="template_3_{{i}}">
             <li *ngFor="let content of item.template_content.contents;let k=index">
               <div>
                 <span *ngIf="content.left_title">{{content.left_title?(content.left_title|zMaxLength:8):'未定义标题'}}</span>
                 <span *ngIf="!content.left_title&&content.right_title">&nbsp;</span>
-                <img *ngIf="!content.left_image||content.left_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+                <img *ngIf="!content.left_image||content.left_image.length===0"
+                  src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.left_image&&content.left_image.length>0" [src]="content.left_image[0]">
               </div>
               <div>
-                <span *ngIf="content.right_title">{{content.right_title?(content.right_title|zMaxLength:8):'未定义标题'}}</span>
+                <span
+                  *ngIf="content.right_title">{{content.right_title?(content.right_title|zMaxLength:8):'未定义标题'}}</span>
                 <span *ngIf="!content.right_title&&content.left_title">&nbsp;</span>
-                <img *ngIf="!content.right_image||content.right_image.length===0" src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+                <img *ngIf="!content.right_image||content.right_image.length===0"
+                  src="/assets/images/interface-decoration/icon_mould_3_empty.png">
                 <img *ngIf="content.right_image&&content.right_image.length>0" [src]="content.right_image[0]">
               </div>
             </li>
           </div>
           <div *ngIf="item.template_type==4" class="template_4" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
+            (click)="onMouldEditClick(4, i)" id="template_4_{{i}}">
             <div>
               <span *ngIf="item.template_content.left_title">
                 {{item.template_content.left_title?(item.template_content.left_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.left_title&&item.template_content.right_top_title">&nbsp;</span>
               <img *ngIf="!item.template_content.left_image||item.template_content.left_image.length===0"
-                   style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
+                style="height: 195px;" src="/assets/images/interface-decoration/icon_mould_4_empty.png">
               <img *ngIf="item.template_content.left_image&&item.template_content.left_image.length>0"
-                   style="height: 195px;" [src]="item.template_content.left_image[0]">
+                style="height: 195px;" [src]="item.template_content.left_image[0]">
             </div>
             <div>
               <span *ngIf="item.template_content.right_top_title">
                 {{item.template_content.right_top_title?(item.template_content.right_top_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.right_top_title&&item.template_content.left_title">&nbsp;</span>
               <img *ngIf="!item.template_content.right_top_image||item.template_content.right_top_image.length===0"
-                   src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+                src="/assets/images/interface-decoration/icon_mould_3_empty.png">
               <img *ngIf="item.template_content.right_top_image&&item.template_content.right_top_image.length>0"
-                   [src]="item.template_content.right_top_image[0]">
+                [src]="item.template_content.right_top_image[0]">
               <span *ngIf="item.template_content.right_bottom_title" style="line-height: 36px">
                 {{item.template_content.right_bottom_title?(item.template_content.right_bottom_title|zMaxLength:8):'未定义标题'}}</span>
               <span *ngIf="!item.template_content.right_bottom_title" style="line-height: 36px">&nbsp;</span>
-              <img *ngIf="!item.template_content.right_bottom_image||item.template_content.right_bottom_image.length===0"
-                   src="/assets/images/interface-decoration/icon_mould_3_empty.png">
+              <img
+                *ngIf="!item.template_content.right_bottom_image||item.template_content.right_bottom_image.length===0"
+                src="/assets/images/interface-decoration/icon_mould_3_empty.png">
               <img *ngIf="item.template_content.right_bottom_image&&item.template_content.right_bottom_image.length>0"
-                   [src]="item.template_content.right_bottom_image[0]">
+                [src]="item.template_content.right_bottom_image[0]">
             </div>
           </div>
           <div *ngIf="item.template_type==5" class="template_5" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(5, i)" id="template_5_{{i}}" [ngStyle]="{height: item.template_content.height + 'px'}">
-            <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            (click)="onMouldEditClick(5, i)" id="template_5_{{i}}"
+            [ngStyle]="{height: item.template_content.height + 'px'}">
+            <label
+              *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
             <div id="father{{i}}" class="father">
               <ul id="box{{i}}" class="box">
                 <ng-container *ngIf="item.template_content.products[0].product_type==='1'">
                   <li *ngFor="let product of item.template_content.mallProducts;let k=index">
-                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type!=1)" style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
-                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type==1)" src="/assets/images/interface-decoration/icon_mould_5_empty.png">
+                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type!=1)"
+                      style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                    <img *ngIf="!product.commodity_id&&(item.template_content.products[0].product_type==1)"
+                      src="/assets/images/interface-decoration/icon_mould_5_empty.png">
                     <img *ngIf="product.commodity_id" [src]="product.commodity_images[0]">
                     <span>{{product.commodity_name?(product.commodity_name | zMaxLength:9):'未定义商品名称'}}</span>
                     <div>
@@ -105,8 +120,10 @@
                 </ng-container>
                 <ng-container *ngIf="item.template_content.products[0].product_type!=='1'">
                   <li *ngFor="let product of item.template_content.ticketProducts;let k=index">
-                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type!=1)" style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
-                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type==1)" src="/assets/images/interface-decoration/icon_mould_5_empty.png">
+                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type!=1)"
+                      style="height: 73px;" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
+                    <img *ngIf="!product?.product_id&&(item.template_content.products[0].product_type==1)"
+                      src="/assets/images/interface-decoration/icon_mould_5_empty.png">
                     <img *ngIf="product?.product_id" [src]="product.image_urls?.split(',')[0]" style="height: 73px;">
                     <span>{{product?.product_name?(product.product_name | zMaxLength:9):'未定义商品名称'}}</span>
                     <div>
@@ -119,8 +136,9 @@
             </div>
           </div>
           <div *ngIf="item.template_type==6" class="template_6" [class.mould-edit-active]="mouldIndex===i"
-               (click)="onMouldEditClick(6, i)" id="template_6_{{i}}">
-            <label *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
+            (click)="onMouldEditClick(6, i)" id="template_6_{{i}}">
+            <label
+              *ngIf="item.template_content.title">{{item.template_content.title?item.template_content.title:'未定义标题'}}</label>
             <ul *ngIf="item.template_content.products[0].product_type==='1'">
               <li *ngFor="let product of item.template_content.mallProducts;let k=index">
                 <img *ngIf="!product.commodity_id" src="/assets/images/interface-decoration/icon_mould_6_empty.png">
@@ -149,7 +167,8 @@
       </div>
       <div>
         <div class="mobile-bottom">没有更多了</div>
-        <img src="/assets/images/interface-decoration/nav_bottom.png">
+        <img *ngIf="previewData.category!==3" src="/assets/images/interface-decoration/nav_bottom_find.png">
+        <img *ngIf="previewData.category===3" src="/assets/images/interface-decoration/nav_bottom_mall.png">
       </div>
     </div>
     <div [hidden]="mouldIndex<0" class="form-space" id="form">
@@ -160,49 +179,68 @@
         <i (click)="onDownClick()"></i>
         <i (click)="onDeleteTemplateClick()"></i>
       </ul>
-      <app-form-icon-magic [hidden]="currentTemplate.template_type!=1" (cancelEdit)="onCancelClick()" (saveTemplate)="onEditFormSubmit($event)"></app-form-icon-magic>
+      <app-form-icon-magic [hidden]="currentTemplate.template_type!=1" (cancelEdit)="onCancelClick()"
+        (saveTemplate)="onEditFormSubmit($event)"></app-form-icon-magic>
       <app-form-single-row-broadcast [hidden]="currentTemplate.template_type!=2" (cancelEdit)="onCancelClick()"
-                                     (saveTemplate)="onEditFormSubmit($event)"></app-form-single-row-broadcast>
+        (saveTemplate)="onEditFormSubmit($event)"></app-form-single-row-broadcast>
       <app-form-left-right-layout1 [hidden]="currentTemplate.template_type!=3" (cancelEdit)="onCancelClick()"
-                                     (saveTemplate)="onEditFormSubmit($event)"></app-form-left-right-layout1>
+        (saveTemplate)="onEditFormSubmit($event)"></app-form-left-right-layout1>
       <app-form-left-right-layout2 [hidden]="currentTemplate.template_type!=4" (cancelEdit)="onCancelClick()"
-                                     (saveTemplate)="onEditFormSubmit($event)"></app-form-left-right-layout2>
-      <app-form-single-line-scroll [hidden]="currentTemplate.template_type!=5&&currentTemplate.template_type!=6" (cancelEdit)="onCancelClick()"
-                                     (saveTemplate)="onEditFormSubmit($event)" (productTitleChange)="onProductTitleChange()"></app-form-single-line-scroll>
+        (saveTemplate)="onEditFormSubmit($event)"></app-form-left-right-layout2>
+      <app-form-single-line-scroll [hidden]="currentTemplate.template_type!=5&&currentTemplate.template_type!=6"
+        (cancelEdit)="onCancelClick()" (saveTemplate)="onEditFormSubmit($event)"
+        (productTitleChange)="onProductTitleChange()"></app-form-single-line-scroll>
     </div>
   </div>
-  <div class="content-bottom">
-    <button type="button" nz-button (appZDebounceClick)="onSaveDraftClick()" [disabled]="!CheckSaveDraftValid(1)">保存草稿</button>
-    <button type="button" nz-button (appZDebounceClick)="onReleaseClick()" [disabled]="!CheckSaveDraftValid(2)">保存并发布</button>
-  </div>
+</div>
+
+<div class="content-bottom">
+  <button type="button" nz-button (appZDebounceClick)="onSaveDraftClick()"
+    [disabled]="!CheckSaveDraftValid(1)">保存草稿</button>
+  <button type="button" nz-button (appZDebounceClick)="onReleaseClick()"
+    [disabled]="!CheckSaveDraftValid(2)">保存并发布</button>
 </div>
 
 <!-- 保存名称 -->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
+  aria-labelledby="myModalLabel" aria-hidden="true" #promptDiv>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <span class="modal-title">{{modal_type===1?'保存草稿':'保存并发布'}}</span>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="onCloseModal()">&times;
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onCloseModal()">&times;
         </button>
       </div>
-      <form nz-form class="content-layout" #noticeForm="ngForm">
-        <div class="row" style="margin-top: 15px">
-          <label class="control-label" style="width: 100px;text-align: center;line-height: 34px">
+      <form nz-form class="content-layout" #noticeForm="ngForm" autocomplete="off" style="margin-top: 50px;">
+        <div class="row">
+          <label class="control-label" style="width: 100px;text-align: left;line-height: 34px">
             <b>*</b>
             <span>名称</span>
           </label>
           <div class="control-input" style="width: 340px">
-            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="previewData.page_name" name="page_name"
-                   maxlength="10" autocomplete="off" required appIgnoreSpace>
+            <input class="form-control" placeholder="请输入1-10字名称" [(ngModel)]="savaPageParams.page_name" name="page_name"
+              maxlength="10" autocomplete="off" required appIgnoreSpace>
           </div>
         </div>
-        <div class="modal-footer">
+
+        <div class="row" *ngIf="modal_type===2">
+          <label class="control-label" style="width: 100px;text-align: left;line-height: 34px">
+            <b>*</b>
+            <span>投放位置</span>
+          </label>
+          <div class="control-input" style="width: 340px">
+            <select class="form-control" [(ngModel)]="savaPageParams.category" name="category" required
+              (change)="onChangeCategory($event)">
+              <option value="">请选择投放位置</option>
+              <option value="1">发现</option>
+              <option value="3">商城</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer" style="margin-top: 50px;">
           <button class="modal-close-btn" nz-button (click)="onCloseModal()">取消</button>
           <button class="modal-sure-btn" nz-button nzType="primary" [disabled]="!noticeForm.valid"
-                  (appZDebounceClick)='onSaveTitle()'>
+            (appZDebounceClick)='onSaveTitle()'>
             保存
           </button>
         </div>

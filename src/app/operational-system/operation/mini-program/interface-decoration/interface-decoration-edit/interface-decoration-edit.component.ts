@@ -11,7 +11,8 @@ import {
   SingleLineScrollingProductEntity,
   SingleRowBroadcastContentEntity,
   SingleRowBroadcastEntity,
-  TemplateEntity
+  TemplateEntity,
+  SavaPageParams
 } from '../interface-decoration.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,6 +33,7 @@ import { FormSingleLineScrollComponent } from './form-single-line-scroll/form-si
 export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateComponent {
 
   public mouldList = ['ICON魔方', '单行轮播广告', '左右布局(1)', '左右布局(2)', '单行左右滑动', '商品推荐'];
+  public categoryType = ['', '发现', '首页', '商城'];
   public mouldIndex = -1; // 当前选中的模板index
   public previewData: PageEntity = new PageEntity(); // 预览数据
   public templatesList: Array<TemplateEntity> = []; // 模板List
@@ -47,6 +49,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   private currentTemplate_old: TemplateEntity = new TemplateEntity(); // 当前选中的模板备份
   private templatesList_old: Array<TemplateEntity> = []; // 模板List备份
   private is_saved = false;
+  public savaPageParams: SavaPageParams = new SavaPageParams(); // 保存参数
 
   @ViewChild('promptDiv', { static: true }) public promptDiv: ElementRef;
   @ViewChild(FormIconMagicComponent, { static: true }) public iconMagicComponent: FormIconMagicComponent;
@@ -56,11 +59,11 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   @ViewChild(FormSingleLineScrollComponent, { static: true }) public singleLineScrollComponent: FormSingleLineScrollComponent;
 
   constructor(
-      private interfaceService: InterfaceDecorationService,
-      private globalService: GlobalService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private productService: ProductService
+    private interfaceService: InterfaceDecorationService,
+    private globalService: GlobalService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private productService: ProductService
   ) {
     route.paramMap.subscribe(map => {
       this.page_id = map.get('page_id');
@@ -137,7 +140,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 获取全部商城商品信息
   private requestMallProductAll(product_id: string) {
-    const params = {commodity_ids: product_id};
+    const params = { commodity_ids: product_id };
     this.interfaceService.requestProductList(params).subscribe(res => {
       const templatesList = this.templatesList.filter(value => value.template_type > 4);
       if (res.length > 0) {
@@ -169,7 +172,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
 
   // 获取全部票务商品信息
   private requestTicketProductAll(ticketProductHttpList: Array<any>) {
-    forkJoin(ticketProductHttpList).subscribe( res => {
+    forkJoin(ticketProductHttpList).subscribe(res => {
       this.templatesList.forEach((value1, index1) => {
         const ticketProducts = [];
         res.forEach(value => {
@@ -363,7 +366,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const form = document.getElementById('form');
     const temp = document.getElementById(`template_${type}_${index}`);
     if (form && temp) {
-      form.style.top = (temp.offsetTop - 135) + 'px';
+      form.style.top = (temp.offsetTop - 65) + 'px';
     }
   }
 
@@ -405,6 +408,11 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     });
   }
 
+  // 变更投放位置
+  public onChangeCategory(event: any) {
+    event.target.value ? this.savaPageParams.category = Number(event.target.value) : '';
+  }
+
   /**
    * 保存草稿、保存并发布校验
    * @returns boolean
@@ -422,6 +430,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 保存草稿
   public onSaveDraftClick() {
     this.modal_type = 1;
+    this.savaPageParams = new SavaPageParams();
+    this.savaPageParams.category = this.previewData.category || '';
+    this.savaPageParams.page_name = this.previewData.page_name;
     $(this.promptDiv.nativeElement).modal('show');
   }
 
@@ -430,6 +441,9 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.globalService.confirmationBox.open('提示', '确认要发布吗？发布后可在发布记录中查看此记录!', () => {
       this.globalService.confirmationBox.close();
       this.modal_type = 2;
+      this.savaPageParams = new SavaPageParams();
+      this.savaPageParams.category = this.previewData.category || '';
+      this.savaPageParams.page_name = this.previewData.page_name;
       $(this.promptDiv.nativeElement).modal('show');
     });
   }
@@ -437,18 +451,22 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
   // 保存草稿/发布
   public onSaveTitle() {
     const tip = this.previewData.page_type === 1 ? '保存草稿成功！' : '保存并发布成功！';
-    const params = {category: 1,
-      page_name: this.previewData.page_name,
-      page_content: this.templatesList.map(v => v.template_id).join(',')};
+    const params = {
+      category: this.savaPageParams.category || 1,
+      page_name: this.savaPageParams.page_name,
+      page_content: this.templatesList.map(v => v.template_id).join(','),
+    };
     if (!this.page_id) {
       // 保存草稿
       this.requestCreatePage(params);
     } else if (this.previewData.page_type === 1) {
       // 更新草稿
       this.interfaceService.requestUpdatePageData(params, this.page_id).subscribe(res => {
+        // 草稿=>草稿
         if (this.modal_type === 1) {
           this.successFunc(tip);
         } else {
+          // 草稿=>发布
           this.requestPageReleaseData(this.page_id);
         }
       }, error => {
@@ -464,24 +482,28 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     const templateList = this.templatesList.map(v => v.template_id);
     const template_id = templateList.filter(key => !this.template_ids.includes(key));
     if (template_id.length > 0) {
-      const params = {template_ids: template_id.join(',')};
+      const params = { template_ids: template_id.join(',') };
       this.interfaceService.requestCopyPageData(params).subscribe(res => {
         const save_template_ids = res.body.new_template_ids.split(',');
         this.template_ids.forEach(value => {
           const index = templateList.findIndex(v => v === value);
           save_template_ids.splice(index, 0, value);
         });
-        const copyParams = {category: 1,
-          page_name: this.previewData.page_name,
-          page_content: save_template_ids.join(',')};
+        const copyParams = {
+          category: this.savaPageParams.category || 1,
+          page_name: this.savaPageParams.page_name,
+          page_content: save_template_ids.join(','),
+        };
         this.requestCreatePage(copyParams);
       }, error => {
         this.globalService.httpErrorProcess(error);
       });
     } else {
-      const copyParams = {category: 1,
-        page_name: this.previewData.page_name,
-        page_content: templateList.join(',')};
+      const copyParams = {
+        category: this.savaPageParams.category || 1,
+        page_name: this.savaPageParams.page_name,
+        page_content: templateList.join(',')
+      };
       this.requestCreatePage(copyParams);
     }
   }
@@ -514,7 +536,7 @@ export class InterfaceDecorationEditComponent implements OnInit, CanDeactivateCo
     this.is_saved = true;
     $(this.promptDiv.nativeElement).modal('hide');
     this.globalService.promptBox.open(tip);
-    this.router.navigate(['/main/operation/mini-program/interface-decoration/record-list'], {queryParams: {page_type: this.modal_type}});
+    this.router.navigate(['/main/operation/mini-program/interface-decoration/record-list'], { queryParams: { page_type: this.modal_type } });
   }
 
   // 产品名称改变，高度变化

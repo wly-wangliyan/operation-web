@@ -9,7 +9,7 @@ import { CommodityEntity } from '../../../mall/goods-management/goods-management
 import { PushLinkResponse } from '../push-management/push-management.service';
 
 export class SearchParams extends EntityBase {
-  public category = 1; // Integer	T	类别	1: 发现　2:　首页
+  public category: any = ''; // Integer	T	类别	1: 发现　2:　首页
   public page_type: number = undefined; // Integer	T	页面类型	1:　草稿　2: 发布记录
   public release_status = ''; // 	Integer	F	发布状态	0: 未发布　1: 生效　2: 失效
   public page_num = 1; // 页码
@@ -152,7 +152,7 @@ export class TemplateEntity extends EntityBase {
 export class PageEntity extends EntityBase {
   public page_id: string = undefined; // String	页面id
   public page_name: string = undefined; // String	页面名称
-  public category: number = undefined; // Integer	类别	1: 发现　2:　首页
+  public category: number = undefined; // Integer	类别	1: 发现　2:　首页 3:商城
   public release_status: number = undefined; // Integer	发布状态	0: 未发布　1: 生效　2: 失效
   public page_type: number = undefined; // Integer	页面类型	1:　草稿　2: 发布记录
   public page_content: string = undefined; // String	页面内容	模板id集合　例：　“sdfljksjdkfj,sdfsdfsdfsdf,sdfsdfsdfsdfsdf”
@@ -169,6 +169,12 @@ export class PageEntity extends EntityBase {
     }
     return null;
   }
+}
+
+export class SavaPageParams extends EntityBase {
+  public category: any = ''; // Integer	类别	1: 发现　2:　首页 3:商城
+  public page_name: string = undefined; // 页面名称
+  public page_content: string = undefined; // 页面内容
 }
 
 
@@ -197,7 +203,7 @@ export class InterfaceDecorationService {
   public requestPageListData(searchParams: SearchParams): Observable<PageLinkResponse> {
     const httpUrl = `${this.domain}/pages`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new PageLinkResponse(res)));
+      .pipe(map(res => new PageLinkResponse(res)));
   }
 
   /**

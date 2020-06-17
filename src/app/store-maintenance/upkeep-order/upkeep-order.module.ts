@@ -11,8 +11,20 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { StoreShareModule } from '../share/store-share.module';
 import { ArrivalOrderDetailComponent } from './arrival-order-detail/arrival-order-detail.component';
+import { ExamineGoodsModalComponent } from './examine-goods-modal/examine-goods-modal.component';
+import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
+import { environment } from '../../../environments/environment';
+
+const uploadToken: UploadConfig = {
+  img_config: {
+    reportProcess: true,
+    url: `${environment.STORAGE_DOMAIN}/storages/images`,
+    source: 'park',
+  },
+};
+
 @NgModule({
-  declarations: [UpkeepOrderComponent, OrderListComponent, BatteryDetailComponent, ArrivalOrderDetailComponent],
+  declarations: [UpkeepOrderComponent, OrderListComponent, BatteryDetailComponent, ArrivalOrderDetailComponent, ExamineGoodsModalComponent],
   imports: [
     CommonModule,
     UpkeepOrderRoutingModule,
@@ -22,6 +34,11 @@ import { ArrivalOrderDetailComponent } from './arrival-order-detail/arrival-orde
     NzTableModule,
     NzButtonModule,
     StoreShareModule
-  ]
+  ],
+  providers: [{
+    provide: UPLOAD_TOKEN,
+    useValue: uploadToken
+  },
+    UploadService]
 })
 export class UpkeepOrderModule { }

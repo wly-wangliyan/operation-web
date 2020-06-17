@@ -10,66 +10,88 @@
         </nz-radio-group>
     </div>
     <div class="table-container">
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>模块：</span>
+                    <select name="status" class="form-control" style="width: 130px;"
+                        [(ngModel)]="searchParams.category">
+                        <option value=''>全部</option>
+                        <option value=1>发现</option>
+                        <option value=3>商城</option>
+                    </select>
+
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="zmy-table">
-            <nz-table *ngIf="searchParams.page_type===1" #recordTable
-                      [nzData]="recordList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+            <nz-table *ngIf="searchParams.page_type===1" #recordTable [nzData]="recordList" [nzPageSize]="'15'"
+                [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)"
+                [nzNoResult]="noResultText">
                 <thead>
-                <tr>
-                    <th>模块</th>
-                    <th>名称</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
-                </tr>
+                    <tr>
+                        <th>模块</th>
+                        <th>名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of recordTable.data; let i=index">
+                    <tr *ngFor="let data of recordTable.data; let i=index">
 
-                    <td>{{data.category===1?'发现':'首页'}}</td>
+                        <td>{{data.category===1?'发现':data.category===2?'首页':'商城'}}</td>
 
-                    <td>{{data.page_name}}</td>
+                        <td>{{data.page_name}}</td>
 
-                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
-                    <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
-                        <a [title]="'删除'" *ngIf="!data.is_use" (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
-                    </td>
-                </tr>
+                        <td class="operation">
+                            <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
+                            <a [title]="'删除'" *ngIf="!data.is_use"
+                                (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
+                        </td>
+                    </tr>
                 </tbody>
             </nz-table>
-            <nz-table *ngIf="searchParams.page_type===2"
-                      #recordTable1 [nzData]="recordList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
-                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+            <nz-table *ngIf="searchParams.page_type===2" #recordTable1 [nzData]="recordList" [nzPageSize]="'15'"
+                [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)"
+                [nzNoResult]="noResultText">
                 <thead>
-                <tr>
-                    <th>模块</th>
-                    <th>名称</th>
-                    <th>创建时间</th>
-                    <th>发布时间</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
+                    <tr>
+                        <th>模块</th>
+                        <th>名称</th>
+                        <th>创建时间</th>
+                        <th>发布时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of recordTable1.data; let i=index">
+                    <tr *ngFor="let data of recordTable1.data; let i=index">
 
-                    <td>{{data.category===1?'发现':'首页'}}</td>
+                        <td>{{data.category===1?'发现':data.category===2?'首页':'商城'}}</td>
 
-                    <td>{{data.page_name}}</td>
+                        <td>{{data.page_name}}</td>
 
-                    <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.created_time ?(data.created_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
-                    <td>{{data.release_time ?(data.release_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+                        <td>{{data.release_time ?(data.release_time * 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
 
-                    <td>{{data.release_status===0?'未生效':data.release_status===1?'生效中':data.release_status===2?'已失效':'--'}}</td>
+                        <td>{{data.release_status===0?'未生效':data.release_status===1?'生效中':data.release_status===2?'已失效':'--'}}
+                        </td>
 
-                    <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
-                        <a *ngIf="data.release_status!==1" [title]="'重新发布'" (appZDebounceClick)="onReleaseClick(data.page_id)">重新发布</a>
-                        <a *ngIf="data.release_status!==1" [title]="'删除'" (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
-                    </td>
-                </tr>
+                        <td class="operation">
+                            <a [title]="'编辑'" [routerLink]="['../edit',data.page_id]">编辑</a>
+                            <a *ngIf="data.release_status!==1" [title]="'重新发布'"
+                                (appZDebounceClick)="onReleaseClick(data.page_id)">重新发布</a>
+                            <a *ngIf="data.release_status!==1" [title]="'删除'"
+                                (appZDebounceClick)="onDeleteClick(data.page_id)">删除</a>
+                        </td>
+                    </tr>
                 </tbody>
             </nz-table>
         </div>
