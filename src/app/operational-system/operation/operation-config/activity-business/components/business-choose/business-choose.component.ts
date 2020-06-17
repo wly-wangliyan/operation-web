@@ -53,7 +53,6 @@ export class BusinessChooseComponent implements OnInit {
               private mallService: BusinessManagementService,
               private businessService: ActivityBusinessService) {
     this.nzSearchAssistant = new NzSearchAssistant(this);
-    this.nzSearchAssistant.submitSearch(true);
   }
 
   ngOnInit() {
@@ -69,6 +68,9 @@ export class BusinessChooseComponent implements OnInit {
     this.movement_id = movement_id;
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
+    this.repairList = [];
+    this.mallList = [];
+    this.nzSearchAssistant.submitSearch(true);
     openBoothModal();
   }
 
