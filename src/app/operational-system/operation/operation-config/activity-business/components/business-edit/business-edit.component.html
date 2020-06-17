@@ -1,0 +1,134 @@
+<!--新建、编辑-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #businessPromptDiv id="activityBusinessPromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{currentBusiness.movement_shop_id ? '编辑活动门店': '新建活动门店'}}</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" (keydown)="onKeydownEvent($event)" #activityBusinessForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>商家名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentBusiness.name" name="name"
+                                   placeholder="请输入1-50字标题" appIgnoreSpace minlength="1" maxlength="50" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>商家图片：</span>
+                        </label>
+                        <div class="control-input">
+                            <app-z-photo-select #businessImg [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
+                                                [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="businessImg"
+                                                [imageUrls]="cover_url" [imageAddHeight]="100">
+                            </app-z-photo-select>
+                            <div class="row row-message" style="height: 20px!important;margin-top: -6px">
+                                <div class="control-input err-message">
+                                    <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                                </div>
+                            </div>
+                            <p class="cover-hint">注：格式PNG/JPG/GIF，大小2M以内</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>标签：</span>
+                        </label>
+                        <div class="control-input" style="display: contents!important;">
+                            <ul>
+                                <li *ngFor="let tag of tagList; let i=index">
+                                    <div class="tag-div">{{tag}}</div>
+                                    <span class="tag-span" (click)="tagList.splice(i, 1)">
+                                        <img src="/assets/images/tag_delete.png">
+                                    </span>
+                                </li>
+                                <li *ngIf="tagList.length < 10">
+                                    <input class="tag-input" placeholder="请输入1-10字标签" [(ngModel)]="tag" name="tag" maxlength="10">
+                                    <span class="tag-span" [class.disabled]="!tag" (click)="onAddTagClick()">
+                                        <img src="/assets/images/tag_add.png">
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>地图坐标：</span>
+                        </label>
+                        <div class="control-input map-position">
+                            <input class="form-control" style="width: 200px" name="lonlat" disabled maxlength="50" required
+                                   [value]="currentBusiness.lon&&currentBusiness.lat?(currentBusiness.lon+'、'+currentBusiness.lat):''">
+                            <button nz-button (click)="openMapModal()">选择</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>门店地址：</span>
+                        </label>
+                        <div class="control-input">
+                            <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj" #projectInfoPro></app-pro-city-dist-select>
+                            <input class="form-control" style="margin-top: 10px" placeholder="详细地址" [(ngModel)]="currentBusiness.address"
+                                   [title]="currentBusiness.address" name="address">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 30px">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>商家电话：</span>
+                        </label>
+                        <div class="control-input business-tel">
+                            <input class="form-control" [(ngModel)]="telephone_1" name="telephone_1"
+                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="11" (change)="onTelChange($event)">
+                            <input class="form-control" [(ngModel)]="telephone_2" name="telephone_2"
+                                   placeholder="请输入商家电话" appIgnoreSpace maxlength="11" (change)="onTelChange($event)">
+                        </div>
+                    </div>
+                    <div class="row-message" style="height: 20px!important;margin-top: -6px;margin-left: 134px">
+                        <div class="control-input err-message">
+                            <span *ngIf="errPositionItem?.telephone?.isError">{{errPositionItem?.telephone?.errMes}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>商家权籍：</span>
+                        </label>
+                        <div class="control-input">
+                            <select class="form-control" [(ngModel)]="currentBusiness.rank" name="rank">
+                                <option [value]="''">请选择</option>
+                                <option [value]="'A'">A</option>
+                                <option [value]="'B'">B</option>
+                                <option [value]="'C'">C</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!activityBusinessForm.form.valid||businessImg.imageList.length===0"
+                            (appZDebounceClick)="onEditActivitySubmit()">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-z-map-select-point [mapObj]="mapObj" (selectedMarkerInfo)="selectedMarkerInfo($event)"></app-z-map-select-point>

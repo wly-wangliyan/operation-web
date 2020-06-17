@@ -1,0 +1,112 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'活动管理'" [level2Name]="'活动商家'" [level3Name]="'编辑'" [level2RelativePath]="'../../'"></app-crumb>
+</div>
+<div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tab_index">
+        <label nz-radio-button [nzValue]=1 (click)="onTabChange(1)">基础信息</label>
+        <label nz-radio-button [nzValue]=2 (click)="onTabChange(2)">商家列表</label>
+    </nz-radio-group>
+</div>
+<div class="content-flow">
+    <div class="content-container">
+        <form autocomplete="off" class="form-horizontal" #editConfigForm="ngForm" *ngIf="tab_index===1">
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>标题</span>
+                </label>
+                <div class="control-input">
+                    <input name="title" class="form-control" [(ngModel)]="activityParams.title"
+                           placeholder="输入1-50个字标题" minlength="1" maxlength="50" appIgnoreSpace required>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label"></label>
+                <p>用于链接标题显示</p>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>*</b>
+                    <span>活动名称</span>
+                </label>
+                <div class="control-input">
+                    <input name="name" class="form-control" [(ngModel)]="activityParams.name"
+                           placeholder="输入1-50个字活动名称" minlength="1" maxlength="50" appIgnoreSpace required>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label"></label>
+                <p>用于链接标题显示</p>
+            </div>
+            <div class="row">
+                <label class="control-label">
+                    <b>&nbsp;&nbsp;</b>
+                    <span>备注</span>
+                </label>
+                <div class="control-input">
+                    <textarea name="remark" class="form-control" [(ngModel)]="activityParams.remark" rows="3"
+                              placeholder="输入1-100个字备注" maxlength="100" appIgnoreSpace></textarea>
+                </div>
+            </div>
+            <div class="row footer">
+                <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary" [disabled]="!editConfigForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
+                    保存
+                </button>
+                <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+            </div>
+        </form>
+        <div class="table-container" *ngIf="tab_index===2">
+            <ul class="header-right">
+                <li class="big-bg" (click)="onChooseClick()">
+                    <a>选择</a>
+                </li>
+                <li class="big-bg" (click)="onEditBusinessClick(null)">
+                    <a>新建</a>
+                </li>
+            </ul>
+            <div class="zmy-table">
+                <nz-table #businessTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+                          [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+                          (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>商家名称</th>
+                        <th>地址</th>
+                        <th>电话</th>
+                        <th>标签</th>
+                        <th>权籍</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of businessTable.data; let i=index">
+                        <td>{{i+(nzSearchAssistant.currentPage-1)*15+1}}</td>
+
+                        <td [title]="data.name?data.name:''">
+                            {{data.name?(data.name|zMaxLength:15):'--'}}</td>
+
+                        <td [title]="data.province?data.province+data.city+data.district+data.address:''">
+                            {{data.province?(data.province+data.city+data.district+data.address|zMaxLength:20):'--'}}</td>
+
+                        <td>{{data.telephone||'--'}}</td>
+                        <td>{{data.tags||'--'}}</td>
+
+                        <td>{{data.rank||'--'}}</td>
+
+                        <td class="operation">
+                            <a [title]="'编辑'" (click)="onEditBusinessClick(data)">编辑</a>
+                            <a [title]="'删除'" (click)="onDelBusinessClick(data.movement_shop_id)">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑商家-->
+<app-business-edit></app-business-edit>
+<!--选择门店-->
+<app-business-choose></app-business-choose>

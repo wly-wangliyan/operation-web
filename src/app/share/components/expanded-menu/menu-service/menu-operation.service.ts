@@ -67,7 +67,7 @@ export class MenuOperationService {
     return systemMenu;
   }
 
-  // 运营 》运营配置
+  // 运营 》活动管理
   private generateOperationConfigMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('活动管理', null);
     systemMenu.icon = '/assets/images/menu_config.png';
@@ -79,6 +79,8 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu3);
     const subFinanceMenu4 = new SideMenuItem('活动配置', '/main/operation/operation-config/activity-config', systemMenu);
     systemMenu.children.push(subFinanceMenu4);
+    const subFinanceMenu5 = new SideMenuItem('活动商家', '/main/operation/operation-config/activity-business', systemMenu);
+    systemMenu.children.push(subFinanceMenu5);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
   }

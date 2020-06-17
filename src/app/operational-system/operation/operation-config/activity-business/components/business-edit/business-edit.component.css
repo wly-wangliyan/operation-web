@@ -1,0 +1,103 @@
+.modal-dialog {
+    min-width: 620px;
+}
+
+.control-label {
+    width: 90px;
+    line-height: 34px;
+}
+
+.control-input {
+    width: 410px;
+}
+
+p {
+    margin-bottom: 0;
+    color: #686868;
+}
+
+.control-input .form-control {
+    height: 34px !important;
+    font-size: 14px !important;
+    margin-right: 0 !important;
+    background: rgba(246, 246, 246, 1);
+    border-radius: 1px;
+}
+
+.tag-input, .tag-div {
+    width: 150px;
+    height: 34px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 34px;
+    float: left;
+    color: #3E71F7;
+    margin-bottom: 10px;
+    background: rgba(62,113,247,0.22);
+    border: none;
+}
+
+.control-input ul {
+    width: 410px;
+}
+
+.tag-span {
+    width: 34px;
+    height: 34px;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 34px;
+    margin-bottom: 10px;
+    background-color: rgba(62,113,247,1);
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.tag-input::-webkit-input-placeholder{
+    color:rgba(62,113,247,1);
+}
+.tag-input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:rgba(62,113,247,1);
+}
+.tag-input::-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:rgba(62,113,247,1);
+}
+.tag-input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
+    color:rgba(62,113,247,1);
+}
+
+.row-message {
+    margin-bottom: 0px;
+    color: #e82038;
+}
+
+.row {
+    margin-bottom: 5px;
+}
+
+.business-tel {
+    display: inline-flex;
+}
+
+.business-tel input {
+    width: 48%;
+}
+
+.business-tel input:last-child {
+    margin-left: 4%;
+}
+
+.map-position {
+    display: inline-flex;
+}
+
+.map-position button {
+    margin-left: -1px;
+    border-radius: 2px;
+    height: 34px;
+}
+
+.disabled {
+    cursor: not-allowed;
+}

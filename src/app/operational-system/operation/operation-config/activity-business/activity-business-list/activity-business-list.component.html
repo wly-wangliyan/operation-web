@@ -1,0 +1,136 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'活动管理'" [level2Name]="'活动商家'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg" (click)="onCreateClick()">
+            <a>新建</a>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+
+            <div class="form-group">
+                <span>名称：</span>
+                <input name="name" class="form-control" placeholder="请输入活动名称" maxlength="50"
+                       [(ngModel)]="searchParams.name" appIgnoreSpace />
+            </div>
+
+            <div class="form-group">
+                <span>ID：</span>
+                <input name="promotion_id" class="form-control" placeholder="请输入ID" maxlength="32"
+                       [(ngModel)]="searchParams.movement_id" oninput="value=value.replace(/[^a-zA-Z0-9]/ig,'')" appIgnoreSpace />
+            </div>
+
+            <div class="form-group">
+                <span>创建时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #businessTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="true"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>ID</th>
+                    <th>活动名称</th>
+                    <th>标题</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of businessTable.data; let i=index">
+                    <td>{{i+(nzSearchAssistant.currentPage-1)*15+1}}</td>
+
+                    <td [title]="data.movement_id?data.movement_id:''">
+                        <span *ngIf="data.movement_id" [appTxtCopy]="data.movement_id">
+                            {{data.movement_id}}
+                        </span>
+                        <span *ngIf="!data.movement_id">--</span>
+                    </td>
+
+                    <td [title]="data.name?data.name:''">
+                        {{data.name?(data.name|zMaxLength:20):'--'}}</td>
+
+                    <td [title]="data.title?data.title:''">
+                        {{data.title?(data.title|zMaxLength:20):'--'}}</td>
+
+                    <td>{{data.created_time ?(data.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
+
+                    <td class="operation">
+                        <a [title]="'编辑'" [routerLink]="['../edit', data.movement_id]">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+<!--新建、编辑-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #activityBusinessPromptDiv id="activityBusinessPromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{currentActivity.movement_id ? '编辑': '新建'}}</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" (keydown)="onKeydownEvent($event)" #activityBusinessForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>标题：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentActivity.title" name="title"
+                                   placeholder="请输入1-50字标题" appIgnoreSpace minlength="1" maxlength="50" required>
+                            <p>用于链接标题显示</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>活动名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="currentActivity.name"
+                                   name="name" placeholder="请输入1-50字活动名称" appIgnoreSpace minlength="1"
+                                   maxlength="50" required>
+                            <p>仅用于区分不同活动的商家列表</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!activityBusinessForm.form.valid"
+                            (appZDebounceClick)="onEditActivitySubmit()">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

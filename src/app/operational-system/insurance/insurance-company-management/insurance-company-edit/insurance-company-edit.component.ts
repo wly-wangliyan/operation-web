@@ -131,7 +131,7 @@ export class InsuranceCompanyEditComponent implements OnInit {
       return;
     }
     this.coverImgSelectComponent.upload().subscribe( () => {
-      const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);
+      `const imageUrl = this.coverImgSelectComponent.imageList.map(i => i.sourceUrl);`
       const params = new UpdateInsueranceEntity();
       params.ic_image = imageUrl.join(',');
       params.ic_name = this.currentInsurance.ic_name;

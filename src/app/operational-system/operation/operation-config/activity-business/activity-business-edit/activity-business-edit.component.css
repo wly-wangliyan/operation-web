@@ -1,0 +1,59 @@
+.tab-bar-list {
+    padding: 14px 15px 0 15px;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-group {
+    display: inline-flex;
+    flex-wrap: nowrap;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper {
+    width: 120px;
+    height: 40px;
+    color: #3B3B3B;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    font-family: 'Microsoft YaHei';
+    border-bottom: none;
+    padding: 0 5px;
+    box-shadow: 2px 0px 2px 0px rgba(137, 146, 170, 0.33);
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper-checked {
+    color: #fff;
+}
+
+.tab-bar-list ::ng-deep .ant-radio-button-wrapper:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.content-container {
+    border: 1px solid #d9d9d9;
+    margin: 0 15px 0 5px;
+}
+
+.table-container {
+    background: #fff;
+    margin-top: -18px;
+}
+
+p {
+    margin-bottom: 10px;
+    color: #686868;
+    font-size: 14px;
+}
+
+.footer {
+    height: auto;
+    margin-top: 30px;
+}
+
+.control-label, .control-input {
+    margin-bottom: 5px!important;
+}
+
+.header-right {
+    z-index: 500;
+    position: relative;
+}

@@ -24,6 +24,11 @@ const routes: Routes = [{
       loadChildren: () => import('./luck-draw/luck-draw.module').then(m => m.LuckDrawModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'activity-business',
+      loadChildren: () => import('./activity-business/activity-business.module').then(m => m.ActivityBusinessModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'activity-config', pathMatch: 'full' }
   ]
 }];

@@ -1,0 +1,79 @@
+<!--新建、编辑-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #businessPromptDiv id="businessPromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">选择门店</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" (keydown)="onKeydownEvent($event)" #activityBusinessForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>业务筛选：</span>
+                        </label>
+                        <div class="control-input">
+                            <select class="form-control" [(ngModel)]="batchBusinessParams.type" name="type" (change)="onTypeChange()">
+                                <option [value]="1">门店保养/洗车</option>
+                                <option [value]="2">商城</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>可选商家：</span>
+                        </label>
+                        <div class="control-input" style="display: inline-flex">
+                            <input class="form-control" [(ngModel)]="name" name="business_name"
+                                   placeholder="请输入商家名称" appIgnoreSpace maxlength="50">
+                            <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">搜索</button>
+                            <button *ngIf="!checked_all" nz-button nzType="primary" (click)="onCheckAllClick(true)">全选</button>
+                            <button *ngIf="checked_all" nz-button nzType="primary" (click)="onCheckAllClick(false)">取消选中</button>
+                        </div>
+                    </div>
+                    <div class="zmy-table">
+                        <nz-table #businessTable [nzData]="repairList" [nzShowPagination]="true"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type==1"
+                                  (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                            <tbody>
+                            <tr *ngFor="let data of businessTable.data; let i=index">
+                                <td style="width: 80%">{{data.source.repair_shop_name}}</td>
+                                <td class="operation">
+                                    <label nz-checkbox [(nzChecked)]="data.is_check"></label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+                        <nz-table #businessTable [nzData]="mallList" [nzShowPagination]="true"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText" [nzPageSize]="'15'" *ngIf="batchBusinessParams.type==2"
+                                  (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)" [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                            <tbody>
+                            <tr *ngFor="let data of businessTable.data; let i=index">
+                                <td style="width: 80%">{{data.source.mall_business_name}}</td>
+                                <td class="operation">
+                                    <label nz-checkbox [(nzChecked)]="data.is_check"></label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onChooseSubmit()">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
