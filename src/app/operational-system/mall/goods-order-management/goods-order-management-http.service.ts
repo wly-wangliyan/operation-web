@@ -46,6 +46,8 @@ export class OrderDetailEntity extends EntityBase {
   public unit_sell_price = undefined; // 	int	单位分 售价
   public amount = undefined; // 	int	数量
   public commodity_type = undefined; // int	商品类型 1：实物商品 2：虚拟商品
+  public template_coupon_ids = ''; // 模板ids
+  public coupon_group_ids = ''; // 券组ids
 }
 
 export class WriteOffEntity extends EntityBase {
@@ -84,7 +86,7 @@ export class GoodsOrderEntity extends EntityBase {
   public commodity_ids = ''; // 	String	商品ids
   public is_delivery = 1; // 	是否需要邮寄 1为需要， 2为不需要
   public pay_status = undefined; // 	integer	订单状态 1:待支付 2:已支付 3:已取消
-  public delivery_status = undefined; // 	integer	发货状态 1:待发货 2:已发货 3:已签收
+  public delivery_status = undefined; // 	integer	发货状态 1:待发货 2:已发货 3:已签收 4:失败
   public order_status = undefined; // 	integer	订单状态 1未完成，2已完成
   public confirm_type = undefined; // 	integer	签收类型 1:客户签收 2:管理员签收 3:到期自动签收
   public total_amount = undefined; // 	integer	总金额 (应收金额 单位分)
@@ -129,6 +131,8 @@ export class GoodsOrderEntity extends EntityBase {
   public detail: Array<OrderDetailEntity> = []; // 	obj[]	订单明细对象列表
   public write_off_code: Array<WriteOffEntity> = []; // 	obj[]	核销码对象列表
   public refund_order: OrderRefundEntity = undefined; // 	订单退款对象
+  public failed_template_ids = ''; // 发货失败的模板ids
+  public failed_group_ids = ''; // 发货失败的券组ids
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'detail') {

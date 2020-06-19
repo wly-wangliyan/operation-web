@@ -19,8 +19,14 @@
             </a>
             <a name="commodity_type" class="commodity-type-btn"
               [class.commodity-type-active-btn]="commodityInfo.commodity_type===2"
-              (click)="onChangeCommodityType('commodity_type', 2)" style="margin-right: 5px">
+              (click)="onChangeCommodityType('commodity_type', 2)">
               <span>虚拟商品</span>
+              <span>无需配送</span>
+            </a>
+            <a name="commodity_type" class="commodity-type-btn"
+               [class.commodity-type-active-btn]="commodityInfo.commodity_type===3"
+               (click)="onChangeCommodityType('commodity_type', 3)" style="margin-right: 5px">
+              <span>优惠券商品</span>
               <span>无需配送</span>
             </a>
           </div>
@@ -129,7 +135,7 @@
             </div>
           </div>
         </div>
-        <div class="row control-row" style="margin-bottom: 20px;">
+        <div class="row control-row" style="margin-bottom: 20px;" *ngIf="commodityInfo.commodity_type!==3">
           <label class="control-label special-control-label">
             <span>视频介绍</span>
           </label>
@@ -175,11 +181,13 @@
             <b>*</b>
             <span>产品规格</span>
           </label>
-          <div class="control-input table-container" id='table-container' style="padding-top: 10px;">
+          <div class="control-input table-container" id='table-container' style="padding-top: 10px;width: 1150px">
             <table class="table">
               <thead>
                 <tr>
                   <th style="width: 160px;">规格名称</th>
+                  <th *ngIf="commodityInfo.commodity_type===3" style="width: 160px;">优惠券模板ID</th>
+                  <th *ngIf="commodityInfo.commodity_type===3" style="width: 160px;">券组ID</th>
                   <th style="width: 125px;">原价</th>
                   <th *ngIf="commodityInfo.validity_type!==2" style="width: 125px;">售价</th>
                   <th style="width: 125px;">结算价</th>
@@ -210,6 +218,22 @@
                           <span *ngIf="specificationErrMsgItem?.isError">{{specificationErrMsgItem?.errMes}}</span>
                         </div>
                       </div>
+                    </div>
+                  </td>
+                  <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
+                    <div class="td-content name-content">
+                      <input type="text" class="form-control"
+                             [(ngModel)]="formatCommoditySpecification.specification_params.template_coupon_ids"
+                             [name]="'template_coupon_ids_' + formatCommoditySpecification.idCount"
+                             placeholder="输入ID以','分割" appIgnoreSpace>
+                    </div>
+                  </td>
+                  <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
+                    <div class="td-content name-content">
+                      <input type="text" class="form-control"
+                             [(ngModel)]="formatCommoditySpecification.specification_params.coupon_group_ids"
+                             [name]="'coupon_group_ids_' + formatCommoditySpecification.idCount"
+                             placeholder="输入ID以','分割" appIgnoreSpace>
                     </div>
                   </td>
                   <td style="width: 125px;">
@@ -265,7 +289,7 @@
                       <span>已售：{{formatCommoditySpecification.specification_params.sold_amount}}</span>
                     </div>
                   </td>
-                  <td style="height: 57px;">
+                  <td style="height: 57px;padding: 0" nzAlign="left">
                     <div class="td-content operation-container">
                       <a class="remove-a" [title]="'移除'" *ngIf="FormatCommoditySpecificationList.length > 1"
                         (click)="onDeleteCommoditySpecification(specificationIndex)"> 移除
@@ -282,6 +306,18 @@
             </table>
           </div>
         </div>
+        <div class="row control-row" *ngIf="commodityInfo.commodity_type===1">
+          <label class="control-label">
+            <b>*</b>
+            <span>邮费</span>
+          </label>
+          <div class="control-input" style="width: 233px">
+            <input type="text" class="form-control"
+                   [(ngModel)]="commodityInfo.freight_fee" name="freight_fee" placeholder="输入0即为包邮" maxlength="3"
+                   appIntNumber appIgnoreSpace required>
+            <label class="one-word-lable">元</label>
+          </div>
+        </div>
         <div class="row control-row">
           <label class="control-label">
             <b>&nbsp;</b>
@@ -295,13 +331,35 @@
             <label class="one-word-lable">件</label>
           </div>
         </div>
-        <div class="row control-row">
+        <div class="row control-row" *ngIf="commodityInfo.commodity_type!==3">
           <label class="control-label special-control-label">
             <span>赠品设置</span>
           </label>
           <div class="control-input" style="width: 275px">
             <label class="check-box" nz-checkbox [(ngModel)]="giveaway_settings" name='giveaway_settings'
               (ngModelChange)='onCheckBoxSetting()'>此商品可使用兑换码兑换</label>
+          </div>
+        </div>
+        <div class="row control-row" *ngIf="commodityInfo.commodity_type!==1">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>核销描述</span>
+          </label>
+          <div class="control-input">
+            <textarea type="text" class="form-control" [(ngModel)]="commodityInfo.remark" name="remark"
+                      rows="3" placeholder="输入0-200字核销描述" maxlength="200" appIgnoreSpace></textarea>
+          </div>
+        </div>
+        <div class="row control-row">
+          <label class="control-label">
+            <b>*</b>
+            <span>是否显示评论</span>
+          </label>
+          <div class="control-input">
+            <nz-radio-group required [(ngModel)]="commodityInfo.show_comment" name="show_comment">
+              <label nz-radio [nzValue]="1">显示</label>
+              <label nz-radio [nzValue]="2">不显示</label>
+            </nz-radio-group>
           </div>
         </div>
         <div class="row control-row">

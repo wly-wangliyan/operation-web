@@ -149,7 +149,8 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
         (lastCommoditySpecificationItem.stock_json && isNullOrUndefined(lastCommoditySpecificationItem.stock_json.stock_day)
           && this.commodityInfo.validity_type === 2) ||
         (isNullOrUndefined(lastCommoditySpecificationItem.unit_sell_price) && this.commodityInfo.validity_type !== 2)
-        || (!lastCommoditySpecificationItem.stock_json && this.commodityInfo.validity_type === 2)) {
+        || (!lastCommoditySpecificationItem.stock_json && this.commodityInfo.validity_type === 2) ||
+          (this.commodityInfo.commodity_type === 3 && !lastCommoditySpecificationItem.coupon_group_ids && !lastCommoditySpecificationItem.template_coupon_ids)) {
         return false;
       }
       return true;
@@ -388,11 +389,14 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       this.commodityInfo = data;
       this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
       this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
+      this.commodityInfo.freight_fee = this.commodityInfo.freight_fee ? this.commodityInfo.freight_fee / 100 : this.commodityInfo.freight_fee;
       this.giveaway_settings = this.commodityInfo.giveaway_settings === 1 ? true : false;
       this.commodityInfo.specifications.forEach(specificationItem => {
         const tempSpecificationItem = new SpecificationParamsItem();
         tempSpecificationItem.specification_params = new SpecificationEntity(specificationItem);
         tempSpecificationItem.is_create = false;
+        tempSpecificationItem.specification_params.template_coupon_ids = specificationItem.template_coupon_ids;
+        tempSpecificationItem.specification_params.coupon_group_ids = specificationItem.coupon_group_ids;
         if (tempSpecificationItem.specification_params.stock_json) {
           tempSpecificationItem.specification_params.stock_json.unit_sell_price_day =
             tempSpecificationItem.specification_params.stock_json.unit_sell_price_day ?
@@ -529,6 +533,11 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
       if (!ValidateHelper.Length(specificationItemParams.specification_name, 1, 20)) {
         this.specificationErrMsgItem.isError = true;
         this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格名称格式错误，请输入1-20字规格名称！`;
+        return false;
+      }
+      if (this.commodityInfo.commodity_type === 3 && !specificationItemParams.coupon_group_ids && !specificationItemParams.template_coupon_ids) {
+        this.specificationErrMsgItem.isError = true;
+        this.specificationErrMsgItem.errMes = `第${specificationIndex + 1}个规格优惠券模板ID和券组ID至少填写一个！`;
         return false;
       }
       for (const specificationItemIndex in this.FormatCommoditySpecificationList) {

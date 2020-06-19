@@ -13,10 +13,11 @@
         <form class="search-form">
           <div class="form-group">
             <span>商品类型：</span>
-            <select class="form-control" style="width: 100px;" name="commodity_type" [(ngModel)]="commodity_type">
+            <select class="form-control" style="width: 120px;" name="commodity_type" [(ngModel)]="commodity_type">
               <option value=0>全部</option>
               <option value=1>实物商品</option>
               <option value=2>虚拟商品</option>
+              <option value=3>优惠券商品</option>
             </select>
           </div>
           <div class="form-group" *ngIf='tab.key===0||tab.key===5'>
@@ -166,13 +167,19 @@
                   <td>{{order.refund_type | refundType}}
                     <span *ngIf='order.refund_type!==3'>({{order.refund_order?.refund_status | refundStatus}})</span>
                   </td>
-                  <td>{{order | orderStatusFormat}}</td>
+                  <td>
+                    {{order | orderStatusFormat}}
+                    <ng-container *ngIf="order.detail[0]?.commodity_type===3&&order.delivery_status===4">
+                      ({{order.failed_template_ids.length===order.detail[0]?.template_coupon_ids.length&&
+                      order.failed_group_ids.length===order.detail[0]?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
+                    </ng-container>
+                  </td>
                   <td class="operation">
                     <!-- 虚拟产品有核销 -->
                     <a *ngIf="order.detail[0]?.commodity_type===2&&order.delivery_status===2&&order.is_refundable"
                       [title]="'核销'" (click)="onWriteOff(order)">核销</a>
                     <!-- 根据是否可以退款状态区分是否显示退款按钮 -->
-                    <a *ngIf="order.is_refundable&&order.pay_type!=='EC'" [title]="'退款'"
+                    <a *ngIf="order.is_refundable&&order.pay_type!=='EC'&&order.detail[0]?.commodity_type!==3" [title]="'退款'"
                       (click)="onEditRefundClick(order)">退款</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.pay_status===2&&order.delivery_status===1&&order.is_refundable"
                       [title]="'发货'" (click)="onEditDeliveryClick(order)" style="padding-right:5px ;">发货</a>
@@ -180,7 +187,7 @@
                       [title]="'修改物流'" (click)="onEditDeliveryClick(order)">修改物流</a>
                     <a *ngIf="order.detail[0]?.commodity_type===1&&order.delivery_status===2&&order.is_refundable"
                       [title]="'确认收货'" (click)="onConfiemClick(order)">确认收货</a>
-                    <div *ngIf='!order.is_refundable'>--</div>
+                    <div *ngIf='!order.is_refundable||order.detail[0]?.commodity_type===3'>--</div>
                   </td>
                 </tr>
               </ng-template>

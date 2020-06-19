@@ -26,6 +26,7 @@
           <option value="">全部</option>
           <option value="1">实物商品</option>
           <option value="2">虚拟商品</option>
+          <option value="3">优惠券商品</option>
         </select>
       </div>
       <!-- <div class="form-group">
@@ -103,7 +104,7 @@
                     {{commodity.commodity_name | zMaxLength:15}}
                   </a>
                   <div class="goods-tip">
-                    <label *ngIf="commodity.commodity_type">{{commodity.commodity_type===1?'实物商品':'虚拟商品'}}</label>
+                    <label *ngIf="commodity.commodity_type">{{commodity.commodity_type|mallCommodityType}}</label>
                     <label
                       *ngIf="commodity.shipping_method">{{commodity.shipping_method===1?'平台自营':'由'+commodity.mall_business_name+'供应'}}</label>
                   </div>

@@ -65,7 +65,7 @@ export class SpecificationParams extends EntityBase {
 export class CommodityEntity extends EntityBase {
   public commodity_id: string = undefined; // 商品id
   public commodity_name: string = undefined; // 商品名称
-  public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品
+  public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品 3:优惠券商品
   public buy_max_num: number = undefined; // 购买上限 -1:无上限
   public subtitle: string = undefined; // 副标题
   public commodity_images: Array<string> = []; // 商品图片列表
@@ -77,6 +77,8 @@ export class CommodityEntity extends EntityBase {
   public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
   public specifications: Array<SpecificationEntity> = []; // 规格对象列表
   public giveaway_settings: number = undefined; // 0未设置 1兑换码兑换
+  public remark: string = undefined; // 核销描述
+  public show_comment = 1; // 显示评论 1显示 2不显示
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
   // 用于页面展示
@@ -115,7 +117,7 @@ export class CommodityEntity extends EntityBase {
     delete json.unit_original_price_section;
     delete json.sold_amount_sum;
     delete json.category;
-    delete json.freight_fee;
+    json.freight_fee = Math.round(json.freight_fee * 100);
     return json;
   }
 }
@@ -144,6 +146,8 @@ export class SpecificationEntity extends EntityBase {
   public stock: number = undefined; // 库存
   public sold_amount = 0; // 已售数量
   public stock_json: SpecificationDateEntity = undefined; // 商品有效期为使用日期当日有效时的库存信息
+  public template_coupon_ids: string = undefined; // 模板ids
+  public coupon_group_ids: string = undefined; //  券组ids
   public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间

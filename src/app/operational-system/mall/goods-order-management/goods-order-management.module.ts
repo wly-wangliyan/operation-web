@@ -21,40 +21,43 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCardModule } from 'ng-zorro-antd/card';
 @NgModule({
-  imports: [
-    ShareModule,
-    CommonModule,
-    GoodsOrderManagementRoutingModule,
-    NzRadioModule,
-    NzTabsModule,
-    NzTableModule,
-    NzButtonModule,
-    NzDatePickerModule,
-    NzCardModule
-  ],
-  declarations: [
-    GoodsOrderManagementComponent,
-    GoodsOrderListComponent,
-    GoodsOrderDetailComponent,
-    DeliveryStatusPipe,
-    PayStatusPipe,
-    ConfirmTypePipe,
-    RealGoodsDeliveryStatusPipe,
-    DeliveryMethodPipe,
-    RefundTypePipe,
-    RefundStatusPipe,
-    WriteOffStatusPipe,
-    OrderStatusFormatPipe,
-    MallCommodityTypePipe,
-    PayTypePipe,
-    GoodsOrderDeliveryComponent,
-    GoodsOrderRefundComponent,
-    GoodsOrderRemarkComponent,
-    GoodsWriteOffComponent
-  ],
-  providers: [
-    GoodsOrderManagementHttpService,
-  ]
+    imports: [
+        ShareModule,
+        CommonModule,
+        GoodsOrderManagementRoutingModule,
+        NzRadioModule,
+        NzTabsModule,
+        NzTableModule,
+        NzButtonModule,
+        NzDatePickerModule,
+        NzCardModule
+    ],
+    declarations: [
+        GoodsOrderManagementComponent,
+        GoodsOrderListComponent,
+        GoodsOrderDetailComponent,
+        DeliveryStatusPipe,
+        PayStatusPipe,
+        ConfirmTypePipe,
+        RealGoodsDeliveryStatusPipe,
+        DeliveryMethodPipe,
+        RefundTypePipe,
+        RefundStatusPipe,
+        WriteOffStatusPipe,
+        OrderStatusFormatPipe,
+        MallCommodityTypePipe,
+        PayTypePipe,
+        GoodsOrderDeliveryComponent,
+        GoodsOrderRefundComponent,
+        GoodsOrderRemarkComponent,
+        GoodsWriteOffComponent
+    ],
+    exports: [
+        MallCommodityTypePipe
+    ],
+    providers: [
+        GoodsOrderManagementHttpService,
+    ]
 })
 export class GoodsOrderManagementModule {
 }

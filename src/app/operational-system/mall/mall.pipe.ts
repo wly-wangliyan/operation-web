@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 /** 商品类型 */
 const mallCommodityType = {
   1: '实物商品',
-  2: '虚拟商品'
+  2: '虚拟商品',
+  3: '优惠券商品'
 };
 
 @Pipe({
@@ -336,4 +337,3 @@ export class ExchangeStatusPipe implements PipeTransform {
     return result;
   }
 }
-
