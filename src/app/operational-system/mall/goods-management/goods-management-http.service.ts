@@ -86,7 +86,7 @@ export class CommodityEntity extends EntityBase {
   public unit_original_price_section: string = undefined; // 原价区间
   public sold_amount_sum = 0; // 销量，已售数量之和
   public category: number = undefined; // 	1餐饮卷 2车周边
-  public shipping_method = ''; // 	供货方式 1平台自营，2第三方供应
+  public shipping_method: any = ''; // 	供货方式 1平台自营，2第三方供应
   public collection_type = '1'; // 收款方式 1平台 2此供应商户
   public validity_type: number = undefined; // 	有效期类型 1.付款后立即生效 2.使用日期当日有效 *使用日期信息
   public freight_fee: number = undefined; // 	运费 单位分
@@ -95,6 +95,8 @@ export class CommodityEntity extends EntityBase {
   public sort_id = ''; // 分类id
   public sort_name = ''; // 分类名称
   public cover_image = ''; // 封面图片
+  public click_num: number = undefined; // 累计点击量
+  public click_person: number = undefined; // 累计点击人数
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'specifications') {
@@ -208,6 +210,29 @@ export class ExchangeRecordLinkResponse extends LinkResponse {
     const tempList: Array<ExchangeRecordEntity> = [];
     results.forEach(res => {
       tempList.push(ExchangeRecordEntity.Create(res));
+    });
+    return tempList;
+  }
+}
+
+export class SearchStatisticParams extends EntityBase {
+  public start_time: any = undefined; // 开始时间
+  public end_time: any = undefined; // 结束时间
+  public page_size = 45;
+  public page_num = 1;
+}
+
+export class StatisticEntity extends EntityBase {
+  public click_num: number = undefined; // 开始时间
+  public click_person: number = undefined; // 结束时间
+  public date: number = undefined;
+}
+
+export class StatisticLinkResponse extends LinkResponse {
+  public generateEntityData(results: Array<any>): Array<StatisticEntity> {
+    const tempList: Array<StatisticEntity> = [];
+    results.forEach(res => {
+      tempList.push(StatisticEntity.Create(res));
     });
     return tempList;
   }
@@ -355,6 +380,17 @@ export class GoodsManagementHttpService {
         observer.error(err);
       });
     });
+  }
+
+  // 获取统计信息
+  public requestStatisticData(commodity_id: string, searchParams: SearchStatisticParams): Observable<StatisticLinkResponse> {
+    const httpUrl = `${this.domain}/users/commodities/${commodity_id}/click`;
+    return this.httpService.get(httpUrl, searchParams.json()).pipe(map(res => new StatisticLinkResponse(res)));
+  }
+
+  // 分页获取
+  public requestContinueStatisticData(url: string): Observable<StatisticLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new StatisticLinkResponse(res)));
   }
 }
 

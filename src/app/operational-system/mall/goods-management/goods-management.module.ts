@@ -22,6 +22,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { GoodsOrderManagementModule } from '../goods-order-management/goods-order-management.module';
+import { StatisticDetailComponent } from './statistic-detail/statistic-detail.component';
 @NgModule({
   imports: [
     ShareModule,
@@ -47,7 +48,8 @@ import { GoodsOrderManagementModule } from '../goods-order-management/goods-orde
     GoodsDetailComponent,
     ClassifyManagementComponent,
     ClassifyEditComponent,
-    ExchangeStatusPipe
+    ExchangeStatusPipe,
+    StatisticDetailComponent
   ],
   providers: [
     GoodsManagementHttpService,

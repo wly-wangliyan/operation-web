@@ -7,6 +7,7 @@ import { GoodsListComponent } from './goods-list/goods-list.component';
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
 import { GoodsDetailComponent } from './goods-detail/goods-detail.component';
 import { ClassifyManagementComponent } from './classify-management/classify-management.component';
+import { StatisticDetailComponent } from './statistic-detail/statistic-detail.component';
 
 const routes: Routes = [{
   path: '', component: GoodsManagementComponent,
@@ -18,6 +19,7 @@ const routes: Routes = [{
     { path: 'list/edit/:commodity_id', component: GoodsCreateComponent },
     { path: 'list/detail/:commodity_id', component: GoodsDetailComponent },
     { path: 'classify-list', component: ClassifyManagementComponent },
+    { path: 'list/statistic-detail/:commodity_id', component: StatisticDetailComponent },
     { path: '**', redirectTo: 'list', pathMatch: 'full' }
   ]
 }];

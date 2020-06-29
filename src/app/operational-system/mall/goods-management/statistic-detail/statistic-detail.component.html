@@ -1,0 +1,80 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'商品管理'" [level2Name]="'产品列表'" [level3Name]="'浏览量'" [level2RelativePath]="'../../list'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="total-statistic">
+
+    <div class="img-item">
+      <div class="img-box">
+        <ng-container *ngIf="commodityInfo.commodity_images.length > 0">
+          <img [src]="commodityInfo.commodity_images[0]" />
+        </ng-container>
+        <ng-container *ngIf="commodityInfo.commodity_images.length === 0">
+          <img src="/assets/images/image_space_3_2.png" />
+        </ng-container>
+      </div>
+      <div>
+        <a style="word-break: keep-all;text-align: left;font-size: 16px;"
+          [title]="globalService.limitStrLengthTitle(commodityInfo.commodity_name, 15)"
+          [routerLink]="['../../detail', commodityInfo.commodity_id]">
+          {{commodityInfo.commodity_name | zMaxLength:15}}
+        </a>
+        <div class="goods-tip">
+          <label *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type|mallCommodityType}}</label>
+          <label
+            *ngIf="commodityInfo.shipping_method">{{commodityInfo.shipping_method===1?'平台自营':'由'+commodityInfo.mall_business_name+'供应'}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="statistic-item">
+      <div class="count">{{commodityInfo.click_num||0}}</div>
+      <div class="target">累计访问量</div>
+    </div>
+    <div class="statistic-item">
+      <div class="count">{{commodityInfo.click_person||0}}</div>
+      <div class="target">累计访问人数</div>
+    </div>
+  </div>
+
+  <div class="table-item">
+    <div class="search-container">
+      <form class="search-form" autocomplete="off">
+        <div class="form-group">
+          <span class="control-label">日期：</span>
+          <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false
+            [nzDisabledDate]="disabledStartTime" nzPlaceHolder="开始日期">
+          </nz-date-picker>
+          <span style="margin: 0 7px">-</span>
+          <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+            nzPlaceHolder="结束日期">
+          </nz-date-picker>
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="zmy-table statistic-table">
+      <nz-table #statisticsTable [nzData]="nzSearchAssistant.nzData" [nzNoResult]="nzSearchAssistant.nzNoResultText"
+        [nzPageSize]="'15'" (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+        [(nzPageIndex)]="nzSearchAssistant.currentPage">
+        <thead>
+          <tr>
+            <th nzWidth="33%">日期</th>
+            <th nzWidth="33%">访问量</th>
+            <th>访问人数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of statisticsTable.data; let i=index">
+            <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
+            <td>{{data.click_num || 0}}</td>
+            <td>{{data.click_person || 0}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

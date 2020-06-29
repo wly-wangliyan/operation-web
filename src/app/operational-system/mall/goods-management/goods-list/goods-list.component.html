@@ -125,6 +125,7 @@
             <td class="operation">
               <a [title]="'查看'" [routerLink]="['../list/detail', commodity.commodity_id]">查看</a>
               <a [title]="'编辑'" [routerLink]="['../list/edit', commodity.commodity_id]">编辑</a>
+              <a [title]="'浏览量'" [routerLink]="['../list/statistic-detail', commodity.commodity_id]">浏览量</a>
               <a [title]="'删除'" (click)="onDeleteCommodityClick(commodity)">删除</a>
             </td>
           </tr>
