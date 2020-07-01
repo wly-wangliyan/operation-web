@@ -41,6 +41,11 @@ const routes: Routes = [{
       loadChildren: () => import('./wechat/wechat.module').then(m => m.WechatModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'integral-management', /** 积分管理 */
+      loadChildren: () => import('./integral-management/integral-management.module').then(m => m.IntegralManagementModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' }
   ]
 }];
