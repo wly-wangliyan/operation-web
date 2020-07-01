@@ -1,0 +1,98 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'积分管理'" [level2Name]="'用户积分管理'" [level3Name]="'积分明细'" [level2RelativePath]="'../../'">
+  </app-crumb>
+</div>
+<div class="content-flow">
+  <div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.tab_key" (ngModelChange)="onTabChange($event)">
+      <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'>{{tab.label}}</label>
+    </nz-radio-group>
+  </div>
+  <div class="table-container">
+    <div class="search-container" style="padding: 0;">
+      <form class="search-form">
+        <div class="form-group">
+          <span>{{searchParams.tab_key===1?'产生时间':searchParams.tab_key===2?'消耗时间':'失效时间'}}：</span>
+          <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+            name='order_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"
+            nzPlaceHolder="开始时间"></nz-date-picker>
+          <span class='line'>-</span>
+          <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+            name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm" nzPlaceHolder="结束时间">
+          </nz-date-picker>
+        </div>
+        <div class="form-group" *ngIf="searchParams.tab_key===1">
+          <span>发放状态：</span>
+          <select name="status" class="form-control" [(ngModel)]="searchParams.status"
+            (change)="onChangeStatus($event.target.value)">
+            <option value="">全部</option>
+            <option value="1">待发放</option>
+            <option value="2">已发放</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="search-btn-group">
+            <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="zmy-tabel">
+      <nz-table #userIntegralTable [nzData]="nzSearchAssistant.nzData" [nzNoResult]="nzSearchAssistant.nzNoResultText"
+        [nzPageSize]="'15'" (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+        [(nzPageIndex)]="nzSearchAssistant.currentPage">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <ng-container *ngIf="searchParams.tab_key===1">
+              <th>业务类型</th>
+              <th>规则ID</th>
+              <th>订单编号</th>
+              <th>获取积分数</th>
+              <th>产生时间</th>
+              <th>发放时间</th>
+              <th>发放状态</th>
+            </ng-container>
+
+            <ng-container *ngIf="searchParams.tab_key===2">
+              <th>订单编号</th>
+              <th>消耗积分数</th>
+              <th>消耗时间</th>
+            </ng-container>
+
+            <ng-container *ngIf="searchParams.tab_key===3">
+              <th>失效积分数</th>
+              <th>失效时间</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of userIntegralTable.data; let i=index">
+            <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
+            <ng-container *ngIf="searchParams.tab_key===1">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </ng-container>
+
+            <ng-container *ngIf="searchParams.tab_key===2">
+              <td></td>
+              <td></td>
+              <td></td>
+            </ng-container>
+
+            <ng-container *ngIf="searchParams.tab_key===3">
+              <td></td>
+              <td></td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

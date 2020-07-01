@@ -103,11 +103,11 @@ export class MenuOperationService {
   private geberateIntegralManagementMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('积分管理', null);
     systemMenu.icon = '/assets/images/menu/menu_wechat.png';
-    const subFinanceMenu1 = new SideMenuItem('积分兑换商城', '/main/operation/integral-management/integral-mall/goods-list', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('积分兑换商城', '/main/operation/integral-management/integral-mall', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    const subFinanceMenu2 = new SideMenuItem('用户积分管理', '/main/operation/integral-management/user-integral/user-list', systemMenu);
+    const subFinanceMenu2 = new SideMenuItem('用户积分管理', '/main/operation/integral-management/user-integral', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
-    const subFinanceMenu3 = new SideMenuItem('积分订单管理', '/main/operation/integral-management/integral-order/order-list', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('积分订单管理', '/main/operation/integral-management/integral-order', systemMenu);
     systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;

@@ -12,20 +12,23 @@ export class UserListComponent implements OnInit, NzSearchAdapter {
   public searchParams: SearchUserIntegralParams = new SearchUserIntegralParams();
   public nzSearchAssistant: NzSearchAssistant;
 
-  constructor(private globalService: GlobalService, private userIntegralHttpService: UserIntegralHttpService) { }
+  constructor(
+    private globalService: GlobalService,
+    private userIntegralHttpService: UserIntegralHttpService) { }
 
   ngOnInit() {
     this.nzSearchAssistant = new NzSearchAssistant(this);
     this.nzSearchAssistant.submitSearch(true);
   }
+
   /* SearchDecorator 接口实现 */
   /* 请求检索 */
   public requestSearch(): any {
-    // return this.goodsHttpService.requestStatisticData(this.commodity_id, this.searchParams);
+    // return this.userIntegralHttpService;
   }
 
   public continueSearch(url: string): any {
-    // return this.goodsHttpService.requestContinueStatisticData(url);
+    // return this.userIntegralHttpService.requestContinueData(url);
   }
 
   /* 生成并检查参数有效性 */
