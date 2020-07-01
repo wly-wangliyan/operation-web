@@ -1,0 +1,15 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'权益管理'" [level2Name]="'积分权益'"></app-crumb>
+</div>
+
+<div class="content-flow">
+  <div class="tab-bar-list-custom">
+    <ul>
+      <li [routerLink]="['common-rules']" (click)="onNavigatedToCommonRulesClick()" routerLinkActive="active">通用积分规则
+      </li>
+      <li [routerLink]="['custom-rules']" (click)="onNavigatedToCustomRulesClick()" routerLinkActive="active">自定义积分规则
+      </li>
+    </ul>
+  </div>
+  <router-outlet (activate)="onActivate($event)"></router-outlet>
+</div>

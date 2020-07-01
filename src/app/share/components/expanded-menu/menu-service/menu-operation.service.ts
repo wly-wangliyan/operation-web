@@ -22,7 +22,8 @@ export class MenuOperationService {
     menusItem.push(this.generateOperationConfigMenu());
     menusItem.push(this.generateCommentMenu());
     menusItem.push(this.generateAdvancedFunctionMenu());
-    menusItem.push(this.geberateIntegralManagementMenu());
+    menusItem.push(this.generateRightsManagementMenu());
+    menusItem.push(this.generateIntegralManagementMenu());
     return menusItem;
   }
 
@@ -100,7 +101,7 @@ export class MenuOperationService {
     return systemMenu;
   }
 
-  private geberateIntegralManagementMenu(): SideMenuItem {
+  private generateIntegralManagementMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('积分管理', null);
     systemMenu.icon = '/assets/images/menu/menu_wechat.png';
     const subFinanceMenu1 = new SideMenuItem('积分兑换商城', '/main/operation/integral-management/integral-mall', systemMenu);
@@ -111,7 +112,15 @@ export class MenuOperationService {
     systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;
-    return;
+  }
+
+  private generateRightsManagementMenu(): SideMenuItem {
+    const systemMenu = new SideMenuItem('权益管理', null);
+    systemMenu.icon = '/assets/images/menu/menu_wechat.png';
+    const subFinanceMenu1 = new SideMenuItem('积分权益', '/main/operation/rights-management/integral-rights/rights-list', systemMenu);
+    systemMenu.children.push(subFinanceMenu1);
+    this.routeLinkList.push(systemMenu);
+    return systemMenu;
   }
 }
 

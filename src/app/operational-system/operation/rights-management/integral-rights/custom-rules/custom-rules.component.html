@@ -1,0 +1,59 @@
+<div class="table-container">
+  <div class="search-container">
+    <form class="search-form">
+      <div class="form-group">
+        <span>状态：</span>
+        <select name="status" class="form-control">
+          <option value="">全部</option>
+          <option>生效中</option>
+          <option>失效中</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <span>名称：</span>
+        <input name="rule_name" class="form-control" placeholder="请输入名称" />
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="zmy-table">
+    <nz-table #rulesTable [nzData]="nzSearchAssistant.nzData" [nzNoResult]="nzSearchAssistant.nzNoResultText"
+      [nzPageSize]="'15'" (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+      [(nzPageIndex)]="nzSearchAssistant.currentPage">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>规则ID</th>
+          <th>规则名称</th>
+          <th>奖励条件</th>
+          <th>业务类型</th>
+          <th>奖励积分</th>
+          <th>规则更新时间</th>
+          <th>已奖励总积分</th>
+          <th>未发放积分</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of rulesTable.data; let i=index">
+          <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="operation"></td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+</div>

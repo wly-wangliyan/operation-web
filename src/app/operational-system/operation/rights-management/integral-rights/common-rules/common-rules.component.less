@@ -1,0 +1,30 @@
+.integral-card {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.card-box {
+  flex: .33;
+
+  div {
+    text-align: center;
+    line-height: 25px;
+
+    &:first-child {
+      font-size: 16px;
+    }
+
+    &:last-child {
+      font-size: 14px;
+      color: #3E71F7;
+    }
+  }
+
+  &:not(:last-child) {
+    border-right: 1px solid #e6e6e6;
+  }
+}

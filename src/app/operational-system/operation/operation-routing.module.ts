@@ -46,6 +46,11 @@ const routes: Routes = [{
       loadChildren: () => import('./integral-management/integral-management.module').then(m => m.IntegralManagementModule),
       canLoad: [AuthGuardService]
     },
+    {
+      path: 'rights-management', /** 权益管理 */
+      loadChildren: () => import('./rights-management/rights-management.module').then(m => m.RightsManagementModule),
+      canLoad: [AuthGuardService]
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' }
   ]
 }];
