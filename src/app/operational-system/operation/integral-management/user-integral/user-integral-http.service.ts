@@ -21,7 +21,7 @@ export class SearchIntegralDetailParams extends EntityBase {
   providedIn: 'root'
 })
 export class UserIntegralHttpService {
-  private domain = environment.OPERATION_SERVE;
+  private domain = environment.INTEGRAL_DOMAIN;
 
   constructor(private httpService: HttpService) { }
 }

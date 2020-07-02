@@ -1,16 +1,57 @@
 <div class="table-container">
   <div class="integral-card">
     <div class="card-box">
-      <div>累计发放积分</div>
       <div>500</div>
+      <div>累计发放积分</div>
     </div>
     <div class="card-box">
-      <div>累计消耗积分</div>
       <div>600</div>
+      <div>累计消耗积分</div>
     </div>
     <div class="card-box">
-      <div>已失效积分</div>
       <div>700</div>
+      <div>已失效积分</div>
     </div>
   </div>
+
+  <div class="zmy-table">
+    <nz-table #configTable [nzData]="nzDataList" nzFrontPagination="false" [nzNoResult]="noResultText">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>规则名称</th>
+          <th>规则详情</th>
+          <th>更新时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- *ngIf="nzDataList && nzDataList.length>0" -->
+        <ng-container>
+          <tr>
+            <td>1</td>
+            <td>积分有效期</td>
+            <td>2020年起， 间隔 1年 ， 04月03日清零</td>
+            <td>2020-06-22 17:27:01</td>
+            <td class="operation">
+              <a title="设置" (click)="onSettingClick()">设置</a>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>积分获取上限</td>
+            <td>永久有效</td>
+            <td>2020-06-22 17:27:01</td>
+            <td class="operation">
+              <a title="设置" (click)="onSettingClick()">设置</a>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+
+    </nz-table>
+  </div>
 </div>
+
+<app-valid-date-config-modal #validDateConfigModal></app-valid-date-config-modal>
+<app-limit-config-modal #limitConfigModal></app-limit-config-modal>

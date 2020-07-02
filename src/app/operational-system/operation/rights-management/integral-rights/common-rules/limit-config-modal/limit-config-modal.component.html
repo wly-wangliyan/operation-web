@@ -1,0 +1,36 @@
+<!-- 设置积分获取上限 -->
+<div class="modal fade" #configModal id="configModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">设置积分获取上限</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #configForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>&nbsp;</b>
+              <span>积分上限：</span>
+            </label>
+            <div class="control-input">
+              <nz-radio-group [(ngModel)]="limit_type" name="limit_type" (ngModelChange)="onModelChange()">
+                <label nz-radio nzValue=1>无上限</label>
+                <label nz-radio nzValue=2>每个用户每天最多获取<input type="text" nz-input /></label>
+              </nz-radio-group>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!configForm.form.valid"
+              (appZDebounceClick)="onCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -103,7 +103,7 @@ export class MenuOperationService {
 
   private generateIntegralManagementMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('积分管理', null);
-    systemMenu.icon = '/assets/images/menu/menu_wechat.png';
+    systemMenu.icon = '/assets/images/menu/menu_integral.png';
     const subFinanceMenu1 = new SideMenuItem('积分兑换商城', '/main/operation/integral-management/integral-mall', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     const subFinanceMenu2 = new SideMenuItem('用户积分管理', '/main/operation/integral-management/user-integral', systemMenu);
@@ -116,7 +116,7 @@ export class MenuOperationService {
 
   private generateRightsManagementMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('权益管理', null);
-    systemMenu.icon = '/assets/images/menu/menu_wechat.png';
+    systemMenu.icon = '/assets/images/menu/menu_rights.png';
     const subFinanceMenu1 = new SideMenuItem('积分权益', '/main/operation/rights-management/integral-rights/rights-list', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);

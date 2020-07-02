@@ -8,10 +8,17 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { IntegralRightsComponent } from './integral-rights.component';
 import { CommonRulesComponent } from './common-rules/common-rules.component';
 import { CustomRulesComponent } from './custom-rules/custom-rules.component';
+import { ValidDateConfigModalComponent } from './common-rules/valid-date-config-modal/valid-date-config-modal.component';
+import { LimitConfigModalComponent } from './common-rules/limit-config-modal/limit-config-modal.component';
 
 
 @NgModule({
-  declarations: [IntegralRightsComponent, CommonRulesComponent, CustomRulesComponent],
+  declarations: [
+    IntegralRightsComponent,
+    CommonRulesComponent,
+    CustomRulesComponent,
+    ValidDateConfigModalComponent,
+    LimitConfigModalComponent],
   imports: [
     CommonModule,
     IntegralRightsRoutingModule,
