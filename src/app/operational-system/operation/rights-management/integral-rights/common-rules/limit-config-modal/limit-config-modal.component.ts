@@ -26,7 +26,7 @@ export class LimitConfigModalComponent {
    * @param data CommonRuleEntity
    * @param sureFun 保存成功回调
    */
-  public open(data: CommonRuleEntity, sureFun: any) {
+  public open(data: CommonRuleEntity, sureFun?: any) {
     this.initForm(data);
     this.sureCallback = sureFun;
     timer(0).subscribe(() => $(this.configModal.nativeElement).modal());

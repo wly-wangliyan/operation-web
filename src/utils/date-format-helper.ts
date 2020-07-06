@@ -2,6 +2,7 @@
  * Created by zack on 5/5/17.
  */
 import { EntityBase } from './z-entity';
+import { isNullOrUndefined } from 'util';
 
 export class TimeItem extends EntityBase {
   public hour = '00';
@@ -389,5 +390,22 @@ export class DateFormatHelper {
     } else if (unit === 'mm') {
       return parseFloat(timeParam.hour) * 60 + parseFloat(timeParam.minute);
     }
+  }
+
+  /**
+   * 获取未来几年
+   * @param num >=0
+   * @param isIncludeThisYear 是否包含今年
+   */
+  public static getNextFewYears(num: number, isIncludeThisYear: boolean = true): Array<number> {
+    if (isNullOrUndefined(num) || num < 0) {
+      return [];
+    }
+    const yearList = [];
+    const startYear = isIncludeThisYear ? new Date().getFullYear() : new Date().getFullYear() + 1;
+    for (let i = 0; i < num; i++) {
+      yearList.push((startYear + i));
+    }
+    return yearList;
   }
 }

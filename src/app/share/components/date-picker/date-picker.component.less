@@ -1,0 +1,82 @@
+.date-picker-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1100;
+  display: none;
+}
+
+.date-picker-overlay-backdrop {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transition: opacity .4s cubic-bezier(.25, .8, .25, 1);
+  transition: opacity .4s cubic-bezier(.25, .8, .25, 1);
+  opacity: 0;
+  position: absolute;
+  pointer-events: auto;
+  z-index: 1100;
+}
+
+.date-picker-overlay-bounding-box {
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1110;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+.date-picker {
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  position: absolute;
+  width: 198px;
+  z-index: 1100;
+  margin-top: 10px;
+}
+
+.date-box {
+  // border: 1px solid #e6e6e6;
+  // background: #fff;
+  display: flex;
+
+}
+
+.month-box,
+.day-box {
+  flex: .5;
+  text-align: center;
+  height: 100px;
+  overflow-y: auto;
+  border-bottom: 1px solid #e6e6e6;
+
+  li {
+    cursor: pointer;
+    line-height: 25px;
+
+    &.active {
+      background-color: #3E71F7;
+      color: #fff;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.month-box {
+  border-right: 1px solid #e6e6e6;
+}

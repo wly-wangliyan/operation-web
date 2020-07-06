@@ -55,7 +55,9 @@ export class CommonRulesComponent implements OnInit {
       this.globalService.promptBox.open('通用积分规则主键获取失败，\n请刷新重试！', null, -1, null, false);
       return;
     }
-    this.validDateConfigModal.open(this.ruleDetail);
+    this.validDateConfigModal.open(this.ruleDetail, () => {
+      this.requestCommonIntegralRule();
+    });
   }
 
   // 设置积分上限

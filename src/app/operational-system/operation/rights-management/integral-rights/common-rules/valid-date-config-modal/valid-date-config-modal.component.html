@@ -1,0 +1,66 @@
+<!-- 设置积分有效期 -->
+<div class="modal fade" #configModal id="configModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common" id="configModal-dialog">
+    <div class="modal-content modal-content-common">
+      <div class="modal-header">
+        <span class="modal-title">设置积分有效期</span>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #configForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>间隔：</span>
+            </label>
+            <div class="control-input">
+              <select name="interval" [(ngModel)]="ruleData.interval" (change)="onChangeInterval($event)">
+                <option value="">请选择间隔</option>
+                <option value=1>1年</option>
+                <option value=2>2年</option>
+                <option value=3>3年</option>
+                <option value=4>4年</option>
+                <option value=5>5年</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>清零日：</span>
+            </label>
+            <div class="control-input" style="position: relative;">
+              <app-date-picker placeholder="请选择清零日" [month]="ruleData.month" [day]="ruleData.day" #datePicker
+                [offsetLeft]="offsetLeft" [offsetTop]="offsetTop">
+              </app-date-picker>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>开始年份：</span>
+            </label>
+            <div class="control-input">
+              <select name="start-year" [(ngModel)]="ruleData.start_year" (change)="onChangeYear($event)">
+                <option value="">请选择开始年份</option>
+                <option *ngFor="let year of yearList" [value]="year">{{year}}</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="modal-footer">
+            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+            <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!configForm.form.valid"
+              (appZDebounceClick)="onCheckClick()">确认
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
