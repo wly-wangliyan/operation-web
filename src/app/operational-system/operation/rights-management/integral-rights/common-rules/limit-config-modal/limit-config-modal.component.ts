@@ -34,6 +34,7 @@ export class LimitConfigModalComponent {
 
   // 初始化表单
   private initForm(data: CommonRuleEntity) {
+    this.isSaving = false;
     this.ruleData = new CommonRuleEntity();
     this.ruleData.config_id = data.config_id;
     this.ruleData.max_integral = data.max_integral;
@@ -61,9 +62,14 @@ export class LimitConfigModalComponent {
   public onCheckClick(): void {
     this.errMsg = '';
     if (this.isSaving) { return; }
-    if (this.limit_type === 1 && this.integral_count === 0) {
-      this.errMsg = '每个用户每天最多获取的积分数应大于0！';
-      return;
+    if (this.limit_type === 1) {
+      if (this.integral_count === 0) {
+        this.errMsg = '每个用户每天最多获取的积分数应大于0！';
+        return;
+      }
+      this.ruleData.max_integral = this.integral_count;
+    } else {
+      this.ruleData.max_integral = -1;
     }
     this.isSaving = true;
     this.integralRightsHttpService.requestEditCommonIntegralRule(this.ruleData.config_id, this.ruleData, 2)
@@ -71,7 +77,10 @@ export class LimitConfigModalComponent {
         $(this.configModal.nativeElement).modal('hide');
         this.sureCallbackInfo();
         this.globalService.promptBox.open('保存成功');
-      }, err => this.globalService.httpErrorProcess(err));
+      }, err => {
+        this.isSaving = false;
+        this.globalService.httpErrorProcess(err);
+      });
   }
 
   // 确定按钮回调

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { timer } from 'rxjs';
 import { MathHelper } from '../../../../utils/math-helper';
@@ -13,13 +13,13 @@ class MonthItem {
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.less']
 })
-export class DatePickerComponent implements OnInit, OnChanges {
+export class DatePickerComponent implements OnInit {
   @Input() public width = '198';
   @Input() public month: number; // 年
   @Input() public day: number; // 月、
-  @Input() public placeholder: string; // 输入框提示
-  @Input() public offsetLeft: number; // 插入位置偏移量
-  @Input() public offsetTop: number; // 插入位置偏移量
+  @Input() public placeholder: string; // 输入框提示ddd
+  @Output() public changeSelected = new EventEmitter();
+
   public elementId: string = Math.random().toString(36).substr(-10);
   public selectedMonth: MonthItem = new MonthItem();
   public selectedDay: string;
@@ -36,26 +36,9 @@ export class DatePickerComponent implements OnInit, OnChanges {
     this.initForm();
   }
 
-  ngOnChanges(changes: { [msg: string]: SimpleChange }) {
-    if ((changes.offsetLeft && changes.offsetLeft.currentValue || changes.offsetTop && changes.offsetTop.currentValue)) {
-      this.generatePosition();
-    }
-  }
-
-  // 根据插入位置偏移量使日期选择框保持跟随
-  public generatePosition() {
-    const box = document.getElementById(`date-picker-group_${this.elementId}`);
-    const datePickerEle = document.getElementById(`date-picker_${this.elementId}`);
-    const offsetLeft = this.offsetLeft + box.parentElement.parentElement.offsetLeft + 'px';
-    const offsetTop = this.offsetTop + box.parentElement.parentElement.offsetTop + 34 + 'px';
-    datePickerEle.style.top = offsetTop;
-    datePickerEle.style.left = offsetLeft;
-  }
-
   // 打开日期选择
   public onOpenDatePicker(event: any) {
     this.isShowDatePicker = true;
-    this.generatePosition();
     this.scrollToSelectedMonth();
     this.scrollToSelectedDay();
   }
@@ -73,6 +56,7 @@ export class DatePickerComponent implements OnInit, OnChanges {
     if (!this.selectedMonth.month || !this.selectedDay) {
       this.onClearForm();
     }
+    this.changeSelected.emit({ month: this.selectedMonth.month, day: this.selectedDay });
   }
 
   // 清除信息

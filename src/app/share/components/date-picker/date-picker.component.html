@@ -1,28 +1,25 @@
 <div [ngStyle]="{width:width+'px'}" id="date-picker-group_{{elementId}}">
   <input name="date-input_{{elementId}}" class="form-control" [ngStyle]="{width:width+'px'}" [(ngModel)]="dateStr"
     [disabled]="isShowDatePicker" [placeholder]="placeholder" (focus)="onOpenDatePicker($event)" />
-  <div class="date-picker-overlay-container" [ngStyle]="{display:isShowDatePicker?'block':'none'}">
-
-
-    <div class="date-picker" id="date-picker_{{elementId}}">
-      <div class="date-box">
-        <div class="month-box">
-          <ul>
-            <li *ngFor="let monthItem of month_list" (click)="onSelectMonth(monthItem)"
-              [class.active]="monthItem.month === selectedMonth.month">
-              <span>{{monthItem.month}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="day-box">
-          <ul>
-            <li *ngFor="let day of tempDays" (click)="onSelectDay(day)" [class.active]="day === selectedDay">
-              <span>{{day}}</span>
-            </li>
-          </ul>
-        </div>
+  <div class="date-picker" id="date-picker_{{elementId}}" [ngStyle]="{display:isShowDatePicker?'block':'none'}">
+    <div class="date-box">
+      <div class="month-box">
+        <ul>
+          <li *ngFor="let monthItem of month_list" (click)="onSelectMonth(monthItem)"
+            [class.active]="monthItem.month === selectedMonth.month">
+            <span>{{monthItem.month}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="day-box">
+        <ul>
+          <li *ngFor="let day of tempDays" (click)="onSelectDay(day)" [class.active]="day === selectedDay">
+            <span>{{day}}</span>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="date-picker-overlay-backdrop" (click)="onCloseDatePicker()"></div>
   </div>
+  <div class="date-picker-overlay-backdrop" (click)="onCloseDatePicker()"
+    [ngStyle]="{display:isShowDatePicker?'block':'none'}"></div>
 </div>
