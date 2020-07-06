@@ -221,7 +221,7 @@
   line-height: 27px;
   padding: 0 10px !important;
   float: right;
-  margin-top: 6px;
+  /* margin-top: 6px; */
 }
 
 .remark_td {
@@ -232,8 +232,14 @@
 
 .remark_info {
   display: inline-block;
-  line-height: 22px;
-  width: 75%;
+  line-height: 27px;
+  width: 80%;
+}
+
+.buyer_remark {
+  display: inline-block;
+  line-height: 27px;
+  width: 100%;
 }
 
 .card-span {
@@ -281,4 +287,8 @@ label {
   float: left;
   line-height: 22px;
   margin-right: 10px;
+}
+
+.ant-card-bordered {
+  /* border: none; */
 }
