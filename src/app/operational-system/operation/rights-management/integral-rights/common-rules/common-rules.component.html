@@ -1,21 +1,21 @@
 <div class="table-container">
   <div class="integral-card">
     <div class="card-box">
-      <div>500</div>
+      <div>{{statisticData.total_issue || 0}}</div>
       <div>累计发放积分</div>
     </div>
     <div class="card-box">
-      <div>600</div>
+      <div>{{statisticData.total_consume || 0}}</div>
       <div>累计消耗积分</div>
     </div>
     <div class="card-box">
-      <div>700</div>
+      <div>{{statisticData.total_invalid || 0}}</div>
       <div>已失效积分</div>
     </div>
   </div>
 
   <div class="zmy-table">
-    <nz-table #configTable [nzData]="nzDataList" nzFrontPagination="false" [nzNoResult]="noResultText">
+    <nz-table #configTable [nzData]="[[]]" nzFrontPagination="false" [nzNoResult]="noResultText">
       <thead>
         <tr>
           <th>序号</th>
@@ -26,27 +26,29 @@
         </tr>
       </thead>
       <tbody>
-        <!-- *ngIf="nzDataList && nzDataList.length>0" -->
-        <ng-container>
-          <tr>
-            <td>1</td>
-            <td>积分有效期</td>
-            <td>2020年起， 间隔 1年 ， 04月03日清零</td>
-            <td>2020-06-22 17:27:01</td>
-            <td class="operation">
-              <a title="设置" (click)="onSettingClick()">设置</a>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>积分获取上限</td>
-            <td>永久有效</td>
-            <td>2020-06-22 17:27:01</td>
-            <td class="operation">
-              <a title="设置" (click)="onSettingClick()">设置</a>
-            </td>
-          </tr>
-        </ng-container>
+        <tr>
+          <td>1</td>
+          <td>积分有效期</td>
+          <td>{{ruleDetail.start_year || 'x'}} 年起，间隔 {{ruleDetail.interval || 'x'}} 年，{{clearMonthStr ||'x'}} 月
+            {{clearDayStr ||'x'}} 日清零</td>
+          <td>{{ruleDetail.date_update_time?(ruleDetail.date_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}</td>
+          <td class="operation">
+            <a title="设置" (click)="onConfigValidDateClick()">设置</a>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>积分获取上限</td>
+          <td>
+            {{ruleDetail.max_integral?(ruleDetail.max_integral===-1?'无上限':('每个用户每天最多获取'+ruleDetail.max_integral+'积分')):'--'}}
+          </td>
+          <td>
+            {{ruleDetail.integral_update_time?(ruleDetail.integral_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}
+          </td>
+          <td class="operation">
+            <a title="设置" (click)="onConfigLimitClick()">设置</a>
+          </td>
+        </tr>
       </tbody>
 
     </nz-table>
