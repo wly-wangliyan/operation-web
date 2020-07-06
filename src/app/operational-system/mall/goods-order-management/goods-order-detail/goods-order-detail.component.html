@@ -84,7 +84,7 @@
           (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
       </div>
       <div nz-card-grid class="leftBootm-card">
-        <span class="remark_info" [title]='orderDetail.platform_desc'>
+        <span class="remark_info" [title]="orderDetail.platform_desc||''">
           <label style="padding-left: 16px;width: 120px;">备注（平台）: </label>
           <span>{{(orderDetail.platform_desc| zMaxLength:30) || '--'}}</span>
         </span>
@@ -92,12 +92,18 @@
           (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
       </div>
       <div nz-card-grid class="rightBootm-card">
-        <span class="remark_info" [title]='orderDetail.business_desc'>
+        <span class="remark_info" [title]="orderDetail.business_desc||''">
           <label style="width: 120px;">备注（商家）: </label>
           <span>{{(orderDetail.business_desc| zMaxLength:30) || '--'}}</span>
         </span>
         <button class='goods-btn' nz-button nzType="primary"
           (click)="onUpdateRemarkClick('备注（商家）',orderDetail)">编辑</button></div>
+      <div nz-card-grid>
+        <span class="buyer_remark" [title]="orderDetail.buyer_remark||''">
+          <label style="padding-left: 16px;width: 120px;">用户订单备注: </label>
+          <span>{{(orderDetail.buyer_remark| zMaxLength:30) || '--'}}</span>
+        </span>
+      </div>
     </nz-card>
     <nz-card nzTitle="" class="bottom-card">
       <div nz-card-grid>
@@ -212,7 +218,7 @@
           <div class="card-text">
             <label>退款备注：</label>
             <span class="card-span"
-              [title]='orderDetail.refund_remark'>{{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}</span>
+              [title]="orderDetail.refund_remark||''">{{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}</span>
           </div>
         </div>
       </div>
