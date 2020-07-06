@@ -12,15 +12,22 @@
 
           <div class="row">
             <label class="control-label">
-              <b>&nbsp;</b>
+              <b>*</b>
               <span>积分上限：</span>
             </label>
             <div class="control-input">
-              <nz-radio-group [(ngModel)]="limit_type" name="limit_type" (ngModelChange)="onModelChange()">
-                <label nz-radio nzValue=1>无上限</label>
-                <label nz-radio nzValue=2>每个用户每天最多获取<input type="text" nz-input /></label>
+              <nz-radio-group [(ngModel)]="limit_type" name="limit_type" (ngModelChange)="onModelChange($event)"
+                required>
+                <label nz-radio [nzValue]=-1>无上限</label>
+                <label nz-radio [nzValue]=1>每个用户每天最多获取<input type="text" name="integral_count" nz-input
+                    [(ngModel)]="integral_count" appIntNumber="true" maxlength="8" [required]="limit_type===1"
+                    (change)="errMsg=''" />
+                  积分</label>
               </nz-radio-group>
             </div>
+          </div>
+          <div class="err-message">
+            <span>{{ errMsg }}</span>
           </div>
 
           <div class="modal-footer">
