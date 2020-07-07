@@ -1,0 +1,131 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"></app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" [routerLink]="['../create']">
+      <a>新建</a>
+    </li>
+  </ul>
+</div>
+<div class="content-flow">
+  <div class="search-container">
+    <form class="search-form" autocomplete="off">
+      <div class="form-group">
+        <span>销售状态：</span>
+        <select class="form-control" style="width: 120px;" name="status" [(ngModel)]="searchParams.status">
+          <option value="">全部</option>
+          <option [value]=1>销售中</option>
+          <option [value]=2>已下架</option>
+        </select>
+      </div>
+      <!-- <div class="form-group">
+        <span>类型：</span>
+        <select class="form-control" style="width: 120px;" name="commodity_type"
+          [(ngModel)]="searchParams.commodity_type">
+          <option value="">全部</option>
+          <option value="1">实物商品</option>
+          <option value="2">虚拟商品</option>
+          <option value="3">优惠券商品</option>
+        </select>
+      </div> -->
+      <!-- <div class="form-group">
+        <span>供应方式：</span>
+        <select class="form-control" style="width: 120px;" name="shipping_method"
+          [(ngModel)]="searchParams.shipping_method">
+          <option value="">全部</option>
+          <option value="1">平台自营</option>
+          <option value="2">第三方供应</option>
+        </select>
+      </div> -->
+      <div class="form-group">
+        <span>产品名称：</span>
+        <input class="form-control" [(ngModel)]="searchParams.commodity_name" name="commodity_name"
+          placeholder="请输入产品名称" maxlength="20" appIgnoreSpace />
+      </div>
+      <div class="form-group">
+        <span>创建时间：</span>
+        <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false
+          [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm">
+        </nz-date-picker>
+        <span class='line'>-</span>
+        <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+          [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+        <div class="search-btn-group">
+          <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="table-container">
+    <div class="zmy-table">
+      <nz-table #commodityTable [nzData]="nzSearchAssistant.nzData" [nzNoResult]="nzSearchAssistant.nzNoResultText"
+        [nzPageSize]="'15'" (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+        [(nzPageIndex)]="nzSearchAssistant.currentPage">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th style="width: 18%">商品信息</th>
+            <th>兑换积分</th>
+            <th>浏览量</th>
+            <th>兑换量</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>销售状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let commodity of commodityTable.data; let commodityIndex = index">
+            <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+commodityIndex+1}}</td>
+            <td>
+              <div class="img-item">
+                <div class="img-box">
+                  <ng-container *ngIf="commodity.commodity_images.length > 0">
+                    <img [src]="commodity.commodity_images[0]" />
+                  </ng-container>
+                  <ng-container *ngIf="commodity.commodity_images === 0">
+                    <img src="/assets/images/image_space_3_2.png" />
+                  </ng-container>
+                </div>
+                <div style="display: grid">
+                  <a style="word-break: keep-all;text-align: left"
+                    [title]="globalService.limitStrLengthTitle(commodity.commodity_name, 15)"
+                    [routerLink]="['../list/detail', commodity.commodity_id]">
+                    {{commodity.commodity_name | zMaxLength:15}}
+                  </a>
+                  <div class="goods-tip">
+                    <label *ngIf="commodity.commodity_type">{{commodity.commodity_type|commodityType}}</label>
+                    <!-- <label
+                      *ngIf="commodity.shipping_method">{{commodity.shipping_method===1?'平台自营':'由'+commodity.mall_business_name+'供应'}}</label> -->
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>{{commodity.integral_amount || 0}}</td>
+            <td>
+              <div>访客:{{commodity.total_click_person||0}}人</div>
+              <div>浏览{{commodity.total_click_num||0}}次</div>
+            </td>
+            <td>{{commodity.exchange_amount || 0}}</td>
+            <td>{{commodity.created_time?(commodity.created_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}</td>
+            <td>
+              {{commodity.updated_time?(commodity.updated_time * 1000 | date: 'yyyy-MM-dd HH:mm'):'--'}}
+            </td>
+            <td>
+              <nz-switch [ngModel]="commodity.status===1 ? true : false" nzCheckedChildren="On"
+                nzUnCheckedChildren="Off" [nzControl]=true style="height: 10px"
+                (click)="onChangeSwitchStatus(commodity)">
+              </nz-switch>
+            </td>
+            <td class="operation">
+              <a title="置顶" *ngIf="commodity.isTop===2" (click)="onTopCommodityClick(commodity.commodity_id)">置顶</a>
+              <a title="编辑" [routerLink]="['../edit', commodity.commodity_id]">编辑</a>
+              <a title="浏览量" [routerLink]="['../statistic-detail', commodity.commodity_id]">浏览量</a>
+              <a title="删除" (click)="onDeleteCommodityClick(commodity.commodity_id)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

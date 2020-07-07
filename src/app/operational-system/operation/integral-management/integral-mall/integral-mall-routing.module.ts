@@ -4,6 +4,7 @@ import { AuthGuardService } from '../../../../core/auth-guard.service';
 import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { IntegralMallComponent } from './integral-mall.component';
 import { StatisticDetailComponent } from './statistic-detail/statistic-detail.component';
+import { CommodityListComponent } from './commodity-list/commodity-list.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {
-        path: 'list', component: StatisticDetailComponent
+        path: 'list', component: CommodityListComponent
       },
       {
         path: 'statistic-detail', component: StatisticDetailComponent

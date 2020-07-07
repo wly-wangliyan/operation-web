@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { DisabledTimeHelper } from 'src/utils/disabled-time-helper';
-import { IntegralMallHttpService, SearchStatisticParams } from '../integral-mall-http.service';
+import { IntegralMallHttpService, SearchDailyClickParams, IntegralCommodityEntity } from '../integral-mall-http.service';
 
 @Component({
   selector: 'app-statistic-detail',
@@ -12,11 +12,11 @@ import { IntegralMallHttpService, SearchStatisticParams } from '../integral-mall
 })
 export class StatisticDetailComponent implements OnInit, NzSearchAdapter {
   public nzSearchAssistant: NzSearchAssistant;
-  private searchParams: SearchStatisticParams = new SearchStatisticParams();
+  private searchParams: SearchDailyClickParams = new SearchDailyClickParams();
   public start_time: any = '';
   public end_time: any = '';
   private commodity_id: string;
-  public commodityInfo: any = undefined;
+  public commodityInfo: IntegralCommodityEntity = undefined;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -28,42 +28,41 @@ export class StatisticDetailComponent implements OnInit, NzSearchAdapter {
   }
 
   ngOnInit() {
-    this.requestGoodsDetail();
+    this.requestCommodityDetail();
     this.nzSearchAssistant = new NzSearchAssistant(this);
     this.nzSearchAssistant.submitSearch(true);
   }
 
-  private requestGoodsDetail(): void {
-    // this.integralMallHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
-    //   this.commodityInfo = data;
-    // }, err => {
-    //   if (!this.globalService.httpErrorProcess(err)) {
-    //     if (err.status === 404) {
-    //       this.globalService.promptBox.open('商品详情获取失败，请刷新后重试！', () => {
-    //         this.router.navigateByUrl('/main/mall/goods-order/list');
-    //       }, 2000, null, false);
-    //     }
-    //   }
-    // });
+  private requestCommodityDetail(): void {
+    this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
+      this.commodityInfo = data;
+    }, err => {
+      if (!this.globalService.httpErrorProcess(err)) {
+        if (err.status === 404) {
+          this.globalService.promptBox.open('商品详情获取失败，请刷新后重试！', () => {
+            window.history.back();
+          }, 2000, null, false);
+        }
+      }
+    });
   }
 
   /* SearchDecorator 接口实现 */
   /* 请求检索 */
   public requestSearch(): any {
-    return this.integralMallHttpService.requestStatisticData(this.commodity_id, this.searchParams);
+    return this.integralMallHttpService.requestDailyClickStatisticData(this.commodity_id, this.searchParams);
   }
 
   public continueSearch(url: string): any {
-    return this.integralMallHttpService.requestContinueStatisticData(url);
+    return this.integralMallHttpService.continueDailyClickStatisticData(url);
   }
 
   /* 生成并检查参数有效性 */
   public generateAndCheckParamsValid(): boolean {
-    this.searchParams.start_time = this.start_time
-      ? ((new Date(this.start_time).setHours(0, 0, 0, 0) / 1000)).toString() : 0;
-    this.searchParams.end_time = this.end_time
-      ? ((new Date(this.end_time).setHours(23, 59, 59, 0) / 1000)).toString()
-      : null;
+    const cTime = new Date().getTime() / 1000;
+    const sTime = this.start_time ? ((new Date(this.start_time).setHours(0, 0, 0, 0) / 1000)) : 0;
+    const eTime = this.end_time ? ((new Date(this.end_time).setHours(23, 59, 59, 0) / 1000)) : cTime;
+    this.searchParams.section = `${sTime},${eTime}`;
     return true;
   }
 

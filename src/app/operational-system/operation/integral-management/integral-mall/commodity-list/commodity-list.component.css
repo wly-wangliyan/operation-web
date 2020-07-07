@@ -1,0 +1,52 @@
+.search-container {
+  width: calc(100% - 30px);
+  margin-left: 15px;
+  padding: 0;
+}
+
+.img-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.img-box {
+  width: 90px;
+  position: relative;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.img-box img {
+  width: 90px;
+}
+
+.line {
+  margin: 0 8px;
+}
+
+.goods-tip {
+  text-align: left;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.goods-tip label {
+  min-width: 70px;
+  min-height: 20px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.goods-tip label:first-child {
+  background: #C6E2FF;
+  color: #409DFD;
+}
+
+.goods-tip label:nth-child(2) {
+  background: #E1F3D8;
+  color: #67C23A;
+}

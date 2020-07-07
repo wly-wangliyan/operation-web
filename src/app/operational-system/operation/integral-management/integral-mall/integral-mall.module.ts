@@ -10,10 +10,15 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-
+import { CommodityListComponent } from './commodity-list/commodity-list.component';
+import { CommodityTypePipe } from './share-pipes.pipe';
 
 @NgModule({
-  declarations: [IntegralMallComponent, StatisticDetailComponent],
+  declarations: [
+    IntegralMallComponent,
+    StatisticDetailComponent,
+    CommodityListComponent,
+    CommodityTypePipe],
   imports: [
     CommonModule,
     IntegralMallRoutingModule,

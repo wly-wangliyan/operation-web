@@ -14,25 +14,23 @@
           <img src="/assets/images/image_space_3_2.png" />
         </ng-container>
       </div>
-      <!-- <div>
+      <div>
         <a style="word-break: keep-all;text-align: left;font-size: 16px;"
           [title]="globalService.limitStrLengthTitle(commodityInfo.commodity_name, 15)"
           [routerLink]="['../../detail', commodityInfo.commodity_id]">
           {{commodityInfo.commodity_name | zMaxLength:15}}
         </a>
         <div class="goods-tip">
-          <label *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type|mallCommodityType}}</label>
+          <label *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type|commodityType}}</label>
         </div>
-      </div> -->
+      </div>
     </div>
     <div class="statistic-item">
-      <!-- {{commodityInfo.click_num||0}} -->
-      <div class="count">100</div>
+      <div class="count">{{commodityInfo.total_click_num||0}}</div>
       <div class="target">累计访问量</div>
     </div>
     <div class="statistic-item">
-      <!-- {{commodityInfo.click_person||0}} -->
-      <div class="count">100</div>
+      <div class="count">{{commodityInfo.total_click_person||0}}</div>
       <div class="target">累计访问人数</div>
     </div>
   </div>
@@ -69,7 +67,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of statisticsTable.data; let i=index">
-            <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
+            <td>{{data.ymd ? (data.ymd* 1000 | date:"y-MM-dd") : '--'}}</td>
             <td>{{data.click_num || 0}}</td>
             <td>{{data.click_person || 0}}</td>
           </tr>
