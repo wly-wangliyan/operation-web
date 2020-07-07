@@ -1,0 +1,104 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'权益管理'" [level2Name]="'积分权益'" [level3Name]="!rule_id?'新建积分规则':'编辑积分规则'"
+    [level2RelativePath]="!rule_id?'../rights-list/custom-rules':'../../rights-list/custom-rules'">
+  </app-crumb>
+</div>
+
+<div class="content-flow" *ngIf="ruleData">
+  <div class="content-container">
+    <form autocomplete="off" class="form-horizontal" #editRuleForm="ngForm">
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>业务类型</span>
+        </label>
+        <div class="control-input">
+          <select class="form-control" name="business_type" [(ngModel)]="ruleData.business_type" required
+            [disabled]="rule_id">
+            <option [value]=1>停车缴费</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>名称</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" [(ngModel)]="ruleData.name" placeholder="请输入1-50字名称" maxlength="50" name="name"
+            required>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>奖励分值</span>
+        </label>
+        <div class="control-input">
+          <input class="form-control" (focus)="clear()" [(ngModel)]="ruleData.award_integral" appIntNumber="true"
+            placeholder="请输入奖励分值" maxlength="8" name="award_integral" [appMinNumber]=1 required>
+        </div>
+      </div>
+
+      <div class="err-message">
+        <span>{{ this.errMessageGroup?.errJson?.award_integral.errMes }}</span>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>发放时间</span>
+        </label>
+        <div class="control-input" style="font-size: 14px;">
+          <span>购买后定时发放，每日&nbsp;</span>
+          <app-date-clock [has24]="false" [(hour)]="issued_time.hour" [(minute)]="issued_time.minute">
+          </app-date-clock>&nbsp;发放
+        </div>
+      </div>
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>领取设置</span>
+        </label>
+        <div class="control-input">
+          <nz-radio-group [(ngModel)]="rule_detail.type" name="rule_detail" (ngModelChange)="onChangeRuleType($event)"
+            required>
+            <label nz-radio [nzValue]=1>每成功交易 <input type="text" style="width: 100px;" name="order_number" nz-input
+                [(ngModel)]="rule_detail.order_number" appIntNumber="true" [appMinNumber]=1 maxlength="8"
+                [required]="rule_detail.type===1" (change)="clear()" /> 笔</label>
+            <label nz-radio [nzValue]=2>每笔每购买 <input type="text" style="width: 100px;" name="fee_amount" nz-input
+                [(ngModel)]="rule_detail.fee_amount" maxlength="8" appMaxNumber='99999.99' appFloatNumber
+                [required]="rule_detail.type===2" (change)="clear()" /> 元</label>
+          </nz-radio-group>
+        </div>
+      </div>
+
+      <div class="err-message">
+        <span>{{ this.errMessageGroup?.errJson?.rule_detail.errMes }}</span>
+      </div>
+
+      <div class="row">
+        <label class="control-label">
+          <b>*</b>
+          <span>停车类型设置</span>
+        </label>
+        <div class="control-input">
+          <nz-radio-group [(ngModel)]="ruleData.sub_business_type" name="detail_type" required>
+            <label nz-radio [nzValue]=-1>全部类型参加</label>
+          </nz-radio-group>
+        </div>
+      </div>
+      <div class="remark">如果参加多个积分规则，会重复送积分；发生部分退款时, 按照实际支付金额扣除应退积分。</div>
+
+      <div class="row">
+        <button name="sure_btn" style="margin-left: 140px;" type="button" class="sure-btn" nz-button nzType="primary"
+          [disabled]="!editRuleForm.form.valid" (appZDebounceClick)="onEditFormSubmit()">
+          保存
+        </button>
+        <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">取消</button>
+      </div>
+    </form>
+  </div>
+</div>
