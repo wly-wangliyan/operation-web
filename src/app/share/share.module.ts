@@ -76,6 +76,7 @@ import { BookingOrderStatusPipe } from './pipes/booking-order-type.pipe';
 import { PromptLoadingComponent } from './components/prompt-loading/prompt-loading.component';
 import { IntNumberDirective } from './directives/int-number.directive';
 import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe';
+import { MinNumberDirective } from './directives/min-number.directive';
 
 
 @NgModule({
@@ -174,7 +175,8 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     ZPhotoSelectUploadComponent,
     FloatNumberDirective,
     MaxNumberDirective,
-    IntNumberDirective
+    IntNumberDirective,
+    MinNumberDirective
   ],
   exports: [
     CommonModule,
@@ -261,7 +263,8 @@ import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe
     TxtCopyDirective,
     FloatNumberDirective,
     MaxNumberDirective,
-    IntNumberDirective
+    IntNumberDirective,
+    MinNumberDirective
   ],
 })
 export class ShareModule {

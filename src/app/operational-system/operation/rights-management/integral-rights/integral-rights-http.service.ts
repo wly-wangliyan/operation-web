@@ -45,7 +45,8 @@ export class RuleEntity extends EntityBase {
   public rule_id: string = undefined; // 主键
   public name: string = undefined; // 规则名称
   public city_code = '210100'; // 城市code 沈阳:"210100", 本溪："210500"
-  public business_type: number = undefined; // 业务类型(1停车缴费)
+  public business_type = 1; // 业务类型(1停车缴费)
+  public sub_business_type = -1; // 停车类型设置 -1:全部类型参加
   public award_integral: number = undefined; // 奖励分值
   public rule_detail: RuleDetail = undefined; // 规则详情
   public issued_time: number = undefined; // 发放时间 (当天的第几分钟,例:480代表8点, 1201代表20:01)
@@ -154,7 +155,7 @@ export class IntegralRightsHttpService {
    * 添加自定义积分规则
    * @param addParams {RuleEntity} 规则实体类
    */
-  public requestAddCustomIntegralRule(addParams: CommonRuleEntity): Observable<HttpResponse<any>> {
+  public requestAddCustomIntegralRule(addParams: RuleEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/rules`;
     return this.httpService.post(httpUrl, addParams.toEditJson());
   }
@@ -164,7 +165,7 @@ export class IntegralRightsHttpService {
    * @param rule_id 规则id
    * @param editParams {RuleEntity} 规则实体类
    */
-  public requestEditCustomIntegralRule(rule_id: string, editParams: CommonRuleEntity): Observable<HttpResponse<any>> {
+  public requestEditCustomIntegralRule(rule_id: string, editParams: RuleEntity): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/rules/${rule_id}`;
     return this.httpService.put(httpUrl, editParams.toEditJson());
   }

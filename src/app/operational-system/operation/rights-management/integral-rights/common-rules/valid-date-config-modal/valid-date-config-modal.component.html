@@ -16,7 +16,8 @@
               <span>间隔：</span>
             </label>
             <div class="control-input">
-              <select name="interval" [(ngModel)]="ruleData.interval" (change)="onChangeInterval($event)" required>
+              <select name="interval" class="form-control" style="width: 198px;" [(ngModel)]="ruleData.interval"
+                (change)="onChangeInterval($event)" required>
                 <option value="">请选择间隔</option>
                 <option value=1>1年</option>
                 <option value=2>2年</option>
@@ -45,7 +46,8 @@
               <span>开始年份：</span>
             </label>
             <div class="control-input">
-              <select name="start-year" [(ngModel)]="ruleData.start_year" (change)="onChangeYear($event)" required>
+              <select name="start-year" class="form-control" style="width: 198px;" [(ngModel)]="ruleData.start_year"
+                (change)="onChangeYear($event)" required>
                 <option value="">请选择开始年份</option>
                 <option *ngFor="let year of yearList" [value]="year">{{year}}</option>
               </select>

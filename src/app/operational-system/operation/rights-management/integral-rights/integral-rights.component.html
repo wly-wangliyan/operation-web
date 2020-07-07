@@ -1,5 +1,17 @@
 <div class="content-header">
   <app-crumb [level1Name]="'权益管理'" [level2Name]="'积分权益'"></app-crumb>
+  <ul class="header-right" *ngIf="currentComponent === 'CustomRulesComponent'">
+    <li>
+      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        [routerLink]="['../add-custom-rule']">
+        新建规则
+      </button>
+      <!-- <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+        [routerLink]="['../edit-custom-rule','aaa']">
+        编辑规则
+      </button> -->
+    </li>
+  </ul>
 </div>
 
 <div class="content-flow">

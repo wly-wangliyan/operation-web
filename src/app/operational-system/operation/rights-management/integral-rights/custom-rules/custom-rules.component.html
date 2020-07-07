@@ -1,17 +1,18 @@
 <div class="table-container">
   <div class="search-container padding-zero">
-    <form class="search-form">
+    <form class="search-form" autocomplete="off">
       <div class="form-group">
         <span>状态：</span>
-        <select name="status" class="form-control">
+        <select name="status" class="form-control" [(ngModel)]="searchParams.status">
           <option value="">全部</option>
-          <option>生效中</option>
-          <option>失效中</option>
+          <option [value]=1>生效中</option>
+          <option [value]=2>失效中</option>
         </select>
       </div>
       <div class="form-group">
         <span>名称：</span>
-        <input name="rule_name" class="form-control" placeholder="请输入名称" />
+        <input name="rule_name" class="form-control" placeholder="请输入名称" [(ngModel)]="searchParams.name"
+          maxlength="50" />
         <div class="search-btn-group">
           <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
           </button>
@@ -35,22 +36,34 @@
           <th>已奖励总积分</th>
           <th>未发放积分</th>
           <th>状态</th>
-          <th>操作</th>
+          <th nzWidth="10%">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let data of rulesTable.data; let i=index">
           <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="operation"></td>
+          <td [title]="data.rule_id||''">
+            <span *ngIf="data.rule_id" [appTxtCopy]="data.rule_id">
+              {{data.rule_id|zMaxLength:10}}
+            </span>
+            <span *ngIf="!data.rule_id">--</span>
+          </td>
+          <td [title]="data.name||''">{{data.name?(data.name|zMaxLength:10) :'--'}}</td>
+          <td>
+            {{data.rule_detail?(data.rule_detail.type===1?'每成功交易 '+data.rule_detail.order_number+' 笔':'每笔每购买 '+data.rule_detail.fee_amount|centPriceChange:' 元'):'--'}}
+          </td>
+          <td>{{data.business_type===1?'停车业务':'其他'}}</td>
+          <td>{{data.award_integral || 0}}</td>
+          <td>{{data.updated_time?(data.updated_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}</td>
+          <td>{{data.issued_integral||0}}</td>
+          <td>{{data.unissued_integral||0}}</td>
+          <td>{{data.status===1?'生效中':'失效中'}}</td>
+          <td class="operation">
+            <a title="编辑" [routerLink]="['../../edit-custom-rule',data.rule_id]">编辑</a>
+            <a title="停止" *ngIf="data.status===1" (click)="onChangeRuleStatus(data)">停止</a>
+            <a title="开启" *ngIf="data.status===2" (click)="onChangeRuleStatus(data)">开启</a>
+            <a title="删除" *ngIf="data.status===2" (click)="onDeleteRule(data.rule_id)">删除</a>
+          </td>
         </tr>
       </tbody>
     </nz-table>

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IntegralRightsComponent } from './integral-rights.component';
 import { CommonRulesComponent } from './common-rules/common-rules.component';
 import { CustomRulesComponent } from './custom-rules/custom-rules.component';
+import { EditRuleComponent } from './custom-rules/edit-rule/edit-rule.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,14 @@ const routes: Routes = [
       },
       { path: '**', redirectTo: 'common-rules', pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'add-custom-rule', /** 新建规则 */
+    component: EditRuleComponent
+  },
+  {
+    path: 'edit-custom-rule/:rule_id', /** 编辑规则 */
+    component: EditRuleComponent
   },
   { path: '**', redirectTo: 'rights-list', pathMatch: 'full' }
 ];
