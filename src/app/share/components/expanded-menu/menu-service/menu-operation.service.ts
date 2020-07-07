@@ -117,7 +117,7 @@ export class MenuOperationService {
   private generateRightsManagementMenu(): SideMenuItem {
     const systemMenu = new SideMenuItem('权益管理', null);
     systemMenu.icon = '/assets/images/menu/menu_rights.png';
-    const subFinanceMenu1 = new SideMenuItem('积分权益', '/main/operation/rights-management/integral-rights/rights-list', systemMenu);
+    const subFinanceMenu1 = new SideMenuItem('积分权益', '/main/operation/rights-management/integral-rights', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
     this.routeLinkList.push(systemMenu);
     return systemMenu;

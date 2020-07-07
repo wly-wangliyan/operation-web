@@ -24,11 +24,11 @@ export class UserListComponent implements OnInit, NzSearchAdapter {
   /* SearchDecorator 接口实现 */
   /* 请求检索 */
   public requestSearch(): any {
-    // return this.userIntegralHttpService;
+    return this.userIntegralHttpService.requestUserIntegralList(this.searchParams);
   }
 
   public continueSearch(url: string): any {
-    // return this.userIntegralHttpService.requestContinueData(url);
+    return this.userIntegralHttpService.continueUserIntegralList(url);
   }
 
   /* 生成并检查参数有效性 */

@@ -4,7 +4,7 @@
 <div class="content-flow">
   <div class="table-container">
     <div class="search-container">
-      <form class="search-form">
+      <form class="search-form" autocomplete="off">
         <div class="form-group">
           <span>用户ID：</span>
           <input name="user_id" class="form-control" [(ngModel)]="searchParams.user_id" maxlength="32"
@@ -13,7 +13,7 @@
         <div class="form-group">
           <span>手机号：</span>
           <input name="telephone" class="form-control" [(ngModel)]="searchParams.telephone" maxlength="12"
-            placeholder="输入手机号" />
+            placeholder="输入手机号" appIntNumber />
           <div class="search-btn-group">
             <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
             </button>
@@ -40,8 +40,8 @@
             <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
             <td>{{data.user_id||'--'}}</td>
             <td>{{data.telphone||'--'}}</td>
-            <td>{{data.integral|| 0}}</td>
-            <td>{{data.integral|| 0}}</td>
+            <td>{{data.current_integral|| 0}}</td>
+            <td>{{data.invalid_integral|| 0}}</td>
             <td class="operation">
               <a title="明细" [routerLink]="['../detail',data.user_id]">明细</a>
             </td>
