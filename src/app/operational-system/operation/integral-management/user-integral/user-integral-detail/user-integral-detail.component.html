@@ -4,7 +4,7 @@
 </div>
 <div class="content-flow">
   <div class="tab-bar-list">
-    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="searchParams.tab_key" (ngModelChange)="onTabChange($event)">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tab_key" (ngModelChange)="onTabChange($event)">
       <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'>{{tab.label}}</label>
     </nz-radio-group>
   </div>
@@ -12,7 +12,7 @@
     <div class="search-container" style="padding: 0;">
       <form class="search-form">
         <div class="form-group">
-          <span>{{searchParams.tab_key===1?'产生时间':searchParams.tab_key===2?'消耗时间':'失效时间'}}：</span>
+          <span>{{tab_key===1?'产生时间':tab_key===2?'消耗时间':'失效时间'}}：</span>
           <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
             name='order_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"
             nzPlaceHolder="开始时间"></nz-date-picker>
@@ -21,13 +21,13 @@
             name='order_end_time' [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm" nzPlaceHolder="结束时间">
           </nz-date-picker>
         </div>
-        <div class="form-group" *ngIf="searchParams.tab_key===1">
+        <div class="form-group" *ngIf="tab_key===1">
           <span>发放状态：</span>
-          <select name="status" class="form-control" [(ngModel)]="searchParams.status"
+          <select name="status" class="form-control" [(ngModel)]="searchParams.issue_status"
             (change)="onChangeStatus($event.target.value)">
             <option value="">全部</option>
-            <option value="1">待发放</option>
-            <option value="2">已发放</option>
+            <option [value]=2>待发放</option>
+            <option [value]=1>已发放</option>
           </select>
         </div>
         <div class="form-group">
@@ -45,23 +45,24 @@
         <thead>
           <tr>
             <th>序号</th>
-            <ng-container *ngIf="searchParams.tab_key===1">
+            <ng-container *ngIf="tab_key===1">
               <th>业务类型</th>
               <th>规则ID</th>
               <th>订单编号</th>
               <th>获取积分数</th>
+              <th>实际发放</th>
               <th>产生时间</th>
               <th>发放时间</th>
               <th>发放状态</th>
             </ng-container>
 
-            <ng-container *ngIf="searchParams.tab_key===2">
+            <ng-container *ngIf="tab_key===2">
               <th>订单编号</th>
               <th>消耗积分数</th>
               <th>消耗时间</th>
             </ng-container>
 
-            <ng-container *ngIf="searchParams.tab_key===3">
+            <ng-container *ngIf="tab_key===3">
               <th>失效积分数</th>
               <th>失效时间</th>
             </ng-container>
@@ -70,25 +71,39 @@
         <tbody>
           <tr *ngFor="let data of userIntegralTable.data; let i=index">
             <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
-            <ng-container *ngIf="searchParams.tab_key===1">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+            <ng-container *ngIf="tab_key===1">
+              <td>{{data.business_type===1?'停车缴费':'其他'}}</td>
+              <td [title]="data.gain_record_id||''">
+                <span *ngIf="data.gain_record_id" [appTxtCopy]="data.gain_record_id">
+                  {{data.gain_record_id|zMaxLength:10}}
+                </span>
+                <span *ngIf="!data.gain_record_id">--</span>
+              </td>
+              <td [title]="data.three_order_id||''">
+                <span *ngIf="data.three_order_id" [appTxtCopy]="data.three_order_id">
+                  {{data.three_order_id|zMaxLength:10}}
+                </span>
+                <span *ngIf="!data.three_order_id">--</span>
+              </td>
+              <td>{{data.due_integral || 0}}</td>
+              <td>
+                <span>{{data.real_integral||'--'}}</span>
+                <span *ngIf="data.real_integral && data.due_integral>data.real_integral">(超限)</span>
+              </td>
+              <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
+              <td>{{data.issue_time?(data.issue_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
+              <td>{{data.issue_status===1?'已发放':'待发放'}}</td>
             </ng-container>
 
-            <ng-container *ngIf="searchParams.tab_key===2">
-              <td></td>
-              <td></td>
-              <td></td>
+            <ng-container *ngIf="tab_key===2">
+              <td>{{data.order_id}}</td>
+              <td>{{data.consume_integral||0}}</td>
+              <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
             </ng-container>
 
-            <ng-container *ngIf="searchParams.tab_key===3">
-              <td></td>
-              <td></td>
+            <ng-container *ngIf="tab_key===3">
+              <td>{{data.invalid_integral||0}}</td>
+              <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
             </ng-container>
           </tr>
         </tbody>

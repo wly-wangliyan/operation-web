@@ -19,7 +19,6 @@ export class SearchIntegralDetailParams extends EntityBase {
   public user_id: string = undefined; // user_id
   public issue_status: any = ''; // 发放状态
   public section: string = undefined; // 产生时间/消耗时间/失效时间
-  public tab_key = 1;
   public page_num = 1;
   public page_size = 45;
 }
@@ -83,7 +82,7 @@ export class ConsumeRecordEntity extends EntityBase {
   public order_id: string = undefined; // 订单id
   public business_type: number = undefined; // 业务类型(1商城兑换)
   public consume_integral: number = undefined; // 消费积分
-  public created_time: number = undefined; // float 创建时间;
+  public created_time: number = undefined; // float 创建时间/消耗时间;
   public updated_time: number = undefined; // float 更新时间;
 }
 
@@ -102,8 +101,8 @@ export class InvalidRecordEntity extends EntityBase {
   public invalid_record_id: string = undefined; // 主键
   public ht_code: string = undefined; // ht_code;
   public user_id: string = undefined; // user_id
-  public invalid_integral: number = undefined; // 消费积分
-  public created_time: number = undefined; // float 创建时间;
+  public invalid_integral: number = undefined; // 失效积分
+  public created_time: number = undefined; // float 创建时间/失效时间;
   public updated_time: number = undefined; // float 更新时间;
 }
 
@@ -181,6 +180,25 @@ export class UserIntegralHttpService {
   public continueGainRecordList(url: string): Observable<GainRecordLinkResponse> {
     return this.httpService.get(url).pipe(map(res => new GainRecordLinkResponse(res)));
   }
+
+  /**
+   * 获取积分消耗记录
+   * @param searchParams
+   */
+  public requestConsumeRecordList(searchParams: SearchIntegralDetailParams): Observable<ConsumeRecordLinkResponse> {
+    const httpUrl = `${this.domain}/consume_records`;
+    return this.httpService.get(httpUrl, searchParams.json())
+      .pipe(map(res => new ConsumeRecordLinkResponse(res)));
+  }
+
+  /**
+   * 分页获取积分失效记录
+   * @param url
+   */
+  public continueConsumeRecordList(url: string): Observable<ConsumeRecordLinkResponse> {
+    return this.httpService.get(url).pipe(map(res => new ConsumeRecordLinkResponse(res)));
+  }
+
   /**
    * 获取积分失效记录
    * @param searchParams
@@ -192,7 +210,7 @@ export class UserIntegralHttpService {
   }
 
   /**
-   * 分页获取积分获取记录
+   * 分页获取积分失效记录
    * @param url
    */
   public continueInvalidRecordList(url: string): Observable<InvalidRecordLinkResponse> {
