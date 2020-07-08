@@ -77,19 +77,20 @@ export class EditCommodityParams extends EntityBase {
    * @param data 编辑积分商城商品
    * @param mallSource 选用商城商品
    */
-  constructor(data?: IntegralCommodityEntity, mallSource?: CommodityEntity) {
+  constructor(data?: any) {
     super();
-    if (data || mallSource) {
-      this.commodity_type = mallSource.commodity_type;
-      this.commodity_name = mallSource.commodity_name;
-      this.subtitle = mallSource.subtitle;
-      this.cover_image = mallSource.cover_image;
-      this.commodity_images = mallSource.commodity_images || [];
-      this.buy_max_num = mallSource.buy_max_num;
-      this.remark = mallSource.remark;
-      this.commodity_description = mallSource.commodity_description;
+    if (data instanceof IntegralCommodityEntity || data instanceof CommodityEntity) {
+      this.commodity_type = data.commodity_type;
+      this.commodity_name = data.commodity_name;
+      this.subtitle = data.subtitle;
+      this.cover_image = data.cover_image;
+      this.commodity_images = data.commodity_images || [];
+      this.buy_max_num = data.buy_max_num || -1;
+      this.remark = data.remark;
+      this.commodity_description = data.commodity_description;
+      this.other_fields = new CouponEntity();
     }
-    if (data) {
+    if (data instanceof IntegralCommodityEntity) {
       this.integral_amount = data.integral_amount;
       this.stock = data.stock;
       this.other_fields = data.other_fields || new CouponEntity();

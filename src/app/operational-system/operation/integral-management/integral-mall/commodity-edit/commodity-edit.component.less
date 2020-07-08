@@ -1,0 +1,107 @@
+.form-control:not(:disabled) {
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+:host ::ng-deep .ant-input:focus {
+  box-shadow: none !important;
+  border-color: #3E71F7 !important;
+}
+
+input {
+  text-indent: 8px;
+  padding: 4px 8px;
+  border-color: rgba(136, 136, 136, 0.3);
+
+  &:focus {
+    border: 1px solid #3e71f7;
+  }
+
+  &.no-focus-border:focus {
+    border-color: rgba(136, 136, 136, 0.3) !important;
+  }
+}
+
+.content-container .control-input {
+  width: 500px;
+  max-width: 900px;
+}
+
+.description-input {
+  margin-bottom: 0;
+}
+
+.cover-hint {
+  color: #23242F;
+  font-size: 13px;
+  letter-spacing: 0.15px;
+  margin-bottom: 10px;
+}
+
+.commodity-type-btn {
+  font-size: 14px;
+  width: 100px;
+  height: 57px;
+  line-height: 27px;
+  text-align: center;
+  color: #888 !important;
+  background: rgba(247, 248, 250, 1);
+  border: 1px dashed rgba(136, 136, 136, 1);
+  border-right: none;
+  display: grid;
+}
+
+.commodity-type-btn span:last-child {
+  font-size: 12px;
+}
+
+.commodity-type-btn:first-child {
+  border-radius: 1px 0 0 1px;
+}
+
+.commodity-type-btn:last-child {
+  border-right: 1px dashed rgba(136, 136, 136, 1);
+  border-radius: 0 1px 1px 0;
+}
+
+.commodity-type-btn:hover {
+  color: #3E71F7 !important;
+  background: rgba(62, 113, 247, 0.5);
+}
+
+.commodity-type-active-btn {
+  background: rgba(62, 113, 247, 0.2);
+  border: 1px dashed rgba(62, 113, 247, 1) !important;
+  color: #3E71F7 !important;
+}
+
+.one-word-lable {
+  width: 34px;
+  margin-left: -34px;
+  line-height: 34px;
+  text-align: center;
+}
+
+.control-label {
+  width: 125px !important;
+}
+
+.err-message {
+  font-size: 14px !important;
+  height: 20px;
+  margin-left: 125px;
+  margin-top: -18px;
+}
+
+.remark {
+  font-size: 12px;
+  margin-left: 140px;
+  margin-top: -20px;
+  margin-bottom: 40px;
+  color: #3E71F7;
+}
+
+.sure-btn {
+  margin-left: 125px;
+}

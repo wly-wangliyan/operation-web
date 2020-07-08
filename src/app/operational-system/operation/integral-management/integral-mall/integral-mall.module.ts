@@ -12,13 +12,15 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { CommodityListComponent } from './commodity-list/commodity-list.component';
 import { CommodityTypePipe } from './share-pipes.pipe';
+import { CommodityEditComponent } from './commodity-edit/commodity-edit.component';
 
 @NgModule({
   declarations: [
     IntegralMallComponent,
     StatisticDetailComponent,
     CommodityListComponent,
-    CommodityTypePipe],
+    CommodityTypePipe,
+    CommodityEditComponent],
   imports: [
     CommonModule,
     IntegralMallRoutingModule,

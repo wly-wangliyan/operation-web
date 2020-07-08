@@ -5,7 +5,7 @@ import { RouteMonitorService } from '../../../../core/route-monitor.service';
 import { IntegralMallComponent } from './integral-mall.component';
 import { StatisticDetailComponent } from './statistic-detail/statistic-detail.component';
 import { CommodityListComponent } from './commodity-list/commodity-list.component';
-
+import { CommodityEditComponent } from './commodity-edit/commodity-edit.component';
 
 const routes: Routes = [
   {
@@ -15,6 +15,12 @@ const routes: Routes = [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {
         path: 'list', component: CommodityListComponent
+      },
+      {
+        path: 'add', component: CommodityEditComponent
+      },
+      {
+        path: 'edit/:commodity_id', component: CommodityEditComponent
       },
       {
         path: 'statistic-detail', component: StatisticDetailComponent

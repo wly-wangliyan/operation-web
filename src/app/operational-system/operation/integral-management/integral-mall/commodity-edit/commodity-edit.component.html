@@ -1,0 +1,192 @@
+<div class="content-header">
+  <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"
+    [level3Name]="commodity_id?('编辑_'+commodityInfo.commodity_type|commodityType):'新建商品'"
+    [level2RelativePath]="commodity_id?'':''"></app-crumb>
+  <ul class="header-right" *ngIf="!commodity_id">
+    <li class="big-bg" (click)="onChooseMallGoodsClick()">
+      <a>选用</a>
+    </li>
+  </ul>
+</div>
+<div class="content-flow" *ngIf="commodityInfo">
+  <div class='content-container'>
+    <form class="form-horizontal" #commodityForm="ngForm" autocomplete="off">
+      <div class="card_content">
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>商品类型</span>
+          </label>
+          <div class="control-input">
+            <!-- <a name="commodity_type" class="commodity-type-btn"
+              [class.commodity-type-active-btn]="commodityInfo.commodity_type===1"
+              (click)="onChangeCommodityType('commodity_type', 1)">
+              <span>实物商品</span>
+              <span>物流发货</span>
+            </a>
+            <a name="commodity_type" class="commodity-type-btn"
+              [class.commodity-type-active-btn]="commodityInfo.commodity_type===2"
+              (click)="onChangeCommodityType('commodity_type', 2)">
+              <span>虚拟商品</span>
+              <span>无需配送</span>
+            </a> -->
+            <a name="commodity_type" class="commodity-type-btn"
+              [class.commodity-type-active-btn]="commodityInfo.commodity_type===3"
+              (click)="onChangeCommodityType('commodity_type', 3)" style="margin-right: 5px">
+              <span>优惠券商品</span>
+              <span>无需配送</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>商品名称</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name" name="commodity_name"
+              placeholder="请输入1-20个字商品名称" maxlength="20" appIgnoreSpace required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>副标题</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
+              placeholder="请输入0-80个字副标题" maxlength="80" appIgnoreSpace>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>兑换积分</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.integral_amount" name="integral_amount"
+              placeholder="请输入兑换积分" appIntNumber="true" maxlength="8" required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>兑换库存</span>
+          </label>
+          <div class="control-input">
+            <input type="text" class="form-control" [(ngModel)]="commodityInfo.stock" name="stock" placeholder="请输入兑换库存"
+              appIntNumber="true" maxlength="8" required>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>优惠券模板ID</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="3" placeholder="请输入优惠券模板ID，多个ID用英文逗号分隔"
+              [(ngModel)]="commodityInfo.other_fields.template_coupon_ids" name="template_coupon_ids"
+              onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
+              onkeydown="if(event.keyCode==13)return false;"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>券组ID</span>
+          </label>
+          <div class="control-input">
+            <textarea class="form-control" rows="3" placeholder="请输入券组ID，多个ID用英文逗号分隔"
+              [(ngModel)]="commodityInfo.other_fields.coupon_group_ids" name="coupon_group_ids"
+              onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
+              onkeydown="if(event.keyCode==13)return false;"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>封面图片</span>
+          </label>
+          <div>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+              [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event,'cover_image')" file_id="coverImg"
+              [imgReg]="imgReg" [imageWidth]="97*aspectRatio" [imageHeight]="97" [imageUrls]="coverImgList" #coverImg
+              [aspectRatio]="aspectRatio" [minCropBoxWidth]="345" [minCropBoxHeight]="194" [resizable]="true"
+              [imageShowWidth]="194*aspectRatio">
+            </app-z-photo-select>
+            <p class="cover-hint">注：尺寸750 × 388px，格式PNG或JPG，大小2M以内，最多上传1张</p>
+          </div>
+        </div>
+        <div class="err-message" style="margin-top: -10px">
+          <span>{{ this.errMessageGroup?.errJson?.cover_image.errMes }}</span>
+        </div>
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>商品图片</span>
+          </label>
+          <div>
+            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="6"
+              [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100"
+              [imageUrls]="commodityInfo.commodity_images" [imageShowWidth]="100" [resizable]="true"
+              (selectedImgChange)="onSelectedPicture($event,'commodity_images')" file_id="commodityImg" #commodityImg>
+            </app-z-photo-select>
+            <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</p>
+          </div>
+        </div>
+
+        <div class="err-message" style="margin-top: -10px;margin-bottom: 10px;">
+          <span>{{ this.errMessageGroup?.errJson?.commodity_images.errMes }}</span>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>限购</span>
+          </label>
+          <div class="control-input" style="width: 250px;font-size: 14px;">
+            <span>终身限购</span>
+            <input type="text" class="form-control no-focus-border" style="width: 160px;margin-left: 10px"
+              [(ngModel)]="commodityInfo.buy_max_num" name="buy_max_num" placeholder="不输则为不限制" maxlength="8"
+              appMinNumber="1" appIntNumber="true">
+            <label class="one-word-lable">件</label>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="commodityInfo.commodity_type!==1">
+          <label class="control-label">
+            <b>&nbsp;</b>
+            <span>核销描述</span>
+          </label>
+          <div class="control-input">
+            <textarea type="text" class="form-control" [(ngModel)]="commodityInfo.remark" name="remark" rows="3"
+              placeholder="请输入0-200字核销描述" maxlength="200"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="control-label">
+            <b>*</b>
+            <span>商品描述</span>
+          </label>
+          <div class="control-input description-input">
+            <app-z-text-ckeditor ckEditorId="commodityEditor"></app-z-text-ckeditor>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 40px;">
+          <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
+            (appZDebounceClick)="onAddOrEditCommoditySubmit()"
+            [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid || !CheckTabValia ">
+            保存
+          </button>
+          <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
+            取消
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
