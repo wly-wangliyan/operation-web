@@ -1,0 +1,31 @@
+<!--订单备注-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">{{title}}</span>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
+        </button>
+      </div>
+      <form *ngIf="integral_order_id" class="form-horizontal" #editForm="ngForm">
+        <div class="row">
+          <label class="control-label">
+            <span>{{title}}</span>
+          </label>
+          <div class=" control-input">
+            <textarea class='form-control' placeholder="200字以内..." [(ngModel)]="remark" name="remark"
+              maxlength="200"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" nz-button (click)="onClose()">取消</button>
+          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+            (appZDebounceClick)="onEditFormSubmit()">
+            {{sureName}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
