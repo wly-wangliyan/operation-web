@@ -1,5 +1,5 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品订单'" [level2Name]="'产品订单'"></app-crumb>
+  <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分订单管理'"></app-crumb>
   <!-- <ul class="header-right">
     <li class="big-bg">
       <a (click)='onExportOrderList()'>导出Excel</a>
@@ -97,28 +97,28 @@
                   [routerLink]="['../detail', order.order_id,order.detail[0]?.commodity_type]">
                   <button class='goods-btn' nz-button nzType="primary">查看详情</button>
                 </a>
-                <!-- <a title="备注" (click)="onUpdateRemarkClick('备注',order)">
-                    <button class='remark-btn' nz-button nzType="default">备注</button></a> -->
+                <a title="备注" (click)="onUpdateRemarkClick('备注',order)">
+                  <button class='remark-btn' nz-button nzType="default">备注</button></a>
               </td>
             </tr>
             <tr>
               <td></td>
-              <ng-container *ngIf="order.detail">
-                <td class="img-item">
-                  <img *ngIf="!order.detail.commodity_images||order.detail.commodity_images.length===0"
+              <ng-container *ngIf="order.detail&&order.detail.length>0">
+                <td class="img-item" *ngFor="let commodity of order.detail">
+                  <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
                     src="/assets/images/image_space_3_2.png" />
-                  <img *ngIf="order.detail.commodity_images&&order.detail.commodity_images.length>0"
+                  <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
                     src={{order.detail.commodity_images[0]}} />
                   <div style="display: grid;text-align: left;">
-                    <span [title]="order.detail.commodity_name||''">{{order.detail.commodity_name| zMaxLength:8}}</span>
+                    <span [title]="commodity.commodity_name||''">{{commodity.commodity_name| zMaxLength:8}}</span>
                   </div>
                   <div class="fee">
-                    <span>{{order.detail.integral_amount | centPriceChange:'元'}}</span>
-                    <span>x{{order.detail.amount||0}}</span>
+                    <span>{{commodity.integral_amount ||0}}</span>
+                    <span>x{{commodity.amount||0}}</span>
                   </div>
                 </td>
               </ng-container>
-              <ng-container *ngIf="!order.detail">
+              <ng-container *ngIf="!order.detail||order.detail.length===0">
                 <td>
                   <img src="/assets/images/image_space_3_2.png" />
                 </td>
@@ -133,9 +133,9 @@
 
               <td>
                 {{order | orderStatus}}
-                <ng-container *ngIf="order.detail?.commodity_type===3&&order.delivery_status===4">
-                  ({{order.failed_template_ids.length===order.detail?.template_coupon_ids.length&&
-                    order.failed_group_ids.length===order.detail?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
+                <ng-container *ngIf="order.detail[0]?.commodity_type===3&&order.delivery_status===4">
+                  ({{order.failed_template_ids.length===order.detail[0]?.template_coupon_ids.length&&
+                    order.failed_group_ids.length===order.detail[0]?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
                 </ng-container>
               </td>
               <td class="operation">
@@ -148,3 +148,5 @@
     </div>
   </div>
 </div>
+
+<app-order-remark #orderRemark></app-order-remark>

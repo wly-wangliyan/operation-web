@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { GlobalService } from 'src/app/core/global.service';
 import { IntegralOrderHttpService, SearchIntegralOrderParams, IntegralOrderEntity } from '../integral-order-http.service';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
+import { OrderRemarkComponent } from '../order-remark/order-remark.component';
 
 @Component({
   selector: 'app-order-list',
@@ -24,6 +25,8 @@ export class OrderListComponent implements OnInit, NzSearchAdapter {
   public order_end_time: any = ''; // 下单结束时间
   public pay_start_time: any = ''; // 支付开始时间
   public pay_end_time: any = ''; // 支付结束时间
+
+  @ViewChild('orderRemark', { static: true }) public orderRemark: OrderRemarkComponent;
 
   constructor(
     private globalService: GlobalService,
@@ -50,6 +53,16 @@ export class OrderListComponent implements OnInit, NzSearchAdapter {
       this.searchParams.pay_status = 3;
     }
     this.nzSearchAssistant.submitSearch(true);
+  }
+
+  /*
+    * 修改备注信息
+    * @param data IntegralOrderEntity 商品信息
+    * */
+  public onUpdateRemarkClick(title: string, data: IntegralOrderEntity) {
+    this.orderRemark.open(title, data.clone(), () => {
+      this.nzSearchAssistant.submitSearch(true);
+    }, '保存');
   }
 
   /* SearchDecorator 接口实现 */

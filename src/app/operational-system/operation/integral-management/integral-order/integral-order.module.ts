@@ -9,14 +9,23 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { OrderStatusPipe } from './share-pipes.pipe';
+import {
+  OrderStatusPipe,
+  CommodityDeliveryStatusPipe,
+  IntegralCommodityTypePipe
+} from './share-pipes.pipe';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { OrderRemarkComponent } from './order-remark/order-remark.component';
 
 @NgModule({
   declarations: [
     IntegralOrderComponent,
     OrderListComponent,
     OrderDetailComponent,
-    OrderStatusPipe],
+    OrderStatusPipe,
+    CommodityDeliveryStatusPipe,
+    IntegralCommodityTypePipe,
+    OrderRemarkComponent],
   imports: [
     CommonModule,
     IntegralOrderRoutingModule,
@@ -24,7 +33,8 @@ import { OrderStatusPipe } from './share-pipes.pipe';
     NzTableModule,
     NzButtonModule,
     NzDatePickerModule,
-    NzRadioModule
+    NzRadioModule,
+    NzCardModule
   ]
 })
 export class IntegralOrderModule { }
