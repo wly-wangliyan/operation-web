@@ -44,14 +44,13 @@ export class OrderDetailComponent implements OnInit {
     }
   }
 
-
   // 获取订单信息
   private getOrderDetail() {
     this.orderService.requestIntegralOrderDetail(this.integral_order_id).subscribe(res => {
       this.orderDetail = res;
-      this.orderStatusChange();
+      this.orderStatusFormat();
       this.commodityInfo = res.detail;
-      this.orderInfo = `${this.orderDetail.name}${this.orderDetail.telephone}`;
+      this.orderInfo = `${this.orderDetail.name || ''}${this.orderDetail.telephone || ''}`;
     }, err => {
       if (!this.globalService.httpErrorProcess(err)) {
         this.globalService.promptBox.open('订单详情获取失败！', null, 2000, null, false);
@@ -59,13 +58,32 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  private orderStatusChange() {
-    if (this.orderDetail.pay_status === 1) {
-      this.orderStepStatus = 0; // 未支付
-    } else if (this.orderDetail.order_status === 2 && this.orderDetail.pay_status === 2) {
+  // 订单流程状态
+  private orderStatusFormat() {
+    if (this.orderDetail.order_status === 1) {
+
+      if (this.orderDetail.pay_status === 1) {
+        this.orderStepStatus = 0; // 未支付
+      } else if (this.orderDetail.pay_status === 2) {
+
+        if (this.orderDetail.delivery_status === 1) {
+          this.orderStepStatus = 1; // 待发货
+        } else if (this.orderDetail.delivery_status === 2) {
+          if (this.orderDetail.is_delivery === 1) {
+            this.orderStepStatus = 2; // 已发货（物流发货）
+          } else {
+            this.orderStepStatus = 3; // 已发货（无须配送）
+          }
+        }
+      } else if (this.orderDetail.pay_status === 3) {
+        // if (this.orderDetail.refund_order && this.orderDetail.refund_order.refund_status === 2) {
+        //   this.orderStepStatus = 5; // 已关闭(全额退款)
+        // } else {
+        this.orderStepStatus = 6; // 已关闭(已取消：超时未支付)
+        // }
+      }
+    } else if (this.orderDetail.order_status === 2) {
       this.orderStepStatus = 4; // 已完成
-    } else if (this.orderDetail.pay_status === 3) {
-      this.orderStepStatus = 6; // 已关闭(已取消：超时未支付)
     }
   }
 

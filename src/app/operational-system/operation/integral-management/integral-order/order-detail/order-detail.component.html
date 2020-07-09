@@ -6,68 +6,62 @@
   <div class='des_card'>
     <nz-card nzTitle="" class="top-card">
       <div nz-card-grid class="leftTop-card">
-        <!-- 虚拟商品 -->
+
         <div class="delivery-status">
           {{orderStepStatus | commodityDeliveryStatus}}
-          <span *ngIf='orderStepStatus===orderStepStatus'><span class="line"></span>
-            <ng-container *ngIf="commodityInfo[0]?.commodity_type===3&&orderDetail.delivery_status===4">
-              ({{orderDetail.failed_template_ids.length===commodityInfo[0]?.template_coupon_ids.length&&
-              orderDetail.failed_group_ids.length===commodityInfo[0]?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
-            </ng-container>
-            <ng-container *ngIf="commodityInfo[0]?.commodity_type===3&&orderDetail.delivery_status!==4">
-              发货成功
-            </ng-container>
+          <!-- 优惠券商品 -->
+          <span *ngIf="orderStepStatus===4"><span class="line"></span>
+            <span *ngIf="orderDetail.delivery_status!==1&&orderDetail.delivery_status!==4"> 发货成功</span>
+            <span *ngIf="orderDetail.delivery_status===4"> 发货失败</span>
           </span>
 
         </div>
         <div style="margin: 20px 0 10px;">
           <div class="card-text">
             <label>订单编号：</label>
-            <span>{{orderDetail.integral_order_id || '--'}}</span>
+            <span [appTxtCopy]='orderDetail.integral_order_id'>{{orderDetail.integral_order_id || '--'}}</span>
           </div>
           <div class="card-text">
             <label>下单时间：</label>
-            <span>{{orderDetail.created_time ?(orderDetail.created_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
+            <span>{{orderDetail.created_time ?(orderDetail.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}</span>
           </div>
           <div class="card-text">
             <label>下单渠道：</label>
-            <span>{{orderDetail.client_id?'美行停车小程序':'--'}}</span>
+            <!-- 第一版只有美行停车小程序 -->
+            <span>美行停车小程序</span>
           </div>
         </div>
       </div>
       <div nz-card-grid class="rightTop-card">
         <div style="width: 67%;float: left; ">
-          <!-- 未支付/已关闭（超时未支付） -->
-          <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
-          <!-- 待发货 -->
-          <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
-          <!-- 虚拟商品：已发货 -->
-          <div *ngIf="type==='2' && (orderStepStatus!==0&&orderStepStatus!==1&&orderStepStatus!==6)">
+          <div *ngIf="type==='3'">
             <div class="card-title">
-              无需配送
+              自动发货
             </div>
             <div class="card-content">
-              此订单商品为虚拟商品，无需配送！
+              此订单商品为优惠券商品，无需配送！
             </div>
-          </div>
-          <!-- 实物商品--已发货（无需配送） -->
-          <div *ngIf="type==='1' && orderStepStatus===3">
-            <div class="card-title">
-              无需配送
-            </div>
-            <div class="card-content">
-              此订单无需物流配送，记得提醒买家确认收货！
+            <div *ngIf="orderDetail.delivery_status===4" class="card-content" style="color: red;">
+              发货失败，请人工处理。
             </div>
           </div>
         </div>
       </div>
-      <div nz-card-grid class="leftBootm-card">
-        <span class="remark_info" [title]="orderDetail.remark||''">
-          <label style="width: 120px;">备注（平台）: </label>
-          <span>{{(orderDetail.remark| zMaxLength:30) || '--'}}</span>
-        </span>
-        <button class='goods-btn' nz-button nzType="primary"
-          (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
+      <div style="width: 100%;float: left;">
+        <div class="leftBootm-card">
+          <span class="remark_info">
+            <label style="min-width: 110px;">备注（平台）：</label>
+            <span>{{orderDetail.remark || '--'}}</span>
+          </span>
+          <button class='goods-btn' nz-button nzType="primary"
+            (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
+        </div>
+        <div class="rightBootm-card">
+          <span class="remark_info">
+            <label style="min-width: 110px;">用户备注：</label>
+            <span>{{orderDetail.buyer_remark|| '--'}}</span>
+          </span>
+        </div>
       </div>
     </nz-card>
     <nz-card nzTitle="" class="bottom-card">
@@ -82,7 +76,7 @@
           </div>
           <div class="card-text">
             <label>兑换时间：</label>
-            <span>{{orderDetail.pay_time?(orderDetail.pay_time * 1000 | date:'y-MM-dd HH:mm'):'--'}}</span>
+            <span>{{orderDetail.pay_time?(orderDetail.pay_time * 1000 | date:'y-MM-dd HH:mm:ss'):'--'}}</span>
           </div>
         </div>
       </div>
@@ -94,7 +88,8 @@
           <div class="card-font">
             <label style="float: left;">联系人：</label>
             <span class="con-person">{{orderDetail.name||'--'}}</span>
-            <a *ngIf="orderDetail.name" [appTxtCopy]='orderInfo'><img src="/assets/images/copy.png" /></a>
+            <a *ngIf="orderDetail.name||orderDetail.telephone" [appTxtCopy]='orderInfo'><img
+                src="/assets/images/copy.png" /></a>
             <div style="clear: both;"></div>
           </div>
           <div class="card-text">
@@ -120,19 +115,23 @@
       <tbody>
         <tr *ngFor="let commodity of commodityInfo;let i=index">
           <ng-container>
-            <td class="img-item">
-              <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
-                src="/assets/images/image_space_3_2.png" />
-              <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
-                src={{commodity.commodity_images[0]}} />
-              <div style="display: grid;text-align: left;">
-                <span [title]="commodity.commodity_name||''">{{commodity.commodity_name | zMaxLength:8}}</span>
+            <td>
+              <div class="img-item">
+                <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
+                  src="/assets/images/icon_no_img.png" />
+                <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
+                  src={{commodity.commodity_images[0]}} />
+                <div style="display: grid;text-align: left;">
+                  <a
+                    [routerLink]="['/main/operation/integral-management/integral-mall/detail', commodity.commodity_id,commodity.commodity_type]">
+                    {{commodity.commodity_name||'--'}}</a>
+                </div>
               </div>
             </td>
           </ng-container>
           <ng-container *ngIf="!commodityInfo||commodityInfo.length===0">
             <td>
-              <img src="/assets/images/image_space_3_2.png" />
+              <img src="/assets/images/icon_no_img.png" />
             </td>
           </ng-container>
           <td>{{(commodity.commodity_type|integralCommodityType)||'--'}}</td>

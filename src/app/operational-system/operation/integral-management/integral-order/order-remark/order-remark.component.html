@@ -1,31 +1,33 @@
 <!--订单备注-->
-<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true" #projectPromptDiv>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
+<div class="modal fade " id="remarkModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+  #remarkPromptDiv aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-common">
+    <div class="modal-content modal-content-common">
       <div class="modal-header">
         <span class="modal-title">{{title}}</span>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onClose()">&times;
-        </button>
+        <button type="button" class="close" data-dismiss="modal" (click)="onClose()">×</button>
       </div>
-      <form *ngIf="integral_order_id" class="form-horizontal" #editForm="ngForm">
-        <div class="row">
-          <label class="control-label">
-            <span>{{title}}</span>
-          </label>
-          <div class=" control-input">
-            <textarea class='form-control' placeholder="200字以内..." [(ngModel)]="remark" name="remark"
-              maxlength="200"></textarea>
+      <div class="modal-body">
+        <form autocomplete="off" class="form-horizontal" #editForm="ngForm">
+
+          <div class="row">
+            <label class="control-label">{{title}}：</label>
+            <div class="control-input">
+              <textarea name="remark" rows="4" class="form-control" [(ngModel)]="remark" maxlength="200"
+                placeholder="200字以内...">
+              </textarea>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button class="close-btn" nz-button (click)="onClose()">取消</button>
-          <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
-            (appZDebounceClick)="onEditFormSubmit()">
-            {{sureName}}
-          </button>
-        </div>
-      </form>
+
+          <div class="modal-footer">
+            <button class="close-btn" nz-button (click)="onClose()">取消</button>
+            <button class="sure-btn" nz-button nzType="primary" [disabled]="!editForm.form.valid"
+              (appZDebounceClick)="onEditFormSubmit()">
+              {{sureName}}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

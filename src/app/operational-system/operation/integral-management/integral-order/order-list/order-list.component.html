@@ -77,24 +77,24 @@
         <thead>
           <tr>
             <th>序号</th>
-            <th nzAlign="left">商品/单价/数量</th>
+            <th nzAlign="left" nzWidth="50%">商品/单价/数量</th>
             <th>兑换积分</th>
-            <th style="width: 110px;">买家/收货人</th>
-            <th>订单状态</th>
-            <th>操作</th>
+            <th>买家/收货人</th>
+            <th style="min-width: 150px;">订单状态</th>
+            <!-- <th nzWidth="165px">操作</th> -->
           </tr>
         </thead>
         <tbody>
           <ng-template ngFor let-order let-i=index [ngForOf]="integralOrderTable.data">
             <tr>
               <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
-              <td colspan="4" nzAlign="left">
+              <td colspan="3" nzAlign="left">
                 订单号：{{order.integral_order_id}} /
                 下单时间：{{order.created_time ?(order.created_time* 1000 | date:"y-MM-dd HH:mm:ss"):'--'}}
               </td>
               <td>
                 <a style="margin-right: 10px;" title="查看详情"
-                  [routerLink]="['../detail', order.order_id,order.detail[0]?.commodity_type]">
+                  [routerLink]="['../detail', order.integral_order_id,order.detail[0]?.commodity_type]">
                   <button class='goods-btn' nz-button nzType="primary">查看详情</button>
                 </a>
                 <a title="备注" (click)="onUpdateRemarkClick('备注',order)">
@@ -106,15 +106,17 @@
               <ng-container *ngIf="order.detail&&order.detail.length>0">
                 <td class="img-item" *ngFor="let commodity of order.detail">
                   <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
-                    src="/assets/images/image_space_3_2.png" />
+                    src="/assets/images/icon_no_img.png" />
                   <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
-                    src={{order.detail.commodity_images[0]}} />
+                    src={{commodity.commodity_images[0]}} />
                   <div style="display: grid;text-align: left;">
-                    <span [title]="commodity.commodity_name||''">{{commodity.commodity_name| zMaxLength:8}}</span>
+                    <a
+                      [routerLink]="['/main/operation/integral-management/integral-mall/detail', commodity.commodity_id,commodity.commodity_type]">
+                      {{commodity.commodity_name||'--'}}</a>
                   </div>
                   <div class="fee">
                     <span>{{commodity.integral_amount ||0}}</span>
-                    <span>x{{commodity.amount||0}}</span>
+                    <span>x {{commodity.amount||0}}</span>
                   </div>
                 </td>
               </ng-container>
@@ -138,9 +140,7 @@
                     order.failed_group_ids.length===order.detail[0]?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
                 </ng-container>
               </td>
-              <td class="operation">
-                <a title="查看">查看</a>
-              </td>
+              <!-- <td class="operation"></td> -->
             </tr>
           </ng-template>
         </tbody>

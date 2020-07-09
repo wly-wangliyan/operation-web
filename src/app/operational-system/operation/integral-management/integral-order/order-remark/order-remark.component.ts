@@ -18,7 +18,7 @@ export class OrderRemarkComponent implements OnInit {
   public integral_order_id: string; // 订单id
   private sureCallback: any;
 
-  @ViewChild('projectPromptDiv', { static: true }) public projectPromptDiv: ElementRef;
+  @ViewChild('remarkPromptDiv', { static: true }) public remarkPromptDiv: ElementRef;
 
   constructor(
     private orderHttpService: IntegralOrderHttpService,
@@ -30,7 +30,7 @@ export class OrderRemarkComponent implements OnInit {
 
   // 弹框close
   public onClose() {
-    $(this.projectPromptDiv.nativeElement).modal('hide');
+    $(this.remarkPromptDiv.nativeElement).modal('hide');
   }
 
   /**
@@ -43,7 +43,7 @@ export class OrderRemarkComponent implements OnInit {
   public open(title: string, orderInfo: IntegralOrderEntity, sureFunc: any, sureName: string = '确定') {
     const openModal = () => {
       timer(0).subscribe(() => {
-        $(this.projectPromptDiv.nativeElement).modal('show');
+        $(this.remarkPromptDiv.nativeElement).modal('show');
       });
     };
     this.clear();

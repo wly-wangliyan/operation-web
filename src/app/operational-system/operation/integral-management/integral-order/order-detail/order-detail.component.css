@@ -231,9 +231,15 @@
 }
 
 .remark_info {
-  display: inline-block;
+  display: inline-flex;
   line-height: 27px;
   width: 80%;
+  color: rgba(35, 36, 47, 1);
+}
+
+.remark_info span {
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .buyer_remark {
@@ -269,12 +275,11 @@
   text-decoration: line-through !important;
 }
 
+.rightBootm-card,
 .leftBootm-card {
-  height: 100px;
-}
-
-.rightBootm-card {
-  height: 100px;
+  min-height: 100px;
+  padding: 24px;
+  box-shadow: 1px 0 0 0 rgba(136, 136, 136, 1), 0 1px 0 0 rgba(136, 136, 136, 1), 1px 1px 0 0 rgba(136, 136, 136, 1), 1px 0 0 0 rgba(136, 136, 136, 1) inset, 0 1px 0 0 rgba(136, 136, 136, 1) inset;
 }
 
 label {

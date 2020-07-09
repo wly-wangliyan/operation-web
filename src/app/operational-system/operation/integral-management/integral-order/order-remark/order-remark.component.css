@@ -1,0 +1,24 @@
+.form-control:focus {
+  box-shadow: none !important;
+}
+
+.form-control:not(.five-number):focus {
+  border-color: #3E71F7 !important;
+}
+
+.control-label {
+  text-align: right;
+  width: 150px !important;
+}
+
+.control-input {
+  width: 350px !important;
+}
+
+.control-input label {
+  margin-bottom: 0 !important;
+}
+
+.row {
+  justify-content: flex-start;
+}
