@@ -85,10 +85,10 @@
                 </span>
                 <span *ngIf="!data.three_order_id">--</span>
               </td>
-              <td>{{data.due_integral || 0}}</td>
+              <td>{{data.due_integral>0?'+':''}}{{data.due_integral || 0}}</td>
               <td>
-                <span>{{data.real_integral||'--'}}</span>
-                <span *ngIf="data.real_integral && data.due_integral>data.real_integral">(超限)</span>
+                <span>{{data.real_integral>=0?data.real_integral:'--'}}</span>
+                <span *ngIf="data.real_integral && data.due_integral>data.real_integral"> (超限)</span>
               </td>
               <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
               <td>{{data.issue_time?(data.issue_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
@@ -97,12 +97,12 @@
 
             <ng-container *ngIf="tab_key===2">
               <td>{{data.order_id}}</td>
-              <td>{{data.consume_integral||0}}</td>
+              <td>{{data.consume_integral>0?'-':''}}{{data.consume_integral||0}}</td>
               <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
             </ng-container>
 
             <ng-container *ngIf="tab_key===3">
-              <td>{{data.invalid_integral||0}}</td>
+              <td>{{data.invalid_integral>0?'-':''}}{{data.invalid_integral||0}}</td>
               <td>{{data.created_time?(data.created_time*1000|date:'yyyy-MM-dd HH:mm'):'--'}}</td>
             </ng-container>
           </tr>

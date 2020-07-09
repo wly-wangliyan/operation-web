@@ -93,9 +93,9 @@ export class MenuOperationService {
     systemMenu.icon = '/assets/images/menu/menu_wechat.png';
     const subFinanceMenu1 = new SideMenuItem('功能授权', '/main/operation/wechat/function-authorize', systemMenu);
     systemMenu.children.push(subFinanceMenu1);
-    const subFinanceMenu2 = new SideMenuItem('48小时推送', '/main/operation/wechat/push/push-list', systemMenu);
+    const subFinanceMenu2 = new SideMenuItem('48小时推送', '/main/operation/wechat/push/', systemMenu);
     systemMenu.children.push(subFinanceMenu2);
-    const subFinanceMenu3 = new SideMenuItem('推送记录', '/main/operation/wechat/push/push-log', systemMenu);
+    const subFinanceMenu3 = new SideMenuItem('推送记录', '/main/operation/wechat/push-log/log-list', systemMenu);
     systemMenu.children.push(subFinanceMenu3);
     this.routeLinkList.push(systemMenu);
     return systemMenu;

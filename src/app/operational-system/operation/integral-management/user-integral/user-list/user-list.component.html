@@ -39,7 +39,7 @@
           <tr *ngFor="let data of userIntegralTable.data; let i=index">
             <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
             <td>{{data.user_id||'--'}}</td>
-            <td>{{data.telphone||'--'}}</td>
+            <td>{{data.telephone||'--'}}</td>
             <td>{{data.current_integral|| 0}}</td>
             <td>{{data.invalid_integral|| 0}}</td>
             <td class="operation">

@@ -15,7 +15,7 @@ const routes: Routes = [{
     { path: '', redirectTo: 'push-list', pathMatch: 'full' },
     { path: 'push-list', component: PushListComponent },
     { path: 'add-push', component: AddPushComponent },
-    { path: 'push-log', component: PushLogListComponent },
+    { path: 'log-list', component: PushLogListComponent },
     { path: 'push-detail/:push_message_id', component: AddPushComponent },
     { path: '**', redirectTo: 'push-list', pathMatch: 'full' }
   ]
