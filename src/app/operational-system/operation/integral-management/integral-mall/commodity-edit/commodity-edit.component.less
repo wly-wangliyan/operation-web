@@ -65,9 +65,13 @@ input {
   border-radius: 0 1px 1px 0;
 }
 
-.commodity-type-btn:hover {
+.commodity-type-btn:not(.disabled):hover {
   color: #3E71F7 !important;
   background: rgba(62, 113, 247, 0.5);
+}
+
+.commodity-type-btn.disabled {
+  cursor: not-allowed;
 }
 
 .commodity-type-active-btn {

@@ -1,19 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
 import { IntegralMallHttpService, EditCommodityParams, CouponEntity } from '../integral-mall-http.service';
 import { ErrMessageGroup, ErrMessageBase } from '../../../../../../utils/error-message-helper';
+import { ChooseMallGoodModalComponent } from '../choose-mall-good-modal/choose-mall-good-modal.component';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-commodity-edit',
   templateUrl: './commodity-edit.component.html',
   styleUrls: ['./commodity-edit.component.less']
 })
-export class CommodityEditComponent implements OnInit {
-
+export class CommodityEditComponent implements OnInit, OnDestroy {
+  public sourceType: 1 | 2 | 3; // 1:新建2:编辑3:查看
   public commodity_id: string; // 商品id
+  public commodity_type: number; // 商品类型
   public commodityInfo: EditCommodityParams; // 商品详情
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
   public coverImgList: Array<any> = []; // 封面图片
@@ -24,6 +27,8 @@ export class CommodityEditComponent implements OnInit {
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
   @ViewChild('commodityImg', { static: false }) public commodityImgSelectComponent: ZPhotoSelectComponent;
+
+  @ViewChild('chooseGood', { static: false }) public chooseGoodComponent: ChooseMallGoodModalComponent;
 
   /**
    * 校验是否选择了图片
@@ -55,7 +60,7 @@ export class CommodityEditComponent implements OnInit {
    * @returns boolean
    */
   public get CheckEditorValid(): boolean {
-    if (!CKEDITOR.instances.commodityEditor.getData()) {
+    if (!CKEDITOR.instances.commodityEditor || !CKEDITOR.instances.commodityEditor.getData()) {
       return false;
     }
     return true;
@@ -66,8 +71,10 @@ export class CommodityEditComponent implements OnInit {
     private router: Router,
     private globalService: GlobalService,
     private integralMallHttpService: IntegralMallHttpService) {
+    this.sourceType = this.router.url.includes('/add') ? 1 : this.router.url.includes('/edit/') ? 2 : 3;
     this.route.paramMap.subscribe(map => {
       this.commodity_id = map.get('commodity_id');
+      this.commodity_type = Number(map.get('commodity_type'));
     });
   }
 
@@ -89,8 +96,11 @@ export class CommodityEditComponent implements OnInit {
       this.commodityInfo.other_fields = data.other_fields || new CouponEntity();
       this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
       this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
-      CKEDITOR.instances.commodityEditor.destroy(true);
-      CKEDITOR.replace('commodityEditor', { width: '900px' }).setData(this.commodityInfo.commodity_description);
+      timer(500).subscribe(() => {
+        const tempContent = this.commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
+        CKEDITOR.instances.commodityEditor.setData(tempContent);
+        this.sourceType === 3 && CKEDITOR.instances.commodityEditor.setReadOnly(true);
+      });
     }, err => {
       if (this.globalService.httpErrorProcess(err)) {
         this.globalService.promptBox.open('商品详情获取失败！', null, 2000, null, false);
@@ -108,7 +118,21 @@ export class CommodityEditComponent implements OnInit {
 
   /** 点击选用，打开选用商品弹框 */
   public onChooseMallGoodsClick() {
+    this.chooseGoodComponent.open(this.commodityInfo.commodity_type);
+  }
 
+  // 选用商城商品
+  public onSelectedMallGoodData(event: any) {
+    const commodityInfo = new EditCommodityParams(event.commodity);
+    const tempContent = commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
+    CKEDITOR.instances.commodityEditor.setData(tempContent);
+
+    if (commodityInfo.commodity_type === 3) {
+      commodityInfo.stock = this.commodityInfo.stock;
+      commodityInfo.integral_amount = this.commodityInfo.integral_amount;
+      commodityInfo.other_fields = this.commodityInfo.other_fields || new CouponEntity();
+    }
+    this.commodityInfo = commodityInfo;
   }
 
   /** 初始化错误信息 */
@@ -208,16 +232,6 @@ export class CommodityEditComponent implements OnInit {
     return true;
   }
 
-  // 选用商城商品
-  private onSelectedMallGoodData(event: any) {
-    const commodityInfo = new EditCommodityParams(event.data);
-    CKEDITOR.instances.commodityEditor.setData(this.commodityInfo.commodity_description);
-    if (commodityInfo.commodity_type === 3) {
-      commodityInfo.other_fields = this.commodityInfo.other_fields;
-    }
-    this.commodityInfo = commodityInfo;
-  }
-
   // 上传图片/视频错误信息处理
   private upLoadErrMsg(err: any) {
     this.onSubmitSubscription = null;
@@ -238,6 +252,10 @@ export class CommodityEditComponent implements OnInit {
       this.globalService.confirmationBox.close();
       window.history.back();
     });
+  }
+
+  public ngOnDestroy() {
+    CKEDITOR.instances.commodityEditor && CKEDITOR.instances.commodityEditor.destroy(true);
   }
 
   // 处理错误消息

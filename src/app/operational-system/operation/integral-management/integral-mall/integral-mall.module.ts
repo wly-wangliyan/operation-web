@@ -13,6 +13,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { CommodityListComponent } from './commodity-list/commodity-list.component';
 import { CommodityTypePipe } from './share-pipes.pipe';
 import { CommodityEditComponent } from './commodity-edit/commodity-edit.component';
+import { ChooseMallGoodModalComponent } from './choose-mall-good-modal/choose-mall-good-modal.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CommodityEditComponent } from './commodity-edit/commodity-edit.componen
     StatisticDetailComponent,
     CommodityListComponent,
     CommodityTypePipe,
-    CommodityEditComponent],
+    CommodityEditComponent,
+    ChooseMallGoodModalComponent],
   imports: [
     CommonModule,
     IntegralMallRoutingModule,

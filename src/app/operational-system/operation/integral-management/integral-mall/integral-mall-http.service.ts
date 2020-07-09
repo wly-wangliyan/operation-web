@@ -85,7 +85,7 @@ export class EditCommodityParams extends EntityBase {
       this.subtitle = data.subtitle;
       this.cover_image = data.cover_image;
       this.commodity_images = data.commodity_images || [];
-      this.buy_max_num = data.buy_max_num || -1;
+      this.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
       this.remark = data.remark;
       this.commodity_description = data.commodity_description;
       this.other_fields = new CouponEntity();
@@ -153,7 +153,7 @@ export class DailyClickLinkResponse extends LinkResponse {
 })
 export class IntegralMallHttpService {
 
-  private domain = environment.OPERATION_SERVE;
+  private domain = environment.INTEGRAL_DOMAIN;
 
   constructor(private httpService: HttpService) { }
 
@@ -196,8 +196,8 @@ export class IntegralMallHttpService {
    * @param editParams {EditCommodityParams}
    */
   public requestEditCommodityData(commodity_id: string, editParams: EditCommodityParams): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.domain}/commodities${commodity_id}`;
-    return this.httpService.post(httpUrl, editParams.json());
+    const httpUrl = `${this.domain}/commodities/${commodity_id}`;
+    return this.httpService.put(httpUrl, editParams.json());
   }
 
   /**
@@ -215,7 +215,7 @@ export class IntegralMallHttpService {
    * @param commodity_id 商品id
    * @param status 销售状态 1上架 2下架
    */
-  public requestChangeCommodityStatus(commodity_id: string, status: 1 | 2 = 1): Observable<HttpResponse<any>> {
+  public requestChangeCommodityStatus(commodity_id: string, status: 1 | 2): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/commodities/${commodity_id}/status`;
     return this.httpService.patch(httpUrl, { status });
   }
@@ -226,7 +226,7 @@ export class IntegralMallHttpService {
    */
   public requestDeleteCommodityData(commodity_id: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/commodities/${commodity_id}`;
-    return this.httpService.delete(httpUrl, { status });
+    return this.httpService.delete(httpUrl);
   }
 
   // 获取统计信息

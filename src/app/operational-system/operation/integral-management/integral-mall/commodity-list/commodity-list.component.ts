@@ -44,6 +44,8 @@ export class CommodityListComponent implements OnInit, NzSearchAdapter {
       });
   }
 
+
+  /** 删除商品 */
   public onDeleteCommodityClick(commodity_id: string): void {
     this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
       this.globalService.confirmationBox.close();
@@ -97,8 +99,8 @@ export class CommodityListComponent implements OnInit, NzSearchAdapter {
   /* 生成并检查参数有效性 */
   public generateAndCheckParamsValid(): boolean {
     const cTime = new Date().getTime() / 1000;
-    const sTime = this.start_time ? ((new Date(this.start_time).setHours(0, 0, 0, 0) / 1000)) : 0;
-    const eTime = this.end_time ? ((new Date(this.end_time).setHours(23, 59, 59, 0) / 1000)) : cTime;
+    const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
+    const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
     if (sTime > eTime) {
       this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
       return false;

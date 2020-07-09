@@ -20,10 +20,13 @@ const routes: Routes = [
         path: 'add', component: CommodityEditComponent
       },
       {
-        path: 'edit/:commodity_id', component: CommodityEditComponent
+        path: 'edit/:commodity_id/:commodity_type', component: CommodityEditComponent
       },
       {
-        path: 'statistic-detail', component: StatisticDetailComponent
+        path: 'detail/:commodity_id/:commodity_type', component: CommodityEditComponent
+      },
+      {
+        path: 'statistic-detail/:commodity_id', component: StatisticDetailComponent
       },
       { path: '**', redirectTo: 'list', pathMatch: 'full' }
     ]

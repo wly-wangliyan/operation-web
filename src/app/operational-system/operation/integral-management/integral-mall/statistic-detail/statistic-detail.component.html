@@ -2,7 +2,7 @@
   <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'" [level3Name]="'浏览量'" [level2RelativePath]="'../../list'">
   </app-crumb>
 </div>
-<div class="content-flow">
+<div class="content-flow" *ngIf="commodityInfo.commodity_id">
   <div class="total-statistic">
 
     <div class="img-item">
@@ -11,14 +11,13 @@
           <img [src]="commodityInfo.commodity_images[0]" />
         </ng-container>
         <ng-container *ngIf="!commodityInfo?.commodity_images ||commodityInfo.commodity_images.length === 0">
-          <img src="/assets/images/image_space_3_2.png" />
+          <img src="/assets/images/icon_no_img.png" />
         </ng-container>
       </div>
       <div>
         <a style="word-break: keep-all;text-align: left;font-size: 16px;"
-          [title]="globalService.limitStrLengthTitle(commodityInfo.commodity_name, 15)"
-          [routerLink]="['../../detail', commodityInfo.commodity_id]">
-          {{commodityInfo.commodity_name | zMaxLength:15}}
+          [routerLink]="['../../detail', commodityInfo.commodity_id,commodityInfo.commodity_type]">
+          {{commodityInfo.commodity_name || '--'}}
         </a>
         <div class="goods-tip">
           <label *ngIf="commodityInfo.commodity_type">{{commodityInfo.commodity_type|commodityType}}</label>

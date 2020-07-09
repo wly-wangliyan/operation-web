@@ -16,7 +16,7 @@ export class StatisticDetailComponent implements OnInit, NzSearchAdapter {
   public start_time: any = '';
   public end_time: any = '';
   private commodity_id: string;
-  public commodityInfo: IntegralCommodityEntity = undefined;
+  public commodityInfo: IntegralCommodityEntity = new IntegralCommodityEntity();
   constructor(
     private route: ActivatedRoute,
     private router: Router,

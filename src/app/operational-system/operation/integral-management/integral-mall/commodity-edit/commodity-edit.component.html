@@ -1,10 +1,14 @@
 <div class="content-header">
   <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"
-    [level3Name]="commodity_id?('编辑_'+commodityInfo.commodity_type|commodityType):'新建商品'"
-    [level2RelativePath]="commodity_id?'':''"></app-crumb>
-  <ul class="header-right" *ngIf="!commodity_id">
-    <li class="big-bg" (click)="onChooseMallGoodsClick()">
+    [level3Name]="sourceType===1?'新建商品':((sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType))"
+    [level2RelativePath]="commodity_id?'../../../list':'../list'">
+  </app-crumb>
+  <ul class="header-right">
+    <li class="big-bg" *ngIf="!commodity_id" (click)="onChooseMallGoodsClick()">
       <a>选用</a>
+    </li>
+    <li class="big-bg" *ngIf="sourceType===3" [routerLink]="['../../../edit/'+commodity_id+'/'+commodity_type]">
+      <a>编辑</a>
     </li>
   </ul>
 </div>
@@ -30,9 +34,10 @@
               <span>虚拟商品</span>
               <span>无需配送</span>
             </a> -->
-            <a name="commodity_type" class="commodity-type-btn"
+            <a name="commodity_type" class="commodity-type-btn" [class.disabled]="sourceType===3"
               [class.commodity-type-active-btn]="commodityInfo.commodity_type===3"
-              (click)="onChangeCommodityType('commodity_type', 3)" style="margin-right: 5px">
+              [hidden]="sourceType===3 && commodity_type!==3" (click)="onChangeCommodityType('commodity_type', 3)"
+              style="margin-right: 5px">
               <span>优惠券商品</span>
               <span>无需配送</span>
             </a>
@@ -46,7 +51,7 @@
           </label>
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name" name="commodity_name"
-              placeholder="请输入1-20个字商品名称" maxlength="20" appIgnoreSpace required>
+              placeholder="请输入1-20个字商品名称" maxlength="20" appIgnoreSpace required [disabled]="sourceType===3">
           </div>
         </div>
         <div class="row">
@@ -56,7 +61,7 @@
           </label>
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.subtitle" name="subtitle"
-              placeholder="请输入0-80个字副标题" maxlength="80" appIgnoreSpace>
+              placeholder="请输入0-80个字副标题" maxlength="80" appIgnoreSpace [disabled]="sourceType===3">
           </div>
         </div>
         <div class="row">
@@ -66,7 +71,7 @@
           </label>
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.integral_amount" name="integral_amount"
-              placeholder="请输入兑换积分" appIntNumber="true" maxlength="8" required>
+              placeholder="请输入兑换积分" appIntNumber="true" maxlength="8" required [disabled]="sourceType===3">
           </div>
         </div>
         <div class="row">
@@ -76,7 +81,7 @@
           </label>
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.stock" name="stock" placeholder="请输入兑换库存"
-              appIntNumber="true" maxlength="8" required>
+              appIntNumber="true" maxlength="8" required [disabled]="sourceType===3">
           </div>
         </div>
         <div class="row">
@@ -88,7 +93,7 @@
             <textarea class="form-control" rows="3" placeholder="请输入优惠券模板ID，多个ID用英文逗号分隔"
               [(ngModel)]="commodityInfo.other_fields.template_coupon_ids" name="template_coupon_ids"
               onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
-              onkeydown="if(event.keyCode==13)return false;"></textarea>
+              onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
           </div>
         </div>
 
@@ -101,7 +106,7 @@
             <textarea class="form-control" rows="3" placeholder="请输入券组ID，多个ID用英文逗号分隔"
               [(ngModel)]="commodityInfo.other_fields.coupon_group_ids" name="coupon_group_ids"
               onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
-              onkeydown="if(event.keyCode==13)return false;"></textarea>
+              onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
           </div>
         </div>
         <div class="row">
@@ -109,7 +114,7 @@
             <b>&nbsp;</b>
             <span>封面图片</span>
           </label>
-          <div>
+          <div *ngIf="sourceType!==3">
             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
               [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event,'cover_image')" file_id="coverImg"
               [imgReg]="imgReg" [imageWidth]="97*aspectRatio" [imageHeight]="97" [imageUrls]="coverImgList" #coverImg
@@ -117,6 +122,12 @@
               [imageShowWidth]="194*aspectRatio">
             </app-z-photo-select>
             <p class="cover-hint">注：尺寸750 × 388px，格式PNG或JPG，大小2M以内，最多上传1张</p>
+          </div>
+          <div *ngIf="sourceType===3">
+            <app-z-photo-select *ngIf='coverImgList.length!==0' [hasAddPicture]="false" [hasDeletePicture]="false"
+              [maxLength]="6" [imageUrls]="coverImgList" #coverImg>
+            </app-z-photo-select>
+            <img *ngIf='coverImgList.length ===0' src="/assets/images/image_space_3_2.png" />
           </div>
         </div>
         <div class="err-message" style="margin-top: -10px">
@@ -127,13 +138,19 @@
             <b>*</b>
             <span>商品图片</span>
           </label>
-          <div>
+          <div *ngIf="sourceType!==3">
             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [maxLength]="6"
               [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100" [imageHeight]="100"
               [imageUrls]="commodityInfo.commodity_images" [imageShowWidth]="100" [resizable]="true"
               (selectedImgChange)="onSelectedPicture($event,'commodity_images')" file_id="commodityImg" #commodityImg>
             </app-z-photo-select>
             <p class="cover-hint">注：尺寸800 × 800px，格式PNG或JPG，大小2M以内，最多上传6张</p>
+          </div>
+          <div *ngIf="sourceType===3">
+            <app-z-photo-select *ngIf='commodityInfo.commodity_images.length!==0' [hasAddPicture]="false"
+              [hasDeletePicture]="false" [maxLength]="6" [imageUrls]="commodityInfo.commodity_images" #commodityImg>
+            </app-z-photo-select>
+            <img *ngIf='commodityInfo.commodity_images.length ===0' src="/assets/images/icon_no_img.png" />
           </div>
         </div>
 
@@ -150,7 +167,7 @@
             <span>终身限购</span>
             <input type="text" class="form-control no-focus-border" style="width: 160px;margin-left: 10px"
               [(ngModel)]="commodityInfo.buy_max_num" name="buy_max_num" placeholder="不输则为不限制" maxlength="8"
-              appMinNumber="1" appIntNumber="true">
+              appMinNumber="1" appIntNumber="true" [disabled]="sourceType===3">
             <label class="one-word-lable">件</label>
           </div>
         </div>
@@ -162,7 +179,7 @@
           </label>
           <div class="control-input">
             <textarea type="text" class="form-control" [(ngModel)]="commodityInfo.remark" name="remark" rows="3"
-              placeholder="请输入0-200字核销描述" maxlength="200"></textarea>
+              placeholder="请输入0-200字核销描述" maxlength="200" [disabled]="sourceType===3"></textarea>
           </div>
         </div>
 
@@ -172,11 +189,11 @@
             <span>商品描述</span>
           </label>
           <div class="control-input description-input">
-            <app-z-text-ckeditor ckEditorId="commodityEditor"></app-z-text-ckeditor>
+            <app-z-text-ckeditor ckEditorId="commodityEditor" #commodityEditor></app-z-text-ckeditor>
           </div>
         </div>
 
-        <div class="row" style="margin-top: 40px;">
+        <div class="row" style="margin-top: 40px;" *ngIf="sourceType!==3">
           <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
             (appZDebounceClick)="onAddOrEditCommoditySubmit()"
             [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid || !CheckTabValia ">
@@ -190,3 +207,6 @@
     </form>
   </div>
 </div>
+
+<app-choose-mall-good-modal #chooseGood (selectedGoodEvent)="onSelectedMallGoodData($event)">
+</app-choose-mall-good-modal>
