@@ -52,7 +52,9 @@
         <tr>
           <td>3</td>
           <td>发放时间</td>
-          <td>停车缴费</td>
+          <td>
+            停车缴费：{{ruleDetail.issue_time && ruleDetail.issue_time.time>=0?'每日 '+(ruleDetail.issue_time.time*60|zDuration3)+' 定时发放':'--'}}
+          </td>
           <td>
             {{ruleDetail.issue_time_update_time?(ruleDetail.issue_time_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}
           </td>
