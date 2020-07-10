@@ -64,7 +64,7 @@ export class CommodityListComponent implements OnInit, NzSearchAdapter {
   // 变更销售状态
   public onChangeSwitchStatus(data: IntegralCommodityEntity): void {
     const swith_status = data.status === 1 ? 2 : 1;
-    const tipMsg = swith_status === 1 ? '开启' : '关闭';
+    const tipMsg = swith_status === 1 ? '上架' : '下架';
     this.integralMallHttpService.requestChangeCommodityStatus(data.commodity_id, swith_status).subscribe(() => {
       this.nzSearchAssistant.submitSearch(true);
       this.globalService.promptBox.open(`${tipMsg}成功`);

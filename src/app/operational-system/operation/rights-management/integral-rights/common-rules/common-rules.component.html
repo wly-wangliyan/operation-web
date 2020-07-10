@@ -15,7 +15,7 @@
   </div>
 
   <div class="zmy-table">
-    <nz-table #configTable [nzData]="[[]]" nzFrontPagination="false" [nzNoResult]="noResultText">
+    <nz-table #configTable [nzData]="[[]]" nzFrontPagination="false">
       <thead>
         <tr>
           <th>序号</th>
@@ -33,20 +33,31 @@
             {{clearDayStr ||'x'}} 日清零</td>
           <td>{{ruleDetail.date_update_time?(ruleDetail.date_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}</td>
           <td class="operation">
-            <a title="设置" (click)="onConfigValidDateClick()">设置</a>
+            <a title="设置" (click)="onOpenConfigModal(1)">设置</a>
           </td>
         </tr>
         <tr>
           <td>2</td>
           <td>积分获取上限</td>
           <td>
-            {{ruleDetail.max_integral?(ruleDetail.max_integral===-1?'无上限':('每个用户每天最多获取'+ruleDetail.max_integral+'积分')):'--'}}
+            {{ruleDetail.max_integral?(ruleDetail.max_integral===-1?'无上限':('每个用户每天最多获取 '+ruleDetail.max_integral+' 积分')):'--'}}
           </td>
           <td>
             {{ruleDetail.integral_update_time?(ruleDetail.integral_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}
           </td>
           <td class="operation">
-            <a title="设置" (click)="onConfigLimitClick()">设置</a>
+            <a title="设置" (click)="onOpenConfigModal(2)">设置</a>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>发放时间</td>
+          <td>停车缴费</td>
+          <td>
+            {{ruleDetail.issue_time_update_time?(ruleDetail.issue_time_update_time*1000|date:'yyyy-MM-dd HH:mm:ss'):'--'}}
+          </td>
+          <td class="operation">
+            <a title="设置" (click)="onOpenConfigModal(3)">设置</a>
           </td>
         </tr>
       </tbody>
@@ -57,3 +68,4 @@
 
 <app-valid-date-config-modal #validDateConfigModal></app-valid-date-config-modal>
 <app-limit-config-modal #limitConfigModal></app-limit-config-modal>
+<app-issue-time-modal #issueTimeModal></app-issue-time-modal>

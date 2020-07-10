@@ -6,6 +6,11 @@ import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 
+export class IssueTimeEntity extends EntityBase {
+  public business_type = 1; // 业务类型(1停车缴费)
+  public time: number = undefined; // 发放时间 单位分
+}
+
 // 通用积分规则
 export class CommonRuleEntity extends EntityBase {
   public config_id: string = undefined; // 主键
@@ -16,10 +21,19 @@ export class CommonRuleEntity extends EntityBase {
   public day: number = undefined; // 清零日=>日
   public start_year: any = ''; // int 开始年份
   public max_integral: number = undefined; // Integer	每日积分上限 -1无上限
+  public issue_time: IssueTimeEntity = undefined; // 发放时间
   public date_update_time: number = undefined; // 有效期更新时间
   public integral_update_time: number = undefined; // 积分上限更新时间
+  public issue_time_update_time: number = undefined; // 发放时间更新时间
   public created_time: number = undefined; // 创建时间
   public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'issue_time') {
+      return IssueTimeEntity;
+    }
+    return null;
+  }
 
   public toEditJson(): any {
     const json = this.json();
@@ -49,7 +63,7 @@ export class RuleEntity extends EntityBase {
   public sub_business_type = -1; // 停车类型设置 -1:全部类型参加
   public award_integral: number = undefined; // 奖励分值
   public rule_detail: RuleDetail = undefined; // 规则详情
-  public issued_time: number = undefined; // 发放时间 (当天的第几分钟,例:480代表8点, 1201代表20:01)
+  // public issued_time: number = undefined; // 发放时间 (当天的第几分钟,例:480代表8点, 1201代表20:01)
   public status: number = undefined; // 1开启 2关闭
   public issued_integral: number = undefined; // 已发放积分
   public unissued_integral: number = undefined; // 未发放积分
@@ -119,10 +133,10 @@ export class IntegralRightsHttpService {
    * @param editParams {CommonRuleEntity} 编辑所需参数
    * @param type {1|2} 1:设置有效期 2设置积分上限
    */
-  public requestEditCommonIntegralRule(config_id: string, editParams: CommonRuleEntity, type: 1 | 2): Observable<HttpResponse<any>> {
+  public requestEditCommonIntegralRule(config_id: string, editParams: CommonRuleEntity, type: 1 | 2 | 3): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/configs/${config_id}`;
     const params = editParams.toEditJson();
-    return this.httpService.put(httpUrl, { params, type });
+    return this.httpService.put(httpUrl, { ...params, type });
   }
 
   /**
@@ -186,7 +200,7 @@ export class IntegralRightsHttpService {
    */
   public requestChangeCustomIntegralRuleStatus(rule_id: string, status: 1 | 2): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/rules/${rule_id}/status`;
-    return this.httpService.patch(httpUrl);
+    return this.httpService.patch(httpUrl, { status });
   }
 
   /**

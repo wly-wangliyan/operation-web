@@ -13,6 +13,7 @@ import { ValidDateConfigModalComponent } from './common-rules/valid-date-config-
 import { LimitConfigModalComponent } from './common-rules/limit-config-modal/limit-config-modal.component';
 import { DatePickerModule } from '../../../../share/components/date-picker/date-picker.module';
 import { EditRuleComponent } from './custom-rules/edit-rule/edit-rule.component';
+import { IssueTimeModalComponent } from './common-rules/issue-time-modal/issue-time-modal.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { EditRuleComponent } from './custom-rules/edit-rule/edit-rule.component'
     CustomRulesComponent,
     ValidDateConfigModalComponent,
     LimitConfigModalComponent,
-    EditRuleComponent],
+    EditRuleComponent,
+    IssueTimeModalComponent],
   imports: [
     CommonModule,
     IntegralRightsRoutingModule,

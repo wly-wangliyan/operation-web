@@ -14,7 +14,7 @@ export class EditRuleComponent implements OnInit {
   public rule_id: string; // 规则id
   public ruleData: RuleEntity; // 规则详情
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup();
-  public issued_time: TimeItem = new TimeItem(); // 发放时间
+  // public issued_time: TimeItem = new TimeItem(); // 发放时间
   public rule_detail: RuleDetail = new RuleDetail(); // 领取设置
   private isSaving = false;
 
@@ -42,8 +42,8 @@ export class EditRuleComponent implements OnInit {
     this.integralRightsHttpService.requestCustomIntegralRuleDetailData(this.rule_id)
       .subscribe(res => {
         this.ruleData = res;
-        this.issued_time = res.issued_time ? DateFormatHelper.getMinuteOrTime(res.issued_time)
-          : new TimeItem();
+        // this.issued_time = res.issued_time ? DateFormatHelper.getMinuteOrTime(res.issued_time)
+        //   : new TimeItem();
         // 第一版只有停车缴费
         this.ruleData.business_type = this.ruleData.business_type || 1;
         if (this.ruleData.rule_detail) {
@@ -111,7 +111,7 @@ export class EditRuleComponent implements OnInit {
 
   // 基本信息表单提交校验
   private generateAnfCheckParamsValid(): boolean {
-    const issued_time = DateFormatHelper.getSecondTimeSum(this.issued_time, 'mm');
+    // const issued_time = DateFormatHelper.getSecondTimeSum(this.issued_time, 'mm');
 
     if (this.rule_detail.type === 2) {
       if (!this.rule_detail.fee_amount || Number(this.rule_detail.fee_amount) <= 0) {
@@ -124,7 +124,7 @@ export class EditRuleComponent implements OnInit {
       this.ruleData.rule_detail = this.rule_detail.clone();
     }
 
-    this.ruleData.issued_time = issued_time;
+    // this.ruleData.issued_time = issued_time;
     return true;
   }
 

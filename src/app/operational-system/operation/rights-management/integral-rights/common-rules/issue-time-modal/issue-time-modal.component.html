@@ -1,10 +1,10 @@
-<!-- 设置积分获取上限 -->
+<!-- 设置积分发放时间 -->
 <div class="modal fade" #configModal id="configModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-common">
     <div class="modal-content modal-content-common">
       <div class="modal-header">
-        <span class="modal-title">设置积分获取上限</span>
+        <span class="modal-title">设置积分发放时间</span>
         <button type="button" class="close" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
@@ -13,22 +13,27 @@
           <div class="row">
             <label class="control-label">
               <b>*</b>
-              <span>积分上限：</span>
+              <span>业务类型</span>
             </label>
             <div class="control-input">
-              <nz-radio-group [(ngModel)]="limit_type" name="limit_type" (ngModelChange)="onModelChange($event)"
-                required>
-                <label nz-radio [nzValue]=-1>无上限</label>
-                <label nz-radio [nzValue]=1>每个用户每天最多获取<input type="text" name="integral_count" nz-input
-                    [(ngModel)]="integral_count" [appIntNumber]="true" maxlength="8" [required]="limit_type===1"
-                    (change)="errMsg=''" [appMinNumber]="1" />
-                  积分</label>
-              </nz-radio-group>
+              <select class="form-control" name="business_type" [(ngModel)]="issue_time.business_type" required>
+                <option [value]=1>停车缴费</option>
+              </select>
             </div>
           </div>
-          <div class="err-message">
-            <span>{{ errMsg }}</span>
+
+          <div class="row">
+            <label class="control-label">
+              <b>*</b>
+              <span>发放时间</span>
+            </label>
+            <div class="control-input" style="font-size: 14px;">
+              <span>购买后定时发放，每日&nbsp;</span>
+              <app-date-clock [has24]="false" [(hour)]="time.hour" [(minute)]="time.minute">
+              </app-date-clock>&nbsp;发放
+            </div>
           </div>
+          <div class="remark">示例：每日8:00 定时发放，8:00后产生，次日发放</div>
 
           <div class="modal-footer">
             <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>

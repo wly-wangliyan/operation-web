@@ -16,7 +16,7 @@
               <span>间隔：</span>
             </label>
             <div class="control-input">
-              <select name="interval" class="form-control" style="width: 198px;" [(ngModel)]="ruleData.interval"
+              <select name="interval" class="form-control" [(ngModel)]="ruleData.interval"
                 (change)="onChangeInterval($event)" required>
                 <option value="">请选择间隔</option>
                 <option value=1>1年</option>
@@ -34,8 +34,8 @@
               <span>清零日：</span>
             </label>
             <div class="control-input" style="position: relative;">
-              <app-date-picker placeholder="请选择清零日" [month]="ruleData.month" [day]="ruleData.day" #datePicker
-                (changeSelected)="onChangeSelected($event)">
+              <app-date-picker placeholder="请选择清零日" [width]="428" [month]="ruleData.month" [day]="ruleData.day"
+                #datePicker (changeSelected)="onChangeSelected($event)">
               </app-date-picker>
             </div>
           </div>
@@ -46,13 +46,15 @@
               <span>开始年份：</span>
             </label>
             <div class="control-input">
-              <select name="start-year" class="form-control" style="width: 198px;" [(ngModel)]="ruleData.start_year"
+              <select name="start-year" class="form-control" [(ngModel)]="ruleData.start_year"
                 (change)="onChangeYear($event)" required>
                 <option value="">请选择开始年份</option>
                 <option *ngFor="let year of yearList" [value]="year">{{year}}</option>
               </select>
             </div>
           </div>
+          <div class="remark" style="margin-top: -15px;">示例：若设置为“1年 04月02日 2020”，则用户在2018年05月01日获得的积分，</div>
+          <div class="remark" style="margin-bottom: 20px;">将在2020年起 ，每年的04月02日 00:00:00失效</div>
 
           <div class="modal-footer">
             <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>

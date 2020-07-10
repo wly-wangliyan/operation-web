@@ -136,8 +136,7 @@
               <td>
                 {{order | orderStatus}}
                 <ng-container *ngIf="order.detail[0]?.commodity_type===3&&order.delivery_status===4">
-                  ({{order.failed_template_ids.length===order.detail[0]?.template_coupon_ids.length&&
-                    order.failed_group_ids.length===order.detail[0]?.coupon_group_ids.length?'全部发货失败':'部分发货失败'}})
+                  (发货失败)
                 </ng-container>
               </td>
               <!-- <td class="operation"></td> -->

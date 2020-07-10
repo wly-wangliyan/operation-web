@@ -102,7 +102,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         this.sourceType === 3 && CKEDITOR.instances.commodityEditor.setReadOnly(true);
       });
     }, err => {
-      if (this.globalService.httpErrorProcess(err)) {
+      if (!this.globalService.httpErrorProcess(err)) {
         this.globalService.promptBox.open('商品详情获取失败！', null, 2000, null, false);
       }
     });

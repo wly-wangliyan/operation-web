@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, OnChanges, SimpleChange, EventEmitter } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { timer } from 'rxjs';
 import { MathHelper } from '../../../../utils/math-helper';
@@ -13,7 +13,7 @@ class MonthItem {
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.less']
 })
-export class DatePickerComponent implements OnInit {
+export class DatePickerComponent implements OnInit, OnChanges {
   @Input() public width = '198';
   @Input() public month: number; // 年
   @Input() public day: number; // 月、
@@ -33,7 +33,12 @@ export class DatePickerComponent implements OnInit {
   ngOnInit() {
     this.initDaysOfMonth();
     this.initDaysList();
-    this.initForm();
+  }
+
+  ngOnChanges(changes: { [msg: string]: SimpleChange }) {
+    if ((changes.month || changes.day)) {
+      this.initForm();
+    }
   }
 
   // 打开日期选择

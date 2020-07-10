@@ -7,7 +7,8 @@
     <li class="big-bg" *ngIf="!commodity_id" (click)="onChooseMallGoodsClick()">
       <a>选用</a>
     </li>
-    <li class="big-bg" *ngIf="sourceType===3" [routerLink]="['../../../edit/'+commodity_id+'/'+commodity_type]">
+    <li class="big-bg" *ngIf="commodityInfo && sourceType===3"
+      [routerLink]="['../../../edit/'+commodity_id+'/'+commodity_type]">
       <a>编辑</a>
     </li>
   </ul>
@@ -125,7 +126,7 @@
           </div>
           <div *ngIf="sourceType===3">
             <app-z-photo-select *ngIf='coverImgList.length!==0' [hasAddPicture]="false" [hasDeletePicture]="false"
-              [maxLength]="6" [imageUrls]="coverImgList" #coverImg>
+              [maxLength]="6" [imageUrls]="coverImgList" [imageWidth]="97*aspectRatio" [imageHeight]="97" #coverImg>
             </app-z-photo-select>
             <img *ngIf='coverImgList.length ===0' src="/assets/images/image_space_3_2.png" />
           </div>
