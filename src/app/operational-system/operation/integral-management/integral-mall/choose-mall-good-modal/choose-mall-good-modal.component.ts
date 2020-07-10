@@ -25,7 +25,7 @@ export class ChooseMallGoodModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.nzSearchAssistant = new NzSearchAssistant(this);
+    this.nzSearchAssistant = new NzSearchAssistant(this, 5);
   }
 
   public open(commodity_type: number) {
