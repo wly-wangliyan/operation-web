@@ -149,9 +149,9 @@ export class ZDuration3Pipe implements PipeTransform {
     const hours = Math.floor(Number(totalSeconds / (60 * 60)));
     const minutes = Math.floor(Number(totalSeconds % 3600 / 60));
     const seconds = Math.floor(Number(totalSeconds % 3600 % 60));
-    const formatHour = hours ? hours > 10 ? hours : '0' + hours : '00';
-    const formatMinutes = minutes ? minutes > 10 ? minutes : '0' + minutes : '00';
-    const formatSeconds = seconds ? seconds > 10 ? seconds : '0' + seconds : '00';
+    const formatHour = hours ? hours >= 10 ? hours : '0' + hours : '00';
+    const formatMinutes = minutes ? minutes >= 10 ? minutes : '0' + minutes : '00';
+    const formatSeconds = seconds ? seconds >= 10 ? seconds : '0' + seconds : '00';
     let formatDate = formatHour + ':' + formatMinutes;
     if (!ignoreSeconds) {
       formatDate = formatDate + ':' + formatSeconds;
