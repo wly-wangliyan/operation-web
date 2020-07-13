@@ -51,7 +51,7 @@ export class OrderRemarkComponent implements OnInit {
     this.sureName = sureName;
     this.integral_order_id = orderInfo.integral_order_id;
     this.sureCallback = sureFunc;
-    this.remark = orderInfo.remark;
+    this.remark = orderInfo.order_remark;
     openModal();
     return;
   }
