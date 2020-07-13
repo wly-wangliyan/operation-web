@@ -21,8 +21,10 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
   public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
   public coverImgList: Array<any> = []; // 封面图片
   public aspectRatio = 1.93 / 1; // 截取图片比例
-  public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
+  public isCheckedCoupon = false;
+  public isCheckedCouponGroup = false;
   private onSubmitSubscription: any;
+  public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
 
   @ViewChild('coverImg', { static: false }) public coverImgSelectComponent: ZPhotoSelectComponent;
 
@@ -66,6 +68,18 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  /**
+   * 校验是否选中优惠券ID
+   * @readonly
+   * @type {boolean}
+   */
+  public get CheckConponValid(): boolean {
+    if (this.commodityInfo.commodity_type === 3) {
+      return !this.isCheckedCoupon && !this.isCheckedCouponGroup;
+    }
+    return false;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -94,6 +108,8 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
       this.commodityInfo = new EditCommodityParams(data);
       this.commodityInfo.other_fields = data.other_fields || new CouponEntity();
+      this.isCheckedCoupon = !!this.commodityInfo.other_fields.template_coupon_ids;
+      this.isCheckedCouponGroup = !!this.commodityInfo.other_fields.coupon_group_ids;
       this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
       this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
       timer(500).subscribe(() => {
@@ -114,6 +130,21 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
       return;
     }
     this.commodityInfo[name] = stutas;
+  }
+
+  /**
+   * 变更选中状态
+   * @param {(1 | 2)} type 1 变更优惠券模板ID选中状态  2:变更劵组ID选中状态
+   * @memberof CommodityEditComponent
+   */
+  public onChangeCouponCheck(event: any, type: 1 | 2): void {
+    if (!event) {
+      if (type === 1) {
+        this.commodityInfo.other_fields.template_coupon_ids = '';
+      } else {
+        this.commodityInfo.other_fields.coupon_group_ids = '';
+      }
+    }
   }
 
   /** 点击选用，打开选用商品弹框 */
@@ -203,22 +234,29 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
   // 校验商品参数是否有效
   private checkCommodityParamsValid(isCheckCommodity: boolean = true): boolean {
     this.clearErr();
-    if (this.commodityInfo.other_fields) {
-      if (this.commodityInfo.other_fields.template_coupon_ids) {
-        const ids = this.commodityInfo.other_fields.template_coupon_ids.split(',');
-        if (ids.some(id => !id)) {
-          this.globalService.promptBox.open('优惠券模板ID格式错误！', null, 2000, null, false);
-          return false;
-        }
+    if (this.commodityInfo.commodity_type === 3) {
+      if (!this.isCheckedCoupon && !this.isCheckedCouponGroup) {
+        this.globalService.promptBox.open('请填写优惠券ID！', null, 2000, null, false);
+        return false;
       }
-      if (this.commodityInfo.other_fields.coupon_group_ids) {
-        const ids = this.commodityInfo.other_fields.coupon_group_ids.split(',');
-        if (ids.some(id => !id)) {
-          this.globalService.promptBox.open('券组ID格式错误！', null, 2000, null, false);
-          return false;
+      if (this.commodityInfo.other_fields) {
+        if (this.isCheckedCoupon) {
+          const ids = this.commodityInfo.other_fields.template_coupon_ids.split(',');
+          if (ids.some(id => !id)) {
+            this.globalService.promptBox.open('优惠券模板ID格式错误！', null, 2000, null, false);
+            return false;
+          }
+        }
+        if (this.isCheckedCouponGroup) {
+          const ids = this.commodityInfo.other_fields.coupon_group_ids.split(',');
+          if (ids.some(id => !id)) {
+            this.globalService.promptBox.open('券组ID格式错误！', null, 2000, null, false);
+            return false;
+          }
         }
       }
     }
+
     if (isCheckCommodity) {
       if (!this.CheckImgValid) {
         this.errMessageGroup.errJson.commodity_images.errMes = '请选择商品图片！';

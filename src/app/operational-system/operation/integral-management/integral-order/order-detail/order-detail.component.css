@@ -65,6 +65,10 @@
   margin-left: 35px;
 }
 
+.delivery-status span:last-child {
+  margin-left: 15px;
+}
+
 .delivery-status .line {
   display: inline-block;
   width: 3px;

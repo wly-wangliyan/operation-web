@@ -88,26 +88,29 @@
         <div class="row">
           <label class="control-label">
             <b>*</b>
-            <span>优惠券模板ID</span>
+            <span>优惠券ID</span>
           </label>
-          <div class="control-input">
-            <textarea class="form-control" rows="3" placeholder="请输入优惠券模板ID，多个ID用英文逗号分隔"
-              [(ngModel)]="commodityInfo.other_fields.template_coupon_ids" name="template_coupon_ids"
-              onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
-              onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
-          </div>
-        </div>
-
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>券组ID</span>
-          </label>
-          <div class="control-input">
-            <textarea class="form-control" rows="3" placeholder="请输入券组ID，多个ID用英文逗号分隔"
-              [(ngModel)]="commodityInfo.other_fields.coupon_group_ids" name="coupon_group_ids"
-              onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
-              onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
+          <div class="control-input" style="flex-wrap: wrap;">
+            <div style="width: 100%;display: flex; margin-bottom: 10px;">
+              <label name="template_coupon_ids_label" nz-checkbox [(ngModel)]="isCheckedCoupon"
+                [disabled]="sourceType===3"
+                (ngModelChange)="onChangeCouponCheck($event,1)">优惠券模板ID</label>
+              <textarea class="form-control" rows="3" *ngIf="isCheckedCoupon"
+                placeholder="请输入优惠券模板ID，多个ID用英文逗号分隔"
+                [(ngModel)]="commodityInfo.other_fields.template_coupon_ids" name="template_coupon_ids"
+                onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
+                onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
+            </div>
+            <div style="width: 100%;display: flex;">
+              <label name="coupon_group_ids_label" nz-checkbox [(ngModel)]="isCheckedCouponGroup"
+                [disabled]="sourceType===3"
+                (ngModelChange)="onChangeCouponCheck($event,2)">券组ID</label>
+              <textarea class="form-control" rows="3" *ngIf="isCheckedCouponGroup"
+                placeholder="请输入券组ID，多个ID用英文逗号分隔"
+                [(ngModel)]="commodityInfo.other_fields.coupon_group_ids" name="coupon_group_ids"
+                onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required
+                onkeydown="if(event.keyCode==13)return false;" [disabled]="sourceType===3"></textarea>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -197,7 +200,8 @@
         <div class="row" style="margin-top: 40px;" *ngIf="sourceType!==3">
           <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
             (appZDebounceClick)="onAddOrEditCommoditySubmit()"
-            [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid || !CheckTabValia ">
+            [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid || !CheckTabValia 
+            || CheckConponValid ">
             保存
           </button>
           <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
