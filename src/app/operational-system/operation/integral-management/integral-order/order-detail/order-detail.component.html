@@ -121,7 +121,7 @@
                 <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
                   src={{commodity.commodity_images[0]}} />
                 <div style="display: grid;text-align: left;">
-                  <a
+                  <a style="word-break: keep-all;text-align: left;white-space: nowrap;"
                     [routerLink]="['/main/operation/integral-management/integral-mall/detail', commodity.commodity_id,commodity.commodity_type]">
                     {{commodity.commodity_name||'--'}}</a>
                 </div>
