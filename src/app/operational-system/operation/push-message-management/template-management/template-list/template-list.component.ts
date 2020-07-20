@@ -63,7 +63,19 @@ export class TemplateListComponent implements NzSearchAdapter {
         return differenceInCalendarDays(startValue, new Date()) > 0;
     };
 
-    public onDeleteClick(id: string) {
+    public onDeleteClick(commodity_id: string) {
+        this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
+            this.globalService.confirmationBox.close();
+            this.integralMallHttpService.requestDeleteCommodityData(commodity_id)
+                .subscribe(res => {
+                    this.nzSearchAssistant.submitSearch(true);
+                    this.globalService.promptBox.open('删除成功');
+                }, err => {
+                    if (!this.globalService.httpErrorProcess(err)) {
+                        this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                    }
+                });
+        });
     }
 
     /* SearchDecorator 接口实现 */
