@@ -1,0 +1,155 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'推送管理'" [level2Name]="'模板消息推送'" [level2RelativePath]="'../'" [level3Name]="levelName">
+    </app-crumb>
+</div>
+
+<div class="content-flow">
+    <div class="content-container">
+        <div class="content-flow">
+            <!-- 查看明细 -->
+            <form autocomplete="off" class="form-horizontal" #editTemplatePushModal="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>模板标题</span>
+                    </label>
+                    <div class="control-input">
+                        <select class="form-control" required>
+                            <option>2323</option>
+                            <option>4444</option>
+                        </select>
+                        <div class="operation-item"><p class="cover-hint">请选择适用得模板标题</p></div>
+                    </div>
+                </div>
+                <div class="row content-detail-container">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>详细内容</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" type="text">
+                        <div class="content-detail-item">
+                            <label class="control-label">
+                                详细内容
+                            </label>
+                            <input class="form-control" type="text">
+                        </div>
+                        <input class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="row" style="align-items: flex-start">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>用户范围</span>
+                    </label>
+                    <div class="control-input user-range">
+                        <div>
+                            <select class="form-control" required>
+                                <option>全部(沈阳)</option>
+                                <option>指定用户</option>
+                            </select>
+                            <div class="operation-item">
+                                <button type="button" nz-button nzType="primary">导入</button>
+                                <p class="cover-hint">支持Excel 、text 等常用格式</p>
+                            </div>
+                        </div>
+                        <textarea type="text" class="form-control" rows="3"
+                                  placeholder="输入用户ID，多个用户使用英文逗号分隔"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>落地页</span>
+                    </label>
+                    <div class="control-input">
+                        <select class="form-control" style="width: 150px">
+                            <option value=''>请选择</option>
+                            <option value=2>H5</option>
+                            <option value=1>小程序原生页</option>
+                        </select>
+                        <input class="form-control" placeholder="请输入跳转URL"
+                               maxlength="2000" autocomplete="off"
+                               style="border-left: none!important;width: 300px">
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>推送时间</span>
+                    </label>
+                    <div class="control-input">
+                        <nz-radio-group>
+                            <label nz-radio [nzValue]="1">立即推送</label>
+                            <label nz-radio [nzValue]="2">定时推送</label>
+                            <label nz-radio [nzValue]="3">周期推送</label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                    </label>
+                    <div class="control-input">
+                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledStartTime"
+                                        name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                    </label>
+                    <div class="control-input periodic-push-container">
+                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledStartTime"
+                                        name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                        <span class='line'>-</span>
+                        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledStartTime"
+                                        name='end_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                        <label nz-checkbox>
+                            不限
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                    </label>
+                    <div class="control-input">
+                        <nz-checkbox-group [(ngModel)]="checkOptionsOne" name="checkOptionsOne"
+                                           (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
+                        <div class="week-selected-checkbox">
+                            <span>全选</span>
+                            <span>工作日</span>
+                            <span>周末</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label"></label>
+                    <div class="control-input">
+                        <nz-time-picker nzFormat="HH:mm"></nz-time-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>备注</span>
+                    </label>
+                    <div class="control-input">
+                      <textarea type="text" class="form-control" rows="3" maxlength="100"
+                                placeholder="输入描述，100字以内，仅用于后台查看"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="sure-btn" type="submit" nz-button nzType="primary"
+                            [disabled]="!editTemplatePushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                    <button class="close-btn" type="button" nz-button (click)="onClose()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

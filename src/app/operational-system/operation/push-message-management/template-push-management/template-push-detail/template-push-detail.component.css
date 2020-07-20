@@ -1,0 +1,91 @@
+.content-container {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-right: 10px;
+    /* display: flex; */
+    background: #fff;
+    /* align-items: center; */
+    font-size: 13px;
+}
+
+.table-item {
+    width: 100%;
+    min-width: 800px;
+}
+
+.click-table {
+    margin-top: 60px;
+}
+
+.banner-table table tr>td {
+    text-align: left;
+}
+
+.table-item table {
+    border: 1px solid #d4d4d4;
+    text-align: center;
+    word-break: break-all;
+    width: 100%;
+    margin: 0;
+}
+
+.table-item table tr {
+    height: 50px;
+}
+
+.table-item table tr>td,
+.table-item table>thead tr>th,
+.table-item table>tbody tr>td {
+    height: 50px;
+    box-sizing:border-box;
+    padding: 4px 8px;
+    color: #23242f;
+    font-size: 12px;
+    vertical-align: middle;
+    border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+    border-top: 1px solid #d4d4d4;
+    cursor: default;
+    padding-left: 30px;
+}
+
+.table-item table>thead tr>th {
+    background-color: #f7f8fa;
+}
+.banner-table table tr>td:nth-child(odd) {
+    min-width: 118px;
+    background: #F7F8FA;
+}
+
+.detail-table {
+    width: 100%;
+}
+
+.template-push-remark{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+}
+.template-push-remark p{
+    flex: 1;
+    word-break: break-all;
+}
+.template-push-remark button{
+    height: 27px;
+    background: rgba(62, 113, 247, 1);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 27px;
+    padding: 0 10px !important;
+    font-size: 12px;
+    margin-left: 20px;
+}
+
+.control-input{
+    width: 300px;
+}
+
+.control-input textarea{
+    height: 125px !important;
+}

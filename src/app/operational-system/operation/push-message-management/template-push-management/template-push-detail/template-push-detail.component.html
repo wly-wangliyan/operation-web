@@ -1,0 +1,108 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'推送管理'" [level2Name]="'模板消息推送'" [level2RelativePath]="'../'" [level3Name]="'明细'">
+    </app-crumb>
+</div>
+<div class="content-flow">
+    <!-- 查看明细 -->
+    <div class="content-container">
+        <div class="table-item banner-table">
+            <table class="detail-table">
+                <tr>
+                    <td>模板标题：</td>
+                    <td></td>
+                    <td>用户范围：</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>详细内容：</td>
+                    <td colspan="5">
+                    </td>
+                </tr>
+                <tr>
+                    <td>落地页：</td>
+                    <td colspan="5"></td>
+                </tr>
+                <tr>
+                    <td>推送时间：</td>
+                    <td colspan="5"></td>
+                </tr>
+                <tr>
+                    <td>创建时间：</td>
+                    <td></td>
+                    <td>上线时间：</td>
+                    <td></td>
+                    <td>下线时间：</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>累计成功推送：</td>
+                    <td></td>
+                    <td>备注：</td>
+                    <td>
+                        <div class="template-push-remark">
+                            <p>21312312312</p>
+                            <button nz-button nzType="primary" (click)="onUpdateRemarkClick()">编辑</button>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-item click-table">
+            <table class="detail-table">
+                <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>发送人数</th>
+                    <th>成功数</th>
+                    <th>失败数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 修改备注信息 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #remarkPromptDiv>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">备注信息</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                </button>
+            </div>
+            <form class="form-horizontal" #editRemarkForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <span>备注：</span>
+                    </label>
+                    <div class="control-input">
+                        <textarea class='form-control' placeholder="200字以内..."
+                      maxlength="200"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" nz-button data-dismiss="modal">取消</button>
+                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editRemarkForm.form.valid"
+                            (appZDebounceClick)="onEditRemarkFormSubmit()">
+                        确定
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

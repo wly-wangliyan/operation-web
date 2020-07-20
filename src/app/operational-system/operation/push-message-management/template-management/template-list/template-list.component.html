@@ -1,0 +1,181 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'推送管理'" [level2Name]="'模板管理'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    (click)="onClickCreateTemplate()">
+                新建
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+
+            <div class="form-group">
+                <span>模板标题：</span>
+                <input class="form-control" placeholder="请输入模板标题" maxlength="20"/>
+            </div>
+
+            <div class="form-group">
+                <span>创建时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #TemplateTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="false"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText">
+                <thead>
+                <tr>
+                    <th>模板ID</th>
+                    <th>模板标题</th>
+                    <th>微信模板ID</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of TemplateTable.data; let i=index">
+                    <td>{{i + (pageIndex - 1) * 15 + 1}}</td>
+                    <td>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td class="operation">
+                        <a [title]="'详情'" (appZDebounceClick)="onClickDetail()">详情</a>
+                        <a [title]="'删除'"
+                           (appZDebounceClick)="onDeleteClick(data.push_plan_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+
+<!--新建-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #templateCreatePromptDiv id="templateCreatePromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">新建</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" #templateCreateForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>微信模板ID：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="createTemplate.id" name="id"
+                                   placeholder="微信官方模板ID" appIgnoreSpace minlength="1" maxlength="100" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>标题：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" placeholder="中文标题需在4-12字符之间，英文标题需在8-24字符之间" appIgnoreSpace
+                                   [(ngModel)]="createTemplate.title" name="title"
+                                   maxlength="50" required>
+                            <p class="red-tip">请与微信模板标题一致</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>内容：</span>
+                        </label>
+                        <div class="control-input">
+                            <div class="keyword-list"
+                                 *ngFor="let template of createTemplate.templateList;let index=index">
+                                <input class="form-control" appIgnoreSpace [(ngModel)]="template.templateName"
+                                       [name]="template.dateTime" (input)="templateTip=''"
+                                       maxlength="50" required>
+                                <img src="/assets/images/icon_delete_template.png"
+                                     (click)="onClickDeleteTemplate(index)"
+                                     *ngIf="createTemplate.templateList.length>1">
+                                <p class="red-tip" style="margin-bottom: -20px"
+                                   *ngIf="index===(createTemplate.templateList.length-1)&&templateTip">
+                                    {{templateTip}}</p>
+                            </div>
+                            <button type="button" class="add-keyword" (click)="onClickAddKeyword()" nz-button
+                                    *ngIf="createTemplate.templateList.length<5">添加关键词
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="submit" class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onCreateTemplateData()"
+                            [disabled]="!templateCreateForm.form.valid">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--详情-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #templateDetailPromptDiv id="templateDetailPromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">详情</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="content-example-container">
+                    <h4>内容示例</h4>
+                    <div class="content-example">
+                        <h3>停车服务模板：</h3>
+                        <p>********************</p>
+                        <p>停车场：********************</p>
+                        <p>停车场：********************</p>
+                        <p>停车场：********************</p>
+                        <p>停车场：********************</p>
+                        <p>********************</p>
+                        <div class="content-example-btn">
+                            <span>详情</span>
+                            <img src="../../../../../../assets/images/icon_arrow.png">
+                        </div>
+                    </div>
+                    <p class="red-tip">
+                        注：* 处为可填写内容
+                    </p>
+                </div>
+                <div class="template-detail-bottom">
+                    <p>模板ID： defejpokok[[ppkklk 1243354dfg</p>
+                    <p>微信模板ID: defejpokok[[ppkklk 124335</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

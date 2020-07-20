@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BannerEntity, BannerService } from '../../banner-management/banner.service';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalService } from '../../../../../core/global.service';
 import { debounceTime } from 'rxjs/operators';
 import { differenceInCalendarDays } from 'date-fns';
 import { HttpErrorEntity } from '../../../../../core/http.service';
-import { PushEditComponent } from '../push-edit/push-edit.component';
 import { PushEntity, PushManagementService, SearchParams } from '../push-management.service';
 
 const PageSize = 15;
@@ -13,7 +11,7 @@ const PageSize = 15;
 @Component({
   selector: 'app-push-list',
   templateUrl: './push-list.component.html',
-  styleUrls: ['./push-list.component.css']
+  styleUrls: ['./push-list.component.css', '../../push-message-management.component.css']
 })
 export class PushListComponent implements OnInit {
 

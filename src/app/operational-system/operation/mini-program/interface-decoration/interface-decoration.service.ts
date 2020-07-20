@@ -6,7 +6,7 @@ import { environment } from '../../../../../environments/environment';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { HttpResponse } from '@angular/common/http';
 import { CommodityEntity } from '../../../mall/goods-management/goods-management-http.service';
-import { PushLinkResponse } from '../push-management/push-management.service';
+import { PushLinkResponse } from '../../push-message-management/push-management/push-management.service';
 
 export class SearchParams extends EntityBase {
   public category: any = ''; // Integer	T	类别	1: 发现　2:　首页

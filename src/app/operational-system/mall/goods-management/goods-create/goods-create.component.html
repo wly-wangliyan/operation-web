@@ -71,7 +71,7 @@
           </label>
           <div class="control-input">
             <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name" name="commodity_name"
-              placeholder="输入1-20个字标题" minlength="1" maxlength="20" appIgnoreSpace required>
+              placeholder="输入1-100个字标题" minlength="1" maxlength="100" appIgnoreSpace required>
           </div>
         </div>
         <div class="row control-row">
@@ -211,7 +211,7 @@
                         [(ngModel)]="formatCommoditySpecification.specification_params.specification_name"
                         [name]="'specification_name_' + formatCommoditySpecification.idCount" (input)="initErrMsg()"
                         (focus)='onFocusSpecificationName(specificationIndex)' (blur)='isTooltipShow=false'
-                        placeholder="输入1-20字规格名称" minlength="1" maxlength="20" appIgnoreSpace>
+                        placeholder="输入1-100字规格名称" minlength="1" maxlength="100" appIgnoreSpace>
                       <div class="row row-message text-error"
                         *ngIf='specificationIndex===FormatCommoditySpecificationList.length-1'>
                         <div class="control-input">
