@@ -33,7 +33,7 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table #TemplateTable [nzData]="nzSearchAssistant.nzData" [nzPageSize]="nzSearchAssistant.pageSize"
+            <nz-table #TemplatePushTable [nzData]="nzSearchAssistant.nzData" [nzPageSize]="nzSearchAssistant.pageSize"
                       [(nzPageIndex)]="nzSearchAssistant.currentPage"
                       (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
                       [nzNoResult]="nzSearchAssistant.nzNoResultText">
@@ -49,23 +49,27 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of TemplateTable.data; let i=index">
-                    <td>{{i + (pageIndex - 1) * 15 + 1}}</td>
-                    <td>
+                <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
+                    <!--<td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templatePushIndex+1}}</td>-->
+                    <td [title]="data.template_message_id">
+                         <span [appTxtCopy]="data.template_message_id">
+                            {{data.template_message_id}}
+                        </span>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td [title]="data.title">{{data.title}}</td>
+                    <td>{{data.created_time| date:"y-MM-dd HH:mm"}}</td>
                     <td></td>
                     <td>
-                        <nz-switch [ngModel]="false" nzCheckedChildren="On"
+                        <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"
                                    style="height: 10px"
                                    nzUnCheckedChildren="Off"
-                                   (ngModelChange)="onSwitchChange(data.push_plan_id,$event)"></nz-switch>
+                                   (ngModelChange)="onSwitchChange(data.template_message_id,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../template-push-edit',2]">编辑</a>
-                        <a [title]="'明细'" [routerLink]="['../template-push-detail',1]">明细</a>
-                        <a [title]="'删除'">删除</a>
+                        <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]">编辑</a>
+                        <a [title]="'明细'" [routerLink]="['../template-push-detail',data.template_message_id]">明细</a>
+                        <a *ngIf="data.status===TemplatePushStatus.close" [title]="'删除'"
+                           (appZDebounceClick)="onDeleteTemplateClick(data.wx_template_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>

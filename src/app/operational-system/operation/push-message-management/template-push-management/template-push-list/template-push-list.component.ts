@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import {
-    IntegralMallHttpService,
-    SearchIntegralCommodityParams
-} from '../../../integral-management/integral-mall/integral-mall-http.service';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
+import { TemplatePushManagementService, TemplatePushStatus } from '../template-push-management.service';
+import { SearchParamsEntity } from '../../template-management/template-management.service';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
     selector: 'app-application-push-list',
@@ -13,13 +12,13 @@ import { differenceInCalendarDays } from 'date-fns';
     styleUrls: ['./template-push-list.component.css', '../../push-message-management.component.css']
 })
 export class TemplatePushListComponent implements NzSearchAdapter {
-
-    public searchParams: SearchIntegralCommodityParams = new SearchIntegralCommodityParams(); // 条件筛选参数
+    public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
     public start_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
+    public TemplatePushStatus = TemplatePushStatus;
 
     constructor(private globalService: GlobalService,
-                private integralMallHttpService: IntegralMallHttpService) {
+                private templatePushManagementService: TemplatePushManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
     }
@@ -29,10 +28,14 @@ export class TemplatePushListComponent implements NzSearchAdapter {
         return differenceInCalendarDays(startValue, new Date()) > 0;
     };
 
+    /**
+     * 删除模板消息
+     * @param commodity_id
+     */
     public onDeleteClick(commodity_id: string) {
         this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
             this.globalService.confirmationBox.close();
-            this.integralMallHttpService.requestDeleteCommodityData(commodity_id)
+            this.templatePushManagementService.requestDeleteTemplatePushData(commodity_id)
                 .subscribe(res => {
                     this.nzSearchAssistant.submitSearch(true);
                     this.globalService.promptBox.open('删除成功');
@@ -44,27 +47,65 @@ export class TemplatePushListComponent implements NzSearchAdapter {
         });
     }
 
+    /**
+     * 启停
+     * @param template_message_id
+     * @param event
+     */
+    public onSwitchChange(template_message_id: string, event: boolean) {
+        const swicth = event ? TemplatePushStatus.open : TemplatePushStatus.close;
+        this.templatePushManagementService.requestStatusTemplatePushData(template_message_id, swicth).subscribe(res => {
+            if (event) {
+                this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
+            } else {
+                this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
+            }
+            // timer(500).subscribe(() => {
+            //     node.status = event;
+            // });
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
+    /**
+     * 删除模板
+     * @param template_message_id
+     */
+    public onDeleteTemplateClick(template_message_id: string) {
+        this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
+            this.globalService.confirmationBox.close();
+            this.templatePushManagementService.requestDeleteTemplatePushData(template_message_id).subscribe(res => {
+                this.nzSearchAssistant.submitSearch(true);
+                this.globalService.promptBox.open('删除成功');
+            }, err => {
+                if (!this.globalService.httpErrorProcess(err)) {
+                    this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                }
+            });
+        });
+    }
+
     /* SearchDecorator 接口实现 */
 
     /* 请求检索 */
     public requestSearch(): any {
-        return this.integralMallHttpService.requestIntegralCommodityListData(this.searchParams);
+        return this.templatePushManagementService.requestTemplatePushListData(this.searchParams);
     }
 
     public continueSearch(url: string): any {
-        return this.integralMallHttpService.continueIntegralCommodityData(url);
+        return this.templatePushManagementService.continueTemplatePushListData(url);
     }
 
     /* 生成并检查参数有效性 */
     public generateAndCheckParamsValid(): boolean {
-        // const cTime = new Date().getTime() / 1000;
-        // const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-        // const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
-        // if (sTime > eTime) {
-        //     this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
-        //     return false;
-        // }
-        // this.searchParams.section = `${sTime},${eTime}`;
+        if (this.start_time) {
+            const _start_time = (new Date(this.start_time).setSeconds(0, 0) / 1000);
+            const _end_time = new Date().getTime() / 1000;
+            this.searchParams.section = `${_start_time},${_end_time}`;
+        } else {
+            this.searchParams.section = null;
+        }
         return true;
     }
 

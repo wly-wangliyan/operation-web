@@ -33,8 +33,8 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table #TemplateTable [nzData]="nzSearchAssistant.nzData" [nzShowPagination]="false"
-                      [nzNoResult]="nzSearchAssistant.nzNoResultText">
+            <nz-table #TemplateTable [nzData]="templateList" [nzShowPagination]="false"
+                      [nzNoResult]="nzNoResultText">
                 <thead>
                 <tr>
                     <th>模板ID</th>
@@ -45,16 +45,24 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of TemplateTable.data; let i=index">
-                    <td>{{i + (pageIndex - 1) * 15 + 1}}</td>
-                    <td>
+                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
+                    <!--<td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templateIndex+1}}</td>-->
+                    <td [title]="data.wx_template_id">
+                        <span [appTxtCopy]="data.wx_template_id">
+                            {{data.wx_template_id}}
+                        </span>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td [title]="data.title">{{data.title| zMaxLength:15}}</td>
+                    <td [title]="data.weixin_template_id">
+                        <span [appTxtCopy]="data.weixin_template_id">
+                            {{data.weixin_template_id}}
+                        </span>
+                    </td>
+                    <td>{{data.created_time| date:"y-MM-dd HH:mm"}}</td>
                     <td class="operation">
-                        <a [title]="'详情'" (appZDebounceClick)="onClickDetail()">详情</a>
+                        <a [title]="'详情'" (appZDebounceClick)="onClickDetail(data)">详情</a>
                         <a [title]="'删除'"
-                           (appZDebounceClick)="onDeleteClick(data.push_plan_id)">删除</a>
+                           (appZDebounceClick)="onDeleteTemplateClick(data.wx_template_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -84,8 +92,9 @@
                             <span>微信模板ID：</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" [(ngModel)]="createTemplate.id" name="id"
-                                   placeholder="微信官方模板ID" appIgnoreSpace minlength="1" maxlength="100" required>
+                            <input class="form-control" [(ngModel)]="templateCreate.weixin_template_id"
+                                   name="weixin_template_id"
+                                   placeholder="微信官方模板ID" appIgnoreSpace minlength="1" maxlength="50" required>
                         </div>
                     </div>
                     <div class="row">
@@ -95,7 +104,7 @@
                         </label>
                         <div class="control-input">
                             <input class="form-control" placeholder="中文标题需在4-12字符之间，英文标题需在8-24字符之间" appIgnoreSpace
-                                   [(ngModel)]="createTemplate.title" name="title"
+                                   [(ngModel)]="templateCreate.title" name="title"
                                    maxlength="50" required>
                             <p class="red-tip">请与微信模板标题一致</p>
                         </div>
@@ -107,19 +116,19 @@
                         </label>
                         <div class="control-input">
                             <div class="keyword-list"
-                                 *ngFor="let template of createTemplate.templateList;let index=index">
-                                <input class="form-control" appIgnoreSpace [(ngModel)]="template.templateName"
-                                       [name]="template.dateTime" (input)="templateTip=''"
+                                 *ngFor="let template of templateCreate.content;let index=index">
+                                <input class="form-control" appIgnoreSpace [(ngModel)]="template.name"
+                                       [name]="template.timestamp" (input)="templateTip=''"
                                        maxlength="50" required>
                                 <img src="/assets/images/icon_delete_template.png"
-                                     (click)="onClickDeleteTemplate(index)"
-                                     *ngIf="createTemplate.templateList.length>1">
+                                     (click)="onClickDeleteTemplateContent(index)"
+                                     *ngIf="templateCreate.content.length>1">
                                 <p class="red-tip" style="margin-bottom: -20px"
-                                   *ngIf="index===(createTemplate.templateList.length-1)&&templateTip">
+                                   *ngIf="index===(templateCreate.content.length-1)&&templateTip">
                                     {{templateTip}}</p>
                             </div>
                             <button type="button" class="add-keyword" (click)="onClickAddKeyword()" nz-button
-                                    *ngIf="createTemplate.templateList.length<5">添加关键词
+                                    *ngIf="templateCreate.content.length<5">添加关键词
                             </button>
                         </div>
                     </div>
@@ -151,16 +160,13 @@
                     &times;
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" *ngIf="templateDetail.wx_template_id">
                 <div class="content-example-container">
                     <h4>内容示例</h4>
                     <div class="content-example">
-                        <h3>停车服务模板：</h3>
+                        <h3>{{templateDetail.title}}：</h3>
                         <p>********************</p>
-                        <p>停车场：********************</p>
-                        <p>停车场：********************</p>
-                        <p>停车场：********************</p>
-                        <p>停车场：********************</p>
+                        <p *ngFor="let template of templateDetail.content">{{template.name}}：********************</p>
                         <p>********************</p>
                         <div class="content-example-btn">
                             <span>详情</span>
@@ -172,8 +178,8 @@
                     </p>
                 </div>
                 <div class="template-detail-bottom">
-                    <p>模板ID： defejpokok[[ppkklk 1243354dfg</p>
-                    <p>微信模板ID: defejpokok[[ppkklk 124335</p>
+                    <p>模板ID： {{templateDetail.wx_template_id}}</p>
+                    <p>微信模板ID: {{templateDetail.weixin_template_id}}</p>
                 </div>
             </div>
         </div>

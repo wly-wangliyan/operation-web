@@ -14,9 +14,12 @@
                         <span>模板标题</span>
                     </label>
                     <div class="control-input">
-                        <select class="form-control" required>
-                            <option>2323</option>
-                            <option>4444</option>
+                        <select [(ngModel)]="templatePushDetail.wx_template_id" name="wx_template_id"
+                                (change)="onChangeTemplateTitle($event)"
+                                class="form-control" required>
+                            <option *ngFor="let template of templateList" [value]="template.wx_template_id">
+                                {{template.title}}
+                            </option>
                         </select>
                         <div class="operation-item"><p class="cover-hint">请选择适用得模板标题</p></div>
                     </div>
@@ -27,14 +30,21 @@
                         <span>详细内容</span>
                     </label>
                     <div class="control-input">
-                        <input class="form-control" type="text">
-                        <div class="content-detail-item">
+                        <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.start"
+                               maxlength="50"
+                               appIgnoreSpace
+                               name="start">
+                        <div class="content-detail-item" *ngFor="let contentObj of templatePushDetail.content.content">
                             <label class="control-label">
-                                详细内容
+                                {{contentObj.key}}
                             </label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" [(ngModel)]="contentObj.value"
+                                   [name]="contentObj.timestamp">
                         </div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.end"
+                               maxlength="50"
+                               appIgnoreSpace
+                               name="end">
                     </div>
                 </div>
                 <div class="row" style="align-items: flex-start">
@@ -44,16 +54,27 @@
                     </label>
                     <div class="control-input user-range">
                         <div>
-                            <select class="form-control" required>
-                                <option>全部(沈阳)</option>
-                                <option>指定用户</option>
+                            <select class="form-control" [(ngModel)]="templatePushDetail.user_category"
+                                    name="user_category" required>
+                                <option [value]="UserCategory.all">全部(沈阳)</option>
+                                <option [value]="UserCategory.appoint">指定用户</option>
                             </select>
-                            <div class="operation-item">
-                                <button type="button" nz-button nzType="primary">导入</button>
+                            <div class="operation-item" *ngIf="templatePushDetail.user_category===UserCategory.appoint">
+                                <button type="button" nz-button nzType="primary">
+                                    导入
+                                </button>
+                                <input type="file"
+                                       (change)="onFileChange($event)"
+                                       (click)="$event.target.value = ''"
+                                       multiple="false"
+                                       accept=".xls,.xlsx,.text"/>
                                 <p class="cover-hint">支持Excel 、text 等常用格式</p>
                             </div>
                         </div>
-                        <textarea type="text" class="form-control" rows="3"
+                        <textarea *ngIf="templatePushDetail.user_category===UserCategory.appoint" type="text"
+                                  class="form-control" rows="3" required
+                                  appIgnoreSpace
+                                  [(ngModel)]="templatePushDetail.uu_codes" name="uu_codes"
                                   placeholder="输入用户ID，多个用户使用英文逗号分隔"></textarea>
                     </div>
                 </div>
@@ -63,13 +84,14 @@
                         <span>落地页</span>
                     </label>
                     <div class="control-input">
-                        <select class="form-control" style="width: 150px">
-                            <option value=''>请选择</option>
-                            <option value=2>H5</option>
-                            <option value=1>小程序原生页</option>
+                        <select class="form-control" [(ngModel)]="templatePushDetail.landing_page_type"
+                                name="landing_page_type" required>
+                            <option [value]="LandingPageType.H5">H5</option>
+                            <option [value]="LandingPageType.appletNative">小程序原生页</option>
                         </select>
                         <input class="form-control" placeholder="请输入跳转URL"
-                               maxlength="2000" autocomplete="off"
+                               maxlength="2000" [(ngModel)]="templatePushDetail.landing_page" name="landing_page"
+                               appIgnoreSpace
                                style="border-left: none!important;width: 300px">
                     </div>
                 </div>
@@ -79,68 +101,71 @@
                         <span>推送时间</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group>
-                            <label nz-radio [nzValue]="1">立即推送</label>
-                            <label nz-radio [nzValue]="2">定时推送</label>
-                            <label nz-radio [nzValue]="3">周期推送</label>
+                        <nz-radio-group [(ngModel)]="templatePushDetail.send_type" name="send_type"
+                                        (ngModelChange)="onChangeSendType()">
+                            <label nz-radio [nzValue]="SendType.pushNow">立即推送</label>
+                            <label nz-radio [nzValue]="SendType.timingPush">定时推送</label>
+                            <label nz-radio [nzValue]="SendType.periodicPush">周期推送</label>
                         </nz-radio-group>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="templatePushDetail.send_type===SendType.timingPush">
                     <label class=" control-label">
                     </label>
                     <div class="control-input">
-                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
-                                        [nzDisabledDate]="disabledStartTime"
-                                        name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                        <nz-date-picker [(ngModel)]="templatePushDetail.set_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledSetTime"
+                                        name='set_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                     <label class="control-label">
                     </label>
                     <div class="control-input periodic-push-container">
-                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
-                                        [nzDisabledDate]="disabledStartTime"
-                                        name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                        <nz-date-picker [(ngModel)]="templatePushDetail.start_date" [nzShowToday]=false
+                                        [nzDisabled]="dateUnlimitedChecked"
+                                        [nzDisabledDate]="disabledStartDate"
+                                        name='start_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                         <span class='line'>-</span>
-                        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false
-                                        [nzDisabledDate]="disabledStartTime"
-                                        name='end_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                        <nz-date-picker [(ngModel)]="templatePushDetail.end_date" [nzShowToday]=false
+                                        [nzDisabled]="dateUnlimitedChecked"
+                                        [nzDisabledDate]="disabledEndDate"
+                                        name='end_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
-                        <label nz-checkbox>
+                        <label nz-checkbox [(ngModel)]="dateUnlimitedChecked" name="dateUnlimitedChecked"
+                               (ngModelChange)="onClickDateUnlimited()">
                             不限
                         </label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                     <label class="control-label">
                     </label>
                     <div class="control-input">
-                        <nz-checkbox-group [(ngModel)]="checkOptionsOne" name="checkOptionsOne"
-                                           (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
+                        <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"></nz-checkbox-group>
                         <div class="week-selected-checkbox">
-                            <span>全选</span>
-                            <span>工作日</span>
-                            <span>周末</span>
+                            <span (click)="onClickWeekDay(WeekdayOperationType.all)">全选</span>
+                            <span (click)="onClickWeekDay(WeekdayOperationType.workingDay)">工作日</span>
+                            <span (click)="onClickWeekDay(WeekdayOperationType.weekend)">周末</span>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                     <label class="control-label"></label>
                     <div class="control-input">
-                        <nz-time-picker nzFormat="HH:mm"></nz-time-picker>
+                        <nz-time-picker [(ngModel)]="currentTime" name="currentTime" nzFormat="HH:mm"></nz-time-picker>
                     </div>
                 </div>
                 <div class="row">
                     <label class=" control-label">
-                        <b>*</b>
                         <span>备注</span>
                     </label>
                     <div class="control-input">
                       <textarea type="text" class="form-control" rows="3" maxlength="100"
-                                placeholder="输入描述，100字以内，仅用于后台查看"></textarea>
+                                placeholder="输入描述，100字以内，仅用于后台查看" [(ngModel)]="templatePushDetail.remark"
+                                name="remark"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

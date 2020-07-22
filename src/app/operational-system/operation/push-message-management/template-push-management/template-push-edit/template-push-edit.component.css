@@ -4,7 +4,7 @@
 }
 
 select.form-control {
-    width: 200px;
+    width: 150px;
 }
 
 .operation-item {
@@ -26,6 +26,7 @@ select.form-control {
     background-color: #3E71F7;
     border-color: #3E71F7;
     margin-right: 30px;
+    position: relative;
 }
 
 .operation-item button :hover {
@@ -104,11 +105,19 @@ input.form-control, textarea.form-control {
     color: #3E71F7;
     font-size: 13px;
 }
-.week-selected-checkbox{
+
+.week-selected-checkbox {
     display: flex;
     height: 30px;
     align-items: center;
 }
+
 .week-selected-checkbox > span {
     margin-left: 10px;
+}
+
+input[type=file] {
+    position: absolute;
+    width: 80px;
+    opacity: 0;
 }

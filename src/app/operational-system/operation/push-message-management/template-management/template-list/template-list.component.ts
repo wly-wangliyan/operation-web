@@ -1,61 +1,90 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import {
-    IntegralMallHttpService,
-    SearchIntegralCommodityParams
-} from '../../../integral-management/integral-mall/integral-mall-http.service';
+    SearchParamsEntity,
+    TemplateManagementContentEntity,
+    TemplateManagementEntity,
+    TemplateManagementService
+} from '../template-management.service';
+import { timer } from 'rxjs';
 
 @Component({
     selector: 'app-template-list',
     templateUrl: './template-list.component.html',
     styleUrls: ['./template-list.component.css', '../../push-message-management.component.css']
 })
-export class TemplateListComponent implements NzSearchAdapter {
-
-    public searchParams: SearchIntegralCommodityParams = new SearchIntegralCommodityParams(); // 条件筛选参数
+export class TemplateListComponent implements OnInit {
+    public templateCreate: TemplateManagementEntity = new TemplateManagementEntity();
+    public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
     public start_time: any = '';
-    public nzSearchAssistant: NzSearchAssistant;
     public templateTip = '';
-    public createTemplate = {
-        'title': '',
-        'id': '',
-        'templateList': [{templateName: '', dateTime: new Date().getTime()}],
-    };
+    public templateDetail: TemplateManagementEntity = new TemplateManagementEntity();
+    public templateList: Array<TemplateManagementEntity> = [];
+    public noResultText = '数据加载中...';
 
     constructor(private globalService: GlobalService,
-                private integralMallHttpService: IntegralMallHttpService) {
-        this.nzSearchAssistant = new NzSearchAssistant(this);
-        this.nzSearchAssistant.submitSearch(true);
+                private templateManagementService: TemplateManagementService) {
     }
 
+    public ngOnInit() {
+        this.requestTemplateList();
+    }
+
+    /**
+     * 添加模板
+     */
     public onClickCreateTemplate() {
+        this.templateCreate.content.push(new TemplateManagementContentEntity());
         $('#templateCreatePromptDiv').modal('show');
     }
 
-    public onClickDetail(){
-        $('#templateDetailPromptDiv').modal('show');
+    /**
+     * 查看模板详情
+     * @param templateDetail
+     */
+    public onClickDetail(templateDetail: TemplateManagementEntity) {
+        this.templateDetail = templateDetail;
+        timer(1000).subscribe(() => {
+            $('#templateDetailPromptDiv').modal('show');
+        });
     }
 
+    /**
+     * 添加关键字
+     */
     public onClickAddKeyword() {
-        const index = this.createTemplate.templateList.length - 1;
-        const lastTemplate = this.createTemplate.templateList[index];
-        if (!lastTemplate.templateName) {
+        const index = this.templateCreate.content.length - 1;
+        const lastTemplate = this.templateCreate.content[index];
+        if (!lastTemplate.name) {
             this.templateTip = `当前第${index + 1}个内容信息未填写`;
         } else {
             this.templateTip = '';
-            this.createTemplate.templateList.push({templateName: '', dateTime: new Date().getTime()});
+            this.templateCreate.content.push(new TemplateManagementContentEntity());
         }
     }
 
-    public onCreateTemplateData(){
-        console.log(232323)
+    /**
+     * 创建模板
+     */
+    public onCreateTemplateData() {
+        this.templateManagementService.requestAddTemplateData(this.templateCreate).subscribe(data => {
+            $('#templateCreatePromptDiv').modal('hide');
+            this.requestTemplateList();
+            this.globalService.promptBox.open('保存成功！');
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
-    public onClickDeleteTemplate(index: number) {
+    /**
+     * 删除模板内容
+     * @param index
+     */
+    public onClickDeleteTemplateContent(index: number) {
         this.templateTip = '';
-        this.createTemplate.templateList.splice(index, 1);
+        this.templateCreate.content.splice(index, 1);
     }
 
     // 上架开始时间的禁用部分
@@ -63,12 +92,16 @@ export class TemplateListComponent implements NzSearchAdapter {
         return differenceInCalendarDays(startValue, new Date()) > 0;
     };
 
-    public onDeleteClick(commodity_id: string) {
+    /**
+     * 删除模板
+     * @param wx_template_id
+     */
+    public onDeleteTemplateClick(wx_template_id: string) {
         this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
             this.globalService.confirmationBox.close();
-            this.integralMallHttpService.requestDeleteCommodityData(commodity_id)
+            this.templateManagementService.requestDeleteTemplateData(wx_template_id)
                 .subscribe(res => {
-                    this.nzSearchAssistant.submitSearch(true);
+                    this.requestTemplateList();
                     this.globalService.promptBox.open('删除成功');
                 }, err => {
                     if (!this.globalService.httpErrorProcess(err)) {
@@ -78,36 +111,31 @@ export class TemplateListComponent implements NzSearchAdapter {
         });
     }
 
-    /* SearchDecorator 接口实现 */
-
-    /* 请求检索 */
-    public requestSearch(): any {
-        return this.integralMallHttpService.requestIntegralCommodityListData(this.searchParams);
-    }
-
-    public continueSearch(url: string): any {
-        return this.integralMallHttpService.continueIntegralCommodityData(url);
+    /**
+     * 模板列表
+     */
+    public requestTemplateList() {
+        this.noResultText = '数据加载中...';
+        this.templateManagementService.requestTemplateListData(this.searchParams).subscribe(data => {
+            this.templateList = data;
+            if (data.length === 0) {
+                this.noResultText = '暂无数据';
+            }
+        }, err => {
+            this.noResultText = '暂无数据';
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
     /* 生成并检查参数有效性 */
     public generateAndCheckParamsValid(): boolean {
-        // const cTime = new Date().getTime() / 1000;
-        // const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-        // const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
-        // if (sTime > eTime) {
-        //     this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
-        //     return false;
-        // }
-        // this.searchParams.section = `${sTime},${eTime}`;
+        if (this.start_time) {
+            const _start_time = (new Date(this.start_time).setSeconds(0, 0) / 1000);
+            const _end_time = new Date().getTime() / 1000;
+            this.searchParams.section = `${_start_time},${_end_time}`;
+        } else {
+            this.searchParams.section = null;
+        }
         return true;
-    }
-
-    /* 检索失败处理 */
-    public searchErrProcess(err: any): any {
-        this.globalService.httpErrorProcess(err);
-    }
-
-    /* 检索成功处理 */
-    public searchCompleteProcess(): any {
     }
 }
