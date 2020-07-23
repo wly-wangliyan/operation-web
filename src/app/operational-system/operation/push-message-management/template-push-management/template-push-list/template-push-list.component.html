@@ -16,7 +16,8 @@
 
             <div class="form-group">
                 <span>模板标题：</span>
-                <input class="form-control" placeholder="请输入模板标题" maxlength="20"/>
+                <input class="form-control" [(ngModel)]="searchParams.title" name="title" placeholder="请输入模板标题"
+                       maxlength="20"/>
             </div>
 
             <div class="form-group">
@@ -25,7 +26,7 @@
                                 name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                 nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 <div class="search-btn-group">
-                    <button nz-button nzType="primary">查询
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
                     </button>
                 </div>
             </div>
@@ -58,6 +59,7 @@
                     </td>
                     <td [title]="data.title">{{data.title}}</td>
                     <td>{{data.created_time| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.updated_time| date:"y-MM-dd HH:mm"}}</td>
                     <td></td>
                     <td>
                         <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"

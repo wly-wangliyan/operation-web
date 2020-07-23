@@ -16,7 +16,8 @@
 
             <div class="form-group">
                 <span>模板标题：</span>
-                <input class="form-control" placeholder="请输入模板标题" maxlength="20"/>
+                <input class="form-control" placeholder="请输入模板标题" [(ngModel)]="searchParams.title" name="title"
+                       maxlength="20"/>
             </div>
 
             <div class="form-group">
@@ -25,7 +26,7 @@
                                 name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                 nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 <div class="search-btn-group">
-                    <button nz-button nzType="primary">查询
+                    <button nz-button nzType="primary" (click)="onClickRearch()">查询
                     </button>
                 </div>
             </div>
@@ -34,7 +35,7 @@
     <div class="table-container">
         <div class="zmy-table">
             <nz-table #TemplateTable [nzData]="templateList" [nzShowPagination]="false"
-                      [nzNoResult]="nzNoResultText">
+                      [nzNoResult]="noResultText">
                 <thead>
                 <tr>
                     <th>模板ID</th>
@@ -95,41 +96,6 @@
                             <input class="form-control" [(ngModel)]="templateCreate.weixin_template_id"
                                    name="weixin_template_id"
                                    placeholder="微信官方模板ID" appIgnoreSpace minlength="1" maxlength="50" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>标题：</span>
-                        </label>
-                        <div class="control-input">
-                            <input class="form-control" placeholder="中文标题需在4-12字符之间，英文标题需在8-24字符之间" appIgnoreSpace
-                                   [(ngModel)]="templateCreate.title" name="title"
-                                   maxlength="50" required>
-                            <p class="red-tip">请与微信模板标题一致</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="control-label">
-                            <b>*</b>
-                            <span>内容：</span>
-                        </label>
-                        <div class="control-input">
-                            <div class="keyword-list"
-                                 *ngFor="let template of templateCreate.content;let index=index">
-                                <input class="form-control" appIgnoreSpace [(ngModel)]="template.name"
-                                       [name]="template.timestamp" (input)="templateTip=''"
-                                       maxlength="50" required>
-                                <img src="/assets/images/icon_delete_template.png"
-                                     (click)="onClickDeleteTemplateContent(index)"
-                                     *ngIf="templateCreate.content.length>1">
-                                <p class="red-tip" style="margin-bottom: -20px"
-                                   *ngIf="index===(templateCreate.content.length-1)&&templateTip">
-                                    {{templateTip}}</p>
-                            </div>
-                            <button type="button" class="add-keyword" (click)="onClickAddKeyword()" nz-button
-                                    *ngIf="templateCreate.content.length<5">添加关键词
-                            </button>
                         </div>
                     </div>
                 </div>

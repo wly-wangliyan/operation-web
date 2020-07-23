@@ -5,7 +5,6 @@ import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { PushEntity } from '../push-management/push-management.service';
 
 export class SearchParamsEntity extends EntityBase {
     public title: string = undefined; // 模板标题

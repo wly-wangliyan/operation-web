@@ -5,7 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { SearchParamsEntity } from '../template-management/template-management.service';
+import { SearchParamsEntity, TemplateManagementEntity } from '../template-management/template-management.service';
 
 export enum UserCategory {
     all = '1',
@@ -83,6 +83,19 @@ export class TemplatePushManagementContentChildEntity extends EntityBase {
     public timestamp: Date = new Date(); // ui
 }
 
+export class SendRecordEntity extends EntityBase {
+    public send_record_id: string = undefined;
+    public template_message_id: string = undefined;
+    public total_number: number = undefined; // 	总人数
+    public success_number: number = undefined; // 	发送成功人数
+    public fail_number: number = undefined; // 	发送失败人数
+    public success_ids: number = undefined; // 		成功id
+    public fail_ids: number = undefined; // 	失败id
+    public send_time: string = undefined; // 		发送时间
+    public created_time: string = undefined; // 创建时间
+    public updated_time: string = undefined; // 更新时间
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -148,6 +161,22 @@ export class TemplatePushManagementService {
         const httpUrl = `${this.domain}/wx_template_messages/${template_message_id}`;
         return this.httpService.get(httpUrl).pipe(map(res => {
             return TemplatePushManagementEntity.Create(res.body);
+        }));
+    }
+
+    /**
+     * 模板推送记录
+     * @param template_message_id
+     */
+    public requestTemplatePushRecordListData(template_message_id: string): Observable<Array<SendRecordEntity>> {
+        const httpUrl = `${this.domain}/send_records`;
+        const params = {template_message_id};
+        return this.httpService.get(httpUrl, params).pipe(map(res => {
+            const tempList: Array<SendRecordEntity> = [];
+            res.body.forEach(res => {
+                tempList.push(SendRecordEntity.Create(res));
+            });
+            return tempList;
         }));
     }
 }

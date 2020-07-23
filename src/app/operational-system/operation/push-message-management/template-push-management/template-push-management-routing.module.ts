@@ -14,8 +14,8 @@ const routes: Routes = [{
         {path: '', redirectTo: 'template-push-list', pathMatch: 'full'},
         {path: 'template-push-list', component: TemplatePushListComponent},
         {path: 'template-push-create', component: TemplatePushEditComponent},
-        {path: 'template-push-edit/:push_plan_id', component: TemplatePushEditComponent},
-        {path: 'template-push-detail/:push_plan_id', component: TemplatePushDetailComponent},
+        {path: 'template-push-edit/:template_message_id', component: TemplatePushEditComponent},
+        {path: 'template-push-detail/:template_message_id', component: TemplatePushDetailComponent},
         {path: '**', redirectTo: 'template-push-list', pathMatch: 'full'}
     ]
 }];

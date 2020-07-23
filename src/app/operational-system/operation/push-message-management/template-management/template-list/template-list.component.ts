@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
-import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import {
     SearchParamsEntity,
     TemplateManagementContentEntity,
@@ -19,7 +18,6 @@ export class TemplateListComponent implements OnInit {
     public templateCreate: TemplateManagementEntity = new TemplateManagementEntity();
     public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
     public start_time: any = '';
-    public templateTip = '';
     public templateDetail: TemplateManagementEntity = new TemplateManagementEntity();
     public templateList: Array<TemplateManagementEntity> = [];
     public noResultText = '数据加载中...';
@@ -52,20 +50,6 @@ export class TemplateListComponent implements OnInit {
     }
 
     /**
-     * 添加关键字
-     */
-    public onClickAddKeyword() {
-        const index = this.templateCreate.content.length - 1;
-        const lastTemplate = this.templateCreate.content[index];
-        if (!lastTemplate.name) {
-            this.templateTip = `当前第${index + 1}个内容信息未填写`;
-        } else {
-            this.templateTip = '';
-            this.templateCreate.content.push(new TemplateManagementContentEntity());
-        }
-    }
-
-    /**
      * 创建模板
      */
     public onCreateTemplateData() {
@@ -78,19 +62,10 @@ export class TemplateListComponent implements OnInit {
         });
     }
 
-    /**
-     * 删除模板内容
-     * @param index
-     */
-    public onClickDeleteTemplateContent(index: number) {
-        this.templateTip = '';
-        this.templateCreate.content.splice(index, 1);
-    }
-
     // 上架开始时间的禁用部分
     public disabledStartTime = (startValue: Date): boolean => {
         return differenceInCalendarDays(startValue, new Date()) > 0;
-    };
+    }
 
     /**
      * 删除模板
@@ -112,9 +87,18 @@ export class TemplateListComponent implements OnInit {
     }
 
     /**
+     * 搜索
+     */
+    public onClickRearch() {
+        if (this.generateAndCheckParamsValid()) {
+            this.requestTemplateList();
+        }
+    }
+
+    /**
      * 模板列表
      */
-    public requestTemplateList() {
+    private requestTemplateList() {
         this.noResultText = '数据加载中...';
         this.templateManagementService.requestTemplateListData(this.searchParams).subscribe(data => {
             this.templateList = data;
@@ -128,7 +112,7 @@ export class TemplateListComponent implements OnInit {
     }
 
     /* 生成并检查参数有效性 */
-    public generateAndCheckParamsValid(): boolean {
+    private generateAndCheckParamsValid(): boolean {
         if (this.start_time) {
             const _start_time = (new Date(this.start_time).setSeconds(0, 0) / 1000);
             const _end_time = new Date().getTime() / 1000;

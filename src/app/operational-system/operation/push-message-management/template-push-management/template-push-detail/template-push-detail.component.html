@@ -9,9 +9,9 @@
             <table class="detail-table">
                 <tr>
                     <td>模板标题：</td>
-                    <td></td>
+                    <td>{{templatePushDetail.title}}</td>
                     <td>用户范围：</td>
-                    <td></td>
+                    <td>{{templatePushDetail.user_category}}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -22,7 +22,9 @@
                 </tr>
                 <tr>
                     <td>落地页：</td>
-                    <td colspan="5"></td>
+                    <td colspan="5">
+                        {{templatePushDetail.landing_page}}
+                    </td>
                 </tr>
                 <tr>
                     <td>推送时间：</td>
@@ -30,9 +32,9 @@
                 </tr>
                 <tr>
                     <td>创建时间：</td>
-                    <td></td>
+                    <td>{{templatePushDetail.created_time| date:"y-MM-dd HH:mm"}}</td>
                     <td>下线时间：</td>
-                    <td></td>
+                    <td>{{templatePushDetail.off_time| date:"y-MM-dd HH:mm"}}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -42,7 +44,7 @@
                     <td>备注：</td>
                     <td>
                         <div class="template-push-remark">
-                            <p>21312312312</p>
+                            <p>{{templatePushDetail.remark}}</p>
                             <button nz-button nzType="primary" (click)="onUpdateRemarkClick()">编辑</button>
                         </div>
                     </td>
@@ -63,11 +65,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr *ngFor="let sendRecord of sendRecordList">
+                    <td>{{sendRecord.send_time| date:"y-MM-dd"}}</td>
+                    <td>{{sendRecord.total_number}}</td>
+                    <td>{{sendRecord.success_number}}</td>
+                    <td>{{sendRecord.fail_number}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -91,7 +93,8 @@
                         <span>备注：</span>
                     </label>
                     <div class="control-input">
-                        <textarea class='form-control' placeholder="200字以内..."
+                        <textarea class='form-control' [(ngModel)]="templatePushDetail.remark" name="remark"
+                                  placeholder="200字以内..."
                                   maxlength="200"></textarea>
                     </div>
                 </div>

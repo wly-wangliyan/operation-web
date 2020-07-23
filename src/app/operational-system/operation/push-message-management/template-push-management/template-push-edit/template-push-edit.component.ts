@@ -52,7 +52,7 @@ export class TemplatePushEditComponent implements OnInit {
                 private templateManagementService: TemplateManagementService,
                 private templatePushManagementService: TemplatePushManagementService) {
         this.route.paramMap.subscribe(map => {
-            this.template_message_id = map.get('push_plan_id');
+            this.template_message_id = map.get('template_message_id');
         });
     }
 
