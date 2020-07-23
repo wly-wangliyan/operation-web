@@ -62,10 +62,6 @@
     word-break: break-all;
 }
 
-#templateDetailPromptDiv .modal-dialog{
-    width: 400px;
-}
-
 #templateDetailPromptDiv p,#templateDetailPromptDiv h3{
     margin-bottom: 0;
     line-height: 25px;

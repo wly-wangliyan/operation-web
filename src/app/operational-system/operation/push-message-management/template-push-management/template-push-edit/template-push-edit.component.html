@@ -2,8 +2,10 @@
     <app-crumb [level1Name]="'推送管理'" [level2Name]="'模板消息推送'" [level2RelativePath]="'../'" [level3Name]="levelName">
     </app-crumb>
 </div>
-
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
     <div class="content-container">
         <div class="content-flow">
             <!-- 查看明细 -->
@@ -31,6 +33,7 @@
                     </label>
                     <div class="control-input">
                         <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.start"
+                               placeholder="输入1-50个字标题"
                                maxlength="50"
                                appIgnoreSpace
                                name="start">
@@ -38,10 +41,12 @@
                             <label class="control-label">
                                 {{contentObj.key}}
                             </label>
-                            <input class="form-control" type="text" [(ngModel)]="contentObj.value"
+                            <input class="form-control" type="text" [(ngModel)]="contentObj.value" maxlength="50"
+                                   placeholder="输入1-50个字标题"
                                    [name]="contentObj.timestamp">
                         </div>
                         <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.end"
+                               placeholder="输入1-50个字标题"
                                maxlength="50"
                                appIgnoreSpace
                                name="end">
@@ -91,6 +96,7 @@
                         </select>
                         <input class="form-control" placeholder="请输入跳转URL"
                                maxlength="2000" [(ngModel)]="templatePushDetail.landing_page" name="landing_page"
+                               required
                                appIgnoreSpace
                                style="border-left: none!important;width: 300px">
                     </div>
@@ -113,7 +119,7 @@
                     <label class=" control-label">
                     </label>
                     <div class="control-input">
-                        <nz-date-picker [(ngModel)]="templatePushDetail.set_time" [nzShowToday]=false
+                        <nz-date-picker [(ngModel)]="templatePushDetail.set_time" [nzShowToday]=false required
                                         [nzDisabledDate]="disabledSetTime"
                                         name='set_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -155,7 +161,8 @@
                 <div class="row" *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                     <label class="control-label"></label>
                     <div class="control-input">
-                        <nz-time-picker [(ngModel)]="currentTime" name="currentTime" nzFormat="HH:mm"></nz-time-picker>
+                        <nz-time-picker required [(ngModel)]="currentTime" name="currentTime"
+                                        nzFormat="HH:mm"></nz-time-picker>
                     </div>
                 </div>
                 <div class="row">
@@ -164,13 +171,14 @@
                     </label>
                     <div class="control-input">
                       <textarea type="text" class="form-control" rows="3" maxlength="100"
-                                placeholder="输入描述，100字以内，仅用于后台查看" [(ngModel)]="templatePushDetail.remark"
+                                placeholder="输入描述，100字以内，仅用于后台查看" [(ngModel)]="templatePushDetail.remark" appIgnoreSpace
                                 name="remark"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="sure-btn" type="submit" nz-button nzType="primary"
-                            [disabled]="!editTemplatePushModal.form.valid" (appZDebounceClick)="onEditFormSubmit()">保存
+                            [disabled]="!editTemplatePushModal.form.valid||disabledBtn"
+                            (appZDebounceClick)="onEditFormSubmit()">保存
                     </button>
                     <button class="close-btn" type="button" nz-button>取消</button>
                 </div>

@@ -5,7 +5,11 @@ import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { SearchParamsEntity, TemplateManagementEntity } from '../template-management/template-management.service';
+import {
+    SearchParamsEntity,
+    TemplateManagementContentEntity,
+    TemplateManagementEntity
+} from '../template-management/template-management.service';
 
 export enum UserCategory {
     all = '1',
@@ -66,21 +70,15 @@ export class TemplatePushManagementEntity extends EntityBase {
 
 export class TemplatePushManagementContentEntity extends EntityBase {
     public start: string = undefined;
-    public content: Array<TemplatePushManagementContentChildEntity> = [];
+    public content: Array<TemplateManagementContentEntity> = [];
     public end: string = undefined;
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'content') {
-            return TemplatePushManagementContentChildEntity;
+            return TemplateManagementContentEntity;
         }
         return null;
     }
-}
-
-export class TemplatePushManagementContentChildEntity extends EntityBase {
-    public key: string = undefined;
-    public value: string = undefined;
-    public timestamp: Date = new Date(); // ui
 }
 
 export class SendRecordEntity extends EntityBase {
@@ -128,9 +126,12 @@ export class TemplatePushManagementService {
      * @param templateCreate
      * @param template_message_id
      */
-    public requestAddTemplatePushData(templateCreate: TemplatePushManagementEntity, template_message_id: string): Observable<HttpResponse<any>> {
-        const httpUrl = template_message_id ? `${this.domain}/wx_template_messages/${template_message_id}` : `${this.domain}/wx_template_messages`;
-        return template_message_id ? this.httpService.put(httpUrl, templateCreate.json()) : this.httpService.post(httpUrl, templateCreate.json());
+    public requestAddTemplatePushData(
+        templateCreate: TemplatePushManagementEntity, template_message_id: string): Observable<HttpResponse<any>> {
+        const httpUrl = template_message_id ?
+            `${this.domain}/wx_template_messages/${template_message_id}` : `${this.domain}/wx_template_messages`;
+        return template_message_id ? this.httpService.put(httpUrl, templateCreate.json()) :
+            this.httpService.post(httpUrl, templateCreate.json());
     }
 
     /**

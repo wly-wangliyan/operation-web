@@ -4,16 +4,15 @@ import { differenceInCalendarDays } from 'date-fns';
 import {
     DateUnlimited,
     LandingPageType, SendType,
-    TemplatePushManagementContentChildEntity,
     TemplatePushManagementContentEntity,
     TemplatePushManagementEntity,
     TemplatePushManagementService, UserCategory
 } from '../template-push-management.service';
 import { GlobalService } from '../../../../../core/global.service';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import {
-    SearchParamsEntity,
+    SearchParamsEntity, TemplateManagementContentEntity,
     TemplateManagementEntity,
     TemplateManagementService
 } from '../../template-management/template-management.service';
@@ -25,16 +24,15 @@ import {
 })
 export class TemplatePushEditComponent implements OnInit {
     public levelName = '新建';
-    public start_time = null;
-    public end_time = null;
     public templatePushDetail: TemplatePushManagementEntity = new TemplatePushManagementEntity();
     public templateList: Array<TemplateManagementEntity> = [];
     public UserCategory = UserCategory;
     public LandingPageType = LandingPageType;
     public SendType = SendType;
     public WeekdayOperationType = WeekdayOperationType;
-    public dateUnlimitedChecked = false;
-    public currentTime: Date = null;
+    public dateUnlimitedChecked = false; // 是否是不限制
+    public currentTime: Date = null; // 当前时间
+    public loading = true; // 标记loading
     public checkOptions = [
         {label: '周一', value: 1, checked: false},
         {label: '周二', value: 2, checked: false},
@@ -73,7 +71,7 @@ export class TemplatePushEditComponent implements OnInit {
         } else if (!startValue || !this.templatePushDetail.end_date) {
             return false;
         }
-        return new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.end_time).setHours(0, 0, 0, 0);
+        return new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.templatePushDetail.end_date).setHours(0, 0, 0, 0);
     };
 
     // 上架结束时间的禁用部分
@@ -83,7 +81,7 @@ export class TemplatePushEditComponent implements OnInit {
         } else if (!endValue || !this.templatePushDetail.start_date) {
             return false;
         }
-        return new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.start_time).setHours(0, 0, 0, 0);
+        return new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.templatePushDetail.start_date).setHours(0, 0, 0, 0);
     };
 
     /**
@@ -97,9 +95,9 @@ export class TemplatePushEditComponent implements OnInit {
         this.templatePushDetail.content = new TemplatePushManagementContentEntity();
         const contentObj = this.templatePushDetail.content;
         this.templateList[findIndex].content.forEach(item => {
-            const temp = new TemplatePushManagementContentChildEntity();
-            temp.key = item.name;
-            contentObj.content.push();
+            const temp = new TemplateManagementContentEntity();
+            temp.key = item.key;
+            contentObj.content.push(temp);
         });
     }
 
@@ -182,24 +180,40 @@ export class TemplatePushEditComponent implements OnInit {
      * 提交
      */
     public onEditFormSubmit() {
-        if (this.templatePushDetail.send_type === SendType.timingPush) {
-            this.templatePushDetail.set_time = (new Date(this.templatePushDetail.set_time).setSeconds(0, 0) / 1000);
-        } else if (this.templatePushDetail.send_type === SendType.periodicPush) {
-            this.templatePushDetail.start_date = (new Date(this.templatePushDetail.start_date).setSeconds(0, 0) / 1000);
-            this.templatePushDetail.end_date = (new Date(this.templatePushDetail.end_date).setSeconds(0, 0) / 1000);
+        const params = this.templatePushDetail.clone();
+        if (params.send_type === SendType.timingPush) {
+            params.set_time = (new Date(this.templatePushDetail.set_time).setSeconds(0, 0) / 1000);
+        } else if (params.send_type === SendType.periodicPush) {
+            params.start_date = (new Date(this.templatePushDetail.start_date).setSeconds(0, 0) / 1000);
+            params.end_date = (new Date(this.templatePushDetail.end_date).setSeconds(0, 0) / 1000);
             const _checkOptions = this.checkOptions.filter(item => item.checked);
-            this.templatePushDetail.weekday = _checkOptions.map(item => item.value).join(',');
+            params.weekday = _checkOptions.map(item => item.value).join(',');
             const hour = this.currentTime.getHours();
             const minute = this.currentTime.getMinutes();
-            this.templatePushDetail.send_time = hour * 60 + minute;
+            params.send_time = hour * 60 + minute;
         }
-        this.templatePushManagementService.requestAddTemplatePushData(this.templatePushDetail, this.template_message_id).subscribe(data => {
+        this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(() => {
             this.globalService.promptBox.open(this.template_message_id ? '编辑成功！' : '添加成功！', () => {
-                this.router.navigate(['../../template-push-list'], {relativeTo: this.route});
+                this.router.navigate(['../template-push-list'], {relativeTo: this.route});
             });
         }, err => {
             this.globalService.httpErrorProcess(err);
         });
+    }
+
+    /**
+     * 禁止保存
+     */
+    public get disabledBtn(): boolean {
+        const contentObj = this.templatePushDetail.content;
+        const contentItem = contentObj.content.find(item => !!item.value);
+        const checkOptionItem = this.checkOptions.find(item => !!item.checked);
+        if (this.templatePushDetail.send_type === SendType.periodicPush) {
+            return !(((this.templatePushDetail.start_date && this.templatePushDetail.end_date) ||
+                this.dateUnlimitedChecked) && checkOptionItem);
+        }
+        return !(contentItem || contentObj.start || contentObj.start);
+
     }
 
 
@@ -214,11 +228,13 @@ export class TemplatePushEditComponent implements OnInit {
             httpList.push(this.templatePushManagementService.requestTemplatePushDetailData(this.template_message_id));
         }
         forkJoin(httpList).subscribe(results => {
+            this.loading = false;
             this.templateList = results[0];
             if (this.templateList.length === 0) {
                 this.globalService.promptBox.open('请先创建模板！', () => {
-                    this.router.navigate(['../../template-push-list'], {relativeTo: this.route});
+                    this.router.navigate(['../template-push-list'], {relativeTo: this.route});
                 });
+                return;
             }
             if (this.template_message_id) {
                 this.templatePushDetail = results[1];
@@ -229,12 +245,13 @@ export class TemplatePushEditComponent implements OnInit {
                 this.templatePushDetail.content = new TemplatePushManagementContentEntity();
                 const contentObj = this.templatePushDetail.content;
                 this.templateList[0].content.forEach(item => {
-                    const temp = new TemplatePushManagementContentChildEntity();
-                    temp.key = item.name;
+                    const temp = new TemplateManagementContentEntity();
+                    temp.key = item.key;
                     contentObj.content.push(temp);
                 });
             }
         }, err => {
+            this.loading = false;
             this.globalService.httpErrorProcess(err);
         });
     }

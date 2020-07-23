@@ -29,7 +29,8 @@ export class TemplateManagementEntity extends EntityBase {
 }
 
 export class TemplateManagementContentEntity extends EntityBase {
-    public name: string = undefined; // 名称
+    public key: string = undefined; // 名称
+    public value = ''; // 名称
     public timestamp: Date = new Date(); // ui
 }
 
@@ -86,6 +87,15 @@ export class TemplateManagementService {
         return this.httpService.get(httpUrl).pipe(map(res => {
             return TemplateManagementEntity.Create(res.body);
         }));
+    }
+
+    /**
+     * 判断模板能否删除
+     * @param wx_template_id
+     */
+    public requestTemplateDeleteAllowedData(wx_template_id: string): Observable<any> {
+        const httpUrl = `${this.domain}/wx_templates/${wx_template_id}/delete_allowed`;
+        return this.httpService.get(httpUrl).pipe(map(res => res.body));
     }
 }
 

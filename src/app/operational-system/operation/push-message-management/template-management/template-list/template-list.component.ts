@@ -44,6 +44,7 @@ export class TemplateListComponent implements OnInit {
      */
     public onClickDetail(templateDetail: TemplateManagementEntity) {
         this.templateDetail = templateDetail;
+        console.log(templateDetail);
         timer(1000).subscribe(() => {
             $('#templateDetailPromptDiv').modal('show');
         });
@@ -65,25 +66,35 @@ export class TemplateListComponent implements OnInit {
     // 上架开始时间的禁用部分
     public disabledStartTime = (startValue: Date): boolean => {
         return differenceInCalendarDays(startValue, new Date()) > 0;
-    }
+    };
 
     /**
      * 删除模板
      * @param wx_template_id
      */
     public onDeleteTemplateClick(wx_template_id: string) {
-        this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
-            this.globalService.confirmationBox.close();
-            this.templateManagementService.requestDeleteTemplateData(wx_template_id)
-                .subscribe(res => {
-                    this.requestTemplateList();
-                    this.globalService.promptBox.open('删除成功');
-                }, err => {
-                    if (!this.globalService.httpErrorProcess(err)) {
-                        this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
-                    }
+        this.templateManagementService.requestTemplateDeleteAllowedData(wx_template_id).subscribe(data => {
+            // # 1允许删除 2不可删除
+            if (data.status === 1) {
+                this.globalService.confirmationBox.open('提示', '删除后将不可恢复，确认删除吗？', () => {
+                    this.globalService.confirmationBox.close();
+                    this.templateManagementService.requestDeleteTemplateData(wx_template_id)
+                        .subscribe(res => {
+                            this.requestTemplateList();
+                            this.globalService.promptBox.open('删除成功');
+                        }, err => {
+                            if (!this.globalService.httpErrorProcess(err)) {
+                                this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                            }
+                        });
                 });
+            } else {
+                this.globalService.promptBox.open('此模板正在使用，不可删除！', null, 2000, null, false);
+            }
+        }, err => {
+            this.globalService.httpErrorProcess(err);
         });
+
     }
 
     /**

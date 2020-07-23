@@ -59,7 +59,7 @@
                             {{data.weixin_template_id}}
                         </span>
                     </td>
-                    <td>{{data.created_time| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.created_time*1000| date:"y-MM-dd HH:mm"}}</td>
                     <td class="operation">
                         <a [title]="'详情'" (appZDebounceClick)="onClickDetail(data)">详情</a>
                         <a [title]="'删除'"
@@ -131,9 +131,9 @@
                     <h4>内容示例</h4>
                     <div class="content-example">
                         <h3>{{templateDetail.title}}：</h3>
-                        <p>********************</p>
-                        <p *ngFor="let template of templateDetail.content">{{template.name}}：********************</p>
-                        <p>********************</p>
+                        <p>*************************************</p>
+                        <p *ngFor="let template of templateDetail.content">{{template.key}}：********************</p>
+                        <p>*************************************</p>
                         <div class="content-example-btn">
                             <span>详情</span>
                             <img src="../../../../../../assets/images/icon_arrow.png">

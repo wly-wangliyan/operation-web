@@ -10,7 +10,7 @@ import {
     NzButtonModule,
     NzCheckboxModule,
     NzDatePickerModule,
-    NzRadioModule,
+    NzRadioModule, NzSpinModule,
     NzSwitchModule,
     NzTableModule,
     NzTimePickerModule
@@ -34,9 +34,11 @@ import {
         NzSwitchModule,
         NzRadioModule,
         NzCheckboxModule,
+        NzSpinModule,
         NzTimePickerModule,
         TemplatePushManagementRoutingModule,
     ]
 })
+
 export class TemplatePushManagementModule {
 }
