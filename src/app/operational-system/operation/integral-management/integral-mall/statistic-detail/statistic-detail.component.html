@@ -15,7 +15,7 @@
         </ng-container>
       </div>
       <div>
-        <a style="word-break: keep-all;text-align: left;font-size: 16px;"
+        <a style="word-break: keep-all;text-align: left;font-size: 16px;white-space: nowrap;"
           [routerLink]="['../../detail', commodityInfo.commodity_id,commodityInfo.commodity_type]">
           {{commodityInfo.commodity_name || '--'}}
         </a>
@@ -68,7 +68,7 @@
           <tr *ngFor="let data of statisticsTable.data; let i=index">
             <td>{{data.ymd ? (data.ymd* 1000 | date:"y-MM-dd") : '--'}}</td>
             <td>{{data.click_num || 0}}</td>
-            <td>{{data.click_person || 0}}</td>
+            <td>{{data.click_people || 0}}</td>
           </tr>
         </tbody>
       </nz-table>

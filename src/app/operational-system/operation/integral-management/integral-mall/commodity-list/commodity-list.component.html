@@ -88,7 +88,7 @@
                   </ng-container>
                 </div>
                 <div style="display: grid">
-                  <a style="word-break: keep-all;text-align: left"
+                  <a style="word-break: keep-all;text-align: left;white-space: nowrap;"
                     [title]="globalService.limitStrLengthTitle(commodity.commodity_name, 15)"
                     [routerLink]="['../detail', commodity.commodity_id, commodity.commodity_type]">
                     {{commodity.commodity_name | zMaxLength:15}}

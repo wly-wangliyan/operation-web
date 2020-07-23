@@ -45,7 +45,7 @@ export class IntegralOrderEntity extends EntityBase {
   public delivery_status: number = undefined; // 发货状态; 1: 待发货; 2: 已发货; 3: 已签收; 4: 发货失败;
   public order_status = undefined; // 	integer	订单状态 1未完成，2已完成
   public pay_time: number = undefined; // 支付时间;
-  public remark: string = undefined; // 平台备注;
+  public order_remark: string = undefined; // 平台备注;
   public buyer_remark: string = undefined; // 买家备注;
   public name: string = undefined; // 买家姓名;
   public telephone: string = undefined; // 买家电话;
@@ -111,13 +111,13 @@ export class IntegralOrderHttpService {
   /**
    * 修改备注信息
    * @param integral_order_id 订单id
-   * @param remark 平台备注
+   * @param order_remark 平台备注
    * @returns Observable<HttpResponse<any>>
    */
-  public requestModifyOrderRemark(integral_order_id: string, remark: string): Observable<HttpResponse<any>> {
+  public requestModifyOrderRemark(integral_order_id: string, order_remark: string): Observable<HttpResponse<any>> {
     const httpUrl = `${this.domain}/integral_orders/${integral_order_id}`;
     return this.httpService.put(httpUrl, {
-      remark
+      order_remark
     });
   }
 }

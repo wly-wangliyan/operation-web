@@ -46,6 +46,12 @@ export class UserIntegralLinkResponse extends LinkResponse {
   }
 }
 
+// 积分规则
+export class RuleItem extends EntityBase {
+  public total: number = undefined; // 积分数
+  public rule_id: string = undefined; // 规则id
+}
+
 // 积分获取记录
 export class GainRecordEntity extends EntityBase {
   public gain_record_id: string = undefined; // 主键
@@ -53,7 +59,7 @@ export class GainRecordEntity extends EntityBase {
   public ht_code: string = undefined; // ht_code;
   public user_id: string = undefined; // user_id
   public city_code = '210100'; // 城市 "210100", "210500"
-  public rules_detail: string = undefined; // 积分规则
+  public rules_detail: Array<RuleItem> = undefined; // 积分规则
   public three_order_id: string = undefined; // 订单编号
   public business_type: number = undefined; // 业务类型(1停车缴费)
   public due_integral: number = undefined; // 应得积分
@@ -62,6 +68,13 @@ export class GainRecordEntity extends EntityBase {
   public issue_status: number = undefined; // 发放状态 1已发放 2未发放
   public created_time: number = undefined; // float 创建时间;
   public updated_time: number = undefined; // float 更新时间;
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'rules_detail') {
+      return RuleItem;
+    }
+    return null;
+  }
 }
 
 export class GainRecordLinkResponse extends LinkResponse {

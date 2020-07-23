@@ -127,7 +127,7 @@ export class DailyClickEntity extends EntityBase {
   public daily_click_id: string = undefined; // 主键
   public commodity: IntegralCommodityEntity = undefined;
   public click_num: number = undefined; // 点击量
-  public click_person: number = undefined; // 点击人数
+  public click_people: number = undefined; // 点击人数
   public ymd: number = undefined; // 日期 "2020-06-30"
 
   public getPropertyClass(propertyName: string): typeof EntityBase {

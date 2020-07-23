@@ -90,9 +90,12 @@ export class RuleEntity extends EntityBase {
   }
 }
 
+// 筛选自定义规则列表
 export class SearchCustomIntegralParams extends EntityBase {
   public status: any = ''; // 状态 1生效 2失效
   public name: string = undefined; // 名称
+  public page_num = 1;
+  public page_size = 45;
 }
 
 export class CustomRuleLinkResponse extends LinkResponse {

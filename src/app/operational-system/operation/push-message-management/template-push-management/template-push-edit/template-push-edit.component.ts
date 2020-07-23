@@ -122,7 +122,7 @@ export class TemplatePushEditComponent implements OnInit {
      */
     onFileChange(evt: any) {
         /* wire up file reader */
-        const target: DataTransfer = <DataTransfer>(evt.target);
+        const target: DataTransfer = (evt.target) as DataTransfer;
         if (target.files.length === 0) {
             return;
         }

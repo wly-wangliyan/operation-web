@@ -47,7 +47,7 @@
             <th>序号</th>
             <ng-container *ngIf="tab_key===1">
               <th>业务类型</th>
-              <th>规则ID</th>
+              <th nzWidth="200px">规则ID</th>
               <th>订单编号</th>
               <th>获取积分数</th>
               <th>实际发放</th>
@@ -73,11 +73,15 @@
             <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+i+1}}</td>
             <ng-container *ngIf="tab_key===1">
               <td>{{data.business_type===1?'停车缴费':'其他'}}</td>
-              <td [title]="data.gain_record_id||''">
-                <span *ngIf="data.gain_record_id" [appTxtCopy]="data.gain_record_id">
-                  {{data.gain_record_id|zMaxLength:10}}
-                </span>
-                <span *ngIf="!data.gain_record_id">--</span>
+              <td>
+                <div *ngFor="let item of data.rules_detail; last as isLast">
+                  <div>
+                    <span [title]="item.rule_id||''"
+                      [appTxtCopy]="item.rule_id||''">{{item.rule_id|zMaxLength:10}}</span>
+                    <!-- <span *ngIf="!isLast">, </span> -->
+                  </div>
+                </div>
+                <span *ngIf="!data.rules_detail || data.rules_detail.length===0">--</span>
               </td>
               <td [title]="data.three_order_id||''">
                 <span *ngIf="data.three_order_id" [appTxtCopy]="data.three_order_id">

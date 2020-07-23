@@ -1,9 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { GoodsOrderRemarkComponent } from '../../../../mall/goods-order-management/goods-order-remark/goods-order-remark.component';
-import { forkJoin, timer } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
-import { TemplateManagementService } from '../../template-management/template-management.service';
 import { SendRecordEntity, TemplatePushManagementEntity, TemplatePushManagementService } from '../template-push-management.service';
 
 @Component({
@@ -15,6 +13,7 @@ export class TemplatePushDetailComponent implements OnInit {
     @ViewChild('remarkPromptDiv', {static: true}) public remarkPromptDiv: ElementRef;
     public templatePushDetail: TemplatePushManagementEntity = new TemplatePushManagementEntity();
     public sendRecordList: Array<SendRecordEntity> = [];
+    public remark = '';
     private template_message_id: string;
 
     constructor(private route: ActivatedRoute,
@@ -30,6 +29,28 @@ export class TemplatePushDetailComponent implements OnInit {
         this.requestTemplatePushDetail();
     }
 
+    /*
+     * 修改备注信息
+   * */
+    public onUpdateRemarkClick() {
+        $(this.remarkPromptDiv.nativeElement).modal('show');
+    }
+
+    /**
+     * 编辑备注
+     */
+    public onEditRemarkFormSubmit() {
+        const params = new TemplatePushManagementEntity();
+        params.remark = this.remark;
+        this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(data => {
+            this.globalService.promptBox.open('保存成功！', () => {
+                this.requestTemplatePushDetail();
+            });
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
     /**
      * 请求详情
      */
@@ -40,20 +61,9 @@ export class TemplatePushDetailComponent implements OnInit {
         forkJoin(httpList).subscribe(results => {
             this.templatePushDetail = results[0];
             this.sendRecordList = results[1];
+            this.remark = this.templatePushDetail.clone().remark;
         }, err => {
             this.globalService.httpErrorProcess(err);
         });
-    }
-
-    /*
-     * 修改备注信息
-     * @param data GoodsOrderEntity 商品信息
-   * */
-    public onUpdateRemarkClick() {
-        $(this.remarkPromptDiv.nativeElement).modal('show');
-    }
-
-    public onEditRemarkFormSubmit() {
-
     }
 }

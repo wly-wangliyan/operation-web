@@ -51,7 +51,7 @@ export class TemplatePushManagementEntity extends EntityBase {
     public date_unlimited: DateUnlimited = DateUnlimited.limited; // 1不限日期 2限制日期 默认2
     public weekday: string = undefined; // "1,2,3,4", "6,7"
     public send_time: number = undefined; // 480 当天分钟数
-    public remark: number = undefined; // 480 当天分钟数
+    public remark: string = undefined; // 备注
     public off_time: string = undefined; // 下线时间
     public created_time: string = undefined; // 创建时间
     public updated_time: string = undefined; // 更新时间

@@ -22,7 +22,7 @@ import {
         TemplatePushManagementComponent,
         TemplatePushListComponent,
         TemplatePushEditComponent,
-        TemplatePushDetailComponent
+        TemplatePushDetailComponent,
     ],
     imports: [
         CommonModule,
