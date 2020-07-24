@@ -11,9 +11,7 @@ import {
     NzCheckboxModule,
     NzDatePickerModule,
     NzRadioModule, NzSpinModule,
-    NzSwitchModule,
-    NzTableModule,
-    NzTimePickerModule
+    NzSwitchModule, NzTableModule,
 } from 'ng-zorro-antd';
 
 
@@ -28,14 +26,12 @@ import {
         CommonModule,
         ShareModule,
         NzTableModule,
-        NzTableModule,
         NzButtonModule,
         NzDatePickerModule,
         NzSwitchModule,
         NzRadioModule,
         NzCheckboxModule,
         NzSpinModule,
-        NzTimePickerModule,
         TemplatePushManagementRoutingModule,
     ]
 })

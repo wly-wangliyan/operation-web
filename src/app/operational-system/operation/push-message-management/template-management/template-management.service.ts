@@ -17,13 +17,13 @@ export class TemplateManagementEntity extends EntityBase {
     public wx_template_id: string = undefined; // 主键id
     public weixin_template_id: string = undefined; // 微信模板id
     public title: string = undefined; // 模板标题
-    public content: Array<TemplateManagementContentEntity> = []; // 内容 [{'name': '停车场'},{'name': '停车位'}]
+    public keywords: Array<TemplateManagementContentEntity> = []; // 内容 [{'name': '停车场'},{'name': '停车位'}]
     public is_deleted: string = undefined; // 是否删除
-    public created_time: string = undefined; // 创建时间
-    public updated_time: string = undefined; // 更新时间
+    public created_time: number = undefined; // 创建时间
+    public updated_time: number = undefined; // 更新时间
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-        if (propertyName === 'content') {
+        if (propertyName === 'keywords') {
             return TemplateManagementContentEntity;
         }
         return null;

@@ -23,14 +23,14 @@
                     <td colspan="5">
                         <div class="template-content-detail">
                             <h3>{{templatePushDetail.title}}</h3>
-                            <p *ngIf="templatePushDetail.content.start">{{templatePushDetail.content.start}}</p>
-                            <ng-container *ngFor="let content of templatePushDetail.content.content">
+                            <p *ngIf="templatePushDetail.content.first">{{templatePushDetail.content.first}}</p>
+                            <ng-container *ngFor="let content of templatePushDetail.content.keywords">
                                 <p *ngIf="content.value">
                                     {{content.key}}：{{content.value}}
                                 </p>
                             </ng-container>
 
-                            <p *ngIf="templatePushDetail.content.end">{{templatePushDetail.content.end}}</p>
+                            <p *ngIf="templatePushDetail.content.remark">{{templatePushDetail.content.remark}}</p>
                         </div>
                     </td>
                 </tr>
@@ -74,7 +74,8 @@
                     <td>备注：</td>
                     <td>
                         <div class="template-push-remark">
-                            <p>{{templatePushDetail.remark?templatePushDetail.remark:'-'}}</p>
+                            <p [innerHTML]="templatePushDetail.remark" *ngIf="templatePushDetail.remark"></p>
+                            <p *ngIf="!templatePushDetail.remark">-</p>
                             <button nz-button nzType="primary" (click)="onUpdateRemarkClick()">编辑</button>
                         </div>
                     </td>
@@ -157,7 +158,8 @@
                 </div>
                 <div class="modal-footer">
                     <button class="close-btn" nz-button data-dismiss="modal">取消</button>
-                    <button class="sure-btn" nz-button nzType="primary" [disabled]="!editRemarkForm.form.valid"
+                    <button type="submit" class="sure-btn" nz-button nzType="primary"
+                            [disabled]="!editRemarkForm.form.valid"
                             (appZDebounceClick)="onEditRemarkFormSubmit()">
                         确定
                     </button>

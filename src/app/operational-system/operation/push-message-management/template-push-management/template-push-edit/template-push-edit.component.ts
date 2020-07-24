@@ -62,7 +62,7 @@ export class TemplatePushEditComponent implements OnInit {
 
     // 上架开始时间的禁用部分
     public disabledSetTime = (startValue: Date): boolean => {
-        return differenceInCalendarDays(startValue, new Date()) > 0;
+        return differenceInCalendarDays(new Date(), startValue) > 0;
     };
 
     // 上架开始时间的禁用部分
@@ -95,7 +95,7 @@ export class TemplatePushEditComponent implements OnInit {
         this.templatePushDetail.wx_template_id = this.templateList[findIndex].wx_template_id;
         this.templatePushDetail.content = new TemplatePushManagementContentEntity();
         const contentObj = this.templatePushDetail.content;
-        this.templateList[findIndex].content.forEach(item => {
+        this.templateList[findIndex].keywords.forEach(item => {
             const temp = new TemplateManagementContentEntity();
             temp.key = item.key;
             contentObj.keywords.push(temp);
@@ -245,7 +245,7 @@ export class TemplatePushEditComponent implements OnInit {
             }
             if (this.template_message_id) {
                 this.templatePushDetail = results[1].clone();
-                this.templatePushDetail.user_category = parseFloat(results[1].user_category);
+                this.templatePushDetail.user_category = results[1].user_category.toString();
                 this.templatePushDetail.set_time = results[1].set_time ? new Date((results[1].set_time) * 1000) : null;
                 if (this.templatePushDetail.send_type === SendType.periodicPush) {
                     this.templatePushDetail.start_date = new Date((results[1].start_date) * 1000);
@@ -265,7 +265,7 @@ export class TemplatePushEditComponent implements OnInit {
                 this.templatePushDetail.wx_template_id = this.templateList[0].wx_template_id;
                 this.templatePushDetail.content = new TemplatePushManagementContentEntity();
                 const contentObj = this.templatePushDetail.content;
-                this.templateList[0].content.forEach(item => {
+                this.templateList[0].keywords.forEach(item => {
                     const temp = new TemplateManagementContentEntity();
                     temp.key = item.key;
                     contentObj.keywords.push(temp);
