@@ -61,6 +61,7 @@
                     <div class="control-input user-range">
                         <div>
                             <select class="form-control" [(ngModel)]="templatePushDetail.user_category"
+                                    (change)="templatePushDetail.uu_codes=''"
                                     name="user_category" required>
                                 <option [value]="UserCategory.all">全部(沈阳)</option>
                                 <option [value]="UserCategory.appoint">指定用户</option>
@@ -186,7 +187,7 @@
                             [disabled]="!editTemplatePushModal.form.valid||disabledBtn"
                             (appZDebounceClick)="onEditFormSubmit()">保存
                     </button>
-                    <button class="close-btn" type="button" nz-button>取消</button>
+                    <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
                 </div>
             </form>
         </div>

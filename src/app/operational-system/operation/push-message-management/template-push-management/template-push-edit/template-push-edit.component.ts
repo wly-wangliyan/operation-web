@@ -201,7 +201,7 @@ export class TemplatePushEditComponent implements OnInit {
         }
         this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(() => {
             this.globalService.promptBox.open(this.template_message_id ? '编辑成功！' : '添加成功！', () => {
-                this.router.navigate(['../'], {relativeTo: this.route});
+                this.goToListPage();
             });
         }, err => {
             this.globalService.httpErrorProcess(err);
@@ -220,7 +220,13 @@ export class TemplatePushEditComponent implements OnInit {
                 this.dateUnlimitedChecked) && checkOptionItem);
         }
         return !(contentItem || contentObj.first || contentObj.remark);
+    }
 
+    /**
+     * 返回列表
+     */
+    public goToListPage() {
+        this.router.navigate(['../'], {relativeTo: this.route});
     }
 
 
@@ -239,7 +245,7 @@ export class TemplatePushEditComponent implements OnInit {
             this.templateList = results[0];
             if (this.templateList.length === 0) {
                 this.globalService.promptBox.open('请先创建模板！', () => {
-                    this.router.navigate(['../'], {relativeTo: this.route});
+                    this.goToListPage();
                 });
                 return;
             }
