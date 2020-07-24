@@ -42,7 +42,7 @@ export class TemplatePushListComponent implements NzSearchAdapter {
             return templatePush.set_time >= currentTime;
         } else if (templatePush.send_type === SendType.periodicPush) {
             const currentTime = this.globalService.timeStamp;
-            const _end_date = (new Date(templatePush.end_date).setSeconds(23, 59) / 1000);
+            const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
             return _end_date >= currentTime;
         } else {
             return false;

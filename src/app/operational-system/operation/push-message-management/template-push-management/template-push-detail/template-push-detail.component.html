@@ -11,7 +11,10 @@
                     <td>模板标题：</td>
                     <td>{{templatePushDetail.title}}</td>
                     <td>用户范围：</td>
-                    <td>{{templatePushDetail.user_category===UserCategory.all?'全部(沈阳)':'指定用户'}}</td>
+                    <td (click)="onClickViewUser()"
+                        [class.selected]="templatePushDetail.user_category===UserCategory.appoint">
+                        {{templatePushDetail.user_category===UserCategory.all?'全部(沈阳)':'指定用户'}}
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -46,7 +49,7 @@
                         </ng-container>
                         <ng-container *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                             <ng-container *ngIf="templatePushDetail.date_unlimited===DateUnlimited.limited">
-                                {{templatePushDetail.start_date*1000| date:"y-MM-dd"}}~
+                                {{templatePushDetail.start_date*1000| date:"y-MM-dd"}} ~
                                 {{templatePushDetail.end_date*1000| date:"y-MM-dd"}}
                                 <ng-container *ngFor="let checkOption of checkOptions">
                                     <ng-container *ngIf="checkOption.checked">{{checkOption.label}}</ng-container>
@@ -104,6 +107,31 @@
     </div>
 </div>
 
+<!-- 查看指定用户信息 -->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" id="uuCodePromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">指定用户信息</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="control-label">
+                        <span>指定用户：</span>
+                    </label>
+                    <div class="control-input">
+                        <textarea class='form-control' [value]="templatePushDetail.uu_codes" readonly
+                                  rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 修改备注信息 -->
 <div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true" #remarkPromptDiv>
@@ -115,14 +143,16 @@
                 </button>
             </div>
             <form class="form-horizontal" #editRemarkForm="ngForm">
-                <div class="row">
-                    <label class="control-label">
-                        <span>备注：</span>
-                    </label>
-                    <div class="control-input">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <span>备注：</span>
+                        </label>
+                        <div class="control-input">
                         <textarea class='form-control' [(ngModel)]="remark" name="remark"
                                   placeholder="200字以内..."
                                   maxlength="200"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

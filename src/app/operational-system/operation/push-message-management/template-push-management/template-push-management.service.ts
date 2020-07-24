@@ -70,12 +70,12 @@ export class TemplatePushManagementEntity extends EntityBase {
 }
 
 export class TemplatePushManagementContentEntity extends EntityBase {
-    public start: string = undefined;
-    public content: Array<TemplateManagementContentEntity> = [];
-    public end: string = undefined;
+    public first: string = undefined;
+    public keywords: Array<TemplateManagementContentEntity> = [];
+    public remark: string = undefined;
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-        if (propertyName === 'content') {
+        if (propertyName === 'keywords') {
             return TemplateManagementContentEntity;
         }
         return null;

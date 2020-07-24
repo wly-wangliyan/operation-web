@@ -98,7 +98,7 @@ export class TemplatePushEditComponent implements OnInit {
         this.templateList[findIndex].content.forEach(item => {
             const temp = new TemplateManagementContentEntity();
             temp.key = item.key;
-            contentObj.content.push(temp);
+            contentObj.keywords.push(temp);
         });
     }
 
@@ -186,6 +186,12 @@ export class TemplatePushEditComponent implements OnInit {
         const params = this.templatePushDetail.clone();
         if (params.send_type === SendType.timingPush) {
             params.set_time = (new Date(this.templatePushDetail.set_time).setSeconds(0, 0) / 1000);
+            const currentTime = this.globalService.timeStamp;
+            const day = (currentTime - params.set_time) / (24 * 60 * 60);
+            if (Math.abs(day) > 365) {
+                this.globalService.promptBox.open('定时推送时间不能超过365天！');
+                return;
+            }
         } else if (params.send_type === SendType.periodicPush) {
             params.start_date = (new Date(this.templatePushDetail.start_date).setSeconds(0, 0) / 1000);
             params.end_date = (new Date(this.templatePushDetail.end_date).setSeconds(0, 0) / 1000);
@@ -207,13 +213,13 @@ export class TemplatePushEditComponent implements OnInit {
      */
     public get disabledBtn(): boolean {
         const contentObj = this.templatePushDetail.content;
-        const contentItem = contentObj.content.find(item => !!item.value);
+        const contentItem = contentObj.keywords.find(item => !!item.value);
         const checkOptionItem = this.checkOptions.find(item => !!item.checked);
         if (this.templatePushDetail.send_type === SendType.periodicPush) {
             return !(((this.templatePushDetail.start_date && this.templatePushDetail.end_date) ||
                 this.dateUnlimitedChecked) && checkOptionItem);
         }
-        return !(contentItem || contentObj.start || contentObj.start);
+        return !(contentItem || contentObj.first || contentObj.remark);
 
     }
 
@@ -239,6 +245,7 @@ export class TemplatePushEditComponent implements OnInit {
             }
             if (this.template_message_id) {
                 this.templatePushDetail = results[1].clone();
+                this.templatePushDetail.user_category = parseFloat(results[1].user_category);
                 this.templatePushDetail.set_time = results[1].set_time ? new Date((results[1].set_time) * 1000) : null;
                 if (this.templatePushDetail.send_type === SendType.periodicPush) {
                     this.templatePushDetail.start_date = new Date((results[1].start_date) * 1000);
@@ -254,16 +261,23 @@ export class TemplatePushEditComponent implements OnInit {
                     });
                 }
             }
-            const findIndex = this.templateList.findIndex(item => item.wx_template_id === this.templatePushDetail.wx_template_id);
-            if (findIndex < 0) {
+            if (!this.template_message_id) {
                 this.templatePushDetail.wx_template_id = this.templateList[0].wx_template_id;
                 this.templatePushDetail.content = new TemplatePushManagementContentEntity();
                 const contentObj = this.templatePushDetail.content;
                 this.templateList[0].content.forEach(item => {
                     const temp = new TemplateManagementContentEntity();
                     temp.key = item.key;
-                    contentObj.content.push(temp);
+                    contentObj.keywords.push(temp);
                 });
+            } else {
+                const findIndex = this.templateList.findIndex(item => item.wx_template_id === this.templatePushDetail.wx_template_id);
+                if (findIndex < 0) { // 没有自己手动插入一条
+                    const temp = new TemplateManagementEntity();
+                    temp.wx_template_id = this.templatePushDetail.wx_template_id;
+                    temp.title = this.templatePushDetail.title;
+                    this.templateList.unshift(temp);
+                }
             }
         }, err => {
             this.loading = false;

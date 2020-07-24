@@ -25,6 +25,7 @@ export class TemplatePushDetailComponent implements OnInit {
     public sendRecordList: Array<SendRecordEntity> = [];
     public remark = '';
     public time = new TimeItem();
+    public uuCodeList = [];
     public checkOptions = [
         {label: '周一', value: 1, checked: false},
         {label: '周二', value: 2, checked: false},
@@ -47,6 +48,15 @@ export class TemplatePushDetailComponent implements OnInit {
 
     public ngOnInit() {
         this.requestTemplatePushDetail();
+    }
+
+    /**
+     * 查看用户
+     */
+    public onClickViewUser() {
+        if (this.templatePushDetail.user_category === UserCategory.appoint) {
+            $('#uuCodePromptDiv').modal('show');
+        }
     }
 
     /*
@@ -78,17 +88,19 @@ export class TemplatePushDetailComponent implements OnInit {
     private requestTemplatePushDetail() {
         const httpList = [];
         httpList.push(this.templatePushManagementService.requestTemplatePushDetailData(this.template_message_id));
-        // httpList.push(this.templatePushManagementService.requestTemplatePushRecordListData(this.template_message_id));
+        httpList.push(this.templatePushManagementService.requestTemplatePushRecordListData(this.template_message_id));
         forkJoin(httpList).subscribe(results => {
-            this.templatePushDetail = results[0].clone;
+            this.templatePushDetail = results[0].clone();
+            this.uuCodeList = this.templatePushDetail.uu_codes.split(',');
+            this.templatePushDetail.user_category = results[0].user_category.toString();
             const weekdays = this.templatePushDetail.weekday.split(',');
             this.checkOptions.forEach(item => {
                 if (weekdays.indexOf(item.value.toString()) > -1) {
                     item.checked = true;
                 }
             });
-            this.time = results[1].send_time && results[1].send_time.time ?
-                DateFormatHelper.getMinuteOrTime(results[1].send_time.time, 'mm')
+            this.time = results[0].send_time && results[0].send_time.time ?
+                DateFormatHelper.getMinuteOrTime(results[0].send_time.time, 'mm')
                 : new TimeItem();
             this.sendRecordList = results[1];
             this.remark = this.templatePushDetail.clone().remark;
