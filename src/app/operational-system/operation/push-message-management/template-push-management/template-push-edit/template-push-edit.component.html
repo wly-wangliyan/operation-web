@@ -33,7 +33,8 @@
                     </label>
                     <div class="control-input">
                         <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.start"
-                               placeholder="输入1-50个字标题"
+                               style="margin-bottom: 15px"
+                               placeholder="输入1-50个字"
                                maxlength="50"
                                appIgnoreSpace
                                name="start">
@@ -42,11 +43,11 @@
                                 {{contentObj.key}}
                             </label>
                             <input class="form-control" type="text" [(ngModel)]="contentObj.value" maxlength="50"
-                                   placeholder="输入1-50个字标题"
+                                   placeholder="输入1-50个字"
                                    [name]="contentObj.timestamp">
                         </div>
                         <input class="form-control" type="text" [(ngModel)]="templatePushDetail.content.end"
-                               placeholder="输入1-50个字标题"
+                               placeholder="输入1-50个字"
                                maxlength="50"
                                appIgnoreSpace
                                name="end">
@@ -108,6 +109,7 @@
                     </label>
                     <div class="control-input">
                         <nz-radio-group [(ngModel)]="templatePushDetail.send_type" name="send_type"
+                                        [nzDisabled]="template_message_id"
                                         (ngModelChange)="onChangeSendType()">
                             <label nz-radio [nzValue]="SendType.pushNow">立即推送</label>
                             <label nz-radio [nzValue]="SendType.timingPush">定时推送</label>
@@ -120,6 +122,7 @@
                     </label>
                     <div class="control-input">
                         <nz-date-picker [(ngModel)]="templatePushDetail.set_time" [nzShowToday]=false required
+                                        [nzDisabled]="template_message_id"
                                         [nzDisabledDate]="disabledSetTime"
                                         name='set_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -130,13 +133,13 @@
                     </label>
                     <div class="control-input periodic-push-container">
                         <nz-date-picker [(ngModel)]="templatePushDetail.start_date" [nzShowToday]=false
-                                        [nzDisabled]="dateUnlimitedChecked"
+                                        [nzDisabled]="dateUnlimitedChecked||template_message_id"
                                         [nzDisabledDate]="disabledStartDate"
                                         name='start_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                         <span class='line'>-</span>
                         <nz-date-picker [(ngModel)]="templatePushDetail.end_date" [nzShowToday]=false
-                                        [nzDisabled]="dateUnlimitedChecked"
+                                        [nzDisabled]="dateUnlimitedChecked||template_message_id"
                                         [nzDisabledDate]="disabledEndDate"
                                         name='end_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                         nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
@@ -150,7 +153,8 @@
                     <label class="control-label">
                     </label>
                     <div class="control-input">
-                        <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"></nz-checkbox-group>
+                        <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"
+                                           [nzDisabled]="template_message_id"></nz-checkbox-group>
                         <div class="week-selected-checkbox">
                             <span (click)="onClickWeekDay(WeekdayOperationType.all)">全选</span>
                             <span (click)="onClickWeekDay(WeekdayOperationType.workingDay)">工作日</span>
@@ -161,8 +165,9 @@
                 <div class="row" *ngIf="templatePushDetail.send_type===SendType.periodicPush">
                     <label class="control-label"></label>
                     <div class="control-input">
-                        <nz-time-picker required [(ngModel)]="currentTime" name="currentTime"
-                                        nzFormat="HH:mm"></nz-time-picker>
+                        <app-date-clock [has24]="false" [(hour)]="time.hour" [(minute)]="time.minute"
+                                        [readonly]="template_message_id">
+                        </app-date-clock>
                     </div>
                 </div>
                 <div class="row">

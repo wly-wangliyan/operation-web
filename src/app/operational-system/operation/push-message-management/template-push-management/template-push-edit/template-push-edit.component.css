@@ -60,6 +60,10 @@ select.form-control {
     margin: 15px 0;
 }
 
+.content-detail-item:first-child{
+    margin-top: 0;
+}
+
 .content-detail-item input.form-control {
     width: 345px;
 }

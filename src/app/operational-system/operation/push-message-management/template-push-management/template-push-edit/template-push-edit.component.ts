@@ -16,6 +16,7 @@ import {
     TemplateManagementEntity,
     TemplateManagementService
 } from '../../template-management/template-management.service';
+import { DateFormatHelper, TimeItem } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-application-push-edit',
@@ -31,7 +32,7 @@ export class TemplatePushEditComponent implements OnInit {
     public SendType = SendType;
     public WeekdayOperationType = WeekdayOperationType;
     public dateUnlimitedChecked = false; // 是否是不限制
-    public currentTime: Date = null; // 当前时间
+    public time: TimeItem = new TimeItem(); // 发放时间
     public loading = true; // 标记loading
     public checkOptions = [
         {label: '周一', value: 1, checked: false},
@@ -42,7 +43,7 @@ export class TemplatePushEditComponent implements OnInit {
         {label: '周六', value: 6, checked: false},
         {label: '周日', value: 7, checked: false}
     ];
-    private template_message_id: string;
+    public template_message_id: string;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -54,7 +55,7 @@ export class TemplatePushEditComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.levelName = this.template_message_id ? '编辑' : '新建';
         this.requestTemplateData();
     }
@@ -66,7 +67,7 @@ export class TemplatePushEditComponent implements OnInit {
 
     // 上架开始时间的禁用部分
     public disabledStartDate = (startValue: Date): boolean => {
-        if (differenceInCalendarDays(startValue, new Date()) > 0) {
+        if (differenceInCalendarDays(new Date(), startValue) > 0) {
             return true;
         } else if (!startValue || !this.templatePushDetail.end_date) {
             return false;
@@ -76,7 +77,7 @@ export class TemplatePushEditComponent implements OnInit {
 
     // 上架结束时间的禁用部分
     public disabledEndDate = (endValue: Date): boolean => {
-        if (differenceInCalendarDays(endValue, new Date()) > 0) {
+        if (differenceInCalendarDays(new Date(), endValue) > 0) {
             return true;
         } else if (!endValue || !this.templatePushDetail.start_date) {
             return false;
@@ -111,7 +112,7 @@ export class TemplatePushEditComponent implements OnInit {
         this.templatePushDetail.set_time = null;
         this.templatePushDetail.send_time = null;
         this.templatePushDetail.date_unlimited = DateUnlimited.limited;
-        this.currentTime = null;
+        this.time = new TimeItem();
     }
 
     /**
@@ -163,16 +164,18 @@ export class TemplatePushEditComponent implements OnInit {
      * @param type
      */
     public onClickWeekDay(type: WeekdayOperationType) {
-        const fiveCheck = this.checkOptions.slice(0, 5);
-        const lastTwoCheck = this.checkOptions.slice(5);
-        if (type === WeekdayOperationType.all) {
-            this.checkOptions.forEach(item => item.checked = true);
-        } else if (type === WeekdayOperationType.weekend) {
-            fiveCheck.forEach(item => item.checked = false);
-            lastTwoCheck.forEach(item => item.checked = true);
-        } else {
-            fiveCheck.forEach(item => item.checked = true);
-            lastTwoCheck.forEach(item => item.checked = false);
+        if (!this.template_message_id) {
+            const fiveCheck = this.checkOptions.slice(0, 5);
+            const lastTwoCheck = this.checkOptions.slice(5);
+            if (type === WeekdayOperationType.all) {
+                this.checkOptions.forEach(item => item.checked = true);
+            } else if (type === WeekdayOperationType.weekend) {
+                fiveCheck.forEach(item => item.checked = false);
+                lastTwoCheck.forEach(item => item.checked = true);
+            } else {
+                fiveCheck.forEach(item => item.checked = true);
+                lastTwoCheck.forEach(item => item.checked = false);
+            }
         }
     }
 
@@ -188,13 +191,11 @@ export class TemplatePushEditComponent implements OnInit {
             params.end_date = (new Date(this.templatePushDetail.end_date).setSeconds(0, 0) / 1000);
             const _checkOptions = this.checkOptions.filter(item => item.checked);
             params.weekday = _checkOptions.map(item => item.value).join(',');
-            const hour = this.currentTime.getHours();
-            const minute = this.currentTime.getMinutes();
-            params.send_time = hour * 60 + minute;
+            params.send_time = DateFormatHelper.getSecondTimeSum(this.time, 'mm');
         }
         this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(() => {
             this.globalService.promptBox.open(this.template_message_id ? '编辑成功！' : '添加成功！', () => {
-                this.router.navigate(['../template-push-list'], {relativeTo: this.route});
+                this.router.navigate(['../'], {relativeTo: this.route});
             });
         }, err => {
             this.globalService.httpErrorProcess(err);
@@ -232,12 +233,26 @@ export class TemplatePushEditComponent implements OnInit {
             this.templateList = results[0];
             if (this.templateList.length === 0) {
                 this.globalService.promptBox.open('请先创建模板！', () => {
-                    this.router.navigate(['../template-push-list'], {relativeTo: this.route});
+                    this.router.navigate(['../'], {relativeTo: this.route});
                 });
                 return;
             }
             if (this.template_message_id) {
-                this.templatePushDetail = results[1];
+                this.templatePushDetail = results[1].clone();
+                this.templatePushDetail.set_time = results[1].set_time ? new Date((results[1].set_time) * 1000) : null;
+                if (this.templatePushDetail.send_type === SendType.periodicPush) {
+                    this.templatePushDetail.start_date = new Date((results[1].start_date) * 1000);
+                    this.templatePushDetail.end_date = new Date((results[1].end_date) * 1000);
+                    this.time = results[1].send_time && results[1].send_time.time ?
+                        DateFormatHelper.getMinuteOrTime(results[1].send_time.time, 'mm')
+                        : new TimeItem();
+                    const weekdays = this.templatePushDetail.weekday.split(',');
+                    this.checkOptions.forEach(item => {
+                        if (weekdays.indexOf(item.value.toString()) > -1) {
+                            item.checked = true;
+                        }
+                    });
+                }
             }
             const findIndex = this.templateList.findIndex(item => item.wx_template_id === this.templatePushDetail.wx_template_id);
             if (findIndex < 0) {

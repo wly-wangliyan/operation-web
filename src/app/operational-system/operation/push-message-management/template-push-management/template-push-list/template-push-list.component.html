@@ -58,20 +58,21 @@
                         </span>
                     </td>
                     <td [title]="data.title">{{data.title}}</td>
-                    <td>{{data.created_time| date:"y-MM-dd HH:mm"}}</td>
-                    <td>{{data.updated_time| date:"y-MM-dd HH:mm"}}</td>
-                    <td></td>
+                    <td>{{data.created_time*1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.updated_time*1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.total_send_number}}</td>
                     <td>
                         <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"
                                    style="height: 10px"
                                    nzUnCheckedChildren="Off"
-                                   (ngModelChange)="onSwitchChange(data.template_message_id,$event)"></nz-switch>
+                                   (ngModelChange)="onSwitchChange(data,$event)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]">编辑</a>
+                        <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]"
+                           *ngIf="isEdit(data)">编辑</a>
                         <a [title]="'明细'" [routerLink]="['../template-push-detail',data.template_message_id]">明细</a>
                         <a *ngIf="data.status===TemplatePushStatus.close" [title]="'删除'"
-                           (appZDebounceClick)="onDeleteTemplateClick(data.wx_template_id)">删除</a>
+                           (appZDebounceClick)="onDeleteTemplateClick(data.template_message_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>

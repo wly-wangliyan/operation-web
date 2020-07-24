@@ -8,6 +8,23 @@
     font-size: 13px;
 }
 
+h3{
+    font-size:12px;
+    font-weight:400;
+    color: #23242F;
+    word-break: break-all;
+}
+
+p{
+    word-break: break-all;
+}
+
+.template-content-detail{
+    height: 100%;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
 .table-item {
     width: 100%;
     min-width: 800px;

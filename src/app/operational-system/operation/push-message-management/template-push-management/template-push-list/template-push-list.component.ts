@@ -2,9 +2,15 @@ import { Component } from '@angular/core';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
-import { TemplatePushManagementService, TemplatePushStatus } from '../template-push-management.service';
+import {
+    SendType,
+    TemplatePushManagementEntity,
+    TemplatePushManagementService,
+    TemplatePushStatus
+} from '../template-push-management.service';
 import { SearchParamsEntity } from '../../template-management/template-management.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
+import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-application-push-list',
@@ -16,11 +22,31 @@ export class TemplatePushListComponent implements NzSearchAdapter {
     public start_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
     public TemplatePushStatus = TemplatePushStatus;
+    public SendType = SendType;
 
     constructor(private globalService: GlobalService,
                 private templatePushManagementService: TemplatePushManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
+    }
+
+    /**
+     * 是否可编辑
+     * @param templatePush
+     */
+    public isEdit(templatePush: TemplatePushManagementEntity): boolean {
+        if (templatePush.send_type === SendType.pushNow) {
+            return false;
+        } else if (templatePush.send_type === SendType.timingPush) {
+            const currentTime = this.globalService.timeStamp;
+            return templatePush.set_time >= currentTime;
+        } else if (templatePush.send_type === SendType.periodicPush) {
+            const currentTime = this.globalService.timeStamp;
+            const _end_date = (new Date(templatePush.end_date).setSeconds(23, 59) / 1000);
+            return _end_date >= currentTime;
+        } else {
+            return false;
+        }
     }
 
     // 上架开始时间的禁用部分
@@ -49,20 +75,18 @@ export class TemplatePushListComponent implements NzSearchAdapter {
 
     /**
      * 启停
-     * @param template_message_id
+     * @param templatePush
      * @param event
      */
-    public onSwitchChange(template_message_id: string, event: boolean) {
+    public onSwitchChange(templatePush: TemplatePushManagementEntity, event: boolean) {
         const swicth = event ? TemplatePushStatus.open : TemplatePushStatus.close;
-        this.templatePushManagementService.requestStatusTemplatePushData(template_message_id, swicth).subscribe(res => {
+        this.templatePushManagementService.requestStatusTemplatePushData(templatePush.template_message_id, swicth).subscribe(res => {
             if (event) {
                 this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
             } else {
                 this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
             }
-            // timer(500).subscribe(() => {
-            //     node.status = event;
-            // });
+            templatePush.status = swicth;
         }, err => {
             this.globalService.httpErrorProcess(err);
         });

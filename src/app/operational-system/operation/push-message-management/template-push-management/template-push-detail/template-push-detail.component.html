@@ -11,13 +11,24 @@
                     <td>模板标题：</td>
                     <td>{{templatePushDetail.title}}</td>
                     <td>用户范围：</td>
-                    <td>{{templatePushDetail.user_category}}</td>
+                    <td>{{templatePushDetail.user_category===UserCategory.all?'全部(沈阳)':'指定用户'}}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>详细内容：</td>
                     <td colspan="5">
+                        <div class="template-content-detail">
+                            <h3>{{templatePushDetail.title}}</h3>
+                            <p *ngIf="templatePushDetail.content.start">{{templatePushDetail.content.start}}</p>
+                            <ng-container *ngFor="let content of templatePushDetail.content.content">
+                                <p *ngIf="content.value">
+                                    {{content.key}}：{{content.value}}
+                                </p>
+                            </ng-container>
+
+                            <p *ngIf="templatePushDetail.content.end">{{templatePushDetail.content.end}}</p>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -28,23 +39,39 @@
                 </tr>
                 <tr>
                     <td>推送时间：</td>
-                    <td colspan="5"></td>
+                    <td colspan="5">
+                        <ng-container *ngIf="templatePushDetail.send_type===SendType.pushNow">立即推送</ng-container>
+                        <ng-container *ngIf="templatePushDetail.send_type===SendType.timingPush">
+                            {{templatePushDetail.set_time*1000| date:"y-MM-dd HH:mm"}}
+                        </ng-container>
+                        <ng-container *ngIf="templatePushDetail.send_type===SendType.periodicPush">
+                            <ng-container *ngIf="templatePushDetail.date_unlimited===DateUnlimited.limited">
+                                {{templatePushDetail.start_date*1000| date:"y-MM-dd"}}~
+                                {{templatePushDetail.end_date*1000| date:"y-MM-dd"}}
+                                <ng-container *ngFor="let checkOption of checkOptions">
+                                    <ng-container *ngIf="checkOption.checked">{{checkOption.label}}</ng-container>
+                                </ng-container>
+                                {{time.hour}}:{{time.minute}}
+                            </ng-container>
+                        </ng-container>
+                    </td>
                 </tr>
                 <tr>
                     <td>创建时间：</td>
-                    <td>{{templatePushDetail.created_time| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{templatePushDetail.created_time*1000| date:"y-MM-dd HH:mm"}}</td>
                     <td>下线时间：</td>
-                    <td>{{templatePushDetail.off_time| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{templatePushDetail.off_time?(templatePushDetail.off_time*1000| date:"y-MM-dd HH:mm"):'-'}}
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>累计成功推送：</td>
-                    <td></td>
+                    <td>{{templatePushDetail.total_send_number}}</td>
                     <td>备注：</td>
                     <td>
                         <div class="template-push-remark">
-                            <p>{{templatePushDetail.remark}}</p>
+                            <p>{{templatePushDetail.remark?templatePushDetail.remark:'-'}}</p>
                             <button nz-button nzType="primary" (click)="onUpdateRemarkClick()">编辑</button>
                         </div>
                     </td>

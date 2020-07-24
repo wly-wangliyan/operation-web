@@ -44,7 +44,7 @@ export class TemplatePushManagementEntity extends EntityBase {
     public status: number = undefined; // 状态 1开启 2关闭
     public wx_template_id: string = undefined; // 微信模板id
     public content: TemplatePushManagementContentEntity = new TemplatePushManagementContentEntity(); // 内容{'start': '缴费成功!', 'content': 【{'key': 'parking_name', 'value': '昂立停车场'},{'key':'parking_spot', 'value': '012泊位'}】, 'end': '欢迎再次使用'}
-    public user_category: UserCategory = UserCategory.all; // 1全部 2指定 3定向
+    public user_category: UserCategory = UserCategory.appoint; // 1全部 2指定 3定向
     public uu_codes: string = undefined; // 用户
     public landing_page_type: LandingPageType = LandingPageType.H5; // 落地页类型 1H5 2小程序原生
     public landing_page: string = undefined; // 落地页
@@ -57,6 +57,7 @@ export class TemplatePushManagementEntity extends EntityBase {
     public send_time: number = undefined; // 480 当天分钟数
     public remark: string = undefined; // 备注
     public off_time: string = undefined; // 下线时间
+    public total_send_number: number = undefined; // 累计成功推送
     public created_time: string = undefined; // 创建时间
     public updated_time: string = undefined; // 更新时间
 
@@ -100,7 +101,9 @@ export class SendRecordEntity extends EntityBase {
 
 export class TemplatePushManagementService {
 
-    private domain = environment.OPERATION_SERVE;
+    // private domain = environment.OPERATION_SERVE;
+
+    private domain = 'http://192.168.6.159:8100';
 
     constructor(private httpService: HttpService) {
     }
@@ -146,6 +149,7 @@ export class TemplatePushManagementService {
     /**
      * 启停模板推送
      * @param template_message_id
+     * @param status
      */
     public requestStatusTemplatePushData(template_message_id: string, status: TemplatePushStatus): Observable<HttpResponse<any>> {
         const httpUrl = `${this.domain}/wx_template_messages/${template_message_id}/status`;
@@ -174,8 +178,8 @@ export class TemplatePushManagementService {
         const params = {template_message_id};
         return this.httpService.get(httpUrl, params).pipe(map(res => {
             const tempList: Array<SendRecordEntity> = [];
-            res.body.forEach(res => {
-                tempList.push(SendRecordEntity.Create(res));
+            res.body.forEach(item => {
+                tempList.push(SendRecordEntity.Create(item));
             });
             return tempList;
         }));

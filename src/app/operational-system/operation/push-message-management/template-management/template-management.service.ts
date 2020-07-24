@@ -9,6 +9,8 @@ import { HttpResponse } from '@angular/common/http';
 export class SearchParamsEntity extends EntityBase {
     public title: string = undefined; // 模板标题
     public section: string = undefined; // 创建时间 '15012344,15013454'
+    public page_num = 1; // 页码
+    public page_size = 45; // 每页条数
 }
 
 export class TemplateManagementEntity extends EntityBase {
