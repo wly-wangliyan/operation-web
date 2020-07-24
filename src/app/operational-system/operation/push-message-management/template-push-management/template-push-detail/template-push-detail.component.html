@@ -51,11 +51,14 @@
                             <ng-container *ngIf="templatePushDetail.date_unlimited===DateUnlimited.limited">
                                 {{templatePushDetail.start_date*1000| date:"y-MM-dd"}} ~
                                 {{templatePushDetail.end_date*1000| date:"y-MM-dd"}}
-                                <ng-container *ngFor="let checkOption of checkOptions">
-                                    <ng-container *ngIf="checkOption.checked">{{checkOption.label}}</ng-container>
-                                </ng-container>
-                                {{time.hour}}:{{time.minute}}
                             </ng-container>
+                            <ng-container *ngFor="let checkOption of checkOptions;let index=index">
+                                <ng-container>
+                                    {{checkOption.label}}
+                                </ng-container>
+                                <ng-container *ngIf="index!==checkOptions.length-1">、</ng-container>
+                            </ng-container>
+                            {{time.hour}}:{{time.minute}}
                         </ng-container>
                     </td>
                 </tr>

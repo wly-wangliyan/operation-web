@@ -3,16 +3,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
 import {
     DateUnlimited,
-    LandingPageType, SendType,
+    LandingPageType,
+    SendType,
     TemplatePushManagementContentEntity,
     TemplatePushManagementEntity,
-    TemplatePushManagementService, UserCategory
+    TemplatePushManagementService,
+    UserCategory
 } from '../template-push-management.service';
 import { GlobalService } from '../../../../../core/global.service';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import {
-    SearchParamsEntity, TemplateManagementContentEntity,
+    SearchParamsEntity,
+    TemplateManagementContentEntity,
     TemplateManagementEntity,
     TemplateManagementService
 } from '../../template-management/template-management.service';
@@ -195,6 +198,7 @@ export class TemplatePushEditComponent implements OnInit {
         } else if (params.send_type === SendType.periodicPush) {
             params.start_date = (new Date(this.templatePushDetail.start_date).setSeconds(0, 0) / 1000);
             params.end_date = (new Date(this.templatePushDetail.end_date).setSeconds(0, 0) / 1000);
+            params.date_unlimited = this.dateUnlimitedChecked ? DateUnlimited.unlimited : DateUnlimited.limited;
             const _checkOptions = this.checkOptions.filter(item => item.checked);
             params.weekday = _checkOptions.map(item => item.value).join(',');
             params.send_time = DateFormatHelper.getSecondTimeSum(this.time, 'mm');
@@ -254,10 +258,14 @@ export class TemplatePushEditComponent implements OnInit {
                 this.templatePushDetail.user_category = results[1].user_category.toString();
                 this.templatePushDetail.set_time = results[1].set_time ? new Date((results[1].set_time) * 1000) : null;
                 if (this.templatePushDetail.send_type === SendType.periodicPush) {
-                    this.templatePushDetail.start_date = new Date((results[1].start_date) * 1000);
-                    this.templatePushDetail.end_date = new Date((results[1].end_date) * 1000);
-                    this.time = results[1].send_time && results[1].send_time.time ?
-                        DateFormatHelper.getMinuteOrTime(results[1].send_time.time, 'mm')
+                    if (this.templatePushDetail.date_unlimited === DateUnlimited.limited) {
+                        this.templatePushDetail.start_date = new Date((results[1].start_date) * 1000);
+                        this.templatePushDetail.end_date = new Date((results[1].end_date) * 1000);
+                    } else {
+                        this.dateUnlimitedChecked = true;
+                    }
+                    this.time = results[1].send_time && results[1].send_time ?
+                        DateFormatHelper.getMinuteOrTime(results[1].send_time, 'mm')
                         : new TimeItem();
                     const weekdays = this.templatePushDetail.weekday.split(',');
                     this.checkOptions.forEach(item => {

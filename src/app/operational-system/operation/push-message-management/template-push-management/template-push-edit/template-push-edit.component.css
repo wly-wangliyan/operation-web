@@ -131,3 +131,7 @@ input[type=file] {
 :host ::ng-deep .ant-input {
     background: #fff !important;
 }
+
+:host ::ng-deep .ant-input[disabled] {
+    background-color: #f5f5f5 !important;
+}

@@ -136,14 +136,14 @@
                         <nz-date-picker [(ngModel)]="templatePushDetail.start_date" [nzShowToday]=false
                                         [nzDisabled]="dateUnlimitedChecked||template_message_id"
                                         [nzDisabledDate]="disabledStartDate"
-                                        name='start_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
-                                        nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                        name='start_date'
+                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
                         <span class='line'>-</span>
                         <nz-date-picker [(ngModel)]="templatePushDetail.end_date" [nzShowToday]=false
                                         [nzDisabled]="dateUnlimitedChecked||template_message_id"
                                         [nzDisabledDate]="disabledEndDate"
-                                        name='end_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
-                                        nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                        name='end_date'
+                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
                         <label nz-checkbox [(ngModel)]="dateUnlimitedChecked" name="dateUnlimitedChecked"
                                [nzDisabled]="template_message_id"
                                (ngModelChange)="onClickDateUnlimited()">
@@ -158,9 +158,12 @@
                         <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"
                                            [nzDisabled]="template_message_id"></nz-checkbox-group>
                         <div class="week-selected-checkbox">
-                            <span (click)="onClickWeekDay(WeekdayOperationType.all)">全选</span>
-                            <span (click)="onClickWeekDay(WeekdayOperationType.workingDay)">工作日</span>
-                            <span (click)="onClickWeekDay(WeekdayOperationType.weekend)">周末</span>
+                            <span [style.cursor]="template_message_id?'not-allowed':'pointer'"
+                                  (click)="onClickWeekDay(WeekdayOperationType.all)">全选</span>
+                            <span [style.cursor]="template_message_id?'not-allowed':'pointer'"
+                                  (click)="onClickWeekDay(WeekdayOperationType.workingDay)">工作日</span>
+                            <span [style.cursor]="template_message_id?'not-allowed':'pointer'"
+                                  (click)="onClickWeekDay(WeekdayOperationType.weekend)">周末</span>
                         </div>
                     </div>
                 </div>

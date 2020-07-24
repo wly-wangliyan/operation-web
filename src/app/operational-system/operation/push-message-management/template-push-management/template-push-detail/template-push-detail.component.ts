@@ -26,15 +26,7 @@ export class TemplatePushDetailComponent implements OnInit {
     public remark = '';
     public time = new TimeItem();
     public uuCodeList = [];
-    public checkOptions = [
-        {label: '周一', value: 1, checked: false},
-        {label: '周二', value: 2, checked: false},
-        {label: '周三', value: 3, checked: false},
-        {label: '周四', value: 4, checked: false},
-        {label: '周五', value: 5, checked: false},
-        {label: '周六', value: 6, checked: false},
-        {label: '周日', value: 7, checked: false}
-    ];
+    public checkOptions = [];
     private template_message_id: string;
 
     constructor(private route: ActivatedRoute,
@@ -94,13 +86,22 @@ export class TemplatePushDetailComponent implements OnInit {
             this.uuCodeList = this.templatePushDetail.uu_codes.split(',');
             this.templatePushDetail.user_category = results[0].user_category.toString();
             const weekdays = this.templatePushDetail.weekday.split(',');
-            this.checkOptions.forEach(item => {
+            const checkOptions = [
+                {label: '周一', value: 1, checked: false},
+                {label: '周二', value: 2, checked: false},
+                {label: '周三', value: 3, checked: false},
+                {label: '周四', value: 4, checked: false},
+                {label: '周五', value: 5, checked: false},
+                {label: '周六', value: 6, checked: false},
+                {label: '周日', value: 7, checked: false}
+            ];
+            checkOptions.forEach(item => {
                 if (weekdays.indexOf(item.value.toString()) > -1) {
-                    item.checked = true;
+                    this.checkOptions.push(item);
                 }
             });
-            this.time = results[0].send_time && results[0].send_time.time ?
-                DateFormatHelper.getMinuteOrTime(results[0].send_time.time, 'mm')
+            this.time = results[0].send_time && results[0].send_time ?
+                DateFormatHelper.getMinuteOrTime(results[0].send_time, 'mm')
                 : new TimeItem();
             this.sendRecordList = results[1];
             this.remark = this.templatePushDetail.clone().remark;

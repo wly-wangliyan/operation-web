@@ -3,6 +3,7 @@ import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-sear
 import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
 import {
+    DateUnlimited,
     SendType,
     TemplatePushManagementEntity,
     TemplatePushManagementService,
@@ -41,9 +42,13 @@ export class TemplatePushListComponent implements NzSearchAdapter {
             const currentTime = this.globalService.timeStamp;
             return templatePush.set_time >= currentTime;
         } else if (templatePush.send_type === SendType.periodicPush) {
-            const currentTime = this.globalService.timeStamp;
-            const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
-            return _end_date >= currentTime;
+            if (templatePush.date_unlimited === DateUnlimited.limited) {
+                const currentTime = this.globalService.timeStamp;
+                const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
+                return _end_date >= currentTime;
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
