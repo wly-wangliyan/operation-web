@@ -192,7 +192,7 @@ export class TemplatePushEditComponent implements OnInit {
             const currentTime = this.globalService.timeStamp;
             const day = (currentTime - params.set_time) / (24 * 60 * 60);
             if (Math.abs(day) > 365) {
-                this.globalService.promptBox.open('定时推送时间不能超过365天！');
+                this.globalService.promptBox.open('定时推送时间不能超过365天！', null, 2000, null, false);
                 return;
             }
         } else if (params.send_type === SendType.periodicPush) {

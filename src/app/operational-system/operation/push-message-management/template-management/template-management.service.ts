@@ -41,9 +41,9 @@ export class TemplateManagementContentEntity extends EntityBase {
 })
 export class TemplateManagementService {
 
-    // private domain = environment.OPERATION_SERVE;
+    private domain = environment.OPERATION_SERVE;
 
-    private domain = 'http://192.168.6.159:8100';
+    // private domain = 'http://192.168.6.159:8100';
 
     constructor(private httpService: HttpService) {
     }

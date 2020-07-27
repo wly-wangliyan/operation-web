@@ -72,11 +72,11 @@ export class TemplateListComponent implements OnInit {
                     const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
                     for (const content of error.errors) {
                         if (content.field === 'weixin_template_id' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('微信模板ID不存在或者错误！');
+                            this.globalService.promptBox.open('微信模板ID不存在或者错误！', null, 2000, null, false);
                             return;
                         }
                         if (content.resource === 'template' && content.code === 'already_existed') {
-                            this.globalService.promptBox.open('微信模板ID已存在');
+                            this.globalService.promptBox.open('微信模板ID已存在', null, 2000, null, false);
                             return;
                         }
                     }
