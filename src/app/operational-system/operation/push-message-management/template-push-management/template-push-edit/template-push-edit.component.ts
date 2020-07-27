@@ -203,13 +203,15 @@ export class TemplatePushEditComponent implements OnInit {
             params.weekday = _checkOptions.map(item => item.value).join(',');
             params.send_time = DateFormatHelper.getSecondTimeSum(this.time, 'mm');
         }
-        this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(() => {
-            this.globalService.promptBox.open(this.template_message_id ? '编辑成功！' : '添加成功！', () => {
-                this.goToListPage();
-            });
-        }, err => {
-            this.globalService.httpErrorProcess(err);
-        });
+
+        if (params.send_type === SendType.pushNow) {
+            this.globalService.confirmationBox.open('提示', '是否立即推送？', () => {
+                this.globalService.confirmationBox.close();
+                this.requestUpdateOrAdd(params);
+            }, '推送');
+        } else {
+            this.requestUpdateOrAdd(params);
+        }
     }
 
     /**
@@ -231,6 +233,20 @@ export class TemplatePushEditComponent implements OnInit {
      */
     public goToListPage() {
         this.router.navigate(['../'], {relativeTo: this.route});
+    }
+
+    /**
+     * 编辑和添加
+     * @param params
+     */
+    private requestUpdateOrAdd(params) {
+        this.templatePushManagementService.requestAddTemplatePushData(params, this.template_message_id).subscribe(() => {
+            this.globalService.promptBox.open(this.template_message_id ? '编辑成功！' : '添加成功！', () => {
+                this.goToListPage();
+            });
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
     }
 
 
