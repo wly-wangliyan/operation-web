@@ -36,7 +36,21 @@ export class TemplatePushListComponent implements NzSearchAdapter {
      * @param templatePush
      */
     public isDisabledOpen(templatePush: TemplatePushManagementEntity): boolean {
-        return !!(templatePush.send_type === SendType.pushNow || templatePush.off_time || templatePush.set_time < this.globalService.timeStamp);
+        if (templatePush.send_type === SendType.pushNow) {
+            return true;
+        }
+        if (templatePush.send_type === SendType.timingPush && templatePush.set_time < this.globalService.timeStamp) {
+            return true;
+        }
+        if (templatePush.send_type === SendType.periodicPush) {
+            if (templatePush.date_unlimited === DateUnlimited.limited) {
+                const currentTime = this.globalService.timeStamp;
+                const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
+                return _end_date >= currentTime;
+            } else {
+                return true;
+            }
+        }
     }
 
     /**
@@ -97,7 +111,7 @@ export class TemplatePushListComponent implements NzSearchAdapter {
      * @param event
      */
     public onSwitchChange(templatePush: TemplatePushManagementEntity) {
-        if (templatePush.send_type === SendType.pushNow || templatePush.off_time || templatePush.set_time < this.globalService.timeStamp) {
+        if (this.isDisabledOpen(templatePush)) {
             return;
         }
         const swicth = templatePush.status === TemplatePushStatus.close ? TemplatePushStatus.open : TemplatePushStatus.close;
