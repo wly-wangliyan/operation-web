@@ -17,6 +17,7 @@
                     </label>
                     <div class="control-input">
                         <select [(ngModel)]="templatePushDetail.wx_template_id" name="wx_template_id"
+                                [disabled]="template_message_id"
                                 (change)="onChangeTemplateTitle($event)"
                                 class="form-control" required>
                             <option *ngFor="let template of templateList" [value]="template.wx_template_id">

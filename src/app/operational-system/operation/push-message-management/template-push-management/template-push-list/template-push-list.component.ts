@@ -11,6 +11,7 @@ import {
 import { SearchParamsEntity } from '../../template-management/template-management.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { HttpErrorEntity } from '../../../../../core/http.service';
+import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-application-push-list',
@@ -45,10 +46,10 @@ export class TemplatePushListComponent implements NzSearchAdapter {
         if (templatePush.send_type === SendType.periodicPush) {
             if (templatePush.date_unlimited === DateUnlimited.limited) {
                 const currentTime = this.globalService.timeStamp;
-                const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
-                return _end_date >= currentTime;
+                const _end_date = DateFormatHelper.DateToTimeStamp(new Date(templatePush.end_date * 1000), false) - 1;
+                return _end_date < currentTime;
             } else {
-                return true;
+                return false;
             }
         }
     }
@@ -66,7 +67,7 @@ export class TemplatePushListComponent implements NzSearchAdapter {
         } else if (templatePush.send_type === SendType.periodicPush) {
             if (templatePush.date_unlimited === DateUnlimited.limited) {
                 const currentTime = this.globalService.timeStamp;
-                const _end_date = (new Date(templatePush.end_date * 1000).setSeconds(23, 59) / 1000);
+                const _end_date = DateFormatHelper.DateToTimeStamp(new Date(templatePush.end_date * 1000), false) - 1;
                 return _end_date >= currentTime;
             } else {
                 return true;

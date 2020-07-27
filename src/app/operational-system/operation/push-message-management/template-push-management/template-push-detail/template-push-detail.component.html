@@ -37,7 +37,7 @@
                 <tr>
                     <td>落地页：</td>
                     <td colspan="3">
-                        {{templatePushDetail.landing_page}}
+                        {{templatePushDetail.landing_page?templatePushDetail.landing_page:'--'}}
                     </td>
                 </tr>
                 <tr>
@@ -66,7 +66,7 @@
                     <td>创建时间：</td>
                     <td>{{templatePushDetail.created_time*1000| date:"y-MM-dd HH:mm"}}</td>
                     <td>下线时间：</td>
-                    <td>{{templatePushDetail.off_time?(templatePushDetail.off_time*1000| date:"y-MM-dd HH:mm"):'-'}}
+                    <td>{{templatePushDetail.off_time?(templatePushDetail.off_time*1000| date:"y-MM-dd HH:mm"):'--'}}
                     </td>
                 </tr>
                 <tr>
@@ -76,7 +76,7 @@
                     <td>
                         <div class="template-push-remark">
                             <p [innerHTML]="templatePushDetail.remark" *ngIf="templatePushDetail.remark"></p>
-                            <p *ngIf="!templatePushDetail.remark">-</p>
+                            <p *ngIf="!templatePushDetail.remark">--</p>
                             <button nz-button nzType="primary" (click)="onUpdateRemarkClick()">编辑</button>
                         </div>
                     </td>

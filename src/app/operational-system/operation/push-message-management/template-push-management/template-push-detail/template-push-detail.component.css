@@ -83,7 +83,6 @@ p {
 .template-push-remark {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
     align-items: center;
 }
 
