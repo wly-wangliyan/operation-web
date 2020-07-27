@@ -97,7 +97,7 @@ export class TemplatePushListComponent implements NzSearchAdapter {
      * @param event
      */
     public onSwitchChange(templatePush: TemplatePushManagementEntity) {
-        if (templatePush.send_type === SendType.pushNow || templatePush.off_time) {
+        if (templatePush.send_type === SendType.pushNow || templatePush.off_time || templatePush.set_time < this.globalService.timeStamp) {
             return;
         }
         const swicth = templatePush.status === TemplatePushStatus.close ? TemplatePushStatus.open : TemplatePushStatus.close;
