@@ -68,10 +68,11 @@
                     <td>{{data.total_send_number}}</td>
                     <td>
                         <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"
-                                   [nzDisabled]="data.send_type===SendType.pushNow||data.off_time"
+                                   [nzControl]=true
+                                   [nzDisabled]="isDisabledOpen(data)"
                                    style="height: 10px"
                                    nzUnCheckedChildren="Off"
-                                   (ngModelChange)="onSwitchChange(data,$event)"></nz-switch>
+                                   (click)="onSwitchChange(data)"></nz-switch>
                     </td>
                     <td class="operation">
                         <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]"

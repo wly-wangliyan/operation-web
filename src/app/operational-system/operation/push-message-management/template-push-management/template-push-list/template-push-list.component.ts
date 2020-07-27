@@ -10,6 +10,7 @@ import {
 } from '../template-push-management.service';
 import { SearchParamsEntity } from '../../template-management/template-management.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
     selector: 'app-application-push-list',
@@ -28,6 +29,14 @@ export class TemplatePushListComponent implements NzSearchAdapter {
                 private templatePushManagementService: TemplatePushManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
+    }
+
+    /**
+     * 按钮是否可以开启
+     * @param templatePush
+     */
+    public isDisabledOpen(templatePush: TemplatePushManagementEntity): boolean {
+        return !!(templatePush.send_type === SendType.pushNow || templatePush.off_time || templatePush.set_time < this.globalService.timeStamp);
     }
 
     /**
@@ -87,10 +96,13 @@ export class TemplatePushListComponent implements NzSearchAdapter {
      * @param templatePush
      * @param event
      */
-    public onSwitchChange(templatePush: TemplatePushManagementEntity, event: boolean) {
-        const swicth = event ? TemplatePushStatus.open : TemplatePushStatus.close;
+    public onSwitchChange(templatePush: TemplatePushManagementEntity) {
+        if (templatePush.send_type === SendType.pushNow || templatePush.off_time) {
+            return;
+        }
+        const swicth = templatePush.status === TemplatePushStatus.close ? TemplatePushStatus.open : TemplatePushStatus.close;
         this.templatePushManagementService.requestStatusTemplatePushData(templatePush.template_message_id, swicth).subscribe(res => {
-            if (event) {
+            if (templatePush.status === TemplatePushStatus.close) {
                 this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
             } else {
                 this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
@@ -100,7 +112,21 @@ export class TemplatePushListComponent implements NzSearchAdapter {
                 templatePush.off_time = this.globalService.timeStamp;
             }
         }, err => {
-            this.globalService.httpErrorProcess(err);
+            if (!this.globalService.httpErrorProcess(err)) {
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+                    for (const content of error.errors) {
+                        if (content.resource === 'template' && content.code === 'deleted') {
+                            this.globalService.promptBox.open('微信模板已删除！', null, 2000, null, false);
+                            return;
+                        }
+                        if (content.field === swicth.toString() && content.code === 'not_allowed') {
+                            this.globalService.promptBox.open('不允许操作', null, 2000, null, false);
+                            return;
+                        }
+                    }
+                }
+            }
         });
     }
 
