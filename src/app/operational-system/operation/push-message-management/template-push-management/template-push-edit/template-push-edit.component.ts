@@ -223,7 +223,7 @@ export class TemplatePushEditComponent implements OnInit {
             return !(((this.templatePushDetail.start_date && this.templatePushDetail.end_date) ||
                 this.dateUnlimitedChecked) && checkOptionItem);
         }
-        return !(contentItem || contentObj.first || contentObj.remark);
+        return !(contentItem || contentObj.first.value || contentObj.remark.value);
     }
 
     /**

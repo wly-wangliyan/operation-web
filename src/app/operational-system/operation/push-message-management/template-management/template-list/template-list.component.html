@@ -26,7 +26,8 @@
                                 name='online_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
                                 nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 <span class='line'>-</span>
-                <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false [nzDisabledDate]="disabledEndTime"
+                <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledEndTime"
                                 [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="onClickRearch()">查询
@@ -51,7 +52,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
-                    <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templateIndex+1}}</td>
+                    <td>{{templateIndex+1}}</td>
                     <td [title]="data.wx_template_id">
                         <span [appTxtCopy]="data.wx_template_id">
                             {{data.wx_template_id}}
