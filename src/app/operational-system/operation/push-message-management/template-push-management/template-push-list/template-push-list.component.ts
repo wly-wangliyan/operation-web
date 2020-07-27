@@ -108,7 +108,6 @@ export class TemplatePushListComponent implements NzSearchAdapter {
     /**
      * 启停
      * @param templatePush
-     * @param event
      */
     public onSwitchChange(templatePush: TemplatePushManagementEntity) {
         if (this.isDisabledOpen(templatePush)) {
@@ -121,10 +120,7 @@ export class TemplatePushListComponent implements NzSearchAdapter {
             } else {
                 this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
             }
-            templatePush.status = swicth;
-            if (swicth === TemplatePushStatus.close) {
-                templatePush.off_time = this.globalService.timeStamp;
-            }
+            this.nzSearchAssistant.submitSearch(true);
         }, err => {
             if (!this.globalService.httpErrorProcess(err)) {
                 if (err.status === 422) {
