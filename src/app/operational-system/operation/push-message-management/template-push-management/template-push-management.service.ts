@@ -90,9 +90,9 @@ export class SendRecordEntity extends EntityBase {
     public fail_number: number = undefined; // 	发送失败人数
     public success_ids: number = undefined; // 		成功id
     public fail_ids: number = undefined; // 	失败id
-    public send_time: string = undefined; // 		发送时间
-    public created_time: string = undefined; // 创建时间
-    public updated_time: string = undefined; // 更新时间
+    public send_time: number = undefined; // 		发送时间
+    public created_time: number = undefined; // 创建时间
+    public updated_time: number = undefined; // 更新时间
 }
 
 @Injectable({

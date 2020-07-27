@@ -102,7 +102,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let sendRecord of sendRecordList">
-                    <td>{{sendRecord.send_time| date:"y-MM-dd"}}</td>
+                    <td>{{sendRecord.send_time*1000| date:"y-MM-dd"}}</td>
                     <td>{{sendRecord.total_number}}</td>
                     <td>{{sendRecord.success_number}}</td>
                     <td>{{sendRecord.fail_number}}</td>
