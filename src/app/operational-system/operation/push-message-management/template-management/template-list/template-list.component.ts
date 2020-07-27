@@ -49,7 +49,7 @@ export class TemplateListComponent implements OnInit {
      */
     public onClickDetail(templateDetail: TemplateManagementEntity) {
         this.templateDetail = templateDetail.clone();
-        timer(1000).subscribe(() => {
+        timer(10).subscribe(() => {
             $('#templateDetailPromptDiv').modal('show');
         });
     }
