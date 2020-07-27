@@ -87,12 +87,12 @@
                 </div>
                 <div class="row">
                     <label class=" control-label">
-                        <b>*</b>
                         <span>落地页</span>
                     </label>
                     <div class="control-input">
                         <select class="form-control" [(ngModel)]="templatePushDetail.landing_page_type"
                                 name="landing_page_type">
+                            <option value="">请选择</option>
                             <option [value]="LandingPageType.H5">H5</option>
                             <option [value]="LandingPageType.appletNative">小程序原生页</option>
                         </select>

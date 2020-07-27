@@ -46,7 +46,7 @@ export class TemplatePushManagementEntity extends EntityBase {
     public content: TemplatePushManagementContentEntity = new TemplatePushManagementContentEntity(); // 内容{'start': '缴费成功!', 'content': 【{'key': 'parking_name', 'value': '昂立停车场'},{'key':'parking_spot', 'value': '012泊位'}】, 'end': '欢迎再次使用'}
     public user_category: any = UserCategory.appoint; // 1全部 2指定 3定向
     public uu_codes: string = undefined; // 用户
-    public landing_page_type: LandingPageType = LandingPageType.H5; // 落地页类型 1H5 2小程序原生
+    public landing_page_type = ''; // 落地页类型 1H5 2小程序原生
     public landing_page: string = undefined; // 落地页
     public send_type: SendType = SendType.pushNow; // 推送时间类型 1立即推送 2定时推送 3周期推送
     public set_time: any = undefined;
