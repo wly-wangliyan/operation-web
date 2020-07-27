@@ -23,14 +23,16 @@
                     <td colspan="5">
                         <div class="template-content-detail">
                             <h3>{{templatePushDetail.title}}</h3>
-                            <p *ngIf="templatePushDetail.content.first">{{templatePushDetail.content.first}}</p>
+                            <p *ngIf="templatePushDetail.content.first.value">
+                                {{templatePushDetail.content.first.value}}</p>
                             <ng-container *ngFor="let content of templatePushDetail.content.keywords">
                                 <p *ngIf="content.value">
                                     {{content.key}}：{{content.value}}
                                 </p>
                             </ng-container>
 
-                            <p *ngIf="templatePushDetail.content.remark">{{templatePushDetail.content.remark}}</p>
+                            <p *ngIf="templatePushDetail.content.remark.value">
+                                {{templatePushDetail.content.remark.value}}</p>
                         </div>
                     </td>
                 </tr>
