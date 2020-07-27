@@ -43,6 +43,7 @@
                       [nzNoResult]="nzSearchAssistant.nzNoResultText">
                 <thead>
                 <tr>
+                    <th>序号</th>
                     <th>ID</th>
                     <th>模板标题</th>
                     <th>创建时间</th>
@@ -54,7 +55,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
-                    <!--<td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templatePushIndex+1}}</td>-->
+                    <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templatePushIndex+1}}</td>
                     <td [title]="data.template_message_id">
                          <span [appTxtCopy]="data.template_message_id">
                             {{data.template_message_id}}

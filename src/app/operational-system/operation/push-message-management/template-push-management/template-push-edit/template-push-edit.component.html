@@ -75,8 +75,7 @@
                                        (change)="onFileChange($event)"
                                        (click)="$event.target.value = ''"
                                        multiple="false"
-                                       accept=".xls,.xlsx,.text"/>
-                                <p class="cover-hint">支持Excel 、text 等常用格式</p>
+                                       accept=".xls,.xlsx"/>
                             </div>
                         </div>
                         <textarea *ngIf="templatePushDetail.user_category===UserCategory.appoint" type="text"

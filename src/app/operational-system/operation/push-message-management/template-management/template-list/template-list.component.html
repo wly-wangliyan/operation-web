@@ -41,6 +41,7 @@
                       [nzNoResult]="noResultText">
                 <thead>
                 <tr>
+                    <th>序号</th>
                     <th>模板ID</th>
                     <th>模板标题</th>
                     <th>微信模板ID</th>
@@ -50,7 +51,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
-                    <!--<td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templateIndex+1}}</td>-->
+                    <td>{{(nzSearchAssistant.currentPage-1)*nzSearchAssistant.pageSize+templateIndex+1}}</td>
                     <td [title]="data.wx_template_id">
                         <span [appTxtCopy]="data.wx_template_id">
                             {{data.wx_template_id}}
