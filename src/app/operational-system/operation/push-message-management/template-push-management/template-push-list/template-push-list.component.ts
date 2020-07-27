@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
-import { differenceInCalendarDays } from 'date-fns';
 import {
     DateUnlimited,
     SendType,
@@ -10,8 +9,6 @@ import {
     TemplatePushStatus
 } from '../template-push-management.service';
 import { SearchParamsEntity } from '../../template-management/template-management.service';
-import { HttpErrorEntity } from '../../../../../core/http.service';
-import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 
 @Component({
@@ -59,12 +56,12 @@ export class TemplatePushListComponent implements NzSearchAdapter {
     // 开始时间的禁用部分
     public disabledStartTime = (startValue: Date): boolean => {
         return DisabledTimeHelper.disabledStartTime(startValue, this.end_time);
-    }
+    };
 
     // 结束时间的禁用部分
     public disabledEndTime = (endValue: Date): boolean => {
         return DisabledTimeHelper.disabledEndTime(endValue, this.start_time);
-    }
+    };
 
     /**
      * 删除模板消息
@@ -99,6 +96,9 @@ export class TemplatePushListComponent implements NzSearchAdapter {
                 this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
             }
             templatePush.status = swicth;
+            if (swicth === TemplatePushStatus.close) {
+                templatePush.off_time = this.globalService.timeStamp;
+            }
         }, err => {
             this.globalService.httpErrorProcess(err);
         });
