@@ -12,6 +12,7 @@ import {
 import { SearchParamsEntity } from '../../template-management/template-management.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
+import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 
 @Component({
     selector: 'app-application-push-list',
@@ -21,6 +22,7 @@ import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 export class TemplatePushListComponent implements NzSearchAdapter {
     public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
     public start_time: any = '';
+    public end_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
     public TemplatePushStatus = TemplatePushStatus;
     public SendType = SendType;
@@ -54,10 +56,15 @@ export class TemplatePushListComponent implements NzSearchAdapter {
         }
     }
 
-    // 上架开始时间的禁用部分
+    // 开始时间的禁用部分
     public disabledStartTime = (startValue: Date): boolean => {
-        return differenceInCalendarDays(startValue, new Date()) > 0;
-    };
+        return DisabledTimeHelper.disabledStartTime(startValue, this.end_time);
+    }
+
+    // 结束时间的禁用部分
+    public disabledEndTime = (endValue: Date): boolean => {
+        return DisabledTimeHelper.disabledEndTime(endValue, this.start_time);
+    }
 
     /**
      * 删除模板消息
@@ -128,13 +135,14 @@ export class TemplatePushListComponent implements NzSearchAdapter {
 
     /* 生成并检查参数有效性 */
     public generateAndCheckParamsValid(): boolean {
-        if (this.start_time) {
-            const _start_time = (new Date(this.start_time).setSeconds(0, 0) / 1000);
-            const _end_time = new Date().getTime() / 1000;
-            this.searchParams.section = `${_start_time},${_end_time}`;
-        } else {
-            this.searchParams.section = null;
+        const cTime = new Date().getTime() / 1000;
+        const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
+        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
+        if (sTime > eTime) {
+            this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
+            return false;
         }
+        this.searchParams.section = `${sTime},${eTime}`;
         return true;
     }
 
