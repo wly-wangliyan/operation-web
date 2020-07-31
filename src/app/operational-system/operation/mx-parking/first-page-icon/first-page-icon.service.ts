@@ -26,7 +26,6 @@ export class FirstPageIconEntity extends EntityBase {
     public corner_display = 'true';  // 	bool	角标是否隐藏 false为不隐藏
     public is_delete = undefined;  // 	bool	是否删除 false为不删除
     public menu_business_key: FirstPageIconMenuKeyEntity = new FirstPageIconMenuKeyEntity();
-    this: any;
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'menu_business_key') {
