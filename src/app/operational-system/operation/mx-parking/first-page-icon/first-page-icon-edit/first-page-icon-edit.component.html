@@ -58,15 +58,14 @@
                     <div class="control-input">
                         <input class="form-control" placeholder="请输入1-5字标题" [(ngModel)]="currentPage.menu_business_name"
                                name="menu_business_name"
-                               maxlength="5" autocomplete="off" style="width: 448px!important;" required
-                               (change)="errPositionItem.menu_business_name.isError=false">
+                               maxlength="5" autocomplete="off" style="width: 448px!important;" required>
                     </div>
                 </div>
                 <div class="row row-message">
-                    <label class="control-label"></label>
-                    <div class="control-input err-message">
-                        <span *ngIf="errPositionItem?.menu_business_name?.isError">{{errPositionItem?.menu_business_name?.errMes}}</span>
-                    </div>
+                    <!--                    <label class="control-label"></label>-->
+                    <!--                    <div class="control-input err-message">-->
+                    <!--                        <span *ngIf="errPositionItem?.menu_business_name?.isError">{{errPositionItem?.menu_business_name?.errMes}}</span>-->
+                    <!--                    </div>-->
                 </div>
                 <div class="row">
                     <label class=" control-label">
@@ -79,6 +78,7 @@
                             <option value=2>Android</option>
                         </select>
                         <select class="form-control" [(ngModel)]="currentPage.version" name="version" required
+                                (change)="errPositionItem.system.isError=false"
                                 style="border-left: none!important;">
                             <option value="">请选择</option>
                             <option *ngFor="let item of versionList" [value]="item.version">{{item.version}}</option>
