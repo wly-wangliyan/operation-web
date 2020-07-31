@@ -1,22 +1,14 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'"></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg">
-            <a (click)="onShowModal(null)">新建</a>
-        </li>
-    </ul>
+    <app-crumb [level1Name]="'美行停车'" [level2Name]="'App首页图标配置'" [level2RelativePath]="'../'"
+               [level3Name]="'明细'"></app-crumb>
 </div>
 <div class="content-flow">
-    <div class="tab-bar">
-        <ul *ngFor="let item of appList">
-            <li [class.active]="application_id===item.application_id" [class.width]="appList.length < 6"
-                (click)="onCheckStatusClicked(item.application_id)">{{item.application_name|zMaxLength:14}}</li>
-        </ul>
-    </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table [nzData]="iconList" [nzNoResult]="noResultText"
-                      [nzFrontPagination]="false"
+            <nz-table [nzData]="nzSearchAssistant.nzData" [nzPageSize]="nzSearchAssistant.pageSize"
+                      [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText"
                       #basicTable>
                 <thead>
                 <tr>
@@ -31,9 +23,9 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody cdkDropList (cdkDropListDropped)="drop($event, basicTable.data)">
+                <tbody>
                 <tr *ngFor="let data of basicTable.data; let i=index" cdkDrag>
-                    <td>{{i + 1}}</td>
+                    <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
                     <td>
                         <img [src]="data.icon" width='20px' height='20px'>
                     </td>
@@ -46,8 +38,10 @@
                         ：{{data.jump_link|zMaxLength:25}}</td>
                     <td [title]="data.menu_describe?data.menu_describe:'--'">{{data.menu_describe|zMaxLength:15}}</td>
                     <td class="operation">
-                        <a [title]="'明细'"
-                           [routerLink]="['../first-page-icon-list',application_id,data.menu_business_key.menu_business_key_id]">明细</a>
+                        <a *ngIf="!data.is_display" [title]="'隐藏'" (click)="onHideBtnClick(data, true)">隐藏</a>
+                        <a *ngIf="data.is_display" [title]="'显示'" (click)="onHideBtnClick(data, false)">显示</a>
+                        <a [title]="'编辑'" (click)="onShowModal(data)">编辑</a>
+                        <a [title]="'删除'" (click)="onDeleteBtnClick(data)">删除</a>
                     </td>
                 </tr>
                 </tbody>

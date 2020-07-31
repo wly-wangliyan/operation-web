@@ -15,6 +15,7 @@ import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../../core/upload.
 import { environment } from '../../../../environments/environment';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { FirstPageIconListChildrenComponent } from './first-page-icon/first-page-icon-list-children/first-page-icon-list-children.component';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -36,7 +37,7 @@ const uploadToken: UploadConfig = {
   ],
   declarations: [
     MxParkingComponent, FirstPageIconComponent, AppListComponent, FirstPageIconEditComponent,
-    VersionListComponent, AppAddComponent, VersionAddComponent
+    VersionListComponent, AppAddComponent, VersionAddComponent, FirstPageIconListChildrenComponent
   ],
   providers: [{
     provide: UPLOAD_TOKEN,

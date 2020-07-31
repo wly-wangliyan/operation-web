@@ -23,7 +23,7 @@ export class ErrMessageItem {
 export class ErrPositionItem {
     icon: ErrMessageItem = new ErrMessageItem();
     title: ErrMessageItem = new ErrMessageItem();
-    menu_key: ErrMessageItem = new ErrMessageItem();
+    system: ErrMessageItem = new ErrMessageItem();
     jump_link: ErrMessageItem = new ErrMessageItem();
     corner: ErrMessageItem = new ErrMessageItem();
 
@@ -45,39 +45,23 @@ export class ErrPositionItem {
     templateUrl: './first-page-icon-edit.component.html',
     styleUrls: ['./first-page-icon-edit.component.css']
 })
-export class FirstPageIconEditComponent implements OnInit {
-    public isCreatePage = true;
+export class FirstPageIconEditComponent {
     public currentPage: FirstPageIconEntity = new FirstPageIconEntity();
     public errPositionItem: ErrPositionItem = new ErrPositionItem();
     public cover_url = [];
     public versionList: Array<VersionEntity>;
-    public color = '';
-
+    public isCreatePage = true;
     private continueRequestSubscription: Subscription;
     private sureCallback: any;
     private closeCallback: any;
-    private menu_id: string;
-    private app: any;
 
-    @Input() public data: any;
-    @Input() public sureName: string;
+    @Input() private application_id: string;
 
     @ViewChild('pagePromptDiv', {static: true}) public pagePromptDiv: ElementRef;
     @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
 
     constructor(private firstPageIconService: FirstPageIconService,
                 private globalService: GlobalService) {
-    }
-
-    public ngOnInit(): void {
-    }
-
-    // 键盘按下事件
-    public onKeydownEvent(event: any) {
-        if (event.keyCode === 13) {
-            this.onEditFormSubmit();
-            return false;
-        }
     }
 
     // 弹框close
@@ -89,61 +73,35 @@ export class FirstPageIconEditComponent implements OnInit {
 
     /**
      * 打开确认框
-     * @param sureName 确认按钮文本(默认为确定)
+     * @param application
      * @param sureFunc 确认回调
      * @param closeFunc 取消回调
      */
-    public open(menu_id: string, application: any, sureFunc: any, sureName: string = '确定', closeFunc: any = null) {
-        const openPageModal = (data?: any) => {
-            timer(0).subscribe(() => {
-                $(this.pagePromptDiv.nativeElement).modal('show');
-            });
-        };
-        this.isCreatePage = menu_id ? false : true;
-        this.menu_id = menu_id;
-        this.app = application;
-        this.sureName = sureName;
+    public open(application: any, sureFunc: any, closeFunc: any = null) {
         this.sureCallback = sureFunc;
         this.closeCallback = closeFunc;
-        if (this.isCreatePage) {
-            this.rquestVersionList();
-            this.currentPage = new FirstPageIconEntity();
-            this.cover_url = [];
-            this.currentPage.system = this.app.system;
-        } else {
-            this.rquestPageIconDetail();
-        }
-        openPageModal();
+        this.isCreatePage = true;
+        this.requestVersionList();
+        this.currentPage = new FirstPageIconEntity();
+        this.cover_url = [];
+        this.currentPage.system = application.system;
     }
 
-    // 获取详情\版本列表
-    private rquestPageIconDetail() {
-        this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-        this.continueRequestSubscription =
-            this.firstPageIconService.requestPageIconDetail(this.menu_id, this.app.application_id).subscribe(res => {
-                this.currentPage = res;
-                this.currentPage.system = this.app.system;
-                this.cover_url = this.currentPage.icon ? this.currentPage.icon.split(',') : [];
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
-        this.continueRequestSubscription = this.firstPageIconService.requestVersionList(this.app.application_id)
-            .subscribe(res => {
-                this.versionList = res;
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
-    }
 
-    // 获取版本列表
-    private rquestVersionList() {
-        this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
-        this.continueRequestSubscription = this.firstPageIconService.requestVersionList(this.app.application_id)
-            .subscribe(res => {
-                this.versionList = res;
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
+    /**
+     * 打开确认框
+     * @param menu
+     * @param sureFunc 确认回调
+     * @param closeFunc 取消回调
+     */
+    public openEdit(menu: FirstPageIconEntity, sureFunc: any, closeFunc: any = null) {
+        this.sureCallback = sureFunc;
+        this.closeCallback = closeFunc;
+        this.currentPage = menu.clone();
+        this.currentPage.menu_business_name = menu.menu_business_key.menu_business_name;
+        this.isCreatePage = false;
+        this.cover_url = this.currentPage.icon ? this.currentPage.icon.split(',') : [];
+        this.requestVersionList();
     }
 
     // form提交
@@ -155,7 +113,7 @@ export class FirstPageIconEditComponent implements OnInit {
                 this.currentPage.icon = imageUrl.join(',');
                 if (this.isCreatePage) {
                     // 添加项目
-                    this.firstPageIconService.requestAddPageIcon(this.currentPage, this.app.application_id).subscribe(() => {
+                    this.firstPageIconService.requestAddPageIcon(this.currentPage, this.application_id).subscribe(() => {
                         this.onClose();
                         this.globalService.promptBox.open('添加成功！', () => {
                             this.sureCallbackInfo();
@@ -165,17 +123,32 @@ export class FirstPageIconEditComponent implements OnInit {
                     });
                 } else {
                     // 编辑项目
-                    this.firstPageIconService.requestModifyPageIcon(this.currentPage, this.app.application_id, this.menu_id).subscribe(() => {
-                        this.onClose();
-                        this.globalService.promptBox.open('修改成功！', () => {
-                            this.sureCallbackInfo();
+                    this.firstPageIconService.requestModifyPageIcon(this.currentPage, this.application_id, this.currentPage.menu_id)
+                        .subscribe(() => {
+                            this.onClose();
+                            this.globalService.promptBox.open('修改成功！', () => {
+                                this.sureCallbackInfo();
+                            });
+                        }, err => {
+                            this.errorProcess(err);
                         });
-                    }, err => {
-                        this.errorProcess(err);
-                    });
                 }
             });
         }
+    }
+
+    // 获取版本列表
+    private requestVersionList() {
+        this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
+        this.continueRequestSubscription = this.firstPageIconService.requestVersionList(this.application_id)
+            .subscribe(res => {
+                this.versionList = res;
+                timer(0).subscribe(() => {
+                    $(this.pagePromptDiv.nativeElement).modal('show');
+                });
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
     }
 
     // 表单提交校验
@@ -203,7 +176,7 @@ export class FirstPageIconEditComponent implements OnInit {
     public clear() {
         this.errPositionItem.icon.isError = false;
         this.errPositionItem.title.isError = false;
-        this.errPositionItem.menu_key.isError = false;
+        this.errPositionItem.system.isError = false;
         this.errPositionItem.jump_link.isError = false;
         this.errPositionItem.corner.isError = false;
     }
@@ -227,6 +200,11 @@ export class FirstPageIconEditComponent implements OnInit {
                     if (content.code === 'invalid' && content.field === 'title') {
                         this.errPositionItem.title.isError = true;
                         this.errPositionItem.title.errMes = '标题错误或无效！';
+                        return;
+                    }
+                    if (content.code === 'already_exist' && content.resource === 'operate_menu') {
+                        this.errPositionItem.system.isError = true;
+                        this.errPositionItem.system.errMes = '该版本已经存在此业务！';
                         return;
                     }
                 }

@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs/index';
@@ -8,7 +8,7 @@ import { HttpResponse } from '@angular/common/http';
 
 export class FirstPageIconEntity extends EntityBase {
     public menu_id: string = undefined; 	// 	string 	相机主键
-    public menu_key: string = undefined; // 业务图标
+    public menu_business_name: string = undefined; // 业务名称 /创建编辑时候用的
     public title: string = undefined; 	// string	标题
     public application: string = undefined; 	// 	string	应用id
     public system: number = undefined; 	// 	int	系统(1,'IOS'),(2,'Android')
@@ -25,6 +25,21 @@ export class FirstPageIconEntity extends EntityBase {
     public is_display = undefined;  // 	bool	是否隐藏 false为不隐藏
     public corner_display = 'true';  // 	bool	角标是否隐藏 false为不隐藏
     public is_delete = undefined;  // 	bool	是否删除 false为不删除
+    public menu_business_key: FirstPageIconMenuKeyEntity = new FirstPageIconMenuKeyEntity();
+    this: any;
+
+    public getPropertyClass(propertyName: string): typeof EntityBase {
+        if (propertyName === 'menu_business_key') {
+            return FirstPageIconMenuKeyEntity;
+        }
+        return null;
+    }
+}
+
+class FirstPageIconMenuKeyEntity extends EntityBase {
+    public application_id: string = undefined;
+    public menu_business_key_id: string = undefined; // 业务id
+    public menu_business_name: string = undefined; // 业务名称
 }
 
 export class AppEntity extends EntityBase {
@@ -67,15 +82,14 @@ export class FirstPageIconService {
     /**
      * 请求获取APP首页图标配置列表
      * @param application_id 应用编号
+     * @param menu_business_key_id
      * @returns Observable<FirstPageIconLinkResponse>
      */
-    public requestFirstPageIconList(application_id: string): Observable<FirstPageIconLinkResponse> {
-        const params = {
-            page_size: 45,
-            page_num: 1
-        };
+    public requestFirstPageIconList(application_id: string, menu_business_key_id?: string): Observable<FirstPageIconLinkResponse> {
+        const searchParams: any = new SearchFirstPageIconParams();
+        searchParams.menu_business_key_id = menu_business_key_id || '';
         return this.httpService.get(environment.OPERATION_SERVE + `/admin/applications/${application_id}/menus`,
-            params).pipe(map(res => new FirstPageIconLinkResponse(res)));
+            searchParams).pipe(map(res => new FirstPageIconLinkResponse(res)));
     }
 
     /**
