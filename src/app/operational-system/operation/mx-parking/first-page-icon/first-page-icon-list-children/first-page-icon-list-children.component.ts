@@ -99,7 +99,10 @@ export class FirstPageIconListChildrenComponent implements OnInit, NzSearchAdapt
     }
 
     /* 检索成功处理 */
-    public searchCompleteProcess(): any {
+    public searchCompleteProcess(results: Array<any>): any {
+        if (!results.length) {
+            this.router.navigate(['../'], {relativeTo: this.route});
+        }
     }
 
     //  请求App首页图标配置信息
