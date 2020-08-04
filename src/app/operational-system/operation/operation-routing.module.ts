@@ -24,6 +24,10 @@ const routes: Routes = [{
             path: 'push-message-management',
             loadChildren: () => import('./push-message-management/push-message-management.module').then(m => m.PushMessageManagementModule),
             canLoad: [AuthGuardService]
+        }, {
+            path: 'used-car',
+            loadChildren: () => import('./used-car/used-car.module').then(m => m.UsedCarModule),
+            canLoad: [AuthGuardService]
         },
         {
             path: 'mini-program',

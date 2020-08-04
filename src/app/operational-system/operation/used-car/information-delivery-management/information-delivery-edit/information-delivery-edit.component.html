@@ -1,0 +1,228 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="levelName">
+    </app-crumb>
+</div>
+<!--<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>-->
+<!--    <nz-spin nzSimple></nz-spin>-->
+<!--</div>-->
+<!--[hidden]="loading"-->
+<div class="content-flow">
+    <div class="content-container">
+        <div class="content-flow">
+            <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>详细信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>发布城市</span>
+                        </label>
+                        <div class="control-input">
+                            <p class="read-only-info">沈阳</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>图片</span>
+                        </label>
+                        <div>
+                            <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span>图片示例</span></p>
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                [maxLength]="6"
+                                                [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
+                                                [imageHeight]="100"
+                                                [imageUrls]="[]" [imageShowWidth]="100" [resizable]="true"
+                                                (selectedImgChange)="onSelectedPicture($event,'commodity_images')"
+                                                file_id="commodityImg" #commodityImg>
+                            </app-z-photo-select>
+                        </div>
+                    </div>
+                    <div class="err-message" style="margin-top: -10px;margin-bottom: 10px;">
+                        <span>{{errMessageGroup?.errJson?.commodity_images.errMes }}</span>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <span>标签</span>
+                        </label>
+                        <div class="control-input">
+                            <ul class="tag-list">
+                                <li>
+                                    <span>34535345345</span>
+                                    <img src="/assets/images/tag_del.png">
+                                </li>
+                                <li>
+                                    <span>选择标签</span>
+                                    <img src="/assets/images/add_tag.png">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>车辆识别代号（VIN码）</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>品牌</span>
+                        </label>
+                        <div class="control-input">
+                            <button type="button">请选择品牌车系</button>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                车辆颜色
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control">
+                                    <option value="">请选择车辆颜色</option>
+                                    <option *ngFor="let carColor of carColorList"
+                                            [value]="carColor.value">{{carColor}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                首次上牌时间
+                            </label>
+                            <div class="control-input">
+                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
+                                                [nzDisabledDate]="disabledRegistrationTime"
+                                                name='registration_time'
+                                                nzFormat="yyyy-MM"></nz-date-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                行驶里程
+                            </label>
+                            <div class="control-input">
+                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn">
+                                    <input class="form-control" nz-input/>
+                                    <ng-template #saveUrlBtn><a style="padding: 10px;">万公里</a>
+                                    </ng-template>
+                                </nz-input-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                转让价格
+                            </label>
+                            <div class="control-input">
+                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
+                                    <input class="form-control" nz-input/>
+                                    <ng-template #saveUrlBtn1><a style="padding: 10px;">万元</a>
+                                    </ng-template>
+                                </nz-input-group>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label" style="width: 110px">
+                            </label>
+                            <div class="control-input">
+                                <label nz-checkbox>
+                                    包含过户费用
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                车辆类型
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>车况描述</span>
+                        </label>
+                        <div class="control-input rich-input">
+                            <app-z-text-ckeditor ckEditorId="informationDeliveryEditor"></app-z-text-ckeditor>
+                        </div>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>联系方式</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>信息发布企业</span>
+                        </label>
+                        <div class="control-input">
+                            <select class="form-control">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                联系人
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control">
+                                    <option value="">请选择车辆颜色</option>
+                                    <option *ngFor="let carColor of carColorList"
+                                            [value]="carColor.value">{{carColor}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                联系电话
+                            </label>
+                            <div class="control-input">
+                                <input class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>看车地址</span>
+                        </label>
+                        <div class="control-input" style="width: 740px!important;">
+                            <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj" #projectInfoPro></app-pro-city-dist-select>
+                            <input class="form-control" style="margin-left: 10px" placeholder="详细地址">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="sure-btn" type="submit" nz-button nzType="primary"
+                            [disabled]="!editInformationDeliveryModal.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                    <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

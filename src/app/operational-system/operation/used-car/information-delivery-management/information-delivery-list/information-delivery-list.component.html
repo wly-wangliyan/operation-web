@@ -1,0 +1,115 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    [routerLink]="['../information-delivery-create']">
+                新建
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+
+    <div class="tab-bar-list" style="padding-top:0">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="activeTabIndex" (ngModelChange)="onTabChange($event)">
+            <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'>{{tab.label}}</label>
+        </nz-radio-group>
+    </div>
+    <div class="search-container" style="padding:0">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>模板标题：</span>
+                <input class="form-control" [(ngModel)]="searchParams.title" name="title" placeholder="请输入模板标题"
+                       maxlength="20"/>
+            </div>
+            <div class="form-group">
+                <span>商品类型：</span>
+                <select class="form-control" style="width: 120px;">
+                    <option value=0>全部</option>
+                    <option value=1>实物商品</option>
+                    <option value=2>虚拟商品</option>
+                    <option value=3>优惠券商品</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>创建时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledEndTime"
+                                [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+
+        <div class="zmy-table goods-order">
+            <nz-table #integralOrderTable [nzData]="nzSearchAssistant.nzData"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText"
+                      [nzPageSize]="nzSearchAssistant.pageSize"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                      [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>标题</th>
+                    <th>转让价格</th>
+                    <th>首次上牌时间</th>
+                    <th>车牌颜色</th>
+                    <th>行驶里程</th>
+                    <th>联系人</th>
+                    <th>审核状态</th>
+                    <th>上线状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-template ngFor let-order let-i=index [ngForOf]="integralOrderTable.data">
+                    <tr>
+                        <td colspan="11" nzAlign="left">
+                            发布公司：2323243 |
+                            发布时间：324234234324
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
+<!--                        class="img-item"-->
+                        <td>78989879</td>
+                        <td>奥迪A4L 2017款45TFSI quattro 运动型</td>
+                        <td>888</td>
+                        <td>2010-09</td>
+                        <td>888</td>
+                        <td>2010-09</td>
+                        <td>888</td>
+                        <td>2010-09</td>
+                        <td>
+                            <!--                            <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"-->
+                            <!--                                         [nzControl]=true-->
+                            <!--                                         [nzDisabled]="isDisabledOpen(data)"-->
+                            <!--                                         style="height: 10px"-->
+                            <!--                                         nzUnCheckedChildren="Off"-->
+                            <!--                                         (click)="onSwitchChange(data)"></nz-switch>-->
+                        </td>
+                        <td>
+                            <!--                            <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]"-->
+                            <!--                               *ngIf="isEdit(data)">编辑</a>-->
+                            <!--                            <a [title]="'明细'" [routerLink]="['../template-push-detail',data.template_message_id]">明细</a>-->
+                            <!--                            <a *ngIf="data.status===TemplatePushStatus.close" [title]="'删除'"-->
+                            <!--                               (appZDebounceClick)="onDeleteTemplateClick(data.template_message_id)">删除</a>-->
+                        </td>
+                    </tr>
+                </ng-template>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

@@ -26,6 +26,7 @@ export class MenuOperationService {
         menusItem.push(this.generateAdvancedFunctionMenu());
         menusItem.push(this.generateRightsManagementMenu());
         menusItem.push(this.generateIntegralManagementMenu());
+        menusItem.push(this.generateUsedCarMenu());
         return menusItem;
     }
 
@@ -117,6 +118,7 @@ export class MenuOperationService {
         return systemMenu;
     }
 
+    // 运营 》积分商城
     private generateIntegralManagementMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('积分管理', null);
         systemMenu.icon = '/assets/images/menu/menu_integral.png';
@@ -125,6 +127,19 @@ export class MenuOperationService {
         const subFinanceMenu2 = new SideMenuItem('用户积分管理', '/main/operation/integral-management/user-integral', systemMenu);
         systemMenu.children.push(subFinanceMenu2);
         const subFinanceMenu3 = new SideMenuItem('积分订单管理', '/main/operation/integral-management/integral-order', systemMenu);
+        systemMenu.children.push(subFinanceMenu3);
+        this.routeLinkList.push(systemMenu);
+        return systemMenu;
+    }
+
+    private generateUsedCarMenu(): SideMenuItem {
+        const systemMenu = new SideMenuItem('二手车', null);
+        systemMenu.icon = '/assets/images/menu/menu_integral.png';
+        const subFinanceMenu1 = new SideMenuItem('企业管理', '/main/operation/used-car/company-management', systemMenu);
+        systemMenu.children.push(subFinanceMenu1);
+        const subFinanceMenu2 = new SideMenuItem('信息发布', '/main/operation/used-car/information-delivery-management', systemMenu);
+        systemMenu.children.push(subFinanceMenu2);
+        const subFinanceMenu3 = new SideMenuItem('标签管理', '/main/operation/used-car/tag-management', systemMenu);
         systemMenu.children.push(subFinanceMenu3);
         this.routeLinkList.push(systemMenu);
         return systemMenu;

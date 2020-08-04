@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TransformFontHelper } from '../../../../utils/transform-font';
 import { timer } from 'rxjs/index';
 
@@ -116,7 +116,7 @@ export class ProCityDistSelectComponent implements OnChanges {
                         });
                     } else {
                         console.log(regionsObj);
-                        this.requestRegionsById('中国', this.regionLevel.country, true);
+                        this.requestRegionsById('中国', this.regionLevel.country, false);
                         this.requestMunicipalitiesRegions(this.regionsObj.region_id);
                     }
                 });
