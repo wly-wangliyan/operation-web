@@ -3,7 +3,6 @@ import { GlobalService } from '../../../../../core/global.service';
 import { differenceInCalendarDays } from 'date-fns';
 import {
     SearchParamsEntity,
-    TemplateManagementContentEntity,
     TemplateManagementEntity,
     TemplateManagementService
 } from '../template-management.service';

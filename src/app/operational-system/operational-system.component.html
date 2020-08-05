@@ -48,6 +48,10 @@
                 [class.noPermissions]="!authService.checkPermissions(['topic'])">
                 话题
             </li>
+            <li [class.herder-active]="menuActive('/used-car', 'used-car')" (click)="onMainMenuClick('/used-car')"
+                [class.noPermissions]="!authService.checkPermissions(['used-car'])">
+                二手车
+            </li>
         </ul>
         <div class="user">
             <!--<div class="user_photo"></div>

@@ -1,0 +1,61 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'企业管理'"></app-crumb>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+
+            <div class="form-group">
+                <span>企业名称：</span>
+                <input class="form-control" placeholder="请输入企业名称" [(ngModel)]="searchParams.title" name="title"
+                       maxlength="20"/>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="onClickRearch()">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #TemplateTable [nzData]="nzSearchAssistant.nzData" [nzPageSize]="nzSearchAssistant.pageSize"
+                      [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>企业名称</th>
+                    <th>企业类型</th>
+                    <th>地址</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
+                    <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templateIndex + 1}}</td>
+                    <td [title]="data.wx_template_id">
+                        <span [appTxtCopy]="data.wx_template_id">
+                            {{data.wx_template_id}}
+                        </span>
+                    </td>
+                    <td [title]="data.title">{{data.title| zMaxLength:15}}</td>
+                    <td [title]="data.weixin_template_id">
+                        <span [appTxtCopy]="data.weixin_template_id">
+                            {{data.weixin_template_id}}
+                        </span>
+                    </td>
+                    <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td class="operation">
+                        <a [title]="'编辑'" [routerLink]="['../company-edit',11]">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from '../../../../core/auth-guard.service';
-import { RouteMonitorService } from '../../../../core/route-monitor.service';
+import { AuthGuardService } from '../../../core/auth-guard.service';
+import { RouteMonitorService } from '../../../core/route-monitor.service';
 import { InformationDeliveryListComponent } from './information-delivery-list/information-delivery-list.component';
 import { InformationDeliveryEditComponent } from './information-delivery-edit/information-delivery-edit.component';
 import { InformationDeliveryDetailComponent } from './information-delivery-detail/information-delivery-detail.component';

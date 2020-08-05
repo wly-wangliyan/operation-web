@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { SearchParamsEntity } from '../../../push-message-management/template-management/template-management.service';
-import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
-import { GlobalService } from '../../../../../core/global.service';
+import { SearchParamsEntity } from '../../../operation/push-message-management/template-management/template-management.service';
+import { NzSearchAdapter, NzSearchAssistant } from '../../../../share/nz-search-assistant';
+import { GlobalService } from '../../../../core/global.service';
 import {
     TemplatePushManagementEntity,
     TemplatePushManagementService
-} from '../../../push-message-management/template-push-management/template-push-management.service';
-import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+} from '../../../operation/push-message-management/template-push-management/template-push-management.service';
+import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
 
 @Component({
     selector: 'app-information-delivery-list',
     templateUrl: './information-delivery-list.component.html',
-    styleUrls: ['./information-delivery-list.component.css', '../../../../../../assets/less/tab-bar-list.less']
+    styleUrls: ['./information-delivery-list.component.css', '../../../../../assets/less/tab-bar-list.less']
 })
 export class InformationDeliveryListComponent implements NzSearchAdapter {
 

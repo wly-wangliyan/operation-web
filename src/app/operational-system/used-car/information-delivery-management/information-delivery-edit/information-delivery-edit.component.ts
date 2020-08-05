@@ -1,20 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalService } from '../../../../../core/global.service';
-import { TemplateManagementService } from '../../../push-message-management/template-management/template-management.service';
-import { TemplatePushManagementService } from '../../../push-message-management/template-push-management/template-push-management.service';
-import { ErrMessageGroup } from '../../../../../../utils/error-message-helper';
-import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
+import { GlobalService } from '../../../../core/global.service';
+import { TemplateManagementService } from '../../../operation/push-message-management/template-management/template-management.service';
+import { TemplatePushManagementService } from '../../../operation/push-message-management/template-push-management/template-push-management.service';
+import { ErrMessageGroup } from '../../../../../utils/error-message-helper';
+import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { differenceInCalendarDays } from 'date-fns';
 import {
     ProCityDistSelectComponent,
     RegionEntity
-} from '../../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
+} from '../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
 import {
     MapItem,
     MapType,
-} from '../../../../../share/components/z-map-select-point/z-map-select-point.component';
-import { ZMapSelectPointV2Component } from '../../../../../share/components/z-map-select-point-v2/z-map-select-point-v2.component';
+} from '../../../../share/components/z-map-select-point/z-map-select-point.component';
+import { ZMapSelectPointV2Component } from '../../../../share/components/z-map-select-point-v2/z-map-select-point-v2.component';
+import { AccessoryLibraryService } from '../../../../store-maintenance/accessory-library/accessory-library.service';
+import { SelectBrandComponent } from '../components/select-brand/select-brand.component';
 
 @Component({
     selector: 'app-information-delivery-edit',
@@ -38,6 +40,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         cityCode: ''
     };
     @ViewChild(ZMapSelectPointV2Component, {static: true}) public zMapSelectPointV2Component: ZMapSelectPointV2Component;
+    @ViewChild(SelectBrandComponent, {static: true}) public selectBrandComponent: SelectBrandComponent;
     public checkOptions = [
         {label: 'CPS导航', value: 1, checked: false},
         {label: '倒车影像', value: 2, checked: false},
@@ -59,6 +62,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private globalService: GlobalService,
+                private accessoryLibraryService: AccessoryLibraryService,
                 private templateManagementService: TemplateManagementService,
                 private templatePushManagementService: TemplatePushManagementService) {
         this.route.paramMap.subscribe(map => {
@@ -71,8 +75,25 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.levelName = this.id ? '编辑信息' : '创建信息';
     }
 
-    public onClickBrand(){
-        console.log(32423432)
+    // 推荐设置打开所属厂商选择组件
+    public onClickBrand(): void {
+        const data = {
+            accessory_id: 'db2eaa869ca011eab8dc0242ac120003',
+            car_series_list: [],
+        };
+        // 获取推荐设置
+        this.accessoryLibraryService.requestRecommendCarSeries(data.accessory_id).subscribe(res => {
+            data.car_series_list = res;
+
+            this.selectBrandComponent.open(data, () => {
+                // this.accessoryNewList = [];
+                // this.noResultText = '数据加载中...';
+                // this.searchText$.next();
+            });
+        }, error => {
+            this.globalService.httpErrorProcess(error);
+        });
+
     }
 
     public onClickReach() {

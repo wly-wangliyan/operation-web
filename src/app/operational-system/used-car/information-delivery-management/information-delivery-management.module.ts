@@ -6,7 +6,7 @@ import { InformationDeliveryListComponent } from './information-delivery-list/in
 import { InformationDeliveryDetailComponent } from './information-delivery-detail/information-delivery-detail.component';
 import { InformationDeliveryEditComponent } from './information-delivery-edit/information-delivery-edit.component';
 import { InformationDeliveryManagementRoutingModule } from './information-delivery-management-routing.module';
-import { ShareModule } from '../../../../share/share.module';
+import { ShareModule } from '../../../share/share.module';
 import {
     NzButtonModule,
     NzCheckboxModule,
@@ -17,6 +17,9 @@ import {
     NzTableModule
 } from 'ng-zorro-antd';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { SelectBrandComponent } from './components/select-brand/select-brand.component';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 
 
 @NgModule({
@@ -24,7 +27,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
         InformationDeliveryManagementComponent,
         InformationDeliveryListComponent,
         InformationDeliveryDetailComponent,
-        InformationDeliveryEditComponent],
+        InformationDeliveryEditComponent,
+        SelectBrandComponent],
     imports: [
         CommonModule,
         ShareModule,
@@ -36,6 +40,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
         NzCheckboxModule,
         NzSpinModule,
         NzInputModule,
+        NzTreeModule,
+        NzAnchorModule,
         InformationDeliveryManagementRoutingModule,
     ]
 })
