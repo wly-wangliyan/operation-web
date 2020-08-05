@@ -1,0 +1,21 @@
+.info-window {
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.z-map-select-point-container {
+    margin-left: 130px;
+    display: flex;
+    align-items: flex-start;
+}
+
+#container{
+    width: 670px;
+    height: 300px;
+}
+
+button{
+    margin-left: 10px;
+}

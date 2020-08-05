@@ -5,12 +5,16 @@ import { TemplateManagementService } from '../../../push-message-management/temp
 import { TemplatePushManagementService } from '../../../push-message-management/template-push-management/template-push-management.service';
 import { ErrMessageGroup } from '../../../../../../utils/error-message-helper';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
-import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { differenceInCalendarDays } from 'date-fns';
 import {
     ProCityDistSelectComponent,
     RegionEntity
 } from '../../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
+import {
+    MapItem,
+    MapType,
+} from '../../../../../share/components/z-map-select-point/z-map-select-point.component';
+import { ZMapSelectPointV2Component } from '../../../../../share/components/z-map-select-point-v2/z-map-select-point-v2.component';
 
 @Component({
     selector: 'app-information-delivery-edit',
@@ -22,10 +26,34 @@ export class InformationDeliveryEditComponent implements OnInit {
     public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
     @ViewChild('commodityImg', {static: false}) public commodityImgSelectComponent: ZPhotoSelectComponent;
-    @ViewChild('projectInfoPro', { static: true }) public proCityDistSelectComponent: ProCityDistSelectComponent
+    @ViewChild('projectInfoPro', {static: true}) public proCityDistSelectComponent: ProCityDistSelectComponent;
     public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
     public carColorList: Array<CarColorItem> = [];
     public registration_time = '';
+    public mapObj: MapItem = {
+        point: [],
+        type: MapType.view,
+        address: '',
+        hasDetailedAddress: false,
+        cityCode: ''
+    };
+    @ViewChild(ZMapSelectPointV2Component, {static: true}) public zMapSelectPointV2Component: ZMapSelectPointV2Component;
+    public checkOptions = [
+        {label: 'CPS导航', value: 1, checked: false},
+        {label: '倒车影像', value: 2, checked: false},
+        {label: '定速巡航', value: 3, checked: false},
+        {label: '多媒体控制', value: 4, checked: false},
+        {label: '行车显示屏', value: 5, checked: false},
+        {label: '前雷达', value: 6, checked: false},
+        {label: '全景摄像头', value: 7, checked: false},
+        {label: '胎压监测', value: 6, checked: false},
+        {label: '氙气大灯', value: 7, checked: false},
+        {label: '运动座椅', value: 6, checked: false},
+        {label: '车内氛围灯', value: 7, checked: false},
+        {label: '车载电视', value: 6, checked: false},
+        {label: '铝合金轮圈', value: 7, checked: false},
+        {label: '车载冰箱', value: 7, checked: false}
+    ];
     private id = '';
 
     constructor(private route: ActivatedRoute,
@@ -43,12 +71,35 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.levelName = this.id ? '编辑信息' : '创建信息';
     }
 
+    public onClickBrand(){
+        console.log(32423432)
+    }
+
+    public onClickReach() {
+        this.mapObj.type = MapType.edit;
+        this.mapObj.point = [];
+        // this.currentBusiness.address = this.currentBusiness.address ? this.currentBusiness.address : '';
+        // if (this.currentBusiness.address) {
+        //     this.mapObj.hasDetailedAddress = true;
+        // }
+        this.mapObj.hasDetailedAddress = true;
+        // if (this.currentBusiness.lon && this.currentBusiness.lat) {
+        //     this.mapObj.point.push(Number(this.currentBusiness.lon));
+        //     this.mapObj.point.push(Number(this.currentBusiness.lat));
+        // }
+        this.mapObj.address = this.proCityDistSelectComponent.selectedAddress + '昂立信息园';
+        this.mapObj.cityCode = this.proCityDistSelectComponent.regionsObj.region_id;
+        this.zMapSelectPointV2Component.openMap();
+    }
+
     // 上架开始时间的禁用部分
     public disabledRegistrationTime = (startValue: Date): boolean => {
         return differenceInCalendarDays(new Date(), startValue) > 0;
     };
 
     private initData() {
+        this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
+        this.zMapSelectPointV2Component.openMap();
         this.carColorList = [
             new CarColorItem('黑色', 1),
             new CarColorItem('白色', 2),

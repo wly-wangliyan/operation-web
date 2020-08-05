@@ -7,6 +7,8 @@ export class RegionEntity {
     public city: string;
     public district: string;
     public region_id: string;
+    public lon: string;
+    public lat: string;
 
     constructor(source?: any) {
         if (source) {
@@ -14,6 +16,8 @@ export class RegionEntity {
             this.city = source.city ? TransformFontHelper.transformToSimple(source.city) : '';
             this.district = source.district ? TransformFontHelper.transformToSimple(source.district) : '';
             this.region_id = source.region_id ? source.region_id : '';
+            this.lon = source.lon ? source.lon : '';
+            this.lat = source.lat ? source.lat : '';
         }
     }
 }
@@ -125,23 +129,23 @@ export class ProCityDistSelectComponent implements OnChanges {
         }
     }
 
-    /**
-     * 根据IP定位获取当前城市信息
-     */
-    public requestCityInfo() {
-        // 实例化城市查询类
-        const citySearch = new AMap.CitySearch();
-        // 自动获取用户IP，返回当前城市
-        citySearch.getLocalCity((status, result) => {
-            if (status === 'complete' && result.info === 'OK') {
-                this.regionsObj.province = result.province ? result.province : '';
-                this.regionsObj.city = result.city ? result.city : '';
-                this.regionsObj.district = '';
-                this.regionsObj.region_id = result.adcode ? result.adcode : '';
-                this.requestMunicipalitiesRegions(this.regionsObj.region_id);
-            }
-        });
-    }
+    // /**
+    //  * 根据IP定位获取当前城市信息
+    //  */
+    // public requestCityInfo() {
+    //     // 实例化城市查询类
+    //     const citySearch = new AMap.CitySearch();
+    //     // 自动获取用户IP，返回当前城市
+    //     citySearch.getLocalCity((status, result) => {
+    //         if (status === 'complete' && result.info === 'OK') {
+    //             this.regionsObj.province = result.province ? result.province : '';
+    //             this.regionsObj.city = result.city ? result.city : '';
+    //             this.regionsObj.district = '';
+    //             this.regionsObj.region_id = result.adcode ? result.adcode : '';
+    //             this.requestMunicipalitiesRegions(this.regionsObj.region_id);
+    //         }
+    //     });
+    // }
 
     public getRegionsData(data: any, _level: string, isRequestNextLevel: boolean) {
         const subList = data.districtList;
@@ -185,6 +189,7 @@ export class ProCityDistSelectComponent implements OnChanges {
     }
 
     public searchRegion(event: any, level: string) {
+        console.log(3333, event);
         const adcode = $(event.target).find('option:selected').attr('id');
         const name = event.target.value ? event.target.value : '';
         this._dirty = true;
@@ -261,7 +266,12 @@ export class ProCityDistSelectComponent implements OnChanges {
     private requestRegionsById(adcode: string, level: string, isRequestNextLevel = false) {
         this.district.search(adcode, (status, result) => {
             if (status === 'complete') {
-                this.getRegionsData(result.districtList[0], level, isRequestNextLevel);
+                const MapList = result.districtList[0];
+                // if (MapList.level === this.regionLevel.district) {
+                //     this.regionsObj.lat = MapList.center.lat;
+                //     this.regionsObj.lon = MapList.center.lng;
+                // }
+                this.getRegionsData(MapList, level, isRequestNextLevel);
             }
         });
     }

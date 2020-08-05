@@ -30,7 +30,8 @@
                             <span>图片</span>
                         </label>
                         <div>
-                            <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span>图片示例</span></p>
+                            <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span
+                                    style="color: #3E71F7;margin-left: 10px">图片示例</span></p>
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                                 [maxLength]="6"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
@@ -56,9 +57,10 @@
                                 </li>
                                 <li>
                                     <span>选择标签</span>
-                                    <img src="/assets/images/add_tag.png">
+                                    <img src="/assets/images/icon_add_small.png">
                                 </li>
                             </ul>
+                            <p class="read-only-info">最多可选择3标签</p>
                         </div>
                     </div>
                     <div class="row">
@@ -66,8 +68,9 @@
                             <b>*</b>
                             <span>车辆识别代号（VIN码）</span>
                         </label>
-                        <div class="control-input">
+                        <div class="control-input" style="flex-direction: column">
                             <input class="form-control">
+                            <p class="read-only-info" style="margin-top: 10px">17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改</p>
                         </div>
                     </div>
                     <div class="row">
@@ -76,7 +79,11 @@
                             <span>品牌</span>
                         </label>
                         <div class="control-input">
-                            <button type="button">请选择品牌车系</button>
+                            <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
+                                <input class="form-control" placeholder="请选择品牌车系" nz-input readonly/>
+                                <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>
+                                </ng-template>
+                            </nz-input-group>
                         </div>
                     </div>
                     <div class="row sort-three">
@@ -184,7 +191,7 @@
                         <div>
                             <label class="control-label">
                                 <b>*</b>
-                                联系人
+                                联系电话
                             </label>
                             <div class="control-input">
                                 <select class="form-control">
@@ -197,7 +204,7 @@
                         <div>
                             <label class="control-label">
                                 <b>*</b>
-                                联系电话
+                                联系人
                             </label>
                             <div class="control-input">
                                 <input class="form-control" readonly>
@@ -210,8 +217,105 @@
                             <span>看车地址</span>
                         </label>
                         <div class="control-input" style="width: 740px!important;">
-                            <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj" #projectInfoPro></app-pro-city-dist-select>
+                            <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj"
+                                                      #projectInfoPro></app-pro-city-dist-select>
                             <input class="form-control" style="margin-left: 10px" placeholder="详细地址">
+                            <button style="margin-left: 10px" type="button" nz-button nzType="primary"
+                                    (click)="onClickReach()">搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                        </label>
+                        <div class="control-input">
+                            <input readonly class="form-control" placeholder="经度">
+                            <input readonly class="form-control" placeholder="纬度" style="margin-left: 10px">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <app-z-map-select-point-v2 [mapObj]="mapObj"></app-z-map-select-point-v2>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>更多信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <span>过户次数</span>
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control">
+                                    <option value="0"></option>
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option value="7"></option>
+                                    <option value="8"></option>
+                                    <option value="9"></option>
+                                    <option value="10"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <span>车辆是否抵押</span>
+                            </label>
+                            <div class="control-input">
+                                <nz-radio-group>
+                                    <label nz-radio [nzValue]="1">有</label>
+                                    <label nz-radio [nzValue]="2">无</label>
+                                </nz-radio-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                年检到期
+                            </label>
+                            <div class="control-input">
+                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
+                                                [nzDisabledDate]="disabledRegistrationTime"
+                                                name='registration_time'
+                                                nzFormat="yyyy-MM"></nz-date-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                交强险到期
+                            </label>
+                            <div class="control-input">
+                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
+                                                [nzDisabledDate]="disabledRegistrationTime"
+                                                name='registration_time'
+                                                nzFormat="yyyy-MM"></nz-date-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                商业险到期
+                            </label>
+                            <div class="control-input">
+                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
+                                                [nzDisabledDate]="disabledRegistrationTime"
+                                                name='registration_time'
+                                                nzFormat="yyyy-MM"></nz-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="align-items: flex-start">
+                        <label class="control-label">
+                            车辆家装配置
+                        </label>
+                        <div class="control-input" style="width: 585px">
+                            <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"></nz-checkbox-group>
                         </div>
                     </div>
                 </div>

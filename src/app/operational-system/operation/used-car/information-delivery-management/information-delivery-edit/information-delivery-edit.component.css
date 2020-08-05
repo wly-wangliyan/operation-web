@@ -106,6 +106,7 @@ ul, li {
     box-sizing: border-box;
     word-break: break-all;
     color: #3E71F7;
+    margin-right: 10px;
 }
 
 .tag-list > li:last-child > img {
@@ -119,4 +120,8 @@ ul, li {
 
 li + li {
     margin-left: 20px;
+}
+
+.content-container .control-input{
+    width: 450px;
 }
