@@ -13,7 +13,7 @@ const routes: Routes = [{
     children: [
         {path: '', redirectTo: 'company-list', pathMatch: 'full'},
         {path: 'company-list', component: CompanyListComponent},
-        {path: 'company-edit/:id', component: CompanyEditComponent},
+        {path: 'company-edit/:merchant_id', component: CompanyEditComponent},
         {path: '**', redirectTo: 'company-list', pathMatch: 'full'}
     ]
 }];

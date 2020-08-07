@@ -4,7 +4,7 @@ import { CompanyManagementComponent } from './company-management.component';
 import { CompanyListComponent } from './company-list/company-list.component';
 import { CompanyManagementRoutingModule } from './company-management-routing.module';
 import { ShareModule } from '../../../share/share.module';
-import { NzButtonModule, NzDatePickerModule, NzTableModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzTableModule, NzSpinModule } from 'ng-zorro-antd';
 import { CompanyEditComponent } from './company-edit/company-edit.component';
 
 
@@ -14,9 +14,8 @@ import { CompanyEditComponent } from './company-edit/company-edit.component';
         ShareModule,
         CommonModule,
         NzTableModule,
-        NzTableModule,
         NzButtonModule,
-        NzDatePickerModule,
+        NzSpinModule,
         CompanyManagementRoutingModule
     ]
 })

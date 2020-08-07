@@ -1,1 +1,118 @@
-<p>company-edit works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'企业管理'" [level2RelativePath]="'../'" [level3Name]="'编辑'">
+    </app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+    <div class="content-container">
+        <div class="content-flow">
+            <!-- 查看明细 -->
+            <form autocomplete="off" class="form-horizontal" #editCompanyModal="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <span>二手车商户名称</span>
+                    </label>
+                    <div class="control-input">
+                        <p>{{companyDetail.merchant_name}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>二手车企业名称</span>
+                    </label>
+                    <div class="control-input">
+                        <p>{{companyDetail.company ? companyDetail.company.company_name : '-'}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>类型</span>
+                    </label>
+                    <div class="control-input">
+                        <p>二手车商</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>联系人</span>
+                    </label>
+                    <div class="control-input">
+                        <p>{{companyDetail.contacts}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>联系电话</span>
+                    </label>
+                    <div class="control-input">
+                        <p>{{companyDetail.telephone}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <span>门店地址</span>
+                    </label>
+                    <div class="control-input" style="width: 640px">
+                        <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj"
+                                                  #projectInfoPro></app-pro-city-dist-select>
+                        <input class="form-control" [value]="companyDetail.address" readonly style="margin-left: 10px"
+                               placeholder="详细地址"></div>
+                </div>
+                <ng-container *ngFor="let consultation of consultationList;let index=index">
+                    <div class="row three-input">
+                        <div>
+                            <label class="control-label">
+                                <span>资询电话</span>
+                            </label>
+                            <div class="control-input">
+                                <input [(ngModel)]="consultation.telephone" [name]="'telephone_'+index" class="form-control" maxlength="20"
+                                       required appIgnoreSpace
+                                       (input)="onInputConsultation(index)"
+                                       placeholder="此电话用于用户咨询">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label" style="width: auto">
+                                <span>咨询人</span>
+                            </label>
+                            <div class="control-input">
+                                <input [(ngModel)]="consultation.name" [name]="'name_'+index" maxlength="10"
+                                       required appIgnoreSpace
+                                       (input)="onInputConsultation(index)"
+                                       class="form-control"
+                                       placeholder="输入资讯人">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="control-input">
+                                <a [title]="'移除'" class="clear-item"
+                                   (click)="onClickConsultation(ConsultationOperationType.delete,index)"
+                                   *ngIf="consultationList.length > 1">移除</a>
+                                <a [title]="'添加'" style="color: #007bff"
+                                   (click)="onClickConsultation(ConsultationOperationType.add)"
+                                   *ngIf="(consultationList.length < 100) && (index === consultationList.length - 1)">添加</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: -10px"
+                         [style.visibility]="consultation.error?'visible':'hidden'">
+                        <label class="control-label">
+                        </label>
+                        <div class="control-input">
+                            <p class="waring-color">{{consultation.error}}</p>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="modal-footer">
+                    <button class="sure-btn" type="submit" nz-button nzType="primary"
+                            [disabled]="!editCompanyModal.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                    <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

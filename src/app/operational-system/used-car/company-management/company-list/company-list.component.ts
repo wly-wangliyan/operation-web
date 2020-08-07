@@ -1,12 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {
-    SearchParamsEntity,
-} from '../../../operation/push-message-management/template-management/template-management.service';
+import { Component } from '@angular/core';
 import { GlobalService } from '../../../../core/global.service';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../share/nz-search-assistant';
-import {
-    TemplatePushManagementService
-} from '../../../operation/push-message-management/template-push-management/template-push-management.service';
+import { CompanyManagementService, SearchParamsEntity } from '../company-management.service';
 
 @Component({
     selector: 'app-company-list',
@@ -18,7 +13,7 @@ export class CompanyListComponent implements NzSearchAdapter {
     public nzSearchAssistant: NzSearchAssistant;
 
     constructor(private globalService: GlobalService,
-                private templatePushManagementService: TemplatePushManagementService) {
+                private companyManagementService: CompanyManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
     }
@@ -27,11 +22,11 @@ export class CompanyListComponent implements NzSearchAdapter {
 
     /* 请求检索 */
     public requestSearch(): any {
-        return this.templatePushManagementService.requestTemplatePushListData(this.searchParams);
+        return this.companyManagementService.requestCompanyListData(this.searchParams);
     }
 
     public continueSearch(url: string): any {
-        return this.templatePushManagementService.continueTemplatePushListData(url);
+        return this.companyManagementService.continueCompanyListData(url);
     }
 
     /* 生成并检查参数有效性 */

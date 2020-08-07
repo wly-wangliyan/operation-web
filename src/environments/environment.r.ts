@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   version: 'r',
   OPERATION_SERVE: '//operation-server.parkone.cn',
+  CAR_SERVE: '//car-service-server.parkone.cn',
   COMMENT_SERVE: '//comment-server.parkone.cn',
   TICKET_SERVER: '//ticket-server.parkone.cn',
   MALL_DOMAIN: '//mall-server.parkone.cn',

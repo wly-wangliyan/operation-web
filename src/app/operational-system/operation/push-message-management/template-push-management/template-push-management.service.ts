@@ -8,7 +8,6 @@ import { HttpResponse } from '@angular/common/http';
 import {
     SearchParamsEntity,
     TemplateManagementContentEntity,
-    TemplateManagementEntity
 } from '../template-management/template-management.service';
 
 export enum UserCategory {

@@ -1,0 +1,65 @@
+.content-flow {
+    background: #fff !important;
+    font-size: 14px;
+}
+
+.content-container form .row .control-label {
+    width: 120px;
+}
+
+p {
+    margin-bottom: 0;
+    word-break: break-all;
+}
+
+.three-input {
+    align-items: center;
+}
+
+.three-input > div {
+    display: flex;
+    width: 320px;
+}
+
+.three-input > div:not(:last-child) {
+    margin-right: 10px;
+}
+
+.three-input > div:last-child {
+    width: 100px;
+    margin-left: -25px;
+}
+
+.three-input > div:not(:first-child) {
+    justify-content: center;
+}
+
+.three-input > div:first-child {
+    justify-content: space-between;
+}
+
+.three-input > div .control-input {
+    width: 200px;
+}
+
+.three-input input.form-control{
+    background: #fff !important;
+}
+
+.clear-item, a:hover.clear-item {
+    color: #e82038;
+    margin-right: 10px
+}
+
+.waring-color {
+    color: #e82038;
+}
+
+.modal-footer{
+    width: 600px;
+}
+
+.content-container .sure-btn{
+    margin-left: 0;
+}
+

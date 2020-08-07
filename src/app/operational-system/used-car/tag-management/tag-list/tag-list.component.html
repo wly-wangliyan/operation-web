@@ -1,1 +1,143 @@
-<p>tag-list works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'标签管理'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    (click)="onClickCreateTag()">
+                新建
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>状态：</span>
+                <select class="form-control" [(ngModel)]="searchParams.online_status" name="online_status">
+                    <option value="">全部</option>
+                    <option value="1">上线</option>
+                    <option value="2">下线</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>创建时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledEndTime"
+                                [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="onClickRearch()">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #TemplateTable [nzData]="tagList" [nzFrontPagination]="false"
+                      [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>标签ID</th>
+                    <th>标签名称</th>
+                    <th>描述</th>
+                    <th>创建时间</th>
+                    <th>启停操作</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody cdkDropList (cdkDropListDropped)="onClickDrop($event, TemplateTable.data)">
+                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index" cdkDrag>
+                    <td>{{templateIndex + 1}}</td>
+                    <td [title]="data.label_id">
+                        <span [appTxtCopy]="data.label_id">
+                            {{data.label_id}}
+                        </span>
+                    </td>
+                    <td [title]="data.label_name">{{data.label_name| zMaxLength:15}}</td>
+                    <td [title]="data.description?data.description:''">
+                        {{data.description ? (data.description| zMaxLength:15) : '--'}}
+                    </td>
+                    <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>
+                        <nz-switch [ngModel]="data.online_status===TagOnlineStatus.on" nzCheckedChildren="On"
+                                   [nzControl]=true
+                                   style="height: 10px"
+                                   nzUnCheckedChildren="Off"
+                                   (click)="onSwitchChange(data)"></nz-switch>
+                    </td>
+                    <td class="operation">
+                        <a [title]="'置顶'" *ngIf="templateIndex>0"
+                           (appZDebounceClick)="onTagSortClick(data.label_id)">置顶</a>
+                        <a [title]="'编辑'" (appZDebounceClick)="onClickCreateTag(data)">编辑</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDeleteTagClick(data.label_id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+
+<!--新建-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #tagCreatePromptDiv id="tagCreatePromptDiv">
+    <div class="modal-dialog" role="document" *ngIf="selectedTag">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">{{selectedTag.label_id ? '新建' : '编辑'}}</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" #tagCreateForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>标签名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="selectedTag.label_name" name="label_name"
+                                   appIgnoreSpace required
+                                   placeholder="输入1~10个字，不可重复" minlength="1" maxlength="10">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <span>描   述：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" [(ngModel)]="selectedTag.description" name="description"
+                                   appIgnoreSpace
+                                   placeholder="请输入描述" minlength="1" maxlength="10">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="button" class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onCreateTagData(CreateTagType.continue)" *ngIf="!selectedTag.label_id"
+                            [disabled]="!tagCreateForm.form.valid">
+                        保存并继续添加
+                    </button>
+                    <button type="submit" class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onCreateTagData(CreateTagType.close)"
+                            [disabled]="!tagCreateForm.form.valid">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
