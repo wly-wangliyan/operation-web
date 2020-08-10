@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InformationDeliveryManagementComponent } from './information-delivery-management.component';
-import { UsedCarComponent } from '../used-car.component';
 import { InformationDeliveryListComponent } from './information-delivery-list/information-delivery-list.component';
 import { InformationDeliveryDetailComponent } from './information-delivery-detail/information-delivery-detail.component';
 import { InformationDeliveryEditComponent } from './information-delivery-edit/information-delivery-edit.component';
@@ -20,7 +19,6 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { SelectBrandComponent } from './components/select-brand/select-brand.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
-import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-type/select-brand-firm-type.component';
 
 
 @NgModule({
@@ -29,8 +27,7 @@ import { SelectBrandFirmTypeComponent } from './components/select-brand-firm-typ
         InformationDeliveryListComponent,
         InformationDeliveryDetailComponent,
         InformationDeliveryEditComponent,
-        SelectBrandComponent,
-        SelectBrandFirmTypeComponent],
+        SelectBrandComponent],
     imports: [
         CommonModule,
         ShareModule,
