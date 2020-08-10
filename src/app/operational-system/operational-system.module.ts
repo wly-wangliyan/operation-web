@@ -15,30 +15,45 @@ import zh from '@angular/common/locales/zh';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { SentryErrorHandler } from 'src/utils/sentry-error-handler';
+import { UploadConfig, UploadService, UPLOAD_TOKEN} from '../core/upload.service';
+import { environment } from '../../environments/environment';
+
+const uploadToken: UploadConfig = {
+    img_config: {
+        reportProcess: true,
+        url: `${environment.STORAGE_DOMAIN}/storages/images`,
+        source: 'park',
+    },
+};
 registerLocaleData(zh);
 
 @NgModule({
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    ShareModule,
-    OperationalSystemRoutingModule,
-    NzBadgeModule,
-    NzButtonModule
-  ],
-  declarations: [
-    EntryComponent,
-    OperationalSystemComponent,
-  ],
-  providers: [
-    { provide: NZ_I18N, useValue: zh_CN },
-    { provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
-  ],
-  bootstrap: [EntryComponent]
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        ShareModule,
+        OperationalSystemRoutingModule,
+        NzBadgeModule,
+        NzButtonModule
+    ],
+    declarations: [
+        EntryComponent,
+        OperationalSystemComponent,
+    ],
+    providers: [
+        {provide: NZ_I18N, useValue: zh_CN},
+        {provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true},
+        {provide: ErrorHandler, useClass: SentryErrorHandler},
+        {
+            provide: UPLOAD_TOKEN,
+            useValue: uploadToken
+        },
+        UploadService
+    ],
+    bootstrap: [EntryComponent]
 })
 export class OperationalSystemModule {
 }

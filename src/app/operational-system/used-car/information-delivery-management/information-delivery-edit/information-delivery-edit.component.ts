@@ -17,6 +17,7 @@ import {
 import { ZMapSelectPointV2Component } from '../../../../share/components/z-map-select-point-v2/z-map-select-point-v2.component';
 import { AccessoryLibraryService } from '../../../../store-maintenance/accessory-library/accessory-library.service';
 import { SelectBrandComponent } from '../components/select-brand/select-brand.component';
+import { VehicleManagementHttpService } from '../../../../store-maintenance/vehicle-management/vehicle-management-http.service';
 
 @Component({
     selector: 'app-information-delivery-edit',
@@ -62,7 +63,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private globalService: GlobalService,
-                private accessoryLibraryService: AccessoryLibraryService,
+                private vehicleService: VehicleManagementHttpService,
                 private templateManagementService: TemplateManagementService,
                 private templatePushManagementService: TemplatePushManagementService) {
         this.route.paramMap.subscribe(map => {
@@ -78,11 +79,12 @@ export class InformationDeliveryEditComponent implements OnInit {
     // 推荐设置打开所属厂商选择组件
     public onClickBrand(): void {
         const data = {
-            accessory_id: 'db2eaa869ca011eab8dc0242ac120003',
+            car_series_id: '05720b6c27fd11eaaca60242ac150006',
+            car_param_id: '0572f6bc27fd11eaaca60242ac150006',
             car_series_list: [],
         };
         // 获取推荐设置
-        this.accessoryLibraryService.requestRecommendCarSeries(data.accessory_id).subscribe(res => {
+        this.vehicleService.requestCarDetail(data.car_series_id, data.car_param_id).subscribe(res => {
             data.car_series_list = res;
 
             this.selectBrandComponent.open(data, () => {
