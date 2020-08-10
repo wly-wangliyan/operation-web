@@ -1,0 +1,8 @@
+.select-tag-search{
+    display: flex;
+    align-items: center;
+}
+
+.select-tag-search>button{
+    margin-left: 10px;
+}

@@ -18,6 +18,7 @@ import { ZMapSelectPointV2Component } from '../../../../share/components/z-map-s
 import { AccessoryLibraryService } from '../../../../store-maintenance/accessory-library/accessory-library.service';
 import { SelectBrandComponent } from '../components/select-brand/select-brand.component';
 import { VehicleManagementHttpService } from '../../../../store-maintenance/vehicle-management/vehicle-management-http.service';
+import { ImageExampleComponent } from '../components/image-example/image-example.component';
 
 @Component({
     selector: 'app-information-delivery-edit',
@@ -30,6 +31,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
     @ViewChild('commodityImg', {static: false}) public commodityImgSelectComponent: ZPhotoSelectComponent;
     @ViewChild('projectInfoPro', {static: true}) public proCityDistSelectComponent: ProCityDistSelectComponent;
+    @ViewChild(ImageExampleComponent, {static: false}) public imageExampleComponent: ImageExampleComponent;
     public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
     public carColorList: Array<CarColorItem> = [];
     public registration_time = '';
@@ -75,6 +77,10 @@ export class InformationDeliveryEditComponent implements OnInit {
     public ngOnInit() {
         this.initData();
         this.levelName = this.id ? '编辑信息' : '创建信息';
+    }
+
+    public onClickImageExample() {
+        this.imageExampleComponent.onShow();
     }
 
     // 推荐设置打开所属厂商选择组件

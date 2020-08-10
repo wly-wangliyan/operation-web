@@ -31,7 +31,7 @@
                         </label>
                         <div>
                             <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span
-                                    style="color: #3E71F7;margin-left: 10px">图片示例</span></p>
+                                    (click)="onClickImageExample()">图片示例</span></p>
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                                 [maxLength]="6"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
@@ -333,3 +333,5 @@
 
 
 <app-select-brand></app-select-brand>
+
+<app-image-example></app-image-example>

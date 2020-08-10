@@ -14,6 +14,7 @@ export enum TagOnlineStatus {
 export class SearchParamsEntity extends EntityBase {
     public online_status: any = ''; // 	上线状态 1上线 2下线
     public section: string = undefined; // 创建时间 '15012344,15013454'
+    public label_name: string = undefined;
 }
 
 export class TagManagementEntity extends EntityBase {
@@ -30,9 +31,9 @@ export class TagManagementEntity extends EntityBase {
 })
 export class TagManagementService {
 
-    // private domain = environment.CAR_SERVE;
+    private domain = environment.CAR_SERVE;
 
-    private domain = 'http://192.168.6.159:8340';
+    // private domain = 'http://192.168.6.159:8340';
 
     constructor(private httpService: HttpService) {
     }

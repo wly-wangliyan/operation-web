@@ -28,6 +28,7 @@
                 <tr>
                     <th>序号</th>
                     <th>商户名称</th>
+                    <th>类型</th>
                     <th>地址</th>
                     <th>联系人</th>
                     <th>联系电话</th>
@@ -40,6 +41,7 @@
                     <td [title]="data.merchant_name">
                         {{data.merchant_name|zMaxLength:8}}
                     </td>
+                    <td>二手车商</td>
                     <td [title]="data.detailAddress">
                         {{data.detailAddress|zMaxLength:8}}
                     </td>

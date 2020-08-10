@@ -1,0 +1,29 @@
+.form-horizontal{
+    margin-top: 0;
+}
+.example-title{
+    display: flex;
+    align-items: center;
+    font-size:14px;
+    color: #23242F;
+    font-weight:400;
+    margin-bottom: 15px;
+}
+
+.example-title>img{
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+ul{
+    margin-left: 35px;
+}
+
+li{
+    width: 120px;
+    height: 90px;
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

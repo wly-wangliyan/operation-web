@@ -3,15 +3,15 @@
     font-size: 14px;
 }
 
-.information-delivery-container>div:not(.break-line){
+.information-delivery-container > div:not(.break-line) {
     margin-left: 30px;
 }
 
 .break-line div {
     width: 95%;
     margin: 10px 0 15px 0 !important;
-    height:1px;
-    border:1px solid rgba(136,136,136,.5);
+    height: 1px;
+    border: 1px solid rgba(136, 136, 136, .5);
 }
 
 .content-container form .row .control-label {
@@ -29,6 +29,12 @@ select.form-control, .input-group {
 
 .read-only-info {
     margin-bottom: 0;
+}
+
+.read-only-info > span {
+    color: #3E71F7;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 .rich-input {
@@ -122,6 +128,6 @@ li + li {
     margin-left: 20px;
 }
 
-.content-container .control-input{
+.content-container .control-input {
     width: 450px;
 }

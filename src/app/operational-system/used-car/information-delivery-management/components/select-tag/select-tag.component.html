@@ -1,0 +1,39 @@
+<!--新建-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #selectTagPromptDiv id="selectTagPromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">选择标签</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal" #selectTagForm="ngForm"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="select-tag-search">
+                        <input class="form-control" [(ngModel)]="searchParams.label_name" name="label_name"
+                               appIgnoreSpace required
+                               placeholder="输入1~10个字" minlength="1" maxlength="10">
+                        <button type="button" nz-button nzType="primary" (click)="onShowTagList(selectTagList)">搜索
+                        </button>
+                    </div>
+                    <ul>
+                        <li *ngFor="let tag of tagList">
+<!--                            <label nz-checkbox [(ngModel)]="selectTagList.indexOf(tag.label_id)>-1"-->
+<!--                                   (ngModelChange)="onChangeTag(tag)">{{tag.label_name}}</label>-->
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onSelectTagData()"
+                            [disabled]="!selectTagForm.form.valid">
+                        确定
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
