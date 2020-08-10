@@ -33,6 +33,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
     public carColorList: Array<CarColorItem> = [];
     public registration_time = '';
+    private AAA = /^(?!(?:\d+|[a-zA-Z]+)$)[\dA-HJ-NPR-Z]{17}$/;
     public mapObj: MapItem = {
         point: [],
         type: MapType.view,

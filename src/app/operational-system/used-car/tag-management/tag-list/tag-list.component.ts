@@ -62,8 +62,8 @@ export class TagListComponent implements OnInit {
         } else {
             to_label_id = results[event.currentIndex].label_id;
         }
-        moveItemInArray(results, event.previousIndex, event.currentIndex);
-        this.requestTagSort(results[event.previousIndex].label_id, to_label_id);
+        // moveItemInArray(results, event.previousIndex, event.currentIndex);
+        this.requestTagSort(this.tagList[event.previousIndex].label_id, to_label_id);
     }
 
     /**
@@ -71,8 +71,7 @@ export class TagListComponent implements OnInit {
      * @param label_id
      */
     public onTagSortClick(label_id) {
-        const findIndex = this.tagList.findIndex(item => item.label_id === label_id);
-        const to_label_id = this.tagList[findIndex - 1].label_id;
+        const to_label_id = this.tagList[0].label_id;
         this.requestTagSort(label_id, to_label_id);
     }
 
@@ -147,6 +146,20 @@ export class TagListComponent implements OnInit {
             }
             this.requestTagList();
         }, err => {
+            if (!this.globalService.httpErrorProcess(err)) {
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+                    for (const content of error.errors) {
+                        if (content.code === 'already_exists' && content.field === 'label_name') {
+                            this.globalService.promptBox.open('标签名重复，请重试!', null, 2000, null, false);
+                            return;
+                        } else {
+                            this.globalService.promptBox.open('保存失败，请重试!', null, 2000, null, false);
+                            return;
+                        }
+                    }
+                }
+            }
             this.globalService.httpErrorProcess(err);
         });
     }
@@ -169,9 +182,8 @@ export class TagListComponent implements OnInit {
 
     /* 生成并检查参数有效性 */
     public generateAndCheckParamsValid(): boolean {
-        const cTime = new Date().getTime() / 1000;
         const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
+        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : 253370764800;
         if (sTime > eTime) {
             this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
             return false;
@@ -198,9 +210,8 @@ export class TagListComponent implements OnInit {
      */
     private requestTagSort(label_id: string, to_label_id: string, isTop = false) {
         this.tagManagementService.requestTagSortData(label_id, to_label_id).subscribe(data => {
-            this.globalService.promptBox.open(isTop ? '置顶成功！' : '排序成功！', () => {
-                this.requestTagList();
-            });
+            this.requestTagList();
+            this.globalService.promptBox.open(isTop ? '置顶成功！' : '排序成功！');
         }, err => {
             this.globalService.httpErrorProcess(err);
         });

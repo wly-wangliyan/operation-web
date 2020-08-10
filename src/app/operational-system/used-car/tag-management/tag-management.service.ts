@@ -87,7 +87,7 @@ export class TagManagementService {
      */
     public requestTagSortData(label_id: string, to_label_id: string): Observable<any> {
         const params = {to_label_id};
-        const httpUrl = `${this.domain}/admin/used_car/labels/${label_id}`;
+        const httpUrl = `${this.domain}/admin/used_car/labels/${label_id}/serial_number`;
         return this.httpService.put(httpUrl, params).pipe(map(res => res.body));
     }
 }

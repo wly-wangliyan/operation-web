@@ -1,0 +1,72 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'标签管理'" [level2RelativePath]="'../'" [level3Name]="'信息列表'">
+    </app-crumb>
+</div>
+
+<div class="content-flow">
+    <div class="search-container">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>状态：</span>
+                <select class="form-control" [(ngModel)]="searchParams.online_status" name="online_status">
+                    <option value="">全部</option>
+                    <option value="1">上线</option>
+                    <option value="2">下线</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>创建时间：</span>
+                <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledEndTime"
+                                [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="onClickRearch()">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+        <div class="zmy-table">
+            <nz-table #TemplateTable [nzData]="tagList" [nzFrontPagination]="false"
+                      [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>标签ID</th>
+                    <th>标签名称</th>
+                    <th>描述</th>
+                    <th>创建时间</th>
+                    <th>启停操作</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody cdkDropList (cdkDropListDropped)="onClickDrop($event, TemplateTable.data)">
+                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index" cdkDrag>
+                    <td>{{templateIndex + 1}}</td>
+                    <td [title]="data.label_id">
+                        <span [appTxtCopy]="data.label_id">
+                            {{data.label_id}}
+                        </span>
+                    </td>
+                    <td [title]="data.label_name">{{data.label_name| zMaxLength:15}}</td>
+                    <td [title]="data.description?data.description:''">
+                        {{data.description ? (data.description| zMaxLength:15) : '--'}}
+                    </td>
+                    <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>
+                    </td>
+                    <td class="operation">
+                        <a [title]="'置顶'" *ngIf="templateIndex>0"
+                           (appZDebounceClick)="onTagSortClick(data.label_id)">置顶</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
