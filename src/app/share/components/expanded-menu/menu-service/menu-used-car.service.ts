@@ -29,8 +29,8 @@ export class MenuUsedCarService {
         systemMenu.icon = '/assets/images/menu_used_car.png';
         const subFinanceMenu1 = new SideMenuItem('商户管理', '/main/used-car/merchant-management', systemMenu);
         systemMenu.children.push(subFinanceMenu1);
-        const subFinanceMenu2 = new SideMenuItem('信息发布', '/main/used-car/information-delivery-management', systemMenu);
-        systemMenu.children.push(subFinanceMenu2);
+        // const subFinanceMenu2 = new SideMenuItem('信息发布', '/main/used-car/information-delivery-management', systemMenu);
+        // systemMenu.children.push(subFinanceMenu2);
         const subFinanceMenu3 = new SideMenuItem('标签管理', '/main/used-car/tag-management', systemMenu);
         systemMenu.children.push(subFinanceMenu3);
         this.routeLinkList.push(systemMenu);

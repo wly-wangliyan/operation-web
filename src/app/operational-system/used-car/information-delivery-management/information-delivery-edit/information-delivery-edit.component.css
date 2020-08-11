@@ -119,6 +119,7 @@ ul, li {
     word-break: break-all;
     color: #3E71F7;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .tag-list > li:last-child > img {

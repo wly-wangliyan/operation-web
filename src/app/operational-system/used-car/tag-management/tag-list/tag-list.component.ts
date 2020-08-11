@@ -55,15 +55,16 @@ export class TagListComponent implements OnInit {
         if (event.previousIndex === event.currentIndex) {
             return;
         }
-        let to_label_id = '';
-        if (event.previousIndex > event.currentIndex) {
-            const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
-            to_label_id = results[index].label_id;
-        } else {
-            to_label_id = results[event.currentIndex].label_id;
-        }
+        const to_label_id = this.tagList[event.currentIndex].label_id;
+        const label_id = this.tagList[event.previousIndex].label_id;
+        // if (event.previousIndex > event.currentIndex) {
+        //     const index = event.currentIndex > 0 ? event.currentIndex - 1 : 0;
+        //     to_label_id = results[index].label_id;
+        // } else {
+        //     to_label_id = results[event.currentIndex].label_id;
+        // }
         moveItemInArray(results, event.previousIndex, event.currentIndex);
-        this.requestTagSort(this.tagList[event.previousIndex].label_id, to_label_id);
+        this.requestTagSort(label_id, to_label_id);
     }
 
     /**

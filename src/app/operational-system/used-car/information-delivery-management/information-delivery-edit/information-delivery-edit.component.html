@@ -16,7 +16,7 @@
                         <div></div>
                     </div>
                     <div class="row">
-                        <label class="control-label">
+                        <label class="control-label" style="line-height: initial">
                             <span>发布城市</span>
                         </label>
                         <div class="control-input">
@@ -321,7 +321,7 @@
                 <div class="modal-footer">
                     <button class="sure-btn" type="submit" nz-button nzType="primary"
                             [disabled]="!editInformationDeliveryModal.form.valid"
-                            (appZDebounceClick)="onEditFormSubmit()">保存
+                            (appZDebounceClick)="onEditFormSubmit()">发布
                     </button>
                     <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
                 </div>

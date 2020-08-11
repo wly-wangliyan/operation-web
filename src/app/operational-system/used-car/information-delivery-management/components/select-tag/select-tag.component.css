@@ -1,8 +1,29 @@
-.select-tag-search{
+.select-tag-search {
     display: flex;
     align-items: center;
 }
 
-.select-tag-search>button{
+.select-tag-search > button {
     margin-left: 10px;
+}
+
+.modal-dialog {
+    max-width: 400px;
+}
+
+.modal-body{
+    height: 300px;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+   height: 0;
+}
+
+.form-horizontal {
+    margin-top: 0;
+}
+
+li {
+    padding: 5px;
 }

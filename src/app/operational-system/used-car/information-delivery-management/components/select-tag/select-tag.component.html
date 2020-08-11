@@ -9,12 +9,12 @@
                     &times;
                 </button>
             </div>
-            <form class="form-horizontal" #selectTagForm="ngForm"
+            <form class="form-horizontal"
                   autocomplete="off">
                 <div class="modal-body">
                     <div class="select-tag-search">
                         <input class="form-control" [(ngModel)]="searchParams.label_name" name="label_name"
-                               appIgnoreSpace required
+                               appIgnoreSpace
                                placeholder="输入1~10个字" minlength="1" maxlength="10">
                         <button type="button" nz-button nzType="primary" (click)="onShowTagList(selectTagList)">搜索
                         </button>
@@ -28,10 +28,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="sure-btn" nz-button nzType="primary"
-                            (appZDebounceClick)="onSelectTagData()"
-                            [disabled]="!selectTagForm.form.valid">
+                            (appZDebounceClick)="onSelectTagData()">
                         确定
                     </button>
+                    <button class="close-btn" nz-button data-dismiss="modal">取消</button>
                 </div>
             </form>
         </div>
