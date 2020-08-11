@@ -12,10 +12,10 @@ export class SearchParamsEntity extends EntityBase {
     public page_num = 1;
 }
 
-export class CompanyManagementEntity extends EntityBase {
+export class MerchantManagementEntity extends EntityBase {
     public merchant_id: string = undefined; // 商家id
     public merchant_name: string = undefined; // 商家名称
-    public company: CompanyManagementObjEntity = undefined; // 所属企业
+    public company: MerchantManagementObjEntity = undefined; // 所属企业
     public contacts: string = undefined; // 联系人
     public telephone: string = undefined; // 联系电话
     public region_id: string = undefined; // 省市区code
@@ -39,7 +39,7 @@ export class CompanyManagementEntity extends EntityBase {
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'company') {
-            return CompanyManagementObjEntity;
+            return MerchantManagementObjEntity;
         }
         if (propertyName === 'consult_info') {
             return ConsultationEntity;
@@ -48,7 +48,7 @@ export class CompanyManagementEntity extends EntityBase {
     }
 }
 
-export class CompanyManagementObjEntity extends EntityBase {
+export class MerchantManagementObjEntity extends EntityBase {
     public address: string = undefined;
     public company_id: string = undefined;
     public company_name: string = undefined;
@@ -72,7 +72,7 @@ export class ConsultationEntity extends EntityBase {
     providedIn: 'root'
 })
 
-export class CompanyManagementService {
+export class MerchantManagementService {
 
     private domain = environment.CAR_SERVE;
 
@@ -82,10 +82,10 @@ export class CompanyManagementService {
     }
 
     /** 查看二手车商家列表 */
-    public requestCompanyListData(searchParams: SearchParamsEntity): Observable<CompanyManagementLinkResponse> {
+    public requestMerchantListData(searchParams: SearchParamsEntity): Observable<MerchantManagementLinkResponse> {
         const httpUrl = `${this.domain}/admin/used_car/merchants`;
         return this.httpService.get(httpUrl, searchParams.json())
-            .pipe(map(res => new CompanyManagementLinkResponse(res)));
+            .pipe(map(res => new MerchantManagementLinkResponse(res)));
     }
 
     /**
@@ -93,8 +93,8 @@ export class CompanyManagementService {
      * @returns Observable<PushLinkResponse>
      * @param url
      */
-    public continueCompanyListData(url: string): Observable<CompanyManagementLinkResponse> {
-        return this.httpService.get(url).pipe(map(res => new CompanyManagementLinkResponse(res)));
+    public continueMerchantListData(url: string): Observable<MerchantManagementLinkResponse> {
+        return this.httpService.get(url).pipe(map(res => new MerchantManagementLinkResponse(res)));
     }
 
     /**
@@ -102,7 +102,7 @@ export class CompanyManagementService {
      * @param consultationList
      * @param merchant_id
      */
-    public requestAddCompanyData(
+    public requestAddMerchantData(
         consultationList: Array<ConsultationEntity>, merchant_id: string): Observable<HttpResponse<any>> {
         const arr = [];
         consultationList.forEach(item => {
@@ -122,20 +122,20 @@ export class CompanyManagementService {
      * 查看商家详情
      * @param merchant_id
      */
-    public requestCompanyDetailData(merchant_id: string): Observable<CompanyManagementEntity> {
+    public requestMerchantDetailData(merchant_id: string): Observable<MerchantManagementEntity> {
         const httpUrl = `${this.domain}/admin/used_car/merchants/${merchant_id}`;
         return this.httpService.get(httpUrl).pipe(map(res => {
-            return CompanyManagementEntity.Create(res.body);
+            return MerchantManagementEntity.Create(res.body);
         }));
     }
 }
 
 
-export class CompanyManagementLinkResponse extends LinkResponse {
-    public generateEntityData(results: Array<any>): Array<CompanyManagementEntity> {
-        const tempList: Array<CompanyManagementEntity> = [];
+export class MerchantManagementLinkResponse extends LinkResponse {
+    public generateEntityData(results: Array<any>): Array<MerchantManagementEntity> {
+        const tempList: Array<MerchantManagementEntity> = [];
         results.forEach(res => {
-            tempList.push(CompanyManagementEntity.Create(res));
+            tempList.push(MerchantManagementEntity.Create(res));
         });
         return tempList;
     }

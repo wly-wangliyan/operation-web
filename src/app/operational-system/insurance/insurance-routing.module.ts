@@ -12,10 +12,10 @@ const routes: Routes = [{
   path: '', component: InsuranceComponent,
   canActivateChild: [AuthGuardService, RouteMonitorService, MenuGuardService],
   children: [
-   /* {path: '', redirectTo: 'brokerage-company-list', pathMatch: 'full'},*/
+   /* {path: '', redirectTo: 'brokerage-merchant-list', pathMatch: 'full'},*/
     {path: 'home', component: HomeComponent},
-    {path: 'brokerage-company-list', component: BrokerageCompanyListComponent},
-    {path: 'insurance-company-list', component: InsuranceCompanyListComponent},
+    {path: 'brokerage-merchant-list', component: BrokerageCompanyListComponent},
+    {path: 'insurance-merchant-list', component: InsuranceCompanyListComponent},
     {path: '**', redirectTo: 'home', pathMatch: 'full'}
   ]
 }];

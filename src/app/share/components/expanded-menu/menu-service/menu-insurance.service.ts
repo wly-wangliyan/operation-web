@@ -24,7 +24,7 @@ export class MenuInsuranceService {
 
   // 保险 》经纪公司管理
   private generateBrokerageMenu(): SideMenuItem {
-    const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance/brokerage-company-list');
+    const brokerageMenu = new SideMenuItem('经纪公司管理', '/main/insurance/brokerage-merchant-list');
     brokerageMenu.icon = '/assets/images/menu_business.png';
     this.routeLinkList.push(brokerageMenu);
     return brokerageMenu;
@@ -32,7 +32,7 @@ export class MenuInsuranceService {
 
   // 保险 》保险公司管理
   private generateInsuranceMenu(): SideMenuItem {
-    const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-company-list');
+    const insuranceMenu = new SideMenuItem('保险公司管理', '/main/insurance/insurance-merchant-list');
     insuranceMenu.icon = '/assets/images/menu_insurance.png';
     this.routeLinkList.push(insuranceMenu);
     return insuranceMenu;

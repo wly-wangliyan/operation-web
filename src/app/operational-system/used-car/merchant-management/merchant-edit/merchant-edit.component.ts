@@ -1,36 +1,36 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProCityDistSelectComponent, RegionEntity } from '../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
-import { CompanyManagementEntity, CompanyManagementService, ConsultationEntity } from '../company-management.service';
+import { MerchantManagementEntity, MerchantManagementService, ConsultationEntity } from '../merchant-management.service';
 import { GlobalService } from '../../../../core/global.service';
 import { ValidateHelper } from '../../../../../utils/validate-helper';
 
 @Component({
-    selector: 'app-company-edit',
-    templateUrl: './company-edit.component.html',
-    styleUrls: ['./company-edit.component.css']
+    selector: 'app-merchant-edit',
+    templateUrl: './merchant-edit.component.html',
+    styleUrls: ['./merchant-edit.component.css']
 })
-export class CompanyEditComponent implements OnInit {
+export class MerchantEditComponent implements OnInit {
     public loading = true; // 标记loading
     public consultationList: Array<ConsultationEntity> = [];
     public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
     @ViewChild('projectInfoPro', {static: true}) public proCityDistSelectComponent: ProCityDistSelectComponent;
     public ConsultationOperationType = ConsultationOperationType;
-    public companyDetail: CompanyManagementEntity = new CompanyManagementEntity();
+    public merchantDetail: MerchantManagementEntity = new MerchantManagementEntity();
     private merchant_id: string;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private globalService: GlobalService,
-                private companyManagementService: CompanyManagementService) {
+                private companyManagementService: MerchantManagementService) {
         this.route.paramMap.subscribe(map => {
             this.merchant_id = map.get('merchant_id');
         });
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         if (this.merchant_id) {
-            this.requestCompanyDetail();
+            this.requestMerchantDetail();
         }
     }
 
@@ -81,7 +81,7 @@ export class CompanyEditComponent implements OnInit {
             }
         });
         if (flag) {
-            this.companyManagementService.requestAddCompanyData(this.consultationList, this.merchant_id).subscribe(data => {
+            this.companyManagementService.requestAddMerchantData(this.consultationList, this.merchant_id).subscribe(data => {
                 this.globalService.promptBox.open('编辑成功！', () => {
                     this.goToListPage();
                 });
@@ -98,10 +98,10 @@ export class CompanyEditComponent implements OnInit {
         this.router.navigate(['../'], {relativeTo: this.route});
     }
 
-    private requestCompanyDetail() {
-        this.companyManagementService.requestCompanyDetailData(this.merchant_id).subscribe(data => {
+    private requestMerchantDetail() {
+        this.companyManagementService.requestMerchantDetailData(this.merchant_id).subscribe(data => {
             this.regionsObj = new RegionEntity(data);
-            this.companyDetail = data.clone();
+            this.merchantDetail = data.clone();
             if (data.consult_info && data.consult_info.length > 0) {
                 data.consult_info.forEach(item => {
                     const temp = new ConsultationEntity();

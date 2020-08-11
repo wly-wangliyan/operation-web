@@ -14,8 +14,8 @@ const routes: Routes = [
         children: [
             {path: 'home', component: HomeComponent},
             {
-                path: 'company-management', /** 企业管理 */
-                loadChildren: () => import('./company-management/company-management.module').then(m => m.CompanyManagementModule),
+                path: 'merchant-management', /** 企业管理 */
+                loadChildren: () => import('./merchant-management/merchant-management.module').then(m => m.MerchantManagementModule),
                 canLoad: [AuthGuardService]
             }, {
                 path: 'information-delivery-management', /** 信息发布 */

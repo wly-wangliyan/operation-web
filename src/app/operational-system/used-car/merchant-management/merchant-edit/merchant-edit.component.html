@@ -15,7 +15,7 @@
                         <span>二手车商户名称</span>
                     </label>
                     <div class="control-input">
-                        <p>{{companyDetail.merchant_name}}</p>
+                        <p>{{merchantDetail.merchant_name}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -23,7 +23,7 @@
                         <span>二手车企业名称</span>
                     </label>
                     <div class="control-input">
-                        <p>{{companyDetail.company ? companyDetail.company.company_name : '-'}}</p>
+                        <p>{{merchantDetail.company ? merchantDetail.company.company_name : '-'}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -39,7 +39,7 @@
                         <span>联系人</span>
                     </label>
                     <div class="control-input">
-                        <p>{{companyDetail.contacts}}</p>
+                        <p>{{merchantDetail.contacts}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -47,7 +47,7 @@
                         <span>联系电话</span>
                     </label>
                     <div class="control-input">
-                        <p>{{companyDetail.telephone}}</p>
+                        <p>{{merchantDetail.telephone}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -57,7 +57,7 @@
                     <div class="control-input" style="width: 640px">
                         <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj"
                                                   #projectInfoPro></app-pro-city-dist-select>
-                        <input class="form-control" [value]="companyDetail.address" readonly style="margin-left: 10px"
+                        <input class="form-control" [value]="merchantDetail.address" readonly style="margin-left: 10px"
                                placeholder="详细地址"></div>
                 </div>
                 <ng-container *ngFor="let consultation of consultationList;let index=index">
