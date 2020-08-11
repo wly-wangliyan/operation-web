@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
 import { TemplateManagementService } from '../../../operation/push-message-management/template-management/template-management.service';
 import { TemplatePushManagementService } from '../../../operation/push-message-management/template-push-management/template-push-management.service';
-import { ErrMessageGroup } from '../../../../../utils/error-message-helper';
+import { ErrMessageBase, ErrMessageGroup } from '../../../../../utils/error-message-helper';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { differenceInCalendarDays } from 'date-fns';
 import {
@@ -89,6 +89,13 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.selectTagComponent.onShowTagList();
     }
 
+    /** 初始化错误信息 */
+    public clearErr(): void {
+        this.errMessageGroup.errJson = {};
+        this.errMessageGroup.errJson.cover_image = new ErrMessageBase();
+        this.errMessageGroup.errJson.commodity_images = new ErrMessageBase();
+    }
+
     // 推荐设置打开所属厂商选择组件
     public onClickBrand(): void {
         const data = {
@@ -136,6 +143,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     private initData() {
         this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
         this.zMapSelectPointV2Component.openMap();
+        this.clearErr();
         this.carColorList = [
             new CarColorItem('黑色', 1),
             new CarColorItem('白色', 2),

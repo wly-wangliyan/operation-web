@@ -66,6 +66,7 @@ export class ConsultationEntity extends EntityBase {
     public name: string = undefined;
     public telephone: string = undefined;
     public error: string = undefined;
+    public date: number = new Date().getTime() / 1000;
 }
 
 @Injectable({
@@ -108,6 +109,7 @@ export class MerchantManagementService {
         consultationList.forEach(item => {
             const temp = item.clone();
             delete temp.error;
+            delete temp.date;
             if (temp.name && temp.telephone) {
                 arr.push(temp);
             }
