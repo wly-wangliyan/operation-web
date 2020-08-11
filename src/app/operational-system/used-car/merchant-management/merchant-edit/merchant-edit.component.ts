@@ -43,8 +43,8 @@ export class MerchantEditComponent implements OnInit {
             this.consultationList.forEach(item => {
                 if (!item.name || !item.telephone) {
                     flag = false;
-                    item.error = '请填写资询电话或者资询人！';
-                } else if (!ValidateHelper.Phone(item.telephone)) {
+                    item.error = '请填写资询人或者资询电话！';
+                } else if (item.telephone && !ValidateHelper.Phone(item.telephone)) {
                     flag = false;
                     item.error = '资询电话输入不合法！';
                 }
@@ -64,9 +64,7 @@ export class MerchantEditComponent implements OnInit {
      */
     public onInputConsultation(index: number) {
         const item = this.consultationList[index];
-        if (item.name && item.telephone) {
-            item.error = '';
-        }
+        item.error = '';
     }
 
     /**
@@ -75,7 +73,13 @@ export class MerchantEditComponent implements OnInit {
     public onEditFormSubmit() {
         let flag = true;
         this.consultationList.forEach(item => {
-            if (!ValidateHelper.Phone(item.telephone)) {
+            if (!item.name && item.telephone) {
+                flag = false;
+                item.error = '请填写资询人！';
+            } else if (item.name && !item.telephone) {
+                flag = false;
+                item.error = '请填写资询电话！';
+            } else if (item.telephone && !ValidateHelper.Phone(item.telephone)) {
                 flag = false;
                 item.error = '资询电话输入不合法！';
             }

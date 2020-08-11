@@ -68,7 +68,7 @@
                             </label>
                             <div class="control-input">
                                 <input [(ngModel)]="consultation.telephone" [name]="'telephone_'+index" class="form-control" maxlength="20"
-                                       required appIgnoreSpace
+                                        appIgnoreSpace
                                        (input)="onInputConsultation(index)"
                                        placeholder="此电话用于用户咨询">
                             </div>
@@ -79,7 +79,7 @@
                             </label>
                             <div class="control-input">
                                 <input [(ngModel)]="consultation.name" [name]="'name_'+index" maxlength="10"
-                                       required appIgnoreSpace
+                                       appIgnoreSpace
                                        (input)="onInputConsultation(index)"
                                        class="form-control"
                                        placeholder="输入咨询人">

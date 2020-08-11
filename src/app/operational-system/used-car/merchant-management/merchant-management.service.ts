@@ -108,7 +108,9 @@ export class MerchantManagementService {
         consultationList.forEach(item => {
             const temp = item.clone();
             delete temp.error;
-            arr.push(temp);
+            if (temp.name && temp.telephone) {
+                arr.push(temp);
+            }
         });
         const params = {consult_info: arr};
         const httpUrl = merchant_id ?
