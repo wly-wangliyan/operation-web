@@ -6,6 +6,7 @@
 }
 ::ng-deep .cdk-drag-preview {
     display: table;
+    border: 1px solid red;
 }
 
 ::ng-deep .cdk-drag-placeholder {
