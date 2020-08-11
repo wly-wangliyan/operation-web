@@ -21,8 +21,8 @@
                     </div>
                     <ul>
                         <li *ngFor="let tag of tagList">
-<!--                            <label nz-checkbox [(ngModel)]="selectTagList.indexOf(tag.label_id)>-1"-->
-<!--                                   (ngModelChange)="onChangeTag(tag)">{{tag.label_name}}</label>-->
+                            <label nz-checkbox [ngModel]="selectTagList.indexOf(tag.label_id)>-1" [name]="tag.label_id"
+                                   (ngModelChange)="onChangeTag(tag)">{{tag.label_name}}</label>
                         </li>
                     </ul>
                 </div>

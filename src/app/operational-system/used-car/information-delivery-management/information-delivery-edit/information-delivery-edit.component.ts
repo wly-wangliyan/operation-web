@@ -19,6 +19,7 @@ import { AccessoryLibraryService } from '../../../../store-maintenance/accessory
 import { SelectBrandComponent } from '../components/select-brand/select-brand.component';
 import { VehicleManagementHttpService } from '../../../../store-maintenance/vehicle-management/vehicle-management-http.service';
 import { ImageExampleComponent } from '../components/image-example/image-example.component';
+import { SelectTagComponent } from '../components/select-tag/select-tag.component';
 
 @Component({
     selector: 'app-information-delivery-edit',
@@ -45,6 +46,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     };
     @ViewChild(ZMapSelectPointV2Component, {static: true}) public zMapSelectPointV2Component: ZMapSelectPointV2Component;
     @ViewChild(SelectBrandComponent, {static: true}) public selectBrandComponent: SelectBrandComponent;
+    @ViewChild(SelectTagComponent, {static: true}) public selectTagComponent: SelectTagComponent;
     public checkOptions = [
         {label: 'CPS导航', value: 1, checked: false},
         {label: '倒车影像', value: 2, checked: false},
@@ -81,6 +83,10 @@ export class InformationDeliveryEditComponent implements OnInit {
 
     public onClickImageExample() {
         this.imageExampleComponent.onShow();
+    }
+
+    public onClickTag() {
+        this.selectTagComponent.onShowTagList();
     }
 
     // 推荐设置打开所属厂商选择组件

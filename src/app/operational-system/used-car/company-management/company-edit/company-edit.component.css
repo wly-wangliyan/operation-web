@@ -63,3 +63,6 @@ p {
     margin-left: 0;
 }
 
+input[readonly]{
+    color: #6c757d;
+}

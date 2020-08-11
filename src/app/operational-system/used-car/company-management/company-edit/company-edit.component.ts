@@ -44,6 +44,9 @@ export class CompanyEditComponent implements OnInit {
                 if (!item.name || !item.telephone) {
                     flag = false;
                     item.error = '请填写资询电话或者资询人！';
+                } else if (!ValidateHelper.Phone(item.telephone)) {
+                    flag = false;
+                    item.error = '资询电话输入不合法！';
                 }
             });
             if (!flag) {

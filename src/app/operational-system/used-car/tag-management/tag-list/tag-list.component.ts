@@ -62,7 +62,7 @@ export class TagListComponent implements OnInit {
         } else {
             to_label_id = results[event.currentIndex].label_id;
         }
-        // moveItemInArray(results, event.previousIndex, event.currentIndex);
+        moveItemInArray(results, event.previousIndex, event.currentIndex);
         this.requestTagSort(this.tagList[event.previousIndex].label_id, to_label_id);
     }
 
