@@ -14,7 +14,7 @@ export class SearchParamsEntity extends EntityBase {
 
 export class MerchantManagementEntity extends EntityBase {
     public merchant_id: string = undefined; // 商家id
-    public merchant_name: string = undefined; // 商家名称
+    public merchant_name = ''; // 商家名称
     public company: MerchantManagementObjEntity = undefined; // 所属企业
     public contacts: string = undefined; // 联系人
     public telephone: string = undefined; // 联系电话
@@ -25,7 +25,7 @@ export class MerchantManagementEntity extends EntityBase {
     public address: string = undefined; // 详细地址
     public lon: string = undefined; // 经度
     public lat: string = undefined; // 纬度
-    public consult_info: Array<ConsultationEntity> = undefined;
+    public consult_info: Array<ConsultationEntity> = [];
     public created_time: number = undefined; // 创建时间
     public updated_time: number = undefined; // 更新时间
 
@@ -64,7 +64,7 @@ export class MerchantManagementObjEntity extends EntityBase {
 
 export class ConsultationEntity extends EntityBase {
     public name: string = undefined;
-    public telephone: string = undefined;
+    public telephone = '';
     public error: string = undefined;
     public date: number = new Date().getTime() / 1000;
 }
@@ -75,9 +75,9 @@ export class ConsultationEntity extends EntityBase {
 
 export class MerchantManagementService {
 
-    private domain = environment.CAR_SERVE;
+    // private domain = environment.CAR_SERVE;
 
-    // private domain = 'http://192.168.6.159:8340';
+    private domain = 'http://192.168.6.159:8340';
 
     constructor(private httpService: HttpService) {
     }

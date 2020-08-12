@@ -20,18 +20,21 @@
     <div class="search-container" style="padding:0">
         <form class="search-form" autocomplete="off">
             <div class="form-group">
-                <span>模板标题：</span>
-                <input class="form-control" [(ngModel)]="searchParams.title" name="title" placeholder="请输入模板标题"
+                <span>发布商家：</span>
+                <input class="form-control" [(ngModel)]="searchParams.merchant_name" name="merchant_name"
+                       placeholder="请输入发布商家"
                        maxlength="20"/>
             </div>
             <div class="form-group">
-                <span>商品类型：</span>
-                <select class="form-control" style="width: 120px;">
-                    <option value=0>全部</option>
-                    <option value=1>实物商品</option>
-                    <option value=2>虚拟商品</option>
-                    <option value=3>优惠券商品</option>
-                </select>
+                <span>发布时间：</span>
+                <nz-date-picker [(ngModel)]="review_start_time" [nzShowToday]=false
+                                [nzDisabledDate]="disabledReviewStartTime"
+                                name='review_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="review_end_time" name='review_end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledReviewEndTime"
+                                [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
             </div>
             <div class="form-group">
                 <span>创建时间：</span>
@@ -42,6 +45,12 @@
                 <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
                                 [nzDisabledDate]="disabledEndTime"
                                 [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+            </div>
+            <div class="form-group">
+                <span>发布品牌：</span>
+                <input class="form-control" [(ngModel)]="searchParams.brand_name" name="brand_name"
+                       placeholder="请输入发布品牌"
+                       maxlength="20"/>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
                     </button>
@@ -52,7 +61,7 @@
     <div class="table-container">
 
         <div class="zmy-table goods-order">
-            <nz-table #integralOrderTable [nzData]="nzSearchAssistant.nzData"
+            <nz-table #informationDeliveryTable [nzData]="nzSearchAssistant.nzData"
                       [nzNoResult]="nzSearchAssistant.nzNoResultText"
                       [nzPageSize]="nzSearchAssistant.pageSize"
                       (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
@@ -61,7 +70,7 @@
                 <tr>
                     <th>序号</th>
                     <th>图片</th>
-                    <th>标题</th>
+                    <th>品牌</th>
                     <th>转让价格</th>
                     <th>首次上牌时间</th>
                     <th>车牌颜色</th>
@@ -73,38 +82,53 @@
                 </tr>
                 </thead>
                 <tbody>
-                <ng-template ngFor let-order let-i=index [ngForOf]="integralOrderTable.data">
+                <ng-template ngFor let-informationDelivery let-i=index [ngForOf]="informationDeliveryTable.data">
                     <tr>
-                        <td colspan="11" nzAlign="left">
-                            发布公司：2323243 |
-                            发布时间：324234234324
+                        <td colspan="11" nzAlign="left" class="information-delivery-title">
+                            发布商家：{{informationDelivery.merchant_name}}<span>|</span>
+                            发布时间：{{informationDelivery.review_time ? (informationDelivery.review_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+                            <span>|</span>
+                            创建时间：{{informationDelivery.created_time ? (informationDelivery.created_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
                         </td>
                     </tr>
                     <tr>
                         <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
-<!--                        class="img-item"-->
-                        <td>78989879</td>
-                        <td>奥迪A4L 2017款45TFSI quattro 运动型</td>
-                        <td>888</td>
-                        <td>2010-09</td>
-                        <td>888</td>
-                        <td>2010-09</td>
-                        <td>888</td>
-                        <td>2010-09</td>
-                        <td>
-                            <!--                            <nz-switch [ngModel]="data.status===TemplatePushStatus.open" nzCheckedChildren="On"-->
-                            <!--                                         [nzControl]=true-->
-                            <!--                                         [nzDisabled]="isDisabledOpen(data)"-->
-                            <!--                                         style="height: 10px"-->
-                            <!--                                         nzUnCheckedChildren="Off"-->
-                            <!--                                         (click)="onSwitchChange(data)"></nz-switch>-->
+
+                        <td class="img-item">
+                            <img [src]="informationDelivery.coverImage">
                         </td>
+                        <td class="brand-item"
+                            [title]="informationDelivery.car_param.carBrandName">{{informationDelivery.car_param.carBrandName|zMaxLength:10}}</td>
+                        <td>{{(informationDelivery.price / 10000)| centPriceChange:'元'}}</td>
+                        <td>{{informationDelivery.registration_time ? (informationDelivery.registration_time * 1000 | date:"y-MM") : '--'}}</td>
+                        <td>{{informationDelivery.color}}</td>
+                        <td>{{informationDelivery.mileage / 10000}}万公里</td>
                         <td>
-                            <!--                            <a [title]="'编辑'" [routerLink]="['../template-push-edit',data.template_message_id]"-->
-                            <!--                               *ngIf="isEdit(data)">编辑</a>-->
-                            <!--                            <a [title]="'明细'" [routerLink]="['../template-push-detail',data.template_message_id]">明细</a>-->
-                            <!--                            <a *ngIf="data.status===TemplatePushStatus.close" [title]="'删除'"-->
-                            <!--                               (appZDebounceClick)="onDeleteTemplateClick(data.template_message_id)">删除</a>-->
+                            <p>{{informationDelivery.contact}}</p>
+                            <p>{{informationDelivery.telephone}}</p>
+                        </td>
+                        <td>{{carReviewStatus[informationDelivery.review_status]}}</td>
+                        <td>
+                            <nz-switch [ngModel]="informationDelivery.online_status===OnlineStatus.on"
+                                       nzCheckedChildren="On"
+                                       [disabled]="informationDelivery.review_status===ReviewStatus.reviewing"
+                                       [nzControl]=true
+                                       style="height: 10px"
+                                       nzUnCheckedChildren="Off"
+                                       (click)="onSwitchChange(informationDelivery)"></nz-switch>
+                        </td>
+                        <td class="operation">
+                            <a [title]="'通过'" *ngIf="informationDelivery.review_status===ReviewStatus.reviewing"
+                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.reviewed)">通过</a>
+                            <a [title]="'驳回 '"
+                               *ngIf="informationDelivery.review_status===ReviewStatus.reviewing"
+                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.reviewed)">驳回 </a>
+                            <a [title]="'编辑'"
+                               [routerLink]="['../information-delivery-edit',informationDelivery.car_info_id]">编辑</a>
+                            <a [title]="'明细'"
+                               [routerLink]="['../information-delivery-detail',informationDelivery.car_info_id]">明细</a>
+                            <a [title]="'删除'"
+                               (appZDebounceClick)="onDeleteInformationDeliveryClick(informationDelivery.car_info_id)">删除</a>
                         </td>
                     </tr>
                 </ng-template>

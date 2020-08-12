@@ -178,6 +178,7 @@ export class ZMapSelectPointV2Component implements OnInit {
         if (this.mapObj.type === MapType.view) {
             this.map.setZoom(17); // 100m比例尺
         }
+        this.saveMarker();
     }
 
     /**

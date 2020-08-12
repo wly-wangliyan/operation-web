@@ -1,0 +1,60 @@
+<!-- 选择商城对应类型商品 -->
+<div class="modal fade" #chooseMerchantModal id="chooseMerchantModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">选择信息发布商户</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #chooseMerchantForm="ngForm">
+                    <div class="form-group">
+                        <span>商户名称：</span>
+                        <input class="form-control" (keyup)="nzSearchAssistant.submitSearch(true);"
+                               [(ngModel)]="searchParams.merchant_name" name="merchant_name" placeholder="请输入商户名称"
+                               maxlength="20"
+                               appIgnoreSpace/>
+                    </div>
+                    <div class="table-container">
+                        <nz-table #merchantTable [nzData]="nzSearchAssistant.nzData"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText"
+                                  [nzPageSize]="'5'" (nzPageIndexChange)="onPageSelectd($event)"
+                                  [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>序号</th>
+                                <th>商户名称</th>
+                                <th>类型</th>
+                                <th>地址</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let merchant of merchantTable.data; let i=index">
+                                <td>
+                                    <label nz-checkbox
+                                           [nzChecked]="selectedMerchant.merchant_id === merchant.merchant_id"
+                                           (nzCheckedChange)="onItemChecked(merchant, $event)"></label>
+                                </td>
+                                <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
+                                <td>{{merchant.merchant_name || '--'}}</td>
+                                <td>二手车商</td>
+                                <td>{{merchant.detailAddress}}</td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+
+                    </div>
+
+                    <div class="modal-footer" style="justify-content: center !important;">
+                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!selectedMerchant"
+                                (appZDebounceClick)="onCheckClick()">确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -43,15 +43,15 @@
 }
 
 .img-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 10px;
-    position: relative;
+    width: 90px;
+}
+
+.information-delivery-title span{
+    margin: 0 5px;
 }
 
 .img-item img {
-    margin: 10px 5px 10px 0;
+    margin: 10px 0;
     width: 90px;
     height: 65px;
 }
@@ -61,16 +61,6 @@
     text-align: right;
     position: absolute;
     right: 24px;
-}
-
-.operation {
-    width: 70px;
-    word-break: break-all;
-}
-
-.operation a {
-    margin: 0 3px !important;
-    color: rgba(62, 113, 247, 1) !important;
 }
 
 .goods-btn {
@@ -102,4 +92,8 @@
     .fee {
         right: 10px;
     }
+}
+
+p{
+    margin-bottom: 0;
 }

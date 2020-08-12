@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import { SearchParamsEntity } from '../../../operation/push-message-management/template-management/template-management.service';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../core/global.service';
-import {
-    TemplatePushManagementEntity,
-    TemplatePushManagementService
-} from '../../../operation/push-message-management/template-push-management/template-push-management.service';
 import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
+import {
+    InformationDeliveryManagementService,
+    SearchParamsEntity,
+    OnlineStatus,
+    ReviewStatus,
+    InformationDeliveryManagementEntity
+} from '../information-delivery-management.service';
+import { HttpErrorEntity } from '../../../../core/http.service';
+import { carReviewStatus } from '../../../../share/pipes/information-delivery.pipe';
 
 @Component({
     selector: 'app-information-delivery-list',
@@ -14,20 +18,25 @@ import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
     styleUrls: ['./information-delivery-list.component.css', '../../../../../assets/less/tab-bar-list.less']
 })
 export class InformationDeliveryListComponent implements NzSearchAdapter {
-
+    public OnlineStatus = OnlineStatus;
+    public ReviewStatus = ReviewStatus;
+    public carReviewStatus = carReviewStatus;
     public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
     public start_time: any = '';
     public end_time: any = '';
+    public review_start_time: any = '';
+    public review_end_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
     public tabList = [
         {key: 0, label: '全部'},
         {key: 1, label: '待审核'},
-        {key: 2, label: '已审核'}
+        {key: 2, label: '已审核'},
+        {key: 3, label: '被驳回'}
     ];
     public activeTabIndex = 0;
 
     constructor(private globalService: GlobalService,
-                private templatePushManagementService: TemplatePushManagementService) {
+                private informationDeliveryManagementService: InformationDeliveryManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
     }
@@ -37,13 +46,9 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         this.searchParams = new SearchParamsEntity();
         this.start_time = '';
         this.end_time = '';
-        // if (key === 0) {
-        //   this.searchParams.pay_status = null;
-        // } else if (key === 1) {
-        //   this.searchParams.order_status = 2;
-        // } else if (key === 2) {
-        //   this.searchParams.pay_status = 3;
-        // }
+        this.review_start_time = '';
+        this.review_end_time = '';
+        this.searchParams.review_status = (key === 0 ? null : key);
         this.nzSearchAssistant.submitSearch(true);
     }
 
@@ -52,67 +57,122 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         return DisabledTimeHelper.disabledStartTime(startValue, this.end_time);
     };
 
+
     // 结束时间的禁用部分
     public disabledEndTime = (endValue: Date): boolean => {
         return DisabledTimeHelper.disabledEndTime(endValue, this.start_time);
     };
 
+    // 开始时间的禁用部分
+    public disabledReviewStartTime = (startValue: Date): boolean => {
+        return DisabledTimeHelper.disabledStartTime(startValue, this.review_end_time);
+    };
+
+    // 结束时间的禁用部分
+    public disabledReviewEndTime = (endValue: Date): boolean => {
+        return DisabledTimeHelper.disabledEndTime(endValue, this.review_start_time);
+    };
+
     /**
      * 启停
-     * @param templatePush
+     * @param informationDelivery
      */
-    public onSwitchChange(templatePush: TemplatePushManagementEntity) {
+    public onSwitchChange(informationDelivery: InformationDeliveryManagementEntity) {
         // if (this.isDisabledOpen(templatePush)) {
         //     return;
         // }
-        // const swicth = templatePush.status === TemplatePushStatus.close ? TemplatePushStatus.open : TemplatePushStatus.close;
-        // this.templatePushManagementService.requestStatusTemplatePushData(templatePush.template_message_id, swicth).subscribe(res => {
-        //     if (templatePush.status === TemplatePushStatus.close) {
-        //         this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
-        //     } else {
-        //         this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
-        //     }
-        //     this.nzSearchAssistant.submitSearch(true);
-        // }, err => {
-        //     if (!this.globalService.httpErrorProcess(err)) {
-        //         if (err.status === 422) {
-        //             const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-        //             for (const content of error.errors) {
-        //                 if (content.resource === 'template' && content.code === 'deleted') {
-        //                     this.globalService.promptBox.open('微信模板已删除！', null, 2000, null, false);
-        //                     return;
-        //                 }
-        //                 if (content.field === swicth.toString() && content.code === 'not_allowed') {
-        //                     this.globalService.promptBox.open('不允许操作', null, 2000, null, false);
-        //                     return;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // });
+        const swicth = informationDelivery.online_status === OnlineStatus.off ? OnlineStatus.on : OnlineStatus.off;
+        this.informationDeliveryManagementService.requestInformationDeliveryOnlineStatusData(informationDelivery.car_info_id, swicth).subscribe(res => {
+            if (informationDelivery.online_status === OnlineStatus.off) {
+                this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
+            } else {
+                this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
+            }
+            this.nzSearchAssistant.submitSearch(true);
+        }, err => {
+            if (!this.globalService.httpErrorProcess(err)) {
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+                    for (const content of error.errors) {
+                        if (content.field === 'online_status' && content.code === 'not_allowed') {
+                            this.globalService.promptBox.open('待审核不可上线', null, 2000, null, false);
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 审核二手车信息
+     * @param car_info_id
+     * @param review_status
+     */
+    public onClickReviewStatusData(car_info_id: string, review_status: ReviewStatus) {
+        this.globalService.confirmationBox.open('审核', review_status === ReviewStatus.reviewed ? '确认通过该信息并发布上线？' : '确认驳回该信息？', () => {
+            this.globalService.confirmationBox.close();
+            this.informationDeliveryManagementService.requestInformationDeliveryReviewStatusData
+            (car_info_id, review_status).subscribe(res => {
+                this.nzSearchAssistant.submitSearch(true);
+                this.globalService.promptBox.open(review_status === ReviewStatus.reviewed ? '通过成功' : '驳回成功');
+            }, err => {
+                this.globalService.httpErrorProcess(err);
+            });
+        }, '确定');
+    }
+
+    /**
+     * 删除
+     * @param car_info_id
+     */
+    public onDeleteInformationDeliveryClick(car_info_id: string) {
+        this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+            this.globalService.confirmationBox.close();
+            this.informationDeliveryManagementService.requestDeleteInformationDeliveryData(car_info_id).subscribe(res => {
+                this.nzSearchAssistant.submitSearch(true);
+                this.globalService.promptBox.open('删除成功');
+            }, err => {
+                if (!this.globalService.httpErrorProcess(err)) {
+                    this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                }
+            });
+        }, '确定');
     }
 
     /* SearchDecorator 接口实现 */
 
     /* 请求检索 */
     public requestSearch(): any {
-        return this.templatePushManagementService.requestTemplatePushListData(this.searchParams);
+        return this.informationDeliveryManagementService.requestInformationDeliveryListData(this.searchParams);
     }
 
     public continueSearch(url: string): any {
-        return this.templatePushManagementService.continueTemplatePushListData(url);
+        return this.informationDeliveryManagementService.continueInformationDeliveryListData(url);
     }
 
     /* 生成并检查参数有效性 */
     public generateAndCheckParamsValid(): boolean {
-        const cTime = new Date().getTime() / 1000;
+        if (this.review_start_time || this.review_end_time) {
+            const sReviewTime = this.review_start_time ? ((new Date(this.review_start_time).setSeconds(0, 0) / 1000)) : 0;
+            const eReviewTime = this.review_end_time ? ((new Date(this.review_end_time).setSeconds(0, 0) / 1000)) : 253370764800;
+            if (sReviewTime > eReviewTime) {
+                this.globalService.promptBox.open('发布时间的开始时间应小于等于结束时间！', null, 2000, null, false);
+                return false;
+            }
+            this.searchParams.review_section = `${sReviewTime},${eReviewTime}`;
+        } else {
+            this.searchParams.review_section = null;
+        }
+
+
         const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
+        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : 253370764800;
         if (sTime > eTime) {
             this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
             return false;
         }
-        this.searchParams.section = `${sTime},${eTime}`;
+        this.searchParams.created_section = `${sTime},${eTime}`;
         return true;
     }
 

@@ -1,31 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { GlobalService } from '../../../../../core/global.service';
-import { VehicleManagementHttpService } from '../../../../../store-maintenance/vehicle-management/vehicle-management-http.service';
 import { Observable, of, Subscription, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
-interface Expandable {
-    key: string;
-    title: string;
-    children: Array<any>;
-    expanded: boolean;
-    prepareState: 'noNeed' | 'need' | 'ready';
-}
+import { InformationDeliveryCarParam, InformationDeliveryManagementService } from '../../information-delivery-management.service';
 
 @Component({
     selector: 'app-select-brand',
     templateUrl: './select-brand.component.html',
     styleUrls: ['./select-brand.component.css']
 })
-export class SelectBrandComponent implements OnInit {
+export class SelectBrandComponent {
 
     constructor(
         private globalService: GlobalService,
-        private vehicleService: VehicleManagementHttpService,
+        private informationDeliveryManagementService: InformationDeliveryManagementService,
     ) {
     }
-
-    @Input() public accessory_id: string;
 
     public letter_list = ['A', 'B', 'C', 'D',
         'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -35,20 +25,17 @@ export class SelectBrandComponent implements OnInit {
     public defaultExpandedKeys = [];
     public defaultCheckedKeys = [];
     public loading = true;
-
-    private car_series_list: Array<any> = []; // 已勾选的数组
+    @Output() public selectedBrandEvent = new EventEmitter();
+    private carParam: InformationDeliveryCarParam = new InformationDeliveryCarParam(); // 已勾选的数组
     private isRequestYearData = false;
     private sureCallback: any;
     private closeCallback: any;
     private requestBrandSubscription: Subscription; // 获取品牌数据
     private requestFirmSubscription: Subscription; // 获取厂商数据
 
-    public ngOnInit() {
-    }
-
     // 品牌
-    private requestAllCheckedCarBrands() {
-        this.requestBrandSubscription = this.vehicleService
+    private requestAllCheckedCarBrands(isEdit = false) {
+        this.requestBrandSubscription = this.informationDeliveryManagementService
             .requestCarBrandsListData().pipe(map((carBrands: any) => {
                     return carBrands.results.map((carBrand: any) =>
                         ({
@@ -59,22 +46,21 @@ export class SelectBrandComponent implements OnInit {
                             disableCheckbox: true,
                         }));
                 }),
-                switchMap(carBrandList => this.requestCheckedFactories(carBrandList))).subscribe(carBrandList => {
+                switchMap(carBrandList => {
+                    return isEdit ? this.requestCheckedFactories(carBrandList) : of(carBrandList);
+                })).subscribe(carBrandList => {
                 this.letter_list.forEach(leter => {
                     this.mapOfBrand[leter] = carBrandList.filter(
                         (brand: any) => brand.car_brand_initial === leter
                     );
                 });
                 this.loading = false;
-                timer(1000).subscribe(() => {
-                    const carDetail = this.car_series_list[0];
-                    if (carDetail) {
-                        const car_param = carDetail.car_param;
-                        this.defaultCheckedKeys = [car_param.car_param_id];
-                        this.defaultExpandedKeys =
-                            [car_param.car_brand_id, car_param.car_factory_id,
-                                car_param.car_series_id, car_param.car_series_id + '-' + car_param.car_displacement];
-                    }
+                timer(0).subscribe(() => {
+                    const car_param = this.carParam;
+                    this.defaultCheckedKeys = [car_param.car_param_id];
+                    this.defaultExpandedKeys =
+                        [car_param.car_brand.car_brand_id, car_param.car_factory.car_factory_id,
+                            car_param.car_series.car_series_id, car_param.car_series.car_series_id + '-' + car_param.car_displacement];
                 });
             }, err => {
                 this.loading = false;
@@ -85,9 +71,9 @@ export class SelectBrandComponent implements OnInit {
 
     // 厂商
     private requestCheckedFactories(carBrandList): Observable<any> {
-        return this.vehicleService.requestCarFactoryListData(this.car_series_list[0].car_param.car_brand_id)
+        return this.informationDeliveryManagementService.requestCarFactoryListData(this.carParam.car_brand.car_brand_id)
             .pipe(switchMap((carFactorys: any) => {
-                const carBrand = carBrandList.find(item => item.car_brand_id === this.car_series_list[0].car_param.car_brand_id);
+                const carBrand = carBrandList.find(item => item.car_brand_id === this.carParam.car_brand.car_brand_id);
                 const carFactoryRes = carFactorys.results.map((carFactory: any) =>
                     ({
                         ...carFactory,
@@ -103,11 +89,11 @@ export class SelectBrandComponent implements OnInit {
 
     // 车系
     private requestCheckedSeries(carBrandList): Observable<any> {
-        return this.vehicleService
-            .requestCarSeriesListData(this.car_series_list[0].car_param.car_brand_id, this.car_series_list[0].car_param.car_factory_id)
+        return this.informationDeliveryManagementService
+            .requestCarSeriesListData(this.carParam.car_brand.car_brand_id, this.carParam.car_factory.car_factory_id)
             .pipe(switchMap((httpRes: any) => {
-                const carBrand = carBrandList.find(item => item.car_brand_id === this.car_series_list[0].car_param.car_brand_id);
-                const carFactory = carBrand.children.find(item => item.car_factory_id === this.car_series_list[0].car_param.car_factory_id);
+                const carBrand = carBrandList.find(item => item.car_brand_id === this.carParam.car_brand.car_brand_id);
+                const carFactory = carBrand.children.find(item => item.car_factory_id === this.carParam.car_factory.car_factory_id);
                 const carSeriesRes = httpRes.results.map((httpRe: any) =>
                     ({
                         ...httpRe,
@@ -123,15 +109,14 @@ export class SelectBrandComponent implements OnInit {
 
     // 排量
     private requestCheckedDisplacement(carBrandList): Observable<any> {
-        const car_param = this.car_series_list[0].car_param;
-        return this.vehicleService
-            .requestCarParamsListData(car_param.car_series_id).pipe(switchMap((httpRes: any) => {
-                const carBrand = carBrandList.find(item => item.car_brand_id === car_param.car_brand_id);
-                const carFactory = carBrand.children.find(item => item.car_factory_id === car_param.car_factory_id);
-                const carSeries = carFactory.children.find(item => item.car_series_id === car_param.car_series_id);
+        return this.informationDeliveryManagementService
+            .requestCarParamsListData(this.carParam.car_series.car_series_id).pipe(switchMap((httpRes: any) => {
+                const carBrand = carBrandList.find(item => item.car_brand_id === this.carParam.car_brand.car_brand_id);
+                const carFactory = carBrand.children.find(item => item.car_factory_id === this.carParam.car_factory.car_factory_id);
+                const carSeries = carFactory.children.find(item => item.car_series_id === this.carParam.car_series.car_series_id);
                 const carDisplacement = httpRes.map((httpRe: any) =>
                     ({
-                        key: car_param.car_series_id + '-' + httpRe,
+                        key: this.carParam.car_series.car_series_id + '-' + httpRe,
                         title: httpRe,
                         children: [],
                         disableCheckbox: true,
@@ -143,21 +128,22 @@ export class SelectBrandComponent implements OnInit {
 
     // 排量
     private requestCheckedYear(carBrandList): Observable<any> {
-        const car_param = this.car_series_list[0].car_param;
-        return this.vehicleService.requestCarYearListData
-        (car_param.car_series_id, car_param.car_displacement)
+        return this.informationDeliveryManagementService.requestCarYearListData
+        (this.carParam.car_series.car_series_id, this.carParam.car_displacement)
             .pipe(switchMap((httpRes: any) => {
-                const carBrand = carBrandList.find(item => item.car_brand_id === car_param.car_brand_id);
-                const carFactory = carBrand.children.find(item => item.car_factory_id === car_param.car_factory_id);
-                const carSeries = carFactory.children.find(item => item.car_series_id === car_param.car_series_id);
-                const carDisplacements = carSeries.children.find(item => item.key === (car_param.car_series_id + '-' + car_param.car_displacement));
+                const carBrand = carBrandList.find(item => item.car_brand_id === this.carParam.car_brand.car_brand_id);
+                const carFactory = carBrand.children.find(item => item.car_factory_id === this.carParam.car_factory.car_factory_id);
+                const carSeries = carFactory.children.find(item => item.car_series_id === this.carParam.car_series.car_series_id);
+                const carDisplacements =
+                    carSeries.children.find
+                    (item => item.key === (this.carParam.car_series.car_series_id + '-' + this.carParam.car_displacement));
                 const carYear = httpRes.results.map((httpRe: any) =>
                     ({
                         ...httpRe,
                         isLeaf: true,
                         key: httpRe.car_param_id,
                         title: httpRe.car_year_num,
-                        checked: httpRe.car_param_id === car_param.car_param_id,
+                        checked: httpRe.car_param_id === this.carParam.car_param_id,
                     }));
                 carDisplacements.children = carYear;
                 return of(carBrandList);
@@ -167,12 +153,11 @@ export class SelectBrandComponent implements OnInit {
     /**
      * 打开
      */
-    public open(data: any, sureFunc: any, closeFunc: any = null): any {
+    public open(data: InformationDeliveryCarParam, sureFunc: any, closeFunc: any = null): any {
         $('.tree_ul').scrollTop(0);
         this.initModal();
-        this.accessory_id = data.accessory_id;
-        this.car_series_list = data.car_series_list || [];
-        this.requestAllCheckedCarBrands();
+        this.carParam = data || new InformationDeliveryCarParam();
+        this.requestAllCheckedCarBrands(!!data.car_param_id);
         this.sureCallback = sureFunc;
         this.closeCallback = closeFunc;
         timer(0).subscribe(() => {
@@ -194,8 +179,7 @@ export class SelectBrandComponent implements OnInit {
     // 初始化
     private initModal(): void {
         this.loading = true;
-        this.accessory_id = '';
-        this.car_series_list = [];
+        this.carParam = new InformationDeliveryCarParam();
         this.defaultCheckedKeys = [];
         this.defaultExpandedKeys = [];
     }
@@ -233,10 +217,6 @@ export class SelectBrandComponent implements OnInit {
                         parentNode.getChildren().forEach(item => item.isChecked = false);
                         node.isChecked = true;
                         this.defaultCheckedKeys = [node.key];
-                        // const _parentNode = [parentNode.key];
-                        // const firstNode = node.parentNode.parentNode;
-                        // firstNode && _parentNode.push(firstNode.key);
-                        // this.defaultExpandedKeys = _parentNode;
                     }
                 }
             }
@@ -249,7 +229,7 @@ export class SelectBrandComponent implements OnInit {
      */
     private requestFirmListByBrand(node: any): void {
         const car_brand_id = node.origin.car_brand_id;
-        this.vehicleService.requestCarFactoryListData(car_brand_id).subscribe(
+        this.informationDeliveryManagementService.requestCarFactoryListData(car_brand_id).subscribe(
             res => {
                 const carFactoryList = res.results;
                 const newVehicleFirmList = carFactoryList.map(carFactory => ({
@@ -274,7 +254,7 @@ export class SelectBrandComponent implements OnInit {
         this.isRequestYearData = true;
         const car_brand_id = node.parentNode.origin.car_brand_id;
         const car_factory_id = node.origin.car_factory_id;
-        this.vehicleService.requestCarSeriesListData(car_brand_id, car_factory_id)
+        this.informationDeliveryManagementService.requestCarSeriesListData(car_brand_id, car_factory_id)
             .subscribe(res => {
                 const carSeriesList = res.results;
                 const newVehicleSeriesList = carSeriesList.map(series => ({
@@ -300,7 +280,7 @@ export class SelectBrandComponent implements OnInit {
     private requestCarParamsListByFirm(node: any): void {
         this.isRequestYearData = true;
         const car_series_id = node.origin.car_series_id;
-        this.vehicleService.requestCarParamsListData(car_series_id)
+        this.informationDeliveryManagementService.requestCarParamsListData(car_series_id)
             .subscribe(res => {
                 const carParamList = res;
                 const newVehicleParamList = carParamList.map(param => ({
@@ -327,10 +307,9 @@ export class SelectBrandComponent implements OnInit {
         const car_series_id = node.parentNode.origin.car_series_id;
         const _car_displacements = node.key.split('-');
         const car_displacement = _car_displacements.length === 2 ? _car_displacements[1] : _car_displacements[0];
-        this.vehicleService.requestCarYearListData(car_series_id, car_displacement)
+        this.informationDeliveryManagementService.requestCarYearListData(car_series_id, car_displacement)
             .subscribe(res => {
-                const carDetail = this.car_series_list[0];
-                const car_param = carDetail.car_param;
+                const car_param = this.carParam;
                 const carYearList = res.results;
                 const newVehicleYearList = carYearList.map(param => ({
                     ...param,
@@ -350,29 +329,13 @@ export class SelectBrandComponent implements OnInit {
 
     // 回传选中事件
     public onSelectCarSeries(): void {
-    }
-
-    // 获取选中的车系ID
-    private getCheckedSeriesId(): Array<any> {
-        const seriesList = [];
-        for (const item of Object.keys(this.mapOfBrand)) {
-            this.mapOfBrand[item].forEach(carBrand => {
-                if (carBrand.checked) {
-                    // 第一级勾选
-                    if (carBrand.children) {
-                        // 由于第二级全部勾选导致第一级勾选
-                        this.getThirdChecked(carBrand, seriesList);
-                    } else {
-                        // 第一级全部勾选上
-                        seriesList.push(carBrand);
-                    }
-                } else {
-                    // 第一级未勾选
-                    this.getThirdChecked(carBrand, seriesList);
-                }
-            });
+        this.selectedBrandEvent.emit(this.defaultCheckedKeys[0]);
+        if (this.sureCallback) {
+            const temp = this.sureCallback;
+            this.closeCallback = null;
+            this.sureCallback = null;
+            temp();
         }
-        return seriesList;
     }
 
     // 获取第三级勾选数据

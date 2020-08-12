@@ -78,6 +78,7 @@ import { IntNumberDirective } from './directives/int-number.directive';
 import { RefundTypePipe, CommonRefundStatusPipe } from './pipes/refund-type.pipe';
 import { MinNumberDirective } from './directives/min-number.directive';
 import { ZMapSelectPointV2Component } from './components/z-map-select-point-v2/z-map-select-point-v2.component';
+import { CarReviewStatusPipe } from './pipes/information-delivery.pipe';
 
 
 @NgModule({
@@ -168,6 +169,7 @@ import { ZMapSelectPointV2Component } from './components/z-map-select-point-v2/z
         CommonRefundStatusPipe,
         ServiceTypePipe,
         UploadStatusPipe,
+        CarReviewStatusPipe,
 
         // 指令
         IgnoreSpaceDirective,
@@ -259,6 +261,7 @@ import { ZMapSelectPointV2Component } from './components/z-map-select-point-v2/z
         CommonRefundStatusPipe,
         ServiceTypePipe,
         UploadStatusPipe,
+        CarReviewStatusPipe,
 
         // 指令
         IgnoreSpaceDirective,

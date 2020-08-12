@@ -21,6 +21,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 import { ImageExampleComponent } from './components/image-example/image-example.component';
 import { SelectTagComponent } from './components/select-tag/select-tag.component';
+import { SelectMerchantComponent } from './components/select-merchant/select-merchant.component';
 
 
 @NgModule({
@@ -31,7 +32,10 @@ import { SelectTagComponent } from './components/select-tag/select-tag.component
         InformationDeliveryEditComponent,
         SelectBrandComponent,
         ImageExampleComponent,
-        SelectTagComponent],
+        SelectTagComponent,
+        SelectMerchantComponent,
+        SelectMerchantComponent
+    ],
     imports: [
         CommonModule,
         ShareModule,

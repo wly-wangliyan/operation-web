@@ -40,7 +40,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectCarSeries()">
+                <button class="sure-btn" nz-button nzType="primary" (appZDebounceClick)="onSelectCarSeries()"
+                        [disabled]="!defaultCheckedKeys.length">
                     确定
                 </button>
                 <button class="close-btn" nz-button data-dismiss="modal">取消</button>

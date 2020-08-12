@@ -2,11 +2,10 @@
     <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="levelName">
     </app-crumb>
 </div>
-<!--<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>-->
-<!--    <nz-spin nzSimple></nz-spin>-->
-<!--</div>-->
-<!--[hidden]="loading"-->
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
     <div class="content-container">
         <div class="content-flow">
             <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">
@@ -35,9 +34,9 @@
                                                 [maxLength]="6"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
                                                 [imageHeight]="100"
-                                                [imageUrls]="[]" [imageShowWidth]="100" [resizable]="true"
-                                                (selectedImgChange)="onSelectedPicture($event,'commodity_images')"
-                                                file_id="commodityImg" #commodityImg>
+                                                [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
+                                                (selectedImgChange)="onSelectedPicture($event,'images')"
+                                                file_id="informationDeliveryImg" #informationDeliveryImg>
                             </app-z-photo-select>
                         </div>
                     </div>
@@ -48,13 +47,13 @@
                         <label class=" control-label">
                             <span>标签</span>
                         </label>
-                        <div class="control-input">
+                        <div class="control-input" style="width: 80%">
                             <ul class="tag-list">
-                                <li>
-                                    <span>34535345345</span>
+                                <li *ngFor="let selectTag of selectTagList">
+                                    <span>{{selectTag.label_name}}</span>
                                     <img src="/assets/images/tag_del.png">
                                 </li>
-                                <li (click)="onClickTag()">
+                                <li (click)="onClickTag()" *ngIf="selectTagList.length<3">
                                     <span>选择标签</span>
                                     <img src="/assets/images/icon_add_small.png">
                                 </li>
@@ -68,7 +67,9 @@
                             <span>车辆识别代号（VIN码）</span>
                         </label>
                         <div class="control-input" style="flex-direction: column">
-                            <input class="form-control">
+                            <input [disabled]="car_info_id" class="form-control" [(ngModel)]="carDetail.vin" name="vin"
+                                   required appIgnoreSpace
+                                   placeholder="车辆识别代号（VIN码）">
                             <p class="read-only-info" style="margin-top: 10px">17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改</p>
                         </div>
                     </div>
@@ -79,7 +80,8 @@
                         </label>
                         <div class="control-input">
                             <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
-                                <input class="form-control" placeholder="请选择品牌车系" nz-input readonly/>
+                                <input class="form-control" placeholder="请选择品牌车系" [value]="carParam.carBrandName"
+                                       nz-input readonly required/>
                                 <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>
                                 </ng-template>
                             </nz-input-group>
@@ -92,10 +94,10 @@
                                 车辆颜色
                             </label>
                             <div class="control-input">
-                                <select class="form-control">
+                                <select class="form-control" [(ngModel)]="carDetail.color" name="color" required>
                                     <option value="">请选择车辆颜色</option>
-                                    <option *ngFor="let carColor of carColorList"
-                                            [value]="carColor.value">{{carColor}}</option>
+                                    <option *ngFor="let carColor of carManagementModel.carColorList"
+                                            [value]="carColor.value">{{carColor.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -105,10 +107,8 @@
                                 首次上牌时间
                             </label>
                             <div class="control-input">
-                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
-                                                [nzDisabledDate]="disabledRegistrationTime"
-                                                name='registration_time'
-                                                nzFormat="yyyy-MM"></nz-date-picker>
+                                <nz-month-picker [(ngModel)]="carDetail.registration_time" name="registration_time"
+                                                 [nzDisabledDate]="disabledRegistrationTime"></nz-month-picker>
                             </div>
                         </div>
                         <div>
@@ -118,7 +118,9 @@
                             </label>
                             <div class="control-input">
                                 <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn">
-                                    <input class="form-control" nz-input/>
+                                    <input class="form-control" [(ngModel)]="carDetail.mileage" name="mileage"
+                                           [appFloatNumber]="4" required
+                                           nz-input/>
                                     <ng-template #saveUrlBtn><a style="padding: 10px;">万公里</a>
                                     </ng-template>
                                 </nz-input-group>
@@ -133,7 +135,8 @@
                             </label>
                             <div class="control-input">
                                 <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
-                                    <input class="form-control" nz-input/>
+                                    <input class="form-control" [(ngModel)]="carDetail.price" name="price"
+                                           [appFloatNumber]="4" required nz-input/>
                                     <ng-template #saveUrlBtn1><a style="padding: 10px;">万元</a>
                                     </ng-template>
                                 </nz-input-group>
@@ -143,7 +146,7 @@
                             <label class="control-label" style="width: 110px">
                             </label>
                             <div class="control-input">
-                                <label nz-checkbox>
+                                <label nz-checkbox [(ngModel)]="isTransferFee" name="isTransferFee">
                                     包含过户费用
                                 </label>
                             </div>
@@ -154,8 +157,10 @@
                                 车辆类型
                             </label>
                             <div class="control-input">
-                                <select class="form-control">
-                                    <option></option>
+                                <select class="form-control" [(ngModel)]="carDetail.car_type" name="car_type">
+                                    <option value="">请选择车辆类型</option>
+                                    <option *ngFor="let carType of carManagementModel.carTypeList"
+                                            [value]="carType.value">{{carType.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -178,25 +183,31 @@
                     <div class="row">
                         <label class=" control-label">
                             <b>*</b>
-                            <span>信息发布商户</span>
+                            <span>信息发布商家</span>
                         </label>
                         <div class="control-input">
-                            <select class="form-control">
-                                <option></option>
-                            </select>
+                            <nz-input-group [nzAddOnAfter]="saveUrlBtnMerchant">
+                                <input class="form-control" [value]="selectedMerchant.merchant_name" required
+                                       placeholder="请选择信息发布商家"
+                                       nz-input readonly/>
+                                <ng-template #saveUrlBtnMerchant>
+                                    <a style="padding: 10px;" (click)="selectMerchantComponent.open(selectedMerchant)">选择</a>
+                                </ng-template>
+                            </nz-input-group>
                         </div>
                     </div>
-                    <div class="row sort-three">
+                    <div class="row sort-three" *ngIf="selectedMerchant.merchant_id">
                         <div>
                             <label class="control-label">
                                 <b>*</b>
                                 联系电话
                             </label>
                             <div class="control-input">
-                                <select class="form-control">
-                                    <option value="">请选择车辆颜色</option>
-                                    <option *ngFor="let carColor of carColorList"
-                                            [value]="carColor.value">{{carColor}}</option>
+                                <select class="form-control" [(ngModel)]="carDetail.telephone" name="telephone" required
+                                        (change)="onChangeTelephone($event)">
+                                    <option value="">请选择联系电话</option>
+                                    <option *ngFor="let consultation of consultationList;let index=index"
+                                            [value]="consultation.telephone+','+index">{{consultation.telephone}}</option>
                                 </select>
                             </div>
                         </div>
@@ -206,7 +217,8 @@
                                 联系人
                             </label>
                             <div class="control-input">
-                                <input class="form-control" readonly>
+                                <input class="form-control" [(ngModel)]="carDetail.contact" name="contact" readonly
+                                       required>
                             </div>
                         </div>
                     </div>
@@ -218,8 +230,11 @@
                         <div class="control-input" style="width: 740px!important;">
                             <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj"
                                                       #projectInfoPro></app-pro-city-dist-select>
-                            <input class="form-control" style="margin-left: 10px" placeholder="详细地址">
+                            <input class="form-control" [(ngModel)]="carDetail.address" name="address" appIgnoreSpace
+                                   style="margin-left: 10px"
+                                   placeholder="详细地址">
                             <button style="margin-left: 10px" type="button" nz-button nzType="primary"
+                                    [disabled]="isDisabledSearch"
                                     (click)="onClickReach()">搜索
                             </button>
                         </div>
@@ -228,12 +243,15 @@
                         <label class="control-label">
                         </label>
                         <div class="control-input">
-                            <input readonly class="form-control" placeholder="经度">
-                            <input readonly class="form-control" placeholder="纬度" style="margin-left: 10px">
+                            <input readonly [value]="carDetail.lon" class="form-control"
+                                   placeholder="经度">
+                            <input readonly class="form-control" [value]="carDetail.lat" placeholder="纬度"
+                                   style="margin-left: 10px">
                         </div>
                     </div>
                     <div class="row">
-                        <app-z-map-select-point-v2 [mapObj]="mapObj"></app-z-map-select-point-v2>
+                        <app-z-map-select-point-v2 [mapObj]="mapObj"
+                                                   (selectedMarkerInfo)="selectedMarkerInfo($event)"></app-z-map-select-point-v2>
                     </div>
                 </div>
                 <div class="information-delivery-container">
@@ -247,18 +265,20 @@
                                 <span>过户次数</span>
                             </label>
                             <div class="control-input">
-                                <select class="form-control">
-                                    <option value="0"></option>
-                                    <option value="1"></option>
-                                    <option value="2"></option>
-                                    <option value="3"></option>
-                                    <option value="4"></option>
-                                    <option value="5"></option>
-                                    <option value="6"></option>
-                                    <option value="7"></option>
-                                    <option value="8"></option>
-                                    <option value="9"></option>
-                                    <option value="10"></option>
+                                <select class="form-control" [(ngModel)]="carDetail.transfer_times"
+                                        name="transfer_times">
+                                    <option value="">请选择过户次数</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
                         </div>
@@ -267,7 +287,7 @@
                                 <span>车辆是否抵押</span>
                             </label>
                             <div class="control-input">
-                                <nz-radio-group>
+                                <nz-radio-group [(ngModel)]="carDetail.has_mortgage" name="has_mortgage">
                                     <label nz-radio [nzValue]="1">有</label>
                                     <label nz-radio [nzValue]="2">无</label>
                                 </nz-radio-group>
@@ -280,10 +300,8 @@
                                 年检到期
                             </label>
                             <div class="control-input">
-                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
-                                                [nzDisabledDate]="disabledRegistrationTime"
-                                                name='registration_time'
-                                                nzFormat="yyyy-MM"></nz-date-picker>
+                                <nz-month-picker [(ngModel)]="carDetail.check_deadline" name="check_deadline"
+                                                 [nzDisabledDate]="disabledTime"></nz-month-picker>
                             </div>
                         </div>
                         <div>
@@ -291,10 +309,9 @@
                                 交强险到期
                             </label>
                             <div class="control-input">
-                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
-                                                [nzDisabledDate]="disabledRegistrationTime"
-                                                name='registration_time'
-                                                nzFormat="yyyy-MM"></nz-date-picker>
+                                <nz-month-picker [(ngModel)]="carDetail.compulsory_traffic_insurance_deadline"
+                                                 name="compulsory_traffic_insurance_deadline"
+                                                 [nzDisabledDate]="disabledTime"></nz-month-picker>
                             </div>
                         </div>
                         <div>
@@ -302,10 +319,9 @@
                                 商业险到期
                             </label>
                             <div class="control-input">
-                                <nz-date-picker [(ngModel)]="registration_time" [nzShowToday]=false
-                                                [nzDisabledDate]="disabledRegistrationTime"
-                                                name='registration_time'
-                                                nzFormat="yyyy-MM"></nz-date-picker>
+                                <nz-month-picker [(ngModel)]="carDetail.commercial_insurance_deadline"
+                                                 name="commercial_insurance_deadline"
+                                                 [nzDisabledDate]="disabledTime"></nz-month-picker>
                             </div>
                         </div>
                     </div>
@@ -313,14 +329,15 @@
                         <label class="control-label">
                             车辆家装配置
                         </label>
-                        <div class="control-input" style="width: 585px">
-                            <nz-checkbox-group [(ngModel)]="checkOptions" name="checkOptions"></nz-checkbox-group>
+                        <div class="control-input" style="width: 650px">
+                            <nz-checkbox-group [(ngModel)]="carManagementModel.checkOptions"
+                                               name="checkOptions"></nz-checkbox-group>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="sure-btn" type="submit" nz-button nzType="primary"
-                            [disabled]="!editInformationDeliveryModal.form.valid"
+                            [disabled]="!editInformationDeliveryModal.form.valid||!CheckImgValid"
                             (appZDebounceClick)="onEditFormSubmit()">发布
                     </button>
                     <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
@@ -331,8 +348,11 @@
 </div>
 
 
-<app-select-brand></app-select-brand>
+<app-select-brand (selectedBrandEvent)="carDetail.car_param_id=$event"></app-select-brand>
 
 <app-image-example></app-image-example>
 
-<app-select-tag></app-select-tag>
+<app-select-tag (selectedTagEvent)="onSelectedTag($event)"></app-select-tag>
+
+<app-select-merchant #chooseMerchant (selectedMerchantEvent)="onSelectedMerchant($event)">
+</app-select-merchant>

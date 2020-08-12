@@ -15,8 +15,8 @@ const routes: Routes = [{
         {path: '', redirectTo: 'information-delivery-list', pathMatch: 'full'},
         {path: 'information-delivery-list', component: InformationDeliveryListComponent},
         {path: 'information-delivery-create', component: InformationDeliveryEditComponent},
-        {path: 'information-delivery-edit/:id', component: InformationDeliveryEditComponent},
-        {path: 'information-delivery-detail/:id', component: InformationDeliveryDetailComponent},
+        {path: 'information-delivery-edit/:car_info_id', component: InformationDeliveryEditComponent},
+        {path: 'information-delivery-detail/:car_info_id', component: InformationDeliveryDetailComponent},
         {path: '**', redirectTo: 'information-delivery-list', pathMatch: 'full'}
     ]
 }];
