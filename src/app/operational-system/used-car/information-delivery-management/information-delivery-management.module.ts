@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InformationDeliveryManagementComponent } from './information-delivery-management.component';
 import { InformationDeliveryListComponent } from './information-delivery-list/information-delivery-list.component';
-import { InformationDeliveryDetailComponent } from './information-delivery-detail/information-delivery-detail.component';
 import { InformationDeliveryEditComponent } from './information-delivery-edit/information-delivery-edit.component';
 import { InformationDeliveryManagementRoutingModule } from './information-delivery-management-routing.module';
 import { ShareModule } from '../../../share/share.module';
@@ -22,16 +21,16 @@ import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 import { ImageExampleComponent } from './components/image-example/image-example.component';
 import { SelectTagComponent } from './components/select-tag/select-tag.component';
 import { SelectMerchantComponent } from './components/select-merchant/select-merchant.component';
+import { InformationDeliveryDetailModule } from './information-delivery-detail/information-delivery-detail.module';
 
 
 @NgModule({
     declarations: [
         InformationDeliveryManagementComponent,
         InformationDeliveryListComponent,
-        InformationDeliveryDetailComponent,
         InformationDeliveryEditComponent,
-        SelectBrandComponent,
         ImageExampleComponent,
+        SelectBrandComponent,
         SelectTagComponent,
         SelectMerchantComponent,
         SelectMerchantComponent
@@ -49,6 +48,7 @@ import { SelectMerchantComponent } from './components/select-merchant/select-mer
         NzInputModule,
         NzTreeModule,
         NzAnchorModule,
+        InformationDeliveryDetailModule,
         InformationDeliveryManagementRoutingModule,
     ]
 })

@@ -7,6 +7,7 @@ import { ShareModule } from '../../../share/share.module';
 import { NzButtonModule, NzDatePickerModule, NzSwitchModule, NzTableModule } from 'ng-zorro-antd';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TagCarListComponent } from './tag-car-list/tag-car-list.component';
+import { InformationDeliveryDetailModule } from '../information-delivery-management/information-delivery-detail/information-delivery-detail.module';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { TagCarListComponent } from './tag-car-list/tag-car-list.component';
         NzDatePickerModule,
         NzSwitchModule,
         DragDropModule,
+        InformationDeliveryDetailModule,
         TagManagementRoutingModule
     ]
 })

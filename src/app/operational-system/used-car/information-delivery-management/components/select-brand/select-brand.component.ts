@@ -2,7 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { GlobalService } from '../../../../../core/global.service';
 import { Observable, of, Subscription, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { InformationDeliveryCarParam, InformationDeliveryManagementService } from '../../information-delivery-management.service';
+import {
+    CarBrandEntity, CarFactoryEntity,
+    InformationDeliveryCarParam,
+    InformationDeliveryManagementService,
+    CarSeriesEntity
+} from '../../information-delivery-management.service';
 
 @Component({
     selector: 'app-select-brand',
@@ -190,15 +195,25 @@ export class SelectBrandComponent {
             const node = event.node;
             if (node && node.getChildren().length === 0 && node.isExpanded) {
                 if (node.level === 0) {
+                    this.carParam.car_brand = new CarBrandEntity();
+                    this.carParam.car_brand.car_brand_name = node.title;
+                    this.carParam.car_brand.car_brand_id = node.key;
                     // 根据品牌获取厂商
                     this.requestFirmListByBrand(node);
                 } else if (node.level === 1) {
+                    this.carParam.car_factory = new CarFactoryEntity();
+                    this.carParam.car_factory.car_factory_name = node.title;
+                    this.carParam.car_factory.car_factory_id = node.key;
                     // 根据厂商获取汽车车系
                     this.requestSeriesListByFirm(node);
                 } else if (node.level === 2) {
+                    this.carParam.car_series = new CarSeriesEntity();
+                    this.carParam.car_series.car_series_name = node.title;
+                    this.carParam.car_series.car_series_id = node.key;
                     // 根据车系获取汽车排量
                     this.requestCarParamsListByFirm(node);
                 } else if (node.level === 3) {
+                    this.carParam.car_displacement = node.title;
                     // 根据排量获取汽车年份
                     this.requestCarYearListByFirm(node);
                 }
@@ -212,6 +227,8 @@ export class SelectBrandComponent {
             const node = event.node;
             if (node.isChecked) {
                 if (node.level === 4) {
+                    this.carParam.car_year_num = node.title;
+                    this.carParam.car_param_id = node.key;
                     const parentNode = node.parentNode;
                     if (parentNode && parentNode.getChildren().length) {
                         parentNode.getChildren().forEach(item => item.isChecked = false);
@@ -331,41 +348,11 @@ export class SelectBrandComponent {
     public onSelectCarSeries(): void {
         this.selectedBrandEvent.emit(this.defaultCheckedKeys[0]);
         if (this.sureCallback) {
+            $('#selectMultiBrandFirmModal').modal('hide');
             const temp = this.sureCallback;
             this.closeCallback = null;
             this.sureCallback = null;
             temp();
-        }
-    }
-
-    // 获取第三级勾选数据
-    private getThirdChecked(firstLevel: any, seriesList: any): void {
-        if (firstLevel.children) {
-            // 第二级有部分勾选
-            firstLevel.children.forEach((secondLevel: any) => {
-                if (secondLevel.checked) {
-                    if (secondLevel.children) {
-                        // 第三级全部勾选导致第二级被勾选
-                        seriesList.push(secondLevel.children);
-                    } else {
-                        // 第二级全部勾选
-                        seriesList.push(secondLevel);
-                    }
-                } else if (!secondLevel.checked) {
-                    // 第二级未勾选
-                    if (secondLevel.children) {
-                        // 第三级有部分勾选
-                        secondLevel.children.forEach((item: any) => {
-                            if (item.checked) {
-                                seriesList.push(item);
-                            }
-                        });
-                    }
-                }
-            });
-        } else {
-            // 均未勾选
-            seriesList = [];
         }
     }
 

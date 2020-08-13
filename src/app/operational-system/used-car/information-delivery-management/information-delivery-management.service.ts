@@ -6,6 +6,7 @@ import { EntityBase, noClone } from '../../../../utils/z-entity';
 import { environment } from '../../../../environments/environment';
 import { HttpService, LinkResponse } from '../../../core/http.service';
 import { MerchantManagementEntity } from '../merchant-management/merchant-management.service';
+import { TagManagementEntity } from '../tag-management/tag-management.service';
 
 export enum OnlineStatus {
     on = 1,
@@ -18,7 +19,7 @@ export enum ReviewStatus {
     rejected = 3,
 }
 
-export class SearchParamsEntity extends EntityBase {
+export class SearchParamsCarEntity extends EntityBase {
     public merchant_name: string = undefined; // 发布商家
     public review_section: string = undefined; // 发布时间段
     public created_section: string = undefined; // 创建时间段
@@ -43,7 +44,7 @@ export class InformationDeliveryManagementEntity extends EntityBase {
     public price: number = undefined; // 转让价格 元
     public car_type: number = undefined; // 车辆类型
     public merchant: MerchantManagementEntity = new MerchantManagementEntity(); // 信息发布商户
-    // public region_id: string = undefined; // 省市区code
+    public region_id: string = undefined; // 省市区code
     public province: string = undefined; // 省
     public city: string = undefined; // 市
     public district: string = undefined; // 区
@@ -51,6 +52,7 @@ export class InformationDeliveryManagementEntity extends EntityBase {
     public lon: string = undefined; // 经度
     public lat: string = undefined; // 纬度
     public contain_transfer_fee: number = undefined; // 是否包含过户费用 1包含 2不包含
+    public labels: Array<TagManagementEntity> = [];
     public car_description: string = undefined; // 车况描述
     public transfer_times: number = undefined;  // 过户次数
     public has_mortgage: number = undefined; // 是否抵押 1有 2无
@@ -76,6 +78,9 @@ export class InformationDeliveryManagementEntity extends EntityBase {
         if (propertyName === 'merchant') {
             return MerchantManagementEntity;
         }
+        if (propertyName === 'labels') {
+            return TagManagementEntity;
+        }
         return null;
     }
 }
@@ -91,7 +96,7 @@ export class InformationDeliveryCarParam extends EntityBase {
 
     @noClone
     public get carBrandName(): string {
-        return this.car_brand.car_brand_name + this.car_factory.car_factory_name + this.car_series.car_series_name + this.car_displacement + this.car_year_num;
+        return this.car_brand ? (this.car_brand.car_brand_name + this.car_factory.car_factory_name + this.car_series.car_series_name + this.car_displacement + this.car_year_num) : '';
     }
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
@@ -130,6 +135,7 @@ export class InformationDeliveryManagementParams extends EntityBase {
     public address: string = undefined; // 详细地址
     public lon: string = undefined; // 经度
     public lat: string = undefined; // 纬度
+    public region_id: string = undefined;
     public car_description: string = undefined;
     public transfer_times: any = '';  // 过户次数
     public has_mortgage: number = undefined; // 是否抵押 1有 2无
@@ -137,6 +143,7 @@ export class InformationDeliveryManagementParams extends EntityBase {
     public compulsory_traffic_insurance_deadline: any = ''; // 交强险到期时间
     public commercial_insurance_deadline: any = ''; // 商业险到期时间
     public extra_info: string = undefined; // 加装配置
+    public merchant_name: string = undefined;
 
     constructor(source?: InformationDeliveryManagementEntity) {
         super();
@@ -150,18 +157,27 @@ export class InformationDeliveryManagementParams extends EntityBase {
             this.price = (source.price / 10000).toFixed(4);
             this.lon = source.lon;
             this.lat = source.lat;
+            this.address = source.address;
             this.transfer_times = source.transfer_times;
             this.has_mortgage = source.has_mortgage;
             this.check_deadline = new Date(source.check_deadline * 1000);
             this.compulsory_traffic_insurance_deadline = new Date(source.compulsory_traffic_insurance_deadline * 1000);
             this.commercial_insurance_deadline = new Date(source.commercial_insurance_deadline * 1000);
-            // this.label_ids=source.label_ids;
             this.contain_transfer_fee = source.contain_transfer_fee;
             this.car_param_id = source.car_param.car_param_id;
-            this.car_type = source.car_type;
+            this.car_type = source.car_type.toString();
             this.merchant_id = source.merchant.merchant_id;
+            this.merchant_name = source.merchant.merchant_name;
+            const consult_info = source.merchant.consult_info;
+            if (consult_info && consult_info.length > 0) {
+                const _index = consult_info.findIndex(item => item.telephone === source.telephone);
+                const index = _index > -1 ? _index : 0;
+                this.telephone = consult_info[index].telephone + ',' + index;
+                this.contact = consult_info[index].name;
+            }
             this.has_mortgage = source.has_mortgage;
             this.extra_info = source.extra_info;
+            this.label_ids = source.labels.map(item => item.label_id).join(',');
         }
     }
 }
@@ -180,7 +196,7 @@ export class InformationDeliveryManagementService {
     }
 
     /** 查看二手车信息列表 */
-    public requestInformationDeliveryListData(searchParams: SearchParamsEntity): Observable<InformationDeliveryManagementLinkResponse> {
+    public requestInformationDeliveryListData(searchParams: SearchParamsCarEntity): Observable<InformationDeliveryManagementLinkResponse> {
         const httpUrl = `${this.domain}/admin/used_car/car_info_list`;
         return this.httpService.get(httpUrl, searchParams.json())
             .pipe(map(res => new InformationDeliveryManagementLinkResponse(res)));
@@ -217,6 +233,18 @@ export class InformationDeliveryManagementService {
         return this.httpService.get(httpUrl).pipe(map(res => {
             return InformationDeliveryManagementEntity.Create(res.body);
         }));
+    }
+
+    /**
+     * 判断二手车信息是否关联上线标签
+     * @param car_info_id
+     */
+    public requestInformationDeliveryLabelData(car_info_id: string): Observable<any> {
+        const httpUrl = `${this.domain}/admin/used_car/car_info/${car_info_id}/labels_status`;
+        // {
+        //     "status": 1, # 1已关联上线标签/ 2未关联上线标签
+        // }
+        return this.httpService.get(httpUrl).pipe(map(res => res.body));
     }
 
     /**

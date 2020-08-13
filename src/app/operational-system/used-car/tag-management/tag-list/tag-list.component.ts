@@ -6,7 +6,6 @@ import { SearchParamsEntity, TagManagementService, TagOnlineStatus, TagManagemen
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { timer } from 'rxjs';
-import { TemplateManagementEntity } from '../../../operation/push-message-management/template-management/template-management.service';
 
 @Component({
     selector: 'app-tag-list',

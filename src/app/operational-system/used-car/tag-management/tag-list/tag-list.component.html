@@ -75,6 +75,7 @@
                     <td class="operation">
                         <a [title]="'置顶'" *ngIf="templateIndex>0"
                            (appZDebounceClick)="onTagSortClick(data.label_id)">置顶</a>
+                        <a [title]="'查看对应车辆'" [routerLink]="['../tag-car-list',data.label_id]">查看对应车辆</a>
                         <a [title]="'编辑'" (appZDebounceClick)="onClickCreateTag(data)">编辑</a>
                         <a [title]="'删除'" (appZDebounceClick)="onDeleteTagClick(data.label_id)">删除</a>
                     </td>

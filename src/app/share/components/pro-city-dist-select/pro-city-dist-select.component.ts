@@ -120,7 +120,11 @@ export class ProCityDistSelectComponent implements OnChanges {
                         });
                     } else {
                         console.log(regionsObj);
-                        this.requestRegionsById('中国', this.regionLevel.country, false);
+                        let flag = false;
+                        if (this.isEdit && this.regionsObj.region_id) {
+                            flag = true;
+                        }
+                        this.requestRegionsById('中国', this.regionLevel.country, flag);
                         this.requestMunicipalitiesRegions(this.regionsObj.region_id);
                     }
                 });

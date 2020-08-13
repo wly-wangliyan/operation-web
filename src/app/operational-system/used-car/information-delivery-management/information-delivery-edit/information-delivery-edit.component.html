@@ -31,7 +31,7 @@
                             <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span
                                     (click)="onClickImageExample()">图片示例</span></p>
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                                [maxLength]="6"
+                                                [maxLength]="30"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
                                                 [imageHeight]="100"
                                                 [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
@@ -80,7 +80,8 @@
                         </label>
                         <div class="control-input">
                             <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
-                                <input class="form-control" placeholder="请选择品牌车系" [value]="carParam.carBrandName"
+                                <input class="form-control" placeholder="请选择品牌车系"
+                                       [value]="carDetail.car_param_id?carParam.carBrandName:''"
                                        nz-input readonly required/>
                                 <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>
                                 </ng-template>

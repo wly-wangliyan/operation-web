@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
-import { TemplateManagementService } from '../../../operation/push-message-management/template-management/template-management.service';
-import { TemplatePushManagementService } from '../../../operation/push-message-management/template-push-management/template-push-management.service';
 import { ErrMessageBase, ErrMessageGroup } from '../../../../../utils/error-message-helper';
 import { ZPhotoSelectComponent } from '../../../../share/components/z-photo-select/z-photo-select.component';
 import { differenceInCalendarDays } from 'date-fns';
@@ -22,17 +20,12 @@ import { SelectTagComponent } from '../components/select-tag/select-tag.componen
 import { InformationDeliveryManagementModel } from '../information-delivery-management.model';
 import {
     InformationDeliveryCarParam,
-    InformationDeliveryManagementEntity,
     InformationDeliveryManagementParams,
     InformationDeliveryManagementService
 } from '../information-delivery-management.service';
-import { ChooseMallGoodModalComponent } from '../../../operation/integral-management/integral-mall/choose-mall-good-modal/choose-mall-good-modal.component';
 import { SelectMerchantComponent } from '../components/select-merchant/select-merchant.component';
-import { CouponEntity, EditCommodityParams } from '../../../operation/integral-management/integral-mall/integral-mall-http.service';
 import { ConsultationEntity, MerchantManagementEntity } from '../../merchant-management/merchant-management.service';
 import { TagManagementEntity } from '../../tag-management/tag-management.service';
-import { isNullOrUndefined } from 'util';
-import { ValidateHelper } from '../../../../../utils/validate-helper';
 import { timer } from 'rxjs';
 
 @Component({
@@ -45,7 +38,6 @@ export class InformationDeliveryEditComponent implements OnInit {
     public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
     public regionsObj: RegionEntity = new RegionEntity(); // 基本信息-门店地址
-    public registration_time = '';
     public mapObj: MapItem = {
         point: [],
         type: MapType.view,
@@ -68,16 +60,14 @@ export class InformationDeliveryEditComponent implements OnInit {
     public selectedMerchant: MerchantManagementEntity = new MerchantManagementEntity();
     public consultationList: Array<ConsultationEntity> = [];
     public selectTagList: Array<TagManagementEntity> = [];
-    public isTransferFee = false;
-    private carParam: InformationDeliveryCarParam = new InformationDeliveryCarParam();
+    public isTransferFee = false; // 是否包含过户费
+    public carParam: InformationDeliveryCarParam = new InformationDeliveryCarParam();
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private globalService: GlobalService,
                 private vehicleService: VehicleManagementHttpService,
-                private informationDeliveryManagementService: InformationDeliveryManagementService,
-                private templateManagementService: TemplateManagementService,
-                private templatePushManagementService: TemplatePushManagementService) {
+                private informationDeliveryManagementService: InformationDeliveryManagementService) {
         this.route.paramMap.subscribe(map => {
             this.car_info_id = map.get('car_info_id');
         });
@@ -140,7 +130,8 @@ export class InformationDeliveryEditComponent implements OnInit {
     }
 
     public onClickTag() {
-        this.selectTagComponent.onShowTagList();
+        const selectTagList = this.selectTagList.map(item => item.label_id);
+        this.selectTagComponent.onShowTagList(selectTagList);
     }
 
     /** 初始化错误信息 */
@@ -152,15 +143,20 @@ export class InformationDeliveryEditComponent implements OnInit {
 
     // 推荐设置打开所属厂商选择组件
     public onClickBrand(): void {
-        this.selectBrandComponent.open(this.carParam, () => {
-            // this.accessoryNewList = [];
-            // this.noResultText = '数据加载中...';
-            // this.searchText$.next();
-        });
+        if (!this.car_info_id) {
+            this.selectBrandComponent.open(this.carParam, () => {
+                // this.accessoryNewList = [];
+                // this.noResultText = '数据加载中...';
+                // this.searchText$.next();
+            });
+        }
     }
 
-    public onClickReach() {
+    public onClickReach(isSearch = true) {
         this.mapObj.type = MapType.edit;
+        if (isSearch) {
+            this.mapObj.point = [];
+        }
         this.mapObj.hasDetailedAddress = true;
         this.mapObj.address = this.proCityDistSelectComponent.selectedAddress + this.carDetail.address;
         this.mapObj.cityCode = this.proCityDistSelectComponent.regionsObj.region_id;
@@ -196,6 +192,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.carDetail.province = this.regionsObj.province;
         this.carDetail.city = this.regionsObj.city;
         this.carDetail.district = this.regionsObj.district;
+        this.carDetail.region_id = this.regionsObj.region_id;
     }
 
     /** 选择图片 */
@@ -239,7 +236,9 @@ export class InformationDeliveryEditComponent implements OnInit {
                 params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
                 console.log(111, params);
                 this.informationDeliveryManagementService.requestAddInformationDeliveryData(params, this.car_info_id).subscribe(data => {
-                    this.goToListPage();
+                    this.globalService.promptBox.open(this.car_info_id ? '编辑成功！' : '创建成功', () => {
+                        this.goToListPage();
+                    });
                 }, err => {
                     this.globalService.httpErrorProcess(err);
                 });
@@ -296,9 +295,10 @@ export class InformationDeliveryEditComponent implements OnInit {
             this.loading = false;
             this.carParam = data.car_param.clone();
             this.carDetail = new InformationDeliveryManagementParams(data);
-            console.log(this.carDetail.lat);
+            this.selectTagList = data.labels;
             this.isTransferFee = data.contain_transfer_fee === 1;
             this.selectedMerchant = data.merchant;
+            this.consultationList = data.merchant.consult_info || [];
             this.mapObj.point = [parseFloat(data.lon), parseFloat(data.lat)];
             this.regionsObj = new RegionEntity(data);
             this.imageList = data.images ? data.images.split(',') : [];
@@ -312,7 +312,7 @@ export class InformationDeliveryEditComponent implements OnInit {
                 CKEDITOR.instances.informationDeliveryEditor.destroy(true);
                 CKEDITOR.replace('informationDeliveryEditor', {width: '900px'}).setData(data.car_description);
             });
-            this.onClickReach();
+            this.onClickReach(false);
         }, err => {
             this.loading = false;
             this.globalService.httpErrorProcess(err);

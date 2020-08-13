@@ -149,3 +149,11 @@ li + li {
 :host ::ng-deep .content-container .form-control[readonly] {
     background: #e9ecef !important;
 }
+
+.modal-footer{
+    width: 800px;
+}
+
+.content-container .sure-btn{
+    margin-left: 0;
+}

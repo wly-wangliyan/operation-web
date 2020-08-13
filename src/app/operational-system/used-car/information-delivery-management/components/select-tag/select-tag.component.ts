@@ -8,7 +8,7 @@ import { GlobalService } from '../../../../../core/global.service';
     styleUrls: ['./select-tag.component.css']
 })
 export class SelectTagComponent {
-    public selectTagList: Array<TagManagementEntity> = [];
+    public selectTagList: Array<string> = [];
     public tagList: Array<TagManagementEntity> = [];
     @Output() public selectedTagEvent = new EventEmitter();
     public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
@@ -22,7 +22,13 @@ export class SelectTagComponent {
      */
     public onSelectTagData() {
         $('#selectTagPromptDiv').modal('hide');
-        this.selectedTagEvent.emit(this.selectTagList);
+        const selectTagList = [];
+        this.tagList.forEach(item => {
+            if (this.selectTagList.indexOf(item.label_id) > -1) {
+                selectTagList.push(item);
+            }
+        });
+        this.selectedTagEvent.emit(selectTagList);
     }
 
     /**
@@ -30,18 +36,18 @@ export class SelectTagComponent {
      * @param tag
      */
     public onChangeTag(tag: TagManagementEntity) {
-        const findIndex = this.selectTagList.findIndex(item => item.label_id === tag.label_id);
+        const findIndex = this.selectTagList.findIndex(item => item === tag.label_id);
         if (findIndex > -1) {
             this.selectTagList.splice(findIndex, 1);
         } else {
-            this.selectTagList.push(tag);
+            this.selectTagList.push(tag.label_id);
         }
     }
 
     /**
      * 模板列表
      */
-    public onShowTagList(selectTagList: Array<TagManagementEntity> = []) {
+    public onShowTagList(selectTagList: Array<string> = []) {
         this.tagManagementService.requestTagListData(this.searchParams).subscribe(data => {
             this.tagList = data;
             this.selectTagList = selectTagList;

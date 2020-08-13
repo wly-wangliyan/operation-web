@@ -85,7 +85,8 @@
                 <ng-template ngFor let-informationDelivery let-i=index [ngForOf]="informationDeliveryTable.data">
                     <tr>
                         <td colspan="11" nzAlign="left" class="information-delivery-title">
-                            发布商家：{{informationDelivery.merchant_name}}<span>|</span>
+                            发布商家：{{informationDelivery.merchant ? informationDelivery.merchant.merchant_name : '-'}}
+                            <span>|</span>
                             发布时间：{{informationDelivery.review_time ? (informationDelivery.review_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
                             <span>|</span>
                             创建时间：{{informationDelivery.created_time ? (informationDelivery.created_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
@@ -99,7 +100,7 @@
                         </td>
                         <td class="brand-item"
                             [title]="informationDelivery.car_param.carBrandName">{{informationDelivery.car_param.carBrandName|zMaxLength:10}}</td>
-                        <td>{{(informationDelivery.price / 10000)| centPriceChange:'元'}}</td>
+                        <td>{{(informationDelivery.price / 10000)}}万元</td>
                         <td>{{informationDelivery.registration_time ? (informationDelivery.registration_time * 1000 | date:"y-MM") : '--'}}</td>
                         <td>{{informationDelivery.color}}</td>
                         <td>{{informationDelivery.mileage / 10000}}万公里</td>
@@ -122,13 +123,13 @@
                                (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.reviewed)">通过</a>
                             <a [title]="'驳回 '"
                                *ngIf="informationDelivery.review_status===ReviewStatus.reviewing"
-                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.reviewed)">驳回 </a>
+                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.rejected)">驳回 </a>
                             <a [title]="'编辑'"
-                               [routerLink]="['../information-delivery-edit',informationDelivery.car_info_id]">编辑</a>
+                               (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.update)">编辑</a>
                             <a [title]="'明细'"
                                [routerLink]="['../information-delivery-detail',informationDelivery.car_info_id]">明细</a>
                             <a [title]="'删除'"
-                               (appZDebounceClick)="onDeleteInformationDeliveryClick(informationDelivery.car_info_id)">删除</a>
+                               (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.delete)">删除</a>
                         </td>
                     </tr>
                 </ng-template>

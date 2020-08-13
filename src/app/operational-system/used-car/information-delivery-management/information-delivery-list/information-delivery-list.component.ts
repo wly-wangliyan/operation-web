@@ -4,13 +4,14 @@ import { GlobalService } from '../../../../core/global.service';
 import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
 import {
     InformationDeliveryManagementService,
-    SearchParamsEntity,
+    SearchParamsCarEntity,
     OnlineStatus,
     ReviewStatus,
     InformationDeliveryManagementEntity
 } from '../information-delivery-management.service';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { carReviewStatus } from '../../../../share/pipes/information-delivery.pipe';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-information-delivery-list',
@@ -19,9 +20,10 @@ import { carReviewStatus } from '../../../../share/pipes/information-delivery.pi
 })
 export class InformationDeliveryListComponent implements NzSearchAdapter {
     public OnlineStatus = OnlineStatus;
+    public OperationType = OperationType;
     public ReviewStatus = ReviewStatus;
     public carReviewStatus = carReviewStatus;
-    public searchParams: SearchParamsEntity = new SearchParamsEntity(); // 条件筛选参数
+    public searchParams: SearchParamsCarEntity = new SearchParamsCarEntity(); // 条件筛选参数
     public start_time: any = '';
     public end_time: any = '';
     public review_start_time: any = '';
@@ -36,6 +38,8 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     public activeTabIndex = 0;
 
     constructor(private globalService: GlobalService,
+                private route: ActivatedRoute,
+                private router: Router,
                 private informationDeliveryManagementService: InformationDeliveryManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
@@ -43,7 +47,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     // 切换tab
     public onTabChange(key: number) {
-        this.searchParams = new SearchParamsEntity();
+        this.searchParams = new SearchParamsCarEntity();
         this.start_time = '';
         this.end_time = '';
         this.review_start_time = '';
@@ -74,13 +78,34 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     };
 
     /**
+     * 判断二手车信息是否关联上线标签
+     * @param car_info_id
+     * @param type
+     */
+    public informationDeliveryLabelStatus(car_info_id, type: OperationType) {
+        this.informationDeliveryManagementService.requestInformationDeliveryLabelData(car_info_id).subscribe(data => {
+            // 1已关联上线标签/ 2未关联上线标签
+            if (data.status === 1) {
+                this.globalService.promptBox.open
+                ('此信息存在线上关联标签，不允许' + (type === OperationType.update ? '编辑' : '删除') + '。', null, 2000, null, false);
+            } else {
+                if (type === OperationType.update) {
+                    this.router.navigate(['../information-delivery-edit', car_info_id], {relativeTo: this.route});
+                } else {
+                    this.onDeleteInformationDeliveryClick(car_info_id);
+                }
+            }
+
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
+    /**
      * 启停
      * @param informationDelivery
      */
     public onSwitchChange(informationDelivery: InformationDeliveryManagementEntity) {
-        // if (this.isDisabledOpen(templatePush)) {
-        //     return;
-        // }
         const swicth = informationDelivery.online_status === OnlineStatus.off ? OnlineStatus.on : OnlineStatus.off;
         this.informationDeliveryManagementService.requestInformationDeliveryOnlineStatusData(informationDelivery.car_info_id, swicth).subscribe(res => {
             if (informationDelivery.online_status === OnlineStatus.off) {
@@ -95,7 +120,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
                     const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
                     for (const content of error.errors) {
                         if (content.field === 'online_status' && content.code === 'not_allowed') {
-                            this.globalService.promptBox.open('待审核不可上线', null, 2000, null, false);
+                            this.globalService.promptBox.open('待审核或者已驳回不可上线', null, 2000, null, false);
                             return;
                         }
                     }
@@ -118,24 +143,6 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
                 this.globalService.promptBox.open(review_status === ReviewStatus.reviewed ? '通过成功' : '驳回成功');
             }, err => {
                 this.globalService.httpErrorProcess(err);
-            });
-        }, '确定');
-    }
-
-    /**
-     * 删除
-     * @param car_info_id
-     */
-    public onDeleteInformationDeliveryClick(car_info_id: string) {
-        this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
-            this.globalService.confirmationBox.close();
-            this.informationDeliveryManagementService.requestDeleteInformationDeliveryData(car_info_id).subscribe(res => {
-                this.nzSearchAssistant.submitSearch(true);
-                this.globalService.promptBox.open('删除成功');
-            }, err => {
-                if (!this.globalService.httpErrorProcess(err)) {
-                    this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
-                }
             });
         }, '确定');
     }
@@ -185,4 +192,27 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     public searchCompleteProcess(): any {
     }
 
+    /**
+     * 删除
+     * @param car_info_id
+     */
+    private onDeleteInformationDeliveryClick(car_info_id: string) {
+        this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
+            this.globalService.confirmationBox.close();
+            this.informationDeliveryManagementService.requestDeleteInformationDeliveryData(car_info_id).subscribe(res => {
+                this.nzSearchAssistant.submitSearch(true);
+                this.globalService.promptBox.open('删除成功');
+            }, err => {
+                if (!this.globalService.httpErrorProcess(err)) {
+                    this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                }
+            });
+        }, '确定');
+    }
+
+}
+
+enum OperationType {
+    update,
+    delete,
 }

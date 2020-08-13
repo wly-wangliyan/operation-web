@@ -5,6 +5,10 @@ import { HttpResponse } from '@angular/common/http';
 import { EntityBase } from '../../../../utils/z-entity';
 import { environment } from '../../../../environments/environment';
 import { HttpService } from '../../../core/http.service';
+import {
+    InformationDeliveryManagementEntity,
+    SearchParamsCarEntity
+} from '../information-delivery-management/information-delivery-management.service';
 
 export enum TagOnlineStatus {
     on = 1,
@@ -51,6 +55,19 @@ export class TagManagementService {
             }));
     }
 
+    /** 查看标签关联二手车列表 */
+    public requestTagCarListData(searchParams: SearchParamsCarEntity, label_id: string): Observable<Array<InformationDeliveryManagementEntity>> {
+        const httpUrl = `${this.domain}/admin/used_car/labels/${label_id}/car_info_list`;
+        return this.httpService.get(httpUrl, searchParams.json())
+            .pipe(map(res => {
+                const tempList: Array<InformationDeliveryManagementEntity> = [];
+                res.body.forEach(item => {
+                    tempList.push(InformationDeliveryManagementEntity.Create(item));
+                });
+                return tempList;
+            }));
+    }
+
     /**
      * 添加编辑标签
      * @param tagCreate
@@ -89,6 +106,18 @@ export class TagManagementService {
     public requestTagSortData(label_id: string, to_label_id: string): Observable<any> {
         const params = {to_label_id};
         const httpUrl = `${this.domain}/admin/used_car/labels/${label_id}/serial_number`;
+        return this.httpService.put(httpUrl, params).pipe(map(res => res.body));
+    }
+
+    /**
+     * 标签排序
+     * @param label_id
+     * @param car_info_id
+     * @param to_car_info_id
+     */
+    public requestCarSortData(label_id, car_info_id: string, to_car_info_id: string): Observable<any> {
+        const params = {to_car_info_id};
+        const httpUrl = `${this.domain}/admin/used_car/labels/${label_id}/car_info/${car_info_id}/serial_number`;
         return this.httpService.put(httpUrl, params).pipe(map(res => res.body));
     }
 }

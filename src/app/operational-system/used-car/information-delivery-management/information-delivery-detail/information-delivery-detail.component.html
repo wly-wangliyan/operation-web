@@ -1,1 +1,316 @@
-<p>information-delivery-detail works!</p>
+<div class="content-header">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'明细'">
+    </app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+    <div class="content-container">
+        <div class="content-flow">
+            <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>详细信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label" style="line-height: initial">
+                            <span>发布城市</span>
+                        </label>
+                        <div class="control-input">
+                            <p class="read-only-info">沈阳</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label" style="margin-top: -3px">
+                            <b>*</b>
+                            <span>图片</span>
+                        </label>
+                        <div>
+                            <app-z-photo-select [limitImgSize]="2"
+                                                [maxLength]="30"
+                                                [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
+                                                [imageHeight]="100"
+                                                [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
+                                                file_id="informationDeliveryImg" #informationDeliveryImg>
+                            </app-z-photo-select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <span>标签</span>
+                        </label>
+                        <div class="control-input" style="width: 80%">
+                            <ul class="tag-list">
+                                <li *ngFor="let selectTag of selectTagList">
+                                    <span>{{selectTag.label_name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>车辆识别代号（VIN码）</span>
+                        </label>
+                        <div class="control-input" style="flex-direction: column">
+                            <input readonly class="form-control" [(ngModel)]="carDetail.vin" name="vin"
+                                   required appIgnoreSpace
+                                   placeholder="车辆识别代号（VIN码）">
+                            <p class="read-only-info" style="margin-top: 10px">17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>品牌</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
+                                <input class="form-control" placeholder="请选择品牌车系"
+                                       [value]="carDetail.car_param_id?carParam.carBrandName:''"
+                                       nz-input readonly required/>
+                                <!--                                <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>-->
+                                <!--                                </ng-template>-->
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                车辆颜色
+                            </label>
+                            <div class="control-input">
+                                <input class="form-control" readonly [(ngModel)]="carDetail.color" name="color">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                首次上牌时间
+                            </label>
+                            <div class="control-input">
+                                <nz-month-picker [(ngModel)]="carDetail.registration_time" name="registration_time"
+                                                 disabled></nz-month-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                行驶里程
+                            </label>
+                            <div class="control-input">
+                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn">
+                                    <input class="form-control" [(ngModel)]="carDetail.mileage" name="mileage" readonly
+                                           [appFloatNumber]="4"
+                                           nz-input/>
+                                    <ng-template #saveUrlBtn><a style="padding: 10px;">万公里</a>
+                                    </ng-template>
+                                </nz-input-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                转让价格
+                            </label>
+                            <div class="control-input">
+                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
+                                    <input class="form-control" [(ngModel)]="carDetail.price" name="price"
+                                           [appFloatNumber]="4" readonly nz-input/>
+                                    <ng-template #saveUrlBtn1><a style="padding: 10px;">万元</a>
+                                    </ng-template>
+                                </nz-input-group>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label" style="width: 110px">
+                            </label>
+                            <div class="control-input">
+                                <label nz-checkbox [(ngModel)]="isTransferFee" disabled name="isTransferFee">
+                                    包含过户费用
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                车辆类型
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control" [(ngModel)]="carDetail.car_type" name="car_type" readonly>
+                                    <option value="">请选择车辆类型</option>
+                                    <option *ngFor="let carType of carManagementModel.carTypeList"
+                                            [value]="carType.value">{{carType.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>车况描述</span>
+                        </label>
+                        <div class="control-input rich-input">
+                            <app-z-text-ckeditor ckEditorId="informationDeliveryEditor"></app-z-text-ckeditor>
+                        </div>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>联系方式</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>信息发布商家</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-input-group [nzAddOnAfter]="saveUrlBtnMerchant">
+                                <input class="form-control" [value]="carDetail.merchant_name"
+                                       placeholder="请选择信息发布商家"
+                                       nz-input readonly/>
+                                <!--                                <ng-template #saveUrlBtnMerchant>-->
+                                <!--                                    <a style="padding: 10px;" (click)="selectMerchantComponent.open(selectedMerchant)">选择</a>-->
+                                <!--                                </ng-template>-->
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    <div class="row sort-three" *ngIf="selectedMerchant.merchant_id">
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                联系电话
+                            </label>
+                            <div class="control-input">
+                                <input class="form-control" readonly [(ngModel)]="carDetail.telephone" name="telephone">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <b>*</b>
+                                联系人
+                            </label>
+                            <div class="control-input">
+                                <input class="form-control" [(ngModel)]="carDetail.contact" name="contact" readonly
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>看车地址</span>
+                        </label>
+                        <div class="control-input" style="width: 740px!important;">
+                            <app-pro-city-dist-select [isEdit]="false" [regionsObj]="regionsObj"
+                                                      #projectInfoPro></app-pro-city-dist-select>
+                            <input class="form-control" [(ngModel)]="carDetail.address" name="address" readonly
+                                   style="margin-left: 10px"
+                                   placeholder="详细地址">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                        </label>
+                        <div class="control-input">
+                            <input readonly [value]="carDetail.lon" class="form-control"
+                                   placeholder="经度">
+                            <input readonly class="form-control" [value]="carDetail.lat" placeholder="纬度"
+                                   style="margin-left: 10px">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <app-z-map-select-point-v2 [mapObj]="mapObj"></app-z-map-select-point-v2>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>更多信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                <span>过户次数</span>
+                            </label>
+                            <div class="control-input">
+                                <select class="form-control" [(ngModel)]="carDetail.transfer_times" readonly
+                                        name="transfer_times">
+                                    <option value="">请选择过户次数</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                <span>车辆是否抵押</span>
+                            </label>
+                            <div class="control-input">
+                                <nz-radio-group [(ngModel)]="carDetail.has_mortgage" name="has_mortgage" disabled>
+                                    <label nz-radio [nzValue]="1">有</label>
+                                    <label nz-radio [nzValue]="2">无</label>
+                                </nz-radio-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row sort-three">
+                        <div>
+                            <label class="control-label">
+                                年检到期
+                            </label>
+                            <div class="control-input">
+                                <nz-month-picker [(ngModel)]="carDetail.check_deadline" name="check_deadline"
+                                                 disabled></nz-month-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                交强险到期
+                            </label>
+                            <div class="control-input">
+                                <nz-month-picker [(ngModel)]="carDetail.compulsory_traffic_insurance_deadline" disabled
+                                                 name="compulsory_traffic_insurance_deadline"></nz-month-picker>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="control-label">
+                                商业险到期
+                            </label>
+                            <div class="control-input">
+                                <nz-month-picker [(ngModel)]="carDetail.commercial_insurance_deadline" disabled
+                                                 name="commercial_insurance_deadline"></nz-month-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="align-items: flex-start">
+                        <label class="control-label">
+                            车辆家装配置
+                        </label>
+                        <div class="control-input" style="width: 650px">
+                            <nz-checkbox-group disabled [(ngModel)]="carManagementModel.checkOptions"
+                                               name="checkOptions"></nz-checkbox-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
