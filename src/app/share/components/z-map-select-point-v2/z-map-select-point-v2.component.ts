@@ -19,6 +19,7 @@ export class ZMapSelectPointV2Component implements OnInit {
 
     @Output('selectedMarkerInfo')
     public selectedMarkerInfo = new EventEmitter();
+    public isSearch = false;
 
     public ngOnInit() {
     }
@@ -26,14 +27,15 @@ export class ZMapSelectPointV2Component implements OnInit {
     /**
      * 打开地图
      */
-    public openMap() {
+    public openMap(isSearch = false) {
+        this.isSearch = isSearch;
         this.InitMap();
     }
 
-    public aaa() {
+    public checkMap() {
         if (this.mapObj.type === MapType.view) {
             this.mapObj.type = MapType.edit;
-            this.map.setStatus({dragEnable: true});
+            this.map.setStatus({dragEnable: true, scrollWheel: true});
         }
     }
 
@@ -46,6 +48,7 @@ export class ZMapSelectPointV2Component implements OnInit {
             if (AMap) {
                 this.map = new AMap.Map('container', {
                     resizeEnable: true,
+                    scrollWheel: false,
                     dragEnable: false,
                     keyboardEnable: true,
                     doubleClickZoom: false,
@@ -95,7 +98,7 @@ export class ZMapSelectPointV2Component implements OnInit {
      */
     private showMarkerAndInfoWindow(location: any) {
         this.mapObj.type = MapType.view;
-        this.map.setStatus({dragEnable: false});
+        this.map.setStatus({dragEnable: false, scrollWheel: false});
         this.selectedMarker.point = location;
         this.addMarker(this.selectedMarker.point);
         this.getPosition(() => {

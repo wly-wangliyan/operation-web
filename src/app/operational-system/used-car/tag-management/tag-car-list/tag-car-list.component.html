@@ -1,13 +1,6 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'"></app-crumb>
-    <ul class="header-right">
-        <li>
-            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-                    [routerLink]="['../information-delivery-create']">
-                新建
-            </button>
-        </li>
-    </ul>
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'标签管理'" [level2RelativePath]="'../'" [level3Name]="'信息列表'">
+    </app-crumb>
 </div>
 
 <div class="content-flow">
@@ -81,7 +74,7 @@
                             创建时间：{{informationDelivery.created_time ? (informationDelivery.created_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
                         </td>
                     </tr>
-                    <tr>
+                    <tr cdkDrag>
                         <td>{{i + 1}}</td>
 
                         <td class="img-item">
@@ -101,7 +94,8 @@
                             <a [title]="'置顶'" *ngIf="i!==0"
                                (appZDebounceClick)="onCarSortClick(informationDelivery.car_info_id)">置顶</a>
                             <a [title]="'明细'"
-                               [routerLink]="['../../tag-car-detail',label_id,informationDelivery.car_info_id]">明细</a>
+                               [routerLink]="['../../tag-car-detail',label_id,informationDelivery.car_info_id]"
+                               [queryParams]="{isHasTag: true}">明细</a>
                         </td>
                     </tr>
                 </ng-template>

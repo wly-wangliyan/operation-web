@@ -78,8 +78,42 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.levelName = this.car_info_id ? '编辑信息' : '创建信息';
     }
 
-    public onClickImageExample() {
-        this.imageExampleComponent.onShow();
+    /**
+     * 校验发布按钮
+     */
+    public get checkDisabledValid() {
+        return !this.carParam.car_param_id || !this.CheckImgValid || !this.carDetail.registration_time || !this.carDetail.merchant_id || !this.carDetail.lon || !this.carDetail.lat || !this.isAlreadyFill;
+    }
+
+    // 富文本编辑器是否有值
+    public get isAlreadyFill(): boolean {
+        if (CKEDITOR.instances.informationDeliveryEditor) {
+            const informationDeliveryEditor = !!CKEDITOR.instances.informationDeliveryEditor.getData();
+            return !informationDeliveryEditor;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 搜索
+     */
+    public get isDisabledSearch(): boolean {
+        return !(this.regionsObj.province && this.regionsObj.city && this.regionsObj.district && this.carDetail.address);
+    }
+
+    /**
+     * 校验是否选择了图片
+     * @returns boolean
+     */
+    private get CheckImgValid(): boolean {
+        if (this.informationDeliveryImgSelectComponent) {
+            const images = this.informationDeliveryImgSelectComponent.imageList.map(item => item.sourceUrl);
+            if (images.length > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -113,10 +147,6 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.carDetail.label_ids = event.map(item => item.label_id).join(',');
     }
 
-    public get isDisabledSearch(): boolean {
-        return !(this.regionsObj.province && this.regionsObj.city && this.regionsObj.district && this.carDetail.address);
-    }
-
     /**
      * 选择电话
      * @param event
@@ -129,6 +159,17 @@ export class InformationDeliveryEditComponent implements OnInit {
         }
     }
 
+    /**
+     * 删除标签
+     * @param index
+     */
+    public onClickDeleteTag(index: number) {
+        this.selectTagList.splice(index, 1);
+    }
+
+    /**
+     * 选择标签
+     */
     public onClickTag() {
         const selectTagList = this.selectTagList.map(item => item.label_id);
         this.selectTagComponent.onShowTagList(selectTagList);
@@ -141,17 +182,10 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.errMessageGroup.errJson.commodity_images = new ErrMessageBase();
     }
 
-    // 推荐设置打开所属厂商选择组件
-    public onClickBrand(): void {
-        if (!this.car_info_id) {
-            this.selectBrandComponent.open(this.carParam, () => {
-                // this.accessoryNewList = [];
-                // this.noResultText = '数据加载中...';
-                // this.searchText$.next();
-            });
-        }
-    }
-
+    /**
+     * 搜索
+     * @param isSearch
+     */
     public onClickReach(isSearch = true) {
         this.mapObj.type = MapType.edit;
         if (isSearch) {
@@ -160,7 +194,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.mapObj.hasDetailedAddress = true;
         this.mapObj.address = this.proCityDistSelectComponent.selectedAddress + this.carDetail.address;
         this.mapObj.cityCode = this.proCityDistSelectComponent.regionsObj.region_id;
-        this.zMapSelectPointV2Component.openMap();
+        this.zMapSelectPointV2Component.openMap(!!this.mapObj.address);
     }
 
     public disabledRegistrationTime = (startValue: Date): boolean => {
@@ -172,18 +206,10 @@ export class InformationDeliveryEditComponent implements OnInit {
         return differenceInCalendarDays(new Date(), startValue) > 0;
     };
 
-    private initData() {
-        this.clearErr();
-        this.carManagementModel.initData();
-        if (!this.car_info_id) {
-            this.loading = false;
-            this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
-            this.zMapSelectPointV2Component.openMap();
-        } else {
-            this.requestInformationDeliveryDetail();
-        }
-    }
-
+    /**
+     * 选择marker
+     * @param event
+     */
     public selectedMarkerInfo(event) {
         if (event.selectedMarker.point.lng && event.selectedMarker.point.lat) {
             this.carDetail.lon = event.selectedMarker.point.lng;
@@ -204,8 +230,14 @@ export class InformationDeliveryEditComponent implements OnInit {
         }
     }
 
+    /**
+     * 返回列表
+     */
+    public goToListPage() {
+        this.router.navigate(['../'], {relativeTo: this.route});
+    }
+
     public onEditFormSubmit() {
-        console.log(this.regionsObj);
         const params: InformationDeliveryManagementParams = JSON.parse(JSON.stringify(this.carDetail));
         const vinReg = /^(?!(?:\d+|[a-zA-Z]+)$)[\dA-HJ-NPR-Z]{17}$/;
         this.clearErr();
@@ -266,24 +298,19 @@ export class InformationDeliveryEditComponent implements OnInit {
     }
 
     /**
-     * 校验是否选择了图片
-     * @returns boolean
+     * 初始化
+     * @private
      */
-    public get CheckImgValid(): boolean {
-        if (this.informationDeliveryImgSelectComponent) {
-            const images = this.informationDeliveryImgSelectComponent.imageList.map(item => item.sourceUrl);
-            if (images.length > 0) {
-                return true;
-            }
+    private initData() {
+        this.clearErr();
+        this.carManagementModel.initData();
+        if (!this.car_info_id) {
+            this.loading = false;
+            this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
+            this.zMapSelectPointV2Component.openMap();
+        } else {
+            this.requestInformationDeliveryDetail();
         }
-        return false;
-    }
-
-    /**
-     * 返回列表
-     */
-    public goToListPage() {
-        this.router.navigate(['../'], {relativeTo: this.route});
     }
 
     /**
@@ -309,8 +336,8 @@ export class InformationDeliveryEditComponent implements OnInit {
                 }
             });
             timer(1000).subscribe(() => {
-                CKEDITOR.instances.informationDeliveryEditor.destroy(true);
-                CKEDITOR.replace('informationDeliveryEditor', {width: '900px'}).setData(data.car_description);
+                const tempContent = data.car_description.replace('/\r\n/g', '').replace(/\n/g, '');
+                CKEDITOR.instances.informationDeliveryEditor.setData(tempContent);
             });
             this.onClickReach(false);
         }, err => {

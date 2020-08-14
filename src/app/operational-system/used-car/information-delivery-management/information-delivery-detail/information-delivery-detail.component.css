@@ -113,14 +113,6 @@ li + li {
     text-align: left;
 }
 
-:host ::ng-deep .content-container .form-control, :host ::ng-deep .ant-input {
-    background: #fff !important;
-}
-
-:host ::ng-deep .content-container .form-control[readonly] {
-    background: #e9ecef !important;
-}
-
 .modal-footer{
     width: 800px;
 }

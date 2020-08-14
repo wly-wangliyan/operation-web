@@ -133,8 +133,8 @@ export class InformationDeliveryManagementParams extends EntityBase {
     public city: string = undefined; // 市
     public district: string = undefined; // 区
     public address: string = undefined; // 详细地址
-    public lon: string = undefined; // 经度
-    public lat: string = undefined; // 纬度
+    public lon = ''; // 经度
+    public lat = ''; // 纬度
     public region_id: string = undefined;
     public car_description: string = undefined;
     public transfer_times: any = '';  // 过户次数
@@ -155,10 +155,10 @@ export class InformationDeliveryManagementParams extends EntityBase {
             this.registration_time = new Date(source.registration_time * 1000);
             this.mileage = (source.mileage / 10000).toFixed(4);
             this.price = (source.price / 10000).toFixed(4);
-            this.lon = source.lon;
-            this.lat = source.lat;
+            this.lon = source.lon || '';
+            this.lat = source.lat || '';
             this.address = source.address;
-            this.transfer_times = source.transfer_times;
+            this.transfer_times = source.transfer_times || '';
             this.has_mortgage = source.has_mortgage;
             this.check_deadline = new Date(source.check_deadline * 1000);
             this.compulsory_traffic_insurance_deadline = new Date(source.compulsory_traffic_insurance_deadline * 1000);

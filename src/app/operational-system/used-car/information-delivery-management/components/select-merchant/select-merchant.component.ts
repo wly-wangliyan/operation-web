@@ -44,14 +44,16 @@ export class SelectMerchantComponent implements OnInit, NzSearchAdapter {
 
     // 勾选商户
     public onItemChecked(merchant: MerchantManagementEntity, checked: boolean): void {
-        this.selectedMerchant = checked ? merchant : null;
+        this.selectedMerchant = checked ? merchant : new MerchantManagementEntity();
     }
 
     // 确定
     public onCheckClick() {
-        if (!this.selectedMerchant.consult_info || !this.selectedMerchant.consult_info.length) {
-            this.globalService.promptBox.open('该商户未添加联系电话！', null, 2000, null, false);
-            return;
+        if (this.selectedMerchant.merchant_id) {
+            if (!this.selectedMerchant.consult_info || !this.selectedMerchant.consult_info.length) {
+                this.globalService.promptBox.open('该商户未添加联系电话！', null, 2000, null, false);
+                return;
+            }
         }
         $('#chooseMerchantModal').modal('hide');
         this.selectedMerchantEvent.emit(this.selectedMerchant);

@@ -29,7 +29,7 @@
                         </label>
                         <div>
                             <p class="read-only-info">首图建议使用左前45°车辆图片，展示效果更好<span
-                                    (click)="onClickImageExample()">图片示例</span></p>
+                                    (click)="imageExampleComponent.onShow()">图片示例</span></p>
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                                 [maxLength]="30"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
@@ -49,9 +49,9 @@
                         </label>
                         <div class="control-input" style="width: 80%">
                             <ul class="tag-list">
-                                <li *ngFor="let selectTag of selectTagList">
+                                <li *ngFor="let selectTag of selectTagList;let index=index">
                                     <span>{{selectTag.label_name}}</span>
-                                    <img src="/assets/images/tag_del.png">
+                                    <img src="/assets/images/tag_del.png" (click)="onClickDeleteTag(index)">
                                 </li>
                                 <li (click)="onClickTag()" *ngIf="selectTagList.length<3">
                                     <span>选择标签</span>
@@ -67,10 +67,13 @@
                             <span>车辆识别代号（VIN码）</span>
                         </label>
                         <div class="control-input" style="flex-direction: column">
-                            <input [disabled]="car_info_id" class="form-control" [(ngModel)]="carDetail.vin" name="vin"
+                            <input [readOnly]="car_info_id" class="form-control" [(ngModel)]="carDetail.vin" name="vin"
+                                   maxlength="17"
                                    required appIgnoreSpace
                                    placeholder="车辆识别代号（VIN码）">
-                            <p class="read-only-info" style="margin-top: 10px">17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改</p>
+                            <p class="read-only-info" style="margin-top: 10px">
+                                17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改
+                            </p>
                         </div>
                     </div>
                     <div class="row">
@@ -79,11 +82,16 @@
                             <span>品牌</span>
                         </label>
                         <div class="control-input">
-                            <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
+                            <input class="form-control" placeholder="请选择品牌车系"
+                                   [value]="carDetail.car_param_id?carParam.carBrandName:''"
+                                   nz-input readonly *ngIf="car_info_id"/>
+                            <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand1" *ngIf="!car_info_id">
                                 <input class="form-control" placeholder="请选择品牌车系"
                                        [value]="carDetail.car_param_id?carParam.carBrandName:''"
                                        nz-input readonly required/>
-                                <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>
+                                <ng-template #saveUrlBtnBrand1>
+                                    <a style="padding: 10px;"
+                                       (click)="selectBrandComponent.open(carParam)">选择</a>
                                 </ng-template>
                             </nz-input-group>
                         </div>
@@ -120,6 +128,7 @@
                             <div class="control-input">
                                 <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn">
                                     <input class="form-control" [(ngModel)]="carDetail.mileage" name="mileage"
+                                           maxlength="100"
                                            [appFloatNumber]="4" required
                                            nz-input/>
                                     <ng-template #saveUrlBtn><a style="padding: 10px;">万公里</a>
@@ -137,6 +146,7 @@
                             <div class="control-input">
                                 <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
                                     <input class="form-control" [(ngModel)]="carDetail.price" name="price"
+                                           maxlength="100"
                                            [appFloatNumber]="4" required nz-input/>
                                     <ng-template #saveUrlBtn1><a style="padding: 10px;">万元</a>
                                     </ng-template>
@@ -338,7 +348,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="sure-btn" type="submit" nz-button nzType="primary"
-                            [disabled]="!editInformationDeliveryModal.form.valid||!CheckImgValid"
+                            [disabled]="!editInformationDeliveryModal.form.valid||!checkDisabledValid"
                             (appZDebounceClick)="onEditFormSubmit()">发布
                     </button>
                     <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>

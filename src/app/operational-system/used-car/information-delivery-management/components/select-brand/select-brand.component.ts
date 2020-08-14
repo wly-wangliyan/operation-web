@@ -158,7 +158,7 @@ export class SelectBrandComponent {
     /**
      * 打开
      */
-    public open(data: InformationDeliveryCarParam, sureFunc: any, closeFunc: any = null): any {
+    public open(data: InformationDeliveryCarParam, sureFunc: any = null, closeFunc: any = null): any {
         $('.tree_ul').scrollTop(0);
         this.initModal();
         this.carParam = data || new InformationDeliveryCarParam();
@@ -235,6 +235,10 @@ export class SelectBrandComponent {
                         node.isChecked = true;
                         this.defaultCheckedKeys = [node.key];
                     }
+                }
+            } else {
+                if (node.level === 4) {
+                    this.carParam.car_param_id = '';
                 }
             }
         }
@@ -347,13 +351,7 @@ export class SelectBrandComponent {
     // 回传选中事件
     public onSelectCarSeries(): void {
         this.selectedBrandEvent.emit(this.defaultCheckedKeys[0]);
-        if (this.sureCallback) {
-            $('#selectMultiBrandFirmModal').modal('hide');
-            const temp = this.sureCallback;
-            this.closeCallback = null;
-            this.sureCallback = null;
-            temp();
-        }
+        $('#selectMultiBrandFirmModal').modal('hide');
     }
 
 }

@@ -29,8 +29,7 @@ export class TagCarListComponent implements OnInit {
     constructor(private globalService: GlobalService,
                 private route: ActivatedRoute,
                 private router: Router,
-                private tagManagementService: TagManagementService,
-                private informationDeliveryManagementService: InformationDeliveryManagementService) {
+                private tagManagementService: TagManagementService) {
         this.route.paramMap.subscribe(map => {
             this.label_id = map.get('label_id');
         });

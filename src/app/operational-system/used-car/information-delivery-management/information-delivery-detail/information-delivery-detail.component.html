@@ -1,5 +1,9 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'明细'">
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'明细'"
+               *ngIf="!isHasTag">
+    </app-crumb>
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'标签管理'" [level2RelativePath]="'../'" [level3RelativePath]="lastUrl"
+               [level3Name]="'信息列表'" [level4Name]="'明细'" *ngIf="isHasTag">
     </app-crumb>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
@@ -56,9 +60,7 @@
                         </label>
                         <div class="control-input" style="flex-direction: column">
                             <input readonly class="form-control" [(ngModel)]="carDetail.vin" name="vin"
-                                   required appIgnoreSpace
                                    placeholder="车辆识别代号（VIN码）">
-                            <p class="read-only-info" style="margin-top: 10px">17位，数字和因为字母组合，不包含QIO。填写VIN码发布后不允许修改</p>
                         </div>
                     </div>
                     <div class="row">
@@ -67,13 +69,9 @@
                             <span>品牌</span>
                         </label>
                         <div class="control-input">
-                            <nz-input-group [nzAddOnAfter]="saveUrlBtnBrand">
-                                <input class="form-control" placeholder="请选择品牌车系"
-                                       [value]="carDetail.car_param_id?carParam.carBrandName:''"
-                                       nz-input readonly required/>
-                                <!--                                <ng-template #saveUrlBtnBrand><a style="padding: 10px;" (click)="onClickBrand()">选择</a>-->
-                                <!--                                </ng-template>-->
-                            </nz-input-group>
+                            <input class="form-control" placeholder="请选择品牌车系"
+                                   [value]="carDetail.car_param_id?carParam.carBrandName:''"
+                                   readonly/>
                         </div>
                     </div>
                     <div class="row sort-three">
@@ -102,13 +100,7 @@
                                 行驶里程
                             </label>
                             <div class="control-input">
-                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn">
-                                    <input class="form-control" [(ngModel)]="carDetail.mileage" name="mileage" readonly
-                                           [appFloatNumber]="4"
-                                           nz-input/>
-                                    <ng-template #saveUrlBtn><a style="padding: 10px;">万公里</a>
-                                    </ng-template>
-                                </nz-input-group>
+                                <input class="form-control" [(ngModel)]="carDetail.mileage" name="mileage" readonly/>
                             </div>
                         </div>
                     </div>
@@ -119,12 +111,7 @@
                                 转让价格
                             </label>
                             <div class="control-input">
-                                <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
-                                    <input class="form-control" [(ngModel)]="carDetail.price" name="price"
-                                           [appFloatNumber]="4" readonly nz-input/>
-                                    <ng-template #saveUrlBtn1><a style="padding: 10px;">万元</a>
-                                    </ng-template>
-                                </nz-input-group>
+                                <input class="form-control" [(ngModel)]="carDetail.price" name="price" readonly/>
                             </div>
                         </div>
                         <div>
@@ -171,14 +158,9 @@
                             <span>信息发布商家</span>
                         </label>
                         <div class="control-input">
-                            <nz-input-group [nzAddOnAfter]="saveUrlBtnMerchant">
-                                <input class="form-control" [value]="carDetail.merchant_name"
-                                       placeholder="请选择信息发布商家"
-                                       nz-input readonly/>
-                                <!--                                <ng-template #saveUrlBtnMerchant>-->
-                                <!--                                    <a style="padding: 10px;" (click)="selectMerchantComponent.open(selectedMerchant)">选择</a>-->
-                                <!--                                </ng-template>-->
-                            </nz-input-group>
+                            <input class="form-control" [value]="carDetail.merchant_name"
+                                   placeholder="请选择信息发布商家"
+                                   readonly/>
                         </div>
                     </div>
                     <div class="row sort-three" *ngIf="selectedMerchant.merchant_id">
@@ -197,8 +179,7 @@
                                 联系人
                             </label>
                             <div class="control-input">
-                                <input class="form-control" [(ngModel)]="carDetail.contact" name="contact" readonly
-                                       required>
+                                <input class="form-control" [(ngModel)]="carDetail.contact" name="contact" readonly>
                             </div>
                         </div>
                     </div>
@@ -240,21 +221,8 @@
                                 <span>过户次数</span>
                             </label>
                             <div class="control-input">
-                                <select class="form-control" [(ngModel)]="carDetail.transfer_times" readonly
-                                        name="transfer_times">
-                                    <option value="">请选择过户次数</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
+                                <input class="form-control" [(ngModel)]="carDetail.transfer_times" readonly
+                                       name="transfer_times">
                             </div>
                         </div>
                         <div>

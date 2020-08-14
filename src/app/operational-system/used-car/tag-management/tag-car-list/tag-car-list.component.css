@@ -74,26 +74,14 @@
     font-size: 12px;
 }
 
-.remark-btn {
-    width: 70px;
-    height: 27px;
-    border-color: rgba(62, 113, 247, 1);
-    border-radius: 4px;
-    text-align: center;
-    line-height: 27px;
-    padding: 0 10px !important;
-    margin-top: 6px;
-    font-size: 12px;
-    background: rgba(241, 241, 241, 1);
-    color: rgba(62, 113, 247, 1);
-}
-
-@media screen and (max-width: 1600px) {
-    .fee {
-        right: 10px;
-    }
-}
-
 p{
     margin-bottom: 0;
+}
+
+::ng-deep .cdk-drag-preview {
+    display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+    opacity: 0;
 }

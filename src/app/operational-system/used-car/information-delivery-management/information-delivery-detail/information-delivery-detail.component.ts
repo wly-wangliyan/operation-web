@@ -37,7 +37,7 @@ export class InformationDeliveryDetailComponent implements OnInit {
     // @ViewChild(ImageExampleComponent, {static: false}) public imageExampleComponent: ImageExampleComponent;
     @ViewChild(ZMapSelectPointV2Component, {static: true}) public zMapSelectPointV2Component: ZMapSelectPointV2Component;
     public carManagementModel: InformationDeliveryManagementModel = new InformationDeliveryManagementModel();
-    public car_info_id = '';
+    private car_info_id = '';
     public loading = true; // 标记loading
     public carDetail: InformationDeliveryManagementParams = new InformationDeliveryManagementParams();
     public imageList: Array<string> = [];
@@ -45,6 +45,8 @@ export class InformationDeliveryDetailComponent implements OnInit {
     public selectTagList: Array<TagManagementEntity> = [];
     public isTransferFee = false; // 是否包含过户费
     public carParam: InformationDeliveryCarParam = new InformationDeliveryCarParam();
+    public isHasTag = false;
+    public lastUrl = '../';
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -53,6 +55,11 @@ export class InformationDeliveryDetailComponent implements OnInit {
                 private informationDeliveryManagementService: InformationDeliveryManagementService) {
         this.route.paramMap.subscribe(map => {
             this.car_info_id = map.get('car_info_id');
+            const label_id = map.get('label_id');
+            this.lastUrl = `../../../tag-car-list/${label_id}`;
+        });
+        this.route.queryParamMap.subscribe(map => {
+            this.isHasTag = !!map.get('isHasTag');
         });
     }
 
@@ -85,7 +92,6 @@ export class InformationDeliveryDetailComponent implements OnInit {
                 }
             });
             timer(1000).subscribe(() => {
-                // CKEDITOR.instances.informationDeliveryEditor.destroy(true);
                 const tempContent = data.car_description.replace('/\r\n/g', '').replace(/\n/g, '');
                 CKEDITOR.instances.informationDeliveryEditor.setData(tempContent);
                 CKEDITOR.instances.informationDeliveryEditor.setReadOnly(true);
