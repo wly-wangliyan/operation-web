@@ -93,9 +93,9 @@
                         <td class="operation">
                             <a [title]="'置顶'" *ngIf="i!==0"
                                (appZDebounceClick)="onCarSortClick(informationDelivery.car_info_id)">置顶</a>
-                            <a [title]="'明细'"
+                            <a [title]="'详情'"
                                [routerLink]="['../../tag-car-detail',label_id,informationDelivery.car_info_id]"
-                               [queryParams]="{isHasTag: true}">明细</a>
+                               [queryParams]="{isHasTag: true}">详情</a>
                         </td>
                     </tr>
                 </ng-template>

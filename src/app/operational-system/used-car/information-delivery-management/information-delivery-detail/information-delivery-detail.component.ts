@@ -93,8 +93,8 @@ export class InformationDeliveryDetailComponent implements OnInit {
             });
             timer(1000).subscribe(() => {
                 const tempContent = data.car_description.replace('/\r\n/g', '').replace(/\n/g, '');
-                CKEDITOR.instances.informationDeliveryEditor.setData(tempContent);
-                CKEDITOR.instances.informationDeliveryEditor.setReadOnly(true);
+                CKEDITOR.instances.informationDeliveryEditor1.setData(tempContent);
+                CKEDITOR.instances.informationDeliveryEditor1.setReadOnly(true);
             });
             this.mapObj.type = MapType.view;
             this.mapObj.hasDetailedAddress = true;

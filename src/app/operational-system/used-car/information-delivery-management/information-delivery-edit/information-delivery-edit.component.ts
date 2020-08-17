@@ -82,14 +82,18 @@ export class InformationDeliveryEditComponent implements OnInit {
      * 校验发布按钮
      */
     public get checkDisabledValid() {
-        return !this.carParam.car_param_id || !this.CheckImgValid || !this.carDetail.registration_time || !this.carDetail.merchant_id || !this.carDetail.lon || !this.carDetail.lat || !this.isAlreadyFill;
+        if (this.carDetail.registration_time && this.carParam.car_param_id && this.carDetail.merchant_id && this.carDetail.lon && this.carDetail.lat && !this.isAlreadyFill && this.CheckImgValid) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // 富文本编辑器是否有值
     public get isAlreadyFill(): boolean {
-        if (CKEDITOR.instances.informationDeliveryEditor) {
-            const informationDeliveryEditor = !!CKEDITOR.instances.informationDeliveryEditor.getData();
-            return !informationDeliveryEditor;
+        if (CKEDITOR.instances.informationDeliveryCreate) {
+            const informationDeliveryCreate = !!CKEDITOR.instances.informationDeliveryCreate.getData();
+            return !informationDeliveryCreate;
         } else {
             return true;
         }
@@ -178,8 +182,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     /** 初始化错误信息 */
     public clearErr(): void {
         this.errMessageGroup.errJson = {};
-        this.errMessageGroup.errJson.cover_image = new ErrMessageBase();
-        this.errMessageGroup.errJson.commodity_images = new ErrMessageBase();
+        this.errMessageGroup.errJson.images = new ErrMessageBase();
     }
 
     /**
@@ -259,14 +262,12 @@ export class InformationDeliveryEditComponent implements OnInit {
         params.commercial_insurance_deadline = new Date(params.commercial_insurance_deadline).getTime() / 1000;
         params.mileage = parseFloat(params.mileage) * 10000;
         params.price = parseFloat(params.price) * 10000;
-        params.car_description = CKEDITOR.instances.informationDeliveryEditor.getData().replace('/\r\n/g', '').replace(/\n/g, '');
+        params.car_description = CKEDITOR.instances.informationDeliveryCreate.getData().replace('/\r\n/g', '').replace(/\n/g, '');
         const _checkOptions = this.carManagementModel.checkOptions.filter(item => item.checked);
         params.extra_info = _checkOptions.map(item => item.value).join(',');
-        console.log(111, params);
         this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
             this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
                 params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
-                console.log(111, params);
                 this.informationDeliveryManagementService.requestAddInformationDeliveryData(params, this.car_info_id).subscribe(data => {
                     this.globalService.promptBox.open(this.car_info_id ? '编辑成功！' : '创建成功', () => {
                         this.goToListPage();
@@ -305,7 +306,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.clearErr();
         this.carManagementModel.initData();
         if (!this.car_info_id) {
-            this.loading = false;
+            // this.loading = false;
             this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
             this.zMapSelectPointV2Component.openMap();
         } else {
@@ -337,7 +338,7 @@ export class InformationDeliveryEditComponent implements OnInit {
             });
             timer(1000).subscribe(() => {
                 const tempContent = data.car_description.replace('/\r\n/g', '').replace(/\n/g, '');
-                CKEDITOR.instances.informationDeliveryEditor.setData(tempContent);
+                CKEDITOR.instances.informationDeliveryCreate.setData(tempContent);
             });
             this.onClickReach(false);
         }, err => {

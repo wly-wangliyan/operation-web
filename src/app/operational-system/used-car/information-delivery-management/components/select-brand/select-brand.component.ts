@@ -233,7 +233,15 @@ export class SelectBrandComponent {
                     if (parentNode && parentNode.getChildren().length) {
                         parentNode.getChildren().forEach(item => item.isChecked = false);
                         node.isChecked = true;
+                        $('.tree-box ul').scrollTop(0);
+                        const _parentNode = parentNode.parentNode;
+                        const __parentNode = _parentNode.parentNode;
+                        const ___parentNode = __parentNode.parentNode;
                         this.defaultCheckedKeys = [node.key];
+                        this.defaultExpandedKeys = [parentNode.key];
+                        _parentNode && this.defaultExpandedKeys.push(_parentNode.key);
+                        __parentNode && this.defaultExpandedKeys.push(__parentNode.key);
+                        ___parentNode && this.defaultExpandedKeys.push(___parentNode.key);
                     }
                 }
             } else {

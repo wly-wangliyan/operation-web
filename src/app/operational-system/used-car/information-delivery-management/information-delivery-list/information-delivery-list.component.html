@@ -112,7 +112,7 @@
                         <td>
                             <nz-switch [ngModel]="informationDelivery.online_status===OnlineStatus.on"
                                        nzCheckedChildren="On"
-                                       [disabled]="informationDelivery.review_status===ReviewStatus.reviewing"
+                                       [disabled]="informationDelivery.review_status!==ReviewStatus.reviewed"
                                        [nzControl]=true
                                        style="height: 10px"
                                        nzUnCheckedChildren="Off"
@@ -126,8 +126,8 @@
                                (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.rejected)">驳回 </a>
                             <a [title]="'编辑'"
                                (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.update)">编辑</a>
-                            <a [title]="'明细'"
-                               [routerLink]="['../information-delivery-detail',informationDelivery.car_info_id]">明细</a>
+                            <a [title]="'详情'"
+                               [routerLink]="['../information-delivery-detail',informationDelivery.car_info_id]">详情</a>
                             <a [title]="'删除'"
                                (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.delete)">删除</a>
                         </td>

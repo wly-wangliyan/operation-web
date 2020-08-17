@@ -137,7 +137,7 @@ export class InformationDeliveryManagementParams extends EntityBase {
     public lat = ''; // 纬度
     public region_id: string = undefined;
     public car_description: string = undefined;
-    public transfer_times: any = '';  // 过户次数
+    public transfer_times: any = 0;  // 过户次数
     public has_mortgage: number = undefined; // 是否抵押 1有 2无
     public check_deadline: any = ''; // 年检到期时间
     public compulsory_traffic_insurance_deadline: any = ''; // 交强险到期时间
@@ -158,7 +158,7 @@ export class InformationDeliveryManagementParams extends EntityBase {
             this.lon = source.lon || '';
             this.lat = source.lat || '';
             this.address = source.address;
-            this.transfer_times = source.transfer_times || '';
+            this.transfer_times = source.transfer_times || 0;
             this.has_mortgage = source.has_mortgage;
             this.check_deadline = new Date(source.check_deadline * 1000);
             this.compulsory_traffic_insurance_deadline = new Date(source.compulsory_traffic_insurance_deadline * 1000);

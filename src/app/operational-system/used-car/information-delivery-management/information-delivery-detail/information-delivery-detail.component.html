@@ -1,9 +1,9 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'明细'"
+    <app-crumb [level1Name]="'二手车'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'信息详情'"
                *ngIf="!isHasTag">
     </app-crumb>
     <app-crumb [level1Name]="'二手车'" [level2Name]="'标签管理'" [level2RelativePath]="'../'" [level3RelativePath]="lastUrl"
-               [level3Name]="'信息列表'" [level4Name]="'明细'" *ngIf="isHasTag">
+               [level3Name]="'信息列表'" [level4Name]="'信息详情'" *ngIf="isHasTag">
     </app-crumb>
 </div>
 <div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
@@ -28,13 +28,12 @@
                     </div>
                     <div class="row">
                         <label class="control-label" style="margin-top: -3px">
-                            <b>*</b>
                             <span>图片</span>
                         </label>
                         <div>
                             <app-z-photo-select [limitImgSize]="2"
                                                 [maxLength]="30"
-                                                [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
+                                                [isCutCoverImg]="true" [imageWidth]="100"
                                                 [imageHeight]="100"
                                                 [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
                                                 file_id="informationDeliveryImg" #informationDeliveryImg>
@@ -55,7 +54,6 @@
                     </div>
                     <div class="row">
                         <label class=" control-label">
-                            <b>*</b>
                             <span>车辆识别代号（VIN码）</span>
                         </label>
                         <div class="control-input" style="flex-direction: column">
@@ -65,7 +63,6 @@
                     </div>
                     <div class="row">
                         <label class=" control-label">
-                            <b>*</b>
                             <span>品牌</span>
                         </label>
                         <div class="control-input">
@@ -77,7 +74,6 @@
                     <div class="row sort-three">
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 车辆颜色
                             </label>
                             <div class="control-input">
@@ -86,7 +82,6 @@
                         </div>
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 首次上牌时间
                             </label>
                             <div class="control-input">
@@ -96,7 +91,6 @@
                         </div>
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 行驶里程
                             </label>
                             <div class="control-input">
@@ -107,7 +101,6 @@
                     <div class="row sort-three">
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 转让价格
                             </label>
                             <div class="control-input">
@@ -125,25 +118,22 @@
                         </div>
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 车辆类型
                             </label>
                             <div class="control-input">
-                                <select class="form-control" [(ngModel)]="carDetail.car_type" name="car_type" readonly>
-                                    <option value="">请选择车辆类型</option>
-                                    <option *ngFor="let carType of carManagementModel.carTypeList"
-                                            [value]="carType.value">{{carType.name}}</option>
-                                </select>
+                                <ng-container *ngFor="let carType of carManagementModel.carTypeList">
+                                    <input class="form-control" *ngIf="carDetail.car_type==carType.value" readonly
+                                           [value]="carType.name">
+                                </ng-container>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <label class="control-label">
-                            <b>*</b>
                             <span>车况描述</span>
                         </label>
                         <div class="control-input rich-input">
-                            <app-z-text-ckeditor ckEditorId="informationDeliveryEditor"></app-z-text-ckeditor>
+                            <app-z-text-ckeditor ckEditorId="informationDeliveryEditor1"></app-z-text-ckeditor>
                         </div>
                     </div>
                 </div>
@@ -154,7 +144,6 @@
                     </div>
                     <div class="row">
                         <label class=" control-label">
-                            <b>*</b>
                             <span>信息发布商家</span>
                         </label>
                         <div class="control-input">
@@ -166,7 +155,6 @@
                     <div class="row sort-three" *ngIf="selectedMerchant.merchant_id">
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 联系电话
                             </label>
                             <div class="control-input">
@@ -175,7 +163,6 @@
                         </div>
                         <div>
                             <label class="control-label">
-                                <b>*</b>
                                 联系人
                             </label>
                             <div class="control-input">
@@ -185,7 +172,6 @@
                     </div>
                     <div class="row">
                         <label class="control-label">
-                            <b>*</b>
                             <span>看车地址</span>
                         </label>
                         <div class="control-input" style="width: 740px!important;">
