@@ -42,7 +42,6 @@ export class InformationDeliveryManagementModel {
         ];
 
         this.carTypeList = [
-            new CarTypeItem('不限', 0),
             new CarTypeItem('轿车', 1),
             new CarTypeItem('越野车/SUV', 2),
             new CarTypeItem('MPV', 3),
