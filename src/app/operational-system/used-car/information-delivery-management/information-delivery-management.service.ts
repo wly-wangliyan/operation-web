@@ -188,9 +188,9 @@ export class InformationDeliveryManagementParams extends EntityBase {
 
 export class InformationDeliveryManagementService {
 
-    // private domain = environment.CAR_SERVE;
+    private domain = environment.CAR_SERVE;
 
-    private domain = 'http://192.168.6.159:8340';
+    // private domain = 'http://192.168.6.159:8340';
 
     constructor(private httpService: HttpService) {
     }
