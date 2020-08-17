@@ -306,7 +306,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.clearErr();
         this.carManagementModel.initData();
         if (!this.car_info_id) {
-            // this.loading = false;
+            this.loading = false;
             this.mapObj.point = this.zMapSelectPointV2Component.defaultPoint;
             this.zMapSelectPointV2Component.openMap();
         } else {
