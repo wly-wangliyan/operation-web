@@ -107,15 +107,17 @@ export class MerchantEditComponent implements OnInit {
             this.regionsObj = new RegionEntity(data);
             this.merchantDetail = data.clone();
             if (data.consult_info && data.consult_info.length > 0) {
-                data.consult_info.forEach(item => {
+                data.consult_info.forEach((item, index) => {
                     const temp = new ConsultationEntity();
                     temp.name = item.name;
                     temp.telephone = item.telephone;
+                    temp.date += index;
                     this.consultationList.push(temp);
                 });
             } else {
                 this.consultationList = [new ConsultationEntity()];
             }
+            console.log(this.consultationList);
             this.loading = false;
         }, err => {
             this.globalService.httpErrorProcess(err);

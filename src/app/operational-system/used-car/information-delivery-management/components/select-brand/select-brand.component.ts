@@ -189,35 +189,29 @@ export class SelectBrandComponent {
         this.defaultExpandedKeys = [];
     }
 
-    // 加载下级菜单
+    /**
+     * 点击
+     * @param event
+     */
+    public onNzClick(event) {
+        if (event.eventName === 'click') {
+            const node = event.node;
+            if (node.level !== 4) {
+                node.isExpanded = true;
+                this.loadMenu(node);
+            } else {
+                node.isChecked = !node.isChecked;
+                this.checkMenu(node);
+            }
+
+        }
+    }
+
+    // 展开指定的树节点
     public onNzExpand(event: any): void {
         if (event.eventName === 'expand') {
             const node = event.node;
-            if (node && node.getChildren().length === 0 && node.isExpanded) {
-                if (node.level === 0) {
-                    this.carParam.car_brand = new CarBrandEntity();
-                    this.carParam.car_brand.car_brand_name = node.title;
-                    this.carParam.car_brand.car_brand_id = node.key;
-                    // 根据品牌获取厂商
-                    this.requestFirmListByBrand(node);
-                } else if (node.level === 1) {
-                    this.carParam.car_factory = new CarFactoryEntity();
-                    this.carParam.car_factory.car_factory_name = node.title;
-                    this.carParam.car_factory.car_factory_id = node.key;
-                    // 根据厂商获取汽车车系
-                    this.requestSeriesListByFirm(node);
-                } else if (node.level === 2) {
-                    this.carParam.car_series = new CarSeriesEntity();
-                    this.carParam.car_series.car_series_name = node.title;
-                    this.carParam.car_series.car_series_id = node.key;
-                    // 根据车系获取汽车排量
-                    this.requestCarParamsListByFirm(node);
-                } else if (node.level === 3) {
-                    this.carParam.car_displacement = node.title;
-                    // 根据排量获取汽车年份
-                    this.requestCarYearListByFirm(node);
-                }
-            }
+            this.loadMenu(node);
         }
     }
 
@@ -225,29 +219,71 @@ export class SelectBrandComponent {
     public onNzCheck(event: any): void {
         if (event.eventName === 'check') {
             const node = event.node;
-            if (node.isChecked) {
-                if (node.level === 4) {
-                    this.carParam.car_year_num = node.title;
-                    this.carParam.car_param_id = node.key;
-                    const parentNode = node.parentNode;
-                    if (parentNode && parentNode.getChildren().length) {
-                        parentNode.getChildren().forEach(item => item.isChecked = false);
-                        node.isChecked = true;
-                        $('.tree-box ul').scrollTop(0);
-                        const _parentNode = parentNode.parentNode;
-                        const __parentNode = _parentNode.parentNode;
-                        const ___parentNode = __parentNode.parentNode;
-                        this.defaultCheckedKeys = [node.key];
-                        this.defaultExpandedKeys = [parentNode.key];
-                        _parentNode && this.defaultExpandedKeys.push(_parentNode.key);
-                        __parentNode && this.defaultExpandedKeys.push(__parentNode.key);
-                        ___parentNode && this.defaultExpandedKeys.push(___parentNode.key);
-                    }
+            this.checkMenu(node);
+        }
+    }
+
+    /**
+     * 选中菜单
+     * @param node
+     * @private
+     */
+    private checkMenu(node) {
+        if (node.isChecked) {
+            if (node.level === 4) {
+                this.carParam.car_year_num = node.title;
+                this.carParam.car_param_id = node.key;
+                const parentNode = node.parentNode;
+                if (parentNode && parentNode.getChildren().length) {
+                    parentNode.getChildren().forEach(item => item.isChecked = false);
+                    node.isChecked = true;
+                    $('.tree-box ul').scrollTop(0);
+                    const _parentNode = parentNode.parentNode;
+                    const __parentNode = _parentNode.parentNode;
+                    const ___parentNode = __parentNode.parentNode;
+                    this.defaultCheckedKeys = [node.key];
+                    this.defaultExpandedKeys = [parentNode.key];
+                    _parentNode && this.defaultExpandedKeys.push(_parentNode.key);
+                    __parentNode && this.defaultExpandedKeys.push(__parentNode.key);
+                    ___parentNode && this.defaultExpandedKeys.push(___parentNode.key);
                 }
-            } else {
-                if (node.level === 4) {
-                    this.carParam.car_param_id = '';
-                }
+            }
+        } else {
+            if (node.level === 4) {
+                this.carParam.car_param_id = '';
+            }
+        }
+    }
+
+    /**
+     * 加载下级菜单
+     * @param node
+     * @private
+     */
+    private loadMenu(node) {
+        if (node && node.getChildren().length === 0 && node.isExpanded) {
+            if (node.level === 0) {
+                this.carParam.car_brand = new CarBrandEntity();
+                this.carParam.car_brand.car_brand_name = node.title;
+                this.carParam.car_brand.car_brand_id = node.key;
+                // 根据品牌获取厂商
+                this.requestFirmListByBrand(node);
+            } else if (node.level === 1) {
+                this.carParam.car_factory = new CarFactoryEntity();
+                this.carParam.car_factory.car_factory_name = node.title;
+                this.carParam.car_factory.car_factory_id = node.key;
+                // 根据厂商获取汽车车系
+                this.requestSeriesListByFirm(node);
+            } else if (node.level === 2) {
+                this.carParam.car_series = new CarSeriesEntity();
+                this.carParam.car_series.car_series_name = node.title;
+                this.carParam.car_series.car_series_id = node.key;
+                // 根据车系获取汽车排量
+                this.requestCarParamsListByFirm(node);
+            } else if (node.level === 3) {
+                this.carParam.car_displacement = node.title;
+                // 根据排量获取汽车年份
+                this.requestCarYearListByFirm(node);
             }
         }
     }

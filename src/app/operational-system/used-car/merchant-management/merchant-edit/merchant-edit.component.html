@@ -67,8 +67,9 @@
                                 <span>资询电话</span>
                             </label>
                             <div class="control-input">
-                                <input [(ngModel)]="consultation.telephone" [name]="'telephone_'+consultation.date" class="form-control" maxlength="20"
-                                        appIgnoreSpace
+                                <input [(ngModel)]="consultation.telephone" [name]="'telephone_'+consultation.date"
+                                       class="form-control" maxlength="20"
+                                       appIgnoreSpace
                                        (input)="onInputConsultation(index)"
                                        placeholder="此电话用于用户咨询">
                             </div>
@@ -78,7 +79,8 @@
                                 <span>咨询人</span>
                             </label>
                             <div class="control-input">
-                                <input [(ngModel)]="consultation.name" [name]="'name_'+consultation.date" maxlength="10"
+                                <input [(ngModel)]="consultation.name" [name]="'name_'+consultation.date+index"
+                                       maxlength="10"
                                        appIgnoreSpace
                                        (input)="onInputConsultation(index)"
                                        class="form-control"

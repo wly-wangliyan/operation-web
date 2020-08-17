@@ -27,7 +27,7 @@
                                             <p id="{{ leter }}" class="leter-title">{{ leter }}</p>
                                             <nz-tree *ngIf="mapOfBrand[leter].length !== 0" nzCheckable
                                                      [nzCheckedKeys]="defaultCheckedKeys"
-                                                     [nzExpandedKeys]="defaultExpandedKeys" [nzData]="mapOfBrand[leter]"
+                                                     [nzExpandedKeys]="defaultExpandedKeys" [nzData]="mapOfBrand[leter]" (nzClick)="onNzClick($event)"
                                                      (nzExpandChange)="onNzExpand($event)"
                                                      (nzCheckBoxChange)="onNzCheck($event)">
                                             </nz-tree>

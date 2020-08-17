@@ -160,9 +160,9 @@ export class InformationDeliveryManagementParams extends EntityBase {
             this.address = source.address;
             this.transfer_times = source.transfer_times || 0;
             this.has_mortgage = source.has_mortgage;
-            this.check_deadline = new Date(source.check_deadline * 1000);
-            this.compulsory_traffic_insurance_deadline = new Date(source.compulsory_traffic_insurance_deadline * 1000);
-            this.commercial_insurance_deadline = new Date(source.commercial_insurance_deadline * 1000);
+            this.check_deadline = source.check_deadline ? new Date(source.check_deadline * 1000) : '';
+            this.compulsory_traffic_insurance_deadline = source.compulsory_traffic_insurance_deadline ? new Date(source.compulsory_traffic_insurance_deadline * 1000) : '';
+            this.commercial_insurance_deadline = source.commercial_insurance_deadline ? new Date(source.commercial_insurance_deadline * 1000) : '';
             this.contain_transfer_fee = source.contain_transfer_fee;
             this.car_param_id = source.car_param.car_param_id;
             this.car_type = source.car_type.toString();
