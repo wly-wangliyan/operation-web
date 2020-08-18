@@ -36,7 +36,7 @@ export class SelectMerchantComponent implements OnInit, NzSearchAdapter {
     public open(selectedMerchant: MerchantManagementEntity) {
         this.searchParams = new SearchParamsEntity();
         this.nzSearchAssistant.nzData = [];
-        this.selectedMerchant = selectedMerchant;
+        this.selectedMerchant = selectedMerchant.clone();
         timer(0).subscribe(() => {
             $('#chooseMerchantModal').modal();
             this.nzSearchAssistant.submitSearch(true);
@@ -45,7 +45,7 @@ export class SelectMerchantComponent implements OnInit, NzSearchAdapter {
 
     // 勾选商户
     public onItemChecked(merchant: MerchantManagementEntity, checked: boolean): void {
-        this.selectedMerchant = checked ? merchant : new MerchantManagementEntity();
+        this.selectedMerchant = checked ? merchant.clone() : new MerchantManagementEntity();
     }
 
     // 确定

@@ -125,7 +125,7 @@ export class InformationDeliveryEditComponent implements OnInit {
      * @param event
      */
     public onSelectedMerchant(event) {
-        this.selectedMerchant = event;
+        this.selectedMerchant = event.clone();
         this.carDetail.telephone = '';
         this.carDetail.contact = '';
         this.consultationList = [];
