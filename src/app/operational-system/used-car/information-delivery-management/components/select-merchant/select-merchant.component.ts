@@ -34,6 +34,7 @@ export class SelectMerchantComponent implements OnInit, NzSearchAdapter {
      * @param selectedMerchant
      */
     public open(selectedMerchant: MerchantManagementEntity) {
+        this.searchParams = new SearchParamsEntity();
         this.nzSearchAssistant.nzData = [];
         this.selectedMerchant = selectedMerchant;
         timer(0).subscribe(() => {

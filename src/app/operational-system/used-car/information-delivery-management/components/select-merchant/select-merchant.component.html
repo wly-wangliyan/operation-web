@@ -1,5 +1,6 @@
 <!-- 选择商城对应类型商品 -->
-<div class="modal fade" #chooseMerchantModal id="chooseMerchantModal" data-backdrop="false" data-keyboard="false" tabindex="-1"
+<div class="modal fade" #chooseMerchantModal id="chooseMerchantModal" data-backdrop="false" data-keyboard="false"
+     tabindex="-1"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-common">
         <div class="modal-content modal-content-common">
@@ -48,7 +49,7 @@
                     </div>
 
                     <div class="modal-footer" style="justify-content: center !important;">
-                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button type="button" class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
                         <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!selectedMerchant"
                                 (appZDebounceClick)="onCheckClick()">确认
                         </button>
