@@ -79,6 +79,8 @@ export class InformationDeliveryDetailComponent implements OnInit {
             this.loading = false;
             this.carParam = data.car_param.clone();
             this.carDetail = new InformationDeliveryManagementParams(data);
+            const telephone = this.carDetail.telephone.split(',')[0];
+            this.carDetail.telephone = telephone;
             this.selectTagList = data.labels;
             this.isTransferFee = data.contain_transfer_fee === 1;
             this.selectedMerchant = data.merchant;
