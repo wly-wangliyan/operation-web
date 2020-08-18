@@ -62,7 +62,6 @@ export class SelectMerchantComponent implements OnInit, NzSearchAdapter {
 
     /** 翻页清除选中项 */
     public onPageSelectd(event: any) {
-        this.selectedMerchant = new MerchantManagementEntity();
         this.nzSearchAssistant.pageSelected(event);
     }
 
