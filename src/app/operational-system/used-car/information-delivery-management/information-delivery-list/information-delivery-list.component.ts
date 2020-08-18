@@ -47,6 +47,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     // 切换tab
     public onTabChange(key: number) {
+        this.nzSearchAssistant.nzData = [];
         this.searchParams = new SearchParamsCarEntity();
         this.start_time = '';
         this.end_time = '';
