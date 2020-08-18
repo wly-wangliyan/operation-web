@@ -148,7 +148,6 @@ export class InformationDeliveryEditComponent implements OnInit {
      */
     public onSelectedTag(event) {
         this.selectTagList = event;
-        this.carDetail.label_ids = event.map(item => item.label_id).join(',');
     }
 
     /**
@@ -241,6 +240,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     }
 
     public onEditFormSubmit() {
+        this.carDetail.label_ids = this.selectTagList.map(item => item.label_id).join(',');
         const params: InformationDeliveryManagementParams = JSON.parse(JSON.stringify(this.carDetail));
         const vinReg = /^(?!(?:\d+|[a-zA-Z]+)$)[\dA-HJ-NPR-Z]{17}$/;
         this.clearErr();
