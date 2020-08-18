@@ -16,7 +16,7 @@
                         <input class="form-control" [(ngModel)]="searchParams.label_name" name="label_name"
                                appIgnoreSpace
                                placeholder="输入1~10个字" minlength="1" maxlength="10">
-                        <button type="button" nz-button nzType="primary" (click)="onShowTagList(selectTagList)">搜索
+                        <button type="button" nz-button nzType="primary" (click)="onShowTagList(selectTagList,false)">搜索
                         </button>
                     </div>
                     <ul>

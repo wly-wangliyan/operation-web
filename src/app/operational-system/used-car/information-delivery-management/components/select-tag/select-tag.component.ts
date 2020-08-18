@@ -47,8 +47,8 @@ export class SelectTagComponent {
     /**
      * 模板列表
      */
-    public onShowTagList(selectTagList: Array<string> = []) {
-        this.searchParams = new SearchParamsEntity();
+    public onShowTagList(selectTagList: Array<string> = [], isOpen = true) {
+        isOpen && (this.searchParams = new SearchParamsEntity());
         this.tagManagementService.requestTagListData(this.searchParams).subscribe(data => {
             this.tagList = data;
             this.selectTagList = selectTagList;
