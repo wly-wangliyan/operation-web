@@ -50,7 +50,7 @@
 
                     <div class="modal-footer" style="justify-content: center !important;">
                         <button type="button" class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-                        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!selectedMerchant"
+                        <button class="sure-btn" type="button" nz-button nzType="primary" [disabled]="!selectedMerchant.merchant_id"
                                 (appZDebounceClick)="onCheckClick()">确认
                         </button>
                     </div>
