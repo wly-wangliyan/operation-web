@@ -56,9 +56,16 @@ select.form-control {
 .content-detail-item {
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     margin: 15px 0;
+}
+
+.detail-content .remark-red {
+    margin-left: 20px;
+}
+
+.detail-content > div:first-child, .detail-content > div:last-child {
+    margin: 0 !important;
 }
 
 .content-detail-item:first-child {
@@ -138,5 +145,5 @@ input[type=file] {
 
 .form-control:disabled, .form-control[readonly] {
     background: #e9ecef !important;
-    appearance:none;
+    appearance: none;
 }

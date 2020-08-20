@@ -89,6 +89,19 @@ export class TemplatePushEditComponent implements OnInit {
     };
 
     /**
+     * 标红
+     * @param event
+     * @param params
+     */
+    public onRemarkRed(event, params: TemplateManagementContentEntity) {
+        if (event) {
+            params.color = '#EE0000';
+        } else {
+            params.color = '';
+        }
+    }
+
+    /**
      * 选择模板标题
      * @param event
      */
@@ -298,6 +311,7 @@ export class TemplatePushEditComponent implements OnInit {
                 this.templateList[0].keywords.forEach(item => {
                     const temp = new TemplateManagementContentEntity();
                     temp.key = item.key;
+                    temp.color = item.color;
                     contentObj.keywords.push(temp);
                 });
             } else {
@@ -309,6 +323,7 @@ export class TemplatePushEditComponent implements OnInit {
                     this.templateList.unshift(temp);
                 }
             }
+            console.log(this.templatePushDetail.content.keywords)
         }, err => {
             this.loading = false;
             this.globalService.httpErrorProcess(err);
