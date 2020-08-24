@@ -6,7 +6,7 @@
 #
 # 1.先切换到代码所在的目录(最新代码),启动docker。
 # sudo su
-# docker login docker.uucin.com
+# docker login registry.uucin.com
 # admin
 # Sunmap123
 #
@@ -14,10 +14,10 @@
 
 
 # 本机执行(复制如下语句在当前目录下执行):
-# image_name=docker.uucin.com/zhumengyuan/operation-web:dev && docker build -f .docker/DevDockerfile --tag $image_name --no-cache . && docker push $image_name && docker rmi $image_name
+# image_name=registry.uucin.com/zhumengyuan/operation-web:dev && docker build -f .docker/DevDockerfile --tag $image_name --no-cache . && docker push $image_name && docker rmi $image_name
 
 # 服务器执行(复制如下语句在服务器代码目录下执行):
-# docker pull docker.uucin.com/zhumengyuan/operation-web:dev && docker-compose -f .docker/docker-compose-dev.yaml up -d
+# docker pull registry.uucin.com/zhumengyuan/operation-web:dev && docker-compose -f .docker/docker-compose-dev.yaml up -d
 ###
 
 FROM nginx:alpine
