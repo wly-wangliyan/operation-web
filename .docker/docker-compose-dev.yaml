@@ -1,4 +1,4 @@
-version: "2"
+version: '2'
 services:
   operation-web:
     image: registry.uucin.com/zhumengyuan/operation-web:dev
@@ -6,7 +6,7 @@ services:
     ports:
       - 9006:80
 networks:
-  defaul
+  default:
     ipam:
       config:
         - subnet: 172.20.139.0/24
