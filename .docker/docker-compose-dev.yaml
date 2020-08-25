@@ -1,12 +1,12 @@
 version: "2"
 services:
   operation-web:
-    image: docker.uucin.com/zhumengyuan/operation-web:dev
+    image: registry.uucin.com/zhumengyuan/operation-web:dev
     restart: always
     ports:
       - 9006:80
 networks:
-  default:
+  defaul
     ipam:
       config:
         - subnet: 172.20.139.0/24

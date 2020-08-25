@@ -33,6 +33,7 @@ export class TemplateManagementEntity extends EntityBase {
 export class TemplateManagementContentEntity extends EntityBase {
     public key: string = undefined; // 名称
     public value = ''; // 名称
+    public color = ''; // 颜色 #EE0000
     public timestamp: Date = new Date(); // ui
 }
 

@@ -54,7 +54,8 @@ export class TemplatePushEditComponent implements OnInit {
   ];
   public template_message_id: string;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private globalService: GlobalService,
     private templateManagementService: TemplateManagementService,
@@ -72,7 +73,7 @@ export class TemplatePushEditComponent implements OnInit {
   // 上架开始时间的禁用部分
   public disabledSetTime = (startValue: Date): boolean => {
     return differenceInCalendarDays(new Date(), startValue) > 0;
-  };
+  }
 
   // 上架开始时间的禁用部分
   public disabledStartDate = (startValue: Date): boolean => {
@@ -92,6 +93,19 @@ export class TemplatePushEditComponent implements OnInit {
       return false;
     }
     return new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.templatePushDetail.start_date).setHours(0, 0, 0, 0);
+  }
+
+  /**
+   * 标红
+   * @param event
+   * @param params
+   */
+  public onRemarkRed(event, params: TemplateManagementContentEntity) {
+    if (event) {
+      params.color = '#EE0000';
+    } else {
+      params.color = '';
+    }
   }
 
   /**
@@ -266,7 +280,7 @@ export class TemplatePushEditComponent implements OnInit {
     if (this.template_message_id) {
       httpList.push(this.templatePushManagementService.requestTemplatePushDetailData(this.template_message_id));
     }
-    forkJoin(httpList).subscribe((results: any) => {
+    forkJoin(httpList).subscribe(results => {
       this.loading = false;
       this.templateList = results[0];
       if (this.templateList.length === 0) {
@@ -304,6 +318,7 @@ export class TemplatePushEditComponent implements OnInit {
         this.templateList[0].keywords.forEach(item => {
           const temp = new TemplateManagementContentEntity();
           temp.key = item.key;
+          temp.color = item.color;
           contentObj.keywords.push(temp);
         });
       } else {
@@ -315,6 +330,7 @@ export class TemplatePushEditComponent implements OnInit {
           this.templateList.unshift(temp);
         }
       }
+      console.log(this.templatePushDetail.content.keywords);
     }, err => {
       this.loading = false;
       this.globalService.httpErrorProcess(err);
