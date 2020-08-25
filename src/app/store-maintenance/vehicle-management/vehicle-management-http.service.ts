@@ -203,7 +203,6 @@ export class ImportParams extends EntityBase {
 export class VehicleManagementHttpService {
 
   private domain = environment.STORE_DOMAIN; // 保养域名
-  private car_service_domain = environment.CAR_SERVE; // 车服务域名
 
   constructor(private httpService: HttpService) {
   }
@@ -214,7 +213,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarParamLinkResponse>
    */
   public requestCarTypeListData(searchParams: SearchParams): Observable<CarParamLinkResponse> {
-    const httpUrl = `${this.car_service_domain}/car_params`;
+    const httpUrl = `${this.domain}/car_params`;
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => new CarParamLinkResponse(res)));
   }
@@ -233,7 +232,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarParamLinkResponse>
    */
   public requestCarBrandsListData(): Observable<CarBrandResponse> {
-    const httpUrl = `${this.car_service_domain}/car_brands`;
+    const httpUrl = `${this.domain}/car_brands`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new CarBrandResponse(res)));
   }
@@ -244,7 +243,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarParamLinkResponse>
    */
   public requestRecommendedCarBrandsListData(is_recommended: boolean): Observable<CarBrandResponse> {
-    const httpUrl = `${this.car_service_domain}/car_brands`;
+    const httpUrl = `${this.domain}/car_brands`;
     return this.httpService.get(httpUrl, { is_recommended })
       .pipe(map(res => new CarBrandResponse(res)));
   }
@@ -255,7 +254,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarFactoryResponse>
    */
   public requestCarFactoryListData(car_brand_id: string): Observable<CarFactoryResponse> {
-    const httpUrl = `${this.car_service_domain}/car_brands/${car_brand_id}/car_factories`;
+    const httpUrl = `${this.domain}/car_brands/${car_brand_id}/car_factories`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new CarFactoryResponse(res)));
   }
@@ -267,7 +266,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarSeriesResponse>
    */
   public requestCarSeriesListData(car_brand_id: string, car_factory_id: string): Observable<CarSeriesResponse> {
-    const httpUrl = `${this.car_service_domain}/car_brands/${car_brand_id}/car_factories/${car_factory_id}/car_series`;
+    const httpUrl = `${this.domain}/car_brands/${car_brand_id}/car_factories/${car_factory_id}/car_series`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => new CarSeriesResponse(res)));
   }
@@ -278,7 +277,7 @@ export class VehicleManagementHttpService {
    * @param car_series_id
    */
   public requestCarParamsListData(car_series_id: string): Observable<Array<string>> {
-    const httpUrl = `${this.car_service_domain}/car_series/${car_series_id}/car_params`;
+    const httpUrl = `${this.domain}/car_series/${car_series_id}/car_params`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => res.body));
   }
@@ -290,7 +289,7 @@ export class VehicleManagementHttpService {
    * @param car_displacement
    */
   public requestCarYearListData(car_series_id: string, car_displacement: string): Observable<CarYearResponse> {
-    const httpUrl = `${this.car_service_domain}/car_series/${car_series_id}/car_year_num`;
+    const httpUrl = `${this.domain}/car_series/${car_series_id}/car_year_num`;
     const params = { car_displacement };
     return this.httpService.get(httpUrl, params)
       .pipe(map(res => new CarYearResponse(res)));
@@ -302,7 +301,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestCarParamListData(car_series_id: string): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.car_service_domain}/car_series/${car_series_id}/car_params`;
+    const httpUrl = `${this.domain}/car_series/${car_series_id}/car_params`;
     return this.httpService.get(httpUrl)
       .pipe(map(res => res));
   }
@@ -315,7 +314,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateStatusData(car_series_id: string, car_param_id: string, status: number): Observable<HttpResponse<any>> {
-    const httpUrl = `${this.car_service_domain}/car_series/${car_series_id}/car_params/${car_param_id}/status`;
+    const httpUrl = `${this.domain}/car_series/${car_series_id}/car_params/${car_param_id}/status`;
     return this.httpService.patch(httpUrl, { status });
   }
 
@@ -336,7 +335,7 @@ export class VehicleManagementHttpService {
       eventEmitter.next(data);
     }, err => {
       eventEmitter.error(err);
-    }, this.car_service_domain);
+    }, this.domain);
     return eventEmitter;
   }
 
@@ -359,7 +358,7 @@ export class VehicleManagementHttpService {
       eventEmitter.next(data);
     }, err => {
       eventEmitter.error(err);
-    }, this.car_service_domain);
+    }, this.domain);
     return eventEmitter;
   }
 
@@ -370,7 +369,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<CarParamEntity>
    */
   public requestCarDetail(car_series_id: string, car_param_id: string): Observable<Array<CarPartEntity>> {
-    return this.httpService.get(this.car_service_domain + `/car_series/${car_series_id}/car_params/${car_param_id}`
+    return this.httpService.get(this.domain + `/car_series/${car_series_id}/car_params/${car_param_id}`
     ).pipe(map(res => {
       const tempList: Array<CarPartEntity> = [];
       res.body.forEach(res1 => {
@@ -386,7 +385,7 @@ export class VehicleManagementHttpService {
    * @returns Observable<HttpResponse<any>>
    */
   public requestUpdateRecommendedBrands(car_brand_ids: string): Observable<HttpResponse<any>> {
-    return this.httpService.patch(`${this.car_service_domain}/admin/car_brands/is_recommended`, { car_brand_ids }
+    return this.httpService.patch(`${this.domain}/admin/car_brands/is_recommended`, { car_brand_ids }
     );
   }
 }
