@@ -36,7 +36,7 @@ export class UserVehicleLinkResponse extends LinkResponse {
 })
 export class UserVehicleHttpService {
 
-  private domain = environment.STORE_DOMAIN; // 保养域名
+  private domain = environment.CAR_SERVE; // 车服务域名
 
   constructor(private httpService: HttpService) { }
 

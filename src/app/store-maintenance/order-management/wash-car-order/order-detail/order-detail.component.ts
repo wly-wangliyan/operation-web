@@ -1,3 +1,4 @@
+import { ExpenseHttpService } from './../../../expense-management/expense-http.service';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../core/global.service';
@@ -25,14 +26,15 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   private wash_car_order_id: string; // wash_car_order_id
 
   @ViewChild(PromptLoadingComponent, { static: true }) public promptLoading: PromptLoadingComponent;
-  @ViewChild(CheckRefundComponent, {static: true}) public checkRefundComponent: CheckRefundComponent;
+  @ViewChild(CheckRefundComponent, { static: true }) public checkRefundComponent: CheckRefundComponent;
   @ViewChild(ZPhotoSelectComponent, { static: true }) public ZPhotoSelectComponent: ZPhotoSelectComponent;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private globalService: GlobalService,
-    private orderService: WashOrderService) {
+    private orderService: WashOrderService,
+    private expenseHttpService: ExpenseHttpService) {
     this.route.paramMap.subscribe(map => {
       this.wash_car_order_id = map.get('wash_car_order_id');
     });
@@ -56,7 +58,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
   // 获取订单详情
   private getOrderDetail(): void {
     forkJoin(this.orderService.requestOrderDetailData(this.wash_car_order_id),
-      this.orderService.requestExpenseVerifyRecordsData(this.wash_car_order_id)).subscribe(res => {
+      this.expenseHttpService.requestExpenseVerifyRecordsData(this.wash_car_order_id)).subscribe(res => {
         this.orderRecord = res[0];
         this.imageUrls = this.orderRecord.refund_application.images ? this.orderRecord.refund_application.images.split(',') : [];
         this.expenseVerifyRecords = res[1];
@@ -105,7 +107,7 @@ export class OrderDetailComponent implements OnInit, AfterViewInit {
 
   // 审核并退款
   public onCheckRefundClick(orderItem: WashCarOrderEntity): void {
-    const param = {...orderItem.refund_application, sale_fee: orderItem.sale_fee};
+    const param = { ...orderItem.refund_application, sale_fee: orderItem.sale_fee };
     this.checkRefundComponent.open(param, () => {
       this.searchText$.next();
     });

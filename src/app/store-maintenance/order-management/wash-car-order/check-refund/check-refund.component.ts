@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RefundManagementService, WashCarCheckRefundParams, WashRefundEntity } from '../refund-management/refund-management.service';
+import { RefundManagementService, WashCarCheckRefundParams } from '../refund-management/refund-management.service';
 import { GlobalService } from '../../../../core/global.service';
 import { timer } from 'rxjs';
+import { WashRefundEntity } from '../wash-car-order.service';
 
 @Component({
   selector: 'app-check-refund',
@@ -11,14 +12,15 @@ import { timer } from 'rxjs';
 export class CheckRefundComponent implements OnInit {
 
   public refundCheckParams: WashCarCheckRefundParams = new WashCarCheckRefundParams(); // 退款
-  public selectOrder = {...new WashRefundEntity(), sale_fee: null}; // 选中行
+  public selectOrder = { ...new WashRefundEntity(), sale_fee: null }; // 选中行
 
   private operationing = false;
   private sureCallback: any;
   private refund_fee: number; // 应退金额
 
-  constructor(private globalService: GlobalService,
-              private refundService: RefundManagementService) { }
+  constructor(
+    private globalService: GlobalService,
+    private refundService: RefundManagementService) { }
 
   ngOnInit() {
   }
@@ -46,7 +48,7 @@ export class CheckRefundComponent implements OnInit {
       return;
     }
     const sale_fee = this.selectOrder.sale_fee ? this.selectOrder.sale_fee : this.selectOrder.wash_car_order.sale_fee ?
-        this.selectOrder.wash_car_order.sale_fee : 0;
+      this.selectOrder.wash_car_order.sale_fee : 0;
     if (Number(sale_fee) < Math.round(Number(refund_fee) * 100)) {
       this.globalService.promptBox.open(`退款金额应小于等于实收金额！`, null, 2000, null, false);
       return;
@@ -106,11 +108,11 @@ export class CheckRefundComponent implements OnInit {
       this.sureCallback();
     };
     this.refundService.requestOrderRefundData(this.selectOrder.refund_application_id,
-        this.refundCheckParams).subscribe(() => {
-      successFunc();
-    }, err => {
-      errfunc(err);
-    });
+      this.refundCheckParams).subscribe(() => {
+        successFunc();
+      }, err => {
+        errfunc(err);
+      });
   }
 
 }

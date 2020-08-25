@@ -5,8 +5,6 @@ import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { EntityBase } from '../../../../utils/z-entity';
 import { HttpResponse } from '@angular/common/http';
-import { ExpenseVerifyEntity } from '../../expense-management/expense-http.service';
-import { WashRefundEntity } from './refund-management/refund-management.service';
 
 export class WashCarSearchParams extends EntityBase {
   public order_status = ''; // 订单状态 1：待支付 2：已取消 3：待核销 4：已完成 5:已关闭 6:已失效
@@ -25,6 +23,31 @@ export class StatisticSearchParams extends EntityBase {
   public section: string = undefined; // 时间区间 "xxx,xxx"
   public page_num = 1; // 页码
   public page_size = 45; // 每页条数
+}
+
+export class WashRefundEntity extends EntityBase {
+  public refund_application_id: string = undefined; // 	string	退款申请id 主键
+  public wash_car_order: WashCarOrderEntity = undefined; // 	object	洗车订单对象 WashCarOrder
+  public refund_reason: string = undefined; // 	string	退款原因
+  public refuse_reason: string = undefined; // 	string	拒绝原因
+  public refund_fee: number = undefined; // 	integer	退款金额
+  public refund_explain: string = undefined; // 	string	退款说明
+  public images = undefined; // 	string	上传凭证 多个逗号分隔
+  public apply_status: number = undefined; // 	integer	申请状态 1: 处理中 2: 申请通过 3: 申请驳回
+  public specification_name: string = undefined; // 	string	规格名称
+  public car_type: number = undefined; // 	integer	车型 1: 5座小型车 2：SUV/MPV
+  public valid_date_start: number = undefined; // 	float	规格有效期开始
+  public valid_date_end: number = undefined; // 	float	规格有效期结束
+  public created_time: number = undefined; // 下单时间
+  public updated_time: number = undefined; // 更新时间
+
+  public getPropertyClass(propertyName: string): typeof EntityBase {
+    if (propertyName === 'wash_car_order') {
+      // tslint:disable-next-line: no-use-before-declare
+      return WashCarOrderEntity;
+    }
+    return null;
+  }
 }
 
 export class WashCarOrderEntity extends EntityBase {
@@ -71,14 +94,20 @@ export class WashCarOrderEntity extends EntityBase {
   }
 }
 
+export class OrderSpecificationEntity extends EntityBase {
+  public specification_name: string = undefined; //  string	规格名称
+  public car_type: number = undefined; // 	integer	车型 车型 1: 5座小型车 2：SUV/MPV
+  public specification_num: number = undefined; // 	integer	规格数量
+}
+
 export class OrderStatisticEntity extends EntityBase {
   public wash_car_statistic_id: string = undefined; //  string	洗车订单统计id 主键
   public statistic_date: number = undefined; // 	float	日期
   public pay_order_num: number = undefined; // 	integer	支付订单数量
-  public specification_infos: Array<OrderSpecificatioEntity> = undefined; // 	array	规格数量信息
-// -specification_name	string	规格名称
-// -car_type	integer	车型 车型 1: 5座小型车 2：SUV/MPV
-// -specification_num	integer	规格数量
+  public specification_infos: Array<OrderSpecificationEntity> = undefined; // 	array	规格数量信息
+  // -specification_name	string	规格名称
+  // -car_type	integer	车型 车型 1: 5座小型车 2：SUV/MPV
+  // -specification_num	integer	规格数量
   public running_money: number = undefined; // 	integer	流水 单位:分
   public code_num: number = undefined; // 	integer	核销码数量（卷数量）
   public small_code_num: number = undefined; // 	integer	小车卷数量
@@ -92,16 +121,10 @@ export class OrderStatisticEntity extends EntityBase {
 
   public getPropertyClass(propertyName: string): typeof EntityBase {
     if (propertyName === 'specification_infos') {
-      return OrderSpecificatioEntity;
+      return OrderSpecificationEntity;
     }
     return null;
   }
-}
-
-export class OrderSpecificatioEntity extends EntityBase {
-  public specification_name: string = undefined; //  string	规格名称
-  public car_type: number = undefined; // 	integer	车型 车型 1: 5座小型车 2：SUV/MPV
-  public specification_num: number = undefined; // 	integer	规格数量
 }
 
 export class WashCarOrderLinkResponse extends LinkResponse {
@@ -185,21 +208,6 @@ export class WashOrderService {
   }
 
   /**
-   * 获取洗车订单核销列表
-   * @param wash_car_order_id 洗车订单id
-   */
-  public requestExpenseVerifyRecordsData(wash_car_order_id: string): Observable<Array<ExpenseVerifyEntity>> {
-    const httpUrl = `${this.domain}/admin/wash_car_orders/${wash_car_order_id}/expense_verifies`;
-    return this.httpService.get(httpUrl).pipe(map(res => {
-      const tempList: Array<ExpenseVerifyEntity> = [];
-      res.body.forEach(data => {
-        tempList.push(ExpenseVerifyEntity.Create(data));
-      });
-      return tempList;
-    }));
-  }
-
-  /**
    * 编辑订单备注
    * @param wash_car_order_id 订单ID
    * @param remark 备注
@@ -235,7 +243,7 @@ export class WashOrderService {
   public requestOrderStatisticsData(searchParams: StatisticSearchParams): Observable<OrderStatisticLinkResponse> {
     const httpUrl = `${this.domain}/admin/wash_car_order_statistics`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new OrderStatisticLinkResponse(res)));
+      .pipe(map(res => new OrderStatisticLinkResponse(res)));
   }
 
   /**

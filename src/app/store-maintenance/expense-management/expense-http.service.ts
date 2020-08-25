@@ -92,4 +92,19 @@ export class ExpenseHttpService {
     return this.httpService.get(httpUrl, searchParams.json())
       .pipe(map(res => res.body));
   }
+
+  /**
+   * 获取洗车订单核销列表
+   * @param wash_car_order_id 洗车订单id
+   */
+  public requestExpenseVerifyRecordsData(wash_car_order_id: string): Observable<Array<ExpenseVerifyEntity>> {
+    const httpUrl = `${this.domain}/admin/wash_car_orders/${wash_car_order_id}/expense_verifies`;
+    return this.httpService.get(httpUrl).pipe(map(res => {
+      const tempList: Array<ExpenseVerifyEntity> = [];
+      res.body.forEach(data => {
+        tempList.push(ExpenseVerifyEntity.Create(data));
+      });
+      return tempList;
+    }));
+  }
 }

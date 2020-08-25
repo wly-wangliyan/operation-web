@@ -1,35 +1,11 @@
 import { Injectable } from '@angular/core';
 import { EntityBase } from '../../../../../utils/z-entity';
-import { WashCarOrderEntity, WashCarOrderLinkResponse, WashCarSearchParams } from '../wash-car-order.service';
+import { WashRefundEntity } from '../wash-car-order.service';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { map } from 'rxjs/internal/operators/map';
-
-export class WashRefundEntity extends EntityBase {
-  public refund_application_id: string = undefined; // 	string	退款申请id 主键
-  public wash_car_order: WashCarOrderEntity = undefined; // 	object	洗车订单对象 WashCarOrder
-  public refund_reason: string = undefined; // 	string	退款原因
-  public refuse_reason: string = undefined; // 	string	拒绝原因
-  public refund_fee: number = undefined; // 	integer	退款金额
-  public refund_explain: string = undefined; // 	string	退款说明
-  public images = undefined; // 	string	上传凭证 多个逗号分隔
-  public apply_status: number = undefined; // 	integer	申请状态 1: 处理中 2: 申请通过 3: 申请驳回
-  public specification_name: string = undefined; // 	string	规格名称
-  public car_type: number = undefined; // 	integer	车型 1: 5座小型车 2：SUV/MPV
-  public valid_date_start: number = undefined; // 	float	规格有效期开始
-  public valid_date_end: number = undefined; // 	float	规格有效期结束
-  public created_time: number = undefined; // 下单时间
-  public updated_time: number = undefined; // 更新时间
-
-  public getPropertyClass(propertyName: string): typeof EntityBase {
-    if (propertyName === 'wash_car_order') {
-      return WashCarOrderEntity;
-    }
-    return null;
-  }
-}
 
 // 退款
 export class WashCarCheckRefundParams extends EntityBase {
@@ -84,7 +60,7 @@ export class RefundManagementService {
   public requestOrderRefundList(searchParams: WashCarRefundSearchParams): Observable<WashCarRefundLinkResponse> {
     const httpUrl = `${this.domain}/admin/wash_refund_applications`;
     return this.httpService.get(httpUrl, searchParams.json())
-        .pipe(map(res => new WashCarRefundLinkResponse(res)));
+      .pipe(map(res => new WashCarRefundLinkResponse(res)));
   }
 
   /**
@@ -117,6 +93,6 @@ export class RefundManagementService {
     delete params.page_size;
     const httpUrl = `${this.domain}/admin/wash_refund_applications/statistics`;
     return this.httpService.get(httpUrl, params)
-        .pipe(map(res => res.body));
+      .pipe(map(res => res.body));
   }
 }
