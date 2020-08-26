@@ -12,6 +12,7 @@ import {
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { carReviewStatus } from '../../../../share/pipes/information-delivery.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingStatus } from '../../../../../utils/common-enums';
 
 @Component({
     selector: 'app-information-delivery-list',
@@ -53,6 +54,8 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         this.review_start_time = '';
         this.review_end_time = '';
         this.searchParams.review_status = (key === 0 ? null : key);
+        this.nzSearchAssistant.loadStatus = LoadingStatus.none;
+        this.nzSearchAssistant.nzData = [];
         this.nzSearchAssistant.submitSearch(true);
     }
 

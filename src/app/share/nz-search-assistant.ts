@@ -74,7 +74,7 @@ export class NzSearchAssistant {
 
   private submitTermStream = new Subject<any>();
 
-  private loadStatus: LoadingStatus = LoadingStatus.none;
+  public loadStatus: LoadingStatus = LoadingStatus.none;
 
   /**
    * 构造函数
