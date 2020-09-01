@@ -1,0 +1,103 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'活动管理'" [level2Name]="'分销活动'" [level2RelativePath]="'../'" [level3Name]="levelName">
+    </app-crumb>
+</div>
+<!--<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>-->
+<!--    <nz-spin nzSimple></nz-spin>-->
+<!--</div>-->
+<!--[hidden]="loading"-->
+<div class="content-flow">
+    <div class="content-container">
+        <div class="content-flow">
+            <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">
+                <div class="activity-container">
+                    <div class="break-line">
+                        <span>跳转选择</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>&nbsp;&nbsp;</b>
+                            <span>落地页</span>
+                        </label>
+                        <div class="control-input">
+                            <select class="form-control" required>
+                                <option value=''>请选择</option>
+                                <option>小程序原生页</option>
+                                <option>H5链接</option>
+                            </select>
+                            <input class="form-control" placeholder="跳转链接内容"
+                                   maxlength="2000" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>业务</span>
+                        </label>
+                        <div class="control-input">
+                            <p class="read-only-info">检车业务</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-container">
+                    <div class="break-line">
+                        <span>基本设置</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class=" control-label">
+                            <b>*</b>
+                            <span>活动标题名称</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" placeholder="输入1-100字" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <span>活动时间</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-date-picker [(ngModel)]="start_date" [nzShowToday]=false
+                                            [nzDisabledDate]="disabledStartDate"
+                                            name='start_date'
+                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                            <span class='line'>-</span>
+                            <nz-date-picker [(ngModel)]="end_date" [nzShowToday]=false
+                                            [nzDisabledDate]="disabledEndDate"
+                                            name='end_date'
+                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>上线时间</span>
+                        </label>
+                        <div class="control-input" style="width: 450px">
+                            <nz-radio-group [(ngModel)]="online_time_radio" name="online_time_radio"
+                                            (ngModelChange)="onChangeOnlineTime()">
+                                <label nz-radio [nzValue]="OnlineTimeType.now">立即上线</label>
+                                <label nz-radio [nzValue]="OnlineTimeType.timing">定时上线</label>
+                            </nz-radio-group>
+                            <nz-date-picker *ngIf="online_time_radio===OnlineTimeType.timing" [(ngModel)]="online_time"
+                                            style="margin-left: 25px"
+                                            [nzShowToday]=false
+                                            [nzDisabledDate]="disabledEndDate"
+                                            name='online_time'
+                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="sure-btn" type="submit" nz-button nzType="primary"
+                            [disabled]="!editInformationDeliveryModal.form.valid"
+                            (appZDebounceClick)="onEditFormSubmit()">发布
+                    </button>
+                    <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

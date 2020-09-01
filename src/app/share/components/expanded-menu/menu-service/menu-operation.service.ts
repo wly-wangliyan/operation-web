@@ -99,6 +99,8 @@ export class MenuOperationService {
         systemMenu.children.push(subFinanceMenu4);
         const subFinanceMenu5 = new SideMenuItem('活动商家', '/main/operation/operation-config/activity-business', systemMenu);
         systemMenu.children.push(subFinanceMenu5);
+        const subFinanceMenu6 = new SideMenuItem('分销活动', '/main/operation/operation-config/distribution-activities', systemMenu);
+        systemMenu.children.push(subFinanceMenu6);
         this.routeLinkList.push(systemMenu);
         return systemMenu;
     }

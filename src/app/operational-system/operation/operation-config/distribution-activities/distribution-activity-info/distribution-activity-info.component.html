@@ -1,0 +1,189 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'活动管理'" [level2Name]="'分销活动'" [level3Name]="'活动详情'"
+               [level2RelativePath]="'../../../activity-list'"></app-crumb>
+</div>
+<div class="tab-bar-list">
+    <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="tab_index">
+        <label nz-radio-button [nzValue]=ActivityType.detail
+               (click)="onTabChange(ActivityType.detail,true)">详细信息</label>
+        <label nz-radio-button [nzValue]=ActivityType.business
+               (click)="onTabChange(ActivityType.business,true)">商家</label>
+    </nz-radio-group>
+</div>
+<div class="content-flow" *ngIf="tab_index===ActivityType.detail">
+    <!-- 查看明细 -->
+    <div class="content-container detail-container">
+        <table class="detail-table">
+            <tr>
+                <td>活动名称：</td>
+                <td></td>
+                <td>ID：</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>跳转链接：</td>
+                <td></td>
+                <td>统计业务：</td>
+                <td>检车服务</td>
+            </tr>
+            <tr>
+                <td>活动时间：</td>
+                <td></td>
+                <td>上线时间：</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>下线时间：</td>
+                <td></td>
+                <td>下单数：</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>累计浏览量：</td>
+                <td></td>
+                <td>累计浏览人数：</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>日期：</span>
+                    <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
+                                    name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                    nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <span class='line'>-</span>
+                    <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledEndTime"
+                                    [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="header-right">
+                <li class="big-bg">
+                    <a>浏览数据导出</a>
+                </li>
+                <li class="big-bg">
+                    <a>下单数据导出</a>
+                </li>
+            </ul>
+        </div>
+        <div class="table-container">
+            <div class="zmy-table">
+                <nz-table #TemplatePushTable [nzData]="nzSearchAssistant.nzData"
+                          [nzPageSize]="nzSearchAssistant.pageSize"
+                          [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                          (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                          [nzNoResult]="nzSearchAssistant.nzNoResultText">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>时间</th>
+                        <th>浏览量</th>
+                        <th>浏览人数</th>
+                        <th>下单数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
+                        <td [title]="data.template_message_id">
+                         <span [appTxtCopy]="data.template_message_id">
+                            {{data.template_message_id}}
+                        </span>
+                        </td>
+                        <td [title]="data.title">{{data.title}}</td>
+                        <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td class="operation">
+                            <a [title]="'明细'">明细</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-flow" *ngIf="tab_index===ActivityType.business">
+    <!-- 查看明细 -->
+    <div class="content-container business-container">
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>名称：</span>
+                    <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParams.merchant_name"
+                           name="merchant_name"
+                           maxlength="20"/>
+                </div>
+                <div class="form-group">
+                    <span>ID：</span>
+                    <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParams.merchant_name"
+                           name="merchant_name"
+                           maxlength="50"/>
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="header-right">
+                <li class="big-bg">
+                    <a>下载二维码链接</a>
+                </li>
+                <li class="big-bg">
+                    <a>选用</a>
+                </li>
+            </ul>
+        </div>
+        <div class="table-container">
+            <div class="zmy-table">
+                <nz-table #TemplatePushTable [nzData]="nzSearchAssistant.nzData"
+                          [nzPageSize]="nzSearchAssistant.pageSize"
+                          [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                          (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                          [nzNoResult]="nzSearchAssistant.nzNoResultText">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>商家ID（唯一识别码）</th>
+                        <th>商家名称</th>
+                        <th>二维码链接</th>
+                        <th>浏览量</th>
+                        <th>浏览人数</th>
+                        <th>下单数</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
+                        <td [title]="data.template_message_id">
+                         <span [appTxtCopy]="data.template_message_id">
+                            {{data.template_message_id}}
+                        </span>
+                        </td>
+                        <td [title]="data.title">{{data.title}}</td>
+                        <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td [title]="data.title">{{data.title}}</td>
+                        <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td class="operation">
+                            <a [title]="'删除'">删除</a>
+                            <a [title]="'明细'">明细</a>
+                            <a [title]="'导出'">导出</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>
