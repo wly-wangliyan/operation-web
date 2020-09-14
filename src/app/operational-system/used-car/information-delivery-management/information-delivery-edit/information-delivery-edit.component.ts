@@ -260,8 +260,8 @@ export class InformationDeliveryEditComponent implements OnInit {
         params.check_deadline = new Date(params.check_deadline).getTime() / 1000;
         params.compulsory_traffic_insurance_deadline = new Date(params.compulsory_traffic_insurance_deadline).getTime() / 1000;
         params.commercial_insurance_deadline = new Date(params.commercial_insurance_deadline).getTime() / 1000;
-        params.mileage = parseFloat(params.mileage) * 10000;
-        params.price = parseFloat(params.price) * 10000;
+        params.mileage = parseInt((parseFloat(params.mileage) * 10000) as any);
+        params.price = parseInt((parseFloat(params.price) * 10000) as any);
         params.car_description = CKEDITOR.instances.informationDeliveryCreate.getData().replace('/\r\n/g', '').replace(/\n/g, '');
         const _checkOptions = this.carManagementModel.checkOptions.filter(item => item.checked);
         params.extra_info = _checkOptions.map(item => item.value).join(',');
