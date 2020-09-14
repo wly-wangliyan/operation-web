@@ -1,1 +1,85 @@
-<p>select-business works!</p>
+<div class="modal fade" #selectBusinessModal id="selectBusinessModal" data-backdrop="false" data-keyboard="false"
+     tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">选择商家</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="select-business-container">
+                    <h4>选择商家</h4>
+                    <h4>已选商家</h4>
+                </div>
+                <div class="select-business-container">
+                    <div class="record-business-container">
+                        <div class="form-group record-business-header">
+                            <span>业务：</span>
+                            <select class="form-control" [(ngModel)]="searchParams.merchant_type" name="merchant_type">
+                                <option value="">请选择</option>
+                                <option [value]="1">检车服务</option>
+                                <option [value]="2">汽车保养服务</option>
+                                <option [value]="3">停车服务</option>
+                            </select>
+                            <input [(ngModel)]="searchParams.merchant_name" name="merchant_name" class="form-control"
+                                   placeholder="搜索商户" appIgnoreSpace maxlength="20"/>
+                            <button nz-button nzType="primary"
+                                    (appZDebounceClick)="nzSearchAssistant.submitSearch(true)">搜索
+                            </button>
+                        </div>
+                        <nz-table #recordBusinessTable [nzData]="nzSearchAssistant.nzData"
+                                  [nzPageSize]="nzSearchAssistant.pageSize"
+                                  [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                                  (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                                  [nzNoResult]="'请选择业务'">
+                            <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let data of recordBusinessTable.data;let index=index">
+                                <td [title]="data.merchant_name">
+                                    <label nz-checkbox
+                                           [ngModel]="data.isChecked" name="isChecked{{index}}"
+                                           (ngModelChange)="onClickChecked($event,data)">
+                                        {{data.merchant_name|zMaxLength:20}}
+                                    </label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <div class="activity-business-container">
+                        <ng-container *ngIf="isHasData">
+                            <ng-container *ngFor="let selectedBusiness of selectedBusinessList;">
+                                <h5 *ngIf="selectedBusiness.businessList.length">
+                                    <ng-container *ngIf="selectedBusiness.type===1">检车服务</ng-container>
+                                    <ng-container *ngIf="selectedBusiness.type===2">汽车保养服务</ng-container>
+                                    <ng-container *ngIf="selectedBusiness.type===3">停车服务</ng-container>
+                                </h5>
+                                <ul>
+                                    <li *ngFor="let business of selectedBusiness.businessList;let indexItem=index"
+                                        [title]="business.merchant_name">
+                                        <span>{{business.merchant_name|zMaxLength:20}}</span>
+                                        <a (appZDebounceClick)="onClickDeleteSelectedBusiness(selectedBusiness.type,indexItem,business.merchant_id)">移除</a>
+                                    </li>
+                                </ul>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!isHasData">
+                            <p><span>暂无数据</span></p>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="close-btn" nz-button data-dismiss="modal">取消</button>
+                <button class="sure-btn" type="button" nz-button nzType="primary"
+                        (appZDebounceClick)="onClickSaveBusiness()">保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

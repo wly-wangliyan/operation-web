@@ -16,7 +16,7 @@ const routes: Routes = [{
         {path: 'activity-create', component: DistributionActivityEditComponent},
         {path: 'activity-edit/:activity_id', component: DistributionActivityEditComponent},
         {path: 'activity-detail/:activity_id/:activity_type', component: DistributionActivityInfoComponent},
-        {path: '**', redirectTo: 'merchant-list', pathMatch: 'full'}
+        {path: '**', redirectTo: 'activity-list', pathMatch: 'full'}
     ]
 }];
 

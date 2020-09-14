@@ -1,0 +1,19 @@
+.form-group span:first-child{
+    margin-left: 20px;
+}
+
+.line{
+    margin: 0 5px;
+}
+
+button{
+    margin-left: 10px;
+}
+
+:host ::ng-deep .ant-table-placeholder {
+    border: none;
+}
+
+.modal{
+    z-index: 1000;
+}

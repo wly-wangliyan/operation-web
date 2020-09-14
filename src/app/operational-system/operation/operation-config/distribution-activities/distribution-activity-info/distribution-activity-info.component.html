@@ -13,36 +13,42 @@
 <div class="content-flow" *ngIf="tab_index===ActivityType.detail">
     <!-- 查看明细 -->
     <div class="content-container detail-container">
-        <table class="detail-table">
+        <table class="detail-table" *ngIf="distributionActivityDetail.activity_id">
             <tr>
                 <td>活动名称：</td>
-                <td></td>
+                <td>{{distributionActivityDetail.title}}</td>
                 <td>ID：</td>
-                <td></td>
+                <td>{{distributionActivityDetail.activity_id}}</td>
             </tr>
             <tr>
                 <td>跳转链接：</td>
-                <td></td>
+                <td>{{distributionActivityDetail.jump_content}}</td>
                 <td>统计业务：</td>
                 <td>检车服务</td>
             </tr>
             <tr>
                 <td>活动时间：</td>
-                <td></td>
+                <td>
+                    <ng-container *ngIf="distributionActivityDetail.start_time&&distributionActivityDetail.end_time">
+                        {{distributionActivityDetail.start_time * 1000| date:"y-MM-dd HH:mm"}}
+                        至 {{distributionActivityDetail.end_time * 1000| date:"y-MM-dd HH:mm"}}
+                    </ng-container>
+                    <ng-container *ngIf="!distributionActivityDetail.start_time||!distributionActivityDetail.end_time">
+                        --
+                    </ng-container>
+                </td>
                 <td>上线时间：</td>
-                <td></td>
+                <td>{{distributionActivityDetail.online_type === OnlineTimeType.now ? '立即上线' : (distributionActivityDetail.fixed_time * 1000| date:"y-MM-dd HH:mm")}}</td>
             </tr>
             <tr>
-                <td>下线时间：</td>
-                <td></td>
                 <td>下单数：</td>
-                <td></td>
+                <td>{{distributionActivityDetail.total_order_number}}</td>
+                <td>累计浏览量：</td>
+                <td>{{distributionActivityDetail.total_page_view}}</td>
             </tr>
             <tr>
-                <td>累计浏览量：</td>
-                <td></td>
                 <td>累计浏览人数：</td>
-                <td></td>
+                <td colspan="3">{{distributionActivityDetail.total_user_view}}</td>
             </tr>
         </table>
 
@@ -92,16 +98,12 @@
                     <tbody>
                     <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
                         <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
-                        <td [title]="data.template_message_id">
-                         <span [appTxtCopy]="data.template_message_id">
-                            {{data.template_message_id}}
-                        </span>
-                        </td>
-                        <td [title]="data.title">{{data.title}}</td>
-                        <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
-                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                        <td>{{data.ymd}}</td>
+                        <td>{{data.click_num}}</td>
+                        <td>{{data.click_people}}</td>
+                        <td>{{data.order_number}}</td>
                         <td class="operation">
-                            <a [title]="'明细'">明细</a>
+                            <a [title]="'明细'" (appZDebounceClick)="onClickDetailList()">明细</a>
                         </td>
                     </tr>
                     </tbody>
@@ -117,17 +119,17 @@
             <form class="search-form" autocomplete="off">
                 <div class="form-group">
                     <span>名称：</span>
-                    <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParams.merchant_name"
+                    <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParamsBusiness.merchant_name"
                            name="merchant_name"
                            maxlength="20"/>
                 </div>
                 <div class="form-group">
                     <span>ID：</span>
-                    <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParams.merchant_name"
+                    <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParamsBusiness.merchant_id"
                            name="merchant_name"
                            maxlength="50"/>
                     <div class="search-btn-group">
-                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
                         </button>
                     </div>
                 </div>
@@ -136,7 +138,7 @@
                 <li class="big-bg">
                     <a>下载二维码链接</a>
                 </li>
-                <li class="big-bg">
+                <li class="big-bg" (click)="onClickSelectionBusiness()">
                     <a>选用</a>
                 </li>
             </ul>
@@ -164,20 +166,20 @@
                     <tbody>
                     <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
                         <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
-                        <td [title]="data.template_message_id">
-                         <span [appTxtCopy]="data.template_message_id">
-                            {{data.template_message_id}}
+                        <td [title]="data.merchant_id">
+                         <span [appTxtCopy]="data.merchant_id">
+                            {{data.merchant_id}}
                         </span>
                         </td>
-                        <td [title]="data.title">{{data.title}}</td>
+                        <td>{{data.merchant_name}}</td>
+                        <td>{{data.code_link}}</td>
+                        <td>{{data.page_view}}</td>
+                        <td>{{data.user_view}}</td>
+                        <td>{{data.order_number}}</td>
                         <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
-                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
-                        <td [title]="data.title">{{data.title}}</td>
-                        <td>{{data.created_time * 1000| date:"y-MM-dd HH:mm"}}</td>
-                        <td>{{data.updated_time * 1000| date:"y-MM-dd HH:mm"}}</td>
                         <td class="operation">
-                            <a [title]="'删除'">删除</a>
-                            <a [title]="'明细'">明细</a>
+                            <a [title]="'删除'" (appZDebounceClick)="onClickDeleteMerchant(data.merchant_id)">删除</a>
+                            <a [title]="'明细'" (appZDebounceClick)="onClickDetailList(data.merchant_id)">明细</a>
                             <a [title]="'导出'">导出</a>
                         </td>
                     </tr>
@@ -187,3 +189,10 @@
         </div>
     </div>
 </div>
+
+<app-detail-list #detailListComponent></app-detail-list>
+
+<app-business-list #businessListComponent></app-business-list>
+
+<app-select-business #selectBusinessComponent
+                     (selectBusiness)="nzSearchAssistant.submitSearch(true)"></app-select-business>

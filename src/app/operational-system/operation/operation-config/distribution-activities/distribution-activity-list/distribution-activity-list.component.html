@@ -16,14 +16,14 @@
 
             <div class="form-group">
                 <span>名称：</span>
-                <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParams.merchant_name"
-                       name="merchant_name"
+                <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParams.title" appIgnoreSpace
+                       name="title"
                        maxlength="20"/>
             </div>
             <div class="form-group">
                 <span>ID：</span>
-                <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParams.merchant_name"
-                       name="merchant_name"
+                <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParams.activity_id" appIgnoreSpace
+                       name="activity_id"
                        maxlength="50"/>
                 <div class="search-btn-group">
                     <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
@@ -34,13 +34,15 @@
     </div>
     <div class="table-container">
         <div class="zmy-table">
-            <nz-table #TemplateTable [nzData]="nzSearchAssistant.nzData" [nzPageSize]="nzSearchAssistant.pageSize"
+            <nz-table #DistributionActivityTable [nzData]="nzSearchAssistant.nzData"
+                      [nzPageSize]="nzSearchAssistant.pageSize"
                       [(nzPageIndex)]="nzSearchAssistant.currentPage"
                       (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
                       [nzNoResult]="nzSearchAssistant.nzNoResultText">
                 <thead>
                 <tr>
                     <th>序号</th>
+                    <th>ID</th>
                     <th>活动名称</th>
                     <th>活动时间</th>
                     <th>浏览量</th>
@@ -51,34 +53,47 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
+                <tr *ngFor="let data of DistributionActivityTable.data; let templateIndex=index">
                     <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templateIndex + 1}}</td>
-                    <td [title]="data.merchant_name">
-                        {{data.merchant_name|zMaxLength:8}}
+                    <td [title]="data.activity_id">
+                         <span [appTxtCopy]="data.activity_id">
+                            {{data.activity_id}}
+                        </span>
                     </td>
-                    <td>二手车商</td>
-                    <td [title]="data.detailAddress">
-                        {{data.detailAddress|zMaxLength:8}}
+                    <td [title]="data.title">
+                        {{data.title|zMaxLength:8}}
                     </td>
-                    <td [title]="data.contacts">
-                        {{data.contacts|zMaxLength:8}}
-                    </td>
-                    <td>{{data.telephone}}</td>
                     <td>
-                        <!--                        <nz-switch [ngModel]="informationDelivery.online_status===OnlineStatus.on"-->
-                        <!--                                   nzCheckedChildren="On"-->
-                        <!--                                   [disabled]="informationDelivery.review_status!==ReviewStatus.reviewed"-->
-                        <!--                                   [nzControl]=true-->
-                        <!--                                   style="height: 10px"-->
-                        <!--                                   nzUnCheckedChildren="Off"-->
-                        <!--                                   (click)="onSwitchChange(informationDelivery)"></nz-switch>-->
+                        <ng-container *ngIf="data.start_time&&data.end_time">
+                            <div>{{data.start_time * 1000| date:"y-MM-dd HH:mm"}}</div>
+                            <div>{{data.end_time * 1000| date:"y-MM-dd HH:mm"}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="!data.start_time||!data.end_time">
+                            --
+                        </ng-container>
+                    </td>
+                    <td>
+                        {{data.total_page_view}}
+                    </td>
+                    <td>
+                        {{data.total_user_view}}
+                    </td>
+                    <td>{{data.total_order_number}}</td>
+                    <td>
+                        <nz-switch [ngModel]="data.online_status===OnlineStatus.on"
+                                   nzCheckedChildren="On"
+                                   [nzControl]=true
+                                   style="height: 10px"
+                                   nzUnCheckedChildren="Off"
+                                   (click)="onSwitchChange(data)"></nz-switch>
                     </td>
                     <td class="operation">
-                        <a [title]="'商家'" [routerLink]="['../activity-edit',data.merchant_id,ActivityType.business]">商家</a>
-                        <a [title]="'编辑'" [routerLink]="['../activity-edit',data.merchant_id]">编辑</a>
-                        <a [title]="'删除'">删除</a>
+                        <a [title]="'商家'"
+                           [routerLink]="['../activity-detail',data.activity_id,ActivityType.business]">商家</a>
+                        <a [title]="'编辑'" [routerLink]="['../activity-edit',data.activity_id]">编辑</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onClickDelete(data.activity_id)">删除</a>
                         <a [title]="'详情'"
-                           [routerLink]="['../activity-detail',data.merchant_id,ActivityType.detail]">详情</a>
+                           [routerLink]="['../activity-detail',data.activity_id,ActivityType.detail]">详情</a>
                     </td>
                 </tr>
                 </tbody>
@@ -86,3 +101,5 @@
         </div>
     </div>
 </div>
+
+<app-select-business #selectBusinessComponent></app-select-business>

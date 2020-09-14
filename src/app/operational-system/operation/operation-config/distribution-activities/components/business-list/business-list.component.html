@@ -1,1 +1,56 @@
-<p>business-list works!</p>
+<div class="modal fade" #businessListModal id="businessListModal" data-backdrop="false" data-keyboard="false"
+     tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">明细</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #businessListForm="ngForm">
+                    <div class="form-group">
+                        <span>时间：</span>
+                        <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledStartDate"
+                                        name='start_time'
+                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
+                        <span class='line'>-</span>
+                        <nz-date-picker [(ngModel)]="end_time" [nzShowToday]=false
+                                        [nzDisabledDate]="disabledEndDate"
+                                        name='end_time'
+                                        nzFormat="yyyy-MM-dd"></nz-date-picker>
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <nz-table #detailListTable [nzData]="nzSearchAssistant.nzData"
+                                  [nzPageSize]="nzSearchAssistant.pageSize"
+                                  [(nzPageIndex)]="nzSearchAssistant.currentPage"
+                                  (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                                  [nzNoResult]="nzSearchAssistant.nzNoResultText">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>浏览量</th>
+                                <th>浏览人数</th>
+                                <th>下单人数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let merchant of detailListTable.data; let i=index">
+
+                                <td>{{merchant.ymd}}</td>
+                                <td>{{merchant.click_num}}</td>
+                                <td>{{merchant.click_people}}</td>
+                                <td>{{merchant.order_number}}</td>
+                            </tr>
+                            </tbody>
+                        </nz-table>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

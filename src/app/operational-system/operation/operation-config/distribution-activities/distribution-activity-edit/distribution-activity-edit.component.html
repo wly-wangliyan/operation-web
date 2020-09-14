@@ -21,12 +21,15 @@
                             <span>落地页</span>
                         </label>
                         <div class="control-input">
-                            <select class="form-control" required>
+                            <select class="form-control" [(ngModel)]="distributionActivity.jump_type" name="jump_type"
+                                    required>
                                 <option value=''>请选择</option>
-                                <option>小程序原生页</option>
-                                <option>H5链接</option>
+                                <option [value]="1">小程序原生页</option>
+                                <option [value]="2">H5链接</option>
                             </select>
-                            <input class="form-control" placeholder="跳转链接内容"
+                            <input class="form-control" [(ngModel)]="distributionActivity.jump_content"
+                                   name="jump_content"
+                                   placeholder="跳转链接内容" appIgnoreSpace
                                    maxlength="2000" required>
                         </div>
                     </div>
@@ -51,7 +54,8 @@
                             <span>活动标题名称</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" placeholder="输入1-100字" maxlength="100">
+                            <input class="form-control" [(ngModel)]="distributionActivity.title"
+                                   name="title" appIgnoreSpace required placeholder="输入1-100字" maxlength="100">
                         </div>
                     </div>
                     <div class="row">
@@ -59,14 +63,14 @@
                             <span>活动时间</span>
                         </label>
                         <div class="control-input">
-                            <nz-date-picker [(ngModel)]="start_date" [nzShowToday]=false
+                            <nz-date-picker [(ngModel)]="distributionActivity.start_time" [nzShowToday]=false
                                             [nzDisabledDate]="disabledStartDate"
-                                            name='start_date'
+                                            name='start_time'
                                             nzFormat="yyyy-MM-dd"></nz-date-picker>
                             <span class='line'>-</span>
-                            <nz-date-picker [(ngModel)]="end_date" [nzShowToday]=false
+                            <nz-date-picker [(ngModel)]="distributionActivity.end_time" [nzShowToday]=false
                                             [nzDisabledDate]="disabledEndDate"
-                                            name='end_date'
+                                            name='end_time'
                                             nzFormat="yyyy-MM-dd"></nz-date-picker>
                         </div>
                     </div>
@@ -76,16 +80,17 @@
                             <span>上线时间</span>
                         </label>
                         <div class="control-input" style="width: 450px">
-                            <nz-radio-group [(ngModel)]="online_time_radio" name="online_time_radio"
-                                            (ngModelChange)="onChangeOnlineTime()">
+                            <nz-radio-group [(ngModel)]="distributionActivity.online_type" name="online_type" required
+                                            (ngModelChange)="distributionActivity.fixed_time = ''">
                                 <label nz-radio [nzValue]="OnlineTimeType.now">立即上线</label>
                                 <label nz-radio [nzValue]="OnlineTimeType.timing">定时上线</label>
                             </nz-radio-group>
-                            <nz-date-picker *ngIf="online_time_radio===OnlineTimeType.timing" [(ngModel)]="online_time"
+                            <nz-date-picker *ngIf="distributionActivity.online_type===OnlineTimeType.timing"
+                                            [(ngModel)]="distributionActivity.fixed_time"
                                             style="margin-left: 25px"
                                             [nzShowToday]=false
-                                            [nzDisabledDate]="disabledEndDate"
-                                            name='online_time'
+                                            [nzDisabledDate]="disabledOnlineTimeDate"
+                                            name='fixed_time' required
                                             nzFormat="yyyy-MM-dd"></nz-date-picker>
                         </div>
                     </div>
