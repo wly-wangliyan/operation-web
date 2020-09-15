@@ -30,15 +30,15 @@
                 <td>活动时间：</td>
                 <td>
                     <ng-container *ngIf="distributionActivityDetail.start_time&&distributionActivityDetail.end_time">
-                        {{distributionActivityDetail.start_time * 1000| date:"y-MM-dd HH:mm"}}
-                        至 {{distributionActivityDetail.end_time * 1000| date:"y-MM-dd HH:mm"}}
+                        {{distributionActivityDetail.start_time * 1000| date:"y-MM-dd"}}
+                        至 {{distributionActivityDetail.end_time * 1000| date:"y-MM-dd"}}
                     </ng-container>
                     <ng-container *ngIf="!distributionActivityDetail.start_time||!distributionActivityDetail.end_time">
                         --
                     </ng-container>
                 </td>
                 <td>上线时间：</td>
-                <td>{{distributionActivityDetail.online_type === OnlineTimeType.now ? '立即上线' : (distributionActivityDetail.fixed_time * 1000| date:"y-MM-dd HH:mm")}}</td>
+                <td>{{distributionActivityDetail.online_type === OnlineTimeType.now ? '立即上线' : (distributionActivityDetail.fixed_time * 1000| date:"y-MM-dd")}}</td>
             </tr>
             <tr>
                 <td>下单数：</td>
@@ -57,12 +57,12 @@
                 <div class="form-group">
                     <span>日期：</span>
                     <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false [nzDisabledDate]="disabledStartTime"
-                                    name='start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
-                                    nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                    name='start_time'
+                                    nzFormat="yyyy-MM-dd"></nz-date-picker>
                     <span class='line'>-</span>
                     <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
                                     [nzDisabledDate]="disabledEndTime"
-                                    [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                                    nzFormat="yyyy-MM-dd"></nz-date-picker>
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
                         </button>
@@ -70,10 +70,10 @@
                 </div>
             </form>
             <ul class="header-right">
-                <li class="big-bg">
+                <li class="big-bg" (click)="onClickExport(1)">
                     <a>浏览数据导出</a>
                 </li>
-                <li class="big-bg">
+                <li class="big-bg" (click)="onClickExport(2)">
                     <a>下单数据导出</a>
                 </li>
             </ul>
@@ -103,7 +103,7 @@
                         <td>{{data.user_view}}</td>
                         <td>{{data.order_number}}</td>
                         <td class="operation">
-                            <a [title]="'明细'" (appZDebounceClick)="onClickDetailList()">明细</a>
+                            <a [title]="'明细'" (appZDebounceClick)="onClickDetailList(data.daily_click_id)">明细</a>
                         </td>
                     </tr>
                     </tbody>
@@ -128,7 +128,7 @@
                     <span>ID：</span>
                     <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParamsBusiness.merchant_id"
                            appIgnoreSpace
-                           name="merchant_name"
+                           name="merchant_id"
                            maxlength="50"/>
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
@@ -137,7 +137,7 @@
                 </div>
             </form>
             <ul class="header-right">
-                <li class="big-bg" (click)="onClickDownLoadCode()">
+                <li class="big-bg" (click)="onClickBusinessExport(1)">
                     <a>下载二维码链接</a>
                 </li>
                 <li class="big-bg" (click)="onClickSelectionBusiness()">
@@ -186,7 +186,7 @@
                         <td class="operation">
                             <a [title]="'删除'" (appZDebounceClick)="onClickDeleteMerchant(data.merchant_id)">删除</a>
                             <a [title]="'明细'" (appZDebounceClick)="onClickDetailList(data.merchant_id)">明细</a>
-                            <a [title]="'导出'">导出</a>
+                            <a [title]="'导出'" (appZDebounceClick)="onClickBusinessExport(2,data.merchant_id)">导出</a>
                         </td>
                     </tr>
                     </tbody>

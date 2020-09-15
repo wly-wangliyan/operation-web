@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
 import { DistributionActivitiesParams, DistributionActivitiesService, OnlineTimeType } from '../distribution-activities.service';
+import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-distribution-activity-edit',
@@ -38,12 +39,20 @@ export class DistributionActivityEditComponent implements OnInit {
 
     // 上架开始时间的禁用部分
     public disabledStartDate = (startValue: Date): boolean => {
-        return DisabledTimeHelper.disabledFutureStartTime(startValue, this.distributionActivity.end_time);
+        if (!startValue || !this.distributionActivity.end_time) {
+            return false;
+        } else {
+            return new Date(startValue).setHours(0, 0, 0, 0) > new Date(this.distributionActivity.end_time).setHours(0, 0, 0, 0);
+        }
     };
 
     // 上架结束时间的禁用部分
     public disabledEndDate = (endValue: Date): boolean => {
-        return DisabledTimeHelper.disabledFutureEndTime(endValue, this.distributionActivity.start_time);
+        if (!endValue || !this.distributionActivity.start_time) {
+            return false;
+        } else {
+            return new Date(endValue).setHours(0, 0, 0, 0) < new Date(this.distributionActivity.start_time).setHours(0, 0, 0, 0);
+        }
     };
 
     // 上线时间的禁用部分
@@ -62,7 +71,11 @@ export class DistributionActivityEditComponent implements OnInit {
             this.globalService.promptBox.open('请选择活动开始时间！', null, 2000, null, false);
             return;
         } else {
-            this.distributionActivitiesService.requestAddDistributionActivitiesData(this.distributionActivity, this.activity_id).subscribe(data => {
+            const params: DistributionActivitiesParams = JSON.parse(JSON.stringify(this.distributionActivity));
+            params.start_time = params.start_time ? DateFormatHelper.DateToTimeStamp(params.start_time, true) : '';
+            params.end_time = params.end_time ? (DateFormatHelper.DateToTimeStamp(params.end_time, false) - 1) : '';
+            params.fixed_time = params.fixed_time ? (new Date(params.fixed_time).getTime() / 1000) : '';
+            this.distributionActivitiesService.requestAddDistributionActivitiesData(params, this.activity_id).subscribe(data => {
                 this.globalService.promptBox.open(this.activity_id ? '编辑成功！' : '创建成功', () => {
                     this.goToListPage();
                 });

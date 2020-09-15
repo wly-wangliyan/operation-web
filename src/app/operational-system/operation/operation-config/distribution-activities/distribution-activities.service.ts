@@ -163,9 +163,9 @@ export class BeianMerchantsLinkResponse extends LinkResponse {
 })
 export class DistributionActivitiesService {
 
-    // private domain = environment.OPERATION_SERVE;
+    private domain = environment.OPERATION_SERVE;
 
-    private domain = 'http://192.168.6.159:8100';
+    // private domain = 'http://192.168.6.159:8100';
 
     constructor(private httpService: HttpService) {
     }
@@ -217,6 +217,21 @@ export class DistributionActivitiesService {
      */
     public continueActivityDailyData(url: string): Observable<ActivityDailyLinkResponse> {
         return this.httpService.get(url).pipe(map(res => new ActivityDailyLinkResponse(res)));
+    }
+
+    /** 查看分销活动每日下的商家明细列表 */
+    public requestActivityDailyBusinessData(activity_id: string, daily_click_id: string, params: SearchParamsActivityBusinessListEntity): Observable<ActivityBusinessLinkResponse> {
+        const httpUrl = `${this.domain}/admin/distribution_activities/${activity_id}/daily_data/${daily_click_id}`;
+        return this.httpService.get(httpUrl, params.json()).pipe(map(res => new ActivityBusinessLinkResponse(res)));
+    }
+
+    /**
+     * 通过linkUrl继续查看分销活动每日下的商家明细列表
+     * @returns Observable<PushLinkResponse>
+     * @param url
+     */
+    public continueActivityDailyBusinessData(url: string): Observable<ActivityBusinessLinkResponse> {
+        return this.httpService.get(url).pipe(map(res => new ActivityBusinessLinkResponse(res)));
     }
 
     /** 查看分销活动商家信息列表 */

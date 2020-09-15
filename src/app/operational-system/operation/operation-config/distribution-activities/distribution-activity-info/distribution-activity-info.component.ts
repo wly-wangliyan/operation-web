@@ -14,6 +14,7 @@ import {
     SearchParamsActivityDailyEntity
 } from '../distribution-activities.service';
 import { environment } from '../../../../../../environments/environment';
+import { DateFormatHelper } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-distribution-activity-info',
@@ -69,19 +70,53 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
 
     /**
      * 明细
-     * @param merchant_id
+     * @param id
      */
-    public onClickDetailList(merchant_id?: string) {
+    public onClickDetailList(id: string) {
         if (this.tab_index === ActivityType.detail) {
-            this.detailListComponent.open(this.activity_id);
+            this.detailListComponent.open(this.activity_id, id);
         } else {
-            this.businessListComponent.open(this.activity_id, merchant_id);
+            this.businessListComponent.open(this.activity_id, id);
+        }
+    }
+
+    /**
+     * 浏览|下单数据导出
+     * @param type 1 浏览 2 下单
+     */
+    public onClickExport(type: number) {
+        let searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/orders_export?default=1`;
+        if (type === 1) {
+            searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/view_data_export?default=1`;
+        }
+        if (this.generateAndCheckParamsValid()) {
+            const params = this.searchParamsDaily.json();
+            delete params.page_num;
+            delete params.page_size;
+            for (const key in params) {
+                if (params[key]) {
+                    searchUrl += `&${key}=${params[key]}`;
+                }
+            }
+            window.open(searchUrl);
         }
     }
 
     // 下载二维码链接
-    public onClickDownLoadCode() {
-        const searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/codes_export`;
+    public onClickBusinessExport(type: number, merchant_id?: string) {
+        let searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/codes_export?default=1`;
+        if (type === 2) {
+            searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/merchants/${merchant_id}/orders_export?default=1`;
+        } else {
+            const params = this.searchParamsBusiness.json();
+            delete params.page_num;
+            delete params.page_size;
+            for (const key in params) {
+                if (params[key]) {
+                    searchUrl += `&${key}=${params[key]}`;
+                }
+            }
+        }
         window.open(searchUrl);
     }
 
@@ -116,6 +151,11 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
         if (activityType === ActivityType.detail) {
             this.requestDistributionActivityDetail();
         }
+        this.nzSearchAssistant.nzData = [];
+        this.searchParamsDaily = new SearchParamsActivityDailyEntity();
+        this.searchParamsBusiness = new SearchParamsActivityBusinessListEntity();
+        this.start_time = '';
+        this.end_time = '';
         this.nzSearchAssistant.submitSearch(true);
     }
 
@@ -142,10 +182,10 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
     public generateAndCheckParamsValid(): boolean {
         if (this.tab_index === ActivityType.detail) {
             const cTime = new Date().getTime() / 1000;
-            const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-            const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : cTime;
+            const sTime = this.start_time ? DateFormatHelper.DateToTimeStamp(this.start_time, true) : 0;
+            const eTime = this.end_time ? (DateFormatHelper.DateToTimeStamp(this.end_time, false) - 1) : cTime;
             if (sTime > eTime) {
-                this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
+                this.globalService.promptBox.open('开始时间应小于等于结束时间！', null, 2000, null, false);
                 return false;
             }
             this.searchParamsDaily.section = `${sTime},${eTime}`;

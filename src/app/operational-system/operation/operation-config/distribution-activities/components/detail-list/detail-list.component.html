@@ -26,6 +26,7 @@
                                   [nzNoResult]="nzSearchAssistant.nzNoResultText">
                             <thead>
                             <tr>
+                                <th>序号</th>
                                 <th>商家名称</th>
                                 <th>商家ID</th>
                                 <th>浏览人数</th>
@@ -36,10 +37,15 @@
                             <tbody>
                             <tr *ngFor="let data of detailListTable.data; let i=index">
                                 <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
-                                <td>{{data.merchant_name || '--'}}</td>
-                                <td>二手车商</td>
-                                <td>{{data.detailAddress}}</td>
-                                <td>{{data.detailAddress}}</td>
+                                <td [title]="data.merchant_name">{{data.merchant_name|zMaxLength:10}}</td>
+                                <td [title]="data.merchant_id">
+                                    <span [appTxtCopy]="data.merchant_id">
+                                        {{data.merchant_id|zMaxLength:10}}
+                                    </span>
+                                </td>
+                                <td>{{data.user_view}}</td>
+                                <td>{{data.page_view}}</td>
+                                <td>{{data.order_number}}</td>
                             </tr>
                             </tbody>
                         </nz-table>

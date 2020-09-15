@@ -19,6 +19,7 @@ export class SelectBusinessComponent implements NzSearchAdapter {
     public nzSearchAssistant: NzSearchAssistant;
     public selectedBusinessList: Array<SelectedBusinessItem> = [];
     public isHasData = false; // 是否有已选商家数据
+    public noResultText = '请选择业务';
     private activity_id = '';
     @Output() public selectBusiness = new EventEmitter();
 
@@ -55,6 +56,7 @@ export class SelectBusinessComponent implements NzSearchAdapter {
         this.searchParams = new SearchParamsBeianMerchantsEntity();
         this.nzSearchAssistant.nzData = [];
         const searchParamsActivityBusiness: SearchParamsActivityBusinessListEntity = new SearchParamsActivityBusinessListEntity();
+        this.noResultText = '请选择业务';
         this.selectedBusinessList = [];
         const temp1 = new SelectedBusinessItem();
         temp1.type = 1;
@@ -105,7 +107,6 @@ export class SelectBusinessComponent implements NzSearchAdapter {
      * 保存
      */
     public onClickSaveBusiness() {
-
         this.distributionActivitiesService.requestAddActivityMerchantsData(this.selectedBusinesses, this.activity_id).subscribe(data => {
             $('#selectBusinessModal').modal('hide');
             this.globalService.promptBox.open('选择商家成功！', () => {
@@ -120,6 +121,7 @@ export class SelectBusinessComponent implements NzSearchAdapter {
 
     /* 请求检索 */
     public requestSearch(): any {
+        this.noResultText = '数据加载中...';
         return this.distributionActivitiesService.requestBeianMerchantsData(this.searchParams);
     }
 

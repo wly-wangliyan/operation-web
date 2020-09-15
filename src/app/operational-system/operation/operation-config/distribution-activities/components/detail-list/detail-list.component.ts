@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../../core/global.service';
 import { timer } from 'rxjs';
-import { DistributionActivitiesService, SearchParamsActivityDailyEntity } from '../../distribution-activities.service';
+import {
+    DistributionActivitiesService,
+    SearchParamsActivityBusinessListEntity,
+} from '../../distribution-activities.service';
 
 @Component({
     selector: 'app-detail-list',
@@ -11,9 +14,10 @@ import { DistributionActivitiesService, SearchParamsActivityDailyEntity } from '
 })
 export class DetailListComponent implements NzSearchAdapter {
 
-    public searchParams: SearchParamsActivityDailyEntity = new SearchParamsActivityDailyEntity(); // 条件筛选参数
+    public searchParams: SearchParamsActivityBusinessListEntity = new SearchParamsActivityBusinessListEntity(); // 条件筛选参数
     public nzSearchAssistant: NzSearchAssistant;
     private activity_id = '';
+    private daily_click_id = '';
 
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
@@ -24,11 +28,11 @@ export class DetailListComponent implements NzSearchAdapter {
     /**
      * 打开
      */
-    public open(activity_id: string) {
+    public open(activity_id: string, daily_click_id: string) {
         this.activity_id = activity_id;
-        this.searchParams = new SearchParamsActivityDailyEntity();
+        this.daily_click_id = daily_click_id;
+        this.searchParams = new SearchParamsActivityBusinessListEntity();
         this.nzSearchAssistant.nzData = [];
-        // this.selectedMerchant = selectedMerchant.clone();
         timer(0).subscribe(() => {
             $('#detailListModal').modal();
             this.nzSearchAssistant.submitSearch(true);
@@ -39,11 +43,11 @@ export class DetailListComponent implements NzSearchAdapter {
 
     /* 请求检索 */
     public requestSearch(): any {
-        return this.distributionActivitiesService.requestActivityDailyData(this.searchParams, this.activity_id);
+        return this.distributionActivitiesService.requestActivityDailyBusinessData(this.activity_id, this.daily_click_id, this.searchParams);
     }
 
     public continueSearch(url: string): any {
-        return this.distributionActivitiesService.continueActivityDailyData(url);
+        return this.distributionActivitiesService.continueActivityDailyBusinessData(url);
     }
 
     /* 生成并检查参数有效性 */

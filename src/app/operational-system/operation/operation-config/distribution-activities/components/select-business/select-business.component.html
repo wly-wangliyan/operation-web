@@ -29,10 +29,11 @@
                             </button>
                         </div>
                         <nz-table #recordBusinessTable [nzData]="nzSearchAssistant.nzData"
+                                  [nzSize]="'small'"
                                   [nzPageSize]="nzSearchAssistant.pageSize"
                                   [(nzPageIndex)]="nzSearchAssistant.currentPage"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
-                                  [nzNoResult]="'请选择业务'">
+                                  [nzNoResult]="noResultText">
                             <thead>
                             <tr>
                                 <th></th>
