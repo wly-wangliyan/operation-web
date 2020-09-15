@@ -21,7 +21,6 @@ export class BusinessListComponent implements NzSearchAdapter {
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
-        // this.nzSearchAssistant.submitSearch(true);
     }
 
     // 上架开始时间的禁用部分
@@ -37,6 +36,8 @@ export class BusinessListComponent implements NzSearchAdapter {
 
     /**
      * 打开
+     * @param activity_id
+     * @param merchant_id
      */
     public open(activity_id: string, merchant_id: string) {
         this.activity_id = activity_id;

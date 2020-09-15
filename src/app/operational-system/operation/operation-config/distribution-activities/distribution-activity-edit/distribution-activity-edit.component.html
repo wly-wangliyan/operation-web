@@ -2,11 +2,10 @@
     <app-crumb [level1Name]="'活动管理'" [level2Name]="'分销活动'" [level2RelativePath]="'../'" [level3Name]="levelName">
     </app-crumb>
 </div>
-<!--<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>-->
-<!--    <nz-spin nzSimple></nz-spin>-->
-<!--</div>-->
-<!--[hidden]="loading"-->
-<div class="content-flow">
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
     <div class="content-container">
         <div class="content-flow">
             <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">

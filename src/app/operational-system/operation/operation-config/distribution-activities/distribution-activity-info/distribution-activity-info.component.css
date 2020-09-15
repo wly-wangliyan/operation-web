@@ -76,7 +76,7 @@
     padding: 0;
 }
 
-.search-form{
+.search-form {
     padding-left: 0;
 }
 
@@ -88,7 +88,7 @@
     margin: 0 8px;
 }
 
-.table-container{
+.table-container {
     margin-left: 0;
     margin-right: 0;
 }
@@ -97,10 +97,14 @@
     border: 1px solid #d4d4d4;
 }
 
-.content-container form{
+:host ::ng-deep .table-container {
+    background: transparent;
+}
+
+.content-container form {
     display: initial;
 }
 
-.table-container{
-  width: 100%;
+.table-container {
+    width: 100%;
 }

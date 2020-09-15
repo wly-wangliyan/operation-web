@@ -13,6 +13,7 @@ import { DistributionActivitiesParams, DistributionActivitiesService, OnlineTime
 export class DistributionActivityEditComponent implements OnInit {
     public levelName = '';
     public OnlineTimeType = OnlineTimeType;
+    public loading = true; // 标记loading
     public distributionActivity: DistributionActivitiesParams = new DistributionActivitiesParams();
     private activity_id = '';
 
@@ -30,6 +31,8 @@ export class DistributionActivityEditComponent implements OnInit {
         this.distributionActivity = new DistributionActivitiesParams();
         if (this.activity_id) {
             this.requestDistributionActivityDetail();
+        } else {
+            this.loading = false;
         }
     }
 
@@ -79,8 +82,10 @@ export class DistributionActivityEditComponent implements OnInit {
      */
     private requestDistributionActivityDetail() {
         this.distributionActivitiesService.requestDistributionActivityData(this.activity_id).subscribe(data => {
+            this.loading = false;
             this.distributionActivity = new DistributionActivitiesParams(data);
         }, err => {
+            this.loading = false;
             this.globalService.httpErrorProcess(err);
         });
     }

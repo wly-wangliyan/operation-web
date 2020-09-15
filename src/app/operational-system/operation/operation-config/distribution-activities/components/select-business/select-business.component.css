@@ -65,6 +65,10 @@
     border-bottom: 1px solid #CDCDCD;
 }
 
+:host ::ng-deep .table-container {
+    background: transparent;
+}
+
 .activity-business-container {
     margin-left: 20px;
     width: calc(50% - 20px);

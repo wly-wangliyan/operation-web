@@ -1,4 +1,4 @@
-<div class="modal fade" #selectBusinessModal id="selectBusinessModal" data-backdrop="false" data-keyboard="false"
+<div class="modal fade" id="selectBusinessModal" data-backdrop="false" data-keyboard="false"
      tabindex="-1"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-common">
@@ -55,15 +55,25 @@
                         <ng-container *ngIf="isHasData">
                             <ng-container *ngFor="let selectedBusiness of selectedBusinessList;">
                                 <h5 *ngIf="selectedBusiness.businessList.length">
-                                    <ng-container *ngIf="selectedBusiness.type===1">检车服务</ng-container>
-                                    <ng-container *ngIf="selectedBusiness.type===2">汽车保养服务</ng-container>
-                                    <ng-container *ngIf="selectedBusiness.type===3">停车服务</ng-container>
+                                    <ng-container *ngIf="selectedBusiness.type===1">
+                                        检车服务
+                                    </ng-container>
+                                    <ng-container *ngIf="selectedBusiness.type===2">
+                                        汽车保养服务
+                                    </ng-container>
+                                    <ng-container *ngIf="selectedBusiness.type===3">
+                                        停车服务
+                                    </ng-container>
                                 </h5>
                                 <ul>
                                     <li *ngFor="let business of selectedBusiness.businessList;let indexItem=index"
                                         [title]="business.merchant_name">
-                                        <span>{{business.merchant_name|zMaxLength:20}}</span>
-                                        <a (appZDebounceClick)="onClickDeleteSelectedBusiness(selectedBusiness.type,indexItem,business.merchant_id)">移除</a>
+                                        <span>
+                                            {{business.merchant_name|zMaxLength:20}}
+                                        </span>
+                                        <a (appZDebounceClick)="onClickDeleteSelectedBusiness(selectedBusiness.type,indexItem,business.merchant_id)">
+                                            移除
+                                        </a>
                                     </li>
                                 </ul>
                             </ng-container>
@@ -77,6 +87,7 @@
             <div class="modal-footer">
                 <button type="button" class="close-btn" nz-button data-dismiss="modal">取消</button>
                 <button class="sure-btn" type="button" nz-button nzType="primary"
+                        [disabled]="selectedBusinesses.length===0"
                         (appZDebounceClick)="onClickSaveBusiness()">保存
                 </button>
             </div>

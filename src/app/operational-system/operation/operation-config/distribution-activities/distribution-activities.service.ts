@@ -36,9 +36,9 @@ export enum OnlineTimeType {
 export class DistributionActivityEntity extends EntityBase {
     public activity_id: string = undefined;
     public title: string = undefined;
-    public jump_type: number = undefined;
+    public jump_type: number = undefined; // 跳转类型 1小程序原生 2H5
     public jump_content: string = undefined;
-    public business_type: number = undefined;
+    public business_type = 1; // 业务类型 1检车 2洗车 3停车
     public start_time: number = undefined;
     public end_time: number = undefined;
     public online_status: number = undefined; // 上线状态 1上线 2下线

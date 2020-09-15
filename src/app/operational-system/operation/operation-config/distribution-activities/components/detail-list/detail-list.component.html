@@ -1,4 +1,4 @@
-<div class="modal fade" #detailListModal id="detailListModal" data-backdrop="false" data-keyboard="false"
+<div class="modal fade" id="detailListModal" data-backdrop="false" data-keyboard="false"
      tabindex="-1"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-common">
@@ -8,17 +8,15 @@
                 <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form autocomplete="off" class="form-horizontal" #detailListForm="ngForm">
+                <form autocomplete="off" class="form-horizontal">
                     <div class="form-group">
                         <span>商家名称：</span>
                         <input class="form-control"
                                [(ngModel)]="searchParams.merchant_name" name="merchant_name" placeholder="请输入商户名称"
                                maxlength="20"
                                appIgnoreSpace/>
-                        <div class="search-btn-group">
-                            <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
-                            </button>
-                        </div>
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                        </button>
                     </div>
                     <div class="table-container">
                         <nz-table #detailListTable [nzData]="nzSearchAssistant.nzData"
@@ -36,12 +34,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let merchant of detailListTable.data; let i=index">
+                            <tr *ngFor="let data of detailListTable.data; let i=index">
                                 <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
-                                <td>{{merchant.merchant_name || '--'}}</td>
+                                <td>{{data.merchant_name || '--'}}</td>
                                 <td>二手车商</td>
-                                <td>{{merchant.detailAddress}}</td>
-                                <td>{{merchant.detailAddress}}</td>
+                                <td>{{data.detailAddress}}</td>
+                                <td>{{data.detailAddress}}</td>
                             </tr>
                             </tbody>
                         </nz-table>

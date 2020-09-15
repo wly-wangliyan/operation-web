@@ -1,4 +1,4 @@
-<div class="modal fade" #businessListModal id="businessListModal" data-backdrop="false" data-keyboard="false"
+<div class="modal fade" id="businessListModal" data-backdrop="false" data-keyboard="false"
      tabindex="-1"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-common">
@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form autocomplete="off" class="form-horizontal" #businessListForm="ngForm">
+                <form autocomplete="off" class="form-horizontal">
                     <div class="form-group">
                         <span>时间：</span>
                         <nz-date-picker [(ngModel)]="start_time" [nzShowToday]=false
@@ -20,11 +20,11 @@
                                         [nzDisabledDate]="disabledEndDate"
                                         name='end_time'
                                         nzFormat="yyyy-MM-dd"></nz-date-picker>
-                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
                         </button>
                     </div>
                     <div class="table-container">
-                        <nz-table #detailListTable [nzData]="nzSearchAssistant.nzData"
+                        <nz-table #businessListTable [nzData]="nzSearchAssistant.nzData"
                                   [nzPageSize]="nzSearchAssistant.pageSize"
                                   [(nzPageIndex)]="nzSearchAssistant.currentPage"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
@@ -38,12 +38,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let merchant of detailListTable.data; let i=index">
+                            <tr *ngFor="let data of businessListTable.data">
 
-                                <td>{{merchant.ymd}}</td>
-                                <td>{{merchant.click_num}}</td>
-                                <td>{{merchant.click_people}}</td>
-                                <td>{{merchant.order_number}}</td>
+                                <td>{{data.ymd * 1000| date:"y-MM-dd"}}</td>
+                                <td>{{data.page_view}}</td>
+                                <td>{{data.user_view}}</td>
+                                <td>{{data.order_number}}</td>
                             </tr>
                             </tbody>
                         </nz-table>

@@ -13,6 +13,7 @@ import {
     SearchParamsActivityBusinessListEntity,
     SearchParamsActivityDailyEntity
 } from '../distribution-activities.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
     selector: 'app-distribution-activity-info',
@@ -27,9 +28,9 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
     public start_time: any = '';
     public end_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
-    @ViewChild('detailListComponent', {static: true}) public detailListComponent: DetailListComponent;
-    @ViewChild('businessListComponent', {static: true}) public businessListComponent: BusinessListComponent;
-    @ViewChild('selectBusinessComponent', {static: true}) public selectBusinessComponent: SelectBusinessComponent;
+    @ViewChild('detailListComponent', {static: false}) public detailListComponent: DetailListComponent;
+    @ViewChild('businessListComponent', {static: false}) public businessListComponent: BusinessListComponent;
+    @ViewChild('selectBusinessComponent', {static: false}) public selectBusinessComponent: SelectBusinessComponent;
     public distributionActivityDetail: DistributionActivityEntity = new DistributionActivityEntity();
     public OnlineTimeType = OnlineTimeType;
     private activity_id = '';
@@ -45,6 +46,9 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
         this.nzSearchAssistant = new NzSearchAssistant(this);
     }
 
+    /**
+     * 选择商家
+     */
     public onClickSelectionBusiness() {
         this.selectBusinessComponent.open(this.activity_id);
     }
@@ -73,6 +77,12 @@ export class DistributionActivityInfoComponent implements OnInit, NzSearchAdapte
         } else {
             this.businessListComponent.open(this.activity_id, merchant_id);
         }
+    }
+
+    // 下载二维码链接
+    public onClickDownLoadCode() {
+        const searchUrl = `${environment.OPERATION_SERVE}/admin/distribution_activities/${this.activity_id}/codes_export`;
+        window.open(searchUrl);
     }
 
     /**

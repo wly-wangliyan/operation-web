@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../../share/nz-search-assistant';
-import {
-    MerchantManagementEntity,
-    MerchantManagementService,
-    SearchParamsEntity
-} from '../../../../../used-car/merchant-management/merchant-management.service';
 import { GlobalService } from '../../../../../../core/global.service';
 import { timer } from 'rxjs';
 import { DistributionActivitiesService, SearchParamsActivityDailyEntity } from '../../distribution-activities.service';
@@ -23,7 +18,6 @@ export class DetailListComponent implements NzSearchAdapter {
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
-        // this.nzSearchAssistant.submitSearch(true);
     }
 
 

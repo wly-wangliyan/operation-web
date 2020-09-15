@@ -90,16 +90,23 @@ export class SelectBusinessComponent implements NzSearchAdapter {
         this.isHasData = isHasData;
     }
 
+    /**
+     * 获取选择的商家列表
+     */
+    public get selectedBusinesses(): Array<BeianMerchantEntity> {
+        let businessList = [];
+        this.selectedBusinessList.forEach(item => {
+            businessList = [...businessList, ...item.businessList];
+        });
+        return businessList;
+    }
 
     /**
      * 保存
      */
     public onClickSaveBusiness() {
-        let businessList = [];
-        this.selectedBusinessList.forEach(item => {
-            businessList = [...businessList, ...item.businessList];
-        });
-        this.distributionActivitiesService.requestAddActivityMerchantsData(businessList, this.activity_id).subscribe(data => {
+
+        this.distributionActivitiesService.requestAddActivityMerchantsData(this.selectedBusinesses, this.activity_id).subscribe(data => {
             $('#selectBusinessModal').modal('hide');
             this.globalService.promptBox.open('选择商家成功！', () => {
                 this.selectBusiness.emit();

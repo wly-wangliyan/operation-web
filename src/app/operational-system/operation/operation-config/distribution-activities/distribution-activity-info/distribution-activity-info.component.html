@@ -80,7 +80,7 @@
         </div>
         <div class="table-container">
             <div class="zmy-table">
-                <nz-table #TemplatePushTable [nzData]="nzSearchAssistant.nzData"
+                <nz-table #detailListTable [nzData]="nzSearchAssistant.nzData"
                           [nzPageSize]="nzSearchAssistant.pageSize"
                           [(nzPageIndex)]="nzSearchAssistant.currentPage"
                           (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
@@ -96,11 +96,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
-                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
-                        <td>{{data.ymd}}</td>
-                        <td>{{data.click_num}}</td>
-                        <td>{{data.click_people}}</td>
+                    <tr *ngFor="let data of detailListTable.data; let index=index">
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + index + 1}}</td>
+                        <td>{{data.ymd * 1000| date:"y-MM-dd"}}</td>
+                        <td>{{data.page_view}}</td>
+                        <td>{{data.user_view}}</td>
                         <td>{{data.order_number}}</td>
                         <td class="operation">
                             <a [title]="'明细'" (appZDebounceClick)="onClickDetailList()">明细</a>
@@ -120,22 +120,24 @@
                 <div class="form-group">
                     <span>名称：</span>
                     <input class="form-control" placeholder="请输入名称" [(ngModel)]="searchParamsBusiness.merchant_name"
+                           appIgnoreSpace
                            name="merchant_name"
                            maxlength="20"/>
                 </div>
                 <div class="form-group">
                     <span>ID：</span>
                     <input class="form-control" placeholder="请输入ID" [(ngModel)]="searchParamsBusiness.merchant_id"
+                           appIgnoreSpace
                            name="merchant_name"
                            maxlength="50"/>
                     <div class="search-btn-group">
-                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
+                        <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
                         </button>
                     </div>
                 </div>
             </form>
             <ul class="header-right">
-                <li class="big-bg">
+                <li class="big-bg" (click)="onClickDownLoadCode()">
                     <a>下载二维码链接</a>
                 </li>
                 <li class="big-bg" (click)="onClickSelectionBusiness()">
@@ -145,7 +147,7 @@
         </div>
         <div class="table-container">
             <div class="zmy-table">
-                <nz-table #TemplatePushTable [nzData]="nzSearchAssistant.nzData"
+                <nz-table #businessListTable [nzData]="nzSearchAssistant.nzData"
                           [nzPageSize]="nzSearchAssistant.pageSize"
                           [(nzPageIndex)]="nzSearchAssistant.currentPage"
                           (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
@@ -164,15 +166,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let data of TemplatePushTable.data; let templatePushIndex=index">
-                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + templatePushIndex + 1}}</td>
+                    <tr *ngFor="let data of businessListTable.data; let index=index">
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + index + 1}}</td>
                         <td [title]="data.merchant_id">
                          <span [appTxtCopy]="data.merchant_id">
                             {{data.merchant_id}}
                         </span>
                         </td>
-                        <td>{{data.merchant_name}}</td>
-                        <td>{{data.code_link}}</td>
+                        <td [title]="data.merchant_name">{{data.merchant_name|zMaxLength:20}}</td>
+                        <td [title]="data.code_link">
+                         <span [appTxtCopy]="data.code_link">
+                            {{data.code_link|zMaxLength:20}}
+                        </span>
+                        </td>
                         <td>{{data.page_view}}</td>
                         <td>{{data.user_view}}</td>
                         <td>{{data.order_number}}</td>
@@ -190,9 +196,12 @@
     </div>
 </div>
 
+<!--详细信息明细-->
 <app-detail-list #detailListComponent></app-detail-list>
 
+<!--商家明细-->
 <app-business-list #businessListComponent></app-business-list>
 
+<!--选择商家-->
 <app-select-business #selectBusinessComponent
                      (selectBusiness)="nzSearchAssistant.submitSearch(true)"></app-select-business>

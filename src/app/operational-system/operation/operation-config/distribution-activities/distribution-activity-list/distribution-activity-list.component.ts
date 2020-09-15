@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NzSearchAdapter, NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
 import {
@@ -10,7 +10,6 @@ import {
     OnlineStatus
 } from 'src/app/operational-system/used-car/information-delivery-management/information-delivery-management.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
-import { SelectBusinessComponent } from '../components/select-business/select-business.component';
 
 @Component({
     selector: 'app-distribution-activity-list',
@@ -22,7 +21,6 @@ export class DistributionActivityListComponent implements NzSearchAdapter {
     public searchParams: SearchParamsDistributionActivitiesEntity = new SearchParamsDistributionActivitiesEntity(); // 条件筛选参数
     public nzSearchAssistant: NzSearchAssistant;
     public OnlineStatus = OnlineStatus;
-    @ViewChild('selectBusinessComponent', {static: true}) public selectBusinessComponent: SelectBusinessComponent;
 
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
