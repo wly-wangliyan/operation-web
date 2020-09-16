@@ -140,11 +140,13 @@ export class SelectBusinessComponent implements NzSearchAdapter {
 
     /* 检索失败处理 */
     public searchErrProcess(err: any): any {
+        this.noResultText = '暂无数据';
         this.globalService.httpErrorProcess(err);
     }
 
     /* 检索成功处理 */
     public searchCompleteProcess(results: Array<BeianMerchantEntity>): any {
+        this.noResultText = '暂无数据';
         this.selectedBusinessList.forEach(item => {
             item.businessList.forEach(business => {
                 const beianMerchant = results.find(result => result.merchant_id === business.merchant_id);
