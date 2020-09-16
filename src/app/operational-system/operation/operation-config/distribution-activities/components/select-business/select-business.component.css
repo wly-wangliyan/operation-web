@@ -138,3 +138,9 @@
 .record-business-header button {
     width: 55px;
 }
+
+.ant-btn:hover,
+.ant-btn:focus,
+.ant-btn:active {
+    background: #315ac5;
+}
