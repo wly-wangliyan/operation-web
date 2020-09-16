@@ -65,12 +65,14 @@
                             <nz-date-picker [(ngModel)]="distributionActivity.start_time" [nzShowToday]=false
                                             [nzDisabledDate]="disabledStartDate"
                                             name='start_time'
-                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                            [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                            nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                             <span class='line'>-</span>
                             <nz-date-picker [(ngModel)]="distributionActivity.end_time" [nzShowToday]=false
                                             [nzDisabledDate]="disabledEndDate"
                                             name='end_time'
-                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                            [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                            nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                         </div>
                     </div>
                     <div class="row">
@@ -90,7 +92,8 @@
                                             [nzShowToday]=false
                                             [nzDisabledDate]="disabledOnlineTimeDate"
                                             name='fixed_time' required
-                                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                                            [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                            nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                         </div>
                     </div>
                 </div>

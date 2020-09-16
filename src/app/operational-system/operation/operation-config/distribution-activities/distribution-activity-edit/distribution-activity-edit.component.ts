@@ -72,9 +72,9 @@ export class DistributionActivityEditComponent implements OnInit {
             return;
         } else {
             const params: DistributionActivitiesParams = JSON.parse(JSON.stringify(this.distributionActivity));
-            params.start_time = params.start_time ? DateFormatHelper.DateToTimeStamp(params.start_time, true) : '';
-            params.end_time = params.end_time ? (DateFormatHelper.DateToTimeStamp(params.end_time, false) - 1) : '';
-            params.fixed_time = params.fixed_time ? (new Date(params.fixed_time).getTime() / 1000) : '';
+            params.start_time = params.start_time ? ((new Date(params.start_time).setSeconds(0, 0) / 1000)) : '';
+            params.end_time = params.end_time ? ((new Date(params.end_time).setSeconds(0, 0) / 1000)) : '';
+            params.fixed_time = params.fixed_time ? ((new Date(params.fixed_time).setSeconds(0, 0) / 1000)) : '';
             this.distributionActivitiesService.requestAddDistributionActivitiesData(params, this.activity_id).subscribe(data => {
                 this.globalService.promptBox.open(this.activity_id ? '编辑成功！' : '创建成功', () => {
                     this.goToListPage();
