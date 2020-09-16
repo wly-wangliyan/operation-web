@@ -30,15 +30,15 @@
                 <td>活动时间：</td>
                 <td>
                     <ng-container *ngIf="distributionActivityDetail.start_time&&distributionActivityDetail.end_time">
-                        {{distributionActivityDetail.start_time * 1000| date:"y-MM-dd"}}
-                        至 {{distributionActivityDetail.end_time * 1000| date:"y-MM-dd"}}
+                        {{distributionActivityDetail.start_time * 1000| date:"y-MM-dd HH:mm"}}
+                        至 {{distributionActivityDetail.end_time * 1000| date:"y-MM-dd HH:mm"}}
                     </ng-container>
                     <ng-container *ngIf="!distributionActivityDetail.start_time||!distributionActivityDetail.end_time">
                         --
                     </ng-container>
                 </td>
                 <td>上线时间：</td>
-                <td>{{distributionActivityDetail.online_type === OnlineTimeType.now ? '立即上线' : (distributionActivityDetail.fixed_time * 1000| date:"y-MM-dd")}}</td>
+                <td>{{distributionActivityDetail.online_type === OnlineTimeType.now ? '立即上线' : (distributionActivityDetail.fixed_time * 1000| date:"y-MM-dd HH:mm")}}</td>
             </tr>
             <tr>
                 <td>下单数：</td>

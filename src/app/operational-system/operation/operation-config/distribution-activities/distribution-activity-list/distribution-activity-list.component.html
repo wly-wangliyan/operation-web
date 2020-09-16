@@ -65,8 +65,8 @@
                     </td>
                     <td>
                         <ng-container *ngIf="data.start_time&&data.end_time">
-                            <div>{{data.start_time * 1000| date:"y-MM-dd"}}</div>
-                            <div>{{data.end_time * 1000| date:"y-MM-dd"}}</div>
+                            <div>{{data.start_time * 1000| date:"y-MM-dd HH:mm"}}</div>
+                            <div>{{data.end_time * 1000| date:"y-MM-dd HH:mm"}}</div>
                         </ng-container>
                         <ng-container *ngIf="!data.start_time||!data.end_time">
                             --
