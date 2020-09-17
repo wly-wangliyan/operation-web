@@ -20,7 +20,7 @@
                     </div>
                     <div class="table-container">
                         <nz-table #detailListTable [nzData]="nzSearchAssistant.nzData"
-                                  [nzPageSize]="nzSearchAssistant.pageSize"
+                                  [nzPageSize]="pageSize"
                                   [(nzPageIndex)]="nzSearchAssistant.currentPage"
                                   (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
                                   [nzNoResult]="nzSearchAssistant.nzNoResultText">

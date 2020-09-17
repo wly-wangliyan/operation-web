@@ -16,12 +16,14 @@ export class BusinessListComponent implements NzSearchAdapter {
     public end_time: any = '';
     public searchParams: SearchParamsActivityDailyEntity = new SearchParamsActivityDailyEntity(); // 条件筛选参数
     public nzSearchAssistant: NzSearchAssistant;
+    public pageSize = 5;
     private activity_id = '';
     private merchant_id = '';
 
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
-        this.nzSearchAssistant = new NzSearchAssistant(this);
+        this.searchParams.page_size = 15;
+        this.nzSearchAssistant = new NzSearchAssistant(this, this.pageSize);
     }
 
     // 上架开始时间的禁用部分

@@ -13,7 +13,7 @@ import {
     styleUrls: ['./detail-list.component.css']
 })
 export class DetailListComponent implements NzSearchAdapter {
-
+    public pageSize = 5;
     public searchParams: SearchParamsActivityBusinessListEntity = new SearchParamsActivityBusinessListEntity(); // 条件筛选参数
     public nzSearchAssistant: NzSearchAssistant;
     private activity_id = '';
@@ -21,7 +21,8 @@ export class DetailListComponent implements NzSearchAdapter {
 
     constructor(private globalService: GlobalService,
                 private distributionActivitiesService: DistributionActivitiesService) {
-        this.nzSearchAssistant = new NzSearchAssistant(this);
+        this.searchParams.page_size = 15;
+        this.nzSearchAssistant = new NzSearchAssistant(this, this.pageSize);
     }
 
 
