@@ -33,6 +33,7 @@
                             <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
                                                 [maxLength]="30"
                                                 [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
+                                                [minCropBoxWidth]="200" [aspectRatio]="4/3"
                                                 [imageHeight]="100"
                                                 [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
                                                 (selectedImgChange)="onSelectedPicture($event,'images')"
