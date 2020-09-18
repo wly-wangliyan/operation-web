@@ -55,7 +55,7 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public imageShowWidth = null; // 剪裁后的图片显示的宽度
 
-  @Input() public minCropBoxWidth = 150; // 剪裁框的最小宽度
+  @Input() public minCropBoxWidth = 200; // 剪裁框的最小宽度
 
   @Input() public minCropBoxHeight = 150; // 最大值400
 
@@ -87,7 +87,7 @@ export class ZPhotoSelectComponent implements OnInit {
 
   @Input() public resizable = false; // 是否可以按比例自由截取
 
-  @Input() public aspectRatio = 1 / 1; // 截取图片比例
+  @Input() public aspectRatio = 4 / 3; // 截取图片比例
 
   public imageList: Array<ZPhotoImageEntity> = [];
 
