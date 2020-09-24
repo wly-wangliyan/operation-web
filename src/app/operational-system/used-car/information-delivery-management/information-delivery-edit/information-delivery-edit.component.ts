@@ -266,17 +266,13 @@ export class InformationDeliveryEditComponent implements OnInit {
         const _checkOptions = this.carManagementModel.checkOptions.filter(item => item.checked);
         params.extra_info = _checkOptions.map(item => item.value).join(',');
         this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
-            this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
-                params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
-                this.informationDeliveryManagementService.requestAddInformationDeliveryData(params, this.car_info_id).subscribe(data => {
-                    this.globalService.promptBox.open(this.car_info_id ? '编辑成功！' : '创建成功', () => {
-                        this.goToListPage();
-                    });
-                }, err => {
-                    this.globalService.httpErrorProcess(err);
+            params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
+            this.informationDeliveryManagementService.requestAddInformationDeliveryData(params, this.car_info_id).subscribe(data => {
+                this.globalService.promptBox.open(this.car_info_id ? '编辑成功！' : '创建成功', () => {
+                    this.goToListPage();
                 });
             }, err => {
-                this.upLoadErrMsg(err);
+                this.globalService.httpErrorProcess(err);
             });
         }, err => {
             this.upLoadErrMsg(err);

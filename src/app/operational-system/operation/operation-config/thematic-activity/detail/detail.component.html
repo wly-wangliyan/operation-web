@@ -1,56 +1,61 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'活动管理'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../../'" [level3Name]="'明细'">
-  </app-crumb>
+    <app-crumb [level1Name]="'活动管理'" [level2Name]="'专题活动列表'" [level2RelativePath]="'../../'" [level3Name]="'明细'">
+    </app-crumb>
 </div>
 <div class="content-flow">
-  <!-- 查看明细 -->
+    <!-- 查看明细 -->
 
-  <div class="content-container">
-    <div class="table-item top-table">
-      <table class="detail-table">
-        <tr>
-          <td>标题：</td>
-          <td>{{thematicRecord.title ? thematicRecord.title : '--'}}</td>
+    <div class="content-container">
+        <div class="table-item top-table">
+            <table class="detail-table">
+                <tr>
+                    <td>标题：</td>
+                    <td>{{thematicRecord.title ? thematicRecord.title : '--'}}</td>
 
-          <td>ID：</td>
-          <td>{{thematicRecord.activity_id ? thematicRecord.activity_id : '--'}}</td>
-        </tr>
-        <tr>
-          <td>累计浏览量</td>
-          <td>{{thematicRecord.click_num >= 0 ? thematicRecord.click_num : '--'}}</td>
-          <td>累计浏览人数</td>
-          <td>{{thematicRecord.click_person >= 0 ? thematicRecord.click_person : '--'}}</td>
-        </tr>
-        <tr>
-          <td>累计浏览时长：</td>
-          <td colspan="5">
-            {{thematicRecord.browsing_duration>= 0 ? (thematicRecord.browsing_duration|zDuration2:false) : '--'}}</td>
-        </tr>
-      </table>
+                    <td>ID：</td>
+                    <td>{{thematicRecord.activity_id ? thematicRecord.activity_id : '--'}}</td>
+                </tr>
+                <tr>
+                    <td>累计浏览量</td>
+                    <td>{{thematicRecord.click_num >= 0 ? thematicRecord.click_num : '--'}}</td>
+                    <td>累计浏览人数</td>
+                    <td>{{thematicRecord.click_person >= 0 ? thematicRecord.click_person : '--'}}</td>
+                </tr>
+                <tr>
+                    <td>累计浏览时长：</td>
+                    <td>
+                        {{thematicRecord.browsing_duration >= 0 ? (thematicRecord.browsing_duration|zDuration2:false) : '--'}}</td>
+                    <td>分享人数：</td>
+                    <td>
+                        {{thematicRecord.share_person >= 0 ? thematicRecord.share_person : '--'}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-item">
+            <div class="zmy-table detail-table">
+                <nz-table #statisticsTable [nzData]="readStatisticsList" [nzNoResult]="noResultText" [nzPageSize]="'15'"
+                          [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>浏览量</th>
+                        <th>浏览人数</th>
+                        <th>浏览时长</th>
+                        <th>分享人数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let data of statisticsTable.data; let i=index">
+                        <td>{{data.date ? (data.date * 1000 | date:"y-MM-dd") : '--'}}</td>
+                        <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
+                        <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
+                        <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
+                        <td>{{data.share_person}}</td>
+                    </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
     </div>
-
-    <div class="table-item">
-      <div class="zmy-table detail-table">
-        <nz-table #statisticsTable [nzData]="readStatisticsList" [nzNoResult]="noResultText" [nzPageSize]="'15'"
-          [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="onNZPageIndexChange($event)">
-          <thead>
-            <tr>
-              <th>时间</th>
-              <th>浏览量</th>
-              <th>浏览人数</th>
-              <th>浏览时长</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let data of statisticsTable.data; let i=index">
-              <td>{{data.date ? (data.date* 1000 | date:"y-MM-dd") : '--'}}</td>
-              <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
-              <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
-              <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </div>
-    </div>
-  </div>
 </div>

@@ -114,3 +114,7 @@
 .btn-group > li:nth-child(3) {
     background: url('/assets/images/add_rich.png') no-repeat center;
 }
+
+.content-container form .row .control-label{
+    width: 110px;
+}
