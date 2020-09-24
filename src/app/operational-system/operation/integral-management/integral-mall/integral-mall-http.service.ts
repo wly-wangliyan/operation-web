@@ -38,6 +38,7 @@ export class IntegralCommodityEntity extends EntityBase {
     public buy_max_num: number = undefined; // 购买上限 -1:无上限
     public people_buy_max_num: number = undefined; // 每人每日购买上限 -1:无上限
     public day_buy_max_num: number = undefined; // 商品每日购买上限 -1:无上限
+    public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
     public exchange_amount: number = undefined; // 兑换数量
@@ -74,6 +75,7 @@ export class EditCommodityParams extends EntityBase {
     public buy_max_num: number = undefined; // 购买上限 -1:无上限
     public people_buy_max_num: number = undefined; // 每人每日购买上限 -1:无上限
     public day_buy_max_num: number = undefined; // 商品每日购买上限 -1:无上限
+    public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
 
@@ -100,6 +102,7 @@ export class EditCommodityParams extends EntityBase {
             this.integral_amount = data.integral_amount;
             this.stock = data.stock;
             this.other_fields = data.other_fields || new CouponEntity();
+            this.buy_remark = data.buy_remark;
         }
     }
 

@@ -11,7 +11,7 @@ export class ReadStatisticsEntity extends EntityBase {
     public date: number = undefined; // 时间
     public click_num: string = undefined; // 阅读数
     public click_person: string = undefined; // 阅读人数
-    public share_person: string = undefined; // 分享人数
+    public wechat_share_num: string = undefined; // 分享人数
     public browsing_duration: string = undefined; // 阅读人数
 }
 
@@ -86,9 +86,11 @@ export class ContentEntity extends EntityBase {
 export class ThematicEntity extends EntityBase {
     public activity_id: string = undefined; // 活动id
     public title: string = undefined; // 标题
+    public wechat_title: string = undefined; // 微信分享标题
+    public wechat_cover: string = undefined; // 微信分享封面
     public click_num: number = undefined; // 累计阅读量
     public click_person: number = undefined; // 累计阅读人数
-    public share_person: number = undefined; // 分享人数
+    public wechat_share_num: number = undefined; // 分享人数
     public browsing_duration: number = undefined; // 累计浏览时长
     public is_deleted: boolean = undefined; // 逻辑删除
     public click_stats: Array<ReadStatisticsEntity> = []; // 阅读量统计
@@ -123,6 +125,15 @@ export class ThematicParams extends EntityBase {
     public wechat_cover: string = undefined; // 微信分享封面
     public content: Array<ContentEntity> = []; // 内容
 
+    constructor(source?: ThematicEntity) {
+        super();
+        if (source) {
+            this.title = source.title;
+            this.wechat_title = source.wechat_title;
+            this.wechat_cover = source.wechat_cover;
+        }
+    }
+
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'contents') {
             return ContentEntity;
@@ -148,6 +159,8 @@ export class ClickDataResponse extends LinkResponse {
 export class ThematicActivityService {
 
     private domain = environment.OPERATION_SERVE;
+
+    // private domain = 'http://192.168.6.124:8015';
 
     constructor(private httpService: HttpService) {
     }

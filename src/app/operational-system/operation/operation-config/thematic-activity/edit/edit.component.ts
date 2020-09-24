@@ -98,7 +98,7 @@ export class EditComponent implements OnInit, AfterViewInit {
         this.requestSubscription && this.requestSubscription.unsubscribe();
         this.requestSubscription = this.thematicService.requestThematicDetail(this.activity_id).subscribe(res => {
             this.thematicDetail = res;
-            this.thematicParams.title = res.title;
+            this.thematicParams = new ThematicParams(res);
             this.sort = 0;
             this.contentList = [];
 

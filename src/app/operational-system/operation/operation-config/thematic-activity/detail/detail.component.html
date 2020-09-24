@@ -27,7 +27,7 @@
                         {{thematicRecord.browsing_duration >= 0 ? (thematicRecord.browsing_duration|zDuration2:false) : '--'}}</td>
                     <td>分享人数：</td>
                     <td>
-                        {{thematicRecord.share_person >= 0 ? thematicRecord.share_person : '--'}}</td>
+                        {{thematicRecord.wechat_share_num >= 0 ? thematicRecord.wechat_share_num : '--'}}</td>
                 </tr>
             </table>
         </div>
@@ -51,7 +51,7 @@
                         <td>{{data.click_num >= 0 ? data.click_num : '--'}}</td>
                         <td>{{data.click_person >= 0 ? data.click_person : '--'}}</td>
                         <td>{{data.browsing_duration >= 0 ? (data.browsing_duration|zDuration2:false) : '--'}}</td>
-                        <td>{{data.share_person}}</td>
+                        <td>{{data.wechat_share_num}}</td>
                     </tr>
                     </tbody>
                 </nz-table>

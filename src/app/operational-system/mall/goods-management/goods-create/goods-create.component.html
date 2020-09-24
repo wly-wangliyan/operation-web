@@ -390,9 +390,10 @@
                         <span>订单说明</span>
                     </label>
                     <div class="control-input">
-                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.order_description"
-                               name="order_description"
-                               placeholder="输入0-200字订单说明" maxlength="200" appIgnoreSpace/>
+                        <textarea type="text" class="form-control" [(ngModel)]="commodityInfo.order_description"
+                                  rows="3"
+                                  name="order_description"
+                                  placeholder="输入0-200字订单说明" maxlength="200"></textarea>
                     </div>
                 </div>
                 <div class="row control-row">
@@ -408,6 +409,7 @@
                         <div class="jump-content">
                             <span>跳转：</span>
                             <select class="form-control" [(ngModel)]="commodityInfo.button_config.button_type"
+                                    (change)="commodityInfo.button_config.button_url=''"
                                     name="button_type">
                                 <option value=''>请选择</option>
                                 <option [value]="1">小程序原生页</option>
@@ -416,7 +418,7 @@
                             <input class="form-control" [(ngModel)]="commodityInfo.button_config.button_url"
                                    name="button_url"
                                    placeholder="请输入小程序链接" appIgnoreSpace
-                                   maxlength="2000" required>
+                                   maxlength="2000" [required]="!!commodityInfo.button_config.button_type">
                         </div>
                     </div>
                 </div>
