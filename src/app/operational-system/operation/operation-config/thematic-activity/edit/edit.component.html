@@ -45,14 +45,13 @@
                 </label>
                 <div class="control-input">
                     <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
-                                        [maxLength]="1"
-                                        [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
-                                        [imageHeight]="100"
+                                        [isCutCoverImg]="true" (selectedImgChange)="onWechatSelectedPicture($event)"
+                                        file_id="thematicImg" #thematicImg
+                                        [imageWidth]="125" [imageHeight]="100"
                                         [imageUrls]="thematicParams.wechat_cover?[thematicParams.wechat_cover]:[]"
-                                        [imageShowWidth]="100"
-                                        [resizable]="true"
-                                        (selectedImgChange)="onWechatSelectedPicture($event)"
-                                        file_id="thematicImg" #thematicImg>
+                                        [aspectRatio]="1.25/1"
+                                        [minCropBoxWidth]="270" [minCropBoxHeight]="216" [resizable]="true"
+                                        [imageAddHeight]="100">
                     </app-z-photo-select>
                 </div>
             </div>
