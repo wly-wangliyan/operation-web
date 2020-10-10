@@ -1,5 +1,10 @@
 <div class="content-header">
-    <app-crumb [level1Name]="'积分管理'" [level2Name]="'用户积分管理'"></app-crumb>
+    <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换记录'"></app-crumb>
+    <ul class="header-right">
+        <li class="big-bg">
+            <a (click)='onExport()'>数据导出</a>
+        </li>
+    </ul>
 </div>
 <div class="content-flow">
     <div class="table-container">

@@ -3,6 +3,7 @@ import { SearchUserIntegralParams, UserIntegralHttpService } from '../../user-in
 import { NzSearchAssistant } from '../../../../../share/nz-search-assistant';
 import { GlobalService } from '../../../../../core/global.service';
 import { DisabledTimeHelper } from '../../../../../../utils/disabled-time-helper';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-record-list',
@@ -23,6 +24,22 @@ export class RecordListComponent implements OnInit {
   ngOnInit() {
     this.nzSearchAssistant = new NzSearchAssistant(this);
     this.nzSearchAssistant.submitSearch(true);
+  }
+
+  // 数据导出
+  public onExport() {
+    if (this.generateAndCheckParamsValid()) {
+      let searchUrl = `${environment.EXEMPTION_DOMAIN}/exemption/orders/export?default=1`;
+      const params = this.searchParams.json();
+      delete params.page_num;
+      delete params.page_size;
+      for (const key in params) {
+        if (params[key]) {
+          searchUrl += `&${key}=${params[key]}`;
+        }
+      }
+      window.open(searchUrl);
+    }
   }
 
   // 开始时间的禁用部分
