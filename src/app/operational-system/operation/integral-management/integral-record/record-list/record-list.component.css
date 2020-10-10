@@ -1,0 +1,46 @@
+.search-container {
+    padding: 0;
+}
+
+.img-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.img-box {
+    width: 90px;
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.img-box img {
+    width: 90px;
+}
+
+.line {
+    margin: 0 8px;
+}
+
+.goods-content {
+    display: flex;
+    align-items: center;
+}
+
+.goods-content > a {
+    word-break: keep-all;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.goods-content > p {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.goods-content > p > span:first-child {
+    margin-bottom: 10px;
+}

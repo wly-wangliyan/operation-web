@@ -127,8 +127,10 @@ export class MenuOperationService {
         systemMenu.children.push(subFinanceMenu1);
         const subFinanceMenu2 = new SideMenuItem('用户积分管理', '/main/operation/integral-management/user-integral', systemMenu);
         systemMenu.children.push(subFinanceMenu2);
-        const subFinanceMenu3 = new SideMenuItem('积分订单管理', '/main/operation/integral-management/integral-order', systemMenu);
+        const subFinanceMenu3 = new SideMenuItem('积分兑换记录', '/main/operation/integral-management/integral-record', systemMenu);
         systemMenu.children.push(subFinanceMenu3);
+        const subFinanceMenu4 = new SideMenuItem('积分订单管理', '/main/operation/integral-management/integral-order', systemMenu);
+        systemMenu.children.push(subFinanceMenu4);
         this.routeLinkList.push(systemMenu);
         return systemMenu;
     }
