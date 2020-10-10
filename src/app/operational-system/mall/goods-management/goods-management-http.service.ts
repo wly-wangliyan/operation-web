@@ -102,6 +102,7 @@ export class CommodityEntity extends EntityBase {
     public cover_image = ''; // 封面图片
     public click_num: number = undefined; // 累计点击量
     public click_person: number = undefined; // 累计点击人数
+    public isChecked = false; // ui
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'specifications') {

@@ -5,7 +5,7 @@ import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { CommodityEntity } from '../../../mall/goods-management/goods-management-http.service';
+import { ButtonConfigEntity, CommodityEntity } from '../../../mall/goods-management/goods-management-http.service';
 
 // 商品列表筛选
 export class SearchIntegralCommodityParams extends EntityBase {
@@ -78,6 +78,8 @@ export class EditCommodityParams extends EntityBase {
     public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
+    public shipping_method = '2';
+    public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
 
     /**
      * @param data 编辑积分商城商品

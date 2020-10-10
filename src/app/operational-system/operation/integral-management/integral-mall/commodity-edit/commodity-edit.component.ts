@@ -126,14 +126,6 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    /** 更改商品属性 */
-    public onChangeCommodityType(name: string, stutas: number): void {
-        if (this.commodityInfo[name] === stutas) {
-            return;
-        }
-        this.commodityInfo[name] = stutas;
-    }
-
     /**
      * 变更选中状态
      * @param {(1 | 2)} type 1 变更优惠券模板ID选中状态  2:变更劵组ID选中状态

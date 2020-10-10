@@ -1,7 +1,7 @@
 <div class="content-header">
     <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"></app-crumb>
     <ul class="header-right">
-        <li class="big-bg" [routerLink]="['../add']">
+        <li class="big-bg" (click)="onClickCreateProduct()">
             <a>新建</a>
         </li>
     </ul>
@@ -51,6 +51,7 @@
                     <th style="width: 18%">商品ID</th>
                     <th style="width: 18%">商品信息</th>
                     <th>兑换积分</th>
+                    <th>价格</th>
                     <th>浏览量</th>
                     <th>兑换量</th>
                     <th>创建时间</th>
@@ -92,6 +93,7 @@
                         </div>
                     </td>
                     <td>{{commodity.integral_amount || 0}}</td>
+                    <td>{{commodity.integral_amount || 0}}</td>
                     <td>
                         <div>访客：{{commodity.total_click_person || 0}}人</div>
                         <div>浏览：{{commodity.total_click_num || 0}}次</div>
@@ -120,6 +122,87 @@
                 </tr>
                 </tbody>
             </nz-table>
+        </div>
+    </div>
+</div>
+
+
+<!--新建-->
+<div class="modal fade" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" id="productCreatePromptDiv">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">新建积分商品</span>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <form class="form-horizontal"
+                  autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="control-label">
+                            <span>业务类型</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" placeholder="商城" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <span>商品</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" placeholder="搜索商品"
+                                   [(ngModel)]="commoditySearchParams.commodity_name" name="commodity_name"
+                                   (keyup)="searchText$.next()"
+                                   maxlength="20" appIgnoreSpace>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                        </label>
+                        <div class="control-input commodity-content">
+                            <ng-container *ngIf="commodityList.length">
+                                <label nz-checkbox *ngFor="let item of commodityList" [title]="item.commodity_name"
+                                       [ngModel]="item.isChecked" [name]="item.commodity_id"
+                                       (ngModelChange)="onClickChecked($event,item)">
+                                    {{item.commodity_name|zMaxLength:10}}
+                                </label>
+                            </ng-container>
+                            <ng-container *ngIf="commodityList.length===0">
+                                <nz-spin nzSimple style="padding:20px 30px"
+                                         *ngIf="!commoditySearchParams.commodity_name"></nz-spin>
+                                <p *ngIf="commoditySearchParams.commodity_name" style="margin: 0; color: #888">暂无数据</p>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <span>商品规格</span>
+                        </label>
+                        <div class="control-input">
+                            <select class="form-control">
+                                <option value="">请选择</option>
+                                <option [value]="specification.specification_id"
+                                        *ngFor="let specification of selectedCommodity.specifications">{{specification.specification_name}}
+                                </option>
+                            </select>
+                            <b class="specification-tip">注：根据选择的商品进行规格选择</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="close-btn" nz-button data-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="submit" class="sure-btn" nz-button nzType="primary"
+                            (appZDebounceClick)="onCreateTemplateData()">
+                        保存
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

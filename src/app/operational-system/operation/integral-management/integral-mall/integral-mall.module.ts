@@ -14,25 +14,28 @@ import { CommodityListComponent } from './commodity-list/commodity-list.componen
 import { CommodityTypePipe } from './share-pipes.pipe';
 import { CommodityEditComponent } from './commodity-edit/commodity-edit.component';
 import { ChooseMallGoodModalComponent } from './choose-mall-good-modal/choose-mall-good-modal.component';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
-  declarations: [
-    IntegralMallComponent,
-    StatisticDetailComponent,
-    CommodityListComponent,
-    CommodityTypePipe,
-    CommodityEditComponent,
-    ChooseMallGoodModalComponent],
-  imports: [
-    CommonModule,
-    IntegralMallRoutingModule,
-    ShareModule,
-    NzTableModule,
-    NzButtonModule,
-    NzDatePickerModule,
-    NzRadioModule,
-    NzSwitchModule,
-    NzCheckboxModule
-  ]
+    declarations: [
+        IntegralMallComponent,
+        StatisticDetailComponent,
+        CommodityListComponent,
+        CommodityTypePipe,
+        CommodityEditComponent,
+        ChooseMallGoodModalComponent],
+    imports: [
+        CommonModule,
+        IntegralMallRoutingModule,
+        ShareModule,
+        NzTableModule,
+        NzButtonModule,
+        NzDatePickerModule,
+        NzRadioModule,
+        NzSwitchModule,
+        NzCheckboxModule,
+        NzSpinModule,
+    ]
 })
-export class IntegralMallModule { }
+export class IntegralMallModule {
+}
