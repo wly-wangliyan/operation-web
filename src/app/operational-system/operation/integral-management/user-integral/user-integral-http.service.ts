@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
-import { HttpResponse } from '@angular/common/http';
 
 // 用户积分列表筛选
 export class SearchUserIntegralParams extends EntityBase {

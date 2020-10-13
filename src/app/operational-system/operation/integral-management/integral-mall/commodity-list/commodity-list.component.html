@@ -92,8 +92,8 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{commodity.integral_amount || 0}}</td>
-                    <td>{{commodity.integral_amount || 0}}</td>
+                    <td>{{commodity.exchangeIntegral || 0}}</td>
+                    <td>{{(commodity.sellPrice|centPriceChange:'元') || 0}}</td>
                     <td>
                         <div>访客：{{commodity.total_click_person || 0}}人</div>
                         <div>浏览：{{commodity.total_click_num || 0}}次</div>
@@ -183,7 +183,8 @@
                             <span>商品规格</span>
                         </label>
                         <div class="control-input">
-                            <select class="form-control">
+                            <select class="form-control" [(ngModel)]="selectedSpecificationId"
+                                    name="selectedSpecificationId">
                                 <option value="">请选择</option>
                                 <option [value]="specification.specification_id"
                                         *ngFor="let specification of selectedCommodity.specifications">{{specification.specification_name}}
@@ -198,7 +199,8 @@
                         取消
                     </button>
                     <button type="submit" class="sure-btn" nz-button nzType="primary"
-                            (appZDebounceClick)="onCreateTemplateData()">
+                            [disabled]="!selectedCommodity.commodity_id||!selectedSpecificationId"
+                            (appZDebounceClick)="onCreateProduct()">
                         保存
                     </button>
                 </div>

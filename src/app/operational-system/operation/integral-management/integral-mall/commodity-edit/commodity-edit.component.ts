@@ -3,10 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../../../core/global.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import { ZPhotoSelectComponent } from '../../../../../share/components/z-photo-select/z-photo-select.component';
-import { IntegralMallHttpService, EditCommodityParams, CouponEntity } from '../integral-mall-http.service';
+import { IntegralMallHttpService, EditCommodityParams } from '../integral-mall-http.service';
 import { ErrMessageGroup, ErrMessageBase } from '../../../../../../utils/error-message-helper';
-import { ChooseMallGoodModalComponent } from '../choose-mall-good-modal/choose-mall-good-modal.component';
 import { timer } from 'rxjs';
+import { BusinessEntity } from '../../../../mall/business-management/business-management.service';
+import {
+    GoodsManagementHttpService,
+    SpecificationEntity,
+    SpecificationParams
+} from '../../../../mall/goods-management/goods-management-http.service';
 
 @Component({
     selector: 'app-commodity-edit',
@@ -14,15 +19,15 @@ import { timer } from 'rxjs';
     styleUrls: ['./commodity-edit.component.less']
 })
 export class CommodityEditComponent implements OnInit, OnDestroy {
-    public sourceType: 1 | 2 | 3; // 1:新建2:编辑3:查看
+    public sourceType: 2 | 3; // 2:编辑3:查看
     public commodity_id: string; // 商品id
     public commodity_type: number; // 商品类型
     public commodityInfo: EditCommodityParams; // 商品详情
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
     public coverImgList: Array<any> = []; // 封面图片
     public aspectRatio = 1.93 / 1; // 截取图片比例
-    public isCheckedCoupon = false;
-    public isCheckedCouponGroup = false;
+    public businessList: Array<BusinessEntity> = []; // 商家列表
+    public specificationList: Array<SpecificationEntity> = []; // 规格对象列表
     private onSubmitSubscription: any;
     public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
 
@@ -30,7 +35,27 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
 
     @ViewChild('commodityImg', {static: false}) public commodityImgSelectComponent: ZPhotoSelectComponent;
 
-    @ViewChild('chooseGood', {static: false}) public chooseGoodComponent: ChooseMallGoodModalComponent;
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private globalService: GlobalService,
+        private goodsManagementHttpService: GoodsManagementHttpService,
+        private integralMallHttpService: IntegralMallHttpService) {
+        this.sourceType = this.router.url.includes('/edit/') ? 2 : 3;
+        this.route.paramMap.subscribe(map => {
+            this.commodity_id = map.get('commodity_id');
+            this.commodity_type = Number(map.get('commodity_type'));
+        });
+    }
+
+    public ngOnInit() {
+        this.clearErr();
+        this.businessList = [];
+        this.requestbusinessList();
+        if (this.commodity_id) {
+            this.requestCommodityById();
+        }
+    }
 
     /**
      * 校验是否选择了图片
@@ -47,117 +72,11 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * 校验选项卡
-     * @returns boolean
-     */
-    public get CheckTabValia(): boolean {
-        if (!this.commodityInfo.commodity_type) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * 校验是否填写编辑器内容
      * @returns boolean
      */
     public get CheckEditorValid(): boolean {
-        if (!CKEDITOR.instances.commodityEditor || !CKEDITOR.instances.commodityEditor.getData()) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 校验是否选中优惠券ID
-     * @readonly
-     * @type {boolean}
-     */
-    public get CheckConponValid(): boolean {
-        if (this.commodityInfo.commodity_type === 3) {
-            return !this.isCheckedCoupon && !this.isCheckedCouponGroup;
-        }
-        return false;
-    }
-
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private globalService: GlobalService,
-        private integralMallHttpService: IntegralMallHttpService) {
-        this.sourceType = this.router.url.includes('/add') ? 1 : this.router.url.includes('/edit/') ? 2 : 3;
-        this.route.paramMap.subscribe(map => {
-            this.commodity_id = map.get('commodity_id');
-            this.commodity_type = Number(map.get('commodity_type'));
-        });
-    }
-
-    public ngOnInit() {
-        this.clearErr();
-        if (this.commodity_id) {
-            this.requestCommodityById();
-        } else {
-            this.commodityInfo = new EditCommodityParams();
-            this.commodityInfo.commodity_type = 3; // 优惠券商品
-            this.commodityInfo.other_fields = new CouponEntity();
-        }
-    }
-
-    // 获取商品详情
-    private requestCommodityById() {
-        this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
-            this.commodityInfo = new EditCommodityParams(data);
-            this.commodityInfo.other_fields = data.other_fields || new CouponEntity();
-            this.isCheckedCoupon = !!this.commodityInfo.other_fields.template_coupon_ids;
-            this.isCheckedCouponGroup = !!this.commodityInfo.other_fields.coupon_group_ids;
-            this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
-            this.commodityInfo.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
-            this.commodityInfo.people_buy_max_num = data.people_buy_max_num === -1 ? null : data.people_buy_max_num;
-            this.commodityInfo.day_buy_max_num = data.day_buy_max_num === -1 ? null : data.day_buy_max_num;
-            timer(500).subscribe(() => {
-                const tempContent = this.commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
-                CKEDITOR.instances.commodityEditor.setData(tempContent);
-                this.sourceType === 3 && CKEDITOR.instances.commodityEditor.setReadOnly(true);
-            });
-        }, err => {
-            if (!this.globalService.httpErrorProcess(err)) {
-                this.globalService.promptBox.open('商品详情获取失败！', null, 2000, null, false);
-            }
-        });
-    }
-
-    /**
-     * 变更选中状态
-     * @param {(1 | 2)} type 1 变更优惠券模板ID选中状态  2:变更劵组ID选中状态
-     * @memberof CommodityEditComponent
-     */
-    public onChangeCouponCheck(event: any, type: 1 | 2): void {
-        if (!event) {
-            if (type === 1) {
-                this.commodityInfo.other_fields.template_coupon_ids = '';
-            } else {
-                this.commodityInfo.other_fields.coupon_group_ids = '';
-            }
-        }
-    }
-
-    /** 点击选用，打开选用商品弹框 */
-    public onChooseMallGoodsClick() {
-        this.chooseGoodComponent.open(this.commodityInfo.commodity_type);
-    }
-
-    // 选用商城商品
-    public onSelectedMallGoodData(event: any) {
-        const commodityInfo = new EditCommodityParams(event.commodity);
-        const tempContent = commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
-        CKEDITOR.instances.commodityEditor.setData(tempContent);
-
-        if (commodityInfo.commodity_type === 3) {
-            commodityInfo.stock = this.commodityInfo.stock;
-            commodityInfo.integral_amount = this.commodityInfo.integral_amount;
-            commodityInfo.other_fields = this.commodityInfo.other_fields || new CouponEntity();
-        }
-        this.commodityInfo = commodityInfo;
+        return !(!CKEDITOR.instances.commodityEditor || !CKEDITOR.instances.commodityEditor.getData());
     }
 
     /** 初始化错误信息 */
@@ -191,11 +110,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
                 commodityInfo.buy_max_num = this.commodityInfo.buy_max_num || -1;
                 commodityInfo.people_buy_max_num = this.commodityInfo.people_buy_max_num || -1;
                 commodityInfo.day_buy_max_num = this.commodityInfo.day_buy_max_num || -1;
-                if (this.commodity_id) {
-                    this.requestEditCommodity(commodityInfo);
-                } else {
-                    this.requestCreateCommodity(commodityInfo);
-                }
+                this.requestEditCommodity(commodityInfo);
             }, err => {
                 this.upLoadErrMsg(err);
             });
@@ -204,55 +119,87 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    // 创建商品
-    private requestCreateCommodity(commodityInfo: EditCommodityParams) {
-        console.log(commodityInfo);
-        this.integralMallHttpService.requestAddCommodityData(commodityInfo).subscribe(data => {
-            this.globalService.promptBox.open('新建商品成功', () => {
-                window.history.back();
+    // 点击取消添加/编辑
+    public onCancelClick() {
+        this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
+            this.globalService.confirmationBox.close();
+            window.history.back();
+        });
+    }
+
+    public ngOnDestroy() {
+        CKEDITOR.instances.commodityEditor && CKEDITOR.instances.commodityEditor.destroy(true);
+    }
+
+    // 获取商家列表
+    private requestbusinessList() {
+        this.goodsManagementHttpService.requestBusinessListData().subscribe(data => {
+            this.businessList = data;
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
+    // 获取商品详情
+    private requestCommodityById() {
+        this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
+            this.commodityInfo = new EditCommodityParams(data);
+            this.specificationList = data.specifications;
+            this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
+            timer(500).subscribe(() => {
+                const tempContent = this.commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
+                CKEDITOR.instances.commodityEditor.setData(tempContent);
+                this.sourceType === 3 && CKEDITOR.instances.commodityEditor.setReadOnly(true);
             });
         }, err => {
-            this.processError(err);
+            if (!this.globalService.httpErrorProcess(err)) {
+                this.globalService.promptBox.open('商品详情获取失败！', null, 2000, null, false);
+            }
         });
     }
 
     // 修改商品
     private requestEditCommodity(commodityInfo: EditCommodityParams) {
         this.integralMallHttpService.requestEditCommodityData(this.commodity_id, commodityInfo).subscribe(() => {
+            this.requestModifyCommoditySpecification();
+        }, err => {
+            this.processError(err);
+        });
+    }
+
+    /**
+     * 添加商品对应的规格
+     * @private
+     */
+    private requestModifyCommoditySpecification() {
+        const specificationParams = new SpecificationParams();
+        specificationParams.specification_objs = this.specificationList;
+        this.integralMallHttpService.requestModifyCommoditySpecificationData(this.commodity_id, specificationParams).subscribe(() => {
             this.globalService.promptBox.open('编辑商品成功', () => {
                 window.history.back();
             });
         }, err => {
-            this.processError(err);
+            if (!this.globalService.httpErrorProcess(err)) {
+                if (err.status === 422) {
+                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+
+                    for (const content of error.errors) {
+                        if (content.field === 'specification_objs' && content.code === 'invalid') {
+                            this.globalService.promptBox.open('产品规格对象列表错误或无效！', null, 2000, null, false);
+                        } else if (content.field === 'delete_specification_ids' && content.code === 'invalid') {
+                            this.globalService.promptBox.open('删除产品规格参数错误或无效！', null, 2000, null, false);
+                        } else if (content.resource === 'specifications' && content.code === 'errors') {
+                            this.globalService.promptBox.open('产品规格保存失败，请重新编辑保存！', null, 2000, null, false);
+                        }
+                    }
+                }
+            }
         });
     }
 
     // 校验商品参数是否有效
     private checkCommodityParamsValid(isCheckCommodity: boolean = true): boolean {
         this.clearErr();
-        if (this.commodityInfo.commodity_type === 3) {
-            if (!this.isCheckedCoupon && !this.isCheckedCouponGroup) {
-                this.globalService.promptBox.open('请填写优惠券ID！', null, 2000, null, false);
-                return false;
-            }
-            if (this.commodityInfo.other_fields) {
-                if (this.isCheckedCoupon) {
-                    const ids = this.commodityInfo.other_fields.template_coupon_ids.split(',');
-                    if (ids.some(id => !id)) {
-                        this.globalService.promptBox.open('优惠券模板ID格式错误！', null, 2000, null, false);
-                        return false;
-                    }
-                }
-                if (this.isCheckedCouponGroup) {
-                    const ids = this.commodityInfo.other_fields.coupon_group_ids.split(',');
-                    if (ids.some(id => !id)) {
-                        this.globalService.promptBox.open('券组ID格式错误！', null, 2000, null, false);
-                        return false;
-                    }
-                }
-            }
-        }
-
         if (isCheckCommodity) {
             if (!this.CheckImgValid) {
                 this.errMessageGroup.errJson.commodity_images.errMes = '请选择商品图片！';
@@ -278,18 +225,6 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
                 this.globalService.promptBox.open('请求地址错误！', null, 2000, null, false);
             }
         }
-    }
-
-    // 点击取消添加/编辑
-    public onCancelClick() {
-        this.globalService.confirmationBox.open('提示', '是否确认取消编辑？', () => {
-            this.globalService.confirmationBox.close();
-            window.history.back();
-        });
-    }
-
-    public ngOnDestroy() {
-        CKEDITOR.instances.commodityEditor && CKEDITOR.instances.commodityEditor.destroy(true);
     }
 
     // 处理错误消息

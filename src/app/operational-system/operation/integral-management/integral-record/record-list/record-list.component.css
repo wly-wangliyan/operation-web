@@ -33,12 +33,11 @@
     word-break: keep-all;
     text-align: left;
     white-space: nowrap;
+    margin-right: 10px;
 }
 
-.goods-content > p {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
+.search-btn-group {
+    margin-top: 1px !important;
 }
 
 .goods-content > p > span:first-child {

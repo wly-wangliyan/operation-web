@@ -1,10 +1,10 @@
 <div class="content-header">
     <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换记录'"></app-crumb>
-    <ul class="header-right">
-        <li class="big-bg">
-            <a (click)='onExport()'>数据导出</a>
-        </li>
-    </ul>
+    <!--    <ul class="header-right">-->
+    <!--        <li class="big-bg">-->
+    <!--            <a (click)='onExport()'>数据导出</a>-->
+    <!--        </li>-->
+    <!--    </ul>-->
 </div>
 <div class="content-flow">
     <div class="table-container">
@@ -12,49 +12,53 @@
             <form class="search-form" autocomplete="off">
                 <div class="form-group">
                     <span>手机号：</span>
-                    <input name="telephone" class="form-control" [(ngModel)]="searchParams.telephone" maxlength="12"
+                    <input name="mobile" class="form-control" [(ngModel)]="searchParams.mobile" maxlength="12"
                            placeholder="请输入手机号" appIntNumber/>
                 </div>
                 <div class="form-group">
                     <span>商品名称：</span>
-                    <input name="telephone" class="form-control" [(ngModel)]="searchParams.telephone" maxlength="20"
+                    <input name="commodity_name" class="form-control" [(ngModel)]="searchParams.commodity_name"
+                           appIgnoreSpace
+                           maxlength="20"
                            placeholder="请输入商品名称"/>
                 </div>
                 <div class="form-group">
                     <span>订单号：</span>
-                    <input name="telephone" class="form-control" [(ngModel)]="searchParams.telephone"
+                    <input name="order_id" class="form-control" [(ngModel)]="searchParams.order_id"
                            placeholder="请输入订单号"/>
                 </div>
                 <div class="form-group">
                     <span>兑换时间：</span>
-                    <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false
-                                    [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                    <nz-date-picker [(ngModel)]="exchange_start_time" name='exchange_start_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledExchangeStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
                                     nzFormat="yyyy-MM-dd HH:mm">
                     </nz-date-picker>
                     <span class='line'>-</span>
-                    <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
-                                    [nzDisabledDate]="disabledEndTime"
+                    <nz-date-picker [(ngModel)]="exchange_end_time" name='exchange_end_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledExchangeEndTime"
                                     [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 </div>
                 <div class="form-group">
                     <span>下单时间：</span>
-                    <nz-date-picker [(ngModel)]="start_time" name='start_time' [nzShowToday]=false
-                                    [nzDisabledDate]="disabledStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
+                    <nz-date-picker [(ngModel)]="order_start_time" name='order_start_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledOrderStartTime" [nzShowTime]="{'nzFormat':'HH:mm'}"
                                     nzFormat="yyyy-MM-dd HH:mm">
                     </nz-date-picker>
                     <span class='line'>-</span>
-                    <nz-date-picker [(ngModel)]="end_time" name='end_time' [nzShowToday]=false
-                                    [nzDisabledDate]="disabledEndTime"
+                    <nz-date-picker [(ngModel)]="order_end_time" name='order_end_time' [nzShowToday]=false
+                                    [nzDisabledDate]="disabledOrderEndTime"
                                     [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
                 </div>
                 <div class="form-group">
                     <span>兑换ID：</span>
-                    <input name="user_id" class="form-control" [(ngModel)]="searchParams.user_id" maxlength="32"
+                    <input name="exchange_record_id" class="form-control" [(ngModel)]="searchParams.exchange_record_id"
+                           maxlength="32" appIgnoreSpace
                            placeholder="请输入兑换ID"/>
                 </div>
                 <div class="form-group">
                     <span>用户ID：</span>
-                    <input name="user_id" class="form-control" [(ngModel)]="searchParams.user_id" maxlength="32"
+                    <input name="ht_code" class="form-control" [(ngModel)]="searchParams.ht_code" maxlength="32"
+                           appIgnoreSpace
                            placeholder="请输入用户ID"/>
                     <div class="search-btn-group">
                         <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(true)">查询
@@ -66,7 +70,8 @@
         <div class="zmy-table">
             <nz-table #userIntegralTable [nzData]="nzSearchAssistant.nzData"
                       [nzNoResult]="nzSearchAssistant.nzNoResultText"
-                      [nzPageSize]="'15'" (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                      [nzPageSize]="nzSearchAssistant.pageSize"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
                       [(nzPageIndex)]="nzSearchAssistant.currentPage">
                 <thead>
                 <tr>
@@ -86,40 +91,45 @@
                 <tbody>
                 <tr *ngFor="let data of userIntegralTable.data; let i=index">
                     <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
-                    <td>{{data.user_id || '--'}}</td>
+                    <td [title]="data.exchange_record_id">
+                         <span [appTxtCopy]="data.exchange_record_id">
+                            {{data.exchange_record_id}}
+                        </span>
+                    </td>
                     <td>
                         <div class="img-item">
                             <div class="img-box">
-                                <!--                                <ng-container *ngIf="data.commodity_images.length > 0">-->
-                                <!--                                    <img [src]="data.commodity_images[0]"/>-->
-                                <!--                                </ng-container>-->
-                                <!--                                <ng-container *ngIf="data.commodity_images.length === 0">-->
-                                <img src="/assets/images/icon_no_img.png"/>
-                                <!--                                </ng-container>-->
+                                <ng-container *ngIf="data.commodity_images.length > 0">
+                                    <img [src]="data.commodity_images[0]"/>
+                                </ng-container>
+                                <ng-container *ngIf="data.commodity_images.length === 0">
+                                    <img src="/assets/images/icon_no_img.png"/>
+                                </ng-container>
                             </div>
                             <div class="goods-content">
                                 <a
                                         [title]="data.commodity_name | zMaxLength:15"
                                         [routerLink]="['/main/operation/integral-management/integral-mall/detail', data.commodity_id,3]">
-                                    {{data.commodity_name | zMaxLength:15}}34234234234324
+                                    {{data.commodity_name | zMaxLength:15}}
                                 </a>
-                                <p>
-                                    <span>10元</span>
-                                    <span>x1</span>
-                                </p>
+                                <span>x{{data.amount}}</span>
                             </div>
                         </div>
                     </td>
-                    <td>{{data.user_id || '--'}}</td>
-                    <td>{{data.telephone || '--'}}</td>
-                    <td>{{data.current_integral || 0}}</td>
-                    <td>{{data.current_integral || 0}}</td>
-                    <td>{{data.invalid_integral || 0}}</td>
-                    <td>{{data.invalid_integral || 0}}</td>
-                    <td>{{data.invalid_integral || 0}}</td>
+                    <td>{{data.ht_code || '--'}}</td>
+                    <td>{{data.mobile || '--'}}</td>
+                    <td>{{data.total_integral || 0}}</td>
+                    <td>{{data.total_amount ? (data.total_amount / 100|centPriceChange:'￥':'left') : 0}}</td>
+                    <td>{{data.order_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td>{{data.exchange_time * 1000| date:"y-MM-dd HH:mm"}}</td>
+                    <td [title]="data.order_id">
+                        <span [appTxtCopy]="data.order_id">
+                            {{data.order_id}}
+                        </span>
+                    </td>
                     <td class="operation">
                         <a title="订单详情"
-                           [routerLink]="['/main/mall/goods-order/detail/0207ff76f8be11ea99e90242ac130007/1']">订单详情</a>
+                           [routerLink]="['/main/mall/goods-order/detail',data.order_id,'1']">订单详情</a>
                     </td>
                 </tr>
                 </tbody>

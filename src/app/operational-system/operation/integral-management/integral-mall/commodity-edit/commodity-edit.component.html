@@ -4,9 +4,6 @@
                [level2RelativePath]="commodity_id?'../../../list':'../list'">
     </app-crumb>
     <ul class="header-right">
-        <!--        <li class="big-bg" *ngIf="!commodity_id" (click)="onChooseMallGoodsClick()">-->
-        <!--            <a>选用</a>-->
-        <!--        </li>-->
         <li class="big-bg" *ngIf="commodityInfo && sourceType===3"
             [routerLink]="['../../../edit/'+commodity_id+'/'+commodity_type]">
             <a>编辑</a>
@@ -19,7 +16,6 @@
             <div class="card_content">
                 <div class="row">
                     <label class="control-label">
-                        <!--                        <b>*</b>-->
                         <span>业务类型</span>
                     </label>
                     <div class="control-input">
@@ -28,7 +24,6 @@
                 </div>
                 <div class="row">
                     <label class="control-label">
-                        <!--                        <b>*</b>-->
                         <span>商品类型</span>
                     </label>
                     <div class="control-input">
@@ -51,35 +46,28 @@
                 </div>
                 <div class="row control-row">
                     <label class="control-label">
-                        <!--                        <b>*</b>-->
                         <span>供货方式</span>
                     </label>
                     <div class="control-input">
-                        <a
-                                *ngIf="commodityInfo.shipping_method=='1'">平台自营</a>
+                        <a name="shipping_method" class="tab-btn"
+                           [class.active-btn]="commodityInfo.shipping_method=='1'">平台自营</a>
                         <a style="margin-right: 5px"
-                           *ngIf="commodityInfo.shipping_method=='2'">第三方供应</a>
-                        <!--                        <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id"-->
-                        <!--                                style="width: 180px" [(ngModel)]="commodityInfo.mall_business_id" required>-->
-                        <!--                            <option value="">请选择供应商家</option>-->
-                        <!--                            <option *ngFor="let item of businessList" [value]="item.mall_business_id">-->
-                        <!--                                {{item.mall_business_name}}-->
-                        <!--                            </option>-->
-                        <!--                        </select>-->
+                           name="shipping_method" class="tab-btn"
+                           [class.active-btn]="commodityInfo.shipping_method=='2'">第三方供应</a>
+                        <select *ngIf="commodityInfo.shipping_method=='2'" class="form-control" name="mall_business_id"
+                                disabled style="width: 180px" [(ngModel)]="commodityInfo.business_id">
+                            <option *ngFor="let item of businessList" [value]="item.mall_business_id">
+                                {{item.mall_business_name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="row control-row">
                     <label class="control-label">
-                        <!--                        <b>*</b>-->
                         <span>收款方</span>
                     </label>
                     <div class="control-input">
-                        <select class="form-control" name="collection_type" style="width: 240px"
-                                [(ngModel)]="commodityInfo.collection_type" required
-                                [disabled]="commodityInfo.shipping_method!='2'||!commodityInfo.mall_business_id">
-                            <option value=1>平台</option>
-                            <option value=2>此供应商户</option>
-                        </select>
+                        <a>{{commodityInfo.collection_type == 1 ? '平台' : '此供应商户'}}</a>
                     </div>
                 </div>
                 <div class="row">
@@ -104,60 +92,6 @@
                                placeholder="请输入0-80个字副标题" maxlength="80" appIgnoreSpace [disabled]="sourceType===3">
                     </div>
                 </div>
-                <!--                <div class="row">-->
-                <!--                    <label class="control-label">-->
-                <!--                        <b>*</b>-->
-                <!--                        <span>兑换积分</span>-->
-                <!--                    </label>-->
-                <!--                    <div class="control-input">-->
-                <!--                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.integral_amount"-->
-                <!--                               name="integral_amount"-->
-                <!--                               placeholder="请输入兑换积分" appIntNumber="true" maxlength="8" required-->
-                <!--                               [disabled]="sourceType===3">-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="row">-->
-                <!--                    <label class="control-label">-->
-                <!--                        <b>*</b>-->
-                <!--                        <span>兑换库存</span>-->
-                <!--                    </label>-->
-                <!--                    <div class="control-input">-->
-                <!--                        <input type="text" class="form-control" [(ngModel)]="commodityInfo.stock" name="stock"-->
-                <!--                               placeholder="请输入兑换库存"-->
-                <!--                               appIntNumber="true" maxlength="8" required [disabled]="sourceType===3">-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="row">-->
-                <!--                    <label class="control-label">-->
-                <!--                        <b>*</b>-->
-                <!--                        <span>优惠券ID</span>-->
-                <!--                    </label>-->
-                <!--                    <div class="control-input" style="flex-wrap: wrap;">-->
-                <!--                        <div style="width: 100%;display: flex; margin-bottom: 10px;">-->
-                <!--                            <label name="template_coupon_ids_label" nz-checkbox [(ngModel)]="isCheckedCoupon"-->
-                <!--                                   [disabled]="sourceType===3"-->
-                <!--                                   (ngModelChange)="onChangeCouponCheck($event,1)">优惠券模板ID</label>-->
-                <!--                            <textarea class="form-control" rows="3" *ngIf="isCheckedCoupon"-->
-                <!--                                      placeholder="请输入优惠券模板ID，多个ID用英文逗号分隔"-->
-                <!--                                      [(ngModel)]="commodityInfo.other_fields.template_coupon_ids"-->
-                <!--                                      name="template_coupon_ids"-->
-                <!--                                      onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required-->
-                <!--                                      onkeydown="if(event.keyCode==13)return false;"-->
-                <!--                                      [disabled]="sourceType===3"></textarea>-->
-                <!--                        </div>-->
-                <!--                        <div style="width: 100%;display: flex;">-->
-                <!--                            <label name="coupon_group_ids_label" nz-checkbox [(ngModel)]="isCheckedCouponGroup"-->
-                <!--                                   [disabled]="sourceType===3"-->
-                <!--                                   (ngModelChange)="onChangeCouponCheck($event,2)">券组ID</label>-->
-                <!--                            <textarea class="form-control" rows="3" *ngIf="isCheckedCouponGroup"-->
-                <!--                                      placeholder="请输入券组ID，多个ID用英文逗号分隔"-->
-                <!--                                      [(ngModel)]="commodityInfo.other_fields.coupon_group_ids" name="coupon_group_ids"-->
-                <!--                                      onInput="value=value.replace(/[^a-zA-Z0-9,]/g,'')" appIgnoreSpace required-->
-                <!--                                      onkeydown="if(event.keyCode==13)return false;"-->
-                <!--                                      [disabled]="sourceType===3"></textarea>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
                 <div class="row">
                     <label class="control-label">
                         <b>&nbsp;</b>
@@ -216,7 +150,7 @@
                 <div class="err-message" style="margin-top: -10px;margin-bottom: 10px;">
                     <span>{{ this.errMessageGroup?.errJson?.commodity_images.errMes }}</span>
                 </div>
-                <div class="row control-row">
+                <div class="row control-row" *ngIf="specificationList.length">
                     <label class="control-label">
                         <b>*</b>
                         <span>产品规格</span>
@@ -238,37 +172,51 @@
                             </tr>
                             </thead>
                             <tbody id='table-tbody'>
-                            <tr>
+                            <tr *ngFor="let specification of specificationList;">
                                 <td style="width: 160px;">
                                     <div class="td-content">
                                         <input type="text" class="form-control"
+                                               [(ngModel)]="specification.specification_name" appIgnoreSpace required
+                                               [name]="specification.specification_name+specification.specification_id"
                                                placeholder="输入1-100字规格名称" minlength="1" maxlength="100">
                                     </div>
                                 </td>
                                 <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
                                     <div class="td-content name-content">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control"
+                                               [value]="specification.template_coupon_ids" readonly>
                                     </div>
                                 </td>
                                 <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
                                     <div class="td-content name-content">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" [value]="specification.coupon_group_ids"
+                                               readonly>
                                     </div>
                                 </td>
                                 <td style="width: 125px;">
                                     <div class="td-content special-td-content">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" [(ngModel)]="specification.integral"
+                                               appIntNumber="true" maxlength="9"
+                                               appIgnoreSpace required
+                                               [name]="'integral_'+specification.specification_id">
                                     </div>
                                 </td>
                                 <td style="width: 125px;">
                                     <div class="td-content special-td-content">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="specification.unit_sell_price"
+                                               appIgnoreSpace required appFloatNumber maxlength="9"
+                                               [name]="'unit_sell_price_'+specification.specification_id">
                                         <label class="one-word-lable">元</label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="td-content stock-content">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control"
+                                               [(ngModel)]="specification.stock"
+                                               appIntNumber="true"
+                                               appIgnoreSpace required maxlength="5"
+                                               [name]="'stock_'+specification.specification_id">
                                     </div>
                                     <!--                                    <div class="td-content stock-content" *ngIf="commodityInfo.validity_type===2">-->
                                     <!--                                        <button name="close_btn" type="button" class="price-setting-btn" nz-button-->
@@ -279,7 +227,7 @@
                                 </td>
                                 <td>
                                     <div class="td-content sold-amount-container">
-                                        <span>已售：10</span>
+                                        <span>已售：{{specification.sold_amount}}</span>
                                     </div>
                                 </td>
                             </tr>
@@ -420,8 +368,7 @@
                 <div class="row" style="margin-top: 40px;" *ngIf="sourceType!==3">
                     <button name="sure_btn" type="button" class="sure-btn" nz-button nzType="primary"
                             (appZDebounceClick)="onAddOrEditCommoditySubmit()"
-                            [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid || !CheckTabValia
-            || CheckConponValid ">
+                            [disabled]="!commodityForm.form.valid || !CheckImgValid ||  !CheckEditorValid">
                         保存
                     </button>
                     <button name="close_btn" type="button" class="close-btn" nz-button (click)="onCancelClick()">
@@ -432,6 +379,3 @@
         </form>
     </div>
 </div>
-
-<app-choose-mall-good-modal #chooseGood (selectedGoodEvent)="onSelectedMallGoodData($event)">
-</app-choose-mall-good-modal>

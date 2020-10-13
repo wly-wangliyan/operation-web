@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { EntityBase } from '../../../../../utils/z-entity';
+import { EntityBase, noClone, noJson } from '../../../../../utils/z-entity';
 import { Observable } from 'rxjs';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { environment } from '../../../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { ButtonConfigEntity, CommodityEntity } from '../../../mall/goods-management/goods-management-http.service';
+import {
+    ButtonConfigEntity,
+    CommodityEntity,
+    SpecificationEntity,
+    SpecificationParams
+} from '../../../mall/goods-management/goods-management-http.service';
 
 // 商品列表筛选
 export class SearchIntegralCommodityParams extends EntityBase {
@@ -38,6 +43,7 @@ export class IntegralCommodityEntity extends EntityBase {
     public buy_max_num: number = undefined; // 购买上限 -1:无上限
     public people_buy_max_num: number = undefined; // 每人每日购买上限 -1:无上限
     public day_buy_max_num: number = undefined; // 商品每日购买上限 -1:无上限
+    public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
     public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
@@ -51,14 +57,38 @@ export class IntegralCommodityEntity extends EntityBase {
     public commodity_sold_amount: number = undefined; // 商品销量
     public commodity_show_amount: number = undefined; // 商品展示销量
 
+    public shipping_method: any = ''; // 	供货方式 1平台自营，2第三方供应
+    public collection_type = '1'; // 收款方式 1平台 2此供应商户
+
+    public business_type = 1; // 业务类型 1商城
+    public business_id: string = undefined; // 商家id
+
+    public specifications: Array<SpecificationEntity> = []; // 规格对象列表
+
     public created_time: number = undefined; // 创建时间
     public updated_time: number = undefined; // 更新时间
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'other_fields') {
             return CouponEntity;
+        } else if (propertyName === 'specifications') {
+            return SpecificationEntity;
         }
         return null;
+    }
+
+    /**
+     * 兑换积分
+     */
+    public get exchangeIntegral(): number {
+        return this.specifications[0] ? this.specifications[0].integral : 0;
+    }
+
+    /**
+     * 价钱
+     */
+    public get sellPrice(): number {
+        return this.specifications[0] ? this.specifications[0].unit_sell_price : 0;
     }
 }
 
@@ -66,10 +96,12 @@ export class IntegralCommodityEntity extends EntityBase {
 export class EditCommodityParams extends EntityBase {
     public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品 3:优惠券商品
     public commodity_name: string = undefined; // 商品名称
+    public business_type = 1; // 业务类型 1商城
+    public business_id: string = undefined; // 商家id
     public subtitle: string = undefined; // 副标题
-    public integral_amount: number = undefined; // 兑换积分
-    public stock: number = undefined; // 库存
-    public other_fields: CouponEntity = undefined; // 优惠券模板ID和券组ID
+    // public integral_amount: number = undefined; // 兑换积分
+    // public stock: number = undefined; // 库存
+    // public other_fields: CouponEntity = undefined; // 优惠券模板ID和券组ID
     public cover_image: string = undefined; // 封面图片
     public commodity_images: Array<string> = []; // 商品图片列表
     public buy_max_num: number = undefined; // 购买上限 -1:无上限
@@ -78,12 +110,12 @@ export class EditCommodityParams extends EntityBase {
     public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
-    public shipping_method = '2';
-    public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
+    public shipping_method: any = '1'; // 	供货方式 1平台自营，2第三方供应
+    public collection_type = '1'; // 收款方式 1平台 2此供应商户
+    @noClone public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
 
     /**
      * @param data 编辑积分商城商品
-     * @param mallSource 选用商城商品
      */
     constructor(data?: any) {
         super();
@@ -98,13 +130,19 @@ export class EditCommodityParams extends EntityBase {
             this.day_buy_max_num = data.day_buy_max_num === -1 ? null : data.day_buy_max_num;
             this.remark = data.remark;
             this.commodity_description = data.commodity_description;
-            this.other_fields = new CouponEntity();
+            this.shipping_method = data.shipping_method || '1';
+            this.collection_type = data.collection_type || '1';
+            this.button_config = data.button_config.clone();
+            // this.other_fields = new CouponEntity();
         }
         if (data instanceof IntegralCommodityEntity) {
-            this.integral_amount = data.integral_amount;
-            this.stock = data.stock;
-            this.other_fields = data.other_fields || new CouponEntity();
+            // this.integral_amount = data.integral_amount;
+            // this.stock = data.stock;
+            // this.other_fields = data.other_fields || new CouponEntity();
             this.buy_remark = data.buy_remark;
+            this.business_id = data.business_id;
+        } else {
+            this.business_id = data.mall_business_id;
         }
     }
 
@@ -210,6 +248,19 @@ export class IntegralMallHttpService {
     public requestEditCommodityData(commodity_id: string, editParams: EditCommodityParams): Observable<HttpResponse<any>> {
         const httpUrl = `${this.domain}/commodities/${commodity_id}`;
         return this.httpService.put(httpUrl, editParams.json());
+    }
+
+    /**
+     * 创建/修改规格
+     * @param {string} commodity_id
+     * @param {SpecificationParams} modifyParams
+     * @returns {Observable<HttpResponse<any>>}
+     */
+    public requestModifyCommoditySpecificationData(commodity_id: string, modifyParams: SpecificationParams): Observable<HttpResponse<any>> {
+        const url = this.domain + `/admin/commodities/${commodity_id}/specification`;
+        const params = modifyParams.clone();
+        const body = params.toEditJson();
+        return this.httpService.post(url, body);
     }
 
     /**
