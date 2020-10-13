@@ -1,6 +1,6 @@
 <div class="content-header">
     <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"
-               [level3Name]="sourceType===1?'新建商品':((sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType))"
+               [level3Name]="(sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType)"
                [level2RelativePath]="commodity_id?'../../../list':'../list'">
     </app-crumb>
     <ul class="header-right">

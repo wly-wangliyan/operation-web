@@ -114,7 +114,7 @@
                            *ngIf="commodity.status===1&&((nzSearchAssistant.currentPage===1&&commodityIndex!==0) || nzSearchAssistant.currentPage>1)"
                            (click)="onTopCommodityClick(commodity.commodity_id)">置顶</a>
                         <a title="编辑"
-                           [routerLink]="['../edit', commodity.commodity_id, commodity.commodity_type]">编辑</a>
+                           [routerLink]="['../edit', commodity.commodity_id, 2]">编辑</a>
                         <a title="浏览量" [routerLink]="['../statistic-detail', commodity.commodity_id]">浏览量</a>
                         <a title="删除" *ngIf="commodity.status===2"
                            (click)="onDeleteCommodityClick(commodity.commodity_id)">删除</a>
