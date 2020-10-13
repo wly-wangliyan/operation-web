@@ -163,6 +163,7 @@ export class SpecificationEntity extends EntityBase {
     public stock: number = undefined; // 库存
     public sold_amount = 0; // 已售数量
     public stock_json: SpecificationDateEntity = undefined; // 商品有效期为使用日期当日有效时的库存信息
+    public integral: number = undefined; // 积分
     public template_coupon_ids: string = undefined; // 模板ids
     public coupon_group_ids: string = undefined; //  券组ids
     public is_deleted: boolean = undefined; // 是否被删除 true已删除,false未删除
@@ -192,8 +193,7 @@ export class SpecificationEntity extends EntityBase {
             this.sold_amount = source.sold_amount;
             this.stock_json = source.stock_json;
             this.specification_id = source.specification_id;
-            this.specification_id = source.specification_id;
-            this.specification_id = source.specification_id;
+            this.integral = source.integral;
         }
     }
 }

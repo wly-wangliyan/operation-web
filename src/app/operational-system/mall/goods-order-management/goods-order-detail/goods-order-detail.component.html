@@ -1,319 +1,334 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
-  </app-crumb>
-  <ul class="header-right" *ngIf='orderDetail.is_refundable'>
-    <li class="big-bg" *ngIf="type==='2'&&orderDetail.delivery_status===2">
-      <a (click)="onWriteOff(orderDetail)">核销券码</a>
-    </li>
-    <li class="big-bg" *ngIf="orderDetail.pay_type!=='EC'&&type!=='3'">
-      <a (click)="onEditRefundClick(orderDetail)">退款</a>
-    </li>
-  </ul>
+    <app-crumb [level1Name]="'产品订单'" [level1RelativePath]="'../../'" [level2Name]="'订单详情'">
+    </app-crumb>
+    <ul class="header-right" *ngIf='orderDetail.is_refundable'>
+        <li class="big-bg" *ngIf="type==='2'&&orderDetail.delivery_status===2">
+            <a (click)="onWriteOff(orderDetail)">核销券码</a>
+        </li>
+        <li class="big-bg" *ngIf="orderDetail.pay_type!=='EC'&&type!=='3'">
+            <a (click)="onEditRefundClick(orderDetail)">退款</a>
+        </li>
+    </ul>
 </div>
 <div class="content-flow">
-  <div class='des_card'>
-    <nz-card nzTitle="" class="top-card">
-      <div nz-card-grid class="leftTop-card">
-        <!-- 虚拟商品 -->
-        <div class="delivery-status">
-          {{orderStepStatus | realGoodsDeliveryStatus}}
-          <span *ngIf='orderStepStatus===5'><span class="line"></span> 订单已全额退款，交易自动关闭</span>
-          <span *ngIf='orderStepStatus===6'><span class="line"></span> 订单超时未支付，交易自动关闭</span>
-        </div>
-        <div style="margin: 20px 0 10px;">
-          <div class="card-text">
-            <label>订单编号：</label>
-            <span>{{orderDetail.order_id || '--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>交易单号：</label>
-            <span>{{orderDetail.trade_no || '--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>下单时间：</label>
-            <span>{{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>下单渠道：</label>
-            <span>{{orderDetail.order_channel===1?'美行停车小程序':'--'}}</span>
-          </div>
-        </div>
-      </div>
-      <div nz-card-grid class="rightTop-card">
-        <div style="width: 67%;float: left; ">
-          <!-- 未支付/已关闭（超时未支付） -->
-          <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
-          <!-- 待发货 -->
-          <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
-          <!-- 虚拟商品：已发货 -->
-          <div *ngIf="(orderStepStatus!==0&&orderStepStatus!==1&&orderStepStatus!==6)&&type==='2'">
-            <div class="card-title">
-              无需配送
+    <div class='des_card'>
+        <nz-card nzTitle="" class="top-card">
+            <div nz-card-grid class="leftTop-card">
+                <!-- 虚拟商品 -->
+                <div class="delivery-status">
+                    {{orderStepStatus | realGoodsDeliveryStatus}}
+                    <span *ngIf='orderStepStatus===5'><span class="line"></span> 订单已全额退款，交易自动关闭</span>
+                    <span *ngIf='orderStepStatus===6'><span class="line"></span> 订单超时未支付，交易自动关闭</span>
+                </div>
+                <div style="margin: 20px 0 10px;">
+                    <div class="card-text">
+                        <label>订单编号：</label>
+                        <span>{{orderDetail.order_id || '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>交易单号：</label>
+                        <span>{{orderDetail.trade_no || '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>下单时间：</label>
+                        <span>{{orderDetail.order_time ? (orderDetail.order_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>下单渠道：</label>
+                        <span>{{orderDetail.order_channel === 1 ? '美行停车小程序' : '--'}}</span>
+                    </div>
+                </div>
             </div>
-            <div class="card-content">
-              此订单商品为虚拟商品，无需配送！
+            <div nz-card-grid class="rightTop-card">
+                <div style="width: 67%;float: left; ">
+                    <!-- 未支付/已关闭（超时未支付） -->
+                    <div *ngIf="orderStepStatus===0||orderStepStatus===6">--</div>
+                    <!-- 待发货 -->
+                    <div *ngIf="orderStepStatus===1" class="card-content">客户已支付完成，尽快完成发货！</div>
+                    <!-- 虚拟商品：已发货 -->
+                    <div *ngIf="(orderStepStatus!==0&&orderStepStatus!==1&&orderStepStatus!==6)&&type==='2'">
+                        <div class="card-title">
+                            无需配送
+                        </div>
+                        <div class="card-content">
+                            此订单商品为虚拟商品，无需配送！
+                        </div>
+                    </div>
+                    <!-- 实物商品--已发货（无需配送） -->
+                    <div *ngIf="orderStepStatus===3&&type==='1'">
+                        <div class="card-title">
+                            无需配送
+                        </div>
+                        <div class="card-content">
+                            此订单无需物流配送，记得提醒买家确认收货！
+                        </div>
+                    </div>
+                    <!-- 物流信息 -->
+                    <div *ngIf="(orderStepStatus===2||orderStepStatus===4||orderStepStatus===5)&&type==='1'">
+                        <div class="card-title">
+                            {{orderDetail.delivery_company}}
+                        </div>
+                        <div>{{orderDetail.delivery_order}}</div>
+                        <div class="card-content">
+                            暂不支持物流信息跟踪，敬请期待！
+                        </div>
+                    </div>
+                </div>
+                <button
+                        *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1&&orderDetail.is_refundable"
+                        class='goods-btn' nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货
+                </button>
+                <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
+                        nz-button nzType="primary" (click)="onConfiemClick(orderDetail)">确认收货
+                </button>
+                <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
+                        style="margin-right: 10px;" nz-button nzType="primary"
+                        (click)="onEditDeliveryClick(orderDetail)">修改物流
+                </button>
             </div>
-          </div>
-          <!-- 实物商品--已发货（无需配送） -->
-          <div *ngIf="orderStepStatus===3&&type==='1'">
-            <div class="card-title">
-              无需配送
-            </div>
-            <div class="card-content">
-              此订单无需物流配送，记得提醒买家确认收货！
-            </div>
-          </div>
-          <!-- 物流信息 -->
-          <div *ngIf="(orderStepStatus===2||orderStepStatus===4||orderStepStatus===5)&&type==='1'">
-            <div class="card-title">
-              {{orderDetail.delivery_company}}
-            </div>
-            <div>{{orderDetail.delivery_order}}</div>
-            <div class="card-content">
-              暂不支持物流信息跟踪，敬请期待！
-            </div>
-          </div>
-        </div>
-        <button
-          *ngIf="type==='1'&&orderDetail.pay_status===2&&orderDetail.delivery_status===1&&orderDetail.is_refundable"
-          class='goods-btn' nz-button nzType="primary" (click)="onEditDeliveryClick(orderDetail)">发货</button>
-        <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
-          nz-button nzType="primary" (click)="onConfiemClick(orderDetail)">确认收货</button>
-        <button *ngIf="type==='1'&&orderDetail.delivery_status===2&&orderDetail.is_refundable" class='goods-btn'
-          style="margin-right: 10px;" nz-button nzType="primary"
-          (click)="onEditDeliveryClick(orderDetail)">修改物流</button>
-      </div>
-      <div nz-card-grid class="leftBootm-card">
+            <div nz-card-grid class="leftBootm-card">
         <span class="remark_info" [title]="orderDetail.platform_desc||''">
           <label style="padding-left: 16px;width: 120px;">备注（平台）: </label>
           <span>{{(orderDetail.platform_desc| zMaxLength:30) || '--'}}</span>
         </span>
-        <button class='goods-btn' nz-button nzType="primary"
-          (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑</button>
-      </div>
-      <div nz-card-grid class="rightBootm-card">
+                <button class='goods-btn' nz-button nzType="primary"
+                        (click)="onUpdateRemarkClick('备注（平台）',orderDetail)">编辑
+                </button>
+            </div>
+            <div nz-card-grid class="rightBootm-card">
         <span class="remark_info" [title]="orderDetail.business_desc||''">
           <label style="width: 120px;">备注（商家）: </label>
           <span>{{(orderDetail.business_desc| zMaxLength:30) || '--'}}</span>
         </span>
-        <button class='goods-btn' nz-button nzType="primary"
-          (click)="onUpdateRemarkClick('备注（商家）',orderDetail)">编辑</button></div>
-      <div nz-card-grid>
+                <button class='goods-btn' nz-button nzType="primary"
+                        (click)="onUpdateRemarkClick('备注（商家）',orderDetail)">编辑
+                </button>
+            </div>
+            <div nz-card-grid>
         <span class="buyer_remark" [title]="orderDetail.buyer_remark||''">
           <label style="padding-left: 16px;width: 120px;">用户订单备注: </label>
           <span>{{(orderDetail.buyer_remark| zMaxLength:30) || '--'}}</span>
         </span>
-      </div>
-    </nz-card>
-    <nz-card nzTitle="" class="bottom-card">
-      <div nz-card-grid>
-        <div class="card-title">
-          付款信息
-        </div>
-        <div style="margin: 20px 0 10px;">
-          <div class="card-text">
-            <label>应付金额：</label>
-            <span>{{orderDetail.total_amount | centPriceChange:'元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>立减/优惠：</label>
-            <span
-              class="card-span">平台立减{{orderDetail.discount_price | centPriceChange:'元'}}，优惠券抵扣{{orderDetail.coupon_real_amount | centPriceChange:'元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>商品运费：</label>
-            <span>{{orderDetail.postage | centPriceChange:'元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>实收金额：</label>
-            <span>{{orderDetail.real_price | centPriceChange:'元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>收款账户：</label>
-            <span>{{orderDetail.collection_type===1 ?'平台':orderDetail.collection_type===2 ?orderDetail.business_name:'--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>付款时间：</label>
-            <span>{{orderDetail.pay_time ?(orderDetail.pay_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
-            <span *ngIf='orderDetail.pay_type&&orderDetail.pay_type!=="other"'>
+            </div>
+        </nz-card>
+        <nz-card nzTitle="" class="bottom-card">
+            <div nz-card-grid>
+                <div class="card-title">
+                    付款信息
+                </div>
+                <div style="margin: 20px 0 10px;">
+                    <div class="card-text">
+                        <label>应付金额：</label>
+                        <span>{{orderDetail.total_amount | centPriceChange:'元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>立减/优惠：</label>
+                        <span
+                                class="card-span">平台立减{{orderDetail.discount_price | centPriceChange:'元'}}
+                            ，优惠券抵扣{{orderDetail.coupon_real_amount | centPriceChange:'元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>商品运费：</label>
+                        <span>{{orderDetail.postage | centPriceChange:'元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>实收金额：</label>
+                        <span>{{orderDetail.real_price | centPriceChange:'元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>积分：</label>
+                        <span>{{orderDetail.total_integral || '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>收款账户：</label>
+                        <span>{{orderDetail.collection_type === 1 ? '平台' : orderDetail.collection_type === 2 ? orderDetail.business_name : '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>付款时间：</label>
+                        <span>{{orderDetail.pay_time ? (orderDetail.pay_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                        <span *ngIf='orderDetail.pay_type&&orderDetail.pay_type!=="other"'>
               ({{orderDetail.pay_type|payType}})</span>
-          </div>
-        </div>
-      </div>
-      <div nz-card-grid>
-        <div class="card-title">
-          收货人信息
-        </div>
-        <div style="margin: 20px 0 10px;">
-          <div class="card-font">
-            <label style="float: left;">联系人：</label>
-            <span class="con-person">{{orderDetail.contact||'--'}}</span>
-            <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img src="/assets/images/copy.png" /></a>
-            <div style="clear: both;"></div>
-          </div>
-          <div class="card-text">
-            <label>联系电话：</label>
-            <span>{{orderDetail.mobile||'--'}}</span>
-          </div>
-          <div class="card-text" *ngIf="type==='1'">
-            <label>收货地址：</label>
-            <span class="card-span">{{orderDetail.delivery_region}}{{orderDetail.delivery_address}}</span>
-            <span *ngIf='!orderDetail.delivery_region&&!orderDetail.delivery_address'>--</span>
-          </div>
-        </div>
-      </div>
-      <div nz-card-grid>
-        <div class="card-title">
-          配送信息
-        </div>
-        <div style="margin: 20px 0 10px;">
-          <div class="card-text">
-            <label>配送方式：</label>
-            <span>{{orderDetail.is_delivery |deliveryMethod}}</span>
-          </div>
-          <div class="card-text">
-            <label>物流邮费：</label>
-            <span>{{type==='1'? (orderDetail.postage | centPriceChange:'元'):'0元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>发货时间：</label>
-            <span>{{orderDetail.delivery_time ?(orderDetail.delivery_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>收货方式：</label>
-            <span>{{orderDetail.confirm_type | confirmType}}</span>
-          </div>
-          <div class="card-text">
-            <label>收货时间：</label>
-            <span>{{orderDetail.confirm_time ?(orderDetail.confirm_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
-          </div>
-        </div>
-      </div>
-      <div nz-card-grid *ngIf='orderDetail.refund_type!==3'>
-        <div class="card-title">
-          售后/退款
-        </div>
-        <div style="margin: 20px 0 10px;">
-          <div class="card-text">
-            <label>类型：</label>
-            <span>{{orderDetail.refund_type|refundType}}</span>
-          </div>
-          <div class="card-text">
-            <label>退款状态：</label>
-            <span>{{orderDetail.refund_order?.refund_status|refundStatus}}</span>
-          </div>
-          <div class="card-text">
-            <label>退款金额：</label>
-            <span>{{orderDetail.refund_total_fee | centPriceChange:'元'}}</span>
-          </div>
-          <div class="card-text">
-            <label>交易单号：</label>
-            <span class="card-span"
-              style="word-break: break-all;">{{orderDetail.refund_order?.transaction_id || '--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>退款时间：</label>
-            <span>{{orderDetail.refund_time ?(orderDetail.refund_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</span>
-          </div>
-          <div class="card-text">
-            <label>退款备注：</label>
-            <span class="card-span"
-              [title]="orderDetail.refund_remark||''">{{(orderDetail.refund_remark| zMaxLength:30)|| '--'}}</span>
-          </div>
-        </div>
-      </div>
-    </nz-card>
-  </div>
-  <div class="table-item" style="margin-bottom: 30px;">
-    <table class="detail-table">
-      <caption>商品明细</caption>
-      <thead>
-        <tr>
-          <th>商品名称</th>
-          <th>类型</th>
-          <th>供应商</th>
-          <th>数量</th>
-          <th>原价单价</th>
-          <th>售价单价</th>
-          <th>合计应付</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let commodity of goodsInfo;let i=index">
-          <ng-container *ngIf="goodsInfo&&goodsInfo.length>0">
-            <td class="img-item">
-              <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
-                src="/assets/images/image_space_3_2.png" />
-              <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
-                src={{commodity.commodity_images[0]}} />
-              <div style="display: grid;text-align: left;">
-                <a [title]="commodity.commodity_name"
-                  [routerLink]="['/main/mall/goods-management/list/detail', commodity.commodity_id]">
-                  {{commodity.commodity_name | zMaxLength:8}}</a>
-                <span [title]="commodity.specification_name">
+                    </div>
+                </div>
+            </div>
+            <div nz-card-grid>
+                <div class="card-title">
+                    收货人信息
+                </div>
+                <div style="margin: 20px 0 10px;">
+                    <div class="card-font">
+                        <label style="float: left;">联系人：</label>
+                        <span class="con-person">{{orderDetail.contact || '--'}}</span>
+                        <a *ngIf="orderDetail.contact" [appTxtCopy]='orderInfo'><img src="/assets/images/copy.png"/></a>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="card-text">
+                        <label>联系电话：</label>
+                        <span>{{orderDetail.mobile || '--'}}</span>
+                    </div>
+                    <div class="card-text" *ngIf="type==='1'">
+                        <label>收货地址：</label>
+                        <span class="card-span">{{orderDetail.delivery_region}}{{orderDetail.delivery_address}}</span>
+                        <span *ngIf='!orderDetail.delivery_region&&!orderDetail.delivery_address'>--</span>
+                    </div>
+                </div>
+            </div>
+            <div nz-card-grid>
+                <div class="card-title">
+                    配送信息
+                </div>
+                <div style="margin: 20px 0 10px;">
+                    <div class="card-text">
+                        <label>配送方式：</label>
+                        <span>{{orderDetail.is_delivery |deliveryMethod}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>物流邮费：</label>
+                        <span>{{type === '1' ? (orderDetail.postage | centPriceChange:'元') : '0元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>发货时间：</label>
+                        <span>{{orderDetail.delivery_time ? (orderDetail.delivery_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>收货方式：</label>
+                        <span>{{orderDetail.confirm_type | confirmType}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>收货时间：</label>
+                        <span>{{orderDetail.confirm_time ? (orderDetail.confirm_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                    </div>
+                </div>
+            </div>
+            <div nz-card-grid *ngIf='orderDetail.refund_type!==3'>
+                <div class="card-title">
+                    售后/退款
+                </div>
+                <div style="margin: 20px 0 10px;">
+                    <div class="card-text">
+                        <label>类型：</label>
+                        <span>{{orderDetail.refund_type|refundType}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>退款状态：</label>
+                        <span>{{orderDetail.refund_order?.refund_status|refundStatus}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>退款金额：</label>
+                        <span>{{orderDetail.refund_total_fee | centPriceChange:'元'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>交易单号：</label>
+                        <span class="card-span"
+                              style="word-break: break-all;">{{orderDetail.refund_order?.transaction_id || '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>退款时间：</label>
+                        <span>{{orderDetail.refund_time ? (orderDetail.refund_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</span>
+                    </div>
+                    <div class="card-text">
+                        <label>退款备注：</label>
+                        <span class="card-span"
+                              [title]="orderDetail.refund_remark||''">{{(orderDetail.refund_remark| zMaxLength:30) || '--'}}</span>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+    <div class="table-item" style="margin-bottom: 30px;">
+        <table class="detail-table">
+            <caption>商品明细</caption>
+            <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>类型</th>
+                <th>供应商</th>
+                <th>数量</th>
+                <th *ngIf="!orderDetail.total_integral">原价单价</th>
+                <th *ngIf="orderDetail.total_integral">积分</th>
+                <th>{{orderDetail.total_integral ? '价格' : '售价单价'}}</th>
+                <th>合计应付</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let commodity of goodsInfo;let i=index">
+                <ng-container *ngIf="goodsInfo&&goodsInfo.length>0">
+                    <td class="img-item">
+                        <img *ngIf="!commodity.commodity_images||commodity.commodity_images.length===0"
+                             src="/assets/images/image_space_3_2.png"/>
+                        <img *ngIf="commodity.commodity_images&&commodity.commodity_images.length>0"
+                             src={{commodity.commodity_images[0]}}/>
+                        <div style="display: grid;text-align: left;">
+                            <a [title]="commodity.commodity_name"
+                               [routerLink]="['/main/mall/goods-management/list/detail', commodity.commodity_id]">
+                                {{commodity.commodity_name | zMaxLength:8}}</a>
+                            <span [title]="commodity.specification_name">
                   {{commodity.specification_name | zMaxLength:8}}</span>
-              </div>
-            </td>
-          </ng-container>
-          <ng-container *ngIf="!goodsInfo||goodsInfo.length===0">
-            <td>
-              <img src="/assets/images/image_space_3_2.png" />
-            </td>
-          </ng-container>
-          <td>{{(commodity.commodity_type|mallCommodityType)||'--'}}</td>
-          <td>{{commodity.shipping_method===1?'平台自营':commodity.shipping_method===2?commodity.business_name:'--'}}</td>
-          <td>{{commodity.amount||0}}</td>
-          <td>
-            {{commodity.unit_original_price | centPriceChange:'元'}}
-          </td>
-          <td>
-            {{commodity.unit_sell_price | centPriceChange:'元'}}
-          </td>
-          <td>
-            {{commodity.amount*commodity.unit_sell_price | centPriceChange:'元'}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div *ngIf="type==='2'" class="table-item" style="margin-bottom: 30px;">
-    <table class="detail-table">
-      <caption>商品券码</caption>
-      <thead>
-        <tr>
-          <th>核销码</th>
-          <th>有效期</th>
-          <th>核销时间</th>
-          <th>核销人</th>
-          <th>状态</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of writeOffList;let i=index">
-          <td>
-            <a [ngClass]='item.write_off_status!==1?"text-line":""'>{{item.id}}</a>
-          </td>
-          <td *ngIf='orderDetail.validity_type!==1'>
-            {{item.start_time?(item.start_time* 1000 | date:"y-MM-dd"):'--'}} -
-            {{item.end_time?(item.end_time* 1000 | date:"y-MM-dd"):'--'}}
-          </td>
-          <td *ngIf='orderDetail.validity_type===1'>
-            自 {{orderDetail.order_time ?(orderDetail.order_time* 1000 | date:"y-MM-dd HH:mm"):'--'}} 起有效
-          </td>
-          <td>{{item.write_off_time?(item.write_off_time* 1000 | date:"y-MM-dd HH:mm"):'--'}}</td>
-          <td>
-            {{item.write_off_people||'--'}}
-          </td>
-          <td>
-            {{item.write_off_status|writeOffStatus}}
-          </td>
-        </tr>
-        <tr *ngIf='!writeOffList||writeOffList.length===0'>
-          <td colspan="5" style="text-align: center;">暂无数据</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container *ngIf="!goodsInfo||goodsInfo.length===0">
+                    <td>
+                        <img src="/assets/images/image_space_3_2.png"/>
+                    </td>
+                </ng-container>
+                <td>{{(commodity.commodity_type|mallCommodityType) || '--'}}</td>
+                <td>{{commodity.shipping_method === 1 ? '平台自营' : commodity.shipping_method === 2 ? commodity.business_name : '--'}}</td>
+                <td>{{commodity.amount || 0}}</td>
+                <td *ngIf="!orderDetail.total_integral">
+                    {{commodity.unit_original_price | centPriceChange:'元'}}
+                </td>
+                <td *ngIf="orderDetail.total_integral">
+                    {{commodity.integral}}
+                </td>
+                <td>
+                    {{commodity.unit_sell_price | centPriceChange:'元'}}
+                </td>
+                <td>
+                    {{commodity.amount * commodity.unit_sell_price | centPriceChange:'元'}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="type==='2'" class="table-item" style="margin-bottom: 30px;">
+        <table class="detail-table">
+            <caption>商品券码</caption>
+            <thead>
+            <tr>
+                <th>核销码</th>
+                <th>有效期</th>
+                <th>核销时间</th>
+                <th>核销人</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of writeOffList;let i=index">
+                <td>
+                    <a [ngClass]='item.write_off_status!==1?"text-line":""'>{{item.id}}</a>
+                </td>
+                <td *ngIf='orderDetail.validity_type!==1'>
+                    {{item.start_time ? (item.start_time * 1000 | date:"y-MM-dd") : '--'}} -
+                    {{item.end_time ? (item.end_time * 1000 | date:"y-MM-dd") : '--'}}
+                </td>
+                <td *ngIf='orderDetail.validity_type===1'>
+                    自 {{orderDetail.order_time ? (orderDetail.order_time * 1000 | date:"y-MM-dd HH:mm") : '--'}} 起有效
+                </td>
+                <td>{{item.write_off_time ? (item.write_off_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}</td>
+                <td>
+                    {{item.write_off_people || '--'}}
+                </td>
+                <td>
+                    {{item.write_off_status|writeOffStatus}}
+                </td>
+            </tr>
+            <tr *ngIf='!writeOffList||writeOffList.length===0'>
+                <td colspan="5" style="text-align: center;">暂无数据</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <!--编辑物流信息-->
 <app-goods-order-delivery #orderDeliveryComponent></app-goods-order-delivery>
