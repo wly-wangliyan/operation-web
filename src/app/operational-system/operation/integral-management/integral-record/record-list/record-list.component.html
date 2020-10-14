@@ -13,6 +13,7 @@
                 <div class="form-group">
                     <span>手机号：</span>
                     <input name="mobile" class="form-control" [(ngModel)]="searchParams.mobile" maxlength="12"
+                           appIgnoreSpace
                            placeholder="请输入手机号" appIntNumber/>
                 </div>
                 <div class="form-group">

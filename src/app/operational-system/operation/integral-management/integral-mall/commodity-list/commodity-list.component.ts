@@ -11,7 +11,7 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
 import {
     CommodityEntity,
     CommoditySearchParams,
-    GoodsManagementHttpService, SpecificationParams
+    GoodsManagementHttpService, SpecificationEntity, SpecificationParams
 } from '../../../../mall/goods-management/goods-management-http.service';
 import { isNullOrUndefined } from 'util';
 import { Subject } from 'rxjs';
@@ -65,57 +65,6 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
         this.selectedCommodity = new CommodityEntity();
         this.selectedSpecificationId = '';
         this.requestCommodityListData(this.commoditySearchParams);
-    }
-
-    /**
-     * 添加产品
-     */
-    public onCreateProduct() {
-        const _selectedCommodity = new EditCommodityParams(this.selectedCommodity);
-        const selectedCommodity = _selectedCommodity.clone();
-        selectedCommodity.buy_max_num = _selectedCommodity.buy_max_num ? _selectedCommodity.buy_max_num : -1;
-        selectedCommodity.people_buy_max_num = _selectedCommodity.people_buy_max_num ? _selectedCommodity.people_buy_max_num : -1;
-        selectedCommodity.day_buy_max_num = _selectedCommodity.day_buy_max_num ? _selectedCommodity.day_buy_max_num : -1;
-        this.integralMallHttpService.requestAddCommodityData(selectedCommodity).subscribe(() => {
-            this.requestModifyCommoditySpecification();
-        }, err => {
-            if (!this.globalService.httpErrorProcess(err)) {
-                if (err.status === 422) {
-                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-                    for (const content of error.errors) {
-                        if (content.field === 'commodity_name' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('产品名称未填写！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_name' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('产品名称错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'subtitle' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('副标题未填写！', null, 2000, null, false);
-                        } else if (content.field === 'subtitle' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('副标题错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'sort_id' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('所属分类未选择！', null, 2000, null, false);
-                        } else if (content.field === 'sort_id' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('所属分类错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'cover_image' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('封面图片未选择！', null, 2000, null, false);
-                        } else if (content.field === 'cover_image' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('封面图片错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_images' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('产品图片未选择！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_images' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('产品图片错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_videos' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('视频未选择！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_videos' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('视频错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_description' && content.code === 'missing_field') {
-                            this.globalService.promptBox.open('产品描述未填写！', null, 2000, null, false);
-                        } else if (content.field === 'commodity_description' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('产品描述错误或无效！', null, 2000, null, false);
-                        }
-                    }
-                }
-            }
-        });
     }
 
     /**
@@ -228,39 +177,6 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
     };
 
     /**
-     * 添加商品对应的规格
-     * @private
-     */
-    private requestModifyCommoditySpecification() {
-        const specifications = this.selectedCommodity.specifications.filter(item => {
-            item.specification_id === this.selectedSpecificationId;
-        });
-        const specificationParams = new SpecificationParams();
-        specificationParams.specification_objs = specifications;
-        this.integralMallHttpService.requestModifyCommoditySpecificationData(this.selectedCommodity.commodity_id, specificationParams).subscribe(() => {
-            this.globalService.promptBox.open('新建商品成功', () => {
-                this.nzSearchAssistant.submitSearch(true);
-            });
-        }, err => {
-            if (!this.globalService.httpErrorProcess(err)) {
-                if (err.status === 422) {
-                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-
-                    for (const content of error.errors) {
-                        if (content.field === 'specification_objs' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('产品规格对象列表错误或无效！', null, 2000, null, false);
-                        } else if (content.field === 'delete_specification_ids' && content.code === 'invalid') {
-                            this.globalService.promptBox.open('删除产品规格参数错误或无效！', null, 2000, null, false);
-                        } else if (content.resource === 'specifications' && content.code === 'errors') {
-                            this.globalService.promptBox.open('产品规格保存失败，请重新编辑保存！', null, 2000, null, false);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    /**
      * 递归取所有商品
      * @param searchParams
      * @param targetArr
@@ -278,8 +194,10 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
                 searchParams.page_num += 1;
                 this.requestCommodityListData(searchParams, targetArr);
             } else {
-                this.commodityList = targetArr.filter(item => (item.commodity_type !== 2) || (item.commodity_type === 2 && item.validity_type === 1));
-                this.sourceCommodityList = targetArr.filter(item => (item.commodity_type !== 2) || (item.commodity_type === 2 && item.validity_type === 1));
+                this.commodityList = targetArr.filter(item => (item.commodity_type !== 2)
+                    || (item.commodity_type === 2 && item.validity_type === 1));
+                this.sourceCommodityList = targetArr.filter(item => (item.commodity_type !== 2) ||
+                    (item.commodity_type === 2 && item.validity_type === 1));
             }
         }, err => {
             this.globalService.httpErrorProcess(err);

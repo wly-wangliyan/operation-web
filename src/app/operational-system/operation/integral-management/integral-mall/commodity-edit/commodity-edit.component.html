@@ -1,6 +1,6 @@
 <div class="content-header">
     <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"
-               [level3Name]="(sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType)"
+               [level3Name]="sourceType===1?'新建商品':((sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType))"
                [level2RelativePath]="commodity_id?'../../../list':'../list'">
     </app-crumb>
     <ul class="header-right">
@@ -177,6 +177,7 @@
                                     <div class="td-content">
                                         <input type="text" class="form-control"
                                                [(ngModel)]="specification.specification_name" appIgnoreSpace required
+                                               [disabled]="sourceType===3"
                                                [name]="specification.specification_name+specification.specification_id"
                                                placeholder="输入1-100字规格名称" minlength="1" maxlength="100">
                                     </div>
@@ -184,18 +185,19 @@
                                 <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
                                     <div class="td-content name-content">
                                         <input type="text" class="form-control"
-                                               [value]="specification.template_coupon_ids" readonly>
+                                               [value]="specification.template_coupon_ids" disabled>
                                     </div>
                                 </td>
                                 <td style="width: 160px;" *ngIf="commodityInfo.commodity_type===3">
                                     <div class="td-content name-content">
                                         <input type="text" class="form-control" [value]="specification.coupon_group_ids"
-                                               readonly>
+                                               disabled>
                                     </div>
                                 </td>
                                 <td style="width: 125px;">
                                     <div class="td-content special-td-content">
                                         <input type="text" class="form-control" [(ngModel)]="specification.integral"
+                                               [disabled]="sourceType===3"
                                                appIntNumber="true" maxlength="9"
                                                appIgnoreSpace required
                                                [name]="'integral_'+specification.specification_id">
@@ -204,7 +206,7 @@
                                 <td style="width: 125px;">
                                     <div class="td-content special-td-content">
                                         <input type="text" class="form-control"
-                                               [(ngModel)]="specification.unit_sell_price"
+                                               [(ngModel)]="specification.unit_sell_price" [disabled]="sourceType===3"
                                                appIgnoreSpace required appFloatNumber maxlength="9"
                                                [name]="'unit_sell_price_'+specification.specification_id">
                                         <label class="one-word-lable">元</label>
@@ -214,7 +216,7 @@
                                     <div class="td-content stock-content">
                                         <input type="text" class="form-control"
                                                [(ngModel)]="specification.stock"
-                                               appIntNumber="true"
+                                               appIntNumber="true" [disabled]="sourceType===3"
                                                appIgnoreSpace required maxlength="5"
                                                [name]="'stock_'+specification.specification_id">
                                     </div>
@@ -243,6 +245,7 @@
                     <div class="control-input" style="width: 233px">
                         <input type="text" class="form-control"
                                [(ngModel)]="commodityInfo.freight_fee" name="freight_fee" placeholder="输入0即为包邮"
+                               [disabled]="sourceType===3"
                                maxlength="3"
                                appIntNumber appIgnoreSpace required>
                         <label class="one-word-lable">元</label>
@@ -314,6 +317,7 @@
                     </label>
                     <div class="control-input">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.business_telephone"
+                               [disabled]="sourceType===3"
                                name="business_telephone" placeholder="输入商户联系电话" maxlength="12" appIgnoreSpace/>
                     </div>
                 </div>
@@ -324,6 +328,7 @@
                     </label>
                     <div class="control-input">
                         <textarea type="text" class="form-control" [(ngModel)]="commodityInfo.order_description"
+                                  [disabled]="sourceType===3"
                                   rows="3"
                                   name="order_description"
                                   placeholder="输入0-200字订单说明" maxlength="200"></textarea>
@@ -336,12 +341,14 @@
                     </label>
                     <div class="control-input button-config">
                         <input class="form-control" [(ngModel)]="commodityInfo.button_config.button_remark"
+                               [disabled]="sourceType===3"
                                maxlength="20" placeholder="输入0-20字按钮上描述"
                                name="button_remark"
                                appIgnoreSpace>
                         <div class="jump-content">
                             <span>跳转：</span>
                             <select class="form-control" [(ngModel)]="commodityInfo.button_config.button_type"
+                                    [disabled]="sourceType===3"
                                     (change)="commodityInfo.button_config.button_url=''"
                                     name="button_type">
                                 <option value=''>请选择</option>
@@ -349,6 +356,7 @@
                                 <option [value]="2">H5链接</option>
                             </select>
                             <input class="form-control" [(ngModel)]="commodityInfo.button_config.button_url"
+                                   [disabled]="sourceType===3"
                                    name="button_url"
                                    placeholder="请输入小程序链接" appIgnoreSpace
                                    maxlength="2000" [required]="!!commodityInfo.button_config.button_type">

@@ -35,7 +35,7 @@ export class CommodityOperationParams extends EntityBase {
  */
 export class SpecificationParams extends EntityBase {
     public specification_objs: Array<any> = []; // 规格对象列表 创建/更新
-    public delete_specification_ids: string = undefined; // 规格ids 'wq32','2qwe' 删除
+    public delete_specification_ids = ''; // 规格ids 'wq32','2qwe' 删除
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
         if (propertyName === 'specification_objs') {

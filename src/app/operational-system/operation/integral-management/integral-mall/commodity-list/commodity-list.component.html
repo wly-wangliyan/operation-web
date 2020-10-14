@@ -81,7 +81,7 @@
                             <div style="display: grid">
                                 <a style="word-break: keep-all;text-align: left;white-space: nowrap;"
                                    [title]="globalService.limitStrLengthTitle(commodity.commodity_name, 15)"
-                                   [routerLink]="['../detail', commodity.commodity_id, commodity.commodity_type]">
+                                   [routerLink]="['../detail', commodity.commodity_id, 3]">
                                     {{commodity.commodity_name | zMaxLength:15}}
                                 </a>
                                 <div class="goods-tip">
@@ -93,7 +93,7 @@
                         </div>
                     </td>
                     <td>{{commodity.exchangeIntegral || 0}}</td>
-                    <td>{{(commodity.sellPrice|centPriceChange:'元') || 0}}</td>
+                    <td>{{commodity.sellPrice ? (commodity.sellPrice|centPriceChange:'元') : '--'}}</td>
                     <td>
                         <div>访客：{{commodity.total_click_person || 0}}人</div>
                         <div>浏览：{{commodity.total_click_num || 0}}次</div>
@@ -200,7 +200,7 @@
                     </button>
                     <button type="submit" class="sure-btn" nz-button nzType="primary"
                             [disabled]="!selectedCommodity.commodity_id||!selectedSpecificationId"
-                            (appZDebounceClick)="onCreateProduct()">
+                            [routerLink]="['../add', this.selectedCommodity.commodity_id, this.selectedSpecificationId]">
                         保存
                     </button>
                 </div>

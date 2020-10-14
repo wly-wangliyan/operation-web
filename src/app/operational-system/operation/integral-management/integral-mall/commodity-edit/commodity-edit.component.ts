@@ -19,8 +19,9 @@ import {
     styleUrls: ['./commodity-edit.component.less']
 })
 export class CommodityEditComponent implements OnInit, OnDestroy {
-    public sourceType: 2 | 3; // 2:编辑3:查看
+    public sourceType: 1 | 2 | 3; // 1:新建2:编辑3:查看
     public commodity_id: string; // 商品id
+    public specification_id: string; // 规格id
     public commodity_type: number; // 商品类型
     public commodityInfo: EditCommodityParams; // 商品详情
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
@@ -41,10 +42,11 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         private globalService: GlobalService,
         private goodsManagementHttpService: GoodsManagementHttpService,
         private integralMallHttpService: IntegralMallHttpService) {
-        this.sourceType = this.router.url.includes('/edit/') ? 2 : 3;
         this.route.paramMap.subscribe(map => {
             this.commodity_id = map.get('commodity_id');
+            this.specification_id = map.get('specification_id');
             this.commodity_type = Number(map.get('commodity_type'));
+            this.sourceType = this.specification_id ? 1 : this.commodity_type as any;
         });
     }
 
@@ -53,7 +55,11 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         this.businessList = [];
         this.requestbusinessList();
         if (this.commodity_id) {
-            this.requestCommodityById();
+            if (this.specification_id) {
+                this.requestCommodityById();
+            } else {
+                this.requestIntegralCommodityById();
+            }
         }
     }
 
@@ -110,7 +116,12 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
                 commodityInfo.buy_max_num = this.commodityInfo.buy_max_num || -1;
                 commodityInfo.people_buy_max_num = this.commodityInfo.people_buy_max_num || -1;
                 commodityInfo.day_buy_max_num = this.commodityInfo.day_buy_max_num || -1;
-                this.requestEditCommodity(commodityInfo);
+                commodityInfo.freight_fee = Math.round(this.commodityInfo.freight_fee * 100);
+                if (!this.specification_id) {
+                    this.requestEditCommodity(commodityInfo);
+                } else {
+                    this.requestCreateCommodity(commodityInfo);
+                }
             }, err => {
                 this.upLoadErrMsg(err);
             });
@@ -140,11 +151,11 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    // 获取商品详情
-    private requestCommodityById() {
+    // 获取积分商品详情
+    private requestIntegralCommodityById() {
         this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
             this.commodityInfo = new EditCommodityParams(data);
-            this.specificationList = data.specifications;
+            this.specificationList = data.specifications.map(item => new SpecificationEntity(item));
             this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
             timer(500).subscribe(() => {
                 const tempContent = this.commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
@@ -158,10 +169,43 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
         });
     }
 
+    // 获取商城商品详情
+    private requestCommodityById() {
+        this.goodsManagementHttpService.requestCommodityByIdData(this.commodity_id).subscribe(data => {
+            this.commodityInfo = new EditCommodityParams(data);
+            const specification = data.specifications.find(item => item.specification_id === this.specification_id);
+            specification.specification_id = '';
+            this.specificationList = [new SpecificationEntity(specification)];
+            this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
+            timer(500).subscribe(() => {
+                const tempContent = this.commodityInfo.commodity_description.replace('/\r\n/g', '').replace(/\n/g, '');
+                CKEDITOR.instances.commodityEditor.setData(tempContent);
+                this.sourceType === 3 && CKEDITOR.instances.commodityEditor.setReadOnly(true);
+            });
+        }, err => {
+            if (!this.globalService.httpErrorProcess(err)) {
+                this.globalService.promptBox.open('商品详情获取失败！', null, 2000, null, false);
+            }
+        });
+    }
+
+    /**
+     * 创建商品
+     * @param commodityInfo
+     * @private
+     */
+    private requestCreateCommodity(commodityInfo: EditCommodityParams) {
+        this.integralMallHttpService.requestAddCommodityData(commodityInfo).subscribe((data) => {
+            this.requestModifyCommoditySpecification(data.commodity_id);
+        }, err => {
+            this.processError(err);
+        });
+    }
+
     // 修改商品
     private requestEditCommodity(commodityInfo: EditCommodityParams) {
         this.integralMallHttpService.requestEditCommodityData(this.commodity_id, commodityInfo).subscribe(() => {
-            this.requestModifyCommoditySpecification();
+            this.requestModifyCommoditySpecification(this.commodity_id);
         }, err => {
             this.processError(err);
         });
@@ -171,10 +215,10 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
      * 添加商品对应的规格
      * @private
      */
-    private requestModifyCommoditySpecification() {
+    private requestModifyCommoditySpecification(commodity_id: string) {
         const specificationParams = new SpecificationParams();
         specificationParams.specification_objs = this.specificationList;
-        this.integralMallHttpService.requestModifyCommoditySpecificationData(this.commodity_id, specificationParams).subscribe(() => {
+        this.integralMallHttpService.requestModifyCommoditySpecificationData(commodity_id, specificationParams).subscribe(() => {
             this.globalService.promptBox.open('编辑商品成功', () => {
                 window.history.back();
             });
@@ -200,6 +244,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     // 校验商品参数是否有效
     private checkCommodityParamsValid(isCheckCommodity: boolean = true): boolean {
         this.clearErr();
+        const specification = this.specificationList[0];
         if (isCheckCommodity) {
             if (!this.CheckImgValid) {
                 this.errMessageGroup.errJson.commodity_images.errMes = '请选择商品图片！';
@@ -207,6 +252,19 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
             }
             if (!this.CheckEditorValid) {
                 this.globalService.promptBox.open('请填写商品描述！', null, 2000, null, false);
+                return false;
+            }
+            if (specification.integral <= 0) {
+                this.globalService.promptBox.open('规格中兑换积分输入错误,请输入大于0的数！', null, 2000, null, false);
+                return false;
+            }
+            if (specification.unit_sell_price < 0.01 || specification.unit_sell_price > 999999.99) {
+                this.globalService.promptBox.open('规格中价格输入错误，请输入0.01-999999.99！', null, 2000, null, false);
+                return false;
+            }
+            const stockReg = /^((0|[1-9]\d{0,3})|10000)$/; // 库存可输入0-10000数字
+            if (!stockReg.test(specification.stock.toString())) {
+                this.globalService.promptBox.open('规格中库存输入错误，请输入0-10000！', null, 2000, null, false);
                 return false;
             }
         }

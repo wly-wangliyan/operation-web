@@ -17,7 +17,7 @@ const routes: Routes = [
         path: 'list', component: CommodityListComponent
       },
       {
-        path: 'add', component: CommodityEditComponent
+        path: 'add/:commodity_id/:specification_id', component: CommodityEditComponent
       },
       {
         path: 'edit/:commodity_id/:commodity_type', component: CommodityEditComponent

@@ -43,6 +43,8 @@ export class IntegralCommodityEntity extends EntityBase {
     public buy_max_num: number = undefined; // 购买上限 -1:无上限
     public people_buy_max_num: number = undefined; // 每人每日购买上限 -1:无上限
     public day_buy_max_num: number = undefined; // 商品每日购买上限 -1:无上限
+    public business_telephone: string = undefined; // 商户联系电话
+    public order_description: string = undefined; // 订单说明
     public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
     public buy_remark: string = undefined; // 限购描述
     public remark: string = undefined; // 核销描述
@@ -62,6 +64,8 @@ export class IntegralCommodityEntity extends EntityBase {
 
     public business_type = 1; // 业务类型 1商城
     public business_id: string = undefined; // 商家id
+
+    public freight_fee: number = undefined; // 	运费 单位分
 
     public specifications: Array<SpecificationEntity> = []; // 规格对象列表
 
@@ -94,6 +98,8 @@ export class IntegralCommodityEntity extends EntityBase {
 
 // 新建/编辑积分兑换商品
 export class EditCommodityParams extends EntityBase {
+    public remote_commodity_id: string = undefined; // 商城商品id
+    public commodity_id: string = undefined; // 商品id
     public commodity_type: number = undefined; // 商品类型 1：实物商品 2：虚拟商品 3:优惠券商品
     public commodity_name: string = undefined; // 商品名称
     public business_type = 1; // 业务类型 1商城
@@ -112,37 +118,49 @@ export class EditCommodityParams extends EntityBase {
     public commodity_description: string = undefined; // 商品描述
     public shipping_method: any = '1'; // 	供货方式 1平台自营，2第三方供应
     public collection_type = '1'; // 收款方式 1平台 2此供应商户
-    @noClone public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
+    public freight_fee: number = undefined; // 	运费
+    public business_telephone: string = undefined; // 商户联系电话
+    public order_description: string = undefined; // 订单说明
+    public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
 
     /**
      * @param data 编辑积分商城商品
      */
     constructor(data?: any) {
         super();
-        if (data instanceof IntegralCommodityEntity || data instanceof CommodityEntity) {
-            this.commodity_type = data.commodity_type;
-            this.commodity_name = data.commodity_name;
-            this.subtitle = data.subtitle;
-            this.cover_image = data.cover_image;
-            this.commodity_images = data.commodity_images || [];
-            this.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
-            this.people_buy_max_num = data.people_buy_max_num === -1 ? null : data.people_buy_max_num;
-            this.day_buy_max_num = data.day_buy_max_num === -1 ? null : data.day_buy_max_num;
-            this.remark = data.remark;
-            this.commodity_description = data.commodity_description;
-            this.shipping_method = data.shipping_method || '1';
-            this.collection_type = data.collection_type || '1';
-            this.button_config = data.button_config.clone();
-            // this.other_fields = new CouponEntity();
-        }
-        if (data instanceof IntegralCommodityEntity) {
-            // this.integral_amount = data.integral_amount;
-            // this.stock = data.stock;
-            // this.other_fields = data.other_fields || new CouponEntity();
-            this.buy_remark = data.buy_remark;
-            this.business_id = data.business_id;
-        } else {
-            this.business_id = data.mall_business_id;
+        if (data) {
+            if (data instanceof IntegralCommodityEntity || data instanceof CommodityEntity) {
+                this.commodity_id = data.commodity_id;
+                this.commodity_type = data.commodity_type;
+                this.commodity_name = data.commodity_name;
+                this.subtitle = data.subtitle;
+                this.cover_image = data.cover_image;
+                this.commodity_images = data.commodity_images || [];
+                this.buy_max_num = data.buy_max_num === -1 ? null : data.buy_max_num;
+                this.people_buy_max_num = data.people_buy_max_num === -1 ? null : data.people_buy_max_num;
+                this.day_buy_max_num = data.day_buy_max_num === -1 ? null : data.day_buy_max_num;
+                this.remark = data.remark;
+                this.commodity_description = data.commodity_description;
+                this.shipping_method = data.shipping_method || '1';
+                this.collection_type = data.collection_type || '1';
+                this.button_config.button_type = data.button_config.button_type;
+                this.button_config.button_remark = data.button_config.button_remark;
+                this.button_config.button_url = data.button_config.button_url;
+                this.business_telephone = data.business_telephone;
+                this.order_description = data.order_description;
+                this.freight_fee = data.freight_fee / 100;
+                // this.other_fields = new CouponEntity();
+            }
+            if (data instanceof IntegralCommodityEntity) {
+                // this.integral_amount = data.integral_amount;
+                // this.stock = data.stock;
+                // this.other_fields = data.other_fields || new CouponEntity();
+                this.buy_remark = data.buy_remark;
+                this.business_id = data.business_id;
+            } else {
+                this.business_id = data.mall_business_id;
+                this.remote_commodity_id = data.commodity_id;
+            }
         }
     }
 
@@ -202,7 +220,9 @@ export class DailyClickLinkResponse extends LinkResponse {
 })
 export class IntegralMallHttpService {
 
-    private domain = environment.INTEGRAL_DOMAIN;
+    // private domain = environment.INTEGRAL_DOMAIN;
+
+    private domain = 'http://192.168.6.124:8001';
 
     constructor(private httpService: HttpService) {
     }
@@ -235,9 +255,9 @@ export class IntegralMallHttpService {
      * 添加商品
      * @param addParams {EditCommodityParams}
      */
-    public requestAddCommodityData(addParams: EditCommodityParams): Observable<HttpResponse<any>> {
+    public requestAddCommodityData(addParams: EditCommodityParams): Observable<any> {
         const httpUrl = `${this.domain}/commodities`;
-        return this.httpService.post(httpUrl, addParams.json());
+        return this.httpService.post(httpUrl, addParams).pipe(map(res => res.body));
     }
 
     /**
@@ -247,7 +267,7 @@ export class IntegralMallHttpService {
      */
     public requestEditCommodityData(commodity_id: string, editParams: EditCommodityParams): Observable<HttpResponse<any>> {
         const httpUrl = `${this.domain}/commodities/${commodity_id}`;
-        return this.httpService.put(httpUrl, editParams.json());
+        return this.httpService.put(httpUrl, editParams);
     }
 
     /**
