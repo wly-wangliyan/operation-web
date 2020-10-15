@@ -65,6 +65,7 @@ export class ZConfirmationBoxComponent implements AfterViewInit {
      * @param message 消息体
      * @param sureName 确认按钮文本(默认为确定)
      * @param sureFunc 确认回调
+     * @param secondMessage
      * @param closeFunc 取消回调
      */
     public open(title: string = '提示', message: string, sureFunc: any, sureName: string = '确定', secondMessage: string = null, closeFunc: any = null) {
