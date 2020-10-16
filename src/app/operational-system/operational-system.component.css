@@ -74,9 +74,9 @@
     height: 76px;
 }
 
-.user div {
-    float: left;
-}
+/*.user div {*/
+/*    float: left;*/
+/*}*/
 
 .user_photo {
     width: 22px;
@@ -125,6 +125,12 @@
     line-height: 18px;
 }
 
+.password-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .logout-btn i, .notice-btn i, .password-btn i {
     width: 22px;
     height: 22px;
@@ -140,10 +146,16 @@
 }
 
 .main-herder-title li {
-    width: 80px;
+    width: 96px;
     height: 76px;
     text-align: center;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1600px) {
+    .main-herder-title li{
+        width: 80px;
+    }
 }
 
 .herder-active {
