@@ -12,8 +12,8 @@
     overflow: hidden;
     line-height: 76px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .main-left-layout {
@@ -55,21 +55,19 @@
 }
 
 .logo {
-    height: 39px;
-    background-size: contain;
-    margin-left: 15px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px 0 15px;
 }
 
-.logo div:first-child {
+.logo img {
     width: 186px;
-    margin-right: 10px;
-    outline: none;
-    background: url(/assets/images/app_logo.png) center no-repeat;
+    height: 32px;
 }
 
 .user {
-    margin-right: 20px;
+    margin: 0 20px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -142,7 +140,7 @@
 }
 
 .main-herder-title li {
-    width: 95px;
+    width: 80px;
     height: 76px;
     text-align: center;
     cursor: pointer;
