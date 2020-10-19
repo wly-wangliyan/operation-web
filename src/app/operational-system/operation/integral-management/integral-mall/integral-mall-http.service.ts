@@ -117,7 +117,7 @@ export class EditCommodityParams extends EntityBase {
     public remark: string = undefined; // 核销描述
     public commodity_description: string = undefined; // 商品描述
     public shipping_method: any = '1'; // 	供货方式 1平台自营，2第三方供应
-    public collection_type = '1'; // 收款方式 1平台 2此供应商户
+    public collection_type: any = '1'; // 收款方式 1平台 2此供应商户
     public freight_fee: number = undefined; // 	运费
     public business_telephone: string = undefined; // 商户联系电话
     public order_description: string = undefined; // 订单说明

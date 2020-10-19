@@ -127,7 +127,7 @@
                         <ng-template ngFor let-order let-i=index [ngForOf]="goodsOrderTable.data">
                             <tr>
                                 <td>{{i + (pageIndex - 1) * 15 + 1}}</td>
-                                <td colspan="8" nzAlign="left">
+                                <td colspan="9" nzAlign="left">
                                     订单号：{{order.order_id}} /
                                     下单时间：{{order.order_time ? (order.order_time * 1000 | date:"y-MM-dd HH:mm") : '--'}}
                                     <span *ngIf='order.pay_type&&order.pay_type!=="other"'> / 支付方式：{{order.pay_type|payType}}</span>

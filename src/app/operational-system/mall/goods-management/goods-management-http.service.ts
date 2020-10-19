@@ -34,7 +34,7 @@ export class CommodityOperationParams extends EntityBase {
  * 规格操作参数
  */
 export class SpecificationParams extends EntityBase {
-    public specification_objs: Array<any> = []; // 规格对象列表 创建/更新
+    public specification_objs: Array<SpecificationEntity> = []; // 规格对象列表 创建/更新
     public delete_specification_ids = ''; // 规格ids 'wq32','2qwe' 删除
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
@@ -155,6 +155,7 @@ export class ButtonConfigEntity extends EntityBase {
  */
 export class SpecificationEntity extends EntityBase {
     public specification_id: string = undefined; // 规格id
+    public remote_specification_id: string = undefined; // 在积分商城的规格中加商城的规格
     public commodity: CommodityEntity = undefined; // 商品对象
     public specification_name: string = undefined; // 规格名称
     public unit_original_price: number = undefined; // 单位分 原价
@@ -162,7 +163,7 @@ export class SpecificationEntity extends EntityBase {
     public settlement_price: number = undefined; // 单位分 结算价格
     public stock: number = undefined; // 库存
     public sold_amount = 0; // 已售数量
-    public stock_json: SpecificationDateEntity = undefined; // 商品有效期为使用日期当日有效时的库存信息
+    public stock_json: SpecificationDateEntity | any = undefined; // 商品有效期为使用日期当日有效时的库存信息
     public integral: number = undefined; // 积分
     public template_coupon_ids: string = undefined; // 模板ids
     public coupon_group_ids: string = undefined; //  券组ids
