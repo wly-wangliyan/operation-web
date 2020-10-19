@@ -61,7 +61,7 @@
                         <tr *ngFor="let positive of positiveTable.data; let i=index" style="text-align: left;">
                             <td [nzAlign]="'left'" style="display: flex;">
                   <span class="avatar">
-                    <img [src]="positive.avatar">
+                    <img [src]="positive.avatar?positive.avatar:'./assets/images/icon_topic_avatar.png'">
                   </span>
                                 <span class="point-info">
                     <div>{{positive.nickname}}</div>
