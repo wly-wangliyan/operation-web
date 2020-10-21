@@ -76,6 +76,7 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
         this.commodityList.forEach(item => item.isChecked = false);
         temp.isChecked = isChecked;
         this.selectedCommodity = isChecked ? (temp.clone()) : new CommodityEntity();
+        this.selectedSpecificationId = '';
     }
 
     // 置顶商品
