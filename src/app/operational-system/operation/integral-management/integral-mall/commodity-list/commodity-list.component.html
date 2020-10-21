@@ -104,7 +104,7 @@
                         {{commodity.updated_time ? (commodity.updated_time * 1000 | date: 'yyyy-MM-dd HH:mm') : '--'}}
                     </td>
                     <td>
-                        <nz-switch [ngModel]="commodity.status===1 ? true : false" nzCheckedChildren="On"
+                        <nz-switch [ngModel]="commodity.status===1" nzCheckedChildren="On"
                                    nzUnCheckedChildren="Off" [nzControl]=true style="height: 10px"
                                    (click)="onChangeSwitchStatus(commodity)">
                         </nz-switch>
@@ -187,7 +187,8 @@
                                     name="selectedSpecificationId">
                                 <option value="">请选择</option>
                                 <option [value]="specification.specification_id"
-                                        *ngFor="let specification of selectedCommodity.specifications">{{specification.specification_name}}
+                                        [title]="specification.specification_name"
+                                        *ngFor="let specification of selectedCommodity.specifications">{{specification.specification_name|zMaxLength:20}}
                                 </option>
                             </select>
                             <b class="specification-tip">注：根据选择的商品进行规格选择</b>
