@@ -176,6 +176,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
             const specification = data.specifications.find(item => item.specification_id === this.specification_id);
             specification.specification_id = '';
             specification.remote_specification_id = this.specification_id;
+            specification.sold_amount = 0;
             this.specificationList = [new SpecificationEntity(specification)];
             this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
             timer(500).subscribe(() => {
