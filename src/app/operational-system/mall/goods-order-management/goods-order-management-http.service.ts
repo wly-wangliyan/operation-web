@@ -36,9 +36,11 @@ export class ModifyOrderParams extends EntityBase {
 export class OrderDetailEntity extends EntityBase {
     public commodity_id = ''; // 	string	商品id
     public commodity_name = ''; // 	string	商品名称
+    public integral_commodity_id = ''; // 积分商城商品id
     public subtitle = ''; // 	string	副标题
     public commodity_images = []; // 	Array	商品图片列表
     public specification_id = ''; // 	string	规格id
+    public integral_specification_id = ''; // 积分商城规格id
     public specification_name = ''; // 	string	规格名称
     public shipping_method: number = undefined; // int	供货方式 1平台自营，2第三方供应
     public business_name = ''; // 	string	供应商

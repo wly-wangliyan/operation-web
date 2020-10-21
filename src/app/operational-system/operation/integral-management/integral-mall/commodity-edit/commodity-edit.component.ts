@@ -23,7 +23,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     public commodity_id: string; // 商品id
     public specification_id: string; // 规格id
     public commodity_type: number; // 商品类型
-    public commodityInfo: EditCommodityParams; // 商品详情
+    public commodityInfo: EditCommodityParams = new EditCommodityParams(); // 商品详情
     public errMessageGroup: ErrMessageGroup = new ErrMessageGroup(); // 错误处理
     public coverImgList: Array<any> = []; // 封面图片
     public aspectRatio = 1.93 / 1; // 截取图片比例
@@ -259,7 +259,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
                 this.globalService.promptBox.open('规格中兑换积分输入错误,请输入大于0的数！', null, 2000, null, false);
                 return false;
             }
-            if (specification.unit_sell_price < 0.01 || specification.unit_sell_price > 999999.99) {
+            if (specification.unit_sell_price && (specification.unit_sell_price < 0.01 || specification.unit_sell_price > 999999.99)) {
                 this.globalService.promptBox.open('规格中价格输入错误，请输入0.01-999999.99！', null, 2000, null, false);
                 return false;
             }

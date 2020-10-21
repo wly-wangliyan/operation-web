@@ -78,7 +78,7 @@
                 <tr>
                     <th>序号</th>
                     <th>兑换ID</th>
-                    <th style="width: 20%">商品/单价/数量</th>
+                    <th style="width: 10%">商品/单价/数量</th>
                     <th>用户ID</th>
                     <th>用户手机号</th>
                     <th>兑换积分</th>
@@ -120,7 +120,7 @@
                     <td>{{data.ht_code || '--'}}</td>
                     <td>{{data.mobile || '--'}}</td>
                     <td>{{data.total_integral || 0}}</td>
-                    <td>{{data.total_amount ? (data.total_amount / 100|centPriceChange:'￥':'left') : 0}}</td>
+                    <td>{{data.total_amount ? (data.total_amount / 100|centPriceChange:'￥':'left') : '--'}}</td>
                     <td>{{data.order_time * 1000| date:"y-MM-dd HH:mm"}}</td>
                     <td>{{data.exchange_time * 1000| date:"y-MM-dd HH:mm"}}</td>
                     <td [title]="data.order_id">

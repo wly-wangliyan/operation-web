@@ -1,11 +1,11 @@
 <div class="content-header">
     <app-crumb [level1Name]="'积分管理'" [level2Name]="'积分兑换商城'"
-               [level3Name]="sourceType===1?'新建商品':((sourceType===2?'编辑_':'查看_')+ (commodity_type|commodityType))"
+               [level3Name]="sourceType===1?'新建商品':((sourceType===2?'编辑_':'查看_')+ (commodityInfo.commodity_type|commodityType))"
                [level2RelativePath]="commodity_id?'../../../list':'../list'">
     </app-crumb>
     <ul class="header-right">
         <li class="big-bg" *ngIf="commodityInfo && sourceType===3"
-            [routerLink]="['../../../edit/'+commodity_id+'/'+commodity_type]">
+            [routerLink]="['../../../edit/'+commodity_id+'/'+2]">
             <a>编辑</a>
         </li>
     </ul>
@@ -207,7 +207,7 @@
                                     <div class="td-content special-td-content">
                                         <input type="text" class="form-control"
                                                [(ngModel)]="specification.unit_sell_price" [disabled]="sourceType===3"
-                                               appIgnoreSpace required appFloatNumber maxlength="9"
+                                               appIgnoreSpace appFloatNumber maxlength="9"
                                                [name]="'unit_sell_price_'+specification.specification_id">
                                         <label class="one-word-lable">元</label>
                                     </div>

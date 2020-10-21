@@ -135,7 +135,7 @@
                         <label>实收金额：</label>
                         <span>{{orderDetail.real_price | centPriceChange:'元'}}</span>
                     </div>
-                    <div class="card-text">
+                    <div class="card-text" *ngIf="orderDetail.total_integral">
                         <label>积分：</label>
                         <span>{{orderDetail.total_integral || '--'}}</span>
                     </div>
@@ -260,7 +260,7 @@
                              src={{commodity.commodity_images[0]}}/>
                         <div style="display: grid;text-align: left;">
                             <a [title]="commodity.commodity_name"
-                               [routerLink]="orderDetail.total_integral?['/main/mall/goods-management/list/detail', commodity.commodity_id]:['/main/operation/integral-management/integral-mall/edit', commodity.commodity_id,3]">
+                               [routerLink]="orderDetail.total_integral?['/main/operation/integral-management/integral-mall/edit', commodity.integral_commodity_id,3]:['/main/mall/goods-management/list/detail', commodity.commodity_id]">
                                 {{commodity.commodity_name | zMaxLength:8}}</a>
                             <span [title]="commodity.specification_name">
                   {{commodity.specification_name | zMaxLength:8}}</span>
@@ -279,13 +279,13 @@
                     {{commodity.unit_original_price | centPriceChange:'元'}}
                 </td>
                 <td *ngIf="orderDetail.total_integral">
-                    {{commodity.integral}}
+                    {{orderDetail.total_integral/commodity.amount}}
                 </td>
                 <td>
-                    {{commodity.unit_sell_price | centPriceChange:'元'}}
+                    {{commodity.unit_sell_price ? (commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}
                 </td>
                 <td>
-                    {{commodity.amount * commodity.unit_sell_price | centPriceChange:'元'}}
+                    {{commodity.unit_sell_price ? (commodity.amount * commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}
                 </td>
             </tr>
             </tbody>

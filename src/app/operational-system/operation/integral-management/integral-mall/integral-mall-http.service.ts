@@ -148,7 +148,7 @@ export class EditCommodityParams extends EntityBase {
                 this.button_config.button_url = data.button_config.button_url;
                 this.business_telephone = data.business_telephone;
                 this.order_description = data.order_description;
-                this.freight_fee = data.freight_fee / 100;
+                this.freight_fee = data.freight_fee ? (data.freight_fee / 100) : data.freight_fee;
                 // this.other_fields = new CouponEntity();
             }
             if (data instanceof IntegralCommodityEntity) {
@@ -220,9 +220,7 @@ export class DailyClickLinkResponse extends LinkResponse {
 })
 export class IntegralMallHttpService {
 
-    // private domain = environment.INTEGRAL_DOMAIN;
-
-    private domain = 'http://192.168.6.124:8001';
+    private domain = environment.INTEGRAL_DOMAIN;
 
     constructor(private httpService: HttpService) {
     }

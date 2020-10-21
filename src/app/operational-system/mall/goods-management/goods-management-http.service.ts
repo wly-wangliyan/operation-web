@@ -48,7 +48,7 @@ export class SpecificationParams extends EntityBase {
         const json = this;
         json.specification_objs.forEach(specificationObj => {
             specificationObj.unit_original_price = Math.round(specificationObj.unit_original_price * 100);
-            specificationObj.unit_sell_price = specificationObj.unit_sell_price ? Math.round(specificationObj.unit_sell_price * 100) : specificationObj.unit_sell_price;
+            specificationObj.unit_sell_price = specificationObj.unit_sell_price ? Math.round(specificationObj.unit_sell_price * 100) : specificationObj.unit_sell_price || 0;
             specificationObj.settlement_price = Math.round(specificationObj.settlement_price * 100);
             if (specificationObj.stock_json) {
                 specificationObj.stock_json.unit_sell_price_day = Math.round(specificationObj.stock_json.unit_sell_price_day * 100);
@@ -159,7 +159,7 @@ export class SpecificationEntity extends EntityBase {
     public commodity: CommodityEntity = undefined; // 商品对象
     public specification_name: string = undefined; // 规格名称
     public unit_original_price: number = undefined; // 单位分 原价
-    public unit_sell_price: number = undefined; // 单位分 售价
+    public unit_sell_price: any = undefined; // 单位分 售价
     public settlement_price: number = undefined; // 单位分 结算价格
     public stock: number = undefined; // 库存
     public sold_amount = 0; // 已售数量
@@ -185,10 +185,13 @@ export class SpecificationEntity extends EntityBase {
         super();
         if (source) {
             this.specification_id = source.specification_id;
+            this.remote_specification_id = source.remote_specification_id;
+            this.coupon_group_ids = source.coupon_group_ids;
+            this.template_coupon_ids = source.template_coupon_ids;
             this.commodity = source.commodity;
             this.specification_name = source.specification_name;
             this.unit_original_price = source.unit_original_price ? (source.unit_original_price / 100) : source.unit_original_price;
-            this.unit_sell_price = source.unit_sell_price ? (source.unit_sell_price / 100) : source.unit_sell_price;
+            this.unit_sell_price = source.unit_sell_price ? (source.unit_sell_price / 100) : '';
             this.settlement_price = source.settlement_price ? (source.settlement_price / 100) : source.settlement_price;
             this.stock = source.stock;
             this.sold_amount = source.sold_amount;
