@@ -123,9 +123,10 @@
                     </div>
                     <div class="card-text">
                         <label>立减/优惠：</label>
-                        <span
-                                class="card-span">平台立减{{orderDetail.discount_price | centPriceChange:'元'}}
+                        <span *ngIf="!orderDetail.total_integral"
+                              class="card-span">平台立减{{orderDetail.discount_price | centPriceChange:'元'}}
                             ，优惠券抵扣{{orderDetail.coupon_real_amount | centPriceChange:'元'}}</span>
+                        <span *ngIf="orderDetail.total_integral">--</span>
                     </div>
                     <div class="card-text">
                         <label>商品运费：</label>
@@ -279,7 +280,7 @@
                     {{commodity.unit_original_price | centPriceChange:'元'}}
                 </td>
                 <td *ngIf="orderDetail.total_integral">
-                    {{orderDetail.total_integral/commodity.amount}}
+                    {{orderDetail.total_integral / commodity.amount}}
                 </td>
                 <td>
                     {{commodity.unit_sell_price ? (commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}

@@ -172,8 +172,11 @@
                                     {{order.total_amount | centPriceChange:'元'}}
                                 </td>
                                 <td>
-                                    <div>平台立减：{{order.discount_price | centPriceChange:'元'}}</div>
-                                    <div>优惠券：{{order.coupon_real_amount | centPriceChange:'元'}}</div>
+                                    <ng-container *ngIf="order.total_integral">--</ng-container>
+                                    <ng-container *ngIf="!order.total_integral">
+                                        <div>平台立减：{{order.discount_price | centPriceChange:'元'}}</div>
+                                        <div>优惠券：{{order.coupon_real_amount | centPriceChange:'元'}}</div>
+                                    </ng-container>
                                 </td>
                                 <td>
                                     {{order.real_price | centPriceChange:'元'}}
