@@ -152,7 +152,7 @@
                                              src={{commodity.commodity_images[0]}}/>
                                         <div style="display: grid;text-align: left;">
                                             <a [title]="commodity.commodity_name"
-                                               [routerLink]="['../../goods-management/list/detail', commodity.commodity_id]">
+                                               [routerLink]="order.total_integral?['/main/operation/integral-management/integral-mall/edit', commodity.integral_commodity_id,3]:['/main/mall/goods-management/list/detail', commodity.commodity_id]">
                                                 {{commodity.commodity_name | zMaxLength:8}}</a>
                                             <span [title]="commodity.specification_name">
                           {{commodity.specification_name | zMaxLength:8}}</span>
