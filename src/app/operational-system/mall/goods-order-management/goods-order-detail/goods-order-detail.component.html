@@ -286,7 +286,15 @@
                     {{commodity.unit_sell_price ? (commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}
                 </td>
                 <td>
-                    {{commodity.unit_sell_price ? (commodity.amount * commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}
+                    <ng-container *ngIf="orderDetail.total_integral">
+                        {{orderDetail.total_integral}}&nbsp;积分
+                        <ng-container *ngIf="commodity.unit_sell_price">
+                            +&nbsp;{{commodity.amount * commodity.unit_sell_price | centPriceChange:'元'}}
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!orderDetail.total_integral">
+                        {{commodity.unit_sell_price ? (commodity.amount * commodity.unit_sell_price | centPriceChange:'元') : (0 + '元')}}
+                    </ng-container>
                 </td>
             </tr>
             </tbody>
