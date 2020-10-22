@@ -109,9 +109,9 @@
                             </div>
                             <div class="goods-content">
                                 <a
-                                        [title]="data.commodity_name | zMaxLength:15"
+                                        [title]="data.commodity_name"
                                         [routerLink]="['/main/operation/integral-management/integral-mall/detail', data.commodity_id,3]">
-                                    {{data.commodity_name | zMaxLength:15}}
+                                    {{data.commodity_name | zMaxLength:10}}
                                 </a>
                                 <span>x{{data.amount}}</span>
                             </div>
