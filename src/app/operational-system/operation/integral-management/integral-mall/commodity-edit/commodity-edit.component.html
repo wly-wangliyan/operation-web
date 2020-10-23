@@ -78,7 +78,7 @@
                     <div class="control-input">
                         <input type="text" class="form-control" [(ngModel)]="commodityInfo.commodity_name"
                                name="commodity_name"
-                               placeholder="请输入1-20个字商品名称" maxlength="20" appIgnoreSpace required
+                               placeholder="输入1-100个字标题" minlength="1" maxlength="100" appIgnoreSpace required
                                [disabled]="sourceType===3">
                     </div>
                 </div>
