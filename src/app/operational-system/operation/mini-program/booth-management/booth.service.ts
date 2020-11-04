@@ -36,13 +36,13 @@ export class BoothEntity extends EntityBase {
     public booth_id: string = undefined; // id
     public booth_name: string = undefined; // 展位名称
     public booth_key: string = undefined; // 关键字
-    public booth_type: any = ''; // 展位类型 1:轮播图 2：焦点图
+    public booth_type: any = ''; // 展位类型 1:轮播图 2：焦点图 3：组合
     public booth_num: number = undefined; // 展位个数
     public width: number = undefined; // 宽
     public height: number = undefined; // 高
     public status: number = undefined; // 启停状态 1：开启 2：关闭 默认关闭
     public formats: Array<any> = undefined; // 支持格式 1:PNG 2:JPG 3:GIF
-    public link_types: Array<any> = undefined; // 链接类型 1: 视频链接 2: H5链接 3: 小程序原生页
+    public link_types: Array<any> = undefined; // 链接类型 1: 视频链接 2: H5链接 3: 小程序原生页  4: 第三方小程序
     public remark: string = undefined; // 备注
     public updated_time: number = undefined; // 更新时间
     public created_time: number = undefined; // 创建时间
@@ -80,8 +80,9 @@ export class BoothContentEntity extends EntityBase {
     public booth_content_id: string = undefined; // id
     public booth: BoothEntity = undefined; // 展位对象
     public title: string = undefined; // 标题
+    public position = ''; // 位置  todo
     public image: string = undefined; // 图片
-    public link_type: any = ''; // int 链接类型 1:视频链接 2:H5链接 3:小程序原生页
+    public link_type: any = ''; // int 链接类型 1:视频链接 2:H5链接 3:小程序原生页 4: 第三方小程序
     public link_url: string = undefined; // 链接url
     public offline_type: number = undefined; // 下线时间类型 1：永不下线 2：定时下线 默认为1
     public offline_date: number = undefined; // float 下线时间 若offline_type=2,必填

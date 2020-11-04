@@ -1,146 +1,167 @@
 <!-- 新建、编辑展位 -->
 <div class="modal fade " id="boothConfigModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-common">
-    <div class="modal-content modal-content-common">
-      <div class="modal-header">
-        <span class="modal-title">{{isCreate ? '新建展位' : '编辑展位'}}</span>
-        <button type="button" class="close" data-dismiss="modal">×</button>
-      </div>
-      <div class="modal-body">
-        <form autocomplete="off" class="form-horizontal" #boothConfigForm="ngForm">
-
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>展位名称：</span>
-            </label>
-            <div class="control-input">
-              <input name="booth_name" placeholder="输入1-20字展位名称" [(ngModel)]="boothData.booth_name" maxlength="20"
-                (change)="this.errMessageGroup.errJson.booth_name.errMes=''" class="form-control" appIgnoreSpace
-                required>
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">{{isCreate ? '新建展位' : '编辑展位'}}</span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
-          </div>
+            <div class="modal-body">
+                <form autocomplete="off" class="form-horizontal" #boothConfigForm="ngForm">
 
-          <div class="err-message">
-            <span>{{ this.errMessageGroup?.errJson?.booth_name.errMes }}</span>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>展位名称：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="booth_name" placeholder="输入1-20字展位名称" [(ngModel)]="boothData.booth_name"
+                                   maxlength="20"
+                                   (change)="this.errMessageGroup.errJson.booth_name.errMes=''" class="form-control"
+                                   appIgnoreSpace
+                                   required>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>关键字：</span>
-            </label>
-            <div class="control-input">
-              <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
-                class="form-control" oninput="value=value.replace(/[^a-zA-Z0-9_]/g,'')"
-                (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required>
-            </div>
-          </div>
+                    <div class="err-message">
+                        <span>{{ this.errMessageGroup?.errJson?.booth_name.errMes }}</span>
+                    </div>
 
-          <div class="err-message">
-            <span>{{ this.errMessageGroup?.errJson?.booth_key.errMes }}</span>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>关键字：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="key" placeholder="输入1-20字关键字" [(ngModel)]="boothData.booth_key" maxlength="20"
+                                   class="form-control"
+                                   (change)="this.errMessageGroup.errJson.booth_key.errMes=''" required>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>展位类型：</span>
-            </label>
-            <div class="control-input">
-              <select name="bind-booth_type" [(ngModel)]="boothData.booth_type" (change)="onChangeBoothType($event)"
-                class="form-control" required [disabled]='!isCreate'>
-                <option value=''>请选择</option>
-                <option *ngFor="let type of boothType" [value]='type'>{{type | boothType}}</option>
-              </select>
-            </div>
-          </div>
+                    <div class="err-message">
+                        <span>{{ this.errMessageGroup?.errJson?.booth_key.errMes }}</span>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>数量：</span>
-            </label>
-            <div class="control-input">
-              <input name="booth_num" placeholder="输入1-10字数量" [(ngModel)]="boothData.booth_num" maxlength="2" [disabled]='!isCreate'
-                     class="form-control" appMaxNumber="10" appIntNumber required style="width: 160px" onInput="value=value&&value<1?1:value">
-              <p *ngIf="boothData.booth_type===1" class="tip">注：轮播图可同时开启并轮播数量</p>
-              <p *ngIf="boothData.booth_type===2" class="tip">注：焦点图数量平分总宽度，请慎重填写</p>
-            </div>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>展位类型：</span>
+                        </label>
+                        <div class="control-input">
+                            <select name="bind-booth_type" [(ngModel)]="boothData.booth_type"
+                                    (change)="onChangeBoothType($event)"
+                                    class="form-control" required [disabled]='!isCreate'>
+                                <option value=''>请选择</option>
+                                <option *ngFor="let type of boothType" [value]='type'>{{type | boothType}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="boothData.booth_type===3">
+                        <label class="control-label">
+                            <b>&nbsp;</b>
+                            <span>展位标题：</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" placeholder="输入1-20字展位标题" maxlength="20">
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>尺寸：</span>
-            </label>
-            <div class="control-input">
-              <div class="inline-item">
-                <label class="one-word-lable" style="border-right: 0;">
-                  <span *ngIf="boothData.booth_type!==2">宽</span>
-                  <span *ngIf="boothData.booth_type===2">总宽</span>
-                </label>
-                <input name="bind-width" [(ngModel)]="boothData.width"
-                  (change)="this.errMessageGroup.errJson.icon_size.errMes=''" class="form-control five-number"
-                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
-                <label class="one-word-lable" style="border-left: 0;">px</label>
-              </div>
-              <div class="inline-item">
-                <label class="one-word-lable" style="border-right: 0;">高</label>
-                <input name="bind-height" [(ngModel)]="boothData.height"
-                  (change)="this.errMessageGroup.errJson.icon_size.errMes=''" class="form-control five-number"
-                  appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5' required />
-                <label class="one-word-lable" style="border-left: 0;">px</label>
-              </div>
-            </div>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>数量：</span>
+                        </label>
+                        <div class="control-input">
+                            <input name="booth_num" placeholder="输入1-10字数量" [(ngModel)]="boothData.booth_num"
+                                   maxlength="2" [disabled]='!isCreate||boothData.booth_type===3'
+                                   class="form-control" appMaxNumber="10" appIntNumber required style="width: 160px"
+                                   onInput="value=value&&value<1?1:value">
+                            <p *ngIf="boothData.booth_type===1" class="tip">注：轮播图可同时开启并轮播数量</p>
+                            <p *ngIf="boothData.booth_type===2" class="tip">注：焦点图数量平分总宽度，请慎重填写</p>
+                        </div>
+                    </div>
 
-          <div class="err-message">
-            <span>{{ this.errMessageGroup?.errJson?.icon_size.errMes }}</span>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>尺寸：</span>
+                        </label>
+                        <div class="control-input">
+                            <div class="inline-item">
+                                <label class="one-word-lable" style="border-right: 0;">
+                                    <span *ngIf="boothData.booth_type===1">宽</span>
+                                    <span *ngIf="boothData.booth_type!==1">总宽</span>
+                                </label>
+                                <input name="bind-width" [(ngModel)]="boothData.width"
+                                       (change)="this.errMessageGroup.errJson.icon_size.errMes=''"
+                                       class="form-control five-number"
+                                       appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5'
+                                       required/>
+                                <label class="one-word-lable" style="border-left: 0;">px</label>
+                            </div>
+                            <div class="inline-item">
+                                <label class="one-word-lable" style="border-right: 0;">高</label>
+                                <input name="bind-height" [(ngModel)]="boothData.height"
+                                       (change)="this.errMessageGroup.errJson.icon_size.errMes=''"
+                                       class="form-control five-number"
+                                       appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999' maxlength='5'
+                                       required/>
+                                <label class="one-word-lable" style="border-left: 0;">px</label>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>支持格式：</span>
-            </label>
-            <div class="control-input">
-              <label *ngFor="let data of formatList;let i=index" name="format_{{i}}" nz-checkbox
-                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedFormat()">{{data.name}}</label>
-            </div>
-          </div>
+                    <div class="err-message">
+                        <span>{{ this.errMessageGroup?.errJson?.icon_size.errMes }}</span>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>*</b>
-              <span>跳转链接：</span>
-            </label>
-            <div class="control-input">
-              <label *ngFor="let data of linkTypeList;let i=index" name="link_type_{{i}}" nz-checkbox
-                [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedLinkType()">{{data.key | linkType}}</label>
-            </div>
-          </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>支持格式：</span>
+                        </label>
+                        <div class="control-input">
+                            <label *ngFor="let data of formatList;let i=index" name="format_{{i}}" nz-checkbox
+                                   [(ngModel)]="data.isChecked"
+                                   (ngModelChange)="onChangeCheckedFormat()">{{data.name}}</label>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <label class="control-label">
-              <b>&nbsp;&nbsp;</b>
-              <span>备注：</span>
-            </label>
-            <div class="control-input">
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>跳转链接：</span>
+                        </label>
+                        <div class="control-input">
+                            <label *ngFor="let data of linkTypeList;let i=index" name="link_type_{{i}}" nz-checkbox
+                                   [(ngModel)]="data.isChecked"
+                                   (ngModelChange)="onChangeCheckedLinkType()">{{data.key | linkType}}</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="control-label">
+                            <b>&nbsp;&nbsp;</b>
+                            <span>备注：</span>
+                        </label>
+                        <div class="control-input">
               <textarea name="remark" class="form-control" [(ngModel)]="boothData.remark" maxlength="100"
-                placeholder="输入备注，100字以内">
+                        placeholder="输入备注，100字以内">
               </textarea>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="modal-footer">
-            <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-            <button class="sure-btn" type="button" nz-button nzType="primary"
-              [disabled]="!boothConfigForm.form.valid || ifDisabled()" (appZDebounceClick)="onCheckClick()">确认
-            </button>
-          </div>
-        </form>
-      </div>
+                    <div class="modal-footer">
+                        <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                        <button class="sure-btn" type="button" nz-button nzType="primary"
+                                [disabled]="!boothConfigForm.form.valid || ifDisabled()"
+                                (appZDebounceClick)="onCheckClick()">确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

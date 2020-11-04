@@ -43,8 +43,8 @@
               <span *ngIf="!booth.formats || booth.formats.length===0">--</span>
             </td>
             <td>
-              <nz-switch [ngModel]="booth.status===1 ? true : false" nzCheckedChildren="On" nzUnCheckedChildren="Off"
-                [nzControl]=true style="height: 10px" (click)="onChangeSwitchStatus(booth.status,booth.booth_id)">
+              <nz-switch [ngModel]="booth.status===1" nzCheckedChildren="On" nzUnCheckedChildren="Off"
+                         [nzControl]=true style="height: 10px" (click)="onChangeSwitchStatus(booth.status,booth.booth_id)">
               </nz-switch>
             </td>
             <td class="operation">

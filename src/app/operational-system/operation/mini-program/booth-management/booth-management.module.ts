@@ -18,31 +18,34 @@ import { BoothTypePipe } from './pipes/booth-type.pipe';
 import { FormatPipe } from './pipes/format.pipe';
 import { LinkTypePipe } from './pipes/link-type.pipe';
 import { BoothContentDetailComponent } from './booth-content-detail/booth-content-detail.component';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 
 @NgModule({
-  declarations: [
-    BoothManagementComponent,
-    BoothConfigListComponent,
-    BoothConfigEditComponent,
-    BoothContentListComponent,
-    BoothContentEditComponent,
-    BoothListComponent,
-    BoothTypePipe,
-    FormatPipe,
-    LinkTypePipe,
-    BoothContentDetailComponent
-  ],
-  imports: [
-    CommonModule,
-    BoothManagementRoutingModule,
-    ShareModule,
-    DragDropModule,
-    NzTableModule,
-    NzButtonModule,
-    NzSwitchModule,
-    NzDatePickerModule,
-    NzCheckboxModule
-  ]
+    declarations: [
+        BoothManagementComponent,
+        BoothConfigListComponent,
+        BoothConfigEditComponent,
+        BoothContentListComponent,
+        BoothContentEditComponent,
+        BoothListComponent,
+        BoothTypePipe,
+        FormatPipe,
+        LinkTypePipe,
+        BoothContentDetailComponent
+    ],
+    imports: [
+        CommonModule,
+        BoothManagementRoutingModule,
+        ShareModule,
+        DragDropModule,
+        NzTableModule,
+        NzButtonModule,
+        NzSwitchModule,
+        NzDatePickerModule,
+        NzCheckboxModule,
+        NzRadioModule
+    ]
 })
-export class BoothManagementModule { }
+export class BoothManagementModule {
+}

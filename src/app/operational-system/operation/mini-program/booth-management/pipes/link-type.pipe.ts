@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 const LinkType = {
   1: '视频链接',
   2: 'H5链接',
-  3: '小程序原生页'
+  3: '小程序原生页',
+  4: '第三方小程序'
 };
 
 @Pipe({

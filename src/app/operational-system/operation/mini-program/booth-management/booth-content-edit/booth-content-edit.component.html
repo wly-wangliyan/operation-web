@@ -1,117 +1,150 @@
 <!--新增/编辑booth-->
 <div class="modal fade" id="boothContentModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-common" role="document">
-    <div class="modal-content modal-content-common">
-      <div class="modal-header">
-        <span class="modal-title">{{isCreate ? '新建' : '编辑'}}展位内容</span>
-        <button type="button" class="close" data-dismiss="modal">&times;
-        </button>
-      </div>
-      <form *ngIf="boothParams" autocomplete="off" class="form-horizontal" #editBoothContentModal="ngForm">
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>所属展位</span>
-          </label>
-          <div class="control-input">
-            <span style="line-height: 34px;">{{boothData.booth_name || '--'}}</span>
-          </div>
-        </div>
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>标题</span>
-          </label>
-          <div class="control-input">
-            <input class="form-control" placeholder="输入1-20字标题" [(ngModel)]="boothParams.title" name="title"
-              (change)="errMessageGroup.errJson.title.errMes=''" maxlength="20" required appIgnoreSpace>
-          </div>
-        </div>
-        <div class="err-message">
-          <span>{{ errMessageGroup.errJson?.title?.errMes }}</span>
-        </div>
-        <div class="row">
-          <label class="control-label" style="margin-bottom: 0;">
-            <b>*</b>
-            <span>图片</span>
-          </label>
-          <div class="control-input" style="margin-bottom: 0;">
-            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2" [imgReg]="imgReg"
-              [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
-              [imageWidth]="100*aspectRatio" [imageHeight]="100" [imageUrls]="cover_url" #coverImg
-              [aspectRatio]="aspectRatio" [resizable]="true" [imageShowWidth]="100*aspectRatio">
-            </app-z-photo-select>
-          </div>
-        </div>
-        <div class="err-message" style="margin-top:-8px">
-          <span>{{ errMessageGroup.errJson?.icon?.errMes }}</span>
-        </div>
-        <p class="cover-hint" style="padding-left: 140px;">
-          <span>注：尺寸{{boothData.width || 0}}px * {{boothData.height || 0}}px，格式<span
-              *ngFor="let format of boothData.formats;last as isLast">{{format}}<span
-                *ngIf="!isLast">/</span></span>，大小2M以内</span>
-        </p>
-        <div class="row">
-          <label class=" control-label">
-            <b>&nbsp;&nbsp;</b>
-            <span>落地页</span>
-          </label>
-          <div class="control-input">
-            <select class="form-control" [(ngModel)]="boothParams.link_type" name="link_type"
-              (change)="onChangeLinkType($event)">\
-              <option value=''>请选择</option>
-              <option *ngFor="let type of boothData.link_types" [value]='type'>{{type | linkType}}</option>
-            </select>
-            <input class="form-control" placeholder="输入跳转URL" [(ngModel)]="boothParams.link_url" name="link_url"
-              maxlength="2000" appIgnoreSpace (change)="errMessageGroup.errJson.link_url.errMes=''">
-          </div>
-        </div>
-        <div class="err-message">
-          <span>{{ errMessageGroup.errJson?.link_url?.errMes }}</span>
-        </div>
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-common" role="document">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">{{isCreate ? '新建' : '编辑'}}展位内容</span>
+                <button type="button" class="close" data-dismiss="modal">&times;
+                </button>
+            </div>
+            <form *ngIf="boothParams" autocomplete="off" class="form-horizontal" #editBoothContentModal="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>所属展位</span>
+                    </label>
+                    <div class="control-input">
+                        <span style="line-height: 34px;">{{boothData.booth_name || '--'}}</span>
+                    </div>
+                </div>
+                <div class="row" *ngIf="boothData.booth_type===3">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>位置</span>
+                    </label>
+                    <div class="control-input">
+                        <nz-radio-group required [(ngModel)]="boothParams.position" name="position">
+                            <label nz-radio [nzValue]="1">大图</label>
+                            <label nz-radio [nzValue]="2">小图</label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>标题</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="输入1-20字标题" [(ngModel)]="boothParams.title" name="title"
+                               (change)="errMessageGroup.errJson.title.errMes=''" maxlength="20" required
+                               appIgnoreSpace>
+                    </div>
+                </div>
+                <div class="err-message">
+                    <span>{{ errMessageGroup.errJson?.title?.errMes }}</span>
+                </div>
+                <div class="row">
+                    <label class="control-label" style="margin-bottom: 0;">
+                        <b>*</b>
+                        <span>图片</span>
+                    </label>
+                    <div class="control-input" style="margin-bottom: 0;">
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                            [imgReg]="imgReg"
+                                            [isCutCoverImg]="false" (selectedImgChange)="onSelectedPicture($event)"
+                                            file_id="coverImg"
+                                            [imageWidth]="100*aspectRatio" [imageHeight]="100" [imageUrls]="cover_url"
+                                            #coverImg
+                                            [aspectRatio]="aspectRatio" [resizable]="true"
+                                            [imageShowWidth]="100*aspectRatio">
+                        </app-z-photo-select>
+                    </div>
+                </div>
+                <div class="err-message" style="margin-top:-8px">
+                    <span>{{ errMessageGroup.errJson?.icon?.errMes }}</span>
+                </div>
+                <p class="cover-hint" style="padding-left: 140px;">
+                    <span>注：尺寸{{boothData.width || 0}}px * {{boothData.height || 0}}px，格式
+                        <span *ngFor="let format of boothData.formats;last as isLast">
+                            {{format}}
+                            <span *ngIf="!isLast">/</span>
+                        </span>，大小2M以内
+                    </span>
+                </p>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>落地页</span>
+                    </label>
+                    <div class="control-input">
+                        <select class="form-control" [(ngModel)]="boothParams.link_type" name="link_type"
+                                (change)="onChangeLinkType($event)">
+                            <option value=''>请选择</option>
+                            <option *ngFor="let type of boothData.link_types"
+                                    [value]='type'>{{type | linkType}}</option>
+                        </select>
+                        <input class="form-control" placeholder="输入跳转URL" [(ngModel)]="boothParams.link_url"
+                               name="link_url"
+                               maxlength="2000" appIgnoreSpace (change)="errMessageGroup.errJson.link_url.errMes=''">
+                    </div>
+                </div>
+                <div class="err-message">
+                    <span>{{ errMessageGroup.errJson?.link_url?.errMes }}</span>
+                </div>
+                <div class="row" *ngIf="boothParams.link_type===4">
+                    <label class=" control-label">
+                    </label>
+                    <div class="control-input">
+                        <span>appID</span>
+                        <input class="form-control" placeholder="输入跳转小程序appID" [(ngModel)]="boothParams.link_url"
+                               name="link_url" required
+                               maxlength="200" appIgnoreSpace>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>下线时间</span>
+                    </label>
+                    <div class="control-input">
+                        <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===1"
+                           (click)="onChangeOfflineType(1)">永不下线</a>
+                        <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===2"
+                           (click)="onChangeOfflineType(2)" style="margin-right: 5px">定时下线</a>
+                        <nz-date-picker *ngIf="boothParams.offline_type===2" [(ngModel)]="offline_date"
+                                        (ngModelChange)="errMessageGroup.errJson.offline_date.errMes=''"
+                                        [nzShowToday]=false
+                                        [nzDisabledDate]="disabledTime" name='offline_date'
+                                        [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        nzFormat="yyyy-MM-dd HH:mm">
+                        </nz-date-picker>
+                    </div>
+                </div>
+                <div class="err-message">
+                    <span>{{ errMessageGroup.errJson?.offline_date?.errMes }}</span>
+                </div>
 
-        <div class="row">
-          <label class="control-label">
-            <b>*</b>
-            <span>下线时间</span>
-          </label>
-          <div class="control-input">
-            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===1"
-              (click)="onChangeOfflineType(1)">永不下线</a>
-            <a name="select_firm_btn" class="offline-btn" [class.active-btn]="boothParams.offline_type===2"
-              (click)="onChangeOfflineType(2)" style="margin-right: 5px">定时下线</a>
-            <nz-date-picker *ngIf="boothParams.offline_type===2" [(ngModel)]="offline_date"
-              (ngModelChange)="errMessageGroup.errJson.offline_date.errMes=''" [nzShowToday]=false
-              [nzDisabledDate]="disabledTime" name='offline_date' [nzShowTime]="{'nzFormat':'HH:mm'}"
-              nzFormat="yyyy-MM-dd HH:mm">
-            </nz-date-picker>
-          </div>
-        </div>
-        <div class="err-message">
-          <span>{{ errMessageGroup.errJson?.offline_date?.errMes }}</span>
-        </div>
-
-        <div class="row">
-          <label class="control-label">
-            <b>&nbsp;&nbsp;</b>
-            <span>备注</span>
-          </label>
-          <div class="control-input">
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>备注</span>
+                    </label>
+                    <div class="control-input">
             <textarea class="form-control" rows="4" placeholder="输入描述，100字以内" [(ngModel)]="boothParams.remark"
-              name="remark" maxlength="100">
+                      name="remark" maxlength="100">
             </textarea>
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="modal-footer">
-          <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
-          <button class="sure-btn" type="button" nz-button nzType="primary"
-            [disabled]="!editBoothContentModal.form.valid || coverImg.imageList.length===0  || boothParams.offline_type === 2 && !offline_date"
-            (appZDebounceClick)="onCheckClick()">保存
-          </button>
+                <div class="modal-footer">
+                    <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                    <button class="sure-btn" type="button" nz-button nzType="primary"
+                            [disabled]="!editBoothContentModal.form.valid || coverImg.imageList.length===0  || boothParams.offline_type === 2 && !offline_date"
+                            (appZDebounceClick)="onCheckClick()">保存
+                    </button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 </div>

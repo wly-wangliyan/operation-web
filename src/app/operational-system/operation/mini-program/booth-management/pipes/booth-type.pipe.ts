@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 /** booth类型 */
 const BoothType = {
   1: '轮播图',
-  2: '焦点图'
+  2: '焦点图',
+  3: '组合'
 };
 
 @Pipe({

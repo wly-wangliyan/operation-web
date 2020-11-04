@@ -40,7 +40,7 @@ export class BoothContentEditComponent implements OnInit {
         $('#boothContentModal').modal();
       });
     };
-    this.isCreate = data && data.booth_content_id ? false : true;
+    this.isCreate = !(data && data.booth_content_id);
     if (!this.isCreate) {
       this.boothParams = data.clone();
     } else {
