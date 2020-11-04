@@ -23,6 +23,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { WashCarActivityEditComponent } from './wash-car-activity-edit/wash-car-activity-edit.component';
 import { UPLOAD_TOKEN, UploadConfig, UploadService } from '../../core/upload.service';
 import { environment } from '../../../environments/environment';
+import { TimeSlotComponent } from './time-slot/time-slot.component';
 
 const uploadToken: UploadConfig = {
   img_config: {
@@ -57,6 +58,7 @@ const uploadToken: UploadConfig = {
     ChooseProjectComponent,
     WashCarServiceEditComponent,
     WashCarActivityEditComponent,
+    TimeSlotComponent,
   ],
   providers: [{
     provide: UPLOAD_TOKEN,

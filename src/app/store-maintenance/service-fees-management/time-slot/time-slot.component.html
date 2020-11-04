@@ -1,0 +1,5 @@
+<app-date-clock [has24]="true" [(hour)]="timeSlots.startTime.hour"
+                [(minute)]="timeSlots.startTime.minute" [readonly]="startReadonly"></app-date-clock>
+<span class="line">-</span>
+<app-date-clock [has24]="true" [(hour)]="timeSlots.endTime.hour" [readonly]="endReadonly"
+                [(minute)]="timeSlots.endTime.minute"></app-date-clock>

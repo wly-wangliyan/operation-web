@@ -1,52 +1,149 @@
 .des_card {
-  height: auto;
-  padding: 20px 50px;
-  background: #fff;
-  margin-bottom: 10px;
+    height: auto;
+    padding: 20px 50px;
+    background: #fff;
+    margin-bottom: 10px;
 }
 
 :host ::ng-deep .ant-form-item-label {
-  min-width: 90px;
+    min-width: 90px;
 }
 
 .sure-btn {
-  margin: 0 31px 0 88px;
+    margin: 0 31px 0 88px;
 }
 
 .fee-name {
-  width: 310px;
+    width: 310px;
 }
 
 .pro-input {
-  width: 310px;
+    width: 310px;
 }
 
 .price-input {
-  width: 140px;
+    width: 140px;
 }
 
 .choose {
-  position: absolute;
-  left: 236px;
-  top: -7px;
-  display: inline-block;
-  width: 72px;
-  border-left: 1px solid rgba(136, 136, 136, 0.3);
-  height: 30px;
-  text-align: center;
-  background: #fbfbfb;
-  line-height: 30px;
+    position: absolute;
+    left: 236px;
+    top: -7px;
+    display: inline-block;
+    width: 72px;
+    border-left: 1px solid rgba(136, 136, 136, 0.3);
+    height: 30px;
+    text-align: center;
+    background: #fbfbfb;
+    line-height: 30px;
 }
 
 .unit {
-  position: absolute;
-  left: 105px;
-  top: -7px;
-  display: inline-block;
-  width: 34px;
-  border-left: 1px solid rgba(136, 136, 136, 0.3);
-  height: 30px;
-  text-align: center;
-  background: #fbfbfb;
-  line-height: 30px;
+    position: absolute;
+    left: 105px;
+    top: -7px;
+    display: inline-block;
+    width: 34px;
+    border-left: 1px solid rgba(136, 136, 136, 0.3);
+    height: 30px;
+    text-align: center;
+    background: #fbfbfb;
+    line-height: 30px;
+}
+
+.card-content-title {
+    overflow: hidden;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-content-title span {
+    color: #23242F;
+}
+
+.rescue-fee-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.rescue-fee-content.borderBottom{
+    border-bottom: 1px solid #888888;
+}
+
+.rescue-fee-content img {
+    width: 21px;
+    height: 23px;
+    margin-left: 10px;
+    margin-top: -10px;
+}
+
+.telephone-content {
+    display: flex;
+    align-items: center;
+}
+
+.telephone-content > span {
+    margin-right: 12px;
+    color: #23242F;
+}
+
+.telephone-content li, .telephone-content ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+}
+
+.telephone-content li:not(.select-tag) {
+    width: 175px;
+    height: 30px;
+    position: relative;
+    box-sizing: border-box;
+    word-break: break-all;
+    flex-direction: column;
+}
+
+.telephone-content li:not(.select-tag) > img {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
+.telephone-content li.select-tag {
+    min-width: 67px;
+    height: 30px;
+    background: rgba(62, 113, 247, 0.33);
+    border-radius: .25rem;
+    padding: 0 10px;
+    box-sizing: border-box;
+    word-break: break-all;
+    color: #3E71F7;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.telephone-content li.select-tag > img {
+    width: 12px;
+    height: 12px;
+    color: #3E71F7;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.telephone-content li:hover {
+    cursor: pointer;
+}
+
+li + li {
+    margin-left: 20px;
+}
+
+:host ::ng-deep .ant-form-item {
+    margin-bottom: 0;
 }
