@@ -1,53 +1,64 @@
 <div class="content-header">
-  <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'"></app-crumb>
-  <ul class="header-right">
-    <li>
-      <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-        [routerLink]="['../booth-config-list']">
-        展位设置
-      </button>
-    </li>
-  </ul>
+    <app-crumb [level1Name]="'小程序'" [level2Name]="'展位'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    [routerLink]="['../booth-config-list']">
+                展位设置
+            </button>
+        </li>
+    </ul>
 </div>
 <div class="content-flow">
-  <div class="table-container">
-    <div class="search-container">
-      <form class="search-form" autocomplete="off">
-        <div class="form-group">
-          <span>所属展位：</span>
-          <input class="form-control" placeholder="请输入所属展位" maxlength="20" name="booth_name"
-            [(ngModel)]="searchParams.booth_name" />
-          <div class="search-btn-group">
-            <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
-            </button>
-          </div>
+    <div class="table-container">
+        <div class="search-container">
+            <form class="search-form" autocomplete="off">
+                <div class="form-group">
+                    <span>所属展位：</span>
+                    <input class="form-control" placeholder="请输入所属展位" maxlength="20" name="booth_name"
+                           [(ngModel)]="searchParams.booth_name"/>
+                </div>
+                <div class="form-group">
+                    <span>展位类型：</span>
+                    <select name="booth_type" [(ngModel)]="searchParams.booth_type"
+                            class="form-control">
+                        <option value=''>请选择</option>
+                        <option value="1">轮播图</option>
+                        <option value="2">焦点图</option>
+                        <option value="3">组合</option>
+                    </select>
+                    <div class="search-btn-group">
+                        <button nz-button nzType="primary" (click)="onSearchBtnClick()">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
+        <div class="zmy-table">
+            <nz-table #boothTable [nzData]="boothList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
+                      (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>所属展位</th>
+                    <th>关键字</th>
+                    <th>类型</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let booth of boothTable.data;let index = index">
+                    <td>{{index + (pageIndex - 1) * 15 + 1}}</td>
+                    <td>{{booth.booth_name || '--'}}</td>
+                    <td>{{booth.booth_key || '--'}}</td>
+                    <td>{{booth.booth_type | boothType}}</td>
+                    <td class="operation">
+                        <a class="edit-btn" [title]="'编辑'"
+                           [routerLink]="['../booth-content-list',booth.booth_id]">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
     </div>
-    <div class="zmy-table">
-      <nz-table #boothTable [nzData]="boothList" [nzPageSize]="'15'" [(nzPageIndex)]="pageIndex"
-        (nzPageIndexChange)="onNZPageIndexChange($event)" [nzNoResult]="noResultText">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>所属展位</th>
-            <th>关键字</th>
-            <th>类型</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let booth of boothTable.data;let index = index">
-            <td>{{index+(pageIndex-1)*15+1}}</td>
-            <td>{{booth.booth_name || '--'}}</td>
-            <td>{{booth.booth_key || '--'}}</td>
-            <td>{{booth.booth_type | boothType}}</td>
-            <td class="operation">
-              <a class="edit-btn" [title]="'编辑'" [routerLink]="['../booth-content-list',booth.booth_id]">编辑</a>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-  </div>
 </div>
