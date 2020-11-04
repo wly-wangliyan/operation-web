@@ -276,6 +276,13 @@
                                    appMinNumber="1" appIntNumber="true" [disabled]="sourceType===3">
                             <label class="one-word-lable">件</label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="control-label">
+                    </label>
+                    <div class="control-input purchase-limits">
                         <div>
                             <span>商品每日限购</span>
                             <input type="text" class="form-control no-focus-border"
@@ -285,6 +292,12 @@
                                    maxlength="8"
                                    appMinNumber="1" appIntNumber="true" [disabled]="sourceType===3">
                             <label class="one-word-lable">件</label>
+                        </div>
+                        <div style="margin: 0 20px">
+                            <span style="margin-right: 10px">发放时间</span>
+                            <app-date-clock [has24]="true" [(hour)]="distributionTime.hour"
+                                            [(minute)]="distributionTime .minute"
+                                            [readonly]="sourceType===3"></app-date-clock>
                         </div>
                     </div>
                 </div>

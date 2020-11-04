@@ -12,6 +12,7 @@ import {
     SpecificationEntity,
     SpecificationParams
 } from '../../../../mall/goods-management/goods-management-http.service';
+import { TimeItem } from '../../../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-commodity-edit',
@@ -31,6 +32,8 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     public specificationList: Array<SpecificationEntity> = []; // 规格对象列表
     private onSubmitSubscription: any;
     public imgReg = /(png|jpg|jpeg|gif)$/; // 默认图片校验格式
+
+    public distributionTime: TimeItem = new TimeItem(); // 发放时间
 
     @ViewChild('coverImg', {static: false}) public coverImgSelectComponent: ZPhotoSelectComponent;
 
