@@ -27,12 +27,12 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
     public searchParams = new SearchIntegralCommodityParams();
     public start_time: any = '';
     public end_time: any = '';
-    public commoditySearchParams: CommoditySearchParams = new CommoditySearchParams();
     public commodityList: Array<CommodityEntity> = []; // 产品列表
     public sourceCommodityList: Array<CommodityEntity> = []; // 产品列表
     public selectedCommodity: CommodityEntity = new CommodityEntity(); // 选择的产品
     public selectedSpecificationId = '';
     public searchText$ = new Subject<any>();
+    public commodity_name = '';
 
     constructor(
         public globalService: GlobalService,
@@ -45,7 +45,7 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
 
     public ngOnInit() {
         this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-            const commodity_name = this.commoditySearchParams.commodity_name;
+            const commodity_name = this.commodity_name;
             if (commodity_name) {
                 this.commodityList = this.sourceCommodityList.filter(item => item.commodity_name.indexOf(commodity_name) > -1);
             } else {
@@ -58,13 +58,14 @@ export class CommodityListComponent implements NzSearchAdapter, OnInit {
      * 创建商品
      */
     public onClickCreateProduct() {
-        this.commoditySearchParams = new CommoditySearchParams();
+        const commoditySearchParams = new CommoditySearchParams();
         $('#productCreatePromptDiv').modal('show');
         this.commodityList = [];
         this.sourceCommodityList = [];
         this.selectedCommodity = new CommodityEntity();
         this.selectedSpecificationId = '';
-        this.requestCommodityListData(this.commoditySearchParams);
+        this.commodity_name = '';
+        this.requestCommodityListData(commoditySearchParams);
     }
 
     /**
