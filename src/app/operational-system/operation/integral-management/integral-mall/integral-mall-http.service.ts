@@ -52,6 +52,7 @@ export class IntegralCommodityEntity extends EntityBase {
     public exchange_amount: number = undefined; // 兑换数量
     public is_top: number = undefined; // 是否置顶, 1置顶 2取消置顶
     public status: number = undefined; // 销售状态, 1销售中 2已下架
+    public day_distribution_time: number = undefined; // 商品每日发放时间
 
     public total_click_num: number = undefined; // 总点击次数
     public total_click_person: number = undefined; // 总点击人数
@@ -122,6 +123,7 @@ export class EditCommodityParams extends EntityBase {
     public business_telephone: string = undefined; // 商户联系电话
     public order_description: string = undefined; // 订单说明
     public button_config: ButtonConfigEntity = new ButtonConfigEntity(); // 按钮描述
+    public day_distribution_time: number = undefined; // 商品每日发放时间
 
     /**
      * @param data 编辑积分商城商品
