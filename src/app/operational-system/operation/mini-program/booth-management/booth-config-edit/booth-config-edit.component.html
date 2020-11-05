@@ -64,11 +64,12 @@
                             <span>展位标题：</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" placeholder="输入1-20字展位标题" maxlength="20">
+                            <input class="form-control" placeholder="输入1-20字展位标题" maxlength="20"
+                                   [(ngModel)]="boothData.booth_title" name="booth_title" appIgnoreSpace>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" *ngIf="boothData.booth_type!==3">
                         <label class="control-label">
                             <b>*</b>
                             <span>数量：</span>
@@ -83,7 +84,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" *ngIf="boothData.booth_type!==3">
                         <label class="control-label">
                             <b>*</b>
                             <span>尺寸：</span>

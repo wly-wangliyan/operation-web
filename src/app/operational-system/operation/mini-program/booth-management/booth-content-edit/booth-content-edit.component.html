@@ -24,7 +24,7 @@
                         <span>位置</span>
                     </label>
                     <div class="control-input">
-                        <nz-radio-group required [(ngModel)]="boothParams.position" name="position">
+                        <nz-radio-group required [(ngModel)]="boothParams.image_type" name="image_type">
                             <label nz-radio [nzValue]="1">大图</label>
                             <label nz-radio [nzValue]="2">小图</label>
                         </nz-radio-group>
@@ -65,7 +65,8 @@
                     <span>{{ errMessageGroup.errJson?.icon?.errMes }}</span>
                 </div>
                 <p class="cover-hint" style="padding-left: 140px;">
-                    <span>注：尺寸{{boothData.width || 0}}px * {{boothData.height || 0}}px，格式
+                    <span>注：<span *ngIf="boothData.booth_type!==3">尺寸{{boothData.width || 0}}
+                        px * {{boothData.height || 0}}px，</span>格式
                         <span *ngFor="let format of boothData.formats;last as isLast">
                             {{format}}
                             <span *ngIf="!isLast">/</span>
@@ -97,8 +98,8 @@
                     </label>
                     <div class="control-input">
                         <span>appID</span>
-                        <input class="form-control" placeholder="输入跳转小程序appID" [(ngModel)]="boothParams.link_url"
-                               name="link_url" required
+                        <input class="form-control" placeholder="输入跳转小程序appID" [(ngModel)]="boothParams.app_id"
+                               name="app_id" required
                                maxlength="200" appIgnoreSpace>
                     </div>
                 </div>

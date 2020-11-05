@@ -37,6 +37,7 @@ export class BoothEntity extends EntityBase {
     public booth_name: string = undefined; // 展位名称
     public booth_key: string = undefined; // 关键字
     public booth_type: any = ''; // 展位类型 1:轮播图 2：焦点图 3：组合
+    public booth_title: string = undefined;
     public booth_num: number = undefined; // 展位个数
     public width: number = undefined; // 宽
     public height: number = undefined; // 高
@@ -80,8 +81,9 @@ export class BoothContentEntity extends EntityBase {
     public booth_content_id: string = undefined; // id
     public booth: BoothEntity = undefined; // 展位对象
     public title: string = undefined; // 标题
-    public position = ''; // 位置  todo
+    public image_type: number = undefined; // 图片类型 1：大 2：小
     public image: string = undefined; // 图片
+    public app_id: string = undefined;
     public link_type: any = ''; // int 链接类型 1:视频链接 2:H5链接 3:小程序原生页 4: 第三方小程序
     public link_url: string = undefined; // 链接url
     public offline_type: number = undefined; // 下线时间类型 1：永不下线 2：定时下线 默认为1
