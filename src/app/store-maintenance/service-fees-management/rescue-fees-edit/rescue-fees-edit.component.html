@@ -6,9 +6,9 @@
         <form nz-form class="content-layout" #rescueFeesForm="ngForm">
             <div class="card_content">
                 <div class="card-content-title">
-                    <p><span>救援费名称</span> {{serviceFeeData.service_fee_name}}</p>
+                    <p><span>救援费名称</span> {{service_fee_name}}</p>
                     <ul class="header-right" *ngIf="rescueFeeList.length<5">
-                        <li class="big-bg" (click)="onClickCreateFee()">
+                        <li class="big-bg" (click)="onClickAdd(1)">
                             <a>新建</a>
                         </li>
                     </ul>
@@ -20,8 +20,9 @@
                         <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="'元'">
                                 <input class="price-input" nz-input autocomplete="off"
-                                       [(ngModel)]="balance_initial_price"
-                                       name="balance_initial_price" required maxlength='8' appFloatNumber
+                                       [(ngModel)]="rescueFee.balance_initial_price"
+                                       name="balance_initial_price_{{rescueFee.timestamp+index}}" required maxlength='8'
+                                       appFloatNumber
                                        [appMaxNumber]='99999.99'/>
                             </nz-input-group>
                         </nz-form-control>
@@ -32,14 +33,15 @@
                             <div>
                                 <nz-input-group [nzAddOnAfter]="'元'">
                                     <input class="price-input" nz-input autocomplete="off"
-                                           [(ngModel)]="balance_current_price"
-                                           name="balance_current_price" required maxlength='8' appFloatNumber
+                                           [(ngModel)]="rescueFee.balance_current_price"
+                                           name="balance_current_price_{{rescueFee.timestamp+index}}" required
+                                           maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
                             </div>
-                            <div *ngIf="balanceCurrentPriceErrors" class="text-danger">
+                            <div *ngIf="rescueFee.balanceCurrentPriceErrors" class="text-danger">
                                 <span class="input-error">
-                                    {{balanceCurrentPriceErrors}}
+                                    {{rescueFee.balanceCurrentPriceErrors}}
                                 </span>
                             </div>
                         </nz-form-control>
@@ -50,8 +52,9 @@
                             <div>
                                 <nz-input-group [nzAddOnAfter]="'元'">
                                     <input class="price-input" nz-input autocomplete="off"
-                                           [(ngModel)]="prepay_initial_price"
-                                           name="prepay_initial_price" required maxlength='8' appFloatNumber
+                                           [(ngModel)]="rescueFee.prepay_initial_price"
+                                           name="prepay_initial_price_{{rescueFee.timestamp+index}}" required
+                                           maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
                             </div>
@@ -63,34 +66,41 @@
                             <div>
                                 <nz-input-group [nzAddOnAfter]="'元'">
                                     <input class="price-input" nz-input autocomplete="off"
-                                           [(ngModel)]="prepay_current_price"
-                                           name="prepay_current_price" required maxlength='8' appFloatNumber
+                                           [(ngModel)]="rescueFee.prepay_current_price"
+                                           name="prepay_current_price_{{rescueFee.timestamp+index}}" required
+                                           maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
                             </div>
-                            <div *ngIf="prepayCurrentPriceErrors" class="text-danger">
-                                <span class="input-error">{{prepayCurrentPriceErrors}}</span>
+                            <div *ngIf="rescueFee.prepayCurrentPriceErrors" class="text-danger">
+                                <span class="input-error">{{rescueFee.prepayCurrentPriceErrors}}</span>
                             </div>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nzFlex>
                         <nz-form-label nzRequired [nzNoColon]='true'>时间段</nz-form-label>
                         <nz-form-control>
-                            <app-time-slot [startReadonly]="index===0" [timeSlots]="rescueFee"
-                                           [endReadonly]="index===rescueFeeList.length-1"></app-time-slot>
-                            <img src="./assets/images/delete_hover.png" (click)="onClickDelete(1,index)"
-                                 [ngStyle]="{visibility:rescueFeeList.length>1?'visible':'hidden'}">
+                            <div style="line-height: 40px">
+                                <app-time-slot [startReadonly]="index===0" [timeSlots]="rescueFee"
+                                               [endReadonly]="index===rescueFeeList.length-1"></app-time-slot>
+                                <img src="./assets/images/delete_hover.png" (click)="onClickDelete(1,index)"
+                                     [ngStyle]="{visibility:rescueFeeList.length>1?'visible':'hidden'}">
+                            </div>
+                            <div *ngIf="rescueFee.timeErrors" class="text-danger">
+                                <span class="input-error">{{rescueFee.timeErrors}}</span>
+                            </div>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div class="telephone-content">
                     <span>负责人手机号</span>
                     <ul>
-                        <li *ngFor="let telephone of telephoneList;let index=index">
-                            <input class="form-control">
+                        <li *ngFor="let item of telephoneList;let index=index">
+                            <input class="form-control" [(ngModel)]="item.telephone"
+                                   name="telephone_{{item.timeStamp+index}}" appIgnoreSpace maxlength="20">
                             <img src="/assets/images/tag_del.png" (click)="onClickDelete(2,index)">
                         </li>
-                        <li class="select-tag" (click)="onClickTelephone()" *ngIf="telephoneList.length<5">
+                        <li class="select-tag" (click)="onClickAdd(2)" *ngIf="telephoneList.length<5">
                             <span>添加</span>
                             <img src="./assets/images/icon_add_small.png">
                         </li>

@@ -119,7 +119,6 @@
     min-width: 67px;
     height: 30px;
     background: rgba(62, 113, 247, 0.33);
-    border-radius: .25rem;
     padding: 0 10px;
     box-sizing: border-box;
     word-break: break-all;
@@ -146,4 +145,8 @@ li + li {
 
 :host ::ng-deep .ant-form-item {
     margin-bottom: 0;
+}
+
+:host ::ng-deep .ant-input-group-addon:last-child,.form-control{
+    border-radius: 0;
 }

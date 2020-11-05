@@ -7,9 +7,10 @@ import {
     ServiceFeeEntity,
     ServiceFeesManagementService,
     SearchFeeParams,
+    RescueCostConfigureEntity,
 } from '../service-fees-management.service';
 import { HttpErrorEntity } from '../../../core/http.service';
-import { TimeItem } from '../../../../utils/date-format-helper';
+import { DateFormatHelper, TimeItem } from '../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-rescue-fees-edit',
@@ -17,53 +18,52 @@ import { TimeItem } from '../../../../utils/date-format-helper';
     styleUrls: ['./rescue-fees-edit.component.css']
 })
 export class RescueFeesEditComponent implements OnInit {
-    public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
-    public searchFeeParams: SearchFeeParams = new SearchFeeParams();
+    // public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
+    public service_fee_name = '';
     public loading = false;
-    public service_fee_id: string;
-    public balance_initial_price = '';
-    public balance_current_price = '';
-    public prepay_initial_price = '';
-    public prepay_current_price = '';
-    public balanceCurrentPriceErrors = '';
-    public prepayCurrentPriceErrors = '';
-    public rescueFeeList: Array<TimeSlotItem> = [];
-    public telephoneList: Array<string> = [];
-
-    private searchText$ = new Subject<any>();
+    // public balance_initial_price = '';
+    // public balance_current_price = '';
+    // public prepay_initial_price = '';
+    // public prepay_current_price = '';
+    // public balanceCurrentPriceErrors = '';
+    // public prepayCurrentPriceErrors = '';
+    public rescueFeeList: Array<RescueCostConfigureEntity> = [];
+    public telephoneList: Array<TelephoneItem> = [];
+    private service_fee_id: string;
 
     constructor(private globalService: GlobalService, private feesService: ServiceFeesManagementService,
                 private routerInfo: ActivatedRoute, private router: Router) {
-        const timeSlots = new TimeSlotItem();
-        this.rescueFeeList.push(timeSlots);
-    }
-
-    public ngOnInit() {
         this.routerInfo.params.subscribe((params: Params) => {
             this.service_fee_id = params.service_fee_id;
         });
-        this.searchText$.pipe(debounceTime(500)).subscribe(() => {
-            this.feesService.requestServiceFeeDetailData(this.service_fee_id).subscribe(res => {
-                this.serviceFeeData = res;
-                this.balance_initial_price = this.getFeeData(this.serviceFeeData.balance_initial_price);
-                this.balance_current_price = this.getFeeData(this.serviceFeeData.balance_current_price);
-                this.prepay_initial_price = this.getFeeData(this.serviceFeeData.prepay_initial_price);
-                this.prepay_current_price = this.getFeeData(this.serviceFeeData.prepay_current_price);
-                this.loading = true;
-            }, err => {
-                this.globalService.httpErrorProcess(err);
-            });
-        });
-        this.searchText$.next();
     }
 
-    public onClickCreateFee() {
-        const first = this.rescueFeeList[this.rescueFeeList.length - 1];
-        const timeSlots = new TimeSlotItem();
-        timeSlots.startTime = first.endTime;
-        this.rescueFeeList.push(timeSlots);
+    public ngOnInit() {
+        if (this.service_fee_id) {
+            this.requestServiceFeeDetail();
+        }
     }
 
+    /**
+     * 添加
+     * @param type
+     */
+    public onClickAdd(type: number) {
+        if (type === 1) {
+            const first = this.rescueFeeList[this.rescueFeeList.length - 1];
+            const rescueCostConfigure = new RescueCostConfigureEntity();
+            rescueCostConfigure.startTime = first.endTime;
+            this.rescueFeeList.push(rescueCostConfigure);
+        } else {
+            this.telephoneList.push(new TelephoneItem());
+        }
+    }
+
+    /**
+     * 删除
+     * @param type
+     * @param index
+     */
     public onClickDelete(type: number, index: number) {
         if (type === 1) {
             if (index === 0) {
@@ -83,44 +83,50 @@ export class RescueFeesEditComponent implements OnInit {
         }
     }
 
-    public onClickTelephone() {
-        this.telephoneList.push('1');
-    }
-
-    // 价钱数据处理
-    private getFeeData(fee: number) {
-        return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
-    }
-
     public onCancelBtn() {
         this.router.navigateByUrl('/service-fees-management');
     }
 
     // 保存数据
     public onSaveFormSubmit() {
-
-        if (Number(this.balance_current_price) > Number(this.balance_initial_price)) {
-            this.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
-            this.prepayCurrentPriceErrors = '';
-        } else if (Number(this.prepay_current_price) > Number(this.prepay_initial_price)) {
-            this.prepayCurrentPriceErrors = '预付现价不得大于预付原价！';
-            this.balanceCurrentPriceErrors = '';
-        } else {
-            this.balanceCurrentPriceErrors = '';
-            this.prepayCurrentPriceErrors = '';
-            this.searchFeeParams.balance_initial_price = Math.round(Number(this.balance_initial_price) * 100);
-            this.searchFeeParams.balance_current_price = Math.round(Number(this.balance_current_price) * 100);
-            this.searchFeeParams.prepay_initial_price = Math.round(Number(this.prepay_initial_price) * 100);
-            this.searchFeeParams.prepay_current_price = Math.round(Number(this.prepay_current_price) * 100);
-            this.feesService.requestUpdateFeeData(this.searchFeeParams, this.service_fee_id, 2).subscribe(() => {
+        let flagError = false;
+        // tslint:disable-next-line:prefer-for-of
+        for (let index = 0; index < this.rescueFeeList.length; index++) {
+            const temp = this.rescueFeeList[index];
+            temp.start_time = DateFormatHelper.getSecondTimeSum(temp.startTime, 'mm');
+            temp.end_time = DateFormatHelper.getSecondTimeSum(temp.endTime, 'mm');
+            if (Number(temp.balance_current_price) > Number(temp.balance_initial_price)) {
+                temp.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
+                temp.prepayCurrentPriceErrors = '';
+                temp.timeErrors = '';
+                return flagError = true;
+            } else if (Number(temp.prepay_current_price) > Number(temp.prepay_initial_price)) {
+                temp.prepayCurrentPriceErrors = '预付现价不得大于预付原价！';
+                temp.balanceCurrentPriceErrors = '';
+                temp.timeErrors = '';
+                return flagError = true;
+            } else if (Number(temp.start_time) >= Number(temp.end_time)) {
+                temp.timeErrors = '开始时间不得大于等于结束时间！';
+                temp.prepayCurrentPriceErrors = '';
+                temp.balanceCurrentPriceErrors = '';
+                return flagError = true;
+            } else {
+                temp.prepayCurrentPriceErrors = '';
+                temp.balanceCurrentPriceErrors = '';
+                temp.timeErrors = '';
+            }
+        }
+        if (!flagError) {
+            const searchFeeParams: SearchFeeParams = new SearchFeeParams();
+            searchFeeParams.rescue_cost_configure = this.rescueFeeList;
+            searchFeeParams.rescue_person_telephone = this.telephoneList.map(item => item.telephone).join(',');
+            this.feesService.requestUpdateFeeData(searchFeeParams, this.service_fee_id, 2).subscribe(() => {
                 this.globalService.promptBox.open('编辑救援费成功！');
-                this.searchText$.next();
                 timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));
             }, err => {
                 this.handleErrorFunc(err);
             });
         }
-
     }
 
     // 处理错误信息
@@ -145,9 +151,42 @@ export class RescueFeesEditComponent implements OnInit {
         }
     }
 
+    /**
+     * 获取产品配置详情
+     * @private
+     */
+    private requestServiceFeeDetail() {
+        this.feesService.requestServiceFeeDetailData(this.service_fee_id).subscribe(res => {
+            this.service_fee_name = res.service_fee_name;
+            if (res.rescue_cost_configure.length) {
+                this.rescueFeeList = res.rescue_cost_configure.map(item => new RescueCostConfigureEntity(item));
+            } else {
+                const rescueCostConfigure = new RescueCostConfigureEntity();
+                this.rescueFeeList.push(rescueCostConfigure);
+            }
+            if (res.rescue_person_telephone) {
+                const telephoneList = res.rescue_person_telephone.split(',');
+                this.telephoneList = telephoneList.map(item => new TelephoneItem(item));
+            }
+            // this.serviceFeeData = res;
+            // this.balance_initial_price = this.getFeeData(this.serviceFeeData.balance_initial_price);
+            // this.balance_current_price = this.getFeeData(this.serviceFeeData.balance_current_price);
+            // this.prepay_initial_price = this.getFeeData(this.serviceFeeData.prepay_initial_price);
+            // this.prepay_current_price = this.getFeeData(this.serviceFeeData.prepay_current_price);
+            this.loading = true;
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
+
 }
 
-export class TimeSlotItem {
-    public startTime: TimeItem = new TimeItem();
-    public endTime: TimeItem = new TimeItem('24');
+class TelephoneItem {
+    public telephone: string = undefined;
+    public timeStamp: number = undefined;
+
+    constructor(telephone?: string) {
+        this.telephone = telephone || '';
+        this.timeStamp = GlobalService.Instance.timeStamp;
+    }
 }

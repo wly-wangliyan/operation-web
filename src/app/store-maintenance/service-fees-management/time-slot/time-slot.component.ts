@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TimeSlotItem } from '../rescue-fees-edit/rescue-fees-edit.component';
+import { TimeItem } from '../../../../utils/date-format-helper';
 
 @Component({
     selector: 'app-time-slot',
@@ -16,4 +16,9 @@ export class TimeSlotComponent implements OnInit {
     ngOnInit() {
     }
 
+}
+
+class TimeSlotItem {
+    public startTime: TimeItem = new TimeItem();
+    public endTime: TimeItem = new TimeItem('24');
 }
