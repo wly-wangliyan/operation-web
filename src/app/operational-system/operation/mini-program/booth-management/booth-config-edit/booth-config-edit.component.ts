@@ -113,6 +113,12 @@ export class BoothConfigEditComponent implements OnInit {
             this.boothData.booth_type = Number(targetValue);
             if (this.boothData.booth_type === 3) {
                 this.boothData.booth_num = 1;
+                this.boothData.width = 100;
+                this.boothData.height = 100;
+            } else {
+                this.boothData.width = null;
+                this.boothData.height = null;
+                this.boothData.booth_num = null;
             }
         }
     }
