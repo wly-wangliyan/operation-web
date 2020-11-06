@@ -25,7 +25,7 @@ export class MenuUsedCarService {
 
     // 二手车
     private generateUsedCarMenu(): SideMenuItem {
-        const systemMenu = new SideMenuItem('信息发布', null);
+        const systemMenu = new SideMenuItem('二手车', null);
         systemMenu.icon = '/assets/images/menu_used_car.png';
         const subFinanceMenu1 = new SideMenuItem('商户管理', '/main/used-car/merchant-management', systemMenu);
         systemMenu.children.push(subFinanceMenu1);
