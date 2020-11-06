@@ -23,8 +23,8 @@ export class BoothContentListComponent implements OnInit, OnDestroy {
     public noResultText = TabelHelper.loadingText;
     public online_start_time = ''; // 上线开始时间
     public online_end_time = ''; // 上线结束时间
+    public boothData: BoothEntity; // 所属展位
     private booth_id = '';  // 展位id
-    private boothData: BoothEntity; // 所属展位
     private searchText$ = new Subject<any>();
     private requestSubscription: Subscription; // 获取数据
     private linkUrl: string;
