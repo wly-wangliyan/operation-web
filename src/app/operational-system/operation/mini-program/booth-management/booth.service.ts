@@ -37,7 +37,7 @@ export class BoothEntity extends EntityBase {
     public booth_name: string = undefined; // 展位名称
     public booth_key: string = undefined; // 关键字
     public booth_type: any = ''; // 展位类型 1:轮播图 2：焦点图 3：组合
-    public booth_title: string = undefined;
+    public booth_title: string = undefined; // 展位标题
     public booth_num: number = undefined; // 展位个数
     public width: number = undefined; // 宽
     public height: number = undefined; // 高

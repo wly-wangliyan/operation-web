@@ -40,6 +40,11 @@ export class BoothConfigListComponent implements OnInit, OnDestroy {
     this.searchText$.next();
   }
 
+  // 查询
+  public onSearchBtnClick(): void {
+    this.searchText$.next();
+  }
+
   public ngOnDestroy() {
     this.requestSubscription && this.requestSubscription.unsubscribe();
     this.continueRequestSubscription && this.continueRequestSubscription.unsubscribe();
