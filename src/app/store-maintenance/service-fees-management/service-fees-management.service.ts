@@ -45,8 +45,8 @@ export class SearchFeeParams extends EntityBase {
             item.balance_current_price = Math.round(Number(item.balance_current_price) * 100);
             item.prepay_initial_price = Math.round(Number(item.prepay_initial_price) * 100);
             item.prepay_current_price = Math.round(Number(item.prepay_current_price) * 100);
-            item.start_time = DateFormatHelper.getSecondTimeSum(item.startTime, 'mm');
-            item.end_time = DateFormatHelper.getSecondTimeSum(item.endTime, 'mm');
+            item.start_time = DateFormatHelper.getSecondTimeSum(item.startTime, 'ss');
+            item.end_time = DateFormatHelper.getSecondTimeSum(item.endTime, 'ss');
             delete item.timeStamp;
             delete item.startTime;
             delete item.endTime;

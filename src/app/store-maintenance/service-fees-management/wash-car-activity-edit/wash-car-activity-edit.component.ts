@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { GlobalService } from '../../../core/global.service';
-import { HttpErrorEntity } from '../../../core/http.service';
 import {
     WashCarServiceConfigService,
     WashCarSpecificationEntity,
@@ -65,7 +64,7 @@ export class WashCarActivityEditComponent implements OnInit {
 
     /**
      * 打开确认框
-     * @param wash_car_specification_id 洗车规格ID
+     * @param data
      * @param sureFunc 确认回调
      * @param closeFunc 取消回调
      */

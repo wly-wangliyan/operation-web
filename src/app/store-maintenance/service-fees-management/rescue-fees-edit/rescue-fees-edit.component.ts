@@ -93,8 +93,8 @@ export class RescueFeesEditComponent implements OnInit {
         // tslint:disable-next-line:prefer-for-of
         for (let index = 0; index < this.rescueFeeList.length; index++) {
             const temp = this.rescueFeeList[index];
-            temp.start_time = DateFormatHelper.getSecondTimeSum(temp.startTime, 'mm');
-            temp.end_time = DateFormatHelper.getSecondTimeSum(temp.endTime, 'mm');
+            temp.start_time = DateFormatHelper.getSecondTimeSum(temp.startTime, 'ss');
+            temp.end_time = DateFormatHelper.getSecondTimeSum(temp.endTime, 'ss');
             if (Number(temp.balance_current_price) > Number(temp.balance_initial_price)) {
                 temp.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
                 temp.prepayCurrentPriceErrors = '';
