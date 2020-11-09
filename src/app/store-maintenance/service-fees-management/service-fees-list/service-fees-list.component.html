@@ -135,21 +135,20 @@
                     <ng-container *ngIf="data.rescue_cost_configure.length">
                         <tr *ngFor="let item of data.rescue_cost_configure;let itemIndex=index">
                             <td [attr.rowspan]="data.rescue_cost_configure.length"
-                                *ngIf="itemIndex==0">{{index + (pageIndex - 1) * 15 + 1}}
-                                --{{itemIndex}}</td>
+                                *ngIf="itemIndex==0">{{index + (pageIndex - 1) * 15 + 1}}</td>
                             <td [attr.rowspan]="data.rescue_cost_configure.length"
                                 *ngIf="itemIndex==0">{{data.service_fee_name}}</td>
                             <td>
-                                {{item.initial_price|centPriceChange:'元'}}1
+                                {{item.initial_price|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.current_price|centPriceChange:'元'}}2
+                                {{item.current_price|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.prepay_initial_price|centPriceChange:'元'}}3
+                                {{item.prepay_initial_price|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.prepay_current_price|centPriceChange:'元'}}4
+                                {{item.prepay_current_price|centPriceChange:'元'}}
                             </td>
                             <td class="operation" [attr.rowspan]="data.rescue_cost_configure.length"
                                 *ngIf="itemIndex==0">
