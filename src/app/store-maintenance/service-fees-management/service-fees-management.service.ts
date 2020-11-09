@@ -119,6 +119,31 @@ export class RescueCostConfigureEntity extends EntityBase {
         this.timestamp = GlobalService.Instance.timeStamp;
     }
 
+
+    /**
+     * 列表价格数据计算
+     * 原价：尾款原价+预付原价
+     * 现价：尾款现价+预付现价
+     */
+
+    /**
+     * 原价
+     */
+    public get initial_price(): number {
+        return this.balance_initial_price && this.prepay_initial_price
+            ? Number(this.balance_initial_price) + Number(this.prepay_initial_price)
+            : this.balance_initial_price || this.prepay_initial_price || 0;
+    }
+
+    /**
+     * 售价
+     */
+    public get current_price(): number {
+        return this.balance_current_price && this.prepay_current_price
+            ? Number(this.balance_current_price) + Number(this.prepay_current_price)
+            : this.balance_current_price || this.prepay_current_price || 0;
+    }
+
     // 价钱数据处理
     private getFeeData(fee: number) {
         return (fee || fee === 0) ? (Number(fee) / 100).toFixed(2) : '';
