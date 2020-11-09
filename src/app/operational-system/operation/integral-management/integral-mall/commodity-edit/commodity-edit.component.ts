@@ -120,7 +120,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
                 commodityInfo.people_buy_max_num = this.commodityInfo.people_buy_max_num || -1;
                 commodityInfo.day_buy_max_num = this.commodityInfo.day_buy_max_num || -1;
                 commodityInfo.freight_fee = Math.round(this.commodityInfo.freight_fee * 100);
-                commodityInfo.day_distribution_time = DateFormatHelper.getSecondTimeSum(this.distributionTime, 'mm');
+                commodityInfo.day_distribution_time = DateFormatHelper.getSecondTimeSum(this.distributionTime, 'ss');
                 if (!this.specification_id) {
                     this.requestEditCommodity(commodityInfo);
                 } else {
@@ -159,7 +159,7 @@ export class CommodityEditComponent implements OnInit, OnDestroy {
     private requestIntegralCommodityById() {
         this.integralMallHttpService.requestCommodityDetailData(this.commodity_id).subscribe(data => {
             this.commodityInfo = new EditCommodityParams(data);
-            this.distributionTime = DateFormatHelper.getMinuteOrTime(data.day_distribution_time, 'mm');
+            this.distributionTime = DateFormatHelper.getMinuteOrTime(data.day_distribution_time, 'ss');
             this.specificationList = data.specifications.map(item => new SpecificationEntity(item));
             this.coverImgList = this.commodityInfo.cover_image ? this.commodityInfo.cover_image.split(',') : [];
             timer(500).subscribe(() => {
