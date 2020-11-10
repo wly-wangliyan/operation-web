@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EntityBase, noJson } from 'src/utils/z-entity';
+import { EntityBase, noClone, noCreate, noJson } from 'src/utils/z-entity';
 import { Observable } from 'rxjs/index';
 import { map } from 'rxjs/internal/operators/map';
 import { HttpResponse } from '@angular/common/http';
@@ -113,8 +113,8 @@ export class RescueCostConfigureEntity extends EntityBase {
             this.balance_current_price = this.getFeeData(source.balance_current_price);
             this.prepay_initial_price = this.getFeeData(source.prepay_initial_price);
             this.prepay_current_price = this.getFeeData(source.prepay_current_price);
-            this.startTime = DateFormatHelper.getMinuteOrTime(source.start_time, 'mm');
-            this.endTime = DateFormatHelper.getMinuteOrTime(source.end_time, 'mm');
+            this.startTime = DateFormatHelper.getMinuteOrTime(source.start_time, 'ss');
+            this.endTime = DateFormatHelper.getMinuteOrTime(source.end_time, 'ss');
         }
         this.timestamp = GlobalService.Instance.timeStamp;
     }
@@ -129,6 +129,7 @@ export class RescueCostConfigureEntity extends EntityBase {
     /**
      * 原价
      */
+    @noClone @noCreate @noJson
     public get initial_price(): number {
         return this.balance_initial_price && this.prepay_initial_price
             ? Number(this.balance_initial_price) + Number(this.prepay_initial_price)
@@ -138,6 +139,7 @@ export class RescueCostConfigureEntity extends EntityBase {
     /**
      * 售价
      */
+    @noClone @noCreate @noJson
     public get current_price(): number {
         return this.balance_current_price && this.prepay_current_price
             ? Number(this.balance_current_price) + Number(this.prepay_current_price)
@@ -154,6 +156,9 @@ export class ServiceFeeLinkResponse extends LinkResponse {
     public generateEntityData(results: Array<any>): Array<ServiceFeeEntity> {
         const tempList: Array<ServiceFeeEntity> = [];
         results.forEach(res => {
+            if (res.rescue_cost_configure && res.rescue_cost_configure.length) {
+                res.rescue_cost_configure = res.rescue_cost_configure.map(item => new RescueCostConfigureEntity(item));
+            }
             tempList.push(ServiceFeeEntity.Create(res));
         });
         return tempList;

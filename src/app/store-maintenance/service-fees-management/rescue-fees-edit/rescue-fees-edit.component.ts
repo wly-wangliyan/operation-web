@@ -18,15 +18,8 @@ import { DateFormatHelper, TimeItem } from '../../../../utils/date-format-helper
     styleUrls: ['./rescue-fees-edit.component.css']
 })
 export class RescueFeesEditComponent implements OnInit {
-    // public serviceFeeData: ServiceFeeEntity = new ServiceFeeEntity();
     public service_fee_name = '';
     public loading = false;
-    // public balance_initial_price = '';
-    // public balance_current_price = '';
-    // public prepay_initial_price = '';
-    // public prepay_current_price = '';
-    // public balanceCurrentPriceErrors = '';
-    // public prepayCurrentPriceErrors = '';
     public rescueFeeList: Array<RescueCostConfigureEntity> = [];
     public telephoneList: Array<TelephoneItem> = [];
     private service_fee_id: string;
@@ -160,6 +153,14 @@ export class RescueFeesEditComponent implements OnInit {
             this.service_fee_name = res.service_fee_name;
             if (res.rescue_cost_configure.length) {
                 this.rescueFeeList = res.rescue_cost_configure.map(item => new RescueCostConfigureEntity(item));
+                if (this.rescueFeeList.length > 1) {
+                    for (let index = 0; index < this.rescueFeeList.length; index++) {
+                        const last = this.rescueFeeList[index - 1];
+                        if (last) {
+                            last.endTime = this.rescueFeeList[index].startTime;
+                        }
+                    }
+                }
             } else {
                 const rescueCostConfigure = new RescueCostConfigureEntity();
                 this.rescueFeeList.push(rescueCostConfigure);

@@ -127,6 +127,7 @@
                     <th>售价</th>
                     <th>预付原价</th>
                     <th>预付现价</th>
+                    <th>时间段</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -150,6 +151,10 @@
                             <td>
                                 {{item.prepay_current_price|centPriceChange:'元'}}
                             </td>
+                            <td>
+                                {{item.startTime.hour}}:{{item.startTime.minute}}
+                                ~ {{item.endTime.hour}}:{{item.endTime.minute}}
+                            </td>
                             <td class="operation" [attr.rowspan]="data.rescue_cost_configure.length"
                                 *ngIf="itemIndex==0">
                                 <a [title]="'编辑'" [routerLink]="['../edit',data.service_fee_id]">编辑</a>
@@ -160,6 +165,7 @@
                         <tr>
                             <td>{{index + (pageIndex - 1) * 15 + 1}}</td>
                             <td>{{data.service_fee_name}}</td>
+                            <td>--</td>
                             <td>--</td>
                             <td>--</td>
                             <td>--</td>
