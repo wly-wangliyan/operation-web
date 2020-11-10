@@ -52,6 +52,8 @@ export class SearchFeeParams extends EntityBase {
             delete item.endTime;
             delete item.balanceCurrentPriceErrors;
             delete item.prepayCurrentPriceErrors;
+            delete item.balanceInitPriceErrors;
+            delete item.prepayInitPriceErrors;
             delete item.timeErrors;
         });
         return json;
@@ -102,6 +104,8 @@ export class RescueCostConfigureEntity extends EntityBase {
     public start_time: number = undefined;
     public end_time: number = undefined;
     public timestamp: number = undefined;
+    public balanceInitPriceErrors = '';
+    public prepayInitPriceErrors = '';
     public balanceCurrentPriceErrors = '';
     public prepayCurrentPriceErrors = '';
     public timeErrors = '';

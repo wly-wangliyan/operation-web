@@ -18,14 +18,21 @@
                     <nz-form-item nzFlex>
                         <nz-form-label nzRequired [nzNoColon]='true'>尾款原价</nz-form-label>
                         <nz-form-control>
-                            <nz-input-group [nzAddOnAfter]="'元'">
-                                <input class="price-input" nz-input autocomplete="off"
-                                       [(ngModel)]="rescueFee.balance_initial_price"
-                                       name="balance_initial_price_{{rescueFee.timestamp+index}}" required maxlength='8'
-                                       [appMinNumber]="0.01"
-                                       appFloatNumber
-                                       [appMaxNumber]='99999.99'/>
-                            </nz-input-group>
+                            <div>
+                                <nz-input-group [nzAddOnAfter]="'元'">
+                                    <input class="price-input" nz-input autocomplete="off"
+                                           [(ngModel)]="rescueFee.balance_initial_price"
+                                           name="balance_initial_price_{{rescueFee.timestamp+index}}" required maxlength='8'
+                                           appFloatNumber
+                                           [appMaxNumber]='99999.99'/>
+                                </nz-input-group>
+                            </div>
+
+                            <div *ngIf="rescueFee.balanceInitPriceErrors" class="text-danger">
+                                <span class="input-error">
+                                    {{rescueFee.balanceInitPriceErrors}}
+                                </span>
+                            </div>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nzFlex>
@@ -36,7 +43,6 @@
                                     <input class="price-input" nz-input autocomplete="off"
                                            [(ngModel)]="rescueFee.balance_current_price"
                                            name="balance_current_price_{{rescueFee.timestamp+index}}" required
-                                           [appMinNumber]="0.01"
                                            maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
@@ -56,10 +62,12 @@
                                     <input class="price-input" nz-input autocomplete="off"
                                            [(ngModel)]="rescueFee.prepay_initial_price"
                                            name="prepay_initial_price_{{rescueFee.timestamp+index}}" required
-                                           [appMinNumber]="0.01"
                                            maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
+                            </div>
+                            <div *ngIf="rescueFee.prepayInitPriceErrors" class="text-danger">
+                                <span class="input-error">{{rescueFee.prepayInitPriceErrors}}</span>
                             </div>
                         </nz-form-control>
                     </nz-form-item>
@@ -71,7 +79,6 @@
                                     <input class="price-input" nz-input autocomplete="off"
                                            [(ngModel)]="rescueFee.prepay_current_price"
                                            name="prepay_current_price_{{rescueFee.timestamp+index}}" required
-                                           [appMinNumber]="0.01"
                                            maxlength='8' appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>

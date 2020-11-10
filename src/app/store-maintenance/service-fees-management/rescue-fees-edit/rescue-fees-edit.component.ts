@@ -88,25 +88,32 @@ export class RescueFeesEditComponent implements OnInit {
             const temp = this.rescueFeeList[index];
             temp.start_time = DateFormatHelper.getSecondTimeSum(temp.startTime, 'ss');
             temp.end_time = DateFormatHelper.getSecondTimeSum(temp.endTime, 'ss');
-            if (Number(temp.balance_current_price) > Number(temp.balance_initial_price)) {
+            temp.prepayCurrentPriceErrors = '';
+            temp.balanceCurrentPriceErrors = '';
+            temp.timeErrors = '';
+            temp.balanceInitPriceErrors = '';
+            temp.prepayInitPriceErrors = '';
+            if (!Number(temp.balance_initial_price)) {
+                temp.balanceInitPriceErrors = '尾款原价必须大于0！';
+                return flagError = true;
+            } else if (!Number(temp.balance_current_price)) {
+                temp.balanceCurrentPriceErrors = '尾款现价必须大于0！';
+                return flagError = true;
+            } else if (!Number(temp.prepay_initial_price)) {
+                temp.prepayInitPriceErrors = '预付原价必须大于0！';
+                return flagError = true;
+            } else if (!Number(temp.prepay_current_price)) {
+                temp.prepayCurrentPriceErrors = '预付现价必须大于0！';
+                return flagError = true;
+            } else if (Number(temp.balance_current_price) > Number(temp.balance_initial_price)) {
                 temp.balanceCurrentPriceErrors = '尾款现价不得大于尾款原价！';
-                temp.prepayCurrentPriceErrors = '';
-                temp.timeErrors = '';
                 return flagError = true;
             } else if (Number(temp.prepay_current_price) > Number(temp.prepay_initial_price)) {
                 temp.prepayCurrentPriceErrors = '预付现价不得大于预付原价！';
-                temp.balanceCurrentPriceErrors = '';
-                temp.timeErrors = '';
                 return flagError = true;
             } else if (Number(temp.start_time) >= Number(temp.end_time)) {
                 temp.timeErrors = '开始时间不得大于等于结束时间！';
-                temp.prepayCurrentPriceErrors = '';
-                temp.balanceCurrentPriceErrors = '';
                 return flagError = true;
-            } else {
-                temp.prepayCurrentPriceErrors = '';
-                temp.balanceCurrentPriceErrors = '';
-                temp.timeErrors = '';
             }
         }
         if (!flagError) {
