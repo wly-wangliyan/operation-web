@@ -140,16 +140,16 @@
                             <td [attr.rowspan]="data.rescue_cost_configure.length"
                                 *ngIf="itemIndex==0">{{data.service_fee_name}}</td>
                             <td>
-                                {{item.initial_price|centPriceChange:'元'}}
+                                {{item.initial_price*100|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.current_price|centPriceChange:'元'}}
+                                {{item.current_price*100|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.prepay_initial_price|centPriceChange:'元'}}
+                                {{item.prepay_initial_price*100|centPriceChange:'元'}}
                             </td>
                             <td>
-                                {{item.prepay_current_price|centPriceChange:'元'}}
+                                {{item.prepay_current_price*100|centPriceChange:'元'}}
                             </td>
                             <td>
                                 {{item.startTime.hour}}:{{item.startTime.minute}}
