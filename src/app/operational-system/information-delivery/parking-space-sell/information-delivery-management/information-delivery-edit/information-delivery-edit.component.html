@@ -1,0 +1,221 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'车位租售'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="levelName">
+    </app-crumb>
+</div>
+<div *ngIf="loading" style='text-align: center;margin: 150px 0;'>
+    <nz-spin nzSimple></nz-spin>
+</div>
+<div class="content-flow" [hidden]="loading">
+    <div class="content-container">
+        <div class="content-flow">
+            <form autocomplete="off" class="form-horizontal" #editInformationDeliveryModal="ngForm">
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>基础信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>供需类型</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-radio-group>
+                                <label nz-radio [nzValue]="1">出租</label>
+                                <label nz-radio [nzValue]="2">出售</label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>面积</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
+                                <input class="form-control"
+                                       required nz-input/>
+                                <ng-template #saveUrlBtn1><a style="padding: 10px;">平米</a>
+                                </ng-template>
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>车位类型</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-radio-group>
+                                <label nz-radio [nzValue]="1">地上露天车位</label>
+                                <label nz-radio [nzValue]="2">地下车库</label>
+                                <label nz-radio [nzValue]="2">地上车库</label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>租金</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn2">
+                                <input class="form-control"
+                                       required nz-input/>
+                                <ng-template #saveUrlBtn2>
+                                    <select style="width: 90px;padding: 0;height: 30px;border: none">
+                                        <option>元/月</option>
+                                        <option>元/m²/月</option>
+                                    </select>
+                                </ng-template>
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>起租期</span>
+                        </label>
+                        <div class="control-input">
+                            <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn3">
+                                <input class="form-control"
+                                       required nz-input/>
+                                <ng-template #saveUrlBtn3><a style="padding: 10px;">月</a>
+                                </ng-template>
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>所在区域</span>
+                        </label>
+                        <div class="control-input" style="width: 740px!important;">
+                            <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj"
+                                                      #projectInfoPro></app-pro-city-dist-select>
+                            <input class="form-control"
+                                   maxlength="200"
+                                   required
+                                   style="margin-left: 10px"
+                                   placeholder="详细地址">
+                            <button style="margin-left: 10px" type="button" nz-button nzType="primary"
+                                    [disabled]="isDisabledSearch"
+                                    (click)="onClickReach()">搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                        </label>
+                        <div class="control-input" style="margin-left: 70px">
+                            <input readonly [value]="carDetail.lon" class="form-control"
+                                   placeholder="经度">
+                            <input readonly class="form-control" [value]="carDetail.lat" placeholder="纬度"
+                                   style="margin-left: 10px">
+                        </div>
+                    </div>
+                    <div class="row" style="flex-direction: column">
+                        <app-z-map-select-point-v2 [mapObj]="mapObj"
+                                                   (selectedMarkerInfo)="selectedMarkerInfo($event)"></app-z-map-select-point-v2>
+                        <p style="margin-top: 10px;margin-left: 90px"><b>* </b>若地图标记不符合您的商铺位置，请手动拖动地图背景进行调整。</p>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>详细信息</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>标题</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" maxlength="200" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <span>标签</span>
+                        </label>
+                        <div class="control-input" style="width: 80%">
+                            <ul class="tag-list">
+                                <li *ngFor="let selectTag of selectTagList;let index=index">
+                                    <span>{{selectTag.label_name}}</span>
+                                    <img src="/src/assets/images/tag_del.png" (click)="onClickDeleteTag(index)">
+                                </li>
+                                <li class="select-tag" (click)="onClickTag()" *ngIf="selectTagList.length<3">
+                                    <span>选择标签</span>
+                                    <img src="/assets/images/icon_add_small.png">
+                                </li>
+                            </ul>
+                            <p>最多可选择3标签</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label" style="margin-top: -3px">
+                            <b>*</b>
+                            <span>图片</span>
+                        </label>
+                        <div>
+                            <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                                [maxLength]="10"
+                                                [imgReg]="imgReg" [isCutCoverImg]="true" [imageWidth]="100"
+                                                [minCropBoxWidth]="200" [aspectRatio]="4/3"
+                                                [imageHeight]="100"
+                                                [imageUrls]="imageList" [imageShowWidth]="100" [resizable]="true"
+                                                (selectedImgChange)="onSelectedPicture($event,'images')"
+                                                file_id="informationDeliveryImg" #informationDeliveryImg>
+                            </app-z-photo-select>
+                        </div>
+                    </div>
+                    <div class="err-message" style="margin-top: -10px;margin-bottom: 10px;margin-left: 160px;">
+                        <span>{{errMessageGroup?.errJson?.images.errMes }}</span>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>详情</span>
+                        </label>
+                        <div class="control-input">
+                            <textarea class="form-control" rows="5" maxlength="200" placeholder="输入描述"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="information-delivery-container">
+                    <div class="break-line">
+                        <span>联系方式</span>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>联系人</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" maxlength="200" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label">
+                            <b>*</b>
+                            <span>联系电话</span>
+                        </label>
+                        <div class="control-input">
+                            <input class="form-control" maxlength="200" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="sure-btn" type="submit" nz-button nzType="primary"
+                            [disabled]="!editInformationDeliveryModal.form.valid||!checkDisabledValid"
+                            (appZDebounceClick)="onEditFormSubmit()">发布
+                    </button>
+                    <button class="close-btn" type="button" nz-button (click)="goToListPage()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-select-tag (selectedTagEvent)="onSelectedTag($event)"></app-select-tag>

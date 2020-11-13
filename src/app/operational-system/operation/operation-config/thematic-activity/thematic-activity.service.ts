@@ -31,7 +31,8 @@ export class ElementItemEntity extends EntityBase {
     // 图文链接
     public image_url: Array<any> = []; // 图片Url，用作图文链接组件回显
     public image: string = undefined; // 图片Url
-    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页
+    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页 3:第三方小程序
+    public app_id: string = undefined; // app_id
     public link: number = undefined; // 链接地址
 
     // 富文本

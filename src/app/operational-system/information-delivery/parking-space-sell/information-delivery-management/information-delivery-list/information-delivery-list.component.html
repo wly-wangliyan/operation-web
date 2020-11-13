@@ -1,0 +1,152 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'车位租售'" [level2Name]="'信息发布'"></app-crumb>
+    <ul class="header-right">
+        <li>
+            <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
+                    [routerLink]="['../create']">
+                新建
+            </button>
+        </li>
+    </ul>
+</div>
+
+<div class="content-flow">
+
+    <div class="tab-bar-list" style="padding-top:0">
+        <nz-radio-group [nzButtonStyle]="'solid'" [(ngModel)]="activeTabIndex" (ngModelChange)="onTabChange($event)">
+            <label *ngFor='let tab of tabList;' nz-radio-button [nzValue]='tab.key'>{{tab.label}}</label>
+        </nz-radio-group>
+    </div>
+    <div class="search-container" style="padding:0">
+        <form class="search-form" autocomplete="off">
+            <div class="form-group">
+                <span>标题：</span>
+                <input class="form-control" [(ngModel)]="searchParams.merchant_name" name="merchant_name"
+                       placeholder="请输入标题"
+                       maxlength="20"/>
+            </div>
+            <div class="form-group">
+                <span>类型：</span>
+                <select class="form-control">
+                    <option value="">全部</option>
+                    <option value="">出租</option>
+                    <option value="">出售</option>
+                    <option value="">转让</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>车位类型：</span>
+                <select class="form-control">
+                    <option value="">全部</option>
+                    <option value="">地上露天车位</option>
+                    <option value="">地上车库</option>
+                    <option value="">地下车库</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>地址区域：</span>
+                <select class="form-control">
+                    <option value="">全部</option>
+                    <option value="">地上露天车位</option>
+                    <option value="">地上车库</option>
+                    <option value="">地下车库</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <span>发布者：</span>
+                <input class="form-control" [(ngModel)]="searchParams.merchant_name" name="merchant_name"
+                       placeholder="请输入发布者"
+                       maxlength="20"/>
+            </div>
+            <div class="form-group">
+                <span>发布时间：</span>
+                <nz-date-picker [(ngModel)]="review_start_time" [nzShowToday]=false
+                                [nzDisabledDate]="disabledReviewStartTime"
+                                name='review_start_time' [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <span class='line'>-</span>
+                <nz-date-picker [(ngModel)]="review_end_time" name='review_end_time' [nzShowToday]=false
+                                [nzDisabledDate]="disabledReviewEndTime"
+                                [nzShowTime]="{'nzFormat':'HH:mm'}" nzFormat="yyyy-MM-dd HH:mm"></nz-date-picker>
+                <div class="search-btn-group">
+                    <button nz-button nzType="primary" (click)="nzSearchAssistant.submitSearch(false)">查询
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-container">
+
+        <div class="zmy-table goods-order">
+            <nz-table #informationDeliveryTable [nzData]="nzSearchAssistant.nzData"
+                      [nzNoResult]="nzSearchAssistant.nzNoResultText"
+                      [nzPageSize]="nzSearchAssistant.pageSize"
+                      (nzPageIndexChange)="nzSearchAssistant.pageSelected($event)"
+                      [(nzPageIndex)]="nzSearchAssistant.currentPage">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>标题</th>
+                    <th>价格</th>
+                    <th>建筑面积</th>
+                    <th>车位类型</th>
+                    <th>地址</th>
+                    <th>状态</th>
+                    <th>上线</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-template ngFor let-informationDelivery let-i=index [ngForOf]="informationDeliveryTable.data">
+                    <tr>
+                        <td colspan="11" nzAlign="left" class="information-delivery-title">
+                            发布者：{{informationDelivery.merchant ? informationDelivery.merchant.merchant_name : '-'}}
+                            <span>|</span>
+                            手机号：{{informationDelivery.review_time ? (informationDelivery.review_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+                            <span>|</span>
+                            发布时间：{{informationDelivery.review_time ? (informationDelivery.review_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
+
+                        <td class="img-item">
+                            <img [src]="informationDelivery.coverImage">
+                        </td>
+                        <td class="brand-item"
+                            [title]="informationDelivery.car_param.carBrandName">{{informationDelivery.car_param.carBrandName|zMaxLength:10}}</td>
+                        <td>{{(informationDelivery.price / 10000)}}万元</td>
+                        <td>{{informationDelivery.registration_time ? (informationDelivery.registration_time * 1000 | date:"y-MM") : '--'}}</td>
+                        <td>{{informationDelivery.color}}</td>
+                        <td>{{informationDelivery.mileage / 10000}}万公里</td>
+                        <td>{{carReviewStatus[informationDelivery.review_status]}}</td>
+                        <td>
+                            <nz-switch [ngModel]="informationDelivery.online_status===OnlineStatus.on"
+                                       nzCheckedChildren="On"
+                                       [disabled]="informationDelivery.review_status!==ReviewStatus.reviewed"
+                                       [nzControl]=true
+                                       style="height: 10px"
+                                       nzUnCheckedChildren="Off"
+                                       (click)="onSwitchChange(informationDelivery)"></nz-switch>
+                        </td>
+                        <td class="operation">
+                            <a [title]="'通过'" *ngIf="informationDelivery.review_status===ReviewStatus.reviewing"
+                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.reviewed)">通过</a>
+                            <a [title]="'驳回 '"
+                               *ngIf="informationDelivery.review_status===ReviewStatus.reviewing"
+                               (appZDebounceClick)="onClickReviewStatusData(informationDelivery.car_info_id,ReviewStatus.rejected)">驳回 </a>
+                            <a [title]="'编辑'"
+                               (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.update)">编辑</a>
+                            <a [title]="'详情'"
+                               [routerLink]="['../detail',informationDelivery.car_info_id]">详情</a>
+                            <a [title]="'删除'"
+                               (appZDebounceClick)="informationDeliveryLabelStatus(informationDelivery.car_info_id,OperationType.delete)">删除</a>
+                        </td>
+                    </tr>
+                </ng-template>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

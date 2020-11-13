@@ -1,0 +1,76 @@
+.detail-content {
+    display: flex;
+}
+
+.detail-left {
+    width: 400px;
+    height: 400px;
+    border: 1px solid red;
+}
+
+.detail-right {
+    flex: 1;
+    margin-left: 30px;
+    color: #23242f;
+}
+
+.detail-right-browse {
+    display: flex;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.detail-right-browse > span {
+    background: #C6E2FF;
+    border-radius: 4px;
+    padding: 3px 4px;
+    color: #409DFD;
+}
+
+.detail-right-browse > span:first-child {
+    background: #E1F3D8;
+    color: #67C23A;
+}
+
+.detail-right-browse span + span {
+    margin-left: 10px;
+}
+
+.detail-right-browse > span:last-child {
+    color: #E6A23C;
+    background: #FAECD8;
+}
+
+.sell-item {
+    background: #ececec;
+    display: flex;
+    padding: 10px 30px;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sell-item > li {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sell-item > li > span:first-child {
+    color: rgba(0, 0, 0, .65);
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.sell-item li + li {
+    margin-left: 10px;
+}
+
+p{
+    margin: 10px 0;
+}
+
+.detail-remark{
+    margin-top: 20px;
+}

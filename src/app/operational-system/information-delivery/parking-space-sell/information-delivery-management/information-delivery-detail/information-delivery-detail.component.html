@@ -1,0 +1,55 @@
+<div class="content-header">
+    <app-crumb [level1Name]="'车位租售'" [level2Name]="'信息发布'" [level2RelativePath]="'../'" [level3Name]="'查看信息'">
+    </app-crumb>
+</div>
+<!--*ngIf="loading"-->
+<!--<div  style='text-align: center;margin: 150px 0;'>-->
+<!--    <nz-spin nzSimple></nz-spin>-->
+<!--</div>-->
+
+<div class="content-flow">
+    <div class='content-container'>
+        <div class="detail-content">
+            <div class="detail-left">
+                <app-z-preview-video-photo [isControls]="true" [videoAndPhotoUrls]="videoAndImgList">
+                </app-z-preview-video-photo>
+            </div>
+            <div class="detail-right">
+                <h5>巴塞罗那园区18号楼附近D区地下车位</h5>
+                <p class="detail-right-browse">
+                    <span>出租</span>
+                    <span>更新与2020/01/02</span>
+                    <span>1090人已浏览</span>
+                </p>
+                <ul class="sell-item">
+                    <li>
+                        <span>租金</span>
+                        <span>500元/月</span>
+                    </li>
+                    <li>
+                        <span>建筑面积</span>
+                        <span>10㎡</span>
+                    </li>
+                    <li>
+                        <span>车位类型</span>
+                        <span>地下车库</span>
+                    </li>
+                    <li>
+                        <span>起租期</span>
+                        <span>1年起租</span>
+                    </li>
+                </ul>
+                <p>地址：浑南区IT国际</p>
+                <p>张先生 18989898989</p>
+                <p>
+                    ID：HUIYIO237218797&nbsp;&nbsp;&nbsp;&nbsp;
+                    创建时间：2020/01/01 12:00
+                </p>
+            </div>
+        </div>
+        <div class="detail-remark">
+            <h4>描述</h4>
+            <p>车位可登记多个车牌，轮换停车，物业费已交</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+.tab-bar-list .ant-radio-button-wrapper {
+    width: 200px;
+}
+
+:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(odd) {
+    background: rgba(241, 241, 241, 1);
+}
+
+:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(even) td {
+    border-right: 1px solid rgba(202, 202, 202, 1);
+}
+
+:host ::ng-deep .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab,
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    width: 140px;
+}
+
+:host ::ng-deep .goods-order .ant-table {
+    border: 1px solid rgba(202, 202, 202, 1);
+    margin-top: 10px;
+}
+
+:host ::ng-deep .goods-order .ant-table-thead>tr>th {
+    height: 40px;
+    background: rgba(202, 202, 202, 1);
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(35, 36, 47, 1);
+}
+
+.img-item {
+    width: 90px;
+}
+
+.information-delivery-title span{
+    margin: 0 5px;
+}
+
+.img-item img {
+    margin: 10px 0;
+    width: 90px;
+    height: 65px;
+}
+
+p{
+    margin-bottom: 0;
+}

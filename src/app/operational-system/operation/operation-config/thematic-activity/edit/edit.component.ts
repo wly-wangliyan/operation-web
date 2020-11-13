@@ -368,12 +368,20 @@ export class EditComponent implements OnInit, AfterViewInit {
                                 elements[elementIndex].errMsg = '请上传图片！';
                                 return false;
                             }
-
-                            if (!elements[elementIndex].link) {
-                                elements[elementIndex].errMsg = '请输入跳转URL！';
-                                return false;
+                            if (elements[elementIndex].belong_to === 3) {
+                                if (!elements[elementIndex].app_id) {
+                                    elements[elementIndex].errMsg = '请输入appID！';
+                                    return false;
+                                } else {
+                                    elements[elementIndex].errMsg = '';
+                                }
                             } else {
-                                elements[elementIndex].errMsg = '';
+                                if (!elements[elementIndex].link) {
+                                    elements[elementIndex].errMsg = '请输入跳转URL！';
+                                    return false;
+                                } else {
+                                    elements[elementIndex].errMsg = '';
+                                }
                             }
                         }
                     }

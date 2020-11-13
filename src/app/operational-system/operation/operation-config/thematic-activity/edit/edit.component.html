@@ -81,11 +81,20 @@
                                             [(ngModel)]="element.belong_to" (change)="onChangeBelongTo($event,i,j)">
                                         <option [value]=2>H5</option>
                                         <option [value]=1>小程序原生页</option>
+                                        <option [value]=3>第三方小程序</option>
                                     </select>
                                     <input name="link_{{element.sort_num}}_{{element.time}}" placeholder="输入跳转URL"
                                            [(ngModel)]="element.link" class="form-control" (change)="element.errMsg=''"
                                            maxlength="2000"
                                            appIgnoreSpace/>
+                                </div>
+                                <div class="link" style="padding-left: 123px;padding-top: 10px"
+                                     *ngIf="element.belong_to===3">
+                                    <input name="app_id_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
+                                           placeholder="输入appID"
+                                           [(ngModel)]="content.elements[0].app_id" (change)="content.elements[0].errMsg=''"
+                                           class="form-control"
+                                           maxlength="200" appIgnoreSpace/>
                                 </div>
                                 <p class="cover-hint">注：尺寸 340*220px，格式PNG或JPG，大小2M以内</p>
                                 <p class="err-message">{{element.errMsg}}</p>
@@ -114,12 +123,21 @@
                                         (change)="onChangeBelongTo($event,i)">
                                     <option [value]=2>H5</option>
                                     <option [value]=1>小程序原生页</option>
+                                    <option [value]=3>第三方小程序</option>
                                 </select>
                                 <input name="link_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
                                        placeholder="输入跳转URL"
                                        [(ngModel)]="content.elements[0].link" (change)="content.elements[0].errMsg=''"
                                        class="form-control"
                                        maxlength="2000" appIgnoreSpace/>
+                            </div>
+                            <div class="link" style="padding-left: 123px;padding-top: 10px"
+                                 *ngIf="content.elements[0].belong_to===3">
+                                <input name="app_id_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
+                                       placeholder="输入appID"
+                                       [(ngModel)]="content.elements[0].app_id" (change)="content.elements[0].errMsg=''"
+                                       class="form-control"
+                                       maxlength="200" appIgnoreSpace/>
                             </div>
                             <p class="cover-hint">注：尺寸 690*220px，格式PNG或JPG，大小2M以内</p>
                             <p class="err-message">{{content.elements[0].errMsg}}</p>

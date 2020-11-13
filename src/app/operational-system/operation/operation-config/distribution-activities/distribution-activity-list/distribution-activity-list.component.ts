@@ -8,7 +8,7 @@ import {
 } from '../distribution-activities.service';
 import {
     OnlineStatus
-} from 'src/app/operational-system/used-car/information-delivery-management/information-delivery-management.service';
+} from 'src/app/operational-system/information-delivery/used-car/information-delivery-management/information-delivery-management.service';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 
 @Component({
