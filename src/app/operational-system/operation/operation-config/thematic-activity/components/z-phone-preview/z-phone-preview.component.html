@@ -1,30 +1,31 @@
 <!-- 预览模态框 -->
 <div id="previewModal" class="modal" data-keyboard="false" data-backdrop="false" tabindex="-1" role="dialog"
-  style="display: none; ">
-  <div class="preview-phone-container">
-    <div class="preview-box">
-      <div class="closetx" (click)="onClosePreview()"></div>
-      <div class="pru-back">
-        <div class="pru-con">
-          <div class="title" [innerHTML]="preview_title"></div>
-          <ng-container *ngFor="let item of previewList;let i=index">
-            <ng-container *ngIf="item.content_type===1">
-              <div class="picture-link two-link">
-                <img class="small-picture" [src]="item.elements[0].image">
-                <img class="small-picture" [src]="item.elements[1].image">
-              </div>
-            </ng-container>
-            <ng-container *ngIf="item.content_type===2">
-              <div class="picture-link">
-                <img class="big-picture" [src]="item.elements[0].image">
-              </div>
-            </ng-container>
-            <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
-              <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
-            </ng-container>
-          </ng-container>
+     style="display: none; ">
+    <div class="preview-phone-container">
+        <div class="preview-box">
+            <div class="closetx" (click)="onClosePreview()"></div>
+            <div class="pru-back">
+                <div class="pru-con">
+                    <div class="title" [innerHTML]="preview_title"></div>
+                    <ng-container *ngFor="let item of previewList;let i=index">
+                        <ng-container *ngIf="item.content_type===1">
+                            <div class="picture-link two-link">
+                                <img class="small-picture" [src]="item.elements[0].image">
+                                <img class="small-picture" [src]="item.elements[1].image">
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="item.content_type===2||item.content_type===4">
+                            <div class="picture-link">
+                                <img class="big-picture" [src]="item.elements[0].image"
+                                     [ngStyle]="{'height':(item.content_type===4?(item.elements[0].height?item.elements[0].height+'px':'auto'):'auto')}">
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="item.content_type===3 && item.elements[0].rich">
+                            <div class="ckedtior-content" [innerHTML]="item.elements[0].rich | htmlPipe"></div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

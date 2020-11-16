@@ -31,7 +31,7 @@ export class EditComponent implements OnInit, AfterViewInit {
 
     public loading = true;
 
-    public replaceWidth = 730; // 富文本宽度
+    public replaceWidth = 850; // 富文本宽度
 
     public titleErrMsg = ''; // 标题错误提示
 
@@ -131,7 +131,7 @@ export class EditComponent implements OnInit, AfterViewInit {
             contentItem.elements[1].sort_num = this.sort;
             contentItem.elements[1].element_id = `activityItem${this.sort}`;
             contentItem.elements[1].image_url = !item.elements[1].image || item.elements[1].image.length === 0 ? [] : item.elements[1].image.split(',');
-        } else if (item.content_type === 2) {
+        } else if (item.content_type === 2 || item.content_type === 4) {
             contentItem.elements[0].image_url = !item.elements[0].image || item.elements[0].image.length === 0 ? [] : item.elements[0].image.split(',');
         } else if (item.content_type === 3) {
             const tempContent = item.elements[0].rich.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
@@ -222,6 +222,9 @@ export class EditComponent implements OnInit, AfterViewInit {
                 contentItem.elements.forEach((elementItem, index) => {
                     if (index === 1) {
                         previewItem.elements.push(new ElementItemEntity());
+                    }
+                    if (elementItem.height) {
+                        previewItem.elements[index].height = elementItem.height / 2;
                     }
                     if (elementItem.image) {
                         previewItem.elements[index].image = elementItem.image;
@@ -376,8 +379,16 @@ export class EditComponent implements OnInit, AfterViewInit {
                                     elements[elementIndex].errMsg = '';
                                 }
                             } else {
+                                if (content_type === 4 && !elements[elementIndex].height) {
+                                    elements[elementIndex].errMsg = '请输入视频高度！';
+                                    return false;
+                                }
                                 if (!elements[elementIndex].link) {
-                                    elements[elementIndex].errMsg = '请输入跳转URL！';
+                                    if (content_type === 4) {
+                                        elements[elementIndex].errMsg = '请输入视频地址！';
+                                    } else {
+                                        elements[elementIndex].errMsg = '请输入跳转URL！';
+                                    }
                                     return false;
                                 } else {
                                     elements[elementIndex].errMsg = '';
