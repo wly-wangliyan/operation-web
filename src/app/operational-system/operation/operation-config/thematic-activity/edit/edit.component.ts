@@ -185,7 +185,7 @@ export class EditComponent implements OnInit, AfterViewInit {
             contentItem.elements[1].sort_num = this.sort;
             contentItem.elements[1].element_id = `activityItem${this.sort}`;
             contentItem.elements[1].belong_to = 2;
-        } else if (type === 2) {
+        } else if (type === 2 || type === 5) {
             contentItem.elements[0].belong_to = 2;
         } else if (type === 3) {
             contentItem.elements[0].rich = '';
@@ -383,7 +383,7 @@ export class EditComponent implements OnInit, AfterViewInit {
                                     elements[elementIndex].errMsg = '请输入视频高度！';
                                     return false;
                                 }
-                                if (!elements[elementIndex].link) {
+                                if (elements[elementIndex].belong_to !== 4 && !elements[elementIndex].link) {
                                     if (content_type === 4) {
                                         elements[elementIndex].errMsg = '请输入视频地址！';
                                     } else {

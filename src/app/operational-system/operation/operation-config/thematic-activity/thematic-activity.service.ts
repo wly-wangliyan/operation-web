@@ -33,7 +33,7 @@ export class ElementItemEntity extends EntityBase {
     public image: string = undefined; // 图片Url 视频封面
     public isAutoPlay = false; // 是否自动播放
     public height: number = undefined; // 是否自动播放
-    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页 3:第三方小程序
+    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页 3:第三方小程序 4:客服
     public app_id: string = undefined; // app_id
     public link: number = undefined; // 链接地址 视频地址
 
