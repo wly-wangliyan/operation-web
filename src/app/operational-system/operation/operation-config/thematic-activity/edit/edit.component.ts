@@ -131,7 +131,7 @@ export class EditComponent implements OnInit, AfterViewInit {
             contentItem.elements[1].sort_num = this.sort;
             contentItem.elements[1].element_id = `activityItem${this.sort}`;
             contentItem.elements[1].image_url = !item.elements[1].image || item.elements[1].image.length === 0 ? [] : item.elements[1].image.split(',');
-        } else if (item.content_type === 2 || item.content_type === 4) {
+        } else if (item.content_type === 2 || item.content_type === 4 || item.content_type === 5) {
             contentItem.elements[0].image_url = !item.elements[0].image || item.elements[0].image.length === 0 ? [] : item.elements[0].image.split(',');
         } else if (item.content_type === 3) {
             const tempContent = item.elements[0].rich.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
@@ -159,6 +159,11 @@ export class EditComponent implements OnInit, AfterViewInit {
      * @param type 1:双图文链接 2:单图文链接 3:富文本编辑器
      */
     public onAddComponent(type: number): void {
+        const floatingItem = this.contentList.find(item => item.content_type === 5);
+        if (floatingItem && type === 5) {
+            this.globalService.promptBox.open('最多可添加1个浮窗模块！', null, 2000, null, false);
+            return;
+        }
         if (this.contentList && this.contentList.length === 20) {
             this.globalService.promptBox.open('最多可添加20个模块！', null, 2000, null, false);
             return;

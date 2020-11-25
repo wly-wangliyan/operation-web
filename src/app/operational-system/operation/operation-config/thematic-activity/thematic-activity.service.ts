@@ -24,7 +24,7 @@ export class SearchParams extends EntityBase {
 
 // 模版节点内容
 export class ElementItemEntity extends EntityBase {
-    public type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频
+    public type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频 5 浮窗
     public element_id: string = undefined; // 组件id
     public sort_num: number = undefined; // 序号
 
@@ -77,7 +77,7 @@ export class ElementItemEntity extends EntityBase {
 
 // 模版内容
 export class ContentEntity extends EntityBase {
-    public content_type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频
+    public content_type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频 5 浮窗
     public elements: Array<ElementItemEntity> = []; // 元素集合
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
