@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, timer, Observable, Subject } from 'rxjs';
+import { Subscription, timer, Subject } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import {
