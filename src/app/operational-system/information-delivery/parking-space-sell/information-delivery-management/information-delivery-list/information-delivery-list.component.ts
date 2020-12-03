@@ -7,8 +7,14 @@ import { carReviewStatus } from '../../../../../share/pipes/information-delivery
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStatus } from '../../../../../../utils/common-enums';
 import { InformationDeliveryManagementService, PlaceListParams, ParkingPlaceEntity } from '../information-delivery-management.service';
-import { ReviewStatus, OnlineStatus } from '../../../used-car/information-delivery-management/information-delivery-management.service';
+import {
+    ReviewStatus,
+    OnlineStatus,
+    InformationDeliveryManagementEntity
+} from '../../../used-car/information-delivery-management/information-delivery-management.service';
 import { timer } from 'rxjs';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { BeianMerchantEntity } from '../../../../operation/operation-config/distribution-activities/distribution-activities.service';
 
 @Component({
     selector: 'app-information-delivery-list',
@@ -33,6 +39,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         {key: 3, label: '被驳回'}
     ];
     public activeTabIndex = 0;
+    private parkingPlaceList: Array<ParkingPlaceEntity> = [];
 
     constructor(private globalService: GlobalService,
                 private route: ActivatedRoute,
@@ -62,6 +69,23 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     public disabledReviewEndTime = (endValue: Date): boolean => {
         return DisabledTimeHelper.disabledEndTime(endValue, this.review_start_time);
     };
+
+    // 列表排序
+    public onClickDrop(event: CdkDragDrop<string[]>, results: Array<ParkingPlaceEntity>): void {
+        console.log(121212)
+        if (event.previousIndex === event.currentIndex) {
+            return;
+        }
+        const to_parking_place_info_id = this.parkingPlaceList[event.currentIndex].parking_place_info_id;
+        const parking_place_info_id = this.parkingPlaceList[event.previousIndex].parking_place_info_id;
+        moveItemInArray(results, event.previousIndex, event.currentIndex);
+        this.informationDeliveryManagementService.requestParkingPlaceOrderNum(parking_place_info_id, to_parking_place_info_id).subscribe(data => {
+            this.nzSearchAssistant.submitSearch(true);
+            this.globalService.promptBox.open('排序成功！');
+        }, err => {
+            this.globalService.httpErrorProcess(err);
+        });
+    }
 
     /**
      * 启停
@@ -156,7 +180,8 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     }
 
     /* 检索成功处理 */
-    public searchCompleteProcess(): any {
+    public searchCompleteProcess(results: Array<ParkingPlaceEntity>): any {
+        this.parkingPlaceList = results;
     }
 
     /**

@@ -201,6 +201,17 @@ export class InformationDeliveryManagementService {
         return this.httpService.put(httpUrl, params).pipe(map(res => res.body));
     }
 
+    /**
+     * 出租车位信息排序
+     * @param parking_place_info_id
+     * @param to_place_id
+     */
+    public requestParkingPlaceOrderNum(parking_place_info_id: string, to_place_id: string): Observable<any> {
+        const params = {to_place_id};
+        const httpUrl = `${this.domain}/admin/parking_place_infos/${parking_place_info_id}/order_num`;
+        return this.httpService.patch(httpUrl, params).pipe(map(res => res.body));
+    }
+
 }
 
 class ParkingPlaceListLinkResponse extends LinkResponse {

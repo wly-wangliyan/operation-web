@@ -8,6 +8,7 @@ import { InformationDeliveryListComponent } from './information-delivery-list/in
 import { ShareModule } from '../../../../share/share.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { InformationDeliveryModule } from '../../information-delivery.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { InformationDeliveryModule } from '../../information-delivery.module';
         ShareModule,
         InformationDeliveryManagementRoutingModule,
         NgZorroAntdModule,
+        DragDropModule,
         InformationDeliveryModule
     ]
 })

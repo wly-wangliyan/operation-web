@@ -97,7 +97,7 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody cdkDropList (cdkDropListDropped)="onClickDrop($event, parkingPlaceTable.data)">
                 <ng-template ngFor let-parkingPlace let-i=index [ngForOf]="parkingPlaceTable.data">
                     <tr>
                         <td colspan="11" nzAlign="left" class="information-delivery-title">
@@ -108,7 +108,7 @@
                             发布时间：{{parkingPlace.review_time ? (parkingPlace.review_time * 1000 | date:"y-MM-dd HH:mm:ss") : '--'}}
                         </td>
                     </tr>
-                    <tr>
+                    <tr cdkDrag>
                         <td>{{(nzSearchAssistant.currentPage - 1) * nzSearchAssistant.pageSize + i + 1}}</td>
 
                         <td class="img-item">
