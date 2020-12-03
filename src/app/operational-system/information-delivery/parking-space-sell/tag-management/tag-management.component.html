@@ -3,19 +3,20 @@
     <ul class="header-right">
         <li>
             <button name="sure_btn" type="button" class="header-btn" nz-button nzType="primary"
-                    [routerLink]="['../create']">
+                    (click)="onClickCreateTag()">
                 新建
             </button>
         </li>
     </ul>
 </div>
 
-<div class="content-flow">
+<div class="content-flow" >
     <div class="search-container" style="padding:0">
         <form class="search-form" autocomplete="off">
             <div class="form-group">
                 <span>标签名称：</span>
-                <input class="form-control"
+                <input class="form-control" [(ngModel)]="searchParams.parking_place_label_name"
+                       name="parking_place_label_name"
                        placeholder="请输入标签名称"
                        maxlength="20"/>
                 <div class="search-btn-group">
@@ -26,7 +27,6 @@
         </form>
     </div>
     <div class="table-container">
-
         <div class="zmy-table goods-order">
             <nz-table #TemplateTable [nzData]="tagList" [nzFrontPagination]="false"
                       [nzNoResult]="noResultText">
@@ -39,13 +39,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let data of TemplateTable.data; let templateIndex=index">
+                <tr *ngFor="let data of tagList; let templateIndex=index">
                     <td>{{templateIndex + 1}}</td>
-                    <td></td>
-                    <td></td>
+                    <td [title]="data.parking_place_label_id">
+                        <span [appTxtCopy]="data.parking_place_label_id">
+                            {{data.parking_place_label_id}}
+                        </span>
+                    </td>
+                    <td [title]="data.parking_place_label_name">{{data.parking_place_label_name| zMaxLength:15}}</td>
                     <td class="operation">
-                        <a [title]="'编辑'">编辑</a>
-                        <a [title]="'删除'">删除</a>
+                        <a [title]="'编辑'" (appZDebounceClick)="onClickCreateTag(data)">编辑</a>
+                        <a [title]="'删除'" (appZDebounceClick)="onDeleteTagClick(data.parking_place_label_id)">删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -60,7 +64,7 @@
     <div class="modal-dialog" role="document" *ngIf="selectedTag">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="modal-title">{{selectedTag.label_id ? '编辑' : '新建'}}</span>
+                <span class="modal-title">{{selectedTag.parking_place_label_id ? '编辑' : '新建'}}</span>
                 <button type="button" class="close" aria-label="Close" data-dismiss="modal">
                     &times;
                 </button>
@@ -74,9 +78,10 @@
                             <span>标签名称：</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" [(ngModel)]="selectedTag.label_name" name="label_name"
+                            <input class="form-control" [(ngModel)]="selectedTag.parking_place_label_name"
+                                   name="parking_place_label_name"
                                    appIgnoreSpace required
-                                   placeholder="输入1~7个字，不可重复" minlength="1" maxlength="10">
+                                   placeholder="输入1~7个字，不可重复" minlength="1" maxlength="7">
                         </div>
                     </div>
                 </div>
