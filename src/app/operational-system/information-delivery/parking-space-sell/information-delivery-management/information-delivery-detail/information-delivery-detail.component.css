@@ -3,9 +3,15 @@
 }
 
 .detail-left {
-    width: 400px;
-    height: 400px;
-    border: 1px solid red;
+    position: relative;
+
+}
+
+.detail-left>img{
+    position: absolute;
+    top:0;
+    width: 103px;
+    height: 103px;
 }
 
 .detail-right {
@@ -67,10 +73,10 @@
     margin-left: 10px;
 }
 
-p{
+p {
     margin: 10px 0;
 }
 
-.detail-remark{
+.detail-remark {
     margin-top: 20px;
 }

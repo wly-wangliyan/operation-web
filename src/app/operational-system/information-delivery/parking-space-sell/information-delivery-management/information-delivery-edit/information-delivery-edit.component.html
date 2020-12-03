@@ -20,7 +20,8 @@
                             <span>供需类型</span>
                         </label>
                         <div class="control-input">
-                            <nz-radio-group>
+                            <nz-radio-group [(ngModel)]="parkingPlaceDetail.demand_type" name="demand_type"
+                                            (ngModelChange)="onClickDemandTypeChange($event)" required>
                                 <label nz-radio [nzValue]="1">出租</label>
                                 <label nz-radio [nzValue]="2">出售</label>
                             </nz-radio-group>
@@ -33,7 +34,9 @@
                         </label>
                         <div class="control-input">
                             <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
-                                <input class="form-control"
+                                <input class="form-control" [(ngModel)]="parkingPlaceDetail.place_area" appIgnoreSpace
+                                       [appFloatNumber]="2"
+                                       name="place_area" maxlength="5"
                                        required nz-input/>
                                 <ng-template #saveUrlBtn1><a style="padding: 10px;">平米</a>
                                 </ng-template>
@@ -46,27 +49,32 @@
                             <span>车位类型</span>
                         </label>
                         <div class="control-input">
-                            <nz-radio-group>
+                            <nz-radio-group [(ngModel)]="parkingPlaceDetail.place_type" name="place_type" required>
                                 <label nz-radio [nzValue]="1">地上露天车位</label>
                                 <label nz-radio [nzValue]="2">地下车库</label>
-                                <label nz-radio [nzValue]="2">地上车库</label>
+                                <label nz-radio [nzValue]="3">地上车库</label>
                             </nz-radio-group>
                         </div>
                     </div>
                     <div class="row">
                         <label class="control-label">
                             <b>*</b>
-                            <span>租金</span>
+                            <span>{{parkingPlaceDetail.demand_type === 1 ? '租金' : '售价'}}</span>
                         </label>
                         <div class="control-input">
                             <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn2">
-                                <input class="form-control"
-                                       required nz-input/>
+                                <input class="form-control" [(ngModel)]="parkingPlaceDetail.rent"
+                                       name="rent" maxlength="8" [appFloatNumber]="2" appIgnoreSpace
+                                       nz-input/>
                                 <ng-template #saveUrlBtn2>
-                                    <select style="width: 90px;padding: 0;height: 30px;border: none">
-                                        <option>元/月</option>
-                                        <option>元/m²/月</option>
+                                    <select style="width: 90px;padding: 0;height: 30px;border: none"
+                                            *ngIf="parkingPlaceDetail.demand_type === 1"
+                                            [(ngModel)]="parkingPlaceDetail.rent_type" name="rent_type"
+                                            name="rent_type">
+                                        <option [value]="1">元/月</option>
+                                        <option [value]="2">元/m²/月</option>
                                     </select>
+                                    <a style="padding: 10px;" *ngIf="parkingPlaceDetail.rent_type===3">万元</a>
                                 </ng-template>
                             </nz-input-group>
                         </div>
@@ -78,7 +86,8 @@
                         </label>
                         <div class="control-input">
                             <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn3">
-                                <input class="form-control"
+                                <input class="form-control" [(ngModel)]="parkingPlaceDetail.start_month"
+                                       name="start_month"
                                        required nz-input/>
                                 <ng-template #saveUrlBtn3><a style="padding: 10px;">月</a>
                                 </ng-template>
@@ -93,11 +102,9 @@
                         <div class="control-input" style="width: 740px!important;">
                             <app-pro-city-dist-select [isEdit]="true" [regionsObj]="regionsObj"
                                                       #projectInfoPro></app-pro-city-dist-select>
-                            <input class="form-control"
-                                   maxlength="200"
-                                   required
-                                   style="margin-left: 10px"
-                                   placeholder="详细地址">
+                            <input class="form-control" maxlength="200"
+                                   [(ngModel)]="parkingPlaceDetail.address" name="address" required
+                                   style="margin-left: 10px" placeholder="详细地址">
                             <button style="margin-left: 10px" type="button" nz-button nzType="primary"
                                     [disabled]="isDisabledSearch"
                                     (click)="onClickReach()">搜索
@@ -108,9 +115,9 @@
                         <label class="control-label">
                         </label>
                         <div class="control-input" style="margin-left: 70px">
-                            <input readonly [value]="carDetail.lon" class="form-control"
+                            <input readonly [value]="parkingPlaceDetail.lon" class="form-control"
                                    placeholder="经度">
-                            <input readonly class="form-control" [value]="carDetail.lat" placeholder="纬度"
+                            <input readonly class="form-control" [value]="parkingPlaceDetail.lat" placeholder="纬度"
                                    style="margin-left: 10px">
                         </div>
                     </div>
@@ -131,7 +138,9 @@
                             <span>标题</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" maxlength="200" required>
+                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.title" name="title"
+                                   minlength="10"
+                                   maxlength="30" required>
                         </div>
                     </div>
                     <div class="row">
@@ -178,7 +187,8 @@
                             <span>详情</span>
                         </label>
                         <div class="control-input">
-                            <textarea class="form-control" rows="5" maxlength="200" placeholder="输入描述"></textarea>
+                            <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required
+                                      class="form-control" rows="5" maxlength="200" placeholder="输入描述"></textarea>
                         </div>
                     </div>
                 </div>
@@ -193,7 +203,9 @@
                             <span>联系人</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" maxlength="200" required>
+                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.contact" name="contact"
+                                   minlength="2"
+                                   maxlength="10" required>
                         </div>
                     </div>
                     <div class="row">
@@ -202,7 +214,8 @@
                             <span>联系电话</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" maxlength="200" required>
+                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.telephone" name="telephone"
+                                   maxlength="15" required>
                         </div>
                     </div>
                 </div>
