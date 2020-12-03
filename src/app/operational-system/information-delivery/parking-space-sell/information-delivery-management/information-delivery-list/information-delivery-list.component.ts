@@ -6,13 +6,9 @@ import { HttpErrorEntity } from '../../../../../core/http.service';
 import { carReviewStatus } from '../../../../../share/pipes/information-delivery.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStatus } from '../../../../../../utils/common-enums';
-import {
-    InformationDeliveryManagementService,
-    SearchParamsCarEntity,
-    OnlineStatus,
-    ReviewStatus,
-    InformationDeliveryManagementEntity,
-} from '../../../used-car/information-delivery-management/information-delivery-management.service';
+import { InformationDeliveryManagementService, PlaceListParams, ParkingPlaceEntity } from '../information-delivery-management.service';
+import { ReviewStatus, OnlineStatus } from '../../../used-car/information-delivery-management/information-delivery-management.service';
+import { timer } from 'rxjs';
 
 @Component({
     selector: 'app-information-delivery-list',
@@ -24,12 +20,12 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     public OperationType = OperationType;
     public ReviewStatus = ReviewStatus;
     public carReviewStatus = carReviewStatus;
-    public searchParams: SearchParamsCarEntity = new SearchParamsCarEntity(); // 条件筛选参数
-    public start_time: any = '';
-    public end_time: any = '';
+    public searchParams: PlaceListParams = new PlaceListParams(); // 条件筛选参数
     public review_start_time: any = '';
     public review_end_time: any = '';
     public nzSearchAssistant: NzSearchAssistant;
+    public selectedParkingPlace: ParkingPlaceEntity = new ParkingPlaceEntity();
+    public rejectReason = ''; // 驳回理由
     public tabList = [
         {key: 0, label: '全部'},
         {key: 1, label: '待审核'},
@@ -48,9 +44,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     // 切换tab
     public onTabChange(key: number) {
-        this.searchParams = new SearchParamsCarEntity();
-        this.start_time = '';
-        this.end_time = '';
+        this.searchParams = new PlaceListParams();
         this.review_start_time = '';
         this.review_end_time = '';
         this.searchParams.review_status = (key === 0 ? null : key);
@@ -58,17 +52,6 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         this.nzSearchAssistant.nzData = [];
         this.nzSearchAssistant.submitSearch(true);
     }
-
-    // 开始时间的禁用部分
-    public disabledStartTime = (startValue: Date): boolean => {
-        return DisabledTimeHelper.disabledStartTime(startValue, this.end_time);
-    };
-
-
-    // 结束时间的禁用部分
-    public disabledEndTime = (endValue: Date): boolean => {
-        return DisabledTimeHelper.disabledEndTime(endValue, this.start_time);
-    };
 
     // 开始时间的禁用部分
     public disabledReviewStartTime = (startValue: Date): boolean => {
@@ -81,37 +64,13 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     };
 
     /**
-     * 判断二手车信息是否关联上线标签
-     * @param car_info_id
-     * @param type
-     */
-    public informationDeliveryLabelStatus(car_info_id, type: OperationType) {
-        this.informationDeliveryManagementService.requestInformationDeliveryLabelData(car_info_id).subscribe(data => {
-            // 1已关联上线标签/ 2未关联上线标签
-            if (data.status === 1) {
-                this.globalService.promptBox.open
-                ('此信息存在线上关联标签，不允许' + (type === OperationType.update ? '编辑' : '删除') + '。', null, 2000, null, false);
-            } else {
-                if (type === OperationType.update) {
-                    this.router.navigate(['../edit', car_info_id], {relativeTo: this.route});
-                } else {
-                    this.onDeleteInformationDeliveryClick(car_info_id);
-                }
-            }
-
-        }, err => {
-            this.globalService.httpErrorProcess(err);
-        });
-    }
-
-    /**
      * 启停
-     * @param informationDelivery
+     * @param parkingPlace
      */
-    public onSwitchChange(informationDelivery: InformationDeliveryManagementEntity) {
-        const swicth = informationDelivery.online_status === OnlineStatus.off ? OnlineStatus.on : OnlineStatus.off;
-        this.informationDeliveryManagementService.requestInformationDeliveryOnlineStatusData(informationDelivery.car_info_id, swicth).subscribe(res => {
-            if (informationDelivery.online_status === OnlineStatus.off) {
+    public onSwitchChange(parkingPlace: ParkingPlaceEntity) {
+        const swicth = parkingPlace.online_status === OnlineStatus.off ? OnlineStatus.on : OnlineStatus.off;
+        this.informationDeliveryManagementService.requestParkingPlaceOnlineStatus(parkingPlace.parking_place_info_id, swicth).subscribe(res => {
+            if (parkingPlace.online_status === OnlineStatus.off) {
                 this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
             } else {
                 this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
@@ -133,15 +92,29 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
     }
 
     /**
-     * 审核二手车信息
-     * @param car_info_id
-     * @param review_status
+     * 去驳回
+     * @param parkingPlace
      */
-    public onClickReviewStatusData(car_info_id: string, review_status: ReviewStatus) {
+    public onClickRejected(parkingPlace: ParkingPlaceEntity) {
+        this.selectedParkingPlace = parkingPlace.clone();
+        this.rejectReason = '';
+        timer(10).subscribe(() => {
+            $('#rejectedPromptDiv').modal('show');
+        });
+    }
+
+    /**
+     * 审核信息
+     * @param parking_place_info_id
+     * @param review_status
+     * @param reject_reason
+     */
+    public onClickReviewStatusData(parking_place_info_id: string, review_status: ReviewStatus, reject_reason?: string) {
+        $('#rejectedPromptDiv').modal('hide');
         this.globalService.confirmationBox.open('审核', review_status === ReviewStatus.reviewed ? '确认通过该信息并发布上线？' : '确认驳回该信息？', () => {
             this.globalService.confirmationBox.close();
-            this.informationDeliveryManagementService.requestInformationDeliveryReviewStatusData
-            (car_info_id, review_status).subscribe(res => {
+            this.informationDeliveryManagementService.requestParkingPlaceReviewStatusData
+            (parking_place_info_id, review_status, reject_reason).subscribe(res => {
                 this.nzSearchAssistant.submitSearch(true);
                 this.globalService.promptBox.open(review_status === ReviewStatus.reviewed ? '通过成功' : '驳回成功');
             }, err => {
@@ -154,11 +127,11 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     /* 请求检索 */
     public requestSearch(): any {
-        return this.informationDeliveryManagementService.requestInformationDeliveryListData(this.searchParams);
+        return this.informationDeliveryManagementService.requestParkingPlaceList(this.searchParams);
     }
 
     public continueSearch(url: string): any {
-        return this.informationDeliveryManagementService.continueInformationDeliveryListData(url);
+        return this.informationDeliveryManagementService.continueRequestParkingPlaceList(url);
     }
 
     /* 生成并检查参数有效性 */
@@ -172,17 +145,8 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
             }
             this.searchParams.review_section = `${sReviewTime},${eReviewTime}`;
         } else {
-            this.searchParams.review_section = null;
+            this.searchParams.review_section = '';
         }
-
-
-        const sTime = this.start_time ? ((new Date(this.start_time).setSeconds(0, 0) / 1000)) : 0;
-        const eTime = this.end_time ? ((new Date(this.end_time).setSeconds(0, 0) / 1000)) : 253370764800;
-        if (sTime > eTime) {
-            this.globalService.promptBox.open('创建时间的开始时间应小于等于结束时间！', null, 2000, null, false);
-            return false;
-        }
-        this.searchParams.created_section = `${sTime},${eTime}`;
         return true;
     }
 
@@ -197,12 +161,12 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     /**
      * 删除
-     * @param car_info_id
+     * @param parking_place_info_id
      */
-    private onDeleteInformationDeliveryClick(car_info_id: string) {
+    private onDeleteParkingPlaceClick(parking_place_info_id: string) {
         this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
             this.globalService.confirmationBox.close();
-            this.informationDeliveryManagementService.requestDeleteInformationDeliveryData(car_info_id).subscribe(res => {
+            this.informationDeliveryManagementService.requestDeleteParkingPlaceDetailData(parking_place_info_id).subscribe(res => {
                 this.nzSearchAssistant.submitSearch(true);
                 this.globalService.promptBox.open('删除成功');
             }, err => {
