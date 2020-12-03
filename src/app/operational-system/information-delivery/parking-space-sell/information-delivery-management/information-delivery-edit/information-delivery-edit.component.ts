@@ -7,13 +7,10 @@ import {
     ProCityDistSelectComponent,
     RegionEntity
 } from '../../../../../share/components/pro-city-dist-select/pro-city-dist-select.component';
-import {
-    MapItem,
-    MapType,
-} from '../../../../../share/components/z-map-select-point/z-map-select-point.component';
+import { MapItem, MapType, } from '../../../../../share/components/z-map-select-point/z-map-select-point.component';
 import { ZMapSelectPointV2Component } from '../../../../../share/components/z-map-select-point-v2/z-map-select-point-v2.component';
-import { SelectTagComponent } from '../../../used-car/information-delivery-management/components/select-tag/select-tag.component';
-import { TagManagementEntity } from '../../../used-car/tag-management/tag-management.service';
+import { TagManagementEntity } from '../../tag-management/tag-management.service';
+import { ParkingSpaceSelectTagComponent } from '../components/parking-space-select-tag/parking-space-select-tag.component';
 import {
     CreateParkingPlaceParams,
     InformationDeliveryManagementService,
@@ -40,7 +37,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     @ViewChild('informationDeliveryImg', {static: false}) public informationDeliveryImgSelectComponent: ZPhotoSelectComponent;
     @ViewChild('projectInfoPro', {static: true}) public proCityDistSelectComponent: ProCityDistSelectComponent;
     @ViewChild(ZMapSelectPointV2Component, {static: true}) public zMapSelectPointV2Component: ZMapSelectPointV2Component;
-    @ViewChild(SelectTagComponent, {static: true}) public selectTagComponent: SelectTagComponent;
+    @ViewChild(ParkingSpaceSelectTagComponent, {static: true}) public selectTagComponent: ParkingSpaceSelectTagComponent;
     public loading = true; // 标记loading
     public parkingPlaceDetail: CreateParkingPlaceParams = new CreateParkingPlaceParams();
     public imageList: Array<string> = [];
@@ -116,7 +113,7 @@ export class InformationDeliveryEditComponent implements OnInit {
      * 选择标签
      */
     public onClickTag() {
-        const selectTagList = this.selectTagList.map(item => item.label_id);
+        const selectTagList = this.selectTagList.map(item => item.parking_place_label_id);
         this.selectTagComponent.onShowTagList(selectTagList);
     }
 

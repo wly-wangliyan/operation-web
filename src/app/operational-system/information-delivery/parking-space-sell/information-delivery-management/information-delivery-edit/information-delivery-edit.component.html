@@ -150,15 +150,15 @@
                         <div class="control-input" style="width: 80%">
                             <ul class="tag-list">
                                 <li *ngFor="let selectTag of selectTagList;let index=index">
-                                    <span>{{selectTag.label_name}}</span>
-                                    <img src="/src/assets/images/tag_del.png" (click)="onClickDeleteTag(index)">
+                                    <span>{{selectTag.parking_place_label_name}}</span>
+                                    <img src="/assets/images/tag_del.png" (click)="onClickDeleteTag(index)">
                                 </li>
-                                <li class="select-tag" (click)="onClickTag()" *ngIf="selectTagList.length<3">
+                                <li class="select-tag" (click)="onClickTag()" *ngIf="selectTagList.length<5">
                                     <span>选择标签</span>
                                     <img src="/assets/images/icon_add_small.png">
                                 </li>
                             </ul>
-                            <p>最多可选择3标签</p>
+                            <p>最多可选择5标签</p>
                         </div>
                     </div>
                     <div class="row">
@@ -231,4 +231,4 @@
     </div>
 </div>
 
-<app-select-tag (selectedTagEvent)="onSelectedTag($event)"></app-select-tag>
+<app-parking-space-select-tag (selectedTagEvent)="onSelectedTag($event)"></app-parking-space-select-tag>
