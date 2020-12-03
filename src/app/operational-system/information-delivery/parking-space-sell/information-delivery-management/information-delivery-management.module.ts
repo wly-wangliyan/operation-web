@@ -9,6 +9,7 @@ import { ShareModule } from '../../../../share/share.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { InformationDeliveryModule } from '../../information-delivery.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ParkingSpaceSelectTagComponent } from './components/parking-space-select-tag/parking-space-select-tag.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         InformationDeliveryManagementComponent,
         InformationDeliveryDetailComponent,
         InformationDeliveryEditComponent,
-        InformationDeliveryListComponent
+        InformationDeliveryListComponent,
+        ParkingSpaceSelectTagComponent
     ],
     imports: [
         CommonModule,
