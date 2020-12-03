@@ -10,11 +10,9 @@ import { InformationDeliveryManagementService, PlaceListParams, ParkingPlaceEnti
 import {
     ReviewStatus,
     OnlineStatus,
-    InformationDeliveryManagementEntity
 } from '../../../used-car/information-delivery-management/information-delivery-management.service';
 import { timer } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { BeianMerchantEntity } from '../../../../operation/operation-config/distribution-activities/distribution-activities.service';
 
 @Component({
     selector: 'app-information-delivery-list',

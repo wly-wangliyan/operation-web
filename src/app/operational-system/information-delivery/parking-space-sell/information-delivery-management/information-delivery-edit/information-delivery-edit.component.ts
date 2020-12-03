@@ -13,8 +13,7 @@ import { TagManagementEntity } from '../../tag-management/tag-management.service
 import { ParkingSpaceSelectTagComponent } from '../components/parking-space-select-tag/parking-space-select-tag.component';
 import {
     CreateParkingPlaceParams,
-    InformationDeliveryManagementService,
-    ParkingPlaceEntity
+    InformationDeliveryManagementService
 } from '../information-delivery-management.service';
 
 @Component({
