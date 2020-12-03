@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NzSearchAdapter, NzSearchAssistant } from '../../../../share/nz-search-assistant';
-import { SearchParamsEntity, TagManagementEntity, TagManagementService } from '../../used-car/tag-management/tag-management.service';
+import { SearchParamsEntity, TagManagementEntity, TagManagementService } from './tag-management.service';
 import { GlobalService } from '../../../../core/global.service';
-import { DisabledTimeHelper } from '../../../../../utils/disabled-time-helper';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { HttpErrorEntity } from '../../../../core/http.service';
 import { timer } from 'rxjs';
 
@@ -17,6 +14,8 @@ export class TagManagementComponent implements OnInit {
     public tagList: Array<TagManagementEntity> = [];
     public noResultText = '数据加载中...';
     public selectedTag: TagManagementEntity = new TagManagementEntity();
+    private linkUrl = null;
+    private isLoadingMore = false; // 加载下一页数据中
 
     constructor(private globalService: GlobalService,
                 private tagManagementService: TagManagementService) {
@@ -28,12 +27,12 @@ export class TagManagementComponent implements OnInit {
 
     /**
      * 删除标签
-     * @param label_id
+     * @param parking_place_label_id
      */
-    public onDeleteTagClick(label_id: string) {
+    public onDeleteTagClick(parking_place_label_id: string) {
         this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
             this.globalService.confirmationBox.close();
-            this.tagManagementService.requestDeleteTagData(label_id).subscribe(res => {
+            this.tagManagementService.requestDeleteTagData(parking_place_label_id).subscribe(res => {
                 this.requestTagList();
                 this.globalService.promptBox.open('删除成功');
             }, err => {
@@ -41,7 +40,7 @@ export class TagManagementComponent implements OnInit {
                     this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
                 }
             });
-        }, '确定', '删除后，对应标签车辆关联关系全部失效！');
+        }, '确定');
     }
 
     /**
@@ -59,8 +58,8 @@ export class TagManagementComponent implements OnInit {
      * 创建或者编辑
      */
     public onCreateTagData() {
-        this.tagManagementService.requestAddTagData(this.selectedTag, this.selectedTag.label_id).subscribe(data => {
-            this.globalService.promptBox.open(this.selectedTag.label_id ? '编辑成功！' : '创建成功！', null, 2000);
+        this.tagManagementService.requestAddTagData(this.selectedTag, this.selectedTag.parking_place_label_id).subscribe(data => {
+            this.globalService.promptBox.open(this.selectedTag.parking_place_label_id ? '编辑成功！' : '创建成功！', null, 2000);
             $('#tagCreatePromptDiv').modal('hide');
             this.requestTagList();
         }, err => {
@@ -88,13 +87,54 @@ export class TagManagementComponent implements OnInit {
     public requestTagList() {
         this.noResultText = '数据加载中...';
         this.tagManagementService.requestTagListData(this.searchParams).subscribe(data => {
-            this.tagList = data;
-            if (data.length === 0) {
+            this.tagList = data.results;
+            this.linkUrl = data.linkUrl;
+            if (data.results.length === 0) {
                 this.noResultText = '暂无数据';
+            } else if (data.results.length === 15) {
+                this.continueRequestTag();
             }
         }, err => {
             this.noResultText = '暂无数据';
             this.globalService.httpErrorProcess(err);
         });
     }
+
+    /**
+     * 继续请求模板列表
+     */
+    private continueRequestTag() {
+        if (this.linkUrl && !this.isLoadingMore) {
+            this.isLoadingMore = true;
+            this.tagManagementService.continueRequestTagListData(this.linkUrl).subscribe(data => {
+                data.results.forEach(item => {
+                    this.tagList.push(item);
+                });
+                this.linkUrl = data.linkUrl;
+                this.isLoadingMore = false;
+                if (data.results.length === 15) {
+                    this.continueRequestTag();
+                }
+            }, () => {
+                this.isLoadingMore = false;
+            });
+        }
+    }
+
+    // public onScroll(scrollElement: any) {
+    //     if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 1) {
+    //         if (this.linkUrl && !this.isLoadingMore) {
+    //             this.isLoadingMore = true;
+    //             this.tagManagementService.continueRequestTagListData(this.linkUrl).subscribe(data => {
+    //                 data.results.forEach(item => {
+    //                     this.tagList.push(item);
+    //                 });
+    //                 this.linkUrl = data.linkUrl;
+    //                 this.isLoadingMore = false;
+    //             }, () => {
+    //                 this.isLoadingMore = false;
+    //             });
+    //         }
+    //     }
+    // }
 }
