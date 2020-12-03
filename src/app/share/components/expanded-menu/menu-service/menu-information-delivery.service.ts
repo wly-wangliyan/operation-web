@@ -19,7 +19,7 @@ export class MenuInformationDeliveryService {
         this.routeLinkList = [];
         const menusItem: Array<SideMenuItem> = [];
         menusItem.push(this.generateUsedCarMenu());
-        // menusItem.push(this.generateParkingSpaceSellMenu());
+        menusItem.push(this.generateParkingSpaceSellMenu());
         return menusItem;
     }
 
