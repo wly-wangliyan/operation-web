@@ -65,7 +65,7 @@
                             <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn2">
                                 <input class="form-control" [(ngModel)]="parkingPlaceDetail.rent"
                                        name="rent" maxlength="8" [appFloatNumber]="2" appIgnoreSpace
-                                       nz-input/>
+                                       nz-input [required]="parkingPlaceDetail.demand_type === 2"/>
                                 <ng-template #saveUrlBtn2>
                                     <select style="width: 90px;padding: 0;height: 30px;border: none"
                                             *ngIf="parkingPlaceDetail.demand_type === 1"

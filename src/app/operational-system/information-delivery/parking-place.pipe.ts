@@ -19,18 +19,18 @@ export class ParkingPlacePipe implements PipeTransform {
 
 
 const RentType = {
-  1: '元/月',
-  2: '元/㎡/元',
-  3: '万元',
+    1: '元/月',
+    2: '元/㎡/元',
+    3: '万元',
 };
 
 @Pipe({
-  name: 'rentType'
+    name: 'rentType'
 })
 export class RentTypePipe implements PipeTransform {
 
-  transform(value: any, ...args: any[]): any {
-    return RentType[value];
-  }
+    transform(value: any, ...args: any[]): any {
+        return RentType[value] || '面议';
+    }
 
 }

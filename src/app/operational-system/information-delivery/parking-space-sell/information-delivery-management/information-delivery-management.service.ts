@@ -16,7 +16,7 @@ export class CreateParkingPlaceParams extends EntityBase {
     public start_month: number = undefined; // 起租期
     public contact: string = undefined; // 	联系人
     public telephone: string = undefined; // 	电话
-    public publisher = '管理员'; // 	发布人
+    public publisher = '系统管理员'; // 	发布人
     public province: string = undefined;
     public city: string = undefined;
     public district: string = undefined;
