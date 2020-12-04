@@ -45,14 +45,6 @@ export class TagManagementService {
     /** 查看出租车位标签列表 */
     @mockRequest(TagManagementEntity, true)
     public requestTagListData(searchParams: SearchParamsEntity): Observable<TagListDataLinkResponse> {
-        // const parking_place_list = [];
-        // for (let i = 0; i < 5; i++) {
-        //     const data = new TagManagementEntity();
-        //     data.parking_place_label_id = `123123423${i}`;
-        //     data.parking_place_label_name = `123${i}`;
-        //     parking_place_list.push(data);
-        // }
-        // return of(parking_place_list);
         const httpUrl = `${this.domain}/admin/parking_place_labels`;
         return this.httpService.get(httpUrl, searchParams.json())
             .pipe(map(res => new TagListDataLinkResponse(res)));

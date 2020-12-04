@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { ReviewStatus } from '../../used-car/information-delivery-management/information-delivery-management.service';
+import { TagManagementEntity } from '../tag-management/tag-management.service';
 
 export class CreateParkingPlaceParams extends EntityBase {
     public demand_type: number = undefined; // 供需类型 1出租 2出售
@@ -25,7 +26,7 @@ export class CreateParkingPlaceParams extends EntityBase {
     public lon = '';
     public lat = '';
     public title: string = undefined; // 标题
-    // public label: Array<ParkingPlaceLabelEntity> = []; // 标签 最多5个
+    public label: Array<TagManagementEntity> = []; // 标签 最多5个
     public images: string = undefined; // 图片集 最多10张
     public place_details: string = undefined; // 详情
 
@@ -82,7 +83,7 @@ export class ParkingPlaceEntity extends EntityBase {
     public lon: string = undefined;
     public lat: string = undefined;
     public title: string = undefined; // 标题
-    // public label: ParkingPlaceLabelEntity = undefined; // 标签 最多5个
+    public labels: Array<TagManagementEntity> = []; // 标签 最多5个
     public images: string = undefined; // 图片集 最多10张
     public place_details: string = undefined; // 详情
     public publisher: string = undefined; // 	发布人
@@ -98,12 +99,12 @@ export class ParkingPlaceEntity extends EntityBase {
     public created_time: number = undefined;
     public updated_time: number = undefined;
 
-    // public getPropertyClass(propertyName: string): typeof EntityBase {
-    //   if (propertyName === 'label') {
-    //     return ParkingPlaceLabelEntity;
-    //   }
-    //   return null;
-    // }
+    public getPropertyClass(propertyName: string): typeof EntityBase {
+      if (propertyName === 'labels') {
+        return TagManagementEntity;
+      }
+      return null;
+    }
 
     @noClone
     public get coverImage(): string {

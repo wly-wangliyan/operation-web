@@ -224,7 +224,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.informationDeliveryManagementService.requestParkingPlaceDetailData(this.parking_place_info_id).subscribe(data => {
             this.loading = false;
             this.parkingPlaceDetail = new CreateParkingPlaceParams(data);
-            // this.selectTagList = data.labels;
+            this.selectTagList = data.labels;
             this.mapObj.point = [parseFloat(data.lon), parseFloat(data.lat)];
             this.regionsObj = new RegionEntity(data);
             this.imageList = data.images ? data.images.split(',') : [];
@@ -234,5 +234,4 @@ export class InformationDeliveryEditComponent implements OnInit {
             this.globalService.httpErrorProcess(err);
         });
     }
-
 }
