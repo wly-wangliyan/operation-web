@@ -14,8 +14,6 @@ export class TagManagementComponent implements OnInit {
     public tagList: Array<TagManagementEntity> = [];
     public noResultText = '数据加载中...';
     public selectedTag: TagManagementEntity = new TagManagementEntity();
-    private linkUrl = null;
-    private isLoadingMore = false; // 加载下一页数据中
 
     constructor(private globalService: GlobalService,
                 private tagManagementService: TagManagementService) {
@@ -88,53 +86,12 @@ export class TagManagementComponent implements OnInit {
         this.noResultText = '数据加载中...';
         this.tagManagementService.requestTagListData(this.searchParams).subscribe(data => {
             this.tagList = data.results;
-            this.linkUrl = data.linkUrl;
             if (data.results.length === 0) {
                 this.noResultText = '暂无数据';
-            } else if (data.results.length === 15) {
-                this.continueRequestTag();
             }
         }, err => {
             this.noResultText = '暂无数据';
             this.globalService.httpErrorProcess(err);
         });
     }
-
-    /**
-     * 继续请求模板列表
-     */
-    private continueRequestTag() {
-        if (this.linkUrl && !this.isLoadingMore) {
-            this.isLoadingMore = true;
-            this.tagManagementService.continueRequestTagListData(this.linkUrl).subscribe(data => {
-                data.results.forEach(item => {
-                    this.tagList.push(item);
-                });
-                this.linkUrl = data.linkUrl;
-                this.isLoadingMore = false;
-                if (data.results.length === 15) {
-                    this.continueRequestTag();
-                }
-            }, () => {
-                this.isLoadingMore = false;
-            });
-        }
-    }
-
-    // public onScroll(scrollElement: any) {
-    //     if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 1) {
-    //         if (this.linkUrl && !this.isLoadingMore) {
-    //             this.isLoadingMore = true;
-    //             this.tagManagementService.continueRequestTagListData(this.linkUrl).subscribe(data => {
-    //                 data.results.forEach(item => {
-    //                     this.tagList.push(item);
-    //                 });
-    //                 this.linkUrl = data.linkUrl;
-    //                 this.isLoadingMore = false;
-    //             }, () => {
-    //                 this.isLoadingMore = false;
-    //             });
-    //         }
-    //     }
-    // }
 }
