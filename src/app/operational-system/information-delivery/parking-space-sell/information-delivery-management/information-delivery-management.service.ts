@@ -59,7 +59,7 @@ export class PlaceListParams extends EntityBase {
     public title: string = undefined; // 标题
     public place_type = ''; // 车位类型 1地上露天车位 2地下车库 3地上车库
     public demand_type = ''; // 供需类型 1出租 2出售
-    public region_id: number = undefined;
+    public region_id: any = '';
     public telephone: string = undefined; // 电话
     public review_status: any = undefined; // 审核状态 1待审 2通过 3驳回
     public page_size = 45;

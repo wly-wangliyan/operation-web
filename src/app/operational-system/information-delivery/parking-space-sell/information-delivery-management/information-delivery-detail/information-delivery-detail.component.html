@@ -29,7 +29,7 @@
                 <ul class="sell-item">
                     <li>
                         <span>{{parkingPlaceDetail.demand_type === 1 ? '租金' : '售价'}}</span>
-                        <span>{{parkingPlaceDetail.rent}}元/月</span>
+                        <span>{{parkingPlaceDetail.rent}}{{parkingPlaceDetail.rent_type|rentType}}</span>
                     </li>
                     <li>
                         <span>建筑面积</span>
@@ -37,7 +37,7 @@
                     </li>
                     <li>
                         <span>车位类型</span>
-                        <span>{{parkingPlaceDetail.place_type}}</span>
+                        <span>{{parkingPlaceDetail.place_type|parkingPlaceType}}</span>
                     </li>
                     <li>
                         <span>起租期</span>

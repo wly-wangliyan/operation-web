@@ -68,7 +68,7 @@ export class InformationDeliveryEditComponent implements OnInit {
      * 校验发布按钮
      */
     public get checkDisabledValid() {
-        return this.parkingPlaceDetail.lon && this.parkingPlaceDetail.lat && this.CheckImgValid;
+        return this.parkingPlaceDetail.lon && this.parkingPlaceDetail.lat && this.CheckImgValid && this.parkingPlaceDetail.place_area && this.parkingPlaceDetail.rent;
     }
 
     /**

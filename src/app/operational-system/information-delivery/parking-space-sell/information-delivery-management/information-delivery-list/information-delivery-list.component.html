@@ -36,11 +36,10 @@
             </div>
             <div class="form-group">
                 <span>车位类型：</span>
-                <select class="form-control" [(ngModel)]="searchParams.place_type" name="place_type">
-                    <option value="">全部</option>
-                    <option value="1">地上露天车位</option>
-                    <option value="3">地上车库</option>
-                    <option value="2">地下车库</option>
+                <select class="form-control" [(ngModel)]="searchParams.region_id" name="region_id">
+                    <option [value]="district.region_id" *ngFor="let district of districtList">
+                        {{district.name}}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
@@ -118,7 +117,7 @@
                             [title]="parkingPlace.title">{{parkingPlace.title|zMaxLength:10}}</td>
                         <td>{{(parkingPlace.rent)}}</td>
                         <td>{{parkingPlace.place_area}}m²</td>
-                        <td>{{parkingPlace.place_type}}</td>
+                        <td>{{parkingPlace.place_type|parkingPlaceType}}</td>
                         <td [title]="parkingPlace.addressInfo">{{parkingPlace.addressInfo|zMaxLength:10}}</td>
                         <td>{{carReviewStatus[parkingPlace.review_status]}}</td>
                         <td>

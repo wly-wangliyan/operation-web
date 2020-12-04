@@ -17,7 +17,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
     selector: 'app-information-delivery-list',
     templateUrl: './information-delivery-list.component.html',
-    styleUrls: ['../../parking-space-sell.component.css', './information-delivery-list.component.css', '../../../../../../assets/less/tab-bar-list.less']
+    styleUrls: ['../../parking-space-sell.component.css',
+        './information-delivery-list.component.css',
+        '../../../../../../assets/less/tab-bar-list.less']
 })
 export class InformationDeliveryListComponent implements NzSearchAdapter {
     public OnlineStatus = OnlineStatus;
@@ -36,6 +38,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         {key: 2, label: '已审核'},
         {key: 3, label: '被驳回'}
     ];
+    public districtList: Array<DistrictItem> = [];
     public activeTabIndex = 0;
     private parkingPlaceList: Array<ParkingPlaceEntity> = [];
 
@@ -45,6 +48,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
                 private informationDeliveryManagementService: InformationDeliveryManagementService) {
         this.nzSearchAssistant = new NzSearchAssistant(this);
         this.nzSearchAssistant.submitSearch(true);
+        this.initDistrictList();
     }
 
     // 切换tab
@@ -70,7 +74,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
 
     // 列表排序
     public onClickDrop(event: CdkDragDrop<string[]>, results: Array<ParkingPlaceEntity>): void {
-        console.log(121212)
+        console.log(121212);
         if (event.previousIndex === event.currentIndex) {
             return;
         }
@@ -91,26 +95,27 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
      */
     public onSwitchChange(parkingPlace: ParkingPlaceEntity) {
         const swicth = parkingPlace.online_status === OnlineStatus.off ? OnlineStatus.on : OnlineStatus.off;
-        this.informationDeliveryManagementService.requestParkingPlaceOnlineStatus(parkingPlace.parking_place_info_id, swicth).subscribe(res => {
-            if (parkingPlace.online_status === OnlineStatus.off) {
-                this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
-            } else {
-                this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
-            }
-            this.nzSearchAssistant.submitSearch(true);
-        }, err => {
-            if (!this.globalService.httpErrorProcess(err)) {
-                if (err.status === 422) {
-                    const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
-                    for (const content of error.errors) {
-                        if (content.field === 'online_status' && content.code === 'not_allowed') {
-                            this.globalService.promptBox.open('待审核或者已驳回不可上线', null, 2000, null, false);
-                            return;
+        this.informationDeliveryManagementService.requestParkingPlaceOnlineStatus(parkingPlace.parking_place_info_id, swicth)
+            .subscribe(res => {
+                if (parkingPlace.online_status === OnlineStatus.off) {
+                    this.globalService.promptBox.open('开启成功', null, 2000, '/assets/images/success.png');
+                } else {
+                    this.globalService.promptBox.open('关闭成功', null, 2000, '/assets/images/success.png');
+                }
+                this.nzSearchAssistant.submitSearch(true);
+            }, err => {
+                if (!this.globalService.httpErrorProcess(err)) {
+                    if (err.status === 422) {
+                        const error: HttpErrorEntity = HttpErrorEntity.Create(err.error);
+                        for (const content of error.errors) {
+                            if (content.field === 'online_status' && content.code === 'not_allowed') {
+                                this.globalService.promptBox.open('待审核或者已驳回不可上线', null, 2000, null, false);
+                                return;
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
     }
 
     /**
@@ -200,9 +205,39 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
         }, '确定');
     }
 
+    /**
+     * 初始化区域列表
+     */
+    private initDistrictList() {
+        this.districtList = [
+            new DistrictItem('全部', ''),
+            new DistrictItem('沈阳市-浑南区', '210112'),
+            new DistrictItem('沈阳市-大东区', '210104'),
+            new DistrictItem('沈阳市-法库', '210124'),
+            new DistrictItem('沈阳市-和平区', '210102'),
+            new DistrictItem('沈阳市-皇姑区', '210105'),
+            new DistrictItem('沈阳市-康平', '210123'),
+            new DistrictItem('沈阳市-辽中', '210115'),
+            new DistrictItem('沈阳市-沈北新区', '210113'),
+            new DistrictItem('沈阳市-沈河区', '210103'),
+            new DistrictItem('沈阳市-铁西区', '210106'),
+            new DistrictItem('沈阳市-苏家屯', '210111'),
+        ];
+    }
+
 }
 
 enum OperationType {
     update,
     delete,
+}
+
+class DistrictItem {
+    public name: string = undefined;
+    public region_id: string = undefined;
+
+    constructor(name: string, region_id: string) {
+        this.name = name;
+        this.region_id = region_id;
+    }
 }

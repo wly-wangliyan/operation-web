@@ -87,6 +87,8 @@
                         <div class="control-input">
                             <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn3">
                                 <input class="form-control" [(ngModel)]="parkingPlaceDetail.start_month"
+                                       [appIntNumber]="true"
+                                       [appMaxNumber]="12" [appMinNumber]="1"
                                        name="start_month"
                                        required nz-input/>
                                 <ng-template #saveUrlBtn3><a style="padding: 10px;">月</a>
