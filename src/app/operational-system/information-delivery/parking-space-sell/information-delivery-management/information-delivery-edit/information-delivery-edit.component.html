@@ -189,8 +189,8 @@
                             <span>详情</span>
                         </label>
                         <div class="control-input">
-                            <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required
-                                      class="form-control" rows="5" maxlength="200" placeholder="输入描述"></textarea>
+                            <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required minlength="10"
+                                      class="form-control" rows="5" maxlength="5000" placeholder="输入描述"></textarea>
                         </div>
                     </div>
                 </div>
