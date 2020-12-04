@@ -20,7 +20,7 @@ export class ParkingPlacePipe implements PipeTransform {
 
 const RentType = {
     1: '元/月',
-    2: '元/㎡/元',
+    2: '元/㎡/天',
     3: '万元',
 };
 

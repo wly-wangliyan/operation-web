@@ -13,7 +13,7 @@ export class CreateParkingPlaceParams extends EntityBase {
     public place_area: number = undefined; // 车位面积
     public place_type: number = undefined; // 车位类型 1地上露天车位 2地下车库 3地上车库
     public rent: number = undefined; // 租金
-    public rent_type = 1; // 租金类型 1元/月 2元/㎡/元 3万元
+    public rent_type = 1; // 租金类型 1元/月 2元/㎡/天 3万元
     public start_month: number = undefined; // 起租期
     public contact: string = undefined; // 	联系人
     public telephone: string = undefined; // 	电话
