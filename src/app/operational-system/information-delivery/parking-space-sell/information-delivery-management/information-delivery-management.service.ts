@@ -83,7 +83,7 @@ export class ParkingPlaceEntity extends EntityBase {
     public lon: string = undefined;
     public lat: string = undefined;
     public title: string = undefined; // 标题
-    public labels: Array<TagManagementEntity> = []; // 标签 最多5个
+    public label: Array<TagManagementEntity> = []; // 标签 最多5个
     public images: string = undefined; // 图片集 最多10张
     public place_details: string = undefined; // 详情
     public publisher: string = undefined; // 	发布人
@@ -100,7 +100,7 @@ export class ParkingPlaceEntity extends EntityBase {
     public updated_time: number = undefined;
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-      if (propertyName === 'labels') {
+      if (propertyName === 'label') {
         return TagManagementEntity;
       }
       return null;

@@ -171,6 +171,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     public onEditFormSubmit() {
         // this.parkingPlaceDetail.label_ids = this.selectTagList.map(item => item.label_id).join(',');
         const params: CreateParkingPlaceParams = this.parkingPlaceDetail.clone();
+        params.label = this.selectTagList;
         this.clearErr();
         this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
             params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
@@ -224,7 +225,7 @@ export class InformationDeliveryEditComponent implements OnInit {
         this.informationDeliveryManagementService.requestParkingPlaceDetailData(this.parking_place_info_id).subscribe(data => {
             this.loading = false;
             this.parkingPlaceDetail = new CreateParkingPlaceParams(data);
-            this.selectTagList = data.labels;
+            this.selectTagList = data.label;
             this.mapObj.point = [parseFloat(data.lon), parseFloat(data.lat)];
             this.regionsObj = new RegionEntity(data);
             this.imageList = data.images ? data.images.split(',') : [];
