@@ -6,10 +6,16 @@ import { InformationDeliveryComponent } from './information-delivery.component';
 import { SelectTagComponent } from './used-car/information-delivery-management/components/select-tag/select-tag.component';
 import { ShareModule } from '../../share/share.module';
 import { NzButtonModule, NzCheckboxModule } from 'ng-zorro-antd';
+import { ParkingPlacePipe, RentTypePipe } from './parking-place.pipe';
 
 
 @NgModule({
-    declarations: [InformationDeliveryComponent, SelectTagComponent],
+    declarations: [
+        InformationDeliveryComponent,
+        SelectTagComponent,
+        ParkingPlacePipe,
+        RentTypePipe,
+    ],
     imports: [
         CommonModule,
         InformationDeliveryRoutingModule,
@@ -19,7 +25,9 @@ import { NzButtonModule, NzCheckboxModule } from 'ng-zorro-antd';
         NzCheckboxModule,
     ],
     exports: [
-        SelectTagComponent
+        SelectTagComponent,
+        ParkingPlacePipe,
+        RentTypePipe
     ]
 })
 export class InformationDeliveryModule {

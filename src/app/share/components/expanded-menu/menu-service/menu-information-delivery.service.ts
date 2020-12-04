@@ -41,7 +41,7 @@ export class MenuInformationDeliveryService {
     // 车位租售
     private generateParkingSpaceSellMenu(): SideMenuItem {
         const systemMenu = new SideMenuItem('车位租售', null);
-        systemMenu.icon = '/assets/images/menu_used_car.png';
+        systemMenu.icon = '/assets/images/menu_parking_place.png';
         const subFinanceMenu1 = new SideMenuItem('信息发布', '/main/information-delivery/parking-space-sell/information-delivery-management', systemMenu);
         systemMenu.children.push(subFinanceMenu1);
         const subFinanceMenu2 = new SideMenuItem('标签管理', '/main/information-delivery/parking-space-sell/tag-management', systemMenu);
