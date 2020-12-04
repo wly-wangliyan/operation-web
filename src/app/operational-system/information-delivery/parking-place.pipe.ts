@@ -30,7 +30,7 @@ const RentType = {
 export class RentTypePipe implements PipeTransform {
 
     transform(value: any, ...args: any[]): any {
-        return RentType[value] || '面议';
+        return RentType[value];
     }
 
 }

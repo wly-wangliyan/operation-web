@@ -115,7 +115,12 @@
                         </td>
                         <td class="brand-item"
                             [title]="parkingPlace.title">{{parkingPlace.title|zMaxLength:10}}</td>
-                        <td>{{(parkingPlace.rent|rentType)}}</td>
+                        <td>
+                            <ng-container *ngIf="parkingPlace.rent">
+                                {{parkingPlace.rent}}{{parkingPlace.rent_type|rentType}}
+                            </ng-container>
+                            <ng-container *ngIf="!parkingPlace.rent">面议</ng-container>
+                        </td>
                         <td>{{parkingPlace.place_area}}m²</td>
                         <td>{{parkingPlace.place_type|parkingPlaceType}}</td>
                         <td [title]="parkingPlace.addressInfo">{{parkingPlace.addressInfo|zMaxLength:10}}</td>
