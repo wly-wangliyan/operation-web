@@ -75,7 +75,7 @@ export class InformationDeliveryEditComponent implements OnInit {
      * 搜索
      */
     public get isDisabledSearch(): boolean {
-        return !(this.regionsObj.province && this.regionsObj.city && this.regionsObj.district && this.parkingPlaceDetail.address);
+        return !(this.regionsObj.province && this.regionsObj.city && this.parkingPlaceDetail.address);
     }
 
     /**
