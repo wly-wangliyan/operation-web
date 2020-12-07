@@ -79,7 +79,7 @@
                             </nz-input-group>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="parkingPlaceDetail.demand_type===1">
                         <label class="control-label">
                             <b>*</b>
                             <span>起租期</span>
@@ -189,7 +189,8 @@
                             <span>详情</span>
                         </label>
                         <div class="control-input">
-                            <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required minlength="10"
+                            <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required
+                                      minlength="10"
                                       class="form-control" rows="5" maxlength="5000" placeholder="输入描述"></textarea>
                         </div>
                     </div>
