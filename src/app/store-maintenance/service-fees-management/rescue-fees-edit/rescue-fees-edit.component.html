@@ -111,7 +111,7 @@
                                    name="telephone_{{item.timeStamp+index}}" appIgnoreSpace maxlength="11">
                             <img src="/assets/images/tag_del.png" (click)="onClickDelete(2,index)">
                         </li>
-                        <li class="select-tag" (click)="onClickAdd(2)" *ngIf="telephoneList.length<5">
+                        <li class="select-tag" (click)="onClickAdd(2)" *ngIf="telephoneList.length<10">
                             <span>添加</span>
                             <img src="./assets/images/icon_add_small.png">
                         </li>
