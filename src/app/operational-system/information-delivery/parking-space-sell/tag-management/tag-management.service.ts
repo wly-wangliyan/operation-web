@@ -5,6 +5,7 @@ import { EntityBase } from '../../../../../utils/z-entity';
 import { HttpService, LinkResponse } from '../../../../core/http.service';
 import { mockData, mockRequest, MockSceneType } from './mocker';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 
 export class SearchParamsEntity extends EntityBase {
@@ -35,9 +36,9 @@ export class TagManagementEntity extends EntityBase {
 })
 export class TagManagementService {
 
-    // private domain = environment.CAR_SERVE;
+    private domain = environment.CAR_SERVE;
 
-    private domain = 'http://192.168.6.124:8010';
+    // private domain = 'http://192.168.6.124:8010';
 
     constructor(private httpService: HttpService) {
     }
