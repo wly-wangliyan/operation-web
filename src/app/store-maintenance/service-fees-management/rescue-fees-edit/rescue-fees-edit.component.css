@@ -81,21 +81,23 @@
     margin-top: -10px;
 }
 
-.telephone-content {
-    display: flex;
-    align-items: center;
-}
-
 .telephone-content > span {
     margin-right: 12px;
     color: #23242F;
+    float: left;
 }
 
-.telephone-content li, .telephone-content ul {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.telephone-content ul {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
     margin-bottom: 0;
+    margin-left: 95px;
+}
+
+.telephone-content li{
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .telephone-content li:not(.select-tag) {
@@ -105,6 +107,7 @@
     box-sizing: border-box;
     word-break: break-all;
     flex-direction: column;
+    float: left;
 }
 
 .telephone-content li:not(.select-tag) > img {
@@ -113,6 +116,10 @@
     position: absolute;
     top: -10px;
     right: -10px;
+}
+
+.telephone-content li input{
+    height: 30px;
 }
 
 .telephone-content li.select-tag {
@@ -125,6 +132,10 @@
     color: #3E71F7;
     margin-right: 10px;
     cursor: pointer;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .telephone-content li.select-tag > img {
@@ -137,10 +148,6 @@
 
 .telephone-content li:hover {
     cursor: pointer;
-}
-
-li + li {
-    margin-left: 20px;
 }
 
 :host ::ng-deep .ant-form-item {
