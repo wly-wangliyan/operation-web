@@ -169,9 +169,11 @@ export class InformationDeliveryEditComponent implements OnInit {
     }
 
     public onEditFormSubmit() {
-        // this.parkingPlaceDetail.label_ids = this.selectTagList.map(item => item.label_id).join(',');
         const params: CreateParkingPlaceParams = this.parkingPlaceDetail.clone();
         params.label = this.selectTagList;
+        if (this.parkingPlaceDetail.rent_type === 3) {
+            params.rent = this.parkingPlaceDetail.rent * 10000;
+        }
         this.clearErr();
         this.informationDeliveryImgSelectComponent.upload().subscribe(() => {
             params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');

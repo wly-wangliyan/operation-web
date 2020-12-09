@@ -117,7 +117,7 @@
                             [title]="parkingPlace.title">{{parkingPlace.title|zMaxLength:10}}</td>
                         <td>
                             <ng-container *ngIf="parkingPlace.rent">
-                                {{parkingPlace.rent}}{{parkingPlace.rent_type|rentType}}
+                                {{parkingPlace.rentShow}}{{parkingPlace.rent_type|rentType}}
                             </ng-container>
                             <ng-container *ngIf="!parkingPlace.rent">面议</ng-container>
                         </td>
@@ -174,7 +174,7 @@
                             <span>驳回理由：</span>
                         </label>
                         <div class="control-input">
-                            <textarea class="form-control" [(ngModel)]="rejectReason" name="rejectReason" appIgnoreSpace
+                            <textarea class="form-control" [(ngModel)]="rejectReason" name="rejectReason"
                                       style="width: 300px"
                                       rows="5" placeholder="输入驳回理由" maxlength="200">
                             </textarea>

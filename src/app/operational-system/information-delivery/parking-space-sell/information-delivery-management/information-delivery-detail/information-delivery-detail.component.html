@@ -29,7 +29,7 @@
                 <ul class="sell-item">
                     <li>
                         <span>{{parkingPlaceDetail.demand_type === 1 ? '租金' : '售价'}}</span>
-                        <span *ngIf="parkingPlaceDetail.rent">{{parkingPlaceDetail.rent}}{{parkingPlaceDetail.rent_type|rentType}}</span>
+                        <span *ngIf="parkingPlaceDetail.rent">{{parkingPlaceDetail.rentShow}}{{parkingPlaceDetail.rent_type|rentType}}</span>
                         <span *ngIf="!parkingPlaceDetail.rent">面议</span>
                     </li>
                     <li>

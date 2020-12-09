@@ -36,7 +36,7 @@ export class CreateParkingPlaceParams extends EntityBase {
             this.demand_type = source.demand_type;
             this.place_area = source.place_area;
             this.place_type = source.place_type;
-            this.rent = source.rent;
+            this.rent = source.rent_type === 3 ? parseFloat((source.rent / 10000).toFixed(2)) : source.rent_type;
             this.rent_type = source.rent_type || 1;
             this.start_month = source.start_month;
             this.contact = source.contact;
@@ -100,10 +100,10 @@ export class ParkingPlaceEntity extends EntityBase {
     public updated_time: number = undefined;
 
     public getPropertyClass(propertyName: string): typeof EntityBase {
-      if (propertyName === 'label') {
-        return TagManagementEntity;
-      }
-      return null;
+        if (propertyName === 'label') {
+            return TagManagementEntity;
+        }
+        return null;
     }
 
     @noClone
@@ -114,6 +114,11 @@ export class ParkingPlaceEntity extends EntityBase {
     @noClone
     public get addressInfo(): string {
         return this.province + this.city + this.district + this.address;
+    }
+
+    @noClone
+    public get rentShow() {
+        return this.rent_type === 3 ? parseFloat((this.rent / 10000).toFixed(2)) : this.rent;
     }
 }
 
@@ -191,7 +196,7 @@ export class InformationDeliveryManagementService {
     }
 
     /**
-     * 审核二手车信息
+     * 审核信息
      * @param parking_place_info_id
      * @param review_status
      * @param reject_reason
