@@ -119,7 +119,7 @@ export class RescueFeesEditComponent implements OnInit {
         if (!flagError) {
             const searchFeeParams: SearchFeeParams = new SearchFeeParams();
             searchFeeParams.rescue_cost_configure = this.rescueFeeList;
-            searchFeeParams.rescue_person_telephone = this.telephoneList.map(item => item.telephone).join(',');
+            searchFeeParams.rescue_person_telephone = this.telephoneList.filter(item => !!item.telephone).map(item => item.telephone).join(',');
             this.feesService.requestUpdateFeeData(searchFeeParams, this.service_fee_id, 2).subscribe(() => {
                 this.globalService.promptBox.open('编辑救援费成功！');
                 timer(2000).subscribe(() => this.router.navigateByUrl('/service-fees-management'));

@@ -22,7 +22,8 @@
                                 <nz-input-group [nzAddOnAfter]="'元'">
                                     <input class="price-input" nz-input autocomplete="off"
                                            [(ngModel)]="rescueFee.balance_initial_price"
-                                           name="balance_initial_price_{{rescueFee.timestamp+index}}" required maxlength='8'
+                                           name="balance_initial_price_{{rescueFee.timestamp+index}}" required
+                                           maxlength='8'
                                            appFloatNumber
                                            [appMaxNumber]='99999.99'/>
                                 </nz-input-group>
@@ -107,17 +108,17 @@
                     <span>负责人手机号</span>
                     <ul>
                         <li *ngFor="let item of telephoneList;let index=index">
-                            <input class="form-control" [(ngModel)]="item.telephone"
+                            <input class="form-control" [(ngModel)]="item.telephone" minlength="11"
                                    name="telephone_{{item.timeStamp+index}}" appIgnoreSpace maxlength="11">
                             <img src="/assets/images/tag_del.png" (click)="onClickDelete(2,index)">
                         </li>
-                        <li class="select-tag" (click)="onClickAdd(2)" *ngIf="telephoneList.length<5">
+                        <li class="select-tag" (click)="onClickAdd(2)" *ngIf="telephoneList.length<10">
                             <span>添加</span>
                             <img src="./assets/images/icon_add_small.png">
                         </li>
                     </ul>
                 </div>
-                <div style="margin-top: 40px;margin-bottom: 40px">
+                <div style="margin-top: 40px;margin-bottom: 40px;clear: both">
                     <button class="sure-btn" nz-button nzType="primary" [disabled]="loading&&!rescueFeesForm.form.valid"
                             (appZDebounceClick)='onSaveFormSubmit()'>保存
                     </button>
