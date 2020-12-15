@@ -93,7 +93,7 @@ export class CommodityEntity extends EntityBase {
     public category: number = undefined; // 	1餐饮卷 2车周边
     public shipping_method: any = ''; // 	供货方式 1平台自营，2第三方供应
     public collection_type = '1'; // 收款方式 1平台 2此供应商户
-    public validity_type: number = undefined; // 	有效期类型 1.付款后立即生效 2.使用日期当日有效 *使用日期信息
+    public validity_type: number | any = undefined; // 	有效期类型 1.付款后立即生效 2.使用日期当日有效 *使用日期信息
     public freight_fee: number = undefined; // 	运费 单位分
     public mall_business_id = ''; // 商家id
     public mall_business_name = ''; // 商家名称
