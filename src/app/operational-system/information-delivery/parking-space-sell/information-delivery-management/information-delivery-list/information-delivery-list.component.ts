@@ -191,7 +191,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
      * 删除
      * @param parking_place_info_id
      */
-    private onDeleteParkingPlaceClick(parking_place_info_id: string) {
+    public onDeleteParkingPlaceClick(parking_place_info_id: string) {
         this.globalService.confirmationBox.open('提示', '此操作不可逆，是否确认删除？', () => {
             this.globalService.confirmationBox.close();
             this.informationDeliveryManagementService.requestDeleteParkingPlaceDetailData(parking_place_info_id).subscribe(res => {

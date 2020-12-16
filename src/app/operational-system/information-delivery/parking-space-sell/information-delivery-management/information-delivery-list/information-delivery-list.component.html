@@ -145,7 +145,7 @@
                             <a [title]="'详情'"
                                [routerLink]="['../detail',parkingPlace.parking_place_info_id]">详情</a>
                             <a [title]="'删除'"
-                               (appZDebounceClick)="onDeleteParkingPlaceClick(parkingPlace.parking_place_info_id,OperationType.delete)">删除</a>
+                               (appZDebounceClick)="onDeleteParkingPlaceClick(parkingPlace.parking_place_info_id)">删除</a>
                         </td>
                     </tr>
                 </ng-template>
