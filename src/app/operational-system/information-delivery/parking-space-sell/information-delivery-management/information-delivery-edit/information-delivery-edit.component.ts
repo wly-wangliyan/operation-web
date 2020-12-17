@@ -42,6 +42,7 @@ export class InformationDeliveryEditComponent implements OnInit {
     public imageList: Array<string> = [];
     public selectTagList: Array<TagManagementEntity> = [];
     private parking_place_info_id = '';
+    private isClick = false;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -169,6 +170,10 @@ export class InformationDeliveryEditComponent implements OnInit {
     }
 
     public onEditFormSubmit() {
+        if (this.isClick) {
+            return;
+        }
+        this.isClick = true;
         const params: CreateParkingPlaceParams = this.parkingPlaceDetail.clone();
         params.label = this.selectTagList;
         if (this.parkingPlaceDetail.rent_type === 3) {
@@ -179,12 +184,15 @@ export class InformationDeliveryEditComponent implements OnInit {
             params.images = this.informationDeliveryImgSelectComponent.imageList.map(i => i.sourceUrl).join(',');
             this.informationDeliveryManagementService.requestCreateParkingPlaceData(params, this.parking_place_info_id).subscribe(data => {
                 this.globalService.promptBox.open(this.parking_place_info_id ? '编辑成功！' : '创建成功', () => {
+                    this.isClick = false;
                     this.goToListPage();
                 });
             }, err => {
+                this.isClick = false;
                 this.globalService.httpErrorProcess(err);
             });
         }, err => {
+            this.isClick = false;
             this.upLoadErrMsg(err);
         });
     }
