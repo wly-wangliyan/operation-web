@@ -40,7 +40,7 @@
                         <span>车位类型</span>
                         <span>{{parkingPlaceDetail.place_type|parkingPlaceType}}</span>
                     </li>
-                    <li>
+                    <li *ngIf="parkingPlaceDetail.demand_type === 1">
                         <span>起租期</span>
                         <span>{{parkingPlaceDetail.start_month}}月起租</span>
                     </li>
