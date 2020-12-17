@@ -2,11 +2,11 @@
     width: 200px;
 }
 
-:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(odd) {
+:host ::ng-deep .goods-order .ant-table-tbody > tr:nth-child(odd) {
     background: rgba(241, 241, 241, 1);
 }
 
-:host ::ng-deep .goods-order .ant-table-tbody>tr:nth-child(even) td {
+:host ::ng-deep .goods-order .ant-table-tbody > tr:nth-child(even) td {
     border-right: 1px solid rgba(202, 202, 202, 1);
 }
 
@@ -20,7 +20,7 @@
     margin-top: 10px;
 }
 
-:host ::ng-deep .goods-order .ant-table-thead>tr>th {
+:host ::ng-deep .goods-order .ant-table-thead > tr > th {
     height: 40px;
     background: rgba(202, 202, 202, 1);
     font-size: 12px;
@@ -33,7 +33,7 @@
     width: 90px;
 }
 
-.information-delivery-title span{
+.information-delivery-title span {
     margin: 0 5px;
 }
 
@@ -43,7 +43,7 @@
     height: 65px;
 }
 
-p{
+p {
     margin-bottom: 0;
 }
 
@@ -53,4 +53,12 @@ p{
 
 ::ng-deep .cdk-drag-placeholder {
     opacity: 0;
+}
+
+.demand-type {
+    background: #E1F3D8;
+    color: #67C23A;
+    border-radius: 4px;
+    padding: 3px 4px;
+    margin-right: 10px
 }

@@ -114,7 +114,12 @@
                             <img [src]="parkingPlace.coverImage">
                         </td>
                         <td class="brand-item"
-                            [title]="parkingPlace.title">{{parkingPlace.title|zMaxLength:10}}</td>
+                            [title]="parkingPlace.title">
+                            <span class="demand-type">
+                                {{parkingPlace.demand_type === 1 ? '出租' : '出售'}}
+                            </span>
+                            {{parkingPlace.title|zMaxLength:10}}
+                        </td>
                         <td>
                             <ng-container *ngIf="parkingPlace.rent">
                                 {{parkingPlace.rentShow}}{{parkingPlace.rent_type|rentType}}
