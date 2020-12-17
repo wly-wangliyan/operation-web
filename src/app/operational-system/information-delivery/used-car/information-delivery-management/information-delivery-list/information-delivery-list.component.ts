@@ -207,7 +207,7 @@ export class InformationDeliveryListComponent implements NzSearchAdapter {
                 this.globalService.promptBox.open('删除成功');
             }, err => {
                 if (!this.globalService.httpErrorProcess(err)) {
-                    this.globalService.promptBox.open(`删除失败，请刷新重试！`, null, 2000, null, false);
+                    this.globalService.promptBox.open(`上线信息不允许删除！`, null, 2000, null, false);
                 }
             });
         }, '确定');
