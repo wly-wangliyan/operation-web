@@ -22,8 +22,9 @@
     text-align: right;
     display: flex;
     justify-content: flex-end;
-    width: inherit;
+    width: 90px;
     margin-right: 10px;
+    /*border: 1px solid red;*/
 }
 
 select.form-control, .input-group {
@@ -65,7 +66,6 @@ ul, li {
 .tag-list {
     display: flex;
     margin-right: 20px;
-    margin-left: 15px;
 }
 
 .tag-list > li {
@@ -156,7 +156,7 @@ li + li {
 }
 
 :host ::ng-deep .z-map-select-point-container {
-    margin-left: 90px !important;
+    margin-left: 100px !important;
 }
 
 p{
