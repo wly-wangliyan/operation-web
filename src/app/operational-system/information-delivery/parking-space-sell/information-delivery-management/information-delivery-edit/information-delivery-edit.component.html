@@ -140,7 +140,7 @@
                             <span>标题</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.title" name="title"
+                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.title" name="title" placeholder="最少10个字符，最多30个字符"
                                    minlength="10"
                                    maxlength="30" required>
                         </div>
@@ -191,7 +191,7 @@
                         <div class="control-input">
                             <textarea [(ngModel)]="parkingPlaceDetail.place_details" name="place_details" required
                                       minlength="10"
-                                      class="form-control" rows="5" maxlength="5000" placeholder="输入描述"></textarea>
+                                      class="form-control" rows="5" maxlength="5000" placeholder="输入描述(最少10个字符，最多5000个字符)"></textarea>
                         </div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
                             <span>联系人</span>
                         </label>
                         <div class="control-input">
-                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.contact" name="contact"
+                            <input class="form-control" [(ngModel)]="parkingPlaceDetail.contact" name="contact" placeholder="最少2个字符，最多10个字符"
                                    minlength="2"
                                    maxlength="10" required>
                         </div>
