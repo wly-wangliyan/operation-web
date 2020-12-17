@@ -116,7 +116,7 @@
                     <div class="row">
                         <label class="control-label">
                         </label>
-                        <div class="control-input" style="margin-left: 70px">
+                        <div class="control-input">
                             <input readonly [value]="parkingPlaceDetail.lon" class="form-control"
                                    placeholder="经度">
                             <input readonly class="form-control" [value]="parkingPlaceDetail.lat" placeholder="纬度"
@@ -147,7 +147,6 @@
                     </div>
                     <div class="row">
                         <label class="control-label">
-                            <b>&nbsp;</b>
                             <span>标签</span>
                         </label>
                         <div class="control-input" style="width: 80%">
@@ -219,7 +218,7 @@
                         </label>
                         <div class="control-input">
                             <input class="form-control" [(ngModel)]="parkingPlaceDetail.telephone" name="telephone"
-                                   maxlength="15" required>
+                                   minlength="11" maxlength="15" required>
                         </div>
                     </div>
                 </div>
