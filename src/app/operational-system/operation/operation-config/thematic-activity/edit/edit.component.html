@@ -81,23 +81,11 @@
                                             [(ngModel)]="element.belong_to" (change)="onChangeBelongTo($event,i,j)">
                                         <option [value]=2>H5</option>
                                         <option [value]=1>小程序原生页</option>
-                                        <option [value]=3>第三方小程序</option>
-                                        <option [value]=4>客服</option>
                                     </select>
                                     <input name="link_{{element.sort_num}}_{{element.time}}" placeholder="输入跳转URL"
-                                           [disabled]="element.belong_to===4"
                                            [(ngModel)]="element.link" class="form-control" (change)="element.errMsg=''"
                                            maxlength="2000"
                                            appIgnoreSpace/>
-                                </div>
-                                <div class="link" style="padding-left: 123px;padding-top: 10px"
-                                     *ngIf="element.belong_to===3">
-                                    <input name="app_id_{{element.sort_num}}_{{element.time}}"
-                                           placeholder="输入appID"
-                                           [(ngModel)]="element.app_id"
-                                           (change)="element.errMsg=''"
-                                           class="form-control"
-                                           maxlength="200" appIgnoreSpace/>
                                 </div>
                                 <p class="cover-hint">注：尺寸 340*220px，格式PNG或JPG，大小2M以内</p>
                                 <p class="err-message">{{element.errMsg}}</p>
@@ -126,23 +114,12 @@
                                         (change)="onChangeBelongTo($event,i)">
                                     <option [value]=2>H5</option>
                                     <option [value]=1>小程序原生页</option>
-                                    <option [value]=3>第三方小程序</option>
-                                    <option [value]=4>客服</option>
                                 </select>
                                 <input name="link_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                       [disabled]="content.elements[0].belong_to===4"
                                        placeholder="输入跳转URL"
                                        [(ngModel)]="content.elements[0].link" (change)="content.elements[0].errMsg=''"
                                        class="form-control"
                                        maxlength="2000" appIgnoreSpace/>
-                            </div>
-                            <div class="link" style="padding-left: 123px;padding-top: 10px"
-                                 *ngIf="content.elements[0].belong_to===3">
-                                <input name="app_id_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                       placeholder="输入appID"
-                                       [(ngModel)]="content.elements[0].app_id" (change)="content.elements[0].errMsg=''"
-                                       class="form-control"
-                                       maxlength="200" appIgnoreSpace/>
                             </div>
                             <p class="cover-hint">注：尺寸 690*220px，格式PNG或JPG，大小2M以内</p>
                             <p class="err-message">{{content.elements[0].errMsg}}</p>
@@ -159,103 +136,6 @@
                         <p class="err-message">{{content.elements[0].errMsg}}</p>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="content.content_type===4">
-                    <div class="link-group-container">
-                        <div class="link-group">
-                            <div class="link-video">
-                                <span>视频封面：</span>
-                                <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
-                                                           [hasDeletePicture]="true" [limitImgSize]="2"
-                                                           [isCutCoverImg]="false"
-                                                           [file_id]="content.elements[0].element_id" [imageWidth]="690"
-                                                           [imageHeight]="220"
-                                                           [imageUrls]="content.elements[0].image_url"
-                                                           [imageAddWidth]="690" [imgReg]="imgReg"
-                                                           (selectedImgChange)="onSelectedPicture($event)"
-                                                           (uploadFinish)="onUploadFinish($event)">
-                                </app-z-photo-select-upload>
-                            </div>
-                            <div class="link-video" style="margin-top: 20px">
-                                <span>视频高度：</span>
-                                <div style="display: flex;align-items: center;justify-content: center">
-                                    <nz-input-group class="input-group" [nzAddOnAfter]="saveUrlBtn1">
-                                        <input class="form-control"
-                                               [(ngModel)]="content.elements[0].height"
-                                               name="height_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                               appFloatNumber='true' placeholder="1-99999" [appMaxNumber]='99999'
-                                               maxlength='5'
-                                               (change)="content.elements[0].errMsg=''" nz-input/>
-                                        <ng-template #saveUrlBtn1><a style="padding: 10px;">px</a>
-                                        </ng-template>
-                                    </nz-input-group>
-                                </div>
-                            </div>
-                            <div class="link-video" style="margin: 10px 0">
-                                <span>是否自动播放：</span>
-                                <nz-radio-group [(ngModel)]="content.elements[0].isAutoPlay"
-                                                name="auto_play_{{content.elements[0].sort_num}}_{{content.elements[0].time}}">
-                                    <label nz-radio [nzValue]="true">自动播放</label>
-                                    <label nz-radio [nzValue]="false">不自动播放</label>
-                                </nz-radio-group>
-                            </div>
-                            <div class="link-video">
-                                <span>视频地址：</span>
-                                <input name="link_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                       style="width: 690px"
-                                       placeholder="输入视频地址"
-                                       [(ngModel)]="content.elements[0].link" (change)="content.elements[0].errMsg=''"
-                                       class="form-control"
-                                       maxlength="2000" appIgnoreSpace/>
-                            </div>
-                            <p class="err-message">{{content.elements[0].errMsg}}</p>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="content.content_type===5">
-                    <div class="link-group-container">
-                        <div class="link-group link-floating-group">
-                            <div class="link-picture">
-                                <span>浮窗：</span>
-                                <app-z-photo-select-upload #{{content.elements[0].element_id}} [hasAddPicture]="true"
-                                                           [hasDeletePicture]="true" [limitImgSize]="2"
-                                                           [isCutCoverImg]="false"
-                                                           [file_id]="content.elements[0].element_id" [imageWidth]="690"
-                                                           [imageHeight]="220"
-                                                           [imageUrls]="content.elements[0].image_url"
-                                                           [imageAddWidth]="690" [imgReg]="imgReg"
-                                                           (selectedImgChange)="onSelectedPicture($event)"
-                                                           (uploadFinish)="onUploadFinish($event)">
-                                </app-z-photo-select-upload>
-                            </div>
-                            <div class="link">
-                                <select name="belong_to_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                        class="form-control" [(ngModel)]="content.elements[0].belong_to"
-                                        (change)="onChangeBelongTo($event,i)">
-                                    <option [value]=2>H5</option>
-                                    <option [value]=1>小程序原生页</option>
-                                    <option [value]=3>第三方小程序</option>
-                                    <option [value]=4>客服</option>
-                                </select>
-                                <input name="link_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                       [disabled]="content.elements[0].belong_to===4"
-                                       placeholder="输入跳转URL"
-                                       [(ngModel)]="content.elements[0].link" (change)="content.elements[0].errMsg=''"
-                                       class="form-control"
-                                       maxlength="2000" appIgnoreSpace/>
-                            </div>
-                            <div class="link" style="padding-left: 123px;padding-top: 10px"
-                                 *ngIf="content.elements[0].belong_to===3">
-                                <input name="app_id_{{content.elements[0].sort_num}}_{{content.elements[0].time}}"
-                                       placeholder="输入appID"
-                                       [(ngModel)]="content.elements[0].app_id" (change)="content.elements[0].errMsg=''"
-                                       class="form-control"
-                                       maxlength="200" appIgnoreSpace/>
-                            </div>
-                            <p class="cover-hint">注：格式PNG或JPG，大小2M以内</p>
-                            <p class="err-message">{{content.elements[0].errMsg}}</p>
-                        </div>
-                    </div>
-                </ng-container>
                 <div class="delete-btn" (click)="onDeleteClick(i)">
                     <span class="btn-line"></span>
                     <span class="btn-line"></span>
@@ -268,8 +148,6 @@
                     <li (click)="onAddComponent(1)"></li>
                     <li (click)="onAddComponent(2)"></li>
                     <li (click)="onAddComponent(3)"></li>
-                    <li (click)="onAddComponent(4)"></li>
-                    <li (click)="onAddComponent(5)"></li>
                 </ul>
             </div>
             <div class="row">

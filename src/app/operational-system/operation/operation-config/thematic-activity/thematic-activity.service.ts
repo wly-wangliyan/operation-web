@@ -24,18 +24,15 @@ export class SearchParams extends EntityBase {
 
 // 模版节点内容
 export class ElementItemEntity extends EntityBase {
-    public type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频 5 浮窗
+    public type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本
     public element_id: string = undefined; // 组件id
     public sort_num: number = undefined; // 序号
 
     // 图文链接
-    public image_url: Array<any> = []; // 图片Url 用作图文链接组件回显
-    public image: string = undefined; // 图片Url 视频封面
-    public isAutoPlay = false; // 是否自动播放
-    public height: number = undefined; // 是否自动播放
-    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页 3:第三方小程序 4:客服
-    public app_id: string = undefined; // app_id
-    public link: number = undefined; // 链接地址 视频地址
+    public image_url: Array<any> = []; // 图片Url，用作图文链接组件回显
+    public image: string = undefined; // 图片Url
+    public belong_to: number = undefined; // 链接类型 1：H5 2:小程序原生页
+    public link: number = undefined; // 链接地址
 
     // 富文本
     public rich: string = undefined; // 富文本
@@ -50,9 +47,6 @@ export class ElementItemEntity extends EntityBase {
             this.belong_to = source.belong_to;
             this.link = source.link;
             this.rich = source.rich;
-            this.isAutoPlay = source.isAutoPlay;
-            this.app_id = source.app_id;
-            this.height = source.height;
         }
     }
 
@@ -77,7 +71,7 @@ export class ElementItemEntity extends EntityBase {
 
 // 模版内容
 export class ContentEntity extends EntityBase {
-    public content_type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本 4：视频 5 浮窗
+    public content_type: number = undefined; // 数据类型  1:双图文链接  2：单图文链接  3：富文本
     public elements: Array<ElementItemEntity> = []; // 元素集合
 
     public getPropertyClass(propertyName: string): typeof EntityBase {

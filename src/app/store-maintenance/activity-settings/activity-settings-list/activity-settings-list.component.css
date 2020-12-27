@@ -1,0 +1,122 @@
+:host ::ng-deep .ant-form-item {
+    margin-bottom: 0;
+}
+
+:host ::ng-deep .ant-form-item-label > label {
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    font-weight: 400;
+    color: rgba(51, 51, 51, 1);
+}
+
+:host ::ng-deep .ant-calendar-picker {
+    width: 180px !important;
+}
+
+:host ::ng-deep .ant-table-tbody > tr {
+    background: #fff;
+}
+
+.road-assistance .ant-table-tbody > tr > td {
+    border-right: 1px solid #d9d9d9;
+}
+
+.table-container {
+    margin: 0 15px 15px 0;
+}
+
+.span-width {
+    width: 40px;
+    display: inline-block;
+}
+
+.action {
+    text-align: left;
+    width: 400px;
+    min-width: 400px;
+    padding-left: 50px !important;
+}
+
+.status {
+    margin-left: 10px;
+}
+
+.search-form {
+    padding: 0 !important;
+}
+
+.search_row div {
+    float: left;
+}
+
+.search_row div select {
+    width: 140px !important;
+    line-height: 34px;
+}
+
+.search_row div .form-control {
+    margin-right: 30px;
+    width: 160px;
+}
+
+.search_row .search_time {
+    margin-right: 25px;
+}
+
+.search_row .search_time .line {
+    width: 5px;
+    height: 2px;
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    font-weight: 400;
+    color: rgba(177, 177, 181, 1);
+    margin: 0 10px;
+}
+
+.search_row .search_status {
+    margin-right: 30px;
+}
+
+.search_row .search_status .form_control {
+    margin-left: 12px;
+}
+
+.search_row .search_status img {
+    margin-right: -5px;
+    margin-right: 9px;
+}
+
+.search_select {
+    width: 240px;
+    height: 34px;
+    background: rgba(255, 255, 255, 1);
+}
+
+.search_btn {
+    margin-top: 3px;
+}
+
+.sign {
+    margin-bottom: 28px;
+    margin-left: 3px;
+}
+
+.car_num {
+    text-align: left;
+    min-width: 120px;
+    width: 140px;
+    padding-left: 30px !important;
+}
+
+.operation {
+    min-width: 68px;
+}
+
+.tab-bar-list {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.tab-bar-list .ant-radio-button-wrapper {
+    width: 200px;
+}

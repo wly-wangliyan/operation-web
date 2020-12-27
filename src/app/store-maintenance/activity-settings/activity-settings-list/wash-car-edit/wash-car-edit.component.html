@@ -1,0 +1,146 @@
+<!--新增/编辑配件品牌-->
+<div class="modal fade" id="editBrandModal" data-backdrop="false" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" #activityPromptDiv>
+    <div class="modal-dialog modal-dialog-common" role="document">
+        <div class="modal-content modal-content-common">
+            <div class="modal-header">
+                <span class="modal-title">{{activity_id ? '编辑' : '新建'}}</span>
+                <button type="button" class="close" data-dismiss="modal">&times;
+                </button>
+            </div>
+            <form *ngIf="currentActivity" autocomplete="off" class="form-horizontal" #editBrandForm="ngForm">
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>活动名称</span>
+                    </label>
+                    <div class="control-input">
+                        <input class="form-control" placeholder="请输入活动名称" [(ngModel)]="currentActivity.activity_name"
+                               name="activity_name" maxlength="20" autocomplete="off" required appIgnoreSpace>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>显示端口</span>
+                    </label>
+                    <div class="control-input">
+                        <label *ngFor="let data of formatList;let i=index" name="format_{{i}}" nz-checkbox
+                               [(ngModel)]="data.isChecked" (ngModelChange)="onChangeCheckedLinkType()" [disabled]="data.disabled">{{data.name}}</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>*</b>
+                        <span>显示方式</span>
+                    </label>
+                    <div class="control-input">
+                        <nz-radio-group required [(ngModel)]="currentActivity.display_type" name="show_comment">
+                            <label nz-radio [nzValue]="1">浮窗</label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class=" control-label">
+                        <b>*</b>
+                        <span>浮窗图片</span>
+                    </label>
+                    <div class="control-input">
+                        <app-z-photo-select [hasAddPicture]="true" [hasDeletePicture]="true" [limitImgSize]="2"
+                                            [isCutCoverImg]="true" (selectedImgChange)="onSelectedPicture($event)" file_id="coverImg"
+                                            [imageWidth]="110" [imageHeight]="110" [imageUrls]="cover_url" #coverImg [aspectRatio]="aspectRatio"
+                                            [minCropBoxWidth]="200" [minCropBoxHeight]="200">
+                        </app-z-photo-select>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.tags?.isError">{{errPositionItem?.tags?.errMes}}</span>
+                    </div>
+                </div>
+                <p class="cover-hint">注：尺寸200 × 200px，格式PNG或JPG，大小2M以内</p>
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>落地页</span>
+                    </label>
+                    <div class="control-input">
+                        <select class="form-control" [(ngModel)]="currentActivity.landing_page_type" name="landing_page_type">
+                            <option value=''>请选择</option>
+                            <option [value]="1">H5</option>
+                            <option [value]="2">小程序原生页</option>
+                            <option [value]="3">第三方小程序</option>
+                            <option [value]="4">客服</option>
+                        </select>
+                        <input class="form-control" [(ngModel)]="currentActivity.landing_page"
+                               name="landing_page"
+                               placeholder="跳转链接内容" appIgnoreSpace
+                               maxlength="2000" required>
+                    </div>
+                </div>
+                <div class="row" *ngIf="currentActivity.landing_page_type == 3">
+                    <div class="control-input" style="margin-top: -19px;width: 305px;margin-left: 230px">
+                        <input class="form-control" [(ngModel)]="currentActivity.appId"
+                               name="jump_content"
+                               placeholder="请输入appId" appIgnoreSpace
+                               maxlength="2000" required>
+                    </div>
+                </div>
+                <div class="row row-message">
+                    <label class="control-label"></label>
+                    <div class="control-input err-message">
+                        <span *ngIf="errPositionItem?.icon?.isError">{{errPositionItem?.icon?.errMes}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>定时上线</span>
+                    </label>
+                    <div class="control-input" style="width: 450px">
+                        <nz-date-picker
+                                        [(ngModel)]="online_time"
+                                        style="margin-left: 11px"
+                                        [nzShowToday]=false
+                                        [nzDisabledDate]="disabledOnlineReserveDate"
+                                        name='online_time'
+                                        [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                        nzFormat="yyyy-MM-dd HH:mm"
+                                        (ngModelChange)="timeError=''"></nz-date-picker>
+                        <div *ngIf="timeError" class="text-danger">
+                            <span class="input-error">{{timeError}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label">
+                        <b>&nbsp;&nbsp;</b>
+                        <span>定时下线</span>
+                    </label>
+                    <div class="control-input" style="width: 450px">
+                        <nz-date-picker
+                                [(ngModel)]="offline_time"
+                                style="margin-left: 11px"
+                                [nzShowToday]=false
+                                [nzDisabledDate]="disabledOfflineReserveDate"
+                                name='offline_time'
+                                [nzShowTime]="{'nzFormat':'HH:mm'}"
+                                nzFormat="yyyy-MM-dd HH:mm"
+                                (ngModelChange)="timeError=''"></nz-date-picker>
+                        <div *ngIf="timeError" class="text-danger">
+                            <span class="input-error">{{ timeError }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close-btn" type="button" nz-button data-dismiss="modal">取消</button>
+                    <button class="sure-btn" type="button" nz-button nzType="primary"
+                            [disabled]="!editBrandForm.form.valid || coverImg.imageList.length===0 || ifDisabled()"
+                            (appZDebounceClick)="onEditFormSubmit()">保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -14,7 +14,7 @@ import { MenuStoreMaintenanceService } from './menu-service/menu-store-maintenan
 import { MenuExemptionService } from './menu-service/menu-exemption.service';
 import { MenuOrderParkingService } from './menu-service/menu-order-parking.service';
 import { MenuTopicService } from './menu-service/menu-topic.service';
-import { MenuInformationDeliveryService } from './menu-service/menu-information-delivery.service';
+import { MenuUsedCarService } from './menu-service/menu-used-car.service';
 
 /* 左侧菜单栏 */
 
@@ -45,7 +45,7 @@ export class ExpandedMenuComponent implements OnInit {
                 private exemptionService: MenuExemptionService,
                 private orderParkingService: MenuOrderParkingService,
                 private topicService: MenuTopicService,
-                private informationDeliveryService: MenuInformationDeliveryService) {
+                private usedCarService: MenuUsedCarService) {
         const path = location.pathname;
         this.getMenuItems(path);
     }
@@ -134,10 +134,10 @@ export class ExpandedMenuComponent implements OnInit {
             this.menuItems = this.topicService.generateMenus_topic();
             this.menu_icon = false;
             this.routeLinkList = this.topicService.routeLinkList;
-        } else if (path.includes('/information-delivery/')) {
-            this.menuItems = this.informationDeliveryService.generateMenus_information_delivery();
+        } else if (path.includes('/used-car/')) {
+            this.menuItems = this.usedCarService.generateMenus_used_car();
             this.menu_icon = false;
-            this.routeLinkList = this.informationDeliveryService.routeLinkList;
+            this.routeLinkList = this.usedCarService.routeLinkList;
         } else {
             this.routeLinkList.forEach(item => {
                 item.reset();

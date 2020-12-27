@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, timer, Subject } from 'rxjs';
+import { Subscription, timer, Observable, Subject } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { HttpErrorEntity } from '../../../../../core/http.service';
 import {
@@ -31,7 +31,7 @@ export class EditComponent implements OnInit, AfterViewInit {
 
     public loading = true;
 
-    public replaceWidth = 850; // 富文本宽度
+    public replaceWidth = 730; // 富文本宽度
 
     public titleErrMsg = ''; // 标题错误提示
 
@@ -131,7 +131,7 @@ export class EditComponent implements OnInit, AfterViewInit {
             contentItem.elements[1].sort_num = this.sort;
             contentItem.elements[1].element_id = `activityItem${this.sort}`;
             contentItem.elements[1].image_url = !item.elements[1].image || item.elements[1].image.length === 0 ? [] : item.elements[1].image.split(',');
-        } else if (item.content_type === 2 || item.content_type === 4 || item.content_type === 5) {
+        } else if (item.content_type === 2) {
             contentItem.elements[0].image_url = !item.elements[0].image || item.elements[0].image.length === 0 ? [] : item.elements[0].image.split(',');
         } else if (item.content_type === 3) {
             const tempContent = item.elements[0].rich.replace('/\r\n/g', '<br>').replace(/\n/g, '<br>');
@@ -159,11 +159,6 @@ export class EditComponent implements OnInit, AfterViewInit {
      * @param type 1:双图文链接 2:单图文链接 3:富文本编辑器
      */
     public onAddComponent(type: number): void {
-        const floatingItem = this.contentList.find(item => item.content_type === 5);
-        if (floatingItem && type === 5) {
-            this.globalService.promptBox.open('最多可添加1个浮窗模块！', null, 2000, null, false);
-            return;
-        }
         if (this.contentList && this.contentList.length === 20) {
             this.globalService.promptBox.open('最多可添加20个模块！', null, 2000, null, false);
             return;
@@ -190,7 +185,7 @@ export class EditComponent implements OnInit, AfterViewInit {
             contentItem.elements[1].sort_num = this.sort;
             contentItem.elements[1].element_id = `activityItem${this.sort}`;
             contentItem.elements[1].belong_to = 2;
-        } else if (type === 2 || type === 5) {
+        } else if (type === 2) {
             contentItem.elements[0].belong_to = 2;
         } else if (type === 3) {
             contentItem.elements[0].rich = '';
@@ -227,9 +222,6 @@ export class EditComponent implements OnInit, AfterViewInit {
                 contentItem.elements.forEach((elementItem, index) => {
                     if (index === 1) {
                         previewItem.elements.push(new ElementItemEntity());
-                    }
-                    if (elementItem.height) {
-                        previewItem.elements[index].height = elementItem.height / 2;
                     }
                     if (elementItem.image) {
                         previewItem.elements[index].image = elementItem.image;
@@ -376,28 +368,12 @@ export class EditComponent implements OnInit, AfterViewInit {
                                 elements[elementIndex].errMsg = '请上传图片！';
                                 return false;
                             }
-                            if (elements[elementIndex].belong_to === 3) {
-                                if (!elements[elementIndex].app_id) {
-                                    elements[elementIndex].errMsg = '请输入appID！';
-                                    return false;
-                                } else {
-                                    elements[elementIndex].errMsg = '';
-                                }
+
+                            if (!elements[elementIndex].link) {
+                                elements[elementIndex].errMsg = '请输入跳转URL！';
+                                return false;
                             } else {
-                                if (content_type === 4 && !elements[elementIndex].height) {
-                                    elements[elementIndex].errMsg = '请输入视频高度！';
-                                    return false;
-                                }
-                                if (elements[elementIndex].belong_to !== 4 && !elements[elementIndex].link) {
-                                    if (content_type === 4) {
-                                        elements[elementIndex].errMsg = '请输入视频地址！';
-                                    } else {
-                                        elements[elementIndex].errMsg = '请输入跳转URL！';
-                                    }
-                                    return false;
-                                } else {
-                                    elements[elementIndex].errMsg = '';
-                                }
+                                elements[elementIndex].errMsg = '';
                             }
                         }
                     }

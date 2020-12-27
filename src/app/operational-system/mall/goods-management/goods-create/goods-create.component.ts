@@ -656,7 +656,7 @@ export class GoodsCreateComponent implements OnInit, OnDestroy {
 
     // 更改商品类型
     public onChangeCommodityType(name: string, stutas: number) {
-        this.commodityInfo.validity_type = '';
+        this.commodityInfo.validity_type = null;
         this.commodityInfo[name] = stutas;
         if (name === 'shipping_method' && stutas === 1) {
             this.commodityInfo.collection_type = '1';

@@ -16,25 +16,25 @@ import { HomeModule } from '../home/home.module';
 registerLocaleData(zh);
 
 @NgModule({
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    ShareModule,
-    HomeModule,
-    StoreMaintenanceRoutingModule,
-  ],
-  declarations: [
-    StoreMaintenanceComponent,
-  ],
-  providers: [
-    { provide: NZ_I18N, useValue: zh_CN },
-    { provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
-  ],
-  bootstrap: [StoreMaintenanceComponent]
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        ShareModule,
+        HomeModule,
+        StoreMaintenanceRoutingModule,
+    ],
+    declarations: [
+        StoreMaintenanceComponent,
+    ],
+    providers: [
+        {provide: NZ_I18N, useValue: zh_CN},
+        {provide: APP_INITIALIZER, useFactory: initializer.boot, multi: true},
+        {provide: ErrorHandler, useClass: SentryErrorHandler}
+    ],
+    bootstrap: [StoreMaintenanceComponent]
 })
 export class StoreMaintenanceModule {
 }

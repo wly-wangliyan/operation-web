@@ -47,7 +47,7 @@ export class BrandEditComponent implements OnInit {
 
   public editBrandParams: AccessoryBrandEntity = new AccessoryBrandEntity();
   public errPositionItem: ErrPositionItem = new ErrPositionItem();
-  public cover_url = [];
+  public image_url = [];
   public aspectRatio = 1 / 1; // 截取图片比例
   public tag = '';
   public tagList = []; // 品牌标签
@@ -85,16 +85,12 @@ export class BrandEditComponent implements OnInit {
       });
     };
     this.accessory_brand_id = data ? data.accessory_brand_id : '';
-    this.tagList = data && data.tag ? data.tag : [];
     this.tag = '';
     this.editBrandParams = data ? data.clone() : new AccessoryBrandEntity();
     this.sureCallback = sureFunc;
     this.closeCallback = closeFunc;
     this.clear();
-    this.cover_url = [];
-    if (data && data.sign_image) {
-      this.cover_url.push(data.sign_image);
-    }
+    this.image_url = data.sign_image ? data.sign_image.split(',') : [];
     this.is_save = false;
     openBrandModal();
   }
@@ -123,6 +119,7 @@ export class BrandEditComponent implements OnInit {
       this.upLoadErrMsg(err);
     });
   }
+
   // 添加配件品牌
   private requestAddAccessoryBrand(): void {
     this.brandManagementService
@@ -136,6 +133,7 @@ export class BrandEditComponent implements OnInit {
         this.errorProcess(err, 1);
       });
   }
+
   // 编辑配件品牌
   private requestUpdateAccessoryBrand(): void {
     this.brandManagementService.requestUpdateAccessoryData(

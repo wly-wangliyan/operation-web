@@ -32,8 +32,12 @@ export class MenuStoreMaintenanceService {
 
     // 门店保养 》服务管理
     private generateServiceManagementMenu(): SideMenuItem {
-        const systemMenu = new SideMenuItem('服务管理', '/service-fees-management');
+        const systemMenu = new SideMenuItem('服务管理', 'null');
         systemMenu.icon = '/assets/images/menu_service_management.png';
+        const subFinanceMenu1 = new SideMenuItem('服务设置', '/service-fees-management', systemMenu);
+        const subFinanceMenu2 = new SideMenuItem('活动设置', '/activity-settings', systemMenu);
+        systemMenu.children.push(subFinanceMenu1);
+        systemMenu.children.push(subFinanceMenu2);
         this.routeLinkList.push(systemMenu);
         return systemMenu;
     }

@@ -39,8 +39,8 @@ const routes: Routes = [{
             path: 'management-setting',
             loadChildren: () => import('../management-setting/management-setting.module').then(m => m.ManagementSettingModule)
         }, {
-            path: 'information-delivery',
-            loadChildren: () => import('../information-delivery/information-delivery.module').then(m => m.InformationDeliveryModule),
+            path: 'used-car',
+            loadChildren: () => import('../used-car/used-car.module').then(m => m.UsedCarModule),
             canLoad: [AuthGuardService]
         },
         {path: '**', redirectTo: 'operation', pathMatch: 'full'},

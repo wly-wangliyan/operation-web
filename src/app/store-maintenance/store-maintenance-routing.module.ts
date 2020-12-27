@@ -71,6 +71,11 @@ const routes: Routes = [
     loadChildren: () => import('./user-vehicle/user-vehicle.module').then(m => m.UserVehicleModule),
     canLoad: [AuthGuardService, MenuGuardService]
   },
+  {
+    path: 'activity-settings',
+    loadChildren: () => import('./activity-settings/activity-settings.module').then(m => m.ActivitySettingsModule),
+    canLoad: [AuthGuardService, MenuGuardService]
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }];
 
